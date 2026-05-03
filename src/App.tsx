@@ -3,6 +3,8 @@ import {
   ArrowUp,
   Bookmark,
   Check,
+  ChevronLeft,
+  ChevronRight,
   Clock3,
   Database,
   ExternalLink,
@@ -18,7 +20,8 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import L, { type LayerGroup, type Map as LeafletMap } from "leaflet";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { createAiBrief, createPoll, StopSummary } from "./api";
 import {
   buildPlannerBrief,
@@ -373,6 +376,128 @@ const costRank: Record<Cost, number> = {
   Unknown: 4,
 };
 
+const pageSizeOptions = [24, 48, 96];
+const bayAreaMapCenter: [number, number] = [37.7749, -122.4194];
+
+const categoryMarkerColors: Record<Category, string> = {
+  Outdoors: "#276749",
+  Food: "#b85c38",
+  Culture: "#6f4bb2",
+  Nightlife: "#1f4f7a",
+  Wellness: "#2f8f83",
+  Shopping: "#8a6332",
+};
+
+function escapeHtml(value: string) {
+  return value.replace(/[&<>"']/g, (character) => {
+    const replacements: Record<string, string> = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+    };
+    return replacements[character];
+  });
+}
+
+function SpotMap({ spots }: { spots: Spot[] }) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<LeafletMap | null>(null);
+  const layerRef = useRef<LayerGroup | null>(null);
+
+  const plottedSpots = useMemo(
+    () =>
+      spots.filter(
+        (spot) =>
+          typeof spot.lat === "number" &&
+          typeof spot.lon === "number" &&
+          Number.isFinite(spot.lat) &&
+          Number.isFinite(spot.lon),
+      ),
+    [spots],
+  );
+
+  useEffect(() => {
+    if (!containerRef.current || mapRef.current) {
+      return;
+    }
+
+    const map = L.map(containerRef.current, {
+      center: bayAreaMapCenter,
+      zoom: 9,
+      scrollWheelZoom: false,
+    });
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors",
+      maxZoom: 19,
+    }).addTo(map);
+
+    const layer = L.layerGroup().addTo(map);
+    mapRef.current = map;
+    layerRef.current = layer;
+
+    return () => {
+      map.remove();
+      mapRef.current = null;
+      layerRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    const layer = layerRef.current;
+    if (!map || !layer) {
+      return;
+    }
+
+    layer.clearLayers();
+
+    const bounds: [number, number][] = [];
+    for (const spot of plottedSpots) {
+      const position: [number, number] = [spot.lat as number, spot.lon as number];
+      const color = categoryMarkerColors[spot.category];
+      bounds.push(position);
+
+      L.circleMarker(position, {
+        radius: 5,
+        color,
+        fillColor: color,
+        fillOpacity: 0.78,
+        opacity: 0.9,
+        weight: 1,
+      })
+        .bindPopup(
+          `<strong>${escapeHtml(spot.name)}</strong><br>${escapeHtml(spot.category)} - ${escapeHtml(
+            spot.neighborhood,
+          )}`,
+        )
+        .addTo(layer);
+    }
+
+    if (bounds.length > 0) {
+      map.fitBounds(bounds, { maxZoom: 13, padding: [28, 28] });
+    } else {
+      map.setView(bayAreaMapCenter, 9);
+    }
+  }, [plottedSpots]);
+
+  return (
+    <section className="map-panel" aria-label="Map of filtered Bay Area spots">
+      <div className="map-copy">
+        <p>Map view</p>
+        <h2>Where the current matches are clustered</h2>
+      </div>
+      <div className="map-meta">
+        <span>{plottedSpots.length} mapped</span>
+        <span>{spots.length - plottedSpots.length} without coordinates</span>
+      </div>
+      <div className="map-canvas" ref={containerRef} />
+    </section>
+  );
+}
+
 function readStoredArray<T>(key: string, fallback: T[]): T[] {
   try {
     const raw = window.localStorage.getItem(key);
@@ -432,6 +557,8 @@ function App() {
   const [sortBy, setSortBy] = useState<"best" | "nearest" | "price" | "name">(
     "best",
   );
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(24);
   const [savedIds, setSavedIds] = useState<string[]>(() =>
     readStoredArray("saturday.savedSpots", []),
   );
@@ -551,6 +678,10 @@ function App() {
     setAiState({ status: "idle" });
   }, [category, city, companion, cost, onlyOpen, query, savedIds, vibe]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [category, city, companion, cost, onlyOpen, pageSize, query, sortBy, vibe]);
+
   const allSpots = useMemo(() => [...remoteSpots, ...customSpots], [customSpots, remoteSpots]);
 
   const cityOptions = useMemo(() => {
@@ -619,6 +750,21 @@ function App() {
       return left.transitMinutes - right.transitMinutes;
     });
   }, [allSpots, category, city, companion, cost, onlyOpen, query, sortBy, vibe]);
+
+  const pageCount = Math.max(1, Math.ceil(filteredSpots.length / pageSize));
+  const safePage = Math.min(page, pageCount);
+  const pageStart = filteredSpots.length === 0 ? 0 : (safePage - 1) * pageSize;
+  const pageEnd = Math.min(filteredSpots.length, pageStart + pageSize);
+  const paginatedSpots = useMemo(
+    () => filteredSpots.slice(pageStart, pageStart + pageSize),
+    [filteredSpots, pageSize, pageStart],
+  );
+
+  useEffect(() => {
+    if (page > pageCount) {
+      setPage(pageCount);
+    }
+  }, [page, pageCount]);
 
   const selectedLabel =
     companion === "any"
@@ -826,6 +972,7 @@ function App() {
     setCost("All");
     setOnlyOpen(false);
     setSortBy("best");
+    setPage(1);
   }
 
   function addSpot(event: FormEvent<HTMLFormElement>) {
@@ -912,6 +1059,8 @@ function App() {
       </nav>
 
       {view === "browse" ? (
+      <>
+      <SpotMap spots={filteredSpots} />
       <main className="workspace">
         <aside className="filter-panel" aria-label="Spot filters">
           <div className="panel-heading">
@@ -1032,6 +1181,11 @@ function App() {
             </div>
             <div className="stat-strip" aria-label="Plan stats">
               <span>{dataMeta.loading ? "loading" : `${remoteSpots.length} source spots`}</span>
+              <span>
+                {filteredSpots.length === 0
+                  ? "0 shown"
+                  : `${pageStart + 1}-${pageEnd} shown`}
+              </span>
               {dataMeta.imageStats && (
                 <span>
                   {(dataMeta.imageStats.wikidata ?? 0) + (dataMeta.imageStats.tagged ?? 0)} place
@@ -1044,7 +1198,7 @@ function App() {
           </div>
 
           <div className="spot-grid">
-            {filteredSpots.map((spot) => {
+            {paginatedSpots.map((spot) => {
               const saved = savedIds.includes(spot.id);
               const visited = visitedIds.includes(spot.id);
 
@@ -1146,6 +1300,48 @@ function App() {
               );
             })}
           </div>
+
+          {filteredSpots.length > 0 && (
+            <div className="pagination-bar" aria-label="Spot pagination">
+              <span>
+                Showing {pageStart + 1}-{pageEnd} of {filteredSpots.length}
+              </span>
+              <label>
+                <span>Per page</span>
+                <select
+                  value={pageSize}
+                  onChange={(event) => setPageSize(Number(event.target.value))}
+                >
+                  {pageSizeOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <div className="pagination-controls">
+                <button
+                  className="icon-button"
+                  disabled={safePage === 1}
+                  title="Previous page"
+                  onClick={() => setPage((current) => Math.max(1, current - 1))}
+                >
+                  <ChevronLeft aria-hidden="true" />
+                </button>
+                <span>
+                  Page {safePage} of {pageCount}
+                </span>
+                <button
+                  className="icon-button"
+                  disabled={safePage === pageCount}
+                  title="Next page"
+                  onClick={() => setPage((current) => Math.min(pageCount, current + 1))}
+                >
+                  <ChevronRight aria-hidden="true" />
+                </button>
+              </div>
+            </div>
+          )}
         </section>
 
         <aside className="plan-panel" aria-label="Planner and saved spots">
@@ -1225,6 +1421,7 @@ function App() {
           )}
         </aside>
       </main>
+      </>
       ) : (
       <main className="plans-workspace" aria-label="Plans">
         <aside className="plan-list-panel" aria-label="Saved plans">

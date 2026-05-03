@@ -41,6 +41,8 @@ place-specific images.
 ## Current features
 
 - Search and filter friend outing spots by area, category, cost, and listed hours.
+- Map filtered spots across the Bay Area before browsing cards.
+- Browse paginated spot cards instead of rendering the full dataset at once.
 - Vibe-aware planner brief for balanced, low-effort, active, food-first, night-out, and culture plans.
 - Optional server-side AI refinement through the Cloudflare Worker at `POST /ai/brief`.
 - Save spots into a local shortlist.
