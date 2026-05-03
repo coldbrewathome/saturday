@@ -135,7 +135,7 @@ const categories: Category[] = [
 const costs: Cost[] = ["Free", "$", "$$", "$$$", "Unknown"];
 const vibeOptions = Object.entries(vibeLabels) as Array<[PlannerVibe, string]>;
 
-const DATA_URL = "/data/bay-area-spots.json";
+const DATA_URL = `${import.meta.env.BASE_URL}data/bay-area-spots.json`;
 
 const unsplash = (id: string) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1200&q=80`;
