@@ -24,6 +24,7 @@ export type AiBriefResponse = {
     rationale: string[];
     cautions: string[];
   };
+  picks: Array<{ id: string; reason: string }>;
   model: string;
   generatedAt: string;
 };
@@ -41,9 +42,11 @@ export type PollSnapshot = {
 
 const API_BASE = (import.meta.env.VITE_POLLS_API ?? "").replace(/\/$/, "");
 
+export const API_CONFIGURED = API_BASE.length > 0;
+
 function requireApi(): string {
   if (!API_BASE) {
-    throw new Error("Voting API is not configured. Set VITE_POLLS_API.");
+    throw new Error("Backend API is not configured.");
   }
   return API_BASE;
 }
@@ -87,19 +90,50 @@ export async function postVote(
   return response.json();
 }
 
-export async function createAiBrief(body: {
-  vibe: string;
-  spots: StopSummary[];
-}): Promise<AiBriefResponse> {
+export async function createAiBrief(
+  body: { vibe: string; spots: StopSummary[] },
+  sessionToken: string,
+): Promise<AiBriefResponse> {
   const response = await fetch(`${requireApi()}/ai/brief`, {
     method: "POST",
-    headers: { "content-type": "application/json" },
+    headers: {
+      "content-type": "application/json",
+      authorization: `Bearer ${sessionToken}`,
+    },
     body: JSON.stringify(body),
   });
   if (!response.ok) {
-    throw new Error(`AI brief failed (${response.status})`);
+    let detail = "";
+    try {
+      const data = (await response.json()) as { error?: string };
+      detail = data?.error ? `: ${data.error}` : "";
+    } catch {
+      // ignore
+    }
+    throw new Error(`AI brief failed (${response.status})${detail}`);
   }
   return response.json();
+}
+
+export async function googleSignIn(
+  idToken: string,
+): Promise<{ sessionToken: string; user: { email: string; name: string; picture?: string } }> {
+  const response = await fetch(`${requireApi()}/auth/google`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ idToken }),
+  });
+  if (!response.ok) {
+    throw new Error(`Sign-in failed (${response.status})`);
+  }
+  return response.json();
+}
+
+export async function logoutSession(sessionToken: string): Promise<void> {
+  await fetch(`${requireApi()}/auth/logout`, {
+    method: "POST",
+    headers: { authorization: `Bearer ${sessionToken}` },
+  }).catch(() => {});
 }
 
 export function getOrCreateVoterId(): string {

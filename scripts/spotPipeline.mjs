@@ -523,13 +523,160 @@ export function nearestCity(coords) {
   return best[0];
 }
 
+const CITY_ALIASES = {
+  "berkley": "Berkeley",
+  "milbrae": "Millbrae",
+  "san jose": "San Jose",
+  "pt richmond": "Richmond",
+  "point richmond": "Richmond",
+};
+
+export function normalizeCity(value) {
+  if (!value) {
+    return value;
+  }
+  const stripped = value
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!stripped) {
+    return stripped;
+  }
+  const alias = CITY_ALIASES[stripped.toLowerCase()];
+  if (alias) {
+    return alias;
+  }
+  if (stripped === stripped.toUpperCase() && /[A-Z]/.test(stripped)) {
+    return stripped
+      .toLowerCase()
+      .replace(/\b([a-z])/g, (m) => m.toUpperCase());
+  }
+  return stripped;
+}
+
 export function extractCity(tags = {}, coords) {
-  return (
+  const raw =
     stripUnsafeText(tags["addr:city"], 60) ||
     stripUnsafeText(tags["is_in:city"], 60) ||
     stripUnsafeText(tags["addr:suburb"], 60) ||
-    nearestCity(coords)
-  );
+    nearestCity(coords);
+  return normalizeCity(raw);
+}
+
+const DAY_INDEX = { Mo: 0, Tu: 1, We: 2, Th: 3, Fr: 4, Sa: 5, Su: 6 };
+const DAY_KEYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+
+function expandDayList(spec) {
+  const parts = spec.split(",").map((p) => p.trim()).filter(Boolean);
+  const result = [];
+  for (const part of parts) {
+    if (part.includes("-")) {
+      const [a, b] = part.split("-").map((s) => s.trim());
+      if (DAY_INDEX[a] === undefined || DAY_INDEX[b] === undefined) {
+        return null;
+      }
+      let i = DAY_INDEX[a];
+      const end = DAY_INDEX[b];
+      for (let safety = 0; safety < 8; safety += 1) {
+        result.push(i);
+        if (i === end) break;
+        i = (i + 1) % 7;
+      }
+    } else {
+      if (DAY_INDEX[part] === undefined) {
+        return null;
+      }
+      result.push(DAY_INDEX[part]);
+    }
+  }
+  return result;
+}
+
+function timeToMinutes(value) {
+  const match = value.match(/^(\d{1,2}):(\d{2})$/);
+  if (!match) return null;
+  const h = Number(match[1]);
+  const m = Number(match[2]);
+  if (h < 0 || h > 24 || m < 0 || m > 59) return null;
+  return h * 60 + m;
+}
+
+export function parseOpeningHours(raw) {
+  if (typeof raw !== "string") return null;
+  const trimmed = raw.trim();
+  if (!trimmed) return null;
+  if (trimmed === "24/7") {
+    return { is247: true, days: null };
+  }
+  if (/\|\||"|sunset|sunrise|easter|week\s|PH|SH/i.test(trimmed)) {
+    return null;
+  }
+
+  const days = [[], [], [], [], [], [], []];
+  const groupRe =
+    /([A-Za-z]{2}(?:-[A-Za-z]{2})?(?:,[A-Za-z]{2}(?:-[A-Za-z]{2})?)*)\s+(off|closed|\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2})/gi;
+
+  for (const rule of trimmed.split(";")) {
+    const r = rule.trim();
+    if (!r) continue;
+    const matches = [...r.matchAll(groupRe)];
+    if (matches.length === 0) {
+      return null;
+    }
+    for (const match of matches) {
+      const dayList = expandDayList(match[1]);
+      const window = match[2].toLowerCase();
+      if (!dayList) return null;
+      if (window === "off" || window === "closed") {
+        for (const d of dayList) days[d] = [];
+        continue;
+      }
+      const [openRaw, closeRaw] = window.split("-").map((s) => s.trim());
+      const open = timeToMinutes(openRaw);
+      const close = timeToMinutes(closeRaw);
+      if (open === null || close === null) return null;
+      for (const d of dayList) {
+        days[d].push({ open, close });
+      }
+    }
+  }
+
+  if (days.every((d) => d.length === 0)) {
+    return null;
+  }
+
+  const out = {};
+  days.forEach((slots, idx) => {
+    out[DAY_KEYS[idx]] = slots;
+  });
+  return { is247: false, days: out };
+}
+
+export function extractFeatures(tags = {}) {
+  const yesLike = (value) => {
+    if (typeof value !== "string") return null;
+    const v = value.toLowerCase().trim();
+    if (["yes", "designated", "permissive", "allowed"].includes(v)) return true;
+    if (["no", "private", "prohibited"].includes(v)) return false;
+    return null;
+  };
+  const wheelchairValue =
+    typeof tags.wheelchair === "string" ? tags.wheelchair.toLowerCase().trim() : null;
+  const wheelchair =
+    wheelchairValue === "yes" || wheelchairValue === "limited" || wheelchairValue === "no"
+      ? wheelchairValue
+      : null;
+  const dogsAllowed = yesLike(tags.dog);
+  const kidsFriendly =
+    yesLike(tags.kids) ??
+    yesLike(tags["family_friendly"]) ??
+    (typeof tags.min_age === "string" && /^\s*0\s*$/.test(tags.min_age) ? true : null);
+  const parkingNearby =
+    yesLike(tags.parking) ??
+    yesLike(tags["parking:fee"]) ??
+    yesLike(tags["amenity:parking"]);
+  return { wheelchair, dogsAllowed, kidsFriendly, parkingNearby };
 }
 
 export function extractFriendlyTags(category, tags = {}) {
@@ -570,6 +717,8 @@ export function normalizeElement(element, generatedAt = new Date().toISOString()
 
   const id = `osm-${element.type}-${element.id}`;
   const image = imageFromTags(tags, category, id);
+  const schedule = parseOpeningHours(openingHours);
+  const features = extractFeatures(tags);
 
   return {
     id,
@@ -597,20 +746,21 @@ export function normalizeElement(element, generatedAt = new Date().toISOString()
     wikidataId: normalizeWikidataId(tags.wikidata),
     wikipedia: stripUnsafeText(tags.wikipedia, 120) || null,
     openingHours: openingHours || null,
+    schedule,
+    wheelchair: features.wheelchair,
+    dogsAllowed: features.dogsAllowed,
+    kidsFriendly: features.kidsFriendly,
+    parkingNearby: features.parkingNearby,
     dataSource: "OpenStreetMap",
     updatedAt: generatedAt,
     friendScore: score,
   };
 }
 
-export function buildNote(category, tags = {}, openingHours = "", coords) {
+export function buildNote(category, tags = {}, _openingHours = "", coords) {
   const descriptor = deriveMood(category, tags);
   const city = extractCity(tags, coords);
-  const hoursText = openingHours
-    ? "Hours are listed in the source data."
-    : "Check current hours before heading out.";
-
-  return stripUnsafeText(`${descriptor} in ${city}. ${hoursText}`, 180);
+  return stripUnsafeText(`${descriptor} in ${city}.`, 180);
 }
 
 export function dedupeAndRank(spots, limit = 500) {

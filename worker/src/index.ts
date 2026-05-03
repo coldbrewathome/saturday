@@ -34,7 +34,17 @@ interface Env {
   ALLOWED_ORIGINS: string;
   OPENAI_API_KEY?: string;
   OPENAI_MODEL?: string;
+  GOOGLE_CLIENT_ID?: string;
+  AI_DAILY_LIMIT_PER_IP?: string;
 }
+
+type SessionData = {
+  sub: string;
+  email: string;
+  name: string;
+  picture?: string;
+  createdAt: string;
+};
 
 const VOTE_VALUES: Vote[] = ["up", "down", "meh"];
 
@@ -44,7 +54,7 @@ function corsHeaders(env: Env, origin: string | null): Record<string, string> {
   return {
     "access-control-allow-origin": allow,
     "access-control-allow-methods": "GET,POST,OPTIONS",
-    "access-control-allow-headers": "content-type",
+    "access-control-allow-headers": "content-type,authorization",
     "vary": "origin",
   };
 }
@@ -141,11 +151,168 @@ function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((item) => typeof item === "string");
 }
 
+const SESSION_TTL_SECONDS = 60 * 60 * 24 * 7;
+const RATE_LIMIT_TTL_SECONDS = 60 * 60 * 25;
+
+async function getSession(
+  env: Env,
+  request: Request,
+): Promise<{ token: string; data: SessionData } | null> {
+  const auth = request.headers.get("authorization") || "";
+  const match = auth.match(/^Bearer (.+)$/i);
+  if (!match) return null;
+  const token = match[1].trim();
+  if (!token) return null;
+  const raw = await env.POLLS.get(`session:${token}`);
+  if (!raw) return null;
+  return { token, data: JSON.parse(raw) as SessionData };
+}
+
+async function createSession(
+  env: Env,
+  profile: { sub: string; email: string; name: string; picture?: string },
+): Promise<string> {
+  const token = `${crypto.randomUUID()}${crypto.randomUUID().replace(/-/g, "")}`;
+  const data: SessionData = {
+    sub: profile.sub,
+    email: profile.email,
+    name: profile.name,
+    picture: profile.picture,
+    createdAt: new Date().toISOString(),
+  };
+  await env.POLLS.put(`session:${token}`, JSON.stringify(data), {
+    expirationTtl: SESSION_TTL_SECONDS,
+  });
+  return token;
+}
+
+async function googleAuth(
+  request: Request,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  if (!env.GOOGLE_CLIENT_ID) {
+    return json({ error: "GOOGLE_CLIENT_ID is not configured" }, { status: 501 }, cors);
+  }
+
+  let payload: unknown;
+  try {
+    payload = await request.json();
+  } catch {
+    return json({ error: "invalid json" }, { status: 400 }, cors);
+  }
+  const data = payload as { idToken?: unknown };
+  const idToken = typeof data.idToken === "string" ? data.idToken : "";
+  if (!idToken || idToken.length > 4096) {
+    return json({ error: "idToken required" }, { status: 400 }, cors);
+  }
+
+  const verifyUrl = `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(idToken)}`;
+  const verify = await fetch(verifyUrl);
+  if (!verify.ok) {
+    return json({ error: "token verification failed" }, { status: 401 }, cors);
+  }
+  const claims = (await verify.json()) as {
+    sub?: string;
+    email?: string;
+    email_verified?: string | boolean;
+    name?: string;
+    picture?: string;
+    aud?: string;
+    exp?: string;
+    iss?: string;
+  };
+
+  if (claims.aud !== env.GOOGLE_CLIENT_ID) {
+    return json({ error: "audience mismatch" }, { status: 401 }, cors);
+  }
+  if (claims.iss !== "accounts.google.com" && claims.iss !== "https://accounts.google.com") {
+    return json({ error: "issuer mismatch" }, { status: 401 }, cors);
+  }
+  if (claims.exp && Number(claims.exp) * 1000 < Date.now()) {
+    return json({ error: "token expired" }, { status: 401 }, cors);
+  }
+  const verified =
+    claims.email_verified === true || claims.email_verified === "true";
+  if (!verified) {
+    return json({ error: "email not verified" }, { status: 401 }, cors);
+  }
+  if (!claims.sub || !claims.email) {
+    return json({ error: "missing claims" }, { status: 401 }, cors);
+  }
+
+  const token = await createSession(env, {
+    sub: claims.sub,
+    email: claims.email,
+    name: claims.name || claims.email,
+    picture: claims.picture,
+  });
+  return json(
+    {
+      sessionToken: token,
+      user: {
+        email: claims.email,
+        name: claims.name || claims.email,
+        picture: claims.picture,
+      },
+    },
+    { status: 201 },
+    cors,
+  );
+}
+
+async function logout(
+  request: Request,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  const session = await getSession(env, request);
+  if (session) {
+    await env.POLLS.delete(`session:${session.token}`);
+  }
+  return json({ ok: true }, { status: 200 }, cors);
+}
+
+async function checkAndIncrementAiCap(
+  request: Request,
+  env: Env,
+): Promise<{ ok: true } | { ok: false; remaining: 0; limit: number }> {
+  const limit = Number(env.AI_DAILY_LIMIT_PER_IP || "10") || 10;
+  const ip = request.headers.get("cf-connecting-ip") || "unknown";
+  const day = new Date().toISOString().slice(0, 10);
+  const key = `ratelimit:ai:${ip}:${day}`;
+  const raw = await env.POLLS.get(key);
+  const count = raw ? Number(raw) : 0;
+  if (count >= limit) {
+    return { ok: false, remaining: 0, limit };
+  }
+  await env.POLLS.put(key, String(count + 1), {
+    expirationTtl: RATE_LIMIT_TTL_SECONDS,
+  });
+  return { ok: true };
+}
+
 async function aiBrief(
   request: Request,
   env: Env,
   cors: Record<string, string>,
 ): Promise<Response> {
+  const session = await getSession(env, request);
+  if (!session) {
+    return json({ error: "sign in required" }, { status: 401 }, cors);
+  }
+
+  const cap = await checkAndIncrementAiCap(request, env);
+  if (!cap.ok) {
+    return json(
+      {
+        error: `Daily limit reached (${cap.limit} per IP). Try again tomorrow.`,
+      },
+      { status: 429 },
+      cors,
+    );
+  }
+
   if (!env.OPENAI_API_KEY) {
     return json({ error: "OPENAI_API_KEY is not configured" }, { status: 501 }, cors);
   }
@@ -179,11 +346,11 @@ async function aiBrief(
         verbosity: "low",
       },
       instructions:
-        "You are a Bay Area friend-plan assistant. Return only JSON with keys title, summary, rationale, cautions. Use only the provided sanitized spots. Do not invent hours, prices, locations, or availability. Mention uncertainty when hours or websites are missing.",
+        "You are a Bay Area friend-plan assistant. Build a 2-4 stop Saturday plan from the provided sanitized spots. Return only JSON with keys: title (short), summary (1-2 sentences), rationale (array of 2-4 strings), cautions (array of strings about source-data uncertainty), picks (array of {id, reason} ordered as the plan should be done; ids must come from the provided spots; 2-4 picks). Do not invent hours, prices, locations, or availability. Mention uncertainty in cautions when hours or websites are missing.",
       input: JSON.stringify({
         vibe,
         task:
-          "Choose the best friend plan start, explain the tradeoffs, name a backup, and list source-data cautions. Output JSON.",
+          "Build the Saturday plan: choose 2-4 stops in order, give a brief title and summary, explain the tradeoffs in rationale, list source-data cautions, and return picks with the ordered stop ids. Output JSON only.",
         spots,
       }),
       max_output_tokens: 700,
@@ -212,7 +379,22 @@ async function aiBrief(
     summary?: unknown;
     rationale?: unknown;
     cautions?: unknown;
+    picks?: unknown;
   };
+
+  const validIds = new Set(spots.map((s) => s.id));
+  const picksRaw = Array.isArray(brief.picks) ? brief.picks : [];
+  const picks: Array<{ id: string; reason: string }> = [];
+  const seen = new Set<string>();
+  for (const item of picksRaw) {
+    if (!item || typeof item !== "object") continue;
+    const v = item as Record<string, unknown>;
+    const id = typeof v.id === "string" ? v.id : "";
+    if (!validIds.has(id) || seen.has(id)) continue;
+    seen.add(id);
+    picks.push({ id, reason: cleanText(v.reason, 200) });
+    if (picks.length >= 4) break;
+  }
 
   return json(
     {
@@ -226,6 +408,7 @@ async function aiBrief(
           ? brief.cautions.map((item) => cleanText(item, 180)).filter(Boolean).slice(0, 4)
           : [],
       },
+      picks,
       model: env.OPENAI_MODEL || "gpt-5.4",
       generatedAt: new Date().toISOString(),
     },
@@ -360,6 +543,31 @@ export default {
 
     if (path === "/ai/brief" && request.method === "POST") {
       return aiBrief(request, env, cors);
+    }
+
+    if (path === "/auth/google" && request.method === "POST") {
+      return googleAuth(request, env, cors);
+    }
+
+    if (path === "/auth/logout" && request.method === "POST") {
+      return logout(request, env, cors);
+    }
+
+    if (path === "/auth/me" && request.method === "GET") {
+      const session = await getSession(env, request);
+      return json(
+        session
+          ? {
+              user: {
+                email: session.data.email,
+                name: session.data.name,
+                picture: session.data.picture,
+              },
+            }
+          : { user: null },
+        { status: 200 },
+        cors,
+      );
     }
 
     const pollMatch = path.match(/^\/polls\/([A-Za-z0-9-]+)$/);

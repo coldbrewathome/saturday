@@ -20,14 +20,25 @@ import {
   Users,
   X,
 } from "lucide-react";
-import L, { type LayerGroup, type Map as LeafletMap } from "leaflet";
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
-import { createAiBrief, createPoll, StopSummary } from "./api";
 import {
-  buildPlannerBrief,
+  API_CONFIGURED,
+  createAiBrief,
+  createPoll,
+  googleSignIn,
+  logoutSession,
+  StopSummary,
+} from "./api";
+import {
+  clearSession,
+  loadGoogleIdentity,
+  readSession,
+  SessionState,
+  writeSession,
+} from "./auth";
+import {
   scoreSpotForVibe,
   vibeLabels,
-  type PlannerBrief,
   type PlannerVibe,
 } from "./planner";
 
@@ -40,6 +51,18 @@ type Category =
   | "Wellness"
   | "Shopping";
 type Cost = "Free" | "$" | "$$" | "$$$" | "Unknown";
+
+type ScheduleWindow = { open: number; close: number };
+type WeekSchedule = {
+  mon: ScheduleWindow[];
+  tue: ScheduleWindow[];
+  wed: ScheduleWindow[];
+  thu: ScheduleWindow[];
+  fri: ScheduleWindow[];
+  sat: ScheduleWindow[];
+  sun: ScheduleWindow[];
+};
+type Schedule = { is247: true; days: null } | { is247: false; days: WeekSchedule };
 
 type Spot = {
   id: string;
@@ -65,6 +88,11 @@ type Spot = {
   sourceUrl?: string;
   website?: string | null;
   openingHours?: string | null;
+  schedule?: Schedule | null;
+  wheelchair?: "yes" | "limited" | "no" | null;
+  dogsAllowed?: boolean | null;
+  kidsFriendly?: boolean | null;
+  parkingNearby?: boolean | null;
   dataSource?: string;
   updatedAt?: string;
   friendScore?: number;
@@ -104,6 +132,13 @@ export type Plan = {
   createdAt: string;
   pollId?: string;
   ownerToken?: string;
+  source?: "manual" | "ai";
+  vibe?: PlannerVibe;
+  summary?: string;
+  rationale?: string[];
+  cautions?: string[];
+  picks?: Array<{ id: string; reason: string }>;
+  aiModel?: string;
 };
 
 const companionLabels: Record<Companion, string> = {
@@ -136,6 +171,8 @@ const costs: Cost[] = ["Free", "$", "$$", "$$$", "Unknown"];
 const vibeOptions = Object.entries(vibeLabels) as Array<[PlannerVibe, string]>;
 
 const DATA_URL = `${import.meta.env.BASE_URL}data/bay-area-spots.json`;
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID ?? "";
+const GOOGLE_CONFIGURED = GOOGLE_CLIENT_ID.length > 0;
 
 const unsplash = (id: string) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1200&q=80`;
@@ -210,6 +247,79 @@ function pickCategoryImage(category: Category, key: string): string {
     hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
   }
   return pool[hash % pool.length];
+}
+
+const DAY_KEYS: Array<keyof WeekSchedule> = [
+  "sun",
+  "mon",
+  "tue",
+  "wed",
+  "thu",
+  "fri",
+  "sat",
+];
+const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+function formatMinutes(mins: number): string {
+  const total = mins % 1440;
+  if (total === 0) return "midnight";
+  if (total === 720) return "noon";
+  let h = Math.floor(total / 60);
+  const m = total % 60;
+  const suffix = h >= 12 ? "pm" : "am";
+  h = h % 12 === 0 ? 12 : h % 12;
+  return m === 0 ? `${h}${suffix}` : `${h}:${String(m).padStart(2, "0")}${suffix}`;
+}
+
+type OpenStatus =
+  | { kind: "open"; closesAt: number; nextDayIdx?: number }
+  | { kind: "closed"; nextOpenAt?: number; nextOpenDayIdx?: number }
+  | { kind: "always" }
+  | { kind: "unknown" };
+
+function describeStatus(spot: Spot, now: Date = new Date()): OpenStatus {
+  const schedule = spot.schedule;
+  if (!schedule) return { kind: "unknown" };
+  if (schedule.is247) return { kind: "always" };
+
+  const days = schedule.days;
+  const dayIdx = now.getDay();
+  const minutes = now.getHours() * 60 + now.getMinutes();
+  const todayKey = DAY_KEYS[dayIdx];
+  const todaySlots = days[todayKey];
+
+  for (const slot of todaySlots) {
+    if (minutes >= slot.open && minutes < slot.close) {
+      return { kind: "open", closesAt: slot.close };
+    }
+  }
+
+  // Find next opening within the next 7 days.
+  for (let offset = 0; offset < 7; offset += 1) {
+    const lookIdx = (dayIdx + offset) % 7;
+    const slots = days[DAY_KEYS[lookIdx]];
+    for (const slot of slots) {
+      if (offset === 0 && slot.open <= minutes) continue;
+      return { kind: "closed", nextOpenAt: slot.open, nextOpenDayIdx: lookIdx };
+    }
+  }
+  return { kind: "closed" };
+}
+
+function statusLabel(status: OpenStatus, now: Date = new Date()): string {
+  if (status.kind === "always") return "Open 24/7";
+  if (status.kind === "open") {
+    return `Open · until ${formatMinutes(status.closesAt)}`;
+  }
+  if (status.kind === "closed") {
+    if (status.nextOpenAt === undefined || status.nextOpenDayIdx === undefined) {
+      return "Closed";
+    }
+    const sameDay = status.nextOpenDayIdx === now.getDay();
+    const dayLabel = sameDay ? "" : ` ${DAY_NAMES[status.nextOpenDayIdx]}`;
+    return `Closed · opens ${formatMinutes(status.nextOpenAt)}${dayLabel}`;
+  }
+  return "Hours unknown";
 }
 
 const starterSpots: Spot[] = [
@@ -377,35 +487,8 @@ const costRank: Record<Cost, number> = {
 };
 
 const pageSizeOptions = [24, 48, 96];
-const bayAreaMapCenter: [number, number] = [37.7749, -122.4194];
 
-const categoryMarkerColors: Record<Category, string> = {
-  Outdoors: "#276749",
-  Food: "#b85c38",
-  Culture: "#6f4bb2",
-  Nightlife: "#1f4f7a",
-  Wellness: "#2f8f83",
-  Shopping: "#8a6332",
-};
-
-function escapeHtml(value: string) {
-  return value.replace(/[&<>"']/g, (character) => {
-    const replacements: Record<string, string> = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;",
-    };
-    return replacements[character];
-  });
-}
-
-function SpotMap({ spots }: { spots: Spot[] }) {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const mapRef = useRef<LeafletMap | null>(null);
-  const layerRef = useRef<LayerGroup | null>(null);
-
+function SpotLocationSummary({ spots }: { spots: Spot[] }) {
   const plottedSpots = useMemo(
     () =>
       spots.filter(
@@ -418,82 +501,43 @@ function SpotMap({ spots }: { spots: Spot[] }) {
     [spots],
   );
 
-  useEffect(() => {
-    if (!containerRef.current || mapRef.current) {
-      return;
+  const topAreas = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const spot of spots) {
+      counts.set(spot.neighborhood, (counts.get(spot.neighborhood) || 0) + 1);
     }
 
-    const map = L.map(containerRef.current, {
-      center: bayAreaMapCenter,
-      zoom: 9,
-      scrollWheelZoom: false,
-    });
+    return Array.from(counts.entries())
+      .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
+      .slice(0, 4);
+  }, [spots]);
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "&copy; OpenStreetMap contributors",
-      maxZoom: 19,
-    }).addTo(map);
-
-    const layer = L.layerGroup().addTo(map);
-    mapRef.current = map;
-    layerRef.current = layer;
-
-    return () => {
-      map.remove();
-      mapRef.current = null;
-      layerRef.current = null;
-    };
-  }, []);
-
-  useEffect(() => {
-    const map = mapRef.current;
-    const layer = layerRef.current;
-    if (!map || !layer) {
-      return;
-    }
-
-    layer.clearLayers();
-
-    const bounds: [number, number][] = [];
-    for (const spot of plottedSpots) {
-      const position: [number, number] = [spot.lat as number, spot.lon as number];
-      const color = categoryMarkerColors[spot.category];
-      bounds.push(position);
-
-      L.circleMarker(position, {
-        radius: 5,
-        color,
-        fillColor: color,
-        fillOpacity: 0.78,
-        opacity: 0.9,
-        weight: 1,
-      })
-        .bindPopup(
-          `<strong>${escapeHtml(spot.name)}</strong><br>${escapeHtml(spot.category)} - ${escapeHtml(
-            spot.neighborhood,
-          )}`,
-        )
-        .addTo(layer);
-    }
-
-    if (bounds.length > 0) {
-      map.fitBounds(bounds, { maxZoom: 13, padding: [28, 28] });
-    } else {
-      map.setView(bayAreaMapCenter, 9);
-    }
-  }, [plottedSpots]);
+  const coordinateCoverage =
+    spots.length === 0 ? 0 : Math.round((plottedSpots.length / spots.length) * 100);
 
   return (
-    <section className="map-panel" aria-label="Map of filtered Bay Area spots">
+    <section className="map-panel" aria-label="Location summary for filtered Bay Area spots">
       <div className="map-copy">
         <p>Map view</p>
-        <h2>Where the current matches are clustered</h2>
+        <h2>Current matches by area</h2>
       </div>
       <div className="map-meta">
-        <span>{plottedSpots.length} mapped</span>
+        <span>{plottedSpots.length} with coordinates</span>
         <span>{spots.length - plottedSpots.length} without coordinates</span>
+        <span>{coordinateCoverage}% coverage</span>
       </div>
-      <div className="map-canvas" ref={containerRef} />
+      <div className="map-summary">
+        {topAreas.length > 0 ? (
+          topAreas.map(([name, count]) => (
+            <div className="map-area-row" key={name}>
+              <span>{name}</span>
+              <strong>{count}</strong>
+            </div>
+          ))
+        ) : (
+          <p className="empty-state">No matching areas for the current filters.</p>
+        )}
+      </div>
     </section>
   );
 }
@@ -574,17 +618,28 @@ function App() {
   const [view, setView] = useState<"browse" | "plans">("browse");
   const [activePlanId, setActivePlanId] = useState<string | null>(null);
   const [addStopChoice, setAddStopChoice] = useState<string>("");
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(() => {
+    try {
+      const raw = window.localStorage.getItem("saturday.userLocation");
+      return raw ? (JSON.parse(raw) as { lat: number; lon: number }) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [geoState, setGeoState] = useState<"idle" | "requesting" | "denied">("idle");
   const [shareState, setShareState] = useState<{
     status: "idle" | "sharing" | "shared" | "error";
     url?: string;
     error?: string;
   }>({ status: "idle" });
   const [aiState, setAiState] = useState<{
-    status: "idle" | "loading" | "ready" | "error";
-    brief?: PlannerBrief;
+    status: "idle" | "loading" | "error";
     error?: string;
-    model?: string;
   }>({ status: "idle" });
+  const [session, setSession] = useState<SessionState | null>(() => readSession());
+  const [signInError, setSignInError] = useState<string | null>(null);
+  const signInButtonRef = useRef<HTMLDivElement | null>(null);
   const [remoteSpots, setRemoteSpots] = useState<Spot[]>(starterSpots);
   const [dataMeta, setDataMeta] = useState<{
     generatedAt?: string;
@@ -675,6 +730,62 @@ function App() {
   }, [activePlanId]);
 
   useEffect(() => {
+    if (session || !GOOGLE_CONFIGURED) {
+      return;
+    }
+    let cancelled = false;
+    loadGoogleIdentity()
+      .then(() => {
+        if (cancelled || !window.google?.accounts?.id) return;
+        window.google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: async (response: { credential: string }) => {
+            try {
+              const result = await googleSignIn(response.credential);
+              const next: SessionState = {
+                token: result.sessionToken,
+                user: result.user,
+              };
+              writeSession(next);
+              setSession(next);
+              setSignInError(null);
+            } catch (error) {
+              setSignInError((error as Error).message);
+            }
+          },
+        });
+        if (signInButtonRef.current) {
+          signInButtonRef.current.innerHTML = "";
+          window.google.accounts.id.renderButton(signInButtonRef.current, {
+            theme: "outline",
+            size: "medium",
+            text: "signin_with",
+            shape: "pill",
+          });
+        }
+      })
+      .catch((error: Error) => {
+        if (!cancelled) {
+          setSignInError(error.message);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [session]);
+
+  function signOut() {
+    if (session) {
+      logoutSession(session.token);
+    }
+    if (window.google?.accounts?.id) {
+      window.google.accounts.id.disableAutoSelect();
+    }
+    clearSession();
+    setSession(null);
+  }
+
+  useEffect(() => {
     setAiState({ status: "idle" });
   }, [category, city, companion, cost, onlyOpen, query, savedIds, vibe]);
 
@@ -692,7 +803,7 @@ function App() {
 
     return Array.from(counts.entries())
       .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
-      .map(([name]) => name);
+      .map(([name, count]) => ({ name, count }));
   }, [allSpots]);
 
   const savedSpots = useMemo(
@@ -720,7 +831,7 @@ function App() {
         (category === "All" || spot.category === category) &&
         (city === "All" || spot.neighborhood === city) &&
         (cost === "All" || spot.cost === cost) &&
-        (!onlyOpen || spot.openNow)
+        (!onlyOpen || describeStatus(spot).kind === "open" || describeStatus(spot).kind === "always")
       );
     });
 
@@ -747,9 +858,15 @@ function App() {
         return left.name.localeCompare(right.name);
       }
 
+      if (userLocation) {
+        const ld = distanceFromUser(left) ?? Number.POSITIVE_INFINITY;
+        const rd = distanceFromUser(right) ?? Number.POSITIVE_INFINITY;
+        if (ld !== rd) return ld - rd;
+      }
+
       return left.transitMinutes - right.transitMinutes;
     });
-  }, [allSpots, category, city, companion, cost, onlyOpen, query, sortBy, vibe]);
+  }, [allSpots, category, city, companion, cost, onlyOpen, query, sortBy, vibe, userLocation]);
 
   const pageCount = Math.max(1, Math.ceil(filteredSpots.length / pageSize));
   const safePage = Math.min(page, pageCount);
@@ -773,11 +890,16 @@ function App() {
         ? "Friend-friendly spots"
         : `Best with ${companionLabels[companion]}`;
 
-  const plannerBrief = useMemo(
-    () => buildPlannerBrief(filteredSpots, savedSpots, vibe),
-    [filteredSpots, savedSpots, vibe],
-  );
-  const displayedBrief = aiState.brief ?? plannerBrief;
+  const activeFilterCount = useMemo(() => {
+    let n = 0;
+    if (query) n += 1;
+    if (companion !== "friends") n += 1;
+    if (category !== "All") n += 1;
+    if (city !== "All") n += 1;
+    if (cost !== "All") n += 1;
+    if (onlyOpen) n += 1;
+    return n;
+  }, [query, companion, category, city, cost, onlyOpen]);
 
   const activePlan = useMemo(
     () => plans.find((plan) => plan.id === activePlanId) ?? null,
@@ -814,6 +936,23 @@ function App() {
       name: "New plan",
       stopIds: [],
       createdAt: new Date().toISOString(),
+    };
+    setPlans((current) => [...current, next]);
+    setActivePlanId(id);
+    setView("plans");
+  }
+
+  function createPlanFromSaved() {
+    if (savedSpots.length === 0) {
+      return;
+    }
+    const id = `plan-${Date.now()}`;
+    const next: Plan = {
+      id,
+      name: `Saved plan (${savedSpots.length})`,
+      stopIds: savedSpots.map((spot) => spot.id),
+      createdAt: new Date().toISOString(),
+      source: "manual",
     };
     setPlans((current) => [...current, next]);
     setActivePlanId(id);
@@ -892,8 +1031,22 @@ function App() {
     }
   }
 
-  async function refinePlannerWithAi() {
+  async function createAiPlan() {
+    if (!session) {
+      setAiState({
+        status: "error",
+        error: "Sign in with Google to use AI suggest.",
+      });
+      return;
+    }
     const source = savedSpots.length > 0 ? savedSpots : filteredSpots;
+    if (source.length === 0) {
+      setAiState({
+        status: "error",
+        error: "Save spots or adjust filters so the AI has candidates.",
+      });
+      return;
+    }
     const spots: StopSummary[] = source.slice(0, 12).map((spot) => ({
       id: spot.id,
       name: spot.name,
@@ -913,17 +1066,29 @@ function App() {
 
     setAiState({ status: "loading" });
     try {
-      const result = await createAiBrief({ vibe, spots });
-      setAiState({
-        status: "ready",
-        model: result.model,
-        brief: {
-          title: result.brief.title,
-          summary: result.brief.summary,
-          rationale: result.brief.rationale,
-          cautions: result.brief.cautions,
-        },
-      });
+      const result = await createAiBrief({ vibe, spots }, session.token);
+      const stopIds =
+        result.picks.length > 0
+          ? result.picks.map((p) => p.id)
+          : spots.slice(0, 3).map((s) => s.id);
+      const id = `plan-${Date.now()}`;
+      const plan: Plan = {
+        id,
+        name: result.brief.title || `${vibeLabels[vibe]} plan`,
+        stopIds,
+        createdAt: new Date().toISOString(),
+        source: "ai",
+        vibe,
+        summary: result.brief.summary,
+        rationale: result.brief.rationale,
+        cautions: result.brief.cautions,
+        picks: result.picks,
+        aiModel: result.model,
+      };
+      setPlans((current) => [...current, plan]);
+      setActivePlanId(id);
+      setView("plans");
+      setAiState({ status: "idle" });
     } catch (error) {
       setAiState({ status: "error", error: (error as Error).message });
     }
@@ -945,6 +1110,58 @@ function App() {
         return { ...plan, stopIds: next };
       }),
     );
+  }
+
+  function haversineMiles(
+    a: { lat: number; lon: number },
+    b: { lat: number; lon: number },
+  ) {
+    const toRad = (deg: number) => (deg * Math.PI) / 180;
+    const R = 3958.8;
+    const dLat = toRad(b.lat - a.lat);
+    const dLon = toRad(b.lon - a.lon);
+    const lat1 = toRad(a.lat);
+    const lat2 = toRad(b.lat);
+    const x =
+      Math.sin(dLat / 2) ** 2 +
+      Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
+    return 2 * R * Math.asin(Math.sqrt(x));
+  }
+
+  function distanceFromUser(spot: Spot): number | null {
+    if (!userLocation) return null;
+    if (typeof spot.lat !== "number" || typeof spot.lon !== "number") return null;
+    return haversineMiles(userLocation, { lat: spot.lat, lon: spot.lon });
+  }
+
+  function requestUserLocation() {
+    if (!("geolocation" in navigator)) {
+      setGeoState("denied");
+      return;
+    }
+    setGeoState("requesting");
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const next = {
+          lat: Number(pos.coords.latitude.toFixed(5)),
+          lon: Number(pos.coords.longitude.toFixed(5)),
+        };
+        setUserLocation(next);
+        window.localStorage.setItem("saturday.userLocation", JSON.stringify(next));
+        setGeoState("idle");
+        setSortBy("nearest");
+      },
+      () => {
+        setGeoState("denied");
+      },
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 600000 },
+    );
+  }
+
+  function clearUserLocation() {
+    setUserLocation(null);
+    window.localStorage.removeItem("saturday.userLocation");
+    setGeoState("idle");
   }
 
   function toggleSaved(id: string) {
@@ -1031,6 +1248,28 @@ function App() {
           </div>
         </div>
         <div className="topbar-actions">
+          {GOOGLE_CONFIGURED ? (
+            session ? (
+              <div className="user-chip" title={session.user.email}>
+                {session.user.picture && (
+                  <img src={session.user.picture} alt="" />
+                )}
+                <span>{session.user.name}</span>
+                <button
+                  className="text-button"
+                  onClick={signOut}
+                  title="Sign out"
+                >
+                  Sign out
+                </button>
+              </div>
+            ) : (
+              <div className="signin-wrap">
+                <div ref={signInButtonRef} className="signin-slot" />
+                {signInError && <span className="signin-error">{signInError}</span>}
+              </div>
+            )
+          ) : null}
           <button className="icon-button" title="Reset filters" onClick={resetFilters}>
             <RotateCcw aria-hidden="true" />
           </button>
@@ -1059,13 +1298,29 @@ function App() {
       </nav>
 
       {view === "browse" ? (
-      <>
-      <SpotMap spots={filteredSpots} />
       <main className="workspace">
-        <aside className="filter-panel" aria-label="Spot filters">
+        {filtersOpen && (
+          <div
+            className="filter-backdrop"
+            role="presentation"
+            onClick={() => setFiltersOpen(false)}
+          />
+        )}
+        <aside
+          id="spot-filters"
+          className={`filter-panel${filtersOpen ? " is-open" : ""}`}
+          aria-label="Spot filters"
+        >
           <div className="panel-heading">
             <SlidersHorizontal aria-hidden="true" />
             <span>Filters</span>
+            <button
+              className="filter-done"
+              type="button"
+              onClick={() => setFiltersOpen(false)}
+            >
+              Done
+            </button>
           </div>
 
           <label className="search-box">
@@ -1128,9 +1383,11 @@ function App() {
               value={city}
               onChange={(event) => setCity(event.target.value)}
             >
-              <option>All</option>
-              {cityOptions.map((item) => (
-                <option key={item}>{item}</option>
+              <option value="All">All ({allSpots.length})</option>
+              {cityOptions.map(({ name, count }) => (
+                <option key={name} value={name}>
+                  {name} ({count})
+                </option>
               ))}
             </select>
           </label>
@@ -1154,7 +1411,7 @@ function App() {
               checked={onlyOpen}
               onChange={(event) => setOnlyOpen(event.target.checked)}
             />
-            <span>Hours listed</span>
+            <span>Open now</span>
           </label>
 
           <label className="select-field">
@@ -1166,14 +1423,59 @@ function App() {
               }
             >
               <option value="best">Best fit</option>
-              <option value="nearest">Nearest to SF</option>
+              <option value="nearest">
+                {userLocation ? "Nearest to me" : "Nearest to SF"}
+              </option>
               <option value="price">Lowest cost</option>
               <option value="name">Name</option>
             </select>
           </label>
+
+          <div className="geo-row">
+            {userLocation ? (
+              <button
+                className="geo-button active"
+                type="button"
+                onClick={clearUserLocation}
+                title={`Using your location (${userLocation.lat.toFixed(2)}, ${userLocation.lon.toFixed(2)})`}
+              >
+                <MapPin aria-hidden="true" />
+                Using my location
+              </button>
+            ) : (
+              <button
+                className="geo-button"
+                type="button"
+                disabled={geoState === "requesting"}
+                onClick={requestUserLocation}
+              >
+                <MapPin aria-hidden="true" />
+                {geoState === "requesting" ? "Locating…" : "Use my location"}
+              </button>
+            )}
+          </div>
+          {geoState === "denied" && (
+            <p className="geo-status error">
+              Location permission denied. Enable it in your browser settings to sort by distance from you.
+            </p>
+          )}
         </aside>
 
         <section className="spots-area" aria-label="Visit spots">
+          <button
+            className="filter-trigger"
+            type="button"
+            onClick={() => setFiltersOpen(true)}
+            aria-expanded={filtersOpen}
+            aria-controls="spot-filters"
+          >
+            <SlidersHorizontal aria-hidden="true" />
+            Filters
+            {activeFilterCount > 0 && (
+              <em className="filter-count">{activeFilterCount}</em>
+            )}
+          </button>
+          <SpotLocationSummary spots={filteredSpots} />
           <div className="section-heading">
             <div>
               <p>{filteredSpots.length} matches</p>
@@ -1197,6 +1499,29 @@ function App() {
             </div>
           </div>
 
+          {filteredSpots.length === 0 ? (
+            <div className="empty-results">
+              <h3>No matching spots</h3>
+              <p>
+                Your current filters didn't match any of the {allSpots.length}
+                {" "}spots in the dataset.
+              </p>
+              <ul>
+                {query && <li>Search: "{query}"</li>}
+                {companion !== "any" && (
+                  <li>Companion: {companionLabels[companion]}</li>
+                )}
+                {category !== "All" && <li>Category: {category}</li>}
+                {city !== "All" && <li>Area: {city}</li>}
+                {cost !== "All" && <li>Cost: {cost}</li>}
+                {onlyOpen && <li>Open now only</li>}
+              </ul>
+              <button className="primary-button" onClick={resetFilters}>
+                <RotateCcw aria-hidden="true" />
+                Reset filters
+              </button>
+            </div>
+          ) : (
           <div className="spot-grid">
             {paginatedSpots.map((spot) => {
               const saved = savedIds.includes(spot.id);
@@ -1232,15 +1557,49 @@ function App() {
 
                     <p className="spot-note">{spot.note}</p>
 
+                    {(() => {
+                      const status = describeStatus(spot);
+                      if (status.kind === "unknown") {
+                        return spot.openingHours ? (
+                          <p className="hours-line muted">
+                            <Clock3 aria-hidden="true" />
+                            Hours: {spot.openingHours}
+                          </p>
+                        ) : null;
+                      }
+                      const cls =
+                        status.kind === "open" || status.kind === "always"
+                          ? "open"
+                          : "closed";
+                      return (
+                        <p className={`hours-line ${cls}`}>
+                          <Clock3 aria-hidden="true" />
+                          {statusLabel(status)}
+                        </p>
+                      );
+                    })()}
+
                     <div className="metadata-grid">
                       <span>
                         <MapPin aria-hidden="true" />
                         {spot.neighborhood}
                       </span>
-                      <span>
-                        <Clock3 aria-hidden="true" />
-                        {spot.transitMinutes} min
-                      </span>
+                      {(() => {
+                        const d = distanceFromUser(spot);
+                        return d !== null ? (
+                          <span>
+                            <MapPin aria-hidden="true" />
+                            {d < 1
+                              ? `${(d * 5280).toFixed(0)} ft away`
+                              : `${d.toFixed(1)} mi away`}
+                          </span>
+                        ) : (
+                          <span>
+                            <Clock3 aria-hidden="true" />
+                            {spot.transitMinutes} min
+                          </span>
+                        );
+                      })()}
                       <span>
                         <Users aria-hidden="true" />
                         {spot.groupSize}
@@ -1250,15 +1609,52 @@ function App() {
                       <span>{spot.planning}</span>
                     </div>
 
-                    <div className="tag-row">
-                      {(spot.tags.length > 0 ? spot.tags : spot.bestWith).slice(0, 5).map((item) => (
-                        <span key={item}>
-                          {item in companionLabels
-                            ? companionLabels[item as Companion]
-                            : item}
-                        </span>
-                      ))}
-                    </div>
+                    {(spot.wheelchair === "yes" ||
+                      spot.wheelchair === "limited" ||
+                      spot.dogsAllowed === true ||
+                      spot.kidsFriendly === true ||
+                      spot.parkingNearby === true) && (
+                      <div className="feature-chips">
+                        {spot.wheelchair === "yes" && (
+                          <span title="Wheelchair accessible">♿ Accessible</span>
+                        )}
+                        {spot.wheelchair === "limited" && (
+                          <span title="Wheelchair access limited">♿ Limited</span>
+                        )}
+                        {spot.dogsAllowed === true && (
+                          <span title="Dogs allowed">🐕 Dogs OK</span>
+                        )}
+                        {spot.kidsFriendly === true && (
+                          <span title="Kid-friendly">👶 Kids</span>
+                        )}
+                        {spot.parkingNearby === true && (
+                          <span title="Parking on site">🅿 Parking</span>
+                        )}
+                      </div>
+                    )}
+
+                    {(() => {
+                      const raw = spot.tags.length > 0 ? spot.tags : spot.bestWith;
+                      const visibleTags = raw
+                        .filter((item) => {
+                          const lower = item.toLowerCase();
+                          if (lower === spot.category.toLowerCase()) return false;
+                          if (lower === "friends") return false;
+                          return true;
+                        })
+                        .slice(0, 4);
+                      return visibleTags.length === 0 ? null : (
+                        <div className="tag-row">
+                          {visibleTags.map((item) => (
+                            <span key={item}>
+                              {item in companionLabels
+                                ? companionLabels[item as Companion]
+                                : item}
+                            </span>
+                          ))}
+                        </div>
+                      );
+                    })()}
 
                     {(spot.website || spot.sourceUrl) && (
                       <div className="source-row">
@@ -1278,9 +1674,6 @@ function App() {
                     )}
 
                     <div className="card-footer">
-                      <span className={spot.openNow ? "open" : "closed"}>
-                        {spot.openNow ? "Hours listed" : "Check hours"}
-                      </span>
                       <button
                         className="text-button"
                         onClick={() => toggleVisited(spot.id)}
@@ -1300,6 +1693,7 @@ function App() {
               );
             })}
           </div>
+          )}
 
           {filteredSpots.length > 0 && (
             <div className="pagination-bar" aria-label="Spot pagination">
@@ -1344,84 +1738,44 @@ function App() {
           )}
         </section>
 
-        <aside className="plan-panel" aria-label="Planner and saved spots">
+        <aside className="plan-panel" aria-label="Saved spots">
           <div className="panel-heading">
-            <Sparkles aria-hidden="true" />
-            <span>Planner</span>
-          </div>
-
-          <div className="planner-brief">
-            <div className="planner-topline">
-              <p className="plan-kicker">
-                {aiState.status === "ready" ? "AI refined" : `${vibeLabels[vibe]} plan`}
-              </p>
-              <button
-                className="mini-action"
-                disabled={aiState.status === "loading" || filteredSpots.length === 0}
-                onClick={refinePlannerWithAi}
-              >
-                <Sparkles aria-hidden="true" />
-                {aiState.status === "loading" ? "Refining" : "AI refine"}
-              </button>
-            </div>
-            <h3>{displayedBrief.title}</h3>
-            <p>{displayedBrief.summary}</p>
-
-            <ul className="planner-list">
-              {displayedBrief.rationale.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-
-            {displayedBrief.backup && (
-              <p className="backup-line">
-                Backup: <strong>{displayedBrief.backup.name}</strong>
-              </p>
-            )}
-
-            <div className="caution-list">
-              {displayedBrief.cautions.map((item) => (
-                <span key={item}>{item}</span>
-              ))}
-              {aiState.status === "error" && (
-                <span>AI refine is unavailable: {aiState.error}</span>
-              )}
-              {aiState.status === "ready" && aiState.model && (
-                <span>Generated by {aiState.model} from the visible sanitized candidates.</span>
-              )}
-            </div>
-          </div>
-
-          <div className="panel-divider" />
-
-          <div className="panel-heading saved-heading">
             <Bookmark aria-hidden="true" />
             <span>Saved</span>
           </div>
           {savedSpots.length === 0 ? (
             <p className="empty-state">Save a few group spots to compare your day.</p>
           ) : (
-            <div className="saved-list">
-              {savedSpots.map((spot) => (
-                <div className="saved-item" key={spot.id}>
-                  <div>
-                    <strong>{spot.name}</strong>
-                    <span>{spot.neighborhood}</span>
+            <>
+              <button
+                className="primary-button wide"
+                onClick={() => createPlanFromSaved()}
+                title="Create a plan with all saved spots in order"
+              >
+                <List aria-hidden="true" />
+                Plan from saved ({savedSpots.length})
+              </button>
+              <div className="saved-list">
+                {savedSpots.map((spot) => (
+                  <div className="saved-item" key={spot.id}>
+                    <div>
+                      <strong>{spot.name}</strong>
+                      <span>{spot.neighborhood}</span>
+                    </div>
+                    <button
+                      className="icon-button"
+                      title="Remove saved spot"
+                      onClick={() => toggleSaved(spot.id)}
+                    >
+                      <Trash2 aria-hidden="true" />
+                    </button>
                   </div>
-                  <button
-                    className="icon-button"
-                    title="Remove saved spot"
-                    onClick={() => toggleSaved(spot.id)}
-                  >
-                    <Trash2 aria-hidden="true" />
-                  </button>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </>
           )}
         </aside>
       </main>
-      </>
       ) : (
       <main className="plans-workspace" aria-label="Plans">
         <aside className="plan-list-panel" aria-label="Saved plans">
@@ -1433,6 +1787,51 @@ function App() {
             <Plus aria-hidden="true" />
             New plan
           </button>
+
+          <div className="ai-suggest">
+            <label className="select-field">
+              <span>Vibe</span>
+              <select
+                value={vibe}
+                onChange={(event) => setVibe(event.target.value as PlannerVibe)}
+              >
+                {vibeOptions.map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button
+              className="secondary-button wide"
+              disabled={
+                !API_CONFIGURED ||
+                !session ||
+                aiState.status === "loading" ||
+                (savedSpots.length === 0 && filteredSpots.length === 0)
+              }
+              title={
+                !API_CONFIGURED
+                  ? "Backend not deployed in this preview"
+                  : !session
+                    ? "Sign in with Google to use AI suggest"
+                    : undefined
+              }
+              onClick={createAiPlan}
+            >
+              <Sparkles aria-hidden="true" />
+              {aiState.status === "loading" ? "Thinking…" : "AI suggest"}
+            </button>
+            <p className="ai-suggest-hint">
+              {savedSpots.length > 0
+                ? `Uses your ${savedSpots.length} saved spot${savedSpots.length === 1 ? "" : "s"} as candidates.`
+                : "Uses your current Browse filters as candidates."}
+            </p>
+            {aiState.status === "error" && (
+              <p className="ai-suggest-error">{aiState.error}</p>
+            )}
+          </div>
+
           {plans.length === 0 ? (
             <p className="empty-state">
               Build a small itinerary from your saved spots.
@@ -1474,6 +1873,13 @@ function App() {
               />
 
               <div className="plan-summary">
+                {activePlan.source === "ai" && (
+                  <span className="badge-ai">
+                    <Sparkles aria-hidden="true" />
+                    AI suggested
+                    {activePlan.vibe ? ` · ${vibeLabels[activePlan.vibe]}` : ""}
+                  </span>
+                )}
                 <span>
                   {activePlanStops.length} stop
                   {activePlanStops.length === 1 ? "" : "s"}
@@ -1488,13 +1894,28 @@ function App() {
                 )}
               </div>
 
+              {activePlan.summary && (
+                <p className="plan-ai-summary">{activePlan.summary}</p>
+              )}
+              {activePlan.rationale && activePlan.rationale.length > 0 && (
+                <ul className="plan-rationale">
+                  {activePlan.rationale.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              )}
+
               {activePlanStops.length === 0 ? (
                 <p className="empty-state">
                   Add stops from your saved spots to build the day.
                 </p>
               ) : (
                 <ol className="plan-stops">
-                  {activePlanStops.map((spot, index) => (
+                  {activePlanStops.map((spot, index) => {
+                    const aiReason = activePlan.picks?.find(
+                      (pick) => pick.id === spot.id,
+                    )?.reason;
+                    return (
                     <li className="plan-stop" key={spot.id}>
                       <span className="plan-stop-index">{index + 1}</span>
                       <div className="plan-stop-info">
@@ -1503,6 +1924,7 @@ function App() {
                           {spot.neighborhood} · {spot.category} · {spot.cost} ·{" "}
                           {spot.transitMinutes} min
                         </span>
+                        {aiReason && <em className="plan-stop-reason">{aiReason}</em>}
                       </div>
                       <div className="plan-stop-actions">
                         <button
@@ -1529,7 +1951,8 @@ function App() {
                         </button>
                       </div>
                     </li>
-                  ))}
+                    );
+                  })}
                 </ol>
               )}
 
@@ -1565,10 +1988,15 @@ function App() {
                 <button
                   className="primary-button"
                   disabled={
+                    !API_CONFIGURED ||
                     activePlanStops.length === 0 ||
                     shareState.status === "sharing"
                   }
-                  title="Share this plan for voting"
+                  title={
+                    API_CONFIGURED
+                      ? "Share this plan for voting"
+                      : "Backend not deployed in this preview"
+                  }
                   onClick={sharePlan}
                 >
                   <Share2 aria-hidden="true" />
@@ -1605,6 +2033,17 @@ function App() {
                   <a href={`${window.location.origin}/#/p/${activePlan.pollId}`}>
                     {`${window.location.origin}/#/p/${activePlan.pollId}`}
                   </a>
+                </div>
+              )}
+
+              {activePlan.cautions && activePlan.cautions.length > 0 && (
+                <div className="plan-cautions">
+                  {activePlan.cautions.map((item) => (
+                    <span key={item}>{item}</span>
+                  ))}
+                  {activePlan.aiModel && (
+                    <span>Generated by {activePlan.aiModel}.</span>
+                  )}
                 </div>
               )}
             </div>
