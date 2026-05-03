@@ -29,6 +29,8 @@ jobs:
       - run: npm run build
         env:
           GITHUB_PAGES: "true"
+          VITE_POLLS_API: "https://saturday-polls.santaclararental2016.workers.dev"
+          VITE_GOOGLE_CLIENT_ID: "673443526391-r7oj4up03jd13ti57a6fpq6bcdas91p6.apps.googleusercontent.com"
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
