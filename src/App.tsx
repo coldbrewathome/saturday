@@ -1,0 +1,1544 @@
+import {
+  ArrowDown,
+  ArrowUp,
+  Bookmark,
+  Check,
+  Clock3,
+  Database,
+  ExternalLink,
+  List,
+  MapPin,
+  Plus,
+  RotateCcw,
+  Search,
+  Share2,
+  SlidersHorizontal,
+  Sparkles,
+  Trash2,
+  Users,
+  X,
+} from "lucide-react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
+import { createAiBrief, createPoll, StopSummary } from "./api";
+import {
+  buildPlannerBrief,
+  scoreSpotForVibe,
+  vibeLabels,
+  type PlannerBrief,
+  type PlannerVibe,
+} from "./planner";
+
+type Companion = "solo" | "date" | "friends" | "family" | "dog";
+type Category =
+  | "Outdoors"
+  | "Food"
+  | "Culture"
+  | "Nightlife"
+  | "Wellness"
+  | "Shopping";
+type Cost = "Free" | "$" | "$$" | "$$$" | "Unknown";
+
+type Spot = {
+  id: string;
+  name: string;
+  neighborhood: string;
+  category: Category;
+  imageUrl: string;
+  imageSource?: string;
+  imageAttribution?: string;
+  bestWith: Companion[];
+  cost: Cost;
+  transitMinutes: number;
+  timeWindow: string;
+  mood: string;
+  groupSize: string;
+  planning: string;
+  openNow: boolean;
+  note: string;
+  tags: string[];
+  lat?: number;
+  lon?: number;
+  distanceMiles?: number;
+  sourceUrl?: string;
+  website?: string | null;
+  openingHours?: string | null;
+  dataSource?: string;
+  updatedAt?: string;
+  friendScore?: number;
+  wikidataId?: string | null;
+  wikipedia?: string | null;
+};
+
+type SpotDataset = {
+  generatedAt?: string;
+  source?: {
+    name?: string;
+    attribution?: string;
+    license?: string;
+  };
+  imageStats?: {
+    wikidata?: number;
+    tagged?: number;
+    fallback?: number;
+  };
+  count?: number;
+  spots?: Spot[];
+};
+
+type NewSpotForm = {
+  name: string;
+  neighborhood: string;
+  category: Category;
+  companion: Companion;
+  cost: Cost;
+  note: string;
+};
+
+export type Plan = {
+  id: string;
+  name: string;
+  stopIds: string[];
+  createdAt: string;
+  pollId?: string;
+  ownerToken?: string;
+};
+
+const companionLabels: Record<Companion, string> = {
+  solo: "Solo",
+  date: "Date",
+  friends: "Friends",
+  family: "Family",
+  dog: "Dog",
+};
+
+const companionOptions: Array<{ value: Companion | "any"; label: string }> = [
+  { value: "friends", label: "Friends" },
+  { value: "any", label: "Any" },
+  { value: "date", label: "Date" },
+  { value: "family", label: "Family" },
+  { value: "solo", label: "Solo" },
+  { value: "dog", label: "Dog" },
+];
+
+const categories: Category[] = [
+  "Outdoors",
+  "Food",
+  "Culture",
+  "Nightlife",
+  "Wellness",
+  "Shopping",
+];
+
+const costs: Cost[] = ["Free", "$", "$$", "$$$", "Unknown"];
+const vibeOptions = Object.entries(vibeLabels) as Array<[PlannerVibe, string]>;
+
+const DATA_URL = "/data/bay-area-spots.json";
+
+const unsplash = (id: string) =>
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1200&q=80`;
+
+const categoryImagePool: Record<Category, string[]> = {
+  Food: [
+    "1495474472287-4d71bcdd2085",
+    "1555396273-367ea4eb4db5",
+    "1517248135467-4c7edcad34c4",
+    "1481833761820-0509d3217039",
+    "1414235077428-338989a2e8c0",
+    "1424847651672-bf20a4b0982b",
+    "1610890716171-6b1bb98ffd09",
+    "1504674900247-0877df9cc836",
+    "1565299624946-b28f40a0ae38",
+    "1559339352-11d035aa65de",
+  ].map(unsplash),
+  Outdoors: [
+    "1500530855697-b586d89ba3ee",
+    "1469474968028-56623f02e42e",
+    "1501785888041-af3ef285b470",
+    "1502082553048-f009c37129b9",
+    "1464822759023-fed622ff2c3b",
+    "1473773508845-188df298d2d1",
+    "1441974231531-c6227db76b6e",
+    "1506905925346-21bda4d32df4",
+    "1418065460487-3e41a6c84dc5",
+  ].map(unsplash),
+  Culture: [
+    "1518998053901-5348d3961a04",
+    "1554907984-15263bfd63bd",
+    "1564399579883-451a5d44ec08",
+    "1583847268964-b28dc8f51f92",
+    "1485738422979-f5c462d49f74",
+    "1503095396549-807759245b35",
+  ].map(unsplash),
+  Nightlife: [
+    "1501386761578-eac5c94b800a",
+    "1566417713940-fe7c737a9ef2",
+    "1572116469696-31de0f17cc34",
+    "1543007630-9710e4a00a20",
+    "1559329007-40df8a9345d8",
+    "1521587760476-6c12a4b040da",
+    "1470337458703-46ad1756a187",
+  ].map(unsplash),
+  Wellness: [
+    "1626224583764-f87db24ac4ea",
+    "1518611012118-696072aa579a",
+    "1571902943202-507ec2618e8f",
+    "1599901860904-17e6ed7083a0",
+    "1545205597-3d9d02c29597",
+    "1571388208497-71bedc66e932",
+    "1506629082955-511b1aa562c8",
+    "1518609878373-06d740f60d8b",
+  ].map(unsplash),
+  Shopping: [
+    "1441986300917-64674bd600d8",
+    "1481437156560-3205f6a55735",
+    "1555529669-e69e7aa0ba9a",
+    "1567401893414-76b7b1e5a7a5",
+    "1549298916-b41d501d3772",
+    "1483985988355-763728e1935b",
+    "1472851294608-062f824d29cc",
+    "1555529771-7888783a18d3",
+  ].map(unsplash),
+};
+
+function pickCategoryImage(category: Category, key: string): string {
+  const pool = categoryImagePool[category];
+  let hash = 0;
+  for (let i = 0; i < key.length; i += 1) {
+    hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
+  }
+  return pool[hash % pool.length];
+}
+
+const starterSpots: Spot[] = [
+  {
+    id: "market-hall",
+    name: "Market Hall Crawl",
+    neighborhood: "Downtown",
+    category: "Food",
+    imageUrl:
+      "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80",
+    bestWith: ["friends", "family", "date"],
+    cost: "$$",
+    transitMinutes: 18,
+    timeWindow: "Lunch",
+    mood: "Lots of choices",
+    groupSize: "3-8 people",
+    planning: "Walk-in",
+    openNow: true,
+    note: "Good when nobody can agree on one restaurant. Grab small plates, split snacks, and keep moving.",
+    tags: ["food", "group", "indoor", "shareable"],
+  },
+  {
+    id: "board-game-cafe",
+    name: "Board Game Cafe",
+    neighborhood: "Northside",
+    category: "Food",
+    imageUrl:
+      "https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=1200&q=80",
+    bestWith: ["friends", "date", "family"],
+    cost: "$",
+    transitMinutes: 11,
+    timeWindow: "Afternoon",
+    mood: "Easy hangout",
+    groupSize: "2-6 people",
+    planning: "Reserve",
+    openNow: true,
+    note: "Low-pressure table time for a mixed group. Works especially well when weather is bad.",
+    tags: ["games", "coffee", "indoor", "tables"],
+  },
+  {
+    id: "pickleball-courts",
+    name: "Pickleball Courts",
+    neighborhood: "Civic Park",
+    category: "Wellness",
+    imageUrl:
+      "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=1200&q=80",
+    bestWith: ["friends"],
+    cost: "Free",
+    transitMinutes: 14,
+    timeWindow: "Morning",
+    mood: "Light competition",
+    groupSize: "4 people",
+    planning: "Check courts",
+    openNow: true,
+    note: "Fast to start, easy to rotate, and active without turning the whole day into a workout.",
+    tags: ["active", "outside", "free", "sports"],
+  },
+  {
+    id: "karaoke-room",
+    name: "Karaoke Room",
+    neighborhood: "Japantown",
+    category: "Nightlife",
+    imageUrl:
+      "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1200&q=80",
+    bestWith: ["friends"],
+    cost: "$$",
+    transitMinutes: 24,
+    timeWindow: "Evening",
+    mood: "High energy",
+    groupSize: "4-10 people",
+    planning: "Book ahead",
+    openNow: true,
+    note: "Best when everyone is already up for a loud night. Private rooms make it easier to commit.",
+    tags: ["music", "night", "group", "reservation"],
+  },
+  {
+    id: "sunset-picnic",
+    name: "Sunset Picnic Lawn",
+    neighborhood: "Waterfront",
+    category: "Outdoors",
+    imageUrl:
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+    bestWith: ["friends", "date", "family", "dog"],
+    cost: "Free",
+    transitMinutes: 12,
+    timeWindow: "Sunset",
+    mood: "Low effort",
+    groupSize: "2-12 people",
+    planning: "Bring snacks",
+    openNow: true,
+    note: "Easy default when the group wants outside time without tickets, reservations, or a fixed schedule.",
+    tags: ["picnic", "views", "outside", "free"],
+  },
+  {
+    id: "gallery-taco-loop",
+    name: "Gallery + Taco Loop",
+    neighborhood: "Arts District",
+    category: "Culture",
+    imageUrl:
+      "https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&w=1200&q=80",
+    bestWith: ["friends", "date"],
+    cost: "$",
+    transitMinutes: 21,
+    timeWindow: "Afternoon",
+    mood: "Wander and snack",
+    groupSize: "2-5 people",
+    planning: "Flexible",
+    openNow: false,
+    note: "A compact route with small galleries, murals, and taco stops close enough to split up and regroup.",
+    tags: ["art", "food", "walkable", "casual"],
+  },
+  {
+    id: "record-cafe",
+    name: "Record Cafe",
+    neighborhood: "Northside",
+    category: "Food",
+    imageUrl:
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80",
+    bestWith: ["friends", "solo", "date"],
+    cost: "$",
+    transitMinutes: 9,
+    timeWindow: "Morning",
+    mood: "Coffee and browsing",
+    groupSize: "2-4 people",
+    planning: "Walk-in",
+    openNow: true,
+    note: "A compact coffee stop with records, pastries, and enough browsing to fill a slow morning.",
+    tags: ["coffee", "music", "nearby", "low key"],
+  },
+  {
+    id: "late-dessert",
+    name: "Late Dessert Block",
+    neighborhood: "Old Town",
+    category: "Nightlife",
+    imageUrl:
+      "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1200&q=80",
+    bestWith: ["date", "friends"],
+    cost: "$$",
+    transitMinutes: 17,
+    timeWindow: "Evening",
+    mood: "Low-key night out",
+    groupSize: "2-6 people",
+    planning: "Walk-in",
+    openNow: false,
+    note: "A quieter after-dinner plan: bookstore browsing, dessert, and a few nearby places to keep talking.",
+    tags: ["books", "dessert", "evening", "walkable"],
+  },
+];
+
+const emptyNewSpot: NewSpotForm = {
+  name: "",
+  neighborhood: "",
+  category: "Outdoors",
+  companion: "friends",
+  cost: "$",
+  note: "",
+};
+
+const costRank: Record<Cost, number> = {
+  Free: 0,
+  $: 1,
+  $$: 2,
+  $$$: 3,
+  Unknown: 4,
+};
+
+function readStoredArray<T>(key: string, fallback: T[]): T[] {
+  try {
+    const raw = window.localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T[]) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function formatGeneratedAt(value?: string) {
+  if (!value) {
+    return "Fallback data";
+  }
+
+  return new Intl.DateTimeFormat(undefined, {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(new Date(value));
+}
+
+function interleaveByCategory(spots: Spot[]) {
+  const buckets = new Map<Category, Spot[]>();
+  for (const item of categories) {
+    buckets.set(item, []);
+  }
+
+  for (const spot of spots) {
+    buckets.get(spot.category)?.push(spot);
+  }
+
+  const result: Spot[] = [];
+  let added = true;
+  while (added) {
+    added = false;
+    for (const item of categories) {
+      const next = buckets.get(item)?.shift();
+      if (next) {
+        result.push(next);
+        added = true;
+      }
+    }
+  }
+
+  return result;
+}
+
+function App() {
+  const [query, setQuery] = useState("");
+  const [companion, setCompanion] = useState<Companion | "any">("friends");
+  const [vibe, setVibe] = useState<PlannerVibe>("balanced");
+  const [category, setCategory] = useState<Category | "All">("All");
+  const [city, setCity] = useState("All");
+  const [cost, setCost] = useState<Cost | "All">("All");
+  const [onlyOpen, setOnlyOpen] = useState(false);
+  const [sortBy, setSortBy] = useState<"best" | "nearest" | "price" | "name">(
+    "best",
+  );
+  const [savedIds, setSavedIds] = useState<string[]>(() =>
+    readStoredArray("saturday.savedSpots", []),
+  );
+  const [visitedIds, setVisitedIds] = useState<string[]>(() =>
+    readStoredArray("saturday.visitedSpots", []),
+  );
+  const [customSpots, setCustomSpots] = useState<Spot[]>(() =>
+    readStoredArray("saturday.customSpots", []),
+  );
+  const [plans, setPlans] = useState<Plan[]>(() =>
+    readStoredArray("saturday.plans", []),
+  );
+  const [view, setView] = useState<"browse" | "plans">("browse");
+  const [activePlanId, setActivePlanId] = useState<string | null>(null);
+  const [addStopChoice, setAddStopChoice] = useState<string>("");
+  const [shareState, setShareState] = useState<{
+    status: "idle" | "sharing" | "shared" | "error";
+    url?: string;
+    error?: string;
+  }>({ status: "idle" });
+  const [aiState, setAiState] = useState<{
+    status: "idle" | "loading" | "ready" | "error";
+    brief?: PlannerBrief;
+    error?: string;
+    model?: string;
+  }>({ status: "idle" });
+  const [remoteSpots, setRemoteSpots] = useState<Spot[]>(starterSpots);
+  const [dataMeta, setDataMeta] = useState<{
+    generatedAt?: string;
+    sourceName: string;
+    count: number;
+    loading: boolean;
+    error?: string;
+    imageStats?: SpotDataset["imageStats"];
+  }>({
+    sourceName: "Curated fallback",
+    count: starterSpots.length,
+    loading: true,
+  });
+  const [isAdding, setIsAdding] = useState(false);
+  const [newSpot, setNewSpot] = useState<NewSpotForm>(emptyNewSpot);
+
+  useEffect(() => {
+    let active = true;
+
+    fetch(DATA_URL)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Data request failed: ${response.status}`);
+        }
+
+        return response.json() as Promise<SpotDataset>;
+      })
+      .then((dataset) => {
+        if (!active) {
+          return;
+        }
+
+        if (!Array.isArray(dataset.spots) || dataset.spots.length === 0) {
+          throw new Error("Data file does not contain spots.");
+        }
+
+        setRemoteSpots(dataset.spots);
+        setDataMeta({
+          generatedAt: dataset.generatedAt,
+          sourceName: dataset.source?.name || "Generated Bay Area data",
+          count: dataset.count || dataset.spots.length,
+          loading: false,
+          imageStats: dataset.imageStats,
+        });
+      })
+      .catch((error: Error) => {
+        if (!active) {
+          return;
+        }
+
+        setDataMeta({
+          sourceName: "Curated fallback",
+          count: starterSpots.length,
+          loading: false,
+          error: error.message,
+        });
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem("saturday.savedSpots", JSON.stringify(savedIds));
+  }, [savedIds]);
+
+  useEffect(() => {
+    window.localStorage.setItem(
+      "saturday.visitedSpots",
+      JSON.stringify(visitedIds),
+    );
+  }, [visitedIds]);
+
+  useEffect(() => {
+    window.localStorage.setItem(
+      "saturday.customSpots",
+      JSON.stringify(customSpots),
+    );
+  }, [customSpots]);
+
+  useEffect(() => {
+    window.localStorage.setItem("saturday.plans", JSON.stringify(plans));
+  }, [plans]);
+
+  useEffect(() => {
+    setShareState({ status: "idle" });
+  }, [activePlanId]);
+
+  useEffect(() => {
+    setAiState({ status: "idle" });
+  }, [category, city, companion, cost, onlyOpen, query, savedIds, vibe]);
+
+  const allSpots = useMemo(() => [...remoteSpots, ...customSpots], [customSpots, remoteSpots]);
+
+  const cityOptions = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const spot of allSpots) {
+      counts.set(spot.neighborhood, (counts.get(spot.neighborhood) || 0) + 1);
+    }
+
+    return Array.from(counts.entries())
+      .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
+      .map(([name]) => name);
+  }, [allSpots]);
+
+  const savedSpots = useMemo(
+    () => allSpots.filter((spot) => savedIds.includes(spot.id)),
+    [allSpots, savedIds],
+  );
+
+  const filteredSpots = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+    const filtered = allSpots.filter((spot) => {
+      const searchable = [
+        spot.name,
+        spot.neighborhood,
+        spot.category,
+        spot.mood,
+        spot.note,
+        ...spot.tags,
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      return (
+        (!normalizedQuery || searchable.includes(normalizedQuery)) &&
+        (companion === "any" || spot.bestWith.includes(companion)) &&
+        (category === "All" || spot.category === category) &&
+        (city === "All" || spot.neighborhood === city) &&
+        (cost === "All" || spot.cost === cost) &&
+        (!onlyOpen || spot.openNow)
+      );
+    });
+
+    const byScore = (left: Spot, right: Spot) => {
+      const leftScore = scoreSpotForVibe(left, vibe);
+      const rightScore = scoreSpotForVibe(right, vibe);
+      if (rightScore !== leftScore) {
+        return rightScore - leftScore;
+      }
+
+      return left.transitMinutes - right.transitMinutes;
+    };
+
+    if (sortBy === "best") {
+      return interleaveByCategory(filtered.sort(byScore));
+    }
+
+    return filtered.sort((left, right) => {
+      if (sortBy === "price") {
+        return costRank[left.cost] - costRank[right.cost];
+      }
+
+      if (sortBy === "name") {
+        return left.name.localeCompare(right.name);
+      }
+
+      return left.transitMinutes - right.transitMinutes;
+    });
+  }, [allSpots, category, city, companion, cost, onlyOpen, query, sortBy, vibe]);
+
+  const selectedLabel =
+    companion === "any"
+      ? "Places to visit"
+      : companion === "friends"
+        ? "Friend-friendly spots"
+        : `Best with ${companionLabels[companion]}`;
+
+  const plannerBrief = useMemo(
+    () => buildPlannerBrief(filteredSpots, savedSpots, vibe),
+    [filteredSpots, savedSpots, vibe],
+  );
+  const displayedBrief = aiState.brief ?? plannerBrief;
+
+  const activePlan = useMemo(
+    () => plans.find((plan) => plan.id === activePlanId) ?? null,
+    [plans, activePlanId],
+  );
+
+  const activePlanStops = useMemo(() => {
+    if (!activePlan) {
+      return [];
+    }
+    const byId = new Map(allSpots.map((spot) => [spot.id, spot] as const));
+    return activePlan.stopIds
+      .map((id) => byId.get(id))
+      .filter((spot): spot is Spot => Boolean(spot));
+  }, [activePlan, allSpots]);
+
+  const planTotalTransit = useMemo(
+    () => activePlanStops.reduce((sum, spot) => sum + spot.transitMinutes, 0),
+    [activePlanStops],
+  );
+
+  const addableSavedSpots = useMemo(() => {
+    if (!activePlan) {
+      return [];
+    }
+    const inPlan = new Set(activePlan.stopIds);
+    return savedSpots.filter((spot) => !inPlan.has(spot.id));
+  }, [activePlan, savedSpots]);
+
+  function createPlan() {
+    const id = `plan-${Date.now()}`;
+    const next: Plan = {
+      id,
+      name: "New plan",
+      stopIds: [],
+      createdAt: new Date().toISOString(),
+    };
+    setPlans((current) => [...current, next]);
+    setActivePlanId(id);
+    setView("plans");
+  }
+
+  function updatePlan(id: string, patch: Partial<Plan>) {
+    setPlans((current) =>
+      current.map((plan) => (plan.id === id ? { ...plan, ...patch } : plan)),
+    );
+  }
+
+  function deletePlan(id: string) {
+    setPlans((current) => current.filter((plan) => plan.id !== id));
+    if (activePlanId === id) {
+      setActivePlanId(null);
+    }
+  }
+
+  function addStopToPlan(planId: string, stopId: string) {
+    setPlans((current) =>
+      current.map((plan) =>
+        plan.id === planId && !plan.stopIds.includes(stopId)
+          ? { ...plan, stopIds: [...plan.stopIds, stopId] }
+          : plan,
+      ),
+    );
+    setAddStopChoice("");
+  }
+
+  function removeStopFromPlan(planId: string, stopId: string) {
+    setPlans((current) =>
+      current.map((plan) =>
+        plan.id === planId
+          ? {
+              ...plan,
+              stopIds: plan.stopIds.filter((id) => id !== stopId),
+            }
+          : plan,
+      ),
+    );
+  }
+
+  async function sharePlan() {
+    if (!activePlan || activePlanStops.length === 0) {
+      return;
+    }
+    setShareState({ status: "sharing" });
+    const stopPayload: StopSummary[] = activePlanStops.map((spot) => ({
+      id: spot.id,
+      name: spot.name,
+      neighborhood: spot.neighborhood,
+      category: spot.category,
+      imageUrl: spot.imageUrl,
+      cost: spot.cost,
+      transitMinutes: spot.transitMinutes,
+    }));
+    try {
+      const result = await createPoll({
+        title: activePlan.name || "Untitled plan",
+        stops: stopPayload,
+      });
+      const url = `${window.location.origin}/#/p/${result.pollId}`;
+      updatePlan(activePlan.id, {
+        pollId: result.pollId,
+        ownerToken: result.ownerToken,
+      });
+      try {
+        await navigator.clipboard.writeText(url);
+      } catch {
+        // ignore clipboard failures
+      }
+      setShareState({ status: "shared", url });
+    } catch (error) {
+      setShareState({ status: "error", error: (error as Error).message });
+    }
+  }
+
+  async function refinePlannerWithAi() {
+    const source = savedSpots.length > 0 ? savedSpots : filteredSpots;
+    const spots: StopSummary[] = source.slice(0, 12).map((spot) => ({
+      id: spot.id,
+      name: spot.name,
+      neighborhood: spot.neighborhood,
+      category: spot.category,
+      imageUrl: spot.imageUrl,
+      cost: spot.cost,
+      transitMinutes: spot.transitMinutes,
+      mood: spot.mood,
+      groupSize: spot.groupSize,
+      planning: spot.planning,
+      openNow: spot.openNow,
+      website: spot.website,
+      sourceUrl: spot.sourceUrl,
+      friendScore: scoreSpotForVibe(spot, vibe),
+    }));
+
+    setAiState({ status: "loading" });
+    try {
+      const result = await createAiBrief({ vibe, spots });
+      setAiState({
+        status: "ready",
+        model: result.model,
+        brief: {
+          title: result.brief.title,
+          summary: result.brief.summary,
+          rationale: result.brief.rationale,
+          cautions: result.brief.cautions,
+        },
+      });
+    } catch (error) {
+      setAiState({ status: "error", error: (error as Error).message });
+    }
+  }
+
+  function moveStop(planId: string, stopId: string, direction: -1 | 1) {
+    setPlans((current) =>
+      current.map((plan) => {
+        if (plan.id !== planId) {
+          return plan;
+        }
+        const idx = plan.stopIds.indexOf(stopId);
+        const target = idx + direction;
+        if (idx === -1 || target < 0 || target >= plan.stopIds.length) {
+          return plan;
+        }
+        const next = [...plan.stopIds];
+        [next[idx], next[target]] = [next[target], next[idx]];
+        return { ...plan, stopIds: next };
+      }),
+    );
+  }
+
+  function toggleSaved(id: string) {
+    setSavedIds((current) =>
+      current.includes(id)
+        ? current.filter((savedId) => savedId !== id)
+        : [...current, id],
+    );
+  }
+
+  function toggleVisited(id: string) {
+    setVisitedIds((current) =>
+      current.includes(id)
+        ? current.filter((visitedId) => visitedId !== id)
+        : [...current, id],
+    );
+  }
+
+  function resetFilters() {
+    setQuery("");
+    setCompanion("friends");
+    setVibe("balanced");
+    setCategory("All");
+    setCity("All");
+    setCost("All");
+    setOnlyOpen(false);
+    setSortBy("best");
+  }
+
+  function addSpot(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const name = newSpot.name.trim();
+    const neighborhood = newSpot.neighborhood.trim();
+    const note = newSpot.note.trim();
+
+    if (!name || !neighborhood) {
+      return;
+    }
+
+    const created: Spot = {
+      id: `custom-${Date.now()}`,
+      name,
+      neighborhood,
+      category: newSpot.category,
+      imageUrl: pickCategoryImage(newSpot.category, `custom-${Date.now()}`),
+      bestWith: [newSpot.companion],
+      cost: newSpot.cost,
+      transitMinutes: 20,
+      timeWindow: "Anytime",
+      mood: "Saved idea",
+      groupSize: "2-6 people",
+      planning: "Flexible",
+      openNow: true,
+      note: note || "A saved friend outing idea to fill in later.",
+      tags: ["custom", "friends", newSpot.category.toLowerCase(), newSpot.companion],
+    };
+
+    setCustomSpots((current) => [...current, created]);
+    setSavedIds((current) => [...current, created.id]);
+    setNewSpot(emptyNewSpot);
+    setIsAdding(false);
+  }
+
+  return (
+    <div className="app-shell">
+      <header className="topbar">
+        <div>
+          <p className="eyebrow">Group plans</p>
+          <h1>Saturday With Friends</h1>
+        </div>
+        <div className="data-banner" title={dataMeta.sourceName}>
+          <Database aria-hidden="true" />
+          <div>
+            <strong>
+              {dataMeta.loading ? "Loading Bay Area data" : `${dataMeta.count} Bay Area spots`}
+            </strong>
+            <span>
+              {dataMeta.error
+                ? "Using fallback data"
+                : `Refreshed ${formatGeneratedAt(dataMeta.generatedAt)}`}
+            </span>
+          </div>
+        </div>
+        <div className="topbar-actions">
+          <button className="icon-button" title="Reset filters" onClick={resetFilters}>
+            <RotateCcw aria-hidden="true" />
+          </button>
+          <button className="primary-button" onClick={() => setIsAdding(true)}>
+            <Plus aria-hidden="true" />
+            Add spot
+          </button>
+        </div>
+      </header>
+
+      <nav className="view-tabs" aria-label="View">
+        <button
+          className={view === "browse" ? "active" : ""}
+          onClick={() => setView("browse")}
+        >
+          <Search aria-hidden="true" />
+          Browse
+        </button>
+        <button
+          className={view === "plans" ? "active" : ""}
+          onClick={() => setView("plans")}
+        >
+          <List aria-hidden="true" />
+          Plans ({plans.length})
+        </button>
+      </nav>
+
+      {view === "browse" ? (
+      <main className="workspace">
+        <aside className="filter-panel" aria-label="Spot filters">
+          <div className="panel-heading">
+            <SlidersHorizontal aria-hidden="true" />
+            <span>Filters</span>
+          </div>
+
+          <label className="search-box">
+            <Search aria-hidden="true" />
+            <input
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search spots"
+            />
+          </label>
+
+          <div className="filter-group">
+            <span className="filter-label">Best for</span>
+            <div className="segmented">
+              {companionOptions.map((option) => (
+                <button
+                  key={option.value}
+                  className={companion === option.value ? "active" : ""}
+                  onClick={() => setCompanion(option.value)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="filter-group">
+            <span className="filter-label">Vibe</span>
+            <div className="segmented compact">
+              {vibeOptions.map(([value, label]) => (
+                <button
+                  key={value}
+                  className={vibe === value ? "active" : ""}
+                  onClick={() => setVibe(value)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <label className="select-field">
+            <span>Category</span>
+            <select
+              value={category}
+              onChange={(event) =>
+                setCategory(event.target.value as Category | "All")
+              }
+            >
+              <option>All</option>
+              {categories.map((item) => (
+                <option key={item}>{item}</option>
+              ))}
+            </select>
+          </label>
+
+          <label className="select-field">
+            <span>Area</span>
+            <select
+              value={city}
+              onChange={(event) => setCity(event.target.value)}
+            >
+              <option>All</option>
+              {cityOptions.map((item) => (
+                <option key={item}>{item}</option>
+              ))}
+            </select>
+          </label>
+
+          <label className="select-field">
+            <span>Cost</span>
+            <select
+              value={cost}
+              onChange={(event) => setCost(event.target.value as Cost | "All")}
+            >
+              <option>All</option>
+              {costs.map((item) => (
+                <option key={item}>{item}</option>
+              ))}
+            </select>
+          </label>
+
+          <label className="switch-row">
+            <input
+              type="checkbox"
+              checked={onlyOpen}
+              onChange={(event) => setOnlyOpen(event.target.checked)}
+            />
+            <span>Hours listed</span>
+          </label>
+
+          <label className="select-field">
+            <span>Sort</span>
+            <select
+              value={sortBy}
+              onChange={(event) =>
+                setSortBy(event.target.value as "best" | "nearest" | "price" | "name")
+              }
+            >
+              <option value="best">Best fit</option>
+              <option value="nearest">Nearest to SF</option>
+              <option value="price">Lowest cost</option>
+              <option value="name">Name</option>
+            </select>
+          </label>
+        </aside>
+
+        <section className="spots-area" aria-label="Visit spots">
+          <div className="section-heading">
+            <div>
+              <p>{filteredSpots.length} matches</p>
+              <h2>{selectedLabel}</h2>
+            </div>
+            <div className="stat-strip" aria-label="Plan stats">
+              <span>{dataMeta.loading ? "loading" : `${remoteSpots.length} source spots`}</span>
+              {dataMeta.imageStats && (
+                <span>
+                  {(dataMeta.imageStats.wikidata ?? 0) + (dataMeta.imageStats.tagged ?? 0)} place
+                  images
+                </span>
+              )}
+              <span>{savedSpots.length} saved</span>
+              <span>{visitedIds.length} visited</span>
+            </div>
+          </div>
+
+          <div className="spot-grid">
+            {filteredSpots.map((spot) => {
+              const saved = savedIds.includes(spot.id);
+              const visited = visitedIds.includes(spot.id);
+
+              return (
+                <article className="spot-card" key={spot.id}>
+                  <div className="spot-image-frame">
+                    <img
+                      src={spot.imageUrl}
+                      alt={spot.name}
+                      loading="lazy"
+                      title={spot.imageAttribution || spot.imageSource || spot.name}
+                    />
+                    {spot.imageSource && spot.imageSource !== "Category fallback" && (
+                      <span className="image-source-chip">{spot.imageSource}</span>
+                    )}
+                  </div>
+                  <div className="spot-body">
+                    <div className="spot-title-row">
+                      <div>
+                        <p className="spot-category">{spot.category}</p>
+                        <h3>{spot.name}</h3>
+                      </div>
+                      <button
+                        className={`icon-button ${saved ? "selected" : ""}`}
+                        title={saved ? "Remove from saved" : "Save spot"}
+                        onClick={() => toggleSaved(spot.id)}
+                      >
+                        <Bookmark aria-hidden="true" />
+                      </button>
+                    </div>
+
+                    <p className="spot-note">{spot.note}</p>
+
+                    <div className="metadata-grid">
+                      <span>
+                        <MapPin aria-hidden="true" />
+                        {spot.neighborhood}
+                      </span>
+                      <span>
+                        <Clock3 aria-hidden="true" />
+                        {spot.transitMinutes} min
+                      </span>
+                      <span>
+                        <Users aria-hidden="true" />
+                        {spot.groupSize}
+                      </span>
+                      <span>{spot.cost}</span>
+                      <span>{spot.timeWindow}</span>
+                      <span>{spot.planning}</span>
+                    </div>
+
+                    <div className="tag-row">
+                      {(spot.tags.length > 0 ? spot.tags : spot.bestWith).slice(0, 5).map((item) => (
+                        <span key={item}>
+                          {item in companionLabels
+                            ? companionLabels[item as Companion]
+                            : item}
+                        </span>
+                      ))}
+                    </div>
+
+                    {(spot.website || spot.sourceUrl) && (
+                      <div className="source-row">
+                        {spot.website && (
+                          <a href={spot.website} target="_blank" rel="noreferrer">
+                            Website
+                            <ExternalLink aria-hidden="true" />
+                          </a>
+                        )}
+                        {spot.sourceUrl && (
+                          <a href={spot.sourceUrl} target="_blank" rel="noreferrer">
+                            OSM source
+                            <ExternalLink aria-hidden="true" />
+                          </a>
+                        )}
+                      </div>
+                    )}
+
+                    <div className="card-footer">
+                      <span className={spot.openNow ? "open" : "closed"}>
+                        {spot.openNow ? "Hours listed" : "Check hours"}
+                      </span>
+                      <button
+                        className="text-button"
+                        onClick={() => toggleVisited(spot.id)}
+                      >
+                        {visited ? (
+                          <>
+                            <Check aria-hidden="true" />
+                            Visited
+                          </>
+                        ) : (
+                          "Mark visited"
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+
+        <aside className="plan-panel" aria-label="Planner and saved spots">
+          <div className="panel-heading">
+            <Sparkles aria-hidden="true" />
+            <span>Planner</span>
+          </div>
+
+          <div className="planner-brief">
+            <div className="planner-topline">
+              <p className="plan-kicker">
+                {aiState.status === "ready" ? "AI refined" : `${vibeLabels[vibe]} plan`}
+              </p>
+              <button
+                className="mini-action"
+                disabled={aiState.status === "loading" || filteredSpots.length === 0}
+                onClick={refinePlannerWithAi}
+              >
+                <Sparkles aria-hidden="true" />
+                {aiState.status === "loading" ? "Refining" : "AI refine"}
+              </button>
+            </div>
+            <h3>{displayedBrief.title}</h3>
+            <p>{displayedBrief.summary}</p>
+
+            <ul className="planner-list">
+              {displayedBrief.rationale.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+
+            {displayedBrief.backup && (
+              <p className="backup-line">
+                Backup: <strong>{displayedBrief.backup.name}</strong>
+              </p>
+            )}
+
+            <div className="caution-list">
+              {displayedBrief.cautions.map((item) => (
+                <span key={item}>{item}</span>
+              ))}
+              {aiState.status === "error" && (
+                <span>AI refine is unavailable: {aiState.error}</span>
+              )}
+              {aiState.status === "ready" && aiState.model && (
+                <span>Generated by {aiState.model} from the visible sanitized candidates.</span>
+              )}
+            </div>
+          </div>
+
+          <div className="panel-divider" />
+
+          <div className="panel-heading saved-heading">
+            <Bookmark aria-hidden="true" />
+            <span>Saved</span>
+          </div>
+          {savedSpots.length === 0 ? (
+            <p className="empty-state">Save a few group spots to compare your day.</p>
+          ) : (
+            <div className="saved-list">
+              {savedSpots.map((spot) => (
+                <div className="saved-item" key={spot.id}>
+                  <div>
+                    <strong>{spot.name}</strong>
+                    <span>{spot.neighborhood}</span>
+                  </div>
+                  <button
+                    className="icon-button"
+                    title="Remove saved spot"
+                    onClick={() => toggleSaved(spot.id)}
+                  >
+                    <Trash2 aria-hidden="true" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </aside>
+      </main>
+      ) : (
+      <main className="plans-workspace" aria-label="Plans">
+        <aside className="plan-list-panel" aria-label="Saved plans">
+          <div className="panel-heading">
+            <List aria-hidden="true" />
+            <span>Plans</span>
+          </div>
+          <button className="primary-button wide" onClick={createPlan}>
+            <Plus aria-hidden="true" />
+            New plan
+          </button>
+          {plans.length === 0 ? (
+            <p className="empty-state">
+              Build a small itinerary from your saved spots.
+            </p>
+          ) : (
+            <div className="plan-list">
+              {plans.map((plan) => (
+                <button
+                  key={plan.id}
+                  className={
+                    plan.id === activePlanId ? "plan-list-item active" : "plan-list-item"
+                  }
+                  onClick={() => setActivePlanId(plan.id)}
+                >
+                  <strong>{plan.name || "Untitled plan"}</strong>
+                  <span>
+                    {plan.stopIds.length} stop{plan.stopIds.length === 1 ? "" : "s"}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+        </aside>
+
+        <section className="plan-detail-area" aria-label="Plan detail">
+          {!activePlan ? (
+            <div className="plan-empty">
+              <p>Select a plan or create a new one to start chaining stops.</p>
+            </div>
+          ) : (
+            <div className="plan-detail">
+              <input
+                className="plan-name-input"
+                value={activePlan.name}
+                onChange={(event) =>
+                  updatePlan(activePlan.id, { name: event.target.value })
+                }
+                placeholder="Plan name"
+              />
+
+              <div className="plan-summary">
+                <span>
+                  {activePlanStops.length} stop
+                  {activePlanStops.length === 1 ? "" : "s"}
+                </span>
+                <span>~{planTotalTransit} min total transit</span>
+                {activePlanStops.length > 0 && (
+                  <span>
+                    {Array.from(
+                      new Set(activePlanStops.map((stop) => stop.neighborhood)),
+                    ).join(" → ")}
+                  </span>
+                )}
+              </div>
+
+              {activePlanStops.length === 0 ? (
+                <p className="empty-state">
+                  Add stops from your saved spots to build the day.
+                </p>
+              ) : (
+                <ol className="plan-stops">
+                  {activePlanStops.map((spot, index) => (
+                    <li className="plan-stop" key={spot.id}>
+                      <span className="plan-stop-index">{index + 1}</span>
+                      <div className="plan-stop-info">
+                        <strong>{spot.name}</strong>
+                        <span>
+                          {spot.neighborhood} · {spot.category} · {spot.cost} ·{" "}
+                          {spot.transitMinutes} min
+                        </span>
+                      </div>
+                      <div className="plan-stop-actions">
+                        <button
+                          title="Move up"
+                          disabled={index === 0}
+                          onClick={() => moveStop(activePlan.id, spot.id, -1)}
+                        >
+                          <ArrowUp aria-hidden="true" />
+                        </button>
+                        <button
+                          title="Move down"
+                          disabled={index === activePlanStops.length - 1}
+                          onClick={() => moveStop(activePlan.id, spot.id, 1)}
+                        >
+                          <ArrowDown aria-hidden="true" />
+                        </button>
+                        <button
+                          title="Remove from plan"
+                          onClick={() =>
+                            removeStopFromPlan(activePlan.id, spot.id)
+                          }
+                        >
+                          <X aria-hidden="true" />
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              )}
+
+              <div className="plan-add-row">
+                <select
+                  value={addStopChoice}
+                  onChange={(event) => setAddStopChoice(event.target.value)}
+                >
+                  <option value="">
+                    {addableSavedSpots.length === 0
+                      ? "No saved spots left to add"
+                      : "Add stop from saved…"}
+                  </option>
+                  {addableSavedSpots.map((spot) => (
+                    <option key={spot.id} value={spot.id}>
+                      {spot.name} — {spot.neighborhood}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  className="primary-button"
+                  disabled={!addStopChoice}
+                  onClick={() =>
+                    addStopChoice && addStopToPlan(activePlan.id, addStopChoice)
+                  }
+                >
+                  <Plus aria-hidden="true" />
+                  Add
+                </button>
+              </div>
+
+              <div className="plan-actions">
+                <button
+                  className="primary-button"
+                  disabled={
+                    activePlanStops.length === 0 ||
+                    shareState.status === "sharing"
+                  }
+                  title="Share this plan for voting"
+                  onClick={sharePlan}
+                >
+                  <Share2 aria-hidden="true" />
+                  {shareState.status === "sharing"
+                    ? "Sharing…"
+                    : activePlan.pollId
+                      ? "Re-share"
+                      : "Share for voting"}
+                </button>
+                <button
+                  className="danger-button"
+                  onClick={() => deletePlan(activePlan.id)}
+                >
+                  <Trash2 aria-hidden="true" />
+                  Delete plan
+                </button>
+              </div>
+
+              {shareState.status === "shared" && shareState.url && (
+                <div className="share-banner">
+                  <strong>Link copied to clipboard.</strong>
+                  <a href={shareState.url}>{shareState.url}</a>
+                </div>
+              )}
+              {shareState.status === "error" && (
+                <div className="share-banner error">
+                  <strong>Sharing failed.</strong>
+                  <span>{shareState.error}</span>
+                </div>
+              )}
+              {activePlan.pollId && shareState.status === "idle" && (
+                <div className="share-banner">
+                  <strong>Already shared.</strong>
+                  <a href={`${window.location.origin}/#/p/${activePlan.pollId}`}>
+                    {`${window.location.origin}/#/p/${activePlan.pollId}`}
+                  </a>
+                </div>
+              )}
+            </div>
+          )}
+        </section>
+      </main>
+      )}
+
+      {isAdding && (
+        <div className="modal-backdrop" role="presentation">
+          <form className="spot-form" onSubmit={addSpot}>
+            <div className="form-heading">
+              <div>
+                <p className="eyebrow">New idea</p>
+                <h2>Add a spot</h2>
+              </div>
+              <button
+                className="icon-button"
+                title="Close"
+                type="button"
+                onClick={() => setIsAdding(false)}
+              >
+                <X aria-hidden="true" />
+              </button>
+            </div>
+
+            <label>
+              <span>Name</span>
+              <input
+                value={newSpot.name}
+                onChange={(event) =>
+                  setNewSpot((current) => ({
+                    ...current,
+                    name: event.target.value,
+                  }))
+                }
+                autoFocus
+              />
+            </label>
+
+            <label>
+              <span>Neighborhood</span>
+              <input
+                value={newSpot.neighborhood}
+                onChange={(event) =>
+                  setNewSpot((current) => ({
+                    ...current,
+                    neighborhood: event.target.value,
+                  }))
+                }
+              />
+            </label>
+
+            <div className="form-row">
+              <label>
+                <span>Category</span>
+                <select
+                  value={newSpot.category}
+                  onChange={(event) =>
+                    setNewSpot((current) => ({
+                      ...current,
+                      category: event.target.value as Category,
+                    }))
+                  }
+                >
+                  {categories.map((item) => (
+                    <option key={item}>{item}</option>
+                  ))}
+                </select>
+              </label>
+
+              <label>
+                <span>Best with</span>
+                <select
+                  value={newSpot.companion}
+                  onChange={(event) =>
+                    setNewSpot((current) => ({
+                      ...current,
+                      companion: event.target.value as Companion,
+                    }))
+                  }
+                >
+                  {Object.entries(companionLabels).map(([value, label]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <label>
+              <span>Cost</span>
+              <select
+                value={newSpot.cost}
+                onChange={(event) =>
+                  setNewSpot((current) => ({
+                    ...current,
+                    cost: event.target.value as Cost,
+                  }))
+                }
+              >
+                {costs.map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </select>
+            </label>
+
+            <label>
+              <span>Note</span>
+              <textarea
+                value={newSpot.note}
+                onChange={(event) =>
+                  setNewSpot((current) => ({
+                    ...current,
+                    note: event.target.value,
+                  }))
+                }
+                rows={4}
+              />
+            </label>
+
+            <button className="primary-button wide" type="submit">
+              <Plus aria-hidden="true" />
+              Save spot
+            </button>
+          </form>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;
