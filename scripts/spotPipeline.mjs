@@ -763,11 +763,22 @@ export function buildNote(category, tags = {}, _openingHours = "", coords) {
   return stripUnsafeText(`${descriptor} in ${city}.`, 180);
 }
 
+export function hasMinimumQualitySignal(spot) {
+  if (!spot) return false;
+  if (spot.website) return true;
+  if (spot.openingHours) return true;
+  if (spot.wikidataId) return true;
+  return false;
+}
+
 export function dedupeAndRank(spots, limit = 500) {
   const seen = new Set();
   const deduped = [];
 
   for (const spot of spots) {
+    if (!hasMinimumQualitySignal(spot)) {
+      continue;
+    }
     const key = [
       spot.name.toLowerCase(),
       Math.round(spot.lat * 1000),
