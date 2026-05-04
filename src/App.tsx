@@ -105,6 +105,31 @@ type Spot = {
   wikipedia?: string | null;
 };
 
+type FamilyEvent = {
+  id: string;
+  title: string;
+  description: string;
+  venue: string;
+  city: string;
+  neighborhood: string;
+  lat: number;
+  lon: number;
+  category: string;
+  daysOfWeek: number[];
+  timeWindow: "Morning" | "Afternoon" | "Evening";
+  ageBands: AgeBand[];
+  cost: string;
+  url: string;
+  verified: boolean;
+};
+
+type EventsDataset = {
+  schemaVersion?: number;
+  generatedAt?: string;
+  note?: string;
+  events?: FamilyEvent[];
+};
+
 type SpotDataset = {
   generatedAt?: string;
   source?: {
@@ -170,7 +195,17 @@ function vibeBlurb(vibe: PlannerVibe): string {
   return vibeBlurbs[vibe];
 }
 
+const SHORT_DAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+function dayWindowLabel(days: number[]): string {
+  if (!days || days.length === 0) return "Weekly";
+  if (days.length === 1) return SHORT_DAY[days[0]] ?? "Weekly";
+  const sorted = [...days].sort((a, b) => a - b);
+  return sorted.map((d) => SHORT_DAY[d] ?? "?").join(" / ");
+}
+
 const DATA_URL = `${import.meta.env.BASE_URL}data/bay-area-spots.json`;
+const EVENTS_URL = `${import.meta.env.BASE_URL}data/events.json`;
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID ?? "";
 const GOOGLE_CONFIGURED = GOOGLE_CLIENT_ID.length > 0;
 
@@ -667,6 +702,7 @@ function App() {
     "idle" | "loading" | "syncing" | "synced" | "error"
   >("idle");
   const [remoteSpots, setRemoteSpots] = useState<Spot[]>(starterSpots);
+  const [events, setEvents] = useState<FamilyEvent[]>([]);
   const [dataMeta, setDataMeta] = useState<{
     generatedAt?: string;
     sourceName: string;
@@ -724,6 +760,22 @@ function App() {
         });
       });
 
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    fetch(EVENTS_URL)
+      .then((response) => (response.ok ? response.json() : Promise.reject()))
+      .then((dataset: EventsDataset) => {
+        if (!active) return;
+        if (Array.isArray(dataset.events)) setEvents(dataset.events);
+      })
+      .catch(() => {
+        // Events are optional; failure is non-fatal.
+      });
     return () => {
       active = false;
     };
@@ -1004,6 +1056,36 @@ function App() {
     ageBand === "any"
       ? "Family-friendly spots"
       : `For ${ageBandLabels[ageBand].toLowerCase()}`;
+
+  const weekendEvents = useMemo(() => {
+    if (events.length === 0) return [] as FamilyEvent[];
+    const matching = events.filter((event) => {
+      const isWeekend = event.daysOfWeek.some((d) => d === 0 || d === 6);
+      if (!isWeekend) return false;
+      if (ageBand !== "any" && !event.ageBands.includes(ageBand)) return false;
+      return true;
+    });
+    if (!inferredGeo?.lat || !inferredGeo?.lon) return matching;
+    const here = { lat: inferredGeo.lat, lon: inferredGeo.lon };
+    return matching
+      .map((event) => ({
+        event,
+        dist: ((lat: number, lon: number) => {
+          const toRad = (deg: number) => (deg * Math.PI) / 180;
+          const R = 3958.8;
+          const dLat = toRad(lat - here.lat);
+          const dLon = toRad(lon - here.lon);
+          const lat1 = toRad(here.lat);
+          const lat2 = toRad(lat);
+          const x =
+            Math.sin(dLat / 2) ** 2 +
+            Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
+          return 2 * R * Math.asin(Math.sqrt(x));
+        })(event.lat, event.lon),
+      }))
+      .sort((a, b) => a.dist - b.dist)
+      .map((entry) => entry.event);
+  }, [events, ageBand, inferredGeo]);
 
   const activeFilterCount = useMemo(() => {
     let n = 0;
@@ -1620,6 +1702,39 @@ function App() {
         )}
         {homeError && (
           <p className="home-status error">{homeError}</p>
+        )}
+
+        {weekendEvents.length > 0 && (
+          <section className="home-events" aria-label="Weekend events">
+            <div className="home-events-head">
+              <h2>This weekend at the library</h2>
+              <p>
+                {weekendEvents.length} kid program{weekendEvents.length === 1 ? "" : "s"}
+                {ageBand !== "any" ? ` for ${ageBandLabels[ageBand].toLowerCase()}` : ""}
+                {inferredGeo?.city ? ` near ${inferredGeo.city}` : ""}
+                . Times vary by branch — tap through to confirm.
+              </p>
+            </div>
+            <ul className="home-events-list">
+              {weekendEvents.slice(0, 6).map((event) => (
+                <li key={event.id} className="home-event-card">
+                  <a href={event.url} target="_blank" rel="noreferrer">
+                    <strong>{event.title}</strong>
+                    <span className="home-event-meta">
+                      {dayWindowLabel(event.daysOfWeek)} · {event.timeWindow}
+                      {" · "}
+                      {event.ageBands
+                        .map((b) => ageBandLabels[b].split(" ")[0])
+                        .join(", ")}
+                    </span>
+                    <span className="home-event-venue">
+                      {event.venue} · {event.city}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
         )}
 
         <div className="home-escape">

@@ -1228,6 +1228,72 @@ h3 {
   text-align: center;
 }
 
+.home-events {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(31, 48, 39, 0.06);
+  display: grid;
+  gap: 12px;
+  padding: 18px 20px;
+}
+
+.home-events-head h2 {
+  font-size: 1.2rem;
+  margin-bottom: 4px;
+}
+
+.home-events-head p {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.home-events-list {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.home-event-card {
+  background: var(--surface-strong);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0;
+}
+
+.home-event-card a {
+  color: var(--ink);
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  text-decoration: none;
+}
+
+.home-event-card a:hover {
+  background: #e4f0e7;
+}
+
+.home-event-card strong {
+  font-size: 0.94rem;
+}
+
+.home-event-meta {
+  color: var(--blue);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.home-event-venue {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
 @media (max-width: 720px) {
   .home-vibes {
     grid-template-columns: repeat(2, minmax(0, 1fr));
