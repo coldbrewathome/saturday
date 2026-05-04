@@ -27,8 +27,10 @@ import {
   createAiBrief,
   createPoll,
   fetchGeo,
+  getUserState,
   googleSignIn,
   logoutSession,
+  putUserState,
   StopSummary,
 } from "./api";
 import {
@@ -706,6 +708,10 @@ function App() {
   const [session, setSession] = useState<SessionState | null>(() => readSession());
   const [signInError, setSignInError] = useState<string | null>(null);
   const signInButtonRef = useRef<HTMLDivElement | null>(null);
+  const [syncReady, setSyncReady] = useState(false);
+  const [syncStatus, setSyncStatus] = useState<
+    "idle" | "loading" | "syncing" | "synced" | "error"
+  >("idle");
   const [remoteSpots, setRemoteSpots] = useState<Spot[]>(starterSpots);
   const [dataMeta, setDataMeta] = useState<{
     generatedAt?: string;
@@ -805,6 +811,85 @@ function App() {
       cancelled = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (!session || !API_CONFIGURED) {
+      setSyncReady(false);
+      setSyncStatus("idle");
+      return;
+    }
+    let cancelled = false;
+    setSyncStatus("loading");
+    getUserState(session.token)
+      .then((serverState) => {
+        if (cancelled) return;
+        if (serverState) {
+          const incomingSaved: string[] = Array.isArray(serverState.savedIds)
+            ? (serverState.savedIds as string[])
+            : [];
+          const incomingVisited: string[] = Array.isArray(serverState.visitedIds)
+            ? (serverState.visitedIds as string[])
+            : [];
+          const incomingCustom = (Array.isArray(serverState.customSpots)
+            ? serverState.customSpots
+            : []) as Spot[];
+          const incomingPlans = (Array.isArray(serverState.plans)
+            ? serverState.plans
+            : []) as Plan[];
+          setSavedIds((local) =>
+            Array.from(new Set<string>([...incomingSaved, ...local])),
+          );
+          setVisitedIds((local) =>
+            Array.from(new Set<string>([...incomingVisited, ...local])),
+          );
+          setCustomSpots((local) => {
+            const map = new Map<string, Spot>();
+            for (const item of local) map.set(item.id, item);
+            for (const item of incomingCustom) map.set(item.id, item);
+            return Array.from(map.values());
+          });
+          setPlans((local) => {
+            const map = new Map<string, Plan>();
+            for (const item of local) map.set(item.id, item);
+            for (const item of incomingPlans) map.set(item.id, item);
+            return Array.from(map.values());
+          });
+        }
+        setSyncReady(true);
+        setSyncStatus("synced");
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setSyncReady(true);
+        setSyncStatus("error");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [session?.token]);
+
+  useEffect(() => {
+    if (!session || !syncReady) return;
+    const handle = window.setTimeout(() => {
+      setSyncStatus("syncing");
+      putUserState(session.token, {
+        savedIds,
+        visitedIds,
+        customSpots,
+        plans,
+      })
+        .then(() => setSyncStatus("synced"))
+        .catch(() => setSyncStatus("error"));
+    }, 800);
+    return () => window.clearTimeout(handle);
+  }, [
+    session,
+    syncReady,
+    savedIds,
+    visitedIds,
+    customSpots,
+    plans,
+  ]);
 
   useEffect(() => {
     if (session || !GOOGLE_CONFIGURED) {
@@ -1442,6 +1527,26 @@ function App() {
                   <img src={session.user.picture} alt="" />
                 )}
                 <span>{session.user.name}</span>
+                {syncStatus !== "idle" && (
+                  <em
+                    className={`sync-pill sync-${syncStatus}`}
+                    title={
+                      syncStatus === "synced"
+                        ? "Saved + plans synced to your account"
+                        : syncStatus === "loading"
+                          ? "Loading your data…"
+                          : syncStatus === "syncing"
+                            ? "Syncing…"
+                            : "Sync error — local-only for now"
+                    }
+                  >
+                    {syncStatus === "loading" || syncStatus === "syncing"
+                      ? "•••"
+                      : syncStatus === "synced"
+                        ? "✓"
+                        : "!"}
+                  </em>
+                )}
                 <button
                   className="text-button"
                   onClick={signOut}

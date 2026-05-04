@@ -36,6 +36,7 @@ interface Env {
   OPENAI_MODEL?: string;
   GOOGLE_CLIENT_ID?: string;
   AI_DAILY_LIMIT_PER_IP?: string;
+  POLLS_DAILY_LIMIT_PER_IP?: string;
 }
 
 type SessionData = {
@@ -53,7 +54,7 @@ function corsHeaders(env: Env, origin: string | null): Record<string, string> {
   const allow = origin && allowed.includes(origin) ? origin : allowed[0] ?? "*";
   return {
     "access-control-allow-origin": allow,
-    "access-control-allow-methods": "GET,POST,OPTIONS",
+    "access-control-allow-methods": "GET,POST,PUT,OPTIONS",
     "access-control-allow-headers": "content-type,authorization",
     "vary": "origin",
   };
@@ -273,14 +274,100 @@ async function logout(
   return json({ ok: true }, { status: 200 }, cors);
 }
 
+const USER_STATE_TTL_SECONDS = 60 * 60 * 24 * 365;
+const USER_STATE_MAX_BYTES = 200_000;
+
+async function getUserState(
+  request: Request,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  const session = await getSession(env, request);
+  if (!session) {
+    return json({ error: "sign in required" }, { status: 401 }, cors);
+  }
+  const raw = await env.POLLS.get(`userstate:${session.data.sub}`);
+  return json(
+    { state: raw ? JSON.parse(raw) : null },
+    { status: 200 },
+    cors,
+  );
+}
+
+async function putUserState(
+  request: Request,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  const session = await getSession(env, request);
+  if (!session) {
+    return json({ error: "sign in required" }, { status: 401 }, cors);
+  }
+  let payload: unknown;
+  try {
+    payload = await request.json();
+  } catch {
+    return json({ error: "invalid json" }, { status: 400 }, cors);
+  }
+  const data = payload as {
+    savedIds?: unknown;
+    visitedIds?: unknown;
+    customSpots?: unknown;
+    plans?: unknown;
+  };
+  const stringArr = (value: unknown, max: number): string[] =>
+    Array.isArray(value)
+      ? value.filter((v) => typeof v === "string").slice(0, max)
+      : [];
+  const objectArr = (value: unknown, max: number): unknown[] =>
+    Array.isArray(value)
+      ? value.filter((v) => v && typeof v === "object").slice(0, max)
+      : [];
+  const state = {
+    savedIds: stringArr(data.savedIds, 500),
+    visitedIds: stringArr(data.visitedIds, 1000),
+    customSpots: objectArr(data.customSpots, 100),
+    plans: objectArr(data.plans, 50),
+    updatedAt: new Date().toISOString(),
+  };
+  const serialized = JSON.stringify(state);
+  if (serialized.length > USER_STATE_MAX_BYTES) {
+    return json({ error: "state too large" }, { status: 413 }, cors);
+  }
+  await env.POLLS.put(`userstate:${session.data.sub}`, serialized, {
+    expirationTtl: USER_STATE_TTL_SECONDS,
+  });
+  return json({ ok: true, updatedAt: state.updatedAt }, { status: 200 }, cors);
+}
+
 async function checkAndIncrementAiCap(
   request: Request,
   env: Env,
 ): Promise<{ ok: true } | { ok: false; remaining: 0; limit: number }> {
-  const limit = Number(env.AI_DAILY_LIMIT_PER_IP || "10") || 10;
+  return checkAndIncrementCap(request, env, "ai", Number(env.AI_DAILY_LIMIT_PER_IP || "10") || 10);
+}
+
+async function checkAndIncrementPollsCap(
+  request: Request,
+  env: Env,
+): Promise<{ ok: true } | { ok: false; remaining: 0; limit: number }> {
+  return checkAndIncrementCap(
+    request,
+    env,
+    "polls",
+    Number(env.POLLS_DAILY_LIMIT_PER_IP || "30") || 30,
+  );
+}
+
+async function checkAndIncrementCap(
+  request: Request,
+  env: Env,
+  bucket: string,
+  limit: number,
+): Promise<{ ok: true } | { ok: false; remaining: 0; limit: number }> {
   const ip = request.headers.get("cf-connecting-ip") || "unknown";
   const day = new Date().toISOString().slice(0, 10);
-  const key = `ratelimit:ai:${ip}:${day}`;
+  const key = `ratelimit:${bucket}:${ip}:${day}`;
   const raw = await env.POLLS.get(key);
   const count = raw ? Number(raw) : 0;
   if (count >= limit) {
@@ -426,6 +513,15 @@ async function createPoll(
   env: Env,
   cors: Record<string, string>,
 ): Promise<Response> {
+  const cap = await checkAndIncrementPollsCap(request, env);
+  if (!cap.ok) {
+    return json(
+      { error: `Daily share limit reached (${cap.limit} per IP). Try again tomorrow.` },
+      { status: 429 },
+      cors,
+    );
+  }
+
   let payload: unknown;
   try {
     payload = await request.json();
@@ -551,6 +647,14 @@ export default {
 
     if (path === "/auth/logout" && request.method === "POST") {
       return logout(request, env, cors);
+    }
+
+    if (path === "/me/state" && request.method === "GET") {
+      return getUserState(request, env, cors);
+    }
+
+    if (path === "/me/state" && request.method === "PUT") {
+      return putUserState(request, env, cors);
     }
 
     if (path === "/geo" && request.method === "GET") {

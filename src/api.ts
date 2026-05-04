@@ -148,6 +148,44 @@ export async function googleSignIn(
   return response.json();
 }
 
+export type SyncedState = {
+  savedIds: string[];
+  visitedIds: string[];
+  customSpots: unknown[];
+  plans: unknown[];
+  updatedAt?: string;
+};
+
+export async function getUserState(
+  sessionToken: string,
+): Promise<SyncedState | null> {
+  const response = await fetch(`${requireApi()}/me/state`, {
+    headers: { authorization: `Bearer ${sessionToken}` },
+  });
+  if (!response.ok) {
+    throw new Error(`State fetch failed (${response.status})`);
+  }
+  const body = (await response.json()) as { state: SyncedState | null };
+  return body.state;
+}
+
+export async function putUserState(
+  sessionToken: string,
+  state: SyncedState,
+): Promise<void> {
+  const response = await fetch(`${requireApi()}/me/state`, {
+    method: "PUT",
+    headers: {
+      "content-type": "application/json",
+      authorization: `Bearer ${sessionToken}`,
+    },
+    body: JSON.stringify(state),
+  });
+  if (!response.ok) {
+    throw new Error(`State sync failed (${response.status})`);
+  }
+}
+
 export async function logoutSession(sessionToken: string): Promise<void> {
   await fetch(`${requireApi()}/auth/logout`, {
     method: "POST",

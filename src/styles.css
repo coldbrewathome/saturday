@@ -1415,6 +1415,31 @@ h3 {
   white-space: nowrap;
 }
 
+.sync-pill {
+  background: var(--surface-strong);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-style: normal;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  padding: 2px 6px;
+}
+
+.sync-pill.sync-synced {
+  background: #e4f0e7;
+  color: var(--accent-strong);
+}
+
+.sync-pill.sync-loading,
+.sync-pill.sync-syncing {
+  color: var(--muted);
+}
+
+.sync-pill.sync-error {
+  background: #fdecea;
+  color: var(--coral);
+}
+
 .user-chip .text-button {
   font-size: 0.78rem;
 }
