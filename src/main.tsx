@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import PollView from "./PollView";
+import "leaflet/dist/leaflet.css";
 import "./styles.css";
 
 function readPollIdFromHash(): string | null {

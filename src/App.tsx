@@ -20,6 +20,7 @@ import {
   Users,
   X,
 } from "lucide-react";
+import L, { type LayerGroup, type Map as LeafletMap } from "leaflet";
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
   API_CONFIGURED,
@@ -488,7 +489,13 @@ const costRank: Record<Cost, number> = {
 
 const pageSizeOptions = [24, 48, 96];
 
-function SpotLocationSummary({ spots }: { spots: Spot[] }) {
+const bayAreaMapCenter: [number, number] = [37.7749, -122.4194];
+
+function SpotMap({ spots }: { spots: Spot[] }) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<LeafletMap | null>(null);
+  const layerRef = useRef<LayerGroup | null>(null);
+
   const plottedSpots = useMemo(
     () =>
       spots.filter(
@@ -501,43 +508,84 @@ function SpotLocationSummary({ spots }: { spots: Spot[] }) {
     [spots],
   );
 
-  const topAreas = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const spot of spots) {
-      counts.set(spot.neighborhood, (counts.get(spot.neighborhood) || 0) + 1);
+  useEffect(() => {
+    if (!containerRef.current || mapRef.current) {
+      return;
     }
 
-    return Array.from(counts.entries())
-      .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
-      .slice(0, 4);
-  }, [spots]);
+    const map = L.map(containerRef.current, {
+      center: bayAreaMapCenter,
+      zoom: 9,
+      scrollWheelZoom: false,
+    });
 
-  const coordinateCoverage =
-    spots.length === 0 ? 0 : Math.round((plottedSpots.length / spots.length) * 100);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors",
+      maxZoom: 18,
+    }).addTo(map);
+
+    const layer = L.layerGroup().addTo(map);
+    mapRef.current = map;
+    layerRef.current = layer;
+
+    return () => {
+      map.remove();
+      mapRef.current = null;
+      layerRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    const layer = layerRef.current;
+    if (!map || !layer) {
+      return;
+    }
+
+    layer.clearLayers();
+
+    if (plottedSpots.length === 0) {
+      map.setView(bayAreaMapCenter, 9);
+      return;
+    }
+
+    const points: Array<[number, number]> = [];
+    for (const spot of plottedSpots) {
+      const lat = spot.lat as number;
+      const lon = spot.lon as number;
+      points.push([lat, lon]);
+      L.circleMarker([lat, lon], {
+        radius: 5,
+        color: "#276749",
+        weight: 1,
+        fillColor: "#276749",
+        fillOpacity: 0.7,
+      })
+        .bindPopup(
+          `<strong>${spot.name}</strong><br/>${spot.neighborhood} · ${spot.category}`,
+        )
+        .addTo(layer);
+    }
+
+    if (points.length === 1) {
+      map.setView(points[0], 13);
+    } else {
+      const bounds = L.latLngBounds(points);
+      map.fitBounds(bounds, { maxZoom: 13, padding: [28, 28] });
+    }
+  }, [plottedSpots]);
 
   return (
-    <section className="map-panel" aria-label="Location summary for filtered Bay Area spots">
+    <section className="map-panel" aria-label="Map of filtered Bay Area spots">
       <div className="map-copy">
         <p>Map view</p>
-        <h2>Current matches by area</h2>
+        <h2>Where the current matches are clustered</h2>
       </div>
       <div className="map-meta">
-        <span>{plottedSpots.length} with coordinates</span>
+        <span>{plottedSpots.length} mapped</span>
         <span>{spots.length - plottedSpots.length} without coordinates</span>
-        <span>{coordinateCoverage}% coverage</span>
       </div>
-      <div className="map-summary">
-        {topAreas.length > 0 ? (
-          topAreas.map(([name, count]) => (
-            <div className="map-area-row" key={name}>
-              <span>{name}</span>
-              <strong>{count}</strong>
-            </div>
-          ))
-        ) : (
-          <p className="empty-state">No matching areas for the current filters.</p>
-        )}
-      </div>
+      <div className="map-canvas" ref={containerRef} />
     </section>
   );
 }
@@ -1475,7 +1523,7 @@ function App() {
               <em className="filter-count">{activeFilterCount}</em>
             )}
           </button>
-          <SpotLocationSummary spots={filteredSpots} />
+          <SpotMap spots={filteredSpots} />
           <div className="section-heading">
             <div>
               <p>{filteredSpots.length} matches</p>
