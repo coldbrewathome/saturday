@@ -411,8 +411,9 @@ async function aiBrief(
     return json({ error: "invalid json" }, { status: 400 }, cors);
   }
 
-  const data = payload as { vibe?: unknown; spots?: unknown };
+  const data = payload as { vibe?: unknown; spots?: unknown; ageBand?: unknown };
   const vibe = cleanText(data.vibe, 40) || "balanced";
+  const ageBand = cleanText(data.ageBand, 40) || "";
   const spots = cleanStops(data.spots);
   if (spots.length === 0) {
     return json({ error: "spots required" }, { status: 400 }, cors);
@@ -433,11 +434,12 @@ async function aiBrief(
         verbosity: "low",
       },
       instructions:
-        "You are a Bay Area friend-plan assistant. Build a 2-4 stop Saturday plan from the provided sanitized spots. Return only JSON with keys: title (short), summary (1-2 sentences), rationale (array of 2-4 strings), cautions (array of strings about source-data uncertainty), picks (array of {id, reason} ordered as the plan should be done; ids must come from the provided spots; 2-4 picks). Do not invent hours, prices, locations, or availability. Mention uncertainty in cautions when hours or websites are missing.",
+        "You are a Bay Area family-plan assistant for parents planning the weekend with their kids. Build a 2-4 stop kid-friendly weekend plan from the provided sanitized spots. NEVER include bars, breweries, or adult-only venues. Favor parks, libraries, museums, family restaurants, and active indoor places (bowling, mini-golf, escape rooms appropriate for the age). Return only JSON with keys: title (short), summary (1-2 sentences for the parent), rationale (array of 2-4 strings, each citing why the choice fits kids of the given age), cautions (array of strings about source-data uncertainty AND any age-appropriateness caveats), picks (array of {id, reason} ordered as the plan should be done; ids must come from the provided spots; 2-4 picks). Do not invent hours, prices, locations, or availability. Mention uncertainty in cautions when hours or websites are missing.",
       input: JSON.stringify({
         vibe,
+        ageBand: ageBand || "mixed ages",
         task:
-          "Build the Saturday plan: choose 2-4 stops in order, give a brief title and summary, explain the tradeoffs in rationale, list source-data cautions, and return picks with the ordered stop ids. Output JSON only.",
+          "Build a kid-friendly weekend plan: choose 2-4 stops in order, give a brief title and summary aimed at the parent, explain the tradeoffs in rationale (mention age-fit), list source-data cautions, and return picks with the ordered stop ids. Output JSON only.",
         spots,
       }),
       max_output_tokens: 700,

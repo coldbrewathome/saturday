@@ -41,18 +41,18 @@ import {
   writeSession,
 } from "./auth";
 import {
+  ageBandLabels,
   rankForVibe,
   scoreSpotForVibe,
   vibeLabels,
+  type AgeBand,
   type PlannerVibe,
 } from "./planner";
 
-type Companion = "solo" | "date" | "friends" | "family" | "dog";
 type Category =
   | "Outdoors"
   | "Food"
   | "Culture"
-  | "Nightlife"
   | "Wellness"
   | "Shopping";
 type Cost = "Free" | "$" | "$$" | "$$$" | "Unknown";
@@ -77,7 +77,7 @@ type Spot = {
   imageUrl: string;
   imageSource?: string;
   imageAttribution?: string;
-  bestWith: Companion[];
+  bestWith?: string[];
   cost: Cost;
   transitMinutes: number;
   timeWindow: string;
@@ -125,7 +125,6 @@ type NewSpotForm = {
   name: string;
   neighborhood: string;
   category: Category;
-  companion: Companion;
   cost: Cost;
   note: string;
 };
@@ -146,43 +145,25 @@ export type Plan = {
   aiModel?: string;
 };
 
-const companionLabels: Record<Companion, string> = {
-  solo: "Solo",
-  date: "Date",
-  friends: "Friends",
-  family: "Family",
-  dog: "Dog",
-};
-
-const companionOptions: Array<{ value: Companion | "any"; label: string }> = [
-  { value: "friends", label: "Friends" },
-  { value: "any", label: "Any" },
-  { value: "date", label: "Date" },
-  { value: "family", label: "Family" },
-  { value: "solo", label: "Solo" },
-  { value: "dog", label: "Dog" },
-];
-
 const categories: Category[] = [
   "Outdoors",
   "Food",
   "Culture",
-  "Nightlife",
   "Wellness",
   "Shopping",
 ];
+
+const ageBandOptions = Object.entries(ageBandLabels) as Array<[AgeBand, string]>;
 
 const costs: Cost[] = ["Free", "$", "$$", "$$$", "Unknown"];
 const vibeOptions = Object.entries(vibeLabels) as Array<[PlannerVibe, string]>;
 
 const vibeBlurbs: Record<PlannerVibe, string> = {
   balanced: "A bit of everything",
-  "low-effort": "Walk-in, easy hangs",
-  active: "Move your body",
-  "food-first": "Eat your way through",
-  "night-out": "Stay out late",
-  culture: "Galleries and shows",
-  "with-kids": "Day plans, no bars",
+  "low-effort": "Walk-in, easy outings",
+  active: "Run them around",
+  "food-first": "Family-friendly bites",
+  culture: "Museums, libraries, story-time",
 };
 
 function vibeBlurb(vibe: PlannerVibe): string {
@@ -227,15 +208,6 @@ const categoryImagePool: Record<Category, string[]> = {
     "1583847268964-b28dc8f51f92",
     "1485738422979-f5c462d49f74",
     "1503095396549-807759245b35",
-  ].map(unsplash),
-  Nightlife: [
-    "1501386761578-eac5c94b800a",
-    "1566417713940-fe7c737a9ef2",
-    "1572116469696-31de0f17cc34",
-    "1543007630-9710e4a00a20",
-    "1559329007-40df8a9345d8",
-    "1521587760476-6c12a4b040da",
-    "1470337458703-46ad1756a187",
   ].map(unsplash),
   Wellness: [
     "1626224583764-f87db24ac4ea",
@@ -397,24 +369,6 @@ const starterSpots: Spot[] = [
     tags: ["active", "outside", "free", "sports"],
   },
   {
-    id: "karaoke-room",
-    name: "Karaoke Room",
-    neighborhood: "Japantown",
-    category: "Nightlife",
-    imageUrl:
-      "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1200&q=80",
-    bestWith: ["friends"],
-    cost: "$$",
-    transitMinutes: 24,
-    timeWindow: "Evening",
-    mood: "High energy",
-    groupSize: "4-10 people",
-    planning: "Book ahead",
-    openNow: true,
-    note: "Best when everyone is already up for a loud night. Private rooms make it easier to commit.",
-    tags: ["music", "night", "group", "reservation"],
-  },
-  {
     id: "sunset-picnic",
     name: "Sunset Picnic Lawn",
     neighborhood: "Waterfront",
@@ -469,22 +423,22 @@ const starterSpots: Spot[] = [
     tags: ["coffee", "music", "nearby", "low key"],
   },
   {
-    id: "late-dessert",
-    name: "Late Dessert Block",
-    neighborhood: "Old Town",
-    category: "Nightlife",
+    id: "library-storytime",
+    name: "Library Storytime",
+    neighborhood: "Downtown",
+    category: "Culture",
     imageUrl:
-      "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1200&q=80",
-    bestWith: ["date", "friends"],
-    cost: "$$",
-    transitMinutes: 17,
-    timeWindow: "Evening",
-    mood: "Low-key night out",
-    groupSize: "2-6 people",
+      "https://images.unsplash.com/photo-1485738422979-f5c462d49f74?auto=format&fit=crop&w=1200&q=80",
+    cost: "Free",
+    transitMinutes: 10,
+    timeWindow: "Morning",
+    mood: "Quiet morning",
+    groupSize: "1 adult + kids",
     planning: "Walk-in",
-    openNow: false,
-    note: "A quieter after-dinner plan: bookstore browsing, dessert, and a few nearby places to keep talking.",
-    tags: ["books", "dessert", "evening", "walkable"],
+    openNow: true,
+    note: "Free story session for toddlers and preschoolers. Pair with a stroller-friendly walk afterward.",
+    tags: ["library", "free", "toddler", "indoor"],
+    kidsFriendly: true,
   },
 ];
 
@@ -492,7 +446,6 @@ const emptyNewSpot: NewSpotForm = {
   name: "",
   neighborhood: "",
   category: "Outdoors",
-  companion: "friends",
   cost: "$",
   note: "",
 };
@@ -658,7 +611,7 @@ function interleaveByCategory(spots: Spot[]) {
 
 function App() {
   const [query, setQuery] = useState("");
-  const [companion, setCompanion] = useState<Companion | "any">("friends");
+  const [ageBand, setAgeBand] = useState<AgeBand | "any">("any");
   const [vibe, setVibe] = useState<PlannerVibe>("balanced");
   const [category, setCategory] = useState<Category | "All">("All");
   const [city, setCity] = useState("All");
@@ -950,11 +903,11 @@ function App() {
 
   useEffect(() => {
     setAiState({ status: "idle" });
-  }, [category, city, companion, cost, onlyOpen, query, savedIds, vibe]);
+  }, [category, city, ageBand, cost, onlyOpen, query, savedIds, vibe]);
 
   useEffect(() => {
     setPage(1);
-  }, [category, city, companion, cost, onlyOpen, pageSize, query, sortBy, vibe]);
+  }, [category, city, ageBand, cost, onlyOpen, pageSize, query, sortBy, vibe]);
 
   const allSpots = useMemo(() => [...remoteSpots, ...customSpots], [customSpots, remoteSpots]);
 
@@ -990,7 +943,8 @@ function App() {
 
       return (
         (!normalizedQuery || searchable.includes(normalizedQuery)) &&
-        (companion === "any" || spot.bestWith.includes(companion)) &&
+        (ageBand === "any" ||
+          spot.kidsFriendly !== false) &&
         (category === "All" || spot.category === category) &&
         (city === "All" || spot.neighborhood === city) &&
         (cost === "All" || spot.cost === cost) &&
@@ -999,8 +953,8 @@ function App() {
     });
 
     const byScore = (left: Spot, right: Spot) => {
-      const leftScore = scoreSpotForVibe(left, vibe);
-      const rightScore = scoreSpotForVibe(right, vibe);
+      const leftScore = scoreSpotForVibe(left, vibe, ageBand === "any" ? undefined : ageBand);
+      const rightScore = scoreSpotForVibe(right, vibe, ageBand === "any" ? undefined : ageBand);
       if (rightScore !== leftScore) {
         return rightScore - leftScore;
       }
@@ -1029,7 +983,7 @@ function App() {
 
       return left.transitMinutes - right.transitMinutes;
     });
-  }, [allSpots, category, city, companion, cost, onlyOpen, query, sortBy, vibe, userLocation]);
+  }, [allSpots, category, city, ageBand, cost, onlyOpen, query, sortBy, vibe, userLocation]);
 
   const pageCount = Math.max(1, Math.ceil(filteredSpots.length / pageSize));
   const safePage = Math.min(page, pageCount);
@@ -1047,22 +1001,20 @@ function App() {
   }, [page, pageCount]);
 
   const selectedLabel =
-    companion === "any"
-      ? "Places to visit"
-      : companion === "friends"
-        ? "Friend-friendly spots"
-        : `Best with ${companionLabels[companion]}`;
+    ageBand === "any"
+      ? "Family-friendly spots"
+      : `For ${ageBandLabels[ageBand].toLowerCase()}`;
 
   const activeFilterCount = useMemo(() => {
     let n = 0;
     if (query) n += 1;
-    if (companion !== "friends") n += 1;
+    if (ageBand !== "any") n += 1;
     if (category !== "All") n += 1;
     if (city !== "All") n += 1;
     if (cost !== "All") n += 1;
     if (onlyOpen) n += 1;
     return n;
-  }, [query, companion, category, city, cost, onlyOpen]);
+  }, [query, ageBand, category, city, cost, onlyOpen]);
 
   const activePlan = useMemo(
     () => plans.find((plan) => plan.id === activePlanId) ?? null,
@@ -1241,7 +1193,11 @@ function App() {
         openNow: spot.openNow,
         website: spot.website,
         sourceUrl: spot.sourceUrl,
-        friendScore: scoreSpotForVibe(spot, nextVibe),
+        friendScore: scoreSpotForVibe(
+          spot,
+          nextVibe,
+          ageBand === "any" ? undefined : ageBand,
+        ),
       }));
       try {
         const result = await createAiBrief(
@@ -1280,7 +1236,11 @@ function App() {
     }
 
     // Local deterministic fallback (no auth required)
-    const ranked = rankForVibe(candidatePool, nextVibe).slice(0, 3);
+    const ranked = rankForVibe(
+      candidatePool,
+      nextVibe,
+      ageBand === "any" ? undefined : ageBand,
+    ).slice(0, 3);
     if (ranked.length === 0) {
       setHomeBusy(false);
       setHomeError("No matching spots for that vibe.");
@@ -1334,12 +1294,23 @@ function App() {
       openNow: spot.openNow,
       website: spot.website,
       sourceUrl: spot.sourceUrl,
-      friendScore: scoreSpotForVibe(spot, vibe),
+      friendScore: scoreSpotForVibe(
+        spot,
+        vibe,
+        ageBand === "any" ? undefined : ageBand,
+      ),
     }));
 
     setAiState({ status: "loading" });
     try {
-      const result = await createAiBrief({ vibe, spots }, session.token);
+      const result = await createAiBrief(
+        {
+          vibe,
+          spots,
+          ageBand: ageBand === "any" ? undefined : ageBand,
+        },
+        session.token,
+      );
       const stopIds =
         result.picks.length > 0
           ? result.picks.map((p) => p.id)
@@ -1455,7 +1426,7 @@ function App() {
 
   function resetFilters() {
     setQuery("");
-    setCompanion("friends");
+    setAgeBand("any");
     setVibe("balanced");
     setCategory("All");
     setCity("All");
@@ -1482,7 +1453,7 @@ function App() {
       neighborhood,
       category: newSpot.category,
       imageUrl: pickCategoryImage(newSpot.category, `custom-${Date.now()}`),
-      bestWith: [newSpot.companion],
+      bestWith: [],
       cost: newSpot.cost,
       transitMinutes: 20,
       timeWindow: "Anytime",
@@ -1491,7 +1462,7 @@ function App() {
       planning: "Flexible",
       openNow: true,
       note: note || "A saved friend outing idea to fill in later.",
-      tags: ["custom", "friends", newSpot.category.toLowerCase(), newSpot.companion],
+      tags: ["custom", newSpot.category.toLowerCase()],
     };
 
     setCustomSpots((current) => [...current, created]);
@@ -1504,8 +1475,8 @@ function App() {
     <div className="app-shell">
       <header className="topbar">
         <div>
-          <p className="eyebrow">Group plans</p>
-          <h1>Saturday With Friends</h1>
+          <p className="eyebrow">Family weekend</p>
+          <h1>Weekend With Kids</h1>
         </div>
         <div className="data-banner" title={dataMeta.sourceName}>
           <Database aria-hidden="true" />
@@ -1598,14 +1569,36 @@ function App() {
       </nav>
 
       {view === "home" ? (
-      <main className="home-screen" aria-label="Decide what to do Saturday">
+      <main className="home-screen" aria-label="Plan the weekend with the kids">
         <div className="home-hero">
-          <p className="eyebrow">Saturday with friends</p>
-          <h1>Decide where to spend Saturday — together.</h1>
+          <p className="eyebrow">Weekend with the kids</p>
+          <h1>Plan the weekend — together.</h1>
           <p className="home-sub">
-            Pick a vibe. Get 3 stops. Share with the group to vote.
+            Pick the kids' age, then a vibe. Get 3 family stops. Share with
+            co-parents to vote.
             {inferredGeo?.city ? ` Tuned for ${inferredGeo.city}.` : ""}
           </p>
+        </div>
+
+        <div className="home-age" role="group" aria-label="Kids' age">
+          <span className="filter-label">Kids' age</span>
+          <div className="segmented compact">
+            <button
+              className={ageBand === "any" ? "active" : ""}
+              onClick={() => setAgeBand("any")}
+            >
+              Mixed / any
+            </button>
+            {ageBandOptions.map(([value, label]) => (
+              <button
+                key={value}
+                className={ageBand === value ? "active" : ""}
+                onClick={() => setAgeBand(value)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="home-vibes" role="group" aria-label="Pick a vibe">
@@ -1671,15 +1664,21 @@ function App() {
           </label>
 
           <div className="filter-group">
-            <span className="filter-label">Best for</span>
-            <div className="segmented">
-              {companionOptions.map((option) => (
+            <span className="filter-label">Age band</span>
+            <div className="segmented compact">
+              <button
+                className={ageBand === "any" ? "active" : ""}
+                onClick={() => setAgeBand("any")}
+              >
+                Any
+              </button>
+              {ageBandOptions.map(([value, label]) => (
                 <button
-                  key={option.value}
-                  className={companion === option.value ? "active" : ""}
-                  onClick={() => setCompanion(option.value)}
+                  key={value}
+                  className={ageBand === value ? "active" : ""}
+                  onClick={() => setAgeBand(value)}
                 >
-                  {option.label}
+                  {label}
                 </button>
               ))}
             </div>
@@ -1846,8 +1845,8 @@ function App() {
               </p>
               <ul>
                 {query && <li>Search: "{query}"</li>}
-                {companion !== "any" && (
-                  <li>Companion: {companionLabels[companion]}</li>
+                {ageBand !== "any" && (
+                  <li>Age: {ageBandLabels[ageBand]}</li>
                 )}
                 {category !== "All" && <li>Category: {category}</li>}
                 {city !== "All" && <li>Area: {city}</li>}
@@ -1972,8 +1971,7 @@ function App() {
                     )}
 
                     {(() => {
-                      const raw = spot.tags.length > 0 ? spot.tags : spot.bestWith;
-                      const visibleTags = raw
+                      const visibleTags = spot.tags
                         .filter((item) => {
                           const lower = item.toLowerCase();
                           if (lower === spot.category.toLowerCase()) return false;
@@ -1984,11 +1982,7 @@ function App() {
                       return visibleTags.length === 0 ? null : (
                         <div className="tag-row">
                           {visibleTags.map((item) => (
-                            <span key={item}>
-                              {item in companionLabels
-                                ? companionLabels[item as Companion]
-                                : item}
-                            </span>
+                            <span key={item}>{item}</span>
                           ))}
                         </div>
                       );
@@ -2435,43 +2429,22 @@ function App() {
               />
             </label>
 
-            <div className="form-row">
-              <label>
-                <span>Category</span>
-                <select
-                  value={newSpot.category}
-                  onChange={(event) =>
-                    setNewSpot((current) => ({
-                      ...current,
-                      category: event.target.value as Category,
-                    }))
-                  }
-                >
-                  {categories.map((item) => (
-                    <option key={item}>{item}</option>
-                  ))}
-                </select>
-              </label>
-
-              <label>
-                <span>Best with</span>
-                <select
-                  value={newSpot.companion}
-                  onChange={(event) =>
-                    setNewSpot((current) => ({
-                      ...current,
-                      companion: event.target.value as Companion,
-                    }))
-                  }
-                >
-                  {Object.entries(companionLabels).map(([value, label]) => (
-                    <option key={value} value={value}>
-                      {label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
+            <label>
+              <span>Category</span>
+              <select
+                value={newSpot.category}
+                onChange={(event) =>
+                  setNewSpot((current) => ({
+                    ...current,
+                    category: event.target.value as Category,
+                  }))
+                }
+              >
+                {categories.map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </select>
+            </label>
 
             <label>
               <span>Cost</span>

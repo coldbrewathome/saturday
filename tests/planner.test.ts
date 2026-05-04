@@ -28,15 +28,15 @@ describe("planner scoring", () => {
       category: "Outdoors",
       mood: "Outside hangout",
     };
-    const barSpot = {
+    const indoorMallSpot = {
       ...baseSpot,
-      id: "bar",
-      category: "Nightlife",
-      mood: "After-dark energy",
+      id: "mall",
+      category: "Shopping",
+      mood: "Indoor browsing",
     };
 
     expect(scoreSpotForVibe(activeSpot, "active")).toBeGreaterThan(
-      scoreSpotForVibe(barSpot, "active"),
+      scoreSpotForVibe(indoorMallSpot, "active"),
     );
   });
 

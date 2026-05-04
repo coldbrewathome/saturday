@@ -3,9 +3,9 @@ export type PlannerVibe =
   | "low-effort"
   | "active"
   | "food-first"
-  | "night-out"
-  | "culture"
-  | "with-kids";
+  | "culture";
+
+export type AgeBand = "toddler" | "preschool" | "school-age" | "tween";
 
 export type PlannerSpot = {
   id: string;
@@ -36,15 +36,25 @@ export type PlannerBrief = {
 
 export const vibeLabels: Record<PlannerVibe, string> = {
   balanced: "Balanced",
-  "low-effort": "Low effort",
-  active: "Active",
-  "food-first": "Food first",
-  "night-out": "Night out",
-  culture: "Culture",
-  "with-kids": "With kids",
+  "low-effort": "Low-effort day",
+  active: "Active day",
+  "food-first": "Food day",
+  culture: "Museum / library day",
 };
 
-export function scoreSpotForVibe(spot: PlannerSpot, vibe: PlannerVibe) {
+export const ageBandLabels: Record<AgeBand, string> = {
+  toddler: "Toddler (1-3)",
+  preschool: "Preschool (3-5)",
+  "school-age": "School age (6-10)",
+  tween: "Tween (10-13)",
+};
+
+export function scoreSpotForVibe(
+  spot: PlannerSpot,
+  vibe: PlannerVibe,
+  ageBand?: AgeBand,
+) {
+  // Base: every spot is being evaluated as a kid/family option.
   let score = spot.friendScore ?? 60;
 
   if (spot.openNow) score += 5;
@@ -52,52 +62,64 @@ export function scoreSpotForVibe(spot: PlannerSpot, vibe: PlannerVibe) {
   if (spot.transitMinutes > 45) score -= 8;
   if (spot.planning.toLowerCase().includes("book")) score -= 2;
 
+  // Universal kid bias (applies to every vibe in the family-only build).
+  if (spot.kidsFriendly === true) score += 12;
+  if (spot.kidsFriendly === false) score -= 25;
+  if (spot.cost === "Free") score += 4;
+  if (spot.cost === "$") score += 2;
+
   if (vibe === "low-effort") {
     score -= spot.transitMinutes * 0.65;
     if (spot.planning === "Walk-in" || spot.planning === "Flexible") score += 10;
   }
 
   if (vibe === "active") {
-    if (spot.category === "Wellness" || spot.category === "Outdoors") score += 18;
-    if (spot.category === "Nightlife") score -= 10;
+    if (spot.category === "Outdoors") score += 22;
+    if (spot.category === "Wellness") score += 14;
   }
 
   if (vibe === "food-first") {
-    if (spot.category === "Food") score += 20;
-    if (spot.category === "Wellness") score -= 8;
-  }
-
-  if (vibe === "night-out") {
-    if (spot.category === "Nightlife") score += 22;
-    if (spot.category === "Outdoors") score -= 8;
+    if (spot.category === "Food") score += 18;
+    if (spot.cost === "$$$") score -= 6;
   }
 
   if (vibe === "culture") {
     if (spot.category === "Culture") score += 22;
-    if (spot.category === "Shopping") score += 8;
-    if (spot.category === "Wellness") score -= 8;
+    if (spot.category === "Shopping") score += 4;
   }
 
-  if (vibe === "with-kids") {
-    if (spot.category === "Outdoors") score += 18;
-    if (spot.category === "Culture") score += 12;
-    if (spot.category === "Wellness") score += 8;
-    if (spot.category === "Shopping") score += 4;
+  // Age-band bias on top of vibe.
+  if (ageBand === "toddler") {
+    if (spot.category === "Outdoors") score += 8;
+    if (spot.category === "Culture") score += 4;
+    if (spot.planning === "Walk-in" || spot.planning === "Flexible") score += 6;
+    if (spot.transitMinutes > 30) score -= 5;
+  }
+  if (ageBand === "preschool") {
+    if (spot.category === "Outdoors") score += 6;
+    if (spot.category === "Culture") score += 6;
+  }
+  if (ageBand === "school-age") {
+    if (spot.category === "Wellness") score += 5;
+    if (spot.category === "Culture") score += 4;
+  }
+  if (ageBand === "tween") {
+    if (spot.category === "Wellness") score += 6;
     if (spot.category === "Food") score += 4;
-    if (spot.category === "Nightlife") score -= 35;
-    if (spot.cost === "Free") score += 6;
-    if (spot.cost === "$") score += 3;
-    if (spot.kidsFriendly === true) score += 20;
-    if (spot.kidsFriendly === false) score -= 25;
-    if (spot.planning === "Book ahead" || spot.planning === "Reserve") score -= 3;
+    if (spot.category === "Shopping") score += 4;
   }
 
   return Math.round(score);
 }
 
-export function rankForVibe(spots: PlannerSpot[], vibe: PlannerVibe) {
+export function rankForVibe(
+  spots: PlannerSpot[],
+  vibe: PlannerVibe,
+  ageBand?: AgeBand,
+) {
   return [...spots].sort((left, right) => {
-    const scoreDelta = scoreSpotForVibe(right, vibe) - scoreSpotForVibe(left, vibe);
+    const scoreDelta =
+      scoreSpotForVibe(right, vibe, ageBand) - scoreSpotForVibe(left, vibe, ageBand);
     if (scoreDelta !== 0) return scoreDelta;
     return left.transitMinutes - right.transitMinutes;
   });

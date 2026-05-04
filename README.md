@@ -1,6 +1,7 @@
-# Saturday With Friends
+# Weekend With Kids
 
-A Vite React app for finding friend-friendly Bay Area places to visit.
+A Vite React app for planning the weekend with the kids in the Bay Area —
+parks, libraries, museums, family-friendly venues, and family events.
 
 ## Run locally
 
@@ -27,29 +28,28 @@ npm run validate:data
 ```
 
 The generated file lives at `public/data/bay-area-spots.json`. It is sanitized,
-deduplicated, validated, and balanced across food, nightlife, outdoors, culture,
-wellness, and shopping. The GitHub Actions workflow in
-`.github/workflows/refresh-data.yml` refreshes the dataset daily and runs tests
-before committing data changes.
+deduplicated, validated, and balanced across food, outdoors, culture, wellness,
+and shopping (Nightlife is excluded from the kid-focused build). The GitHub
+Actions workflow in `.github/workflows/refresh-data.yml` refreshes the dataset
+daily and runs tests before committing data changes.
 
 Images use the most specific trustworthy source available: OSM `image` tags
 first, OSM Wikimedia Commons references second, Wikidata P18 images third, and
 category fallbacks only when the spot has no place-level public image metadata.
-The generated JSON includes `imageStats` so the UI can show how many spots have
-place-specific images.
 
 ## Current features
 
-- Search and filter friend outing spots by area, category, cost, and listed hours.
-- Review filtered spots by coordinate coverage and top areas before browsing cards.
-- Browse paginated spot cards instead of rendering the full dataset at once.
-- Vibe-aware planner brief for balanced, low-effort, active, food-first, night-out, and culture plans.
-- Optional server-side AI refinement through the Cloudflare Worker at `POST /ai/brief`.
-- Save spots into a local shortlist.
-- Mark spots as visited.
-- Add custom spot ideas stored in browser local storage.
-- Pull current Bay Area source data through a repeatable refresh pipeline.
-- Build saved plans from shortlisted spots and share them for voting when `VITE_POLLS_API` is configured.
+- Pick-a-vibe home funnel that builds a 3-stop family plan in one tap, tuned
+  for the visitor's city via Cloudflare IP geolocation.
+- Age-band filter (toddler / preschool / school-age / tween) that biases the
+  AI suggestion and local rank toward age-appropriate stops.
+- Browse mode with full filter set, real "open now" computation from parsed
+  OSM `opening_hours`, accessibility / dogs-allowed chips, geolocation-based
+  distance.
+- Saved shortlist, manual + AI-built plans, share-for-voting links backed by
+  a Cloudflare Worker (KV-stored polls, anonymous voters, per-IP rate limit).
+- Google sign-in unlocks AI refine + cross-device sync of saved spots and
+  plans.
 
 AI refinement keeps the OpenAI API key server-side in the Worker. Without
 `VITE_POLLS_API` and `OPENAI_API_KEY`, the app uses the local deterministic

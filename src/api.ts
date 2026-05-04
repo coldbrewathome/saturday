@@ -91,7 +91,7 @@ export async function postVote(
 }
 
 export async function createAiBrief(
-  body: { vibe: string; spots: StopSummary[] },
+  body: { vibe: string; spots: StopSummary[]; ageBand?: string },
   sessionToken: string,
 ): Promise<AiBriefResponse> {
   const response = await fetch(`${requireApi()}/ai/brief`, {

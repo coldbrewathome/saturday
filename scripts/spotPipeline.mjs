@@ -52,15 +52,6 @@ export const CATEGORY_IMAGES = {
     "1485738422979-f5c462d49f74",
     "1503095396549-807759245b35",
   ].map(UNSPLASH),
-  Nightlife: [
-    "1501386761578-eac5c94b800a",
-    "1566417713940-fe7c737a9ef2",
-    "1572116469696-31de0f17cc34",
-    "1543007630-9710e4a00a20",
-    "1559329007-40df8a9345d8",
-    "1521587760476-6c12a4b040da",
-    "1470337458703-46ad1756a187",
-  ].map(UNSPLASH),
   Wellness: [
     "1626224583764-f87db24ac4ea",
     "1518611012118-696072aa579a",
@@ -121,13 +112,10 @@ const TAG_RULES = [
   {
     key: "amenity",
     values: [
-      "bar",
-      "biergarten",
       "cafe",
       "fast_food",
       "food_court",
       "ice_cream",
-      "pub",
       "restaurant",
     ],
   },
@@ -331,8 +319,9 @@ export function inferCategory(tags = {}) {
   const tourism = tags.tourism;
   const shop = tags.shop;
 
+  // Adult-only venues are filtered out of this build.
   if (["bar", "biergarten", "pub"].includes(amenity)) {
-    return "Nightlife";
+    return null;
   }
 
   if (
@@ -347,8 +336,9 @@ export function inferCategory(tags = {}) {
     return "Culture";
   }
 
+  // Bowling / dance studios / escape rooms / mini golf are family activities.
   if (["bowling_alley", "dance", "escape_game", "miniature_golf"].includes(leisure)) {
-    return "Nightlife";
+    return "Wellness";
   }
 
   if (["fitness_centre", "pitch", "sports_centre", "swimming_pool"].includes(leisure)) {
@@ -379,7 +369,7 @@ export function deriveCost(category, tags = {}) {
     return "Free";
   }
 
-  if (tags.fee === "yes" || ["Nightlife", "Culture"].includes(category)) {
+  if (tags.fee === "yes" || category === "Culture") {
     return "$$";
   }
 
@@ -395,15 +385,15 @@ export function deriveMood(category, tags = {}) {
     return tags.amenity === "cafe" ? "Coffee and conversation" : "Shareable food";
   }
 
-  if (category === "Nightlife") {
-    return tags.leisure === "escape_game" ? "Group challenge" : "After-dark energy";
-  }
-
   if (category === "Outdoors") {
     return tags.tourism === "viewpoint" ? "View stop" : "Outside hangout";
   }
 
   if (category === "Wellness") {
+    if (tags.leisure === "escape_game") return "Group puzzle";
+    if (tags.leisure === "bowling_alley") return "Bowling lane";
+    if (tags.leisure === "miniature_golf") return "Mini golf";
+    if (tags.leisure === "dance") return "Dance studio";
     return "Light activity";
   }
 
@@ -417,10 +407,6 @@ export function deriveMood(category, tags = {}) {
 export function deriveGroupSize(category, tags = {}) {
   if (tags.leisure === "escape_game") {
     return "3-8 people";
-  }
-
-  if (["bar", "pub", "biergarten"].includes(tags.amenity)) {
-    return "3-6 people";
   }
 
   if (["park", "garden"].includes(tags.leisure)) {
@@ -443,7 +429,7 @@ export function derivePlanning(category, tags = {}) {
     return "Book ahead";
   }
 
-  if (category === "Nightlife" || category === "Culture") {
+  if (category === "Culture") {
     return "Check hours";
   }
 
@@ -455,10 +441,6 @@ export function derivePlanning(category, tags = {}) {
 }
 
 export function deriveTimeWindow(category, tags = {}) {
-  if (["bar", "biergarten", "pub"].includes(tags.amenity)) {
-    return "Evening";
-  }
-
   if (category === "Food") {
     return tags.amenity === "cafe" ? "Morning" : "Lunch";
   }
@@ -467,20 +449,15 @@ export function deriveTimeWindow(category, tags = {}) {
     return "Daylight";
   }
 
-  if (category === "Nightlife") {
-    return "Evening";
-  }
-
   return "Afternoon";
 }
 
 export function friendScore(category, tags = {}) {
   let score = {
     Food: 82,
-    Nightlife: 84,
-    Outdoors: 78,
-    Culture: 72,
-    Wellness: 70,
+    Outdoors: 84,
+    Culture: 78,
+    Wellness: 72,
     Shopping: 62,
   }[category] ?? 60;
 
@@ -708,6 +685,9 @@ export function normalizeElement(element, generatedAt = new Date().toISOString()
   }
 
   const category = inferCategory(tags);
+  if (!category) {
+    return null;
+  }
   const sourceUrl = `https://www.openstreetmap.org/${element.type}/${element.id}`;
   const website = sanitizeUrl(tags.website || tags["contact:website"]);
   const distanceMiles = haversineMiles({ lat: coords.lat, lon: coords.lon });
@@ -809,7 +789,7 @@ export function dedupeAndRank(spots, limit = 500) {
   };
 
   const sorted = deduped.sort(rank);
-  const categories = ["Food", "Nightlife", "Outdoors", "Culture", "Wellness", "Shopping"];
+  const categories = ["Food", "Outdoors", "Culture", "Wellness", "Shopping"];
   const perCategoryTarget = Math.max(75, Math.floor(limit / categories.length));
   const selected = [];
   const selectedIds = new Set();
