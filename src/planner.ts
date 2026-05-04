@@ -4,7 +4,8 @@ export type PlannerVibe =
   | "active"
   | "food-first"
   | "night-out"
-  | "culture";
+  | "culture"
+  | "with-kids";
 
 export type PlannerSpot = {
   id: string;
@@ -21,6 +22,7 @@ export type PlannerSpot = {
   sourceUrl?: string;
   openingHours?: string | null;
   friendScore?: number;
+  kidsFriendly?: boolean | null;
 };
 
 export type PlannerBrief = {
@@ -39,6 +41,7 @@ export const vibeLabels: Record<PlannerVibe, string> = {
   "food-first": "Food first",
   "night-out": "Night out",
   culture: "Culture",
+  "with-kids": "With kids",
 };
 
 export function scoreSpotForVibe(spot: PlannerSpot, vibe: PlannerVibe) {
@@ -73,6 +76,20 @@ export function scoreSpotForVibe(spot: PlannerSpot, vibe: PlannerVibe) {
     if (spot.category === "Culture") score += 22;
     if (spot.category === "Shopping") score += 8;
     if (spot.category === "Wellness") score -= 8;
+  }
+
+  if (vibe === "with-kids") {
+    if (spot.category === "Outdoors") score += 18;
+    if (spot.category === "Culture") score += 12;
+    if (spot.category === "Wellness") score += 8;
+    if (spot.category === "Shopping") score += 4;
+    if (spot.category === "Food") score += 4;
+    if (spot.category === "Nightlife") score -= 35;
+    if (spot.cost === "Free") score += 6;
+    if (spot.cost === "$") score += 3;
+    if (spot.kidsFriendly === true) score += 20;
+    if (spot.kidsFriendly === false) score -= 25;
+    if (spot.planning === "Book ahead" || spot.planning === "Reserve") score -= 3;
   }
 
   return Math.round(score);

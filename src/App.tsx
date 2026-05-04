@@ -182,6 +182,7 @@ const vibeBlurbs: Record<PlannerVibe, string> = {
   "food-first": "Eat your way through",
   "night-out": "Stay out late",
   culture: "Galleries and shows",
+  "with-kids": "Day plans, no bars",
 };
 
 function vibeBlurb(vibe: PlannerVibe): string {
