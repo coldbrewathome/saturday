@@ -1152,6 +1152,94 @@ h3 {
   color: var(--coral);
 }
 
+.home-screen {
+  display: grid;
+  gap: 28px;
+  margin: 0 auto;
+  max-width: 880px;
+  padding: 8px 0 48px;
+}
+
+.home-hero h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.05;
+  margin: 8px 0 14px;
+}
+
+.home-sub {
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.home-vibes {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.home-vibe-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(31, 48, 39, 0.06);
+  display: grid;
+  gap: 6px;
+  min-height: 96px;
+  padding: 16px 18px;
+  text-align: left;
+  transition: transform 0.06s ease, border-color 0.12s ease;
+}
+
+.home-vibe-card:hover:not(:disabled) {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.home-vibe-card:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+.home-vibe-card strong {
+  color: var(--ink);
+  font-size: 1.1rem;
+}
+
+.home-vibe-card span {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.home-status {
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.home-status.error {
+  color: var(--coral);
+}
+
+.home-escape {
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  .home-vibes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 460px) {
+  .home-vibes {
+    grid-template-columns: 1fr;
+  }
+}
+
 .empty-results {
   background: var(--surface);
   border: 1px dashed var(--line);

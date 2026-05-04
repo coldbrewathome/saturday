@@ -115,6 +115,25 @@ export async function createAiBrief(
   return response.json();
 }
 
+export type GeoInfo = {
+  city: string | null;
+  region: string | null;
+  country: string | null;
+  lat: number | null;
+  lon: number | null;
+};
+
+export async function fetchGeo(): Promise<GeoInfo | null> {
+  if (!API_BASE) return null;
+  try {
+    const response = await fetch(`${API_BASE}/geo`);
+    if (!response.ok) return null;
+    return (await response.json()) as GeoInfo;
+  } catch {
+    return null;
+  }
+}
+
 export async function googleSignIn(
   idToken: string,
 ): Promise<{ sessionToken: string; user: { email: string; name: string; picture?: string } }> {

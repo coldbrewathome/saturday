@@ -26,6 +26,7 @@ import {
   API_CONFIGURED,
   createAiBrief,
   createPoll,
+  fetchGeo,
   googleSignIn,
   logoutSession,
   StopSummary,
@@ -38,6 +39,7 @@ import {
   writeSession,
 } from "./auth";
 import {
+  rankForVibe,
   scoreSpotForVibe,
   vibeLabels,
   type PlannerVibe,
@@ -170,6 +172,19 @@ const categories: Category[] = [
 
 const costs: Cost[] = ["Free", "$", "$$", "$$$", "Unknown"];
 const vibeOptions = Object.entries(vibeLabels) as Array<[PlannerVibe, string]>;
+
+const vibeBlurbs: Record<PlannerVibe, string> = {
+  balanced: "A bit of everything",
+  "low-effort": "Walk-in, easy hangs",
+  active: "Move your body",
+  "food-first": "Eat your way through",
+  "night-out": "Stay out late",
+  culture: "Galleries and shows",
+};
+
+function vibeBlurb(vibe: PlannerVibe): string {
+  return vibeBlurbs[vibe];
+}
 
 const DATA_URL = `${import.meta.env.BASE_URL}data/bay-area-spots.json`;
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID ?? "";
@@ -663,7 +678,10 @@ function App() {
   const [plans, setPlans] = useState<Plan[]>(() =>
     readStoredArray("saturday.plans", []),
   );
-  const [view, setView] = useState<"browse" | "plans">("browse");
+  const [view, setView] = useState<"home" | "browse" | "plans">("home");
+  const [inferredGeo, setInferredGeo] = useState<{ city: string | null; lat: number | null; lon: number | null } | null>(null);
+  const [homeBusy, setHomeBusy] = useState(false);
+  const [homeError, setHomeError] = useState<string | null>(null);
   const [activePlanId, setActivePlanId] = useState<string | null>(null);
   const [addStopChoice, setAddStopChoice] = useState<string>("");
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -776,6 +794,17 @@ function App() {
   useEffect(() => {
     setShareState({ status: "idle" });
   }, [activePlanId]);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchGeo().then((geo) => {
+      if (cancelled || !geo) return;
+      setInferredGeo({ city: geo.city, lat: geo.lat, lon: geo.lon });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     if (session || !GOOGLE_CONFIGURED) {
@@ -1079,6 +1108,116 @@ function App() {
     }
   }
 
+  async function selectVibeFromHome(nextVibe: PlannerVibe) {
+    setVibe(nextVibe);
+    setHomeError(null);
+    setHomeBusy(true);
+
+    const candidatePool: Spot[] = (() => {
+      if (!inferredGeo?.lat || !inferredGeo?.lon) return allSpots;
+      const here = { lat: inferredGeo.lat, lon: inferredGeo.lon };
+      const ranked = allSpots
+        .filter(
+          (spot) =>
+            typeof spot.lat === "number" && typeof spot.lon === "number",
+        )
+        .map((spot) => ({
+          spot,
+          dist: haversineMiles(here, {
+            lat: spot.lat as number,
+            lon: spot.lon as number,
+          }),
+        }))
+        .sort((a, b) => a.dist - b.dist)
+        .slice(0, 60)
+        .map((entry) => entry.spot);
+      return ranked.length > 0 ? ranked : allSpots;
+    })();
+
+    if (candidatePool.length === 0) {
+      setHomeBusy(false);
+      setHomeError("Spots are still loading. Try again in a moment.");
+      return;
+    }
+
+    if (session && API_CONFIGURED) {
+      const stopPayload: StopSummary[] = candidatePool.slice(0, 12).map((spot) => ({
+        id: spot.id,
+        name: spot.name,
+        neighborhood: spot.neighborhood,
+        category: spot.category,
+        imageUrl: spot.imageUrl,
+        cost: spot.cost,
+        transitMinutes: spot.transitMinutes,
+        mood: spot.mood,
+        groupSize: spot.groupSize,
+        planning: spot.planning,
+        openNow: spot.openNow,
+        website: spot.website,
+        sourceUrl: spot.sourceUrl,
+        friendScore: scoreSpotForVibe(spot, nextVibe),
+      }));
+      try {
+        const result = await createAiBrief(
+          { vibe: nextVibe, spots: stopPayload },
+          session.token,
+        );
+        const stopIds =
+          result.picks.length > 0
+            ? result.picks.map((p) => p.id)
+            : stopPayload.slice(0, 3).map((s) => s.id);
+        const id = `plan-${Date.now()}`;
+        const plan: Plan = {
+          id,
+          name: result.brief.title || `${vibeLabels[nextVibe]} plan`,
+          stopIds,
+          createdAt: new Date().toISOString(),
+          source: "ai",
+          vibe: nextVibe,
+          summary: result.brief.summary,
+          rationale: result.brief.rationale,
+          cautions: result.brief.cautions,
+          picks: result.picks,
+          aiModel: result.model,
+        };
+        setPlans((current) => [...current, plan]);
+        setActivePlanId(id);
+        setView("plans");
+        setHomeBusy(false);
+        return;
+      } catch (error) {
+        // fall through to local rank below
+        setHomeError(
+          `AI is unavailable (${(error as Error).message}). Using a quick local pick instead.`,
+        );
+      }
+    }
+
+    // Local deterministic fallback (no auth required)
+    const ranked = rankForVibe(candidatePool, nextVibe).slice(0, 3);
+    if (ranked.length === 0) {
+      setHomeBusy(false);
+      setHomeError("No matching spots for that vibe.");
+      return;
+    }
+    const id = `plan-${Date.now()}`;
+    const plan: Plan = {
+      id,
+      name: `${vibeLabels[nextVibe]} plan`,
+      stopIds: ranked.map((s) => s.id),
+      createdAt: new Date().toISOString(),
+      source: "manual",
+      vibe: nextVibe,
+      summary: session
+        ? undefined
+        : "Picked locally. Sign in with Google to use AI for richer suggestions and to save plans across devices.",
+    };
+    setPlans((current) => [...current, plan]);
+    setActivePlanId(id);
+    setView("plans");
+    setHomeBusy(false);
+  }
+
   async function createAiPlan() {
     if (!session) {
       setAiState({
@@ -1330,6 +1469,13 @@ function App() {
 
       <nav className="view-tabs" aria-label="View">
         <button
+          className={view === "home" ? "active" : ""}
+          onClick={() => setView("home")}
+        >
+          <Sparkles aria-hidden="true" />
+          Decide
+        </button>
+        <button
           className={view === "browse" ? "active" : ""}
           onClick={() => setView("browse")}
         >
@@ -1345,7 +1491,45 @@ function App() {
         </button>
       </nav>
 
-      {view === "browse" ? (
+      {view === "home" ? (
+      <main className="home-screen" aria-label="Decide what to do Saturday">
+        <div className="home-hero">
+          <p className="eyebrow">Saturday with friends</p>
+          <h1>Decide where to spend Saturday — together.</h1>
+          <p className="home-sub">
+            Pick a vibe. Get 3 stops. Share with the group to vote.
+            {inferredGeo?.city ? ` Tuned for ${inferredGeo.city}.` : ""}
+          </p>
+        </div>
+
+        <div className="home-vibes" role="group" aria-label="Pick a vibe">
+          {vibeOptions.map(([value, label]) => (
+            <button
+              key={value}
+              className="home-vibe-card"
+              disabled={homeBusy}
+              onClick={() => selectVibeFromHome(value)}
+            >
+              <strong>{label}</strong>
+              <span>{vibeBlurb(value)}</span>
+            </button>
+          ))}
+        </div>
+
+        {homeBusy && (
+          <p className="home-status">Building your plan…</p>
+        )}
+        {homeError && (
+          <p className="home-status error">{homeError}</p>
+        )}
+
+        <div className="home-escape">
+          <button className="text-button" onClick={() => setView("browse")}>
+            Browse all spots →
+          </button>
+        </div>
+      </main>
+      ) : view === "browse" ? (
       <main className="workspace">
         {filtersOpen && (
           <div

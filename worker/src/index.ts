@@ -553,6 +553,23 @@ export default {
       return logout(request, env, cors);
     }
 
+    if (path === "/geo" && request.method === "GET") {
+      const cf = (request as unknown as { cf?: Record<string, unknown> }).cf ?? {};
+      const lat = typeof cf.latitude === "string" ? Number(cf.latitude) : null;
+      const lon = typeof cf.longitude === "string" ? Number(cf.longitude) : null;
+      return json(
+        {
+          city: typeof cf.city === "string" ? cf.city : null,
+          region: typeof cf.region === "string" ? cf.region : null,
+          country: typeof cf.country === "string" ? cf.country : null,
+          lat: Number.isFinite(lat) ? lat : null,
+          lon: Number.isFinite(lon) ? lon : null,
+        },
+        { status: 200 },
+        cors,
+      );
+    }
+
     if (path === "/auth/me" && request.method === "GET") {
       const session = await getSession(env, request);
       return json(
