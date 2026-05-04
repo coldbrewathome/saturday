@@ -767,10 +767,11 @@ export function hasMinimumQualitySignal(spot) {
   if (!spot) return false;
   // Outdoors (parks, viewpoints, gardens) are useful with just a name + coords.
   if (spot.category === "Outdoors") return true;
-  if (spot.website) return true;
-  if (spot.openingHours) return true;
-  if (spot.wikidataId) return true;
-  return false;
+  let signals = 0;
+  if (spot.website) signals += 1;
+  if (spot.openingHours) signals += 1;
+  if (spot.wikidataId) signals += 1;
+  return signals >= 2;
 }
 
 export function dedupeAndRank(spots, limit = 500) {

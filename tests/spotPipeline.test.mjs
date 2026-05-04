@@ -96,6 +96,7 @@ test("buildDataset dedupes, ranks, and validates", () => {
           amenity: "restaurant",
           "addr:city": "San Francisco",
           website: "https://example.com/shared-plates",
+          opening_hours: "Mo-Su 11:00-22:00",
         },
       },
       {
@@ -108,6 +109,7 @@ test("buildDataset dedupes, ranks, and validates", () => {
           amenity: "restaurant",
           "addr:city": "San Francisco",
           website: "https://example.com/shared-plates",
+          opening_hours: "Mo-Su 11:00-22:00",
         },
       },
       {
@@ -120,6 +122,7 @@ test("buildDataset dedupes, ranks, and validates", () => {
           leisure: "escape_game",
           "addr:city": "Oakland",
           opening_hours: "Mo-Su 10:00-22:00",
+          website: "https://example.com/escape",
         },
       },
     ],
