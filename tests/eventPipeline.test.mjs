@@ -5,11 +5,13 @@ import {
   expandRecurringTemplates,
   extractBiblioEvents,
   extractDrupalCardEvents,
+  extractEventListEvents,
   extractHtmlEvents,
   extractIcsEvents,
   extractLibCalEvents,
   extractLibraryCalendarEvents,
   extractJsonLdEvents,
+  extractOfficialTextEvents,
   inferAgeBands,
   parseDateTimeRange,
   parseLooseDate,
@@ -218,6 +220,103 @@ test("extractHtmlEvents finds dated event cards and skips undated links", () => 
   assert.equal(events.length, 1);
   assert.equal(events[0].title, "Family Craft Workshop");
   assert.equal(events[0].url, "https://sfpl.org/event/craft");
+});
+
+test("extractEventListEvents reads official festival list pages", () => {
+  const html = `
+    <section>
+      <h2>June 2026</h2>
+      <p>Fri, Jun 5, 11:00am - 11:30am</p>
+      <h3><a href="/event/manilatown">Manilatown Ancestral Ensemble (Kids' Show)</a></h3>
+      <p>Free outdoor performance for children and adults.</p>
+    </section>
+  `;
+
+  const events = extractEventListEvents(html, {
+    id: "ybg-kids",
+    name: "Yerba Buena Gardens Festival",
+    url: "https://ybgfestival.org/childrens-garden-series/",
+    city: "San Francisco",
+    category: "Festival",
+    eventList: {
+      venue: "Children's Garden, Yerba Buena Gardens",
+      defaultAudienceText: "children kids family all ages",
+    },
+  }, { now: new Date("2026-05-05T12:00:00Z") });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "Manilatown Ancestral Ensemble (Kids' Show)");
+  assert.equal(events[0].venue, "Children's Garden, Yerba Buena Gardens");
+  assert.equal(events[0].extractionMethod, "event-list");
+});
+
+test("extractOfficialTextEvents verifies configured festival events from page text", () => {
+  const html = `
+    <main>
+      <h1>Festival FAQs</h1>
+      <p>The festival is on May 23 & May 24, 2026.</p>
+      <p>The festival opens at 11 AM and closes at 6 PM.</p>
+    </main>
+  `;
+
+  const events = extractOfficialTextEvents(html, {
+    id: "carnaval-sf",
+    name: "Carnaval San Francisco",
+    url: "https://carnavalsanfrancisco.org/faq/",
+    city: "San Francisco",
+    category: "Festival",
+    officialTextEvents: [
+      {
+        title: "Carnaval San Francisco Festival",
+        description: "Free Mission District festival with a kids zone.",
+        venue: "Harrison Street, Mission District",
+        startDateTime: "2026-05-23T11:00:00-07:00",
+        endDateTime: "2026-05-23T18:00:00-07:00",
+        ageBands: ["preschool", "school-age", "tween"],
+        cost: "Free",
+        requiredPattern: "May 23\\s*&\\s*May 24, 2026",
+      },
+    ],
+  });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "Carnaval San Francisco Festival");
+  assert.equal(events[0].extractionMethod, "official-text-event");
+});
+
+test("extractOfficialTextEvents expands verified monthly community events", () => {
+  const html = `
+    <main>
+      <p>Held on the first Friday of every month from 5-9 PM along Telegraph Avenue.</p>
+      <p>This street festival is free, family-friendly, and inclusive.</p>
+    </main>
+  `;
+
+  const events = extractOfficialTextEvents(html, {
+    id: "oakland-first-fridays",
+    name: "Oakland First Fridays",
+    url: "https://www.oaklandfirstfridays.org/about",
+    city: "Oakland",
+    category: "Community",
+    officialRecurringEvents: [
+      {
+        id: "oakland-first-fridays",
+        title: "Oakland First Fridays",
+        description: "Monthly art, food, music, and culture street festival.",
+        venue: "Telegraph Avenue between 22nd and 27th Streets",
+        startTime: "17:00",
+        endTime: "21:00",
+        ageBands: ["preschool", "school-age", "tween"],
+        cost: "Free",
+        requiredText: ["first Friday of every month", "family-friendly"],
+        recurrence: { frequency: "monthly", weekOfMonth: 1, dayOfWeek: 5 },
+      },
+    ],
+  }, { now: new Date("2026-05-05T12:00:00Z"), windowDays: 45 });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].startDateTime, "2026-06-06T00:00:00.000Z");
+  assert.equal(events[0].extractionMethod, "official-recurring-event");
 });
 
 test("expandRecurringTemplates creates dated events inside the planning window", () => {

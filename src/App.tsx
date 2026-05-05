@@ -245,6 +245,25 @@ function weatherTone(label: string): "wet" | "dry" | "mixed" {
   return "mixed";
 }
 
+function isoDate(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
+function parseIsoDate(value: string): Date {
+  const [y, m, d] = value.split("-").map(Number);
+  return new Date(y, (m ?? 1) - 1, d ?? 1);
+}
+
+function nextDayOfWeek(target: number, from: Date = new Date()): Date {
+  const offset = (target - from.getDay() + 7) % 7 || 7;
+  return new Date(from.getFullYear(), from.getMonth(), from.getDate() + offset);
+}
+
+function thisOrNextDayOfWeek(target: number, from: Date = new Date()): Date {
+  const offset = (target - from.getDay() + 7) % 7;
+  return new Date(from.getFullYear(), from.getMonth(), from.getDate() + offset);
+}
+
 function nextBoaWeekend(now: Date = new Date()): { saturday: Date; sunday: Date } {
   let year = now.getFullYear();
   let month = now.getMonth();
@@ -293,6 +312,79 @@ function eventWhenLabel(event: FamilyEvent): string {
     hour: "numeric",
     minute: "2-digit",
   }).format(date);
+}
+
+function eventCategoryToSpotCategory(category: string): Category {
+  if (/\b(library|museum|ticketed)\b/i.test(category)) return "Culture";
+  if (/\b(park|farm|zoo|garden|nature)\b/i.test(category)) return "Outdoors";
+  return "Culture";
+}
+
+function eventCostToSpotCost(cost: string): Cost {
+  if (cost === "Free" || cost === "$" || cost === "$$" || cost === "$$$") {
+    return cost;
+  }
+  if (/free/i.test(cost)) return "Free";
+  if (/\$\$\$/.test(cost)) return "$$$";
+  if (/\$\$/.test(cost)) return "$$";
+  if (/\$/.test(cost)) return "$";
+  return "Unknown";
+}
+
+function isActualPlanningEvent(
+  event: FamilyEvent,
+  now: Date,
+  selectedAgeBand: AgeBand | "any",
+): boolean {
+  if (!event.verified || event.sourceMode === "recurring-template") return false;
+  if (!event.startDateTime) return false;
+  const start = new Date(event.startDateTime);
+  if (Number.isNaN(start.getTime())) return false;
+  const today = new Date(now);
+  today.setHours(0, 0, 0, 0);
+  const horizon = new Date(today.getTime() + 45 * 24 * 60 * 60 * 1000);
+  if (start < today || start > horizon) return false;
+  const day = start.getDay();
+  if (day !== 0 && day !== 6) return false;
+  if (selectedAgeBand !== "any" && !event.ageBands.includes(selectedAgeBand)) {
+    return false;
+  }
+  return true;
+}
+
+function eventToPlanningSpot(event: FamilyEvent, transitMinutes: number): Spot {
+  const when = eventWhenLabel(event);
+  const category = eventCategoryToSpotCategory(event.category);
+  const ageText = event.ageBands.map((band) => ageBandLabels[band]).join(", ");
+  return {
+    id: `event-${event.id}`,
+    name: event.title,
+    neighborhood: `${event.venue}, ${event.city}`,
+    category,
+    imageUrl: pickCategoryImage(category, event.id),
+    cost: eventCostToSpotCost(event.cost),
+    transitMinutes,
+    timeWindow: event.timeWindow,
+    mood: `Scheduled family event: ${when}`,
+    groupSize: "Family",
+    planning: `${when}. Confirm details with ${event.sourceName || "the venue"}.`,
+    openNow: false,
+    note: `${event.description}${ageText ? ` Ages: ${ageText}.` : ""}`,
+    tags: [
+      "event",
+      "scheduled",
+      "family",
+      event.category.toLowerCase(),
+      ...event.ageBands,
+    ],
+    lat: event.lat,
+    lon: event.lon,
+    sourceUrl: event.url,
+    website: event.url,
+    kidsFriendly: true,
+    dataSource: "family-event",
+    friendScore: event.verified ? 96 : 82,
+  };
 }
 
 const DATA_URL = `${import.meta.env.BASE_URL}data/bay-area-spots.json`;
@@ -901,6 +993,12 @@ function App() {
       return [];
     }
   });
+  const [targetDate, setTargetDate] = useState<string>(() => {
+    const d = new Date();
+    const offset = (6 - d.getDay() + 7) % 7 || 7;
+    const next = new Date(d.getFullYear(), d.getMonth(), d.getDate() + offset);
+    return `${next.getFullYear()}-${String(next.getMonth() + 1).padStart(2, "0")}-${String(next.getDate()).padStart(2, "0")}`;
+  });
   const [dataMeta, setDataMeta] = useState<{
     generatedAt?: string;
     sourceName: string;
@@ -1235,6 +1333,76 @@ function App() {
     [customSpots, curatedSpots, remoteSpots],
   );
 
+  const boaWeekend = useMemo(() => nextBoaWeekend(new Date()), []);
+  const boaIsThisWeekend = useMemo(() => {
+    const now = new Date();
+    const sundayEnd = new Date(boaWeekend.sunday);
+    sundayEnd.setHours(23, 59, 59, 999);
+    const saturdayStart = new Date(boaWeekend.saturday);
+    saturdayStart.setHours(0, 0, 0, 0);
+    return saturdayStart <= now
+      ? now <= sundayEnd
+      : (saturdayStart.getTime() - now.getTime()) / (1000 * 60 * 60 * 24) <= 7;
+  }, [boaWeekend]);
+
+  const boaActivitySpots = useMemo<Spot[]>(() => {
+    const weekendLabel = formatWeekendRange(boaWeekend.saturday, boaWeekend.sunday);
+    return boaMuseums.map((museum) => ({
+      id: museum.id,
+      name: museum.name,
+      neighborhood: `${museum.neighborhood}, ${museum.city}`,
+      category: "Culture",
+      imageUrl: pickCategoryImage("Culture", museum.id),
+      cost: boaIsThisWeekend ? "Free" : "$$",
+      transitMinutes: 25,
+      timeWindow: "Afternoon",
+      mood: boaIsThisWeekend
+        ? `BoA Museums on Us option for ${weekendLabel}`
+        : "Museum day option for a culture-focused plan",
+      groupSize: "Family",
+      planning: boaIsThisWeekend
+        ? "Bring a BoA or Merrill card plus photo ID; confirm exclusions."
+        : "Check admission, hours, and exhibit fit before going.",
+      openNow: false,
+      note: boaIsThisWeekend
+        ? "Cardholders may get free general admission during Museums on Us weekend."
+        : "Museums on Us partner; useful as a future free-weekend candidate.",
+      tags: ["museum", "culture", "indoor", "family", "boa", "free"],
+      lat: museum.lat,
+      lon: museum.lon,
+      sourceUrl: "https://museums.bankofamerica.com",
+      website: museum.url,
+      kidsFriendly: true,
+      dataSource: "boa-museums-on-us",
+      friendScore: boaIsThisWeekend ? 92 : 76,
+    }));
+  }, [boaIsThisWeekend, boaMuseums, boaWeekend]);
+
+  const eventActivitySpots = useMemo<Spot[]>(() => {
+    const now = new Date();
+    const anchor =
+      inferredGeo?.lat && inferredGeo?.lon
+        ? { lat: inferredGeo.lat, lon: inferredGeo.lon }
+        : { lat: 37.7749, lon: -122.4194 };
+    return events
+      .filter((event) => isActualPlanningEvent(event, now, ageBand))
+      .map((event) => {
+        const transitMinutes =
+          Number.isFinite(event.lat) && Number.isFinite(event.lon)
+            ? Math.max(8, Math.round(haversineMiles(anchor, {
+                lat: event.lat,
+                lon: event.lon,
+              }) * 6 + 8))
+            : 25;
+        return eventToPlanningSpot(event, transitMinutes);
+      });
+  }, [ageBand, events, inferredGeo]);
+
+  const planningSpots = useMemo(
+    () => [...allSpots, ...eventActivitySpots, ...boaActivitySpots],
+    [allSpots, boaActivitySpots, eventActivitySpots],
+  );
+
   const cityOptions = useMemo(() => {
     const counts = new Map<string, number>();
     for (const spot of allSpots) {
@@ -1329,25 +1497,13 @@ function App() {
       ? "Family-friendly spots"
       : `For ${ageBandLabels[ageBand].toLowerCase()}`;
 
-  const boaWeekend = useMemo(() => nextBoaWeekend(new Date()), []);
-  const boaIsThisWeekend = useMemo(() => {
-    const now = new Date();
-    const sundayEnd = new Date(boaWeekend.sunday);
-    sundayEnd.setHours(23, 59, 59, 999);
-    const saturdayStart = new Date(boaWeekend.saturday);
-    saturdayStart.setHours(0, 0, 0, 0);
-    const weekStart = new Date(now);
-    weekStart.setDate(weekStart.getDate() - 7);
-    return saturdayStart <= now
-      ? now <= sundayEnd
-      : (saturdayStart.getTime() - now.getTime()) / (1000 * 60 * 60 * 24) <= 7;
-  }, [boaWeekend]);
+  const targetDateObj = useMemo(() => parseIsoDate(targetDate), [targetDate]);
+  const targetDayOfWeek = targetDateObj.getDay();
 
   const weekendEvents = useMemo(() => {
     if (events.length === 0) return [] as FamilyEvent[];
     const matching = events.filter((event) => {
-      const isWeekend = event.daysOfWeek.some((d) => d === 0 || d === 6);
-      if (!isWeekend) return false;
+      if (!event.daysOfWeek.includes(targetDayOfWeek)) return false;
       if (ageBand !== "any" && !event.ageBands.includes(ageBand)) return false;
       return true;
     });
@@ -1371,7 +1527,7 @@ function App() {
       }))
       .sort((a, b) => a.dist - b.dist)
       .map((entry) => entry.event);
-  }, [events, ageBand, inferredGeo]);
+  }, [events, ageBand, inferredGeo, targetDayOfWeek]);
 
   const activeFilterCount = useMemo(() => {
     let n = 0;
@@ -1393,11 +1549,11 @@ function App() {
     if (!activePlan) {
       return [];
     }
-    const byId = new Map(allSpots.map((spot) => [spot.id, spot] as const));
+    const byId = new Map(planningSpots.map((spot) => [spot.id, spot] as const));
     return activePlan.stopIds
       .map((id) => byId.get(id))
       .filter((spot): spot is Spot => Boolean(spot));
-  }, [activePlan, allSpots]);
+  }, [activePlan, planningSpots]);
 
   const planNearbyEvents = useMemo(() => {
     if (!activePlan || activePlanStops.length === 0 || events.length === 0) {
@@ -1422,11 +1578,17 @@ function App() {
     const matchAge = activePlan.vibe ? activePlan.vibe : null;
     const useAgeBand = ageBand;
     const NEAR_RADIUS = 2.5;
+    const selectedEventIds = new Set(
+      activePlan.stopIds
+        .filter((id) => id.startsWith("event-"))
+        .map((id) => id.slice("event-".length)),
+    );
     const seen = new Set<string>();
     const matches: Array<{ event: FamilyEvent; dist: number }> = [];
     for (const event of events) {
       if (seen.has(event.id)) continue;
-      if (!event.daysOfWeek.some((d) => d === 0 || d === 6)) continue;
+      if (selectedEventIds.has(event.id)) continue;
+      if (!event.daysOfWeek.includes(targetDayOfWeek)) continue;
       if (
         useAgeBand !== "any" &&
         !event.ageBands.includes(useAgeBand)
@@ -1446,7 +1608,7 @@ function App() {
     matches.sort((a, b) => a.dist - b.dist);
     void matchAge;
     return matches.slice(0, 4).map((m) => m.event);
-  }, [activePlan, activePlanStops, events, ageBand]);
+  }, [activePlan, activePlanStops, events, ageBand, targetDayOfWeek]);
 
   const planTotalTransit = useMemo(
     () => activePlanStops.reduce((sum, spot) => sum + spot.transitMinutes, 0),
@@ -1576,7 +1738,7 @@ function App() {
       setSwapError("Only AI plans can be swapped.");
       return;
     }
-    const stopsById = new Map(allSpots.map((s) => [s.id, s] as const));
+    const stopsById = new Map(planningSpots.map((s) => [s.id, s] as const));
     const currentStops = plan.stopIds
       .map((id) => stopsById.get(id))
       .filter((s): s is Spot => Boolean(s));
@@ -1597,7 +1759,7 @@ function App() {
         ? { lat: inferredGeo.lat, lon: inferredGeo.lon }
         : { lat: 37.7749, lon: -122.4194 });
     const localPool = clusterAround(
-      allSpots.filter((s) => !usedIds.has(s.id)),
+      planningSpots.filter((s) => !usedIds.has(s.id)),
       swapAnchor,
       6,
       18,
@@ -1629,13 +1791,13 @@ function App() {
     setSwapBusyStopId(stopId);
     setSwapError(null);
     try {
-      const today = new Date();
+      const swapDate = targetDateObj;
       const result = await createAiSwap(
         {
           vibe: plan.vibe,
           ageBand: ageBand === "any" ? undefined : ageBand,
-          date: today.toISOString().slice(0, 10),
-          dayOfWeek: today.toLocaleDateString("en-US", { weekday: "long" }),
+          date: targetDate,
+          dayOfWeek: swapDate.toLocaleDateString("en-US", { weekday: "long" }),
           replaceStopId: stopId,
           currentPicks,
           candidates,
@@ -1726,7 +1888,7 @@ function App() {
       inferredGeo?.lat && inferredGeo?.lon
         ? { lat: inferredGeo.lat, lon: inferredGeo.lon }
         : { lat: 37.7749, lon: -122.4194 };
-    const candidatePool = clusterAround(allSpots, anchor, 8, 24);
+    const candidatePool = clusterAround(planningSpots, anchor, 8, 24);
 
     if (candidatePool.length === 0) {
       setHomeBusy(false);
@@ -1756,14 +1918,14 @@ function App() {
         ),
       }));
       try {
-        const today = new Date();
+        const planDate = targetDateObj;
         const result = await createAiBrief(
           {
             vibe: nextVibe,
             spots: stopPayload,
             ageBand: ageBand === "any" ? undefined : ageBand,
-            date: today.toISOString().slice(0, 10),
-            dayOfWeek: today.toLocaleDateString("en-US", { weekday: "long" }),
+            date: targetDate,
+            dayOfWeek: planDate.toLocaleDateString("en-US", { weekday: "long" }),
             weather,
             preferences,
           },
@@ -1841,7 +2003,9 @@ function App() {
       });
       return;
     }
-    const baseSource = savedSpots.length > 0 ? savedSpots : filteredSpots;
+    const baseSource = savedSpots.length > 0
+      ? savedSpots
+      : [...filteredSpots, ...eventActivitySpots, ...boaActivitySpots];
     if (baseSource.length === 0) {
       setAiState({
         status: "error",
@@ -1879,14 +2043,14 @@ function App() {
 
     setAiState({ status: "loading" });
     try {
-      const today = new Date();
+      const planDate = targetDateObj;
       const result = await createAiBrief(
         {
           vibe,
           spots,
           ageBand: ageBand === "any" ? undefined : ageBand,
-          date: today.toISOString().slice(0, 10),
-          dayOfWeek: today.toLocaleDateString("en-US", { weekday: "long" }),
+          date: targetDate,
+          dayOfWeek: planDate.toLocaleDateString("en-US", { weekday: "long" }),
           weather,
           preferences,
         },
@@ -2212,6 +2376,45 @@ function App() {
           </p>
         </div>
 
+        <div className="home-date" role="group" aria-label="Plan date">
+          <span className="filter-label">When</span>
+          <div className="date-row">
+            <input
+              type="date"
+              value={targetDate}
+              min={isoDate(new Date())}
+              onChange={(event) => setTargetDate(event.target.value)}
+            />
+            <div className="date-quick">
+              <button
+                type="button"
+                onClick={() => setTargetDate(isoDate(thisOrNextDayOfWeek(6)))}
+              >
+                This Sat
+              </button>
+              <button
+                type="button"
+                onClick={() => setTargetDate(isoDate(thisOrNextDayOfWeek(0)))}
+              >
+                This Sun
+              </button>
+              <button
+                type="button"
+                onClick={() => setTargetDate(isoDate(nextDayOfWeek(6)))}
+              >
+                Next Sat
+              </button>
+            </div>
+            <span className="date-label">
+              {targetDateObj.toLocaleDateString("en-US", {
+                weekday: "long",
+                month: "short",
+                day: "numeric",
+              })}
+            </span>
+          </div>
+        </div>
+
         <div className="home-age" role="group" aria-label="Kids' age">
           <span className="filter-label">Kids' age</span>
           <div className="segmented compact">
@@ -2299,44 +2502,6 @@ function App() {
         )}
         {homeError && (
           <p className="home-status error">{homeError}</p>
-        )}
-
-        {boaMuseums.length > 0 && (
-          <section className="boa-banner" aria-label="Bank of America Museums on Us">
-            <div className="boa-head">
-              <p className="eyebrow">Free museum weekend</p>
-              <h2>
-                BoA Museums on Us · {formatWeekendRange(
-                  boaWeekend.saturday,
-                  boaWeekend.sunday,
-                )}
-                {boaIsThisWeekend ? " (this weekend!)" : ""}
-              </h2>
-              <p className="boa-sub">
-                Bank of America / Merrill Lynch cardholders get free general admission
-                Saturday and Sunday. Bring your card + ID. Some special exhibits cost
-                extra — confirm with each museum.
-              </p>
-            </div>
-            <ul className="boa-list">
-              {boaMuseums.map((m) => (
-                <li key={m.id}>
-                  <a href={m.url} target="_blank" rel="noreferrer">
-                    <strong>{m.name}</strong>
-                    <span>{m.city} · {m.neighborhood}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <a
-              className="boa-source"
-              href="https://museums.bankofamerica.com"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Full Museums on Us partner list →
-            </a>
-          </section>
         )}
 
         {weekendEvents.length > 0 && (

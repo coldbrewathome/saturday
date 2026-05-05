@@ -309,7 +309,10 @@ async function main() {
           .flatMap((payload) => extractEventsFromPayload(
             payload,
             payload.source || source,
-            { now: new Date(generatedAt) },
+            {
+              now: new Date(generatedAt),
+              windowDays: registry.defaults?.windowDays || 45,
+            },
           ));
         liveEvents = dedupeEvents(filterToPlanningWindow(
           extracted,

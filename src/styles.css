@@ -1262,6 +1262,54 @@ h3 {
   text-align: center;
 }
 
+.home-date {
+  display: grid;
+  gap: 6px;
+}
+
+.date-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.date-row input[type="date"] {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  min-height: 38px;
+  padding: 0 10px;
+}
+
+.date-quick {
+  display: flex;
+  gap: 6px;
+}
+
+.date-quick button {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 0.84rem;
+  font-weight: 800;
+  min-height: 32px;
+  padding: 4px 12px;
+}
+
+.date-quick button:hover {
+  border-color: var(--accent);
+}
+
+.date-label {
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
 .home-weather {
   display: flex;
   flex-wrap: wrap;
@@ -1330,72 +1378,6 @@ h3 {
   background: #e4f0e7;
   border-color: var(--accent);
   color: var(--accent-strong);
-}
-
-.boa-banner {
-  background: linear-gradient(135deg, #f3e9d7 0%, #fdf6e8 100%);
-  border: 1px solid #e0d2b3;
-  border-radius: 12px;
-  display: grid;
-  gap: 12px;
-  padding: 18px 20px;
-}
-
-.boa-head h2 {
-  color: #6e4914;
-  font-size: 1.15rem;
-  margin: 4px 0;
-}
-
-.boa-sub {
-  color: #6e4914;
-  font-size: 0.86rem;
-  font-weight: 800;
-  margin: 0;
-}
-
-.boa-list {
-  display: grid;
-  gap: 4px 12px;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.boa-list li a {
-  color: #5a3a0d;
-  display: grid;
-  font-size: 0.86rem;
-  gap: 1px;
-  padding: 4px 0;
-  text-decoration: none;
-}
-
-.boa-list li a:hover strong {
-  text-decoration: underline;
-}
-
-.boa-list li a strong {
-  font-size: 0.92rem;
-}
-
-.boa-list li a span {
-  color: #8a6328;
-  font-size: 0.78rem;
-  font-weight: 800;
-}
-
-.boa-source {
-  color: #6e4914;
-  font-size: 0.82rem;
-  font-weight: 900;
-  justify-self: end;
-  text-decoration: none;
-}
-
-.boa-source:hover {
-  text-decoration: underline;
 }
 
 .home-events {

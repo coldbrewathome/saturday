@@ -15,13 +15,21 @@ const EVENT_TERMS = [
   "baby",
   "children",
   "craft",
+  "celebration",
+  "concert",
+  "dance",
   "demo",
   "event",
   "family",
+  "festival",
+  "market",
   "kids",
   "lego",
   "maker",
+  "music",
   "nature",
+  "parade",
+  "performance",
   "program",
   "science",
   "story",
@@ -86,6 +94,8 @@ const GENERIC_PAGE_TITLES = [
 ];
 
 const CATEGORY_BY_TEXT = [
+  ["Festival", /\b(festival|parade|street fair|art & wine|carnaval|pride|night market)\b/i],
+  ["Community", /\b(community|open streets|first friday|block party)\b/i],
   ["Library", /\b(library|storytime|book|lego|maker|craft|reading)\b/i],
   ["Zoo", /\b(zoo|animal|wildlife|habitat)\b/i],
   ["Farm", /\b(farm|ranch|garden|harvest|goat|chicken)\b/i],
@@ -233,6 +243,13 @@ export function hasAdultOnlySignal(text) {
 function maybeArray(value) {
   if (!value) return [];
   return Array.isArray(value) ? value : [value];
+}
+
+function sourceAudienceText(source = {}) {
+  return stripUnsafeText(
+    source.defaultAudienceText || source.audienceText || source.eventList?.defaultAudienceText || "",
+    500,
+  );
 }
 
 function walkJsonLd(value, out = []) {
@@ -383,14 +400,16 @@ export function extractHtmlEvents(html, source = {}, options = {}) {
   const extracted = [];
   for (const block of blocks) {
     const text = stripUnsafeText(block, 1400);
-    if (!isEventish(text) || hasAdultOnlySignal(text)) continue;
-    if (!hasFamilySignal(text)) continue;
+    const audienceText = sourceAudienceText(source);
+    const signalText = `${text} ${audienceText}`;
+    if (!isEventish(signalText) || hasAdultOnlySignal(signalText)) continue;
+    if (!hasFamilySignal(signalText)) continue;
     const startDateTime = datetimeFromBlock(block) || parseLooseDate(text, options.now || new Date());
     if (!startDateTime) continue;
     const links = hrefsFromBlock(block, source.url);
     const title = bestTitleFromBlock(block, links, text);
     if (!title) continue;
-    const ageBands = inferAgeBands(`${title} ${text.slice(0, 500)}`);
+    const ageBands = inferAgeBands(`${title} ${text.slice(0, 500)} ${audienceText}`);
     if (ageBands.length === 0) continue;
     extracted.push(normalizeRawEvent({
       title,
@@ -683,7 +702,7 @@ function normalizeLineEvent({ title, dateLine, lines, html, source, options, met
   const range = parseDateTimeRange(dateLine || joined, options.now || new Date());
   if (!range) return null;
   const description = descriptionFromLines(lines, title, dateLine);
-  const signalText = `${title} ${description} ${joined}`;
+  const signalText = `${title} ${description} ${joined} ${sourceAudienceText(source)}`;
   if (!isEventish(signalText) || !hasFamilySignal(signalText) || hasAdultOnlySignal(signalText)) return null;
   const ageBands = inferAgeBands(signalText);
   if (ageBands.length === 0) return null;
@@ -739,6 +758,225 @@ export function extractStructuredHtmlEvents(html, source = {}, options = {}) {
     if (event) events.push(event);
   }
   return dedupeEvents(events);
+}
+
+function eventListOptions(source = {}) {
+  return source.eventList || {};
+}
+
+function parseDateLineRange(line, source = {}, now = new Date()) {
+  const range = parseDateTimeRange(line, now);
+  if (range) return range;
+
+  const config = eventListOptions(source);
+  const startTime = config.defaultStartTime || source.defaultStartTime;
+  if (!startTime) return null;
+  const date = parseMonthDay(line, now);
+  const startClock = parseClock(startTime);
+  if (!date || !startClock) return null;
+  const startDateTime = localDateTime(date, startClock);
+  const endTime = config.defaultEndTime || source.defaultEndTime;
+  const endClock = endTime ? parseClock(endTime) : null;
+  return {
+    startDateTime,
+    endDateTime: endClock
+      ? localDateTime(date, endClock)
+      : addMinutesToLocalIso(startDateTime, Number(config.defaultDurationMinutes || source.defaultDurationMinutes || 60)),
+  };
+}
+
+function isEventListDateLine(line, source = {}, now = new Date()) {
+  return Boolean(parseDateLineRange(line, source, now));
+}
+
+function titleNearDateLine(lines, dateIndex, source = {}, now = new Date()) {
+  const scanForward = lines.slice(dateIndex + 1, Math.min(lines.length, dateIndex + 8));
+  for (const line of scanForward) {
+    if (isEventListDateLine(line, source, now) || isNoiseLine(line)) continue;
+    const title = line.startsWith("###") ? titleFromHeading(line) : cleanEventTitle(line);
+    if (title && !isGenericPageTitle(title) && !parseMonthDay(title, now)) return title;
+  }
+
+  const scanBackward = lines.slice(Math.max(0, dateIndex - 4), dateIndex).reverse();
+  for (const line of scanBackward) {
+    if (isEventListDateLine(line, source, now) || isNoiseLine(line)) continue;
+    const title = line.startsWith("###") ? titleFromHeading(line) : cleanEventTitle(line);
+    if (title && !isGenericPageTitle(title) && !parseMonthDay(title, now)) return title;
+  }
+  return "";
+}
+
+function eventListBlock(lines, dateIndex, source = {}, now = new Date()) {
+  const block = [];
+  for (let cursor = dateIndex; cursor < Math.min(lines.length, dateIndex + 20); cursor += 1) {
+    if (cursor > dateIndex && isEventListDateLine(lines[cursor], source, now)) break;
+    block.push(lines[cursor]);
+  }
+  return block;
+}
+
+export function extractEventListEvents(html, source = {}, options = {}) {
+  const lines = htmlToLines(html);
+  const now = options.now || new Date();
+  const config = eventListOptions(source);
+  const events = [];
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const range = parseDateLineRange(lines[index], source, now);
+    if (!range) continue;
+    const title = titleNearDateLine(lines, index, source, now);
+    if (!title || isGenericPageTitle(title)) continue;
+    const blockLines = eventListBlock(lines, index, source, now);
+    const joined = blockLines.join(" ");
+    if (/cancel(?:ed|led)/i.test(joined)) continue;
+    const signalText = `${title} ${joined} ${sourceAudienceText(source)}`;
+    if (config.requireEventSignal !== false && !isEventish(signalText)) continue;
+    if (config.requireFamilySignal !== false && !hasFamilySignal(signalText)) continue;
+    if (hasAdultOnlySignal(signalText)) continue;
+    const ageBands = inferAgeBands(signalText);
+    const event = normalizeRawEvent({
+      title,
+      description: descriptionFromLines(blockLines, title, lines[index]) || joined,
+      venue: config.venue || source.venue || venueFromLines(blockLines, source),
+      city: config.city || source.city,
+      neighborhood: config.neighborhood || source.neighborhood || source.city,
+      lat: config.lat ?? source.lat,
+      lon: config.lon ?? source.lon,
+      category: config.category || source.category || inferCategory(signalText, "Festival"),
+      startDateTime: range.startDateTime,
+      endDateTime: range.endDateTime,
+      ageBands,
+      cost: config.cost || inferCost(signalText),
+      url: linkForTitle(html, title, source.url) || source.url,
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.url,
+      extractionMethod: "event-list",
+      verified: true,
+    }, source);
+    if (event) events.push(event);
+  }
+
+  return dedupeEvents(events);
+}
+
+function searchablePageText(html) {
+  return decodeHtmlEntities(html)
+    .replace(/<[^>]*>/g, " ")
+    .replace(/[\\"]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 1_000_000);
+}
+
+function textMatchesPattern(text, pattern) {
+  if (!pattern) return true;
+  try {
+    return new RegExp(pattern, "i").test(text);
+  } catch {
+    return text.toLowerCase().includes(String(pattern).toLowerCase());
+  }
+}
+
+function requiredTextMatches(text, required) {
+  const items = maybeArray(required);
+  return items.every((item) => text.toLowerCase().includes(String(item).toLowerCase()));
+}
+
+function officialEventMatchesPage(text, config = {}) {
+  if (config.requiredText && !requiredTextMatches(text, config.requiredText)) return false;
+  if (config.requiredPattern && !maybeArray(config.requiredPattern).every((pattern) => textMatchesPattern(text, pattern))) {
+    return false;
+  }
+  if (config.requiredAnyPattern && !maybeArray(config.requiredAnyPattern).some((pattern) => textMatchesPattern(text, pattern))) {
+    return false;
+  }
+  return true;
+}
+
+function nthWeekdayOfMonth(year, month, dayOfWeek, weekOfMonth) {
+  const first = new Date(Date.UTC(year, month, 1));
+  const offset = (dayOfWeek - first.getUTCDay() + 7) % 7;
+  const day = 1 + offset + (weekOfMonth - 1) * 7;
+  const date = new Date(Date.UTC(year, month, day));
+  return date.getUTCMonth() === month ? date : null;
+}
+
+function expandOfficialRecurringEvents(source = {}, pageText = "", options = {}) {
+  const configs = Array.isArray(source.officialRecurringEvents) ? source.officialRecurringEvents : [];
+  if (configs.length === 0) return [];
+  const now = options.now ? new Date(options.now) : new Date();
+  const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  const end = addDays(start, Number(options.windowDays || DEFAULT_WINDOW_DAYS));
+  const events = [];
+
+  for (const config of configs) {
+    if (!officialEventMatchesPage(pageText, config)) continue;
+    const recurrence = config.recurrence || {};
+    if (recurrence.frequency !== "monthly") continue;
+    const dayOfWeek = Number(recurrence.dayOfWeek);
+    const weekOfMonth = Number(recurrence.weekOfMonth || 1);
+    for (
+      let cursor = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), 1));
+      cursor <= end;
+      cursor = new Date(Date.UTC(cursor.getUTCFullYear(), cursor.getUTCMonth() + 1, 1))
+    ) {
+      const date = nthWeekdayOfMonth(cursor.getUTCFullYear(), cursor.getUTCMonth(), dayOfWeek, weekOfMonth);
+      if (!date || date < start || date > end) continue;
+      const startClock = parseClock(config.startTime || "10:00");
+      if (!startClock) continue;
+      const startDateTime = localDateTime(date, startClock);
+      const endClock = config.endTime ? parseClock(config.endTime) : null;
+      events.push(normalizeRawEvent({
+        ...config,
+        id: `${config.id || source.id}-${dateOnly(date)}`,
+        startDateTime,
+        endDateTime: endClock
+          ? localDateTime(date, endClock)
+          : addMinutesToLocalIso(startDateTime, Number(config.durationMinutes || 120)),
+        city: config.city || source.city,
+        neighborhood: config.neighborhood || source.neighborhood || source.city,
+        lat: config.lat ?? source.lat,
+        lon: config.lon ?? source.lon,
+        category: config.category || source.category || "Community",
+        url: config.url || source.url,
+        sourceId: source.id,
+        sourceName: source.name,
+        sourceUrl: source.url,
+        extractionMethod: "official-recurring-event",
+        verified: true,
+      }, source));
+    }
+  }
+
+  return events.filter(Boolean);
+}
+
+export function extractOfficialTextEvents(html, source = {}, options = {}) {
+  const pageText = searchablePageText(html);
+  const configured = Array.isArray(source.officialTextEvents) ? source.officialTextEvents : [];
+  const events = configured
+    .filter((config) => officialEventMatchesPage(pageText, config))
+    .map((config) => normalizeRawEvent({
+      ...config,
+      city: config.city || source.city,
+      neighborhood: config.neighborhood || source.neighborhood || source.city,
+      lat: config.lat ?? source.lat,
+      lon: config.lon ?? source.lon,
+      category: config.category || source.category || "Festival",
+      url: config.url || source.url,
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.url,
+      extractionMethod: "official-text-event",
+      verified: true,
+    }, source))
+    .filter(Boolean);
+
+  return dedupeEvents([
+    ...events,
+    ...expandOfficialRecurringEvents(source, pageText, options),
+  ]);
 }
 
 export function normalizeDateTime(value) {
@@ -861,6 +1099,12 @@ export function extractEventsFromPayload(payload, source = {}, options = {}) {
   }
   if (source.sourceType === "drupalViewsAjax") {
     return extractDrupalCardEvents(text, source, options);
+  }
+  if (source.sourceType === "eventList") {
+    return extractEventListEvents(text, source, options);
+  }
+  if (source.sourceType === "officialTextEvents") {
+    return extractOfficialTextEvents(text, source, options);
   }
   if (source.sourceType === "ticketmaster") {
     return extractTicketmasterEvents(payload.json, source);
@@ -1142,6 +1386,9 @@ function scoreEvent(event) {
   if (event.extractionMethod === "ics") score += 7;
   if (event.extractionMethod === "librarycalendar") score += 7;
   if (event.extractionMethod === "drupal-views-ajax") score += 7;
+  if (event.extractionMethod === "event-list") score += 7;
+  if (event.extractionMethod === "official-text-event") score += 7;
+  if (event.extractionMethod === "official-recurring-event") score += 7;
   if (event.extractionMethod === "ticketmaster") score += 7;
   if (event.sourceMode === "recurring-template") score -= 2;
   if (event.verified) score += 3;
