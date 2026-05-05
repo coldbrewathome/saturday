@@ -32,20 +32,26 @@ const EVENT_TERMS = [
 ];
 
 const FAMILY_TERMS = [
+  "all ages",
   "baby",
+  "babies",
+  "birth to",
   "camp",
   "children",
   "craft",
+  "families",
   "family",
   "kids",
   "lego",
   "maker",
   "preschool",
+  "preschoolers",
   "school age",
   "school-age",
   "storytime",
   "teen",
   "toddler",
+  "toddlers",
   "tween",
   "youth",
 ];
@@ -73,6 +79,7 @@ const GENERIC_PAGE_TITLES = [
   /^parking\b/i,
   /^visit\b/i,
   /^events?$/i,
+  /^explore activities\b/i,
   /\bmission & history\b/i,
   /\bhours of operation\b/i,
   /\bin progress\b/i,
@@ -184,19 +191,19 @@ export function inferTimeWindowFromDate(value, fallback = "Afternoon") {
 export function inferAgeBands(text) {
   const lower = stripUnsafeText(text, 800).toLowerCase();
   const bands = new Set();
-  if (/\b(baby|babies|infant|toddler|0-3|0 - 3|ages 0|age 0|lapsit)\b/.test(lower)) {
+  if (/\b(baby|babies|birth to|infant|toddler|toddlers|0-3|0 - 3|ages 0|age 0|lapsit)\b/.test(lower)) {
     bands.add("toddler");
   }
-  if (/\b(preschool|pre-k|pre k|ages 3|age 3|ages 4|age 4|ages 5|age 5|0-5|0 - 5)\b/.test(lower)) {
+  if (/\b(preschool|preschoolers|pre-schoolers|pre-k|pre k|ages 2-5|ages 3|age 3|ages 4|age 4|ages 5|age 5|0-5|0 - 5|birth to 5)\b/.test(lower)) {
     bands.add("preschool");
   }
-  if (/\b(camp|kids|school age|school-age|grades?\s+k|grades?\s+[1-5]|ages 6|ages 7|ages 8|ages 9|ages 10|elementary|lego|maker|craft|youth)\b/.test(lower)) {
+  if (/\b(camp|children|kids|kids \(6-11\)|school age|school-age|grades?\s+k|grades?\s+[1-5]|ages 6|ages 7|ages 8|ages 9|ages 10|elementary|lego|maker|craft|youth)\b/.test(lower)) {
     bands.add("school-age");
   }
   if (/\b(tween|tweens|teen|teens|ages 10|ages 11|ages 12|ages 13|middle school|code club)\b/.test(lower)) {
     bands.add("tween");
   }
-  if (bands.size === 0 && /\bfamily|all ages|children|kids\b/.test(lower)) {
+  if (bands.size === 0 && /\bfamilies|family|all ages|children|kids\b/.test(lower)) {
     bands.add("preschool");
     bands.add("school-age");
   }
@@ -406,6 +413,9 @@ export function extractHtmlEvents(html, source = {}, options = {}) {
     return [...jsonLd, ...extracted].filter(Boolean);
   }
 
+  const structured = extractStructuredHtmlEvents(html, source, options);
+  if (structured.length > 0) return structured;
+
   // Last-resort source metadata extraction. This confirms the page is reachable
   // but does not create user-facing events because no dated event was found.
   void pageTitle(html);
@@ -488,6 +498,247 @@ export function parseLooseDate(text, now = new Date()) {
     date = new Date(Date.UTC(year, m, day));
   }
   return `${dateOnly(date)}T${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00-07:00`;
+}
+
+const MONTH_INDEX = {
+  jan: 0,
+  january: 0,
+  feb: 1,
+  february: 1,
+  mar: 2,
+  march: 2,
+  apr: 3,
+  april: 3,
+  may: 4,
+  jun: 5,
+  june: 5,
+  jul: 6,
+  july: 6,
+  aug: 7,
+  august: 7,
+  sep: 8,
+  sept: 8,
+  september: 8,
+  oct: 9,
+  october: 9,
+  nov: 10,
+  november: 10,
+  dec: 11,
+  december: 11,
+};
+
+const MONTH_PATTERN = "January|February|March|April|May|June|July|August|September|October|November|December|Jan\\.?|Feb\\.?|Mar\\.?|Apr\\.?|Jun\\.?|Jul\\.?|Aug\\.?|Sep\\.?|Sept\\.?|Oct\\.?|Nov\\.?|Dec\\.?";
+const CLOCK_PATTERN = "\\d{1,2}(?::\\d{2})?\\s*(?:am|pm)?";
+
+function cleanDateText(value) {
+  return stripUnsafeText(value, 1400)
+    .replace(/[–—]/g, "-")
+    .replace(/\b(\d{1,2})(st|nd|rd|th)\b/gi, "$1")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function parseMonthDay(rawDate, now) {
+  const clean = cleanDateText(rawDate);
+  const match = clean.match(new RegExp(`\\b(${MONTH_PATTERN})\\s+(\\d{1,2})(?:,\\s*(20\\d{2}))?`, "i"));
+  if (!match) return null;
+  const month = MONTH_INDEX[match[1].replace(/\./g, "").toLowerCase()];
+  if (month === undefined) return null;
+  let year = Number(match[3] || now.getUTCFullYear());
+  const day = Number(match[2]);
+  let date = new Date(Date.UTC(year, month, day));
+  if (!match[3]) {
+    const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+    if (date < addDays(today, -1)) {
+      year += 1;
+      date = new Date(Date.UTC(year, month, day));
+    }
+  }
+  return date;
+}
+
+function parseNumericDate(month, day, year) {
+  const date = new Date(Date.UTC(Number(year), Number(month) - 1, Number(day)));
+  return Number.isFinite(date.getTime()) ? date : null;
+}
+
+function parseClock(rawTime, fallbackMeridiem = "") {
+  const clean = stripUnsafeText(rawTime, 40).toLowerCase().replace(/\s+/g, "");
+  const match = clean.match(/^(\d{1,2})(?::(\d{2}))?(am|pm)?$/);
+  if (!match) return null;
+  let hour = Number(match[1]);
+  const minute = Number(match[2] || 0);
+  const meridiem = match[3] || fallbackMeridiem;
+  if (meridiem === "pm" && hour < 12) hour += 12;
+  if (meridiem === "am" && hour === 12) hour = 0;
+  if (hour > 23 || minute > 59) return null;
+  return { hour, minute, meridiem: match[3] || "" };
+}
+
+function inferStartMeridiem(startRaw, endRaw) {
+  const start = stripUnsafeText(startRaw, 40).toLowerCase().match(/^(\d{1,2})/);
+  const end = stripUnsafeText(endRaw, 40).toLowerCase().match(/^(\d{1,2})(?::\d{2})?\s*(am|pm)?$/);
+  if (!start || !end?.[2]) return "";
+  const startHour = Number(start[1]);
+  const endHour = Number(end[1]);
+  if (end[2] === "pm" && endHour === 12 && startHour < 12) return "am";
+  if (end[2] === "pm" && startHour > endHour && endHour <= 5) return "am";
+  return end[2];
+}
+
+function localDateTime(date, clock) {
+  if (!date || !clock) return null;
+  return `${dateOnly(date)}T${String(clock.hour).padStart(2, "0")}:${String(clock.minute).padStart(2, "0")}:00-07:00`;
+}
+
+export function parseDateTimeRange(text, now = new Date()) {
+  const clean = cleanDateText(text);
+  const numeric = clean.match(new RegExp(`\\b(\\d{1,2})/(\\d{1,2})/(20\\d{2})\\s+(${CLOCK_PATTERN})\\s*(?:-|to)\\s*(${CLOCK_PATTERN})`, "i"));
+  const monthNamed = clean.match(new RegExp(`(?:\\bon\\s+)?((${MONTH_PATTERN})\\s+\\d{1,2}(?:,\\s*20\\d{2})?)\\s*(?:,|at)?\\s*(${CLOCK_PATTERN})\\s*(?:-|to)\\s*(${CLOCK_PATTERN})`, "i"));
+  const match = numeric || monthNamed;
+  if (!match) return null;
+
+  const date = numeric ? parseNumericDate(match[1], match[2], match[3]) : parseMonthDay(match[1], now);
+  const startRaw = numeric ? match[4] : match[3];
+  const endRaw = numeric ? match[5] : match[4];
+  const endMeridiem = stripUnsafeText(endRaw, 40).toLowerCase().match(/(am|pm)$/)?.[1] || "";
+  const startMeridiem = stripUnsafeText(startRaw, 40).toLowerCase().match(/(am|pm)$/)?.[1] || inferStartMeridiem(startRaw, endRaw);
+  const startClock = parseClock(startRaw, startMeridiem);
+  const endClock = parseClock(endRaw, endMeridiem || startMeridiem);
+  if (!date || !startClock || !endClock) return null;
+  return {
+    startDateTime: localDateTime(date, startClock),
+    endDateTime: localDateTime(date, endClock),
+  };
+}
+
+function htmlToLines(html) {
+  const marked = decodeHtmlEntities(html)
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<h[1-6][^>]*>/gi, "\n### ")
+    .replace(/<\/h[1-6]>/gi, "\n")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/(a|article|div|li|p|section|span|td|th|time|tr)>/gi, "\n")
+    .replace(/<[^>]*>/g, " ");
+  return marked
+    .split(/\r?\n/)
+    .map((line) => stripUnsafeText(line, 700))
+    .filter(Boolean);
+}
+
+function isNoiseLine(line) {
+  return /^(image|featured events only|options|interested|event actions|learn more|view details|register now|discover|add to calendar|more details|show more|filter|location|date|until|from)$/i.test(line) ||
+    /find more events in:/i.test(line) ||
+    /view all dates/i.test(line);
+}
+
+function titleFromHeading(line) {
+  const clean = stripUnsafeText(line.replace(/^#+\s*/, ""), 140);
+  if (!clean || isNoiseLine(clean)) return "";
+  return cleanEventTitle(clean);
+}
+
+function linkForTitle(html, title, baseUrl) {
+  const wanted = stripUnsafeText(title, 140).toLowerCase();
+  for (const match of html.matchAll(/<a[^>]+href=["']([^"']+)["'][^>]*>([\s\S]{0,700}?)<\/a>/gi)) {
+    const text = stripUnsafeText(match[2], 180).toLowerCase();
+    if (text && (text === wanted || text.includes(wanted))) {
+      return sanitizeUrl(match[1], baseUrl);
+    }
+  }
+  return null;
+}
+
+function venueFromLines(lines, source) {
+  for (const line of lines) {
+    const clean = stripUnsafeText(line, 180);
+    const location = clean.match(/(?:event\s+)?location:\s*(.+)$/i)?.[1];
+    if (location) return stripUnsafeText(location, 100);
+  }
+  const atLine = lines.find((line) => /\bat\b/i.test(line) && !parseDateTimeRange(line));
+  return stripUnsafeText(atLine || source.name, 100);
+}
+
+function descriptionFromLines(lines, title, dateLine) {
+  return lines
+    .filter((line) => {
+      const clean = stripUnsafeText(line, 240);
+      return clean &&
+        clean !== title &&
+        clean !== dateLine &&
+        !clean.startsWith("###") &&
+        !isNoiseLine(clean) &&
+        !/^(canceled|cancelled|in progress)$/i.test(clean) &&
+        !/(event\s+)?location:/i.test(clean) &&
+        !parseDateTimeRange(clean);
+    })
+    .slice(0, 5)
+    .join(" ");
+}
+
+function normalizeLineEvent({ title, dateLine, lines, html, source, options, method, fallbackCategory }) {
+  const joined = lines.join(" ");
+  if (/cancel(?:ed|led)/i.test(joined)) return null;
+  const range = parseDateTimeRange(dateLine || joined, options.now || new Date());
+  if (!range) return null;
+  const description = descriptionFromLines(lines, title, dateLine);
+  const signalText = `${title} ${description} ${joined}`;
+  if (!isEventish(signalText) || !hasFamilySignal(signalText) || hasAdultOnlySignal(signalText)) return null;
+  const ageBands = inferAgeBands(signalText);
+  if (ageBands.length === 0) return null;
+  return normalizeRawEvent({
+    title,
+    description: description || joined,
+    venue: venueFromLines(lines, source),
+    city: source.city,
+    category: source.category || fallbackCategory || inferCategory(signalText),
+    startDateTime: range.startDateTime,
+    endDateTime: range.endDateTime,
+    ageBands,
+    url: linkForTitle(html, title, source.url) || source.url,
+    cost: inferCost(signalText),
+    sourceId: source.id,
+    sourceName: source.name,
+    sourceUrl: source.url,
+    extractionMethod: method,
+    verified: true,
+  }, source);
+}
+
+function hasBiblioYouthAudience(lines) {
+  return /\b(babies|birth to 5|children|families|grade schoolers|kids|pre-schoolers|preschoolers|toddlers|tweens)\b/i.test(lines.join(" "));
+}
+
+export function extractStructuredHtmlEvents(html, source = {}, options = {}) {
+  const lines = htmlToLines(html);
+  const events = [];
+  for (let index = 0; index < lines.length; index += 1) {
+    if (!lines[index].startsWith("###")) continue;
+    const title = titleFromHeading(lines[index]);
+    if (!title || isGenericPageTitle(title)) continue;
+    let end = lines.length;
+    for (let cursor = index + 1; cursor < lines.length; cursor += 1) {
+      if (lines[cursor].startsWith("###")) {
+        end = cursor;
+        break;
+      }
+    }
+    const blockLines = lines.slice(index + 1, Math.min(end, index + 28));
+    const dateLine = blockLines.find((line) => parseDateTimeRange(line, options.now || new Date()));
+    if (!dateLine && !parseDateTimeRange(blockLines.join(" "), options.now || new Date())) continue;
+    const event = normalizeLineEvent({
+      title,
+      dateLine,
+      lines: blockLines,
+      html,
+      source,
+      options,
+      method: source.sourceType || "structured-html",
+    });
+    if (event) events.push(event);
+  }
+  return dedupeEvents(events);
 }
 
 export function normalizeDateTime(value) {
@@ -602,6 +853,15 @@ export function extractEventsFromPayload(payload, source = {}, options = {}) {
   if (source.sourceType === "libcal") {
     return extractLibCalEvents(payload.json, source);
   }
+  if (source.sourceType === "biblioevents") {
+    return extractBiblioEvents(text, source, options);
+  }
+  if (source.sourceType === "librarycalendar") {
+    return extractLibraryCalendarEvents(text, source, options);
+  }
+  if (source.sourceType === "drupalViewsAjax") {
+    return extractDrupalCardEvents(text, source, options);
+  }
   if (source.sourceType === "ticketmaster") {
     return extractTicketmasterEvents(payload.json, source);
   }
@@ -615,6 +875,136 @@ export function extractEventsFromPayload(payload, source = {}, options = {}) {
     return extractJsonEvents(payload.json, source);
   }
   return extractHtmlEvents(text, source, options);
+}
+
+export function extractBiblioEvents(html, source = {}, options = {}) {
+  const lines = htmlToLines(html);
+  const start = Math.max(0, lines.findIndex((line) => /^#{1,3}\s*event items$/i.test(line) || /^event items$/i.test(line)));
+  const scoped = lines.slice(start >= 0 ? start : 0);
+  const events = [];
+
+  for (let index = 0; index < scoped.length; index += 1) {
+    if (!scoped[index].startsWith("###")) continue;
+    const title = titleFromHeading(scoped[index]);
+    if (!title || isGenericPageTitle(title)) continue;
+    let end = scoped.length;
+    for (let cursor = index + 1; cursor < scoped.length; cursor += 1) {
+      if (scoped[cursor].startsWith("###")) {
+        end = cursor;
+        break;
+      }
+    }
+    const blockLines = scoped.slice(index + 1, Math.min(end, index + 34));
+    if (!hasBiblioYouthAudience(blockLines)) continue;
+    const dateLine = blockLines.find((line) => parseDateTimeRange(line, options.now || new Date()));
+    if (!dateLine && !parseDateTimeRange(blockLines.join(" "), options.now || new Date())) continue;
+    const event = normalizeLineEvent({
+      title,
+      dateLine,
+      lines: blockLines,
+      html,
+      source,
+      options,
+      method: "biblioevents",
+      fallbackCategory: "Library",
+    });
+    if (event) events.push(event);
+  }
+
+  return dedupeEvents(events);
+}
+
+export function extractLibraryCalendarEvents(html, source = {}, options = {}) {
+  const blocks = html.match(/<div class="lc-event event-card lc-featured-event[\s\S]*?(?=<div class="lc-event event-card lc-featured-event|<div class="calendar-wrap|$)/gi) || [];
+  const events = [];
+  for (const block of blocks) {
+    const title =
+      stripUnsafeText(block.match(/<div class="lc-featured-event-content">[\s\S]*?<h2[^>]*>\s*<a[^>]*>([\s\S]*?)<\/a>/i)?.[1], 140) ||
+      stripUnsafeText(block.match(/<h3[^>]+class=["'][^"']*lc-event__title--details[^"']*["'][^>]*>([\s\S]*?)<\/h3>/i)?.[1], 140);
+    if (!title || isGenericPageTitle(title)) continue;
+
+    const dateText =
+      stripUnsafeText(block.match(/lc-featured-event-info-item--date[^>]*>([\s\S]*?)<\/div>/i)?.[1], 180) ||
+      stripUnsafeText(block.match(/aria-label=["'][^"']* on ([^"']+)["']/i)?.[1], 180);
+    const range = parseDateTimeRange(dateText, options.now || new Date());
+    if (!range) continue;
+
+    const text = stripUnsafeText(block, 1800);
+    if (/cancel(?:ed|led)/i.test(text) || !hasFamilySignal(`${title} ${text}`) || hasAdultOnlySignal(`${title} ${text}`)) {
+      continue;
+    }
+    const ageBands = inferAgeBands(`${title} ${text}`);
+    if (ageBands.length === 0) continue;
+    const event = normalizeRawEvent({
+      title,
+      description: stripUnsafeText(block.match(/lc-event__body[\s\S]*?<div[^>]*field-item[^>]*>([\s\S]*?)<\/div>/i)?.[1] || text, 500),
+      venue:
+        stripUnsafeText(block.match(/lc-featured-event-location["'][^>]*>([\s\S]*?)<\/div>/i)?.[1], 120) ||
+        stripUnsafeText(block.match(/<div class="lc-event__branch">[\s\S]*?<strong>Event Location:\s*<\/strong>([\s\S]*?)<\/div>/i)?.[1], 120) ||
+        source.name,
+      city: source.city,
+      category: source.category || "Library",
+      startDateTime: range.startDateTime,
+      endDateTime: range.endDateTime,
+      ageBands,
+      url: sanitizeUrl(block.match(/<a[^>]+href=["']([^"']+)["']/i)?.[1], source.url) || source.url,
+      cost: inferCost(text),
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.url,
+      extractionMethod: "librarycalendar",
+      verified: true,
+    }, source);
+    if (event) events.push(event);
+  }
+
+  if (events.length > 0) return dedupeEvents(events);
+  return extractStructuredHtmlEvents(html, source, { ...options, method: "librarycalendar" });
+}
+
+export function extractDrupalCardEvents(html, source = {}, options = {}) {
+  const blocks = html.match(/<div class="col--6">[\s\S]*?(?=<div class="col--6">|<nav class="pager"|$)/gi) || [];
+  const audienceText = source.defaultAudienceText || source.drupalViews?.defaultAudienceText || "all ages kids pre-school teens";
+  const events = [];
+
+  for (const block of blocks) {
+    if (!/collection-card--event/i.test(block)) continue;
+    const title = stripUnsafeText(
+      block.match(/<h3[^>]+class=["'][^"']*collection-card__title[^"']*["'][^>]*>([\s\S]*?)<\/h3>/i)?.[1],
+      140,
+    );
+    if (!title || isGenericPageTitle(title)) continue;
+    const startDateTime = datetimeFromBlock(block);
+    if (!startDateTime) continue;
+
+    const text = stripUnsafeText(block, 1200);
+    const signalText = `${title} ${text} ${audienceText}`;
+    if (/cancel(?:ed|led)/i.test(signalText) || hasAdultOnlySignal(signalText)) continue;
+
+    const location = block.match(/teaser__tag[^>]*teaser__tag--related-park[^>]*>([\s\S]*?)<\/span>\s*,?\s*([^<\n]+)/i);
+    const venue = stripUnsafeText(location?.[1] || source.name, 100);
+    const city = stripUnsafeText(location?.[2] || source.city, 80);
+    const event = normalizeRawEvent({
+      title,
+      description: text,
+      venue,
+      city,
+      category: source.category || "Park",
+      startDateTime,
+      ageBands: inferAgeBands(signalText),
+      url: sanitizeUrl(block.match(/<a[^>]+href=["']([^"']+)["']/i)?.[1], source.url) || source.url,
+      cost: inferCost(signalText),
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.url,
+      extractionMethod: "drupal-views-ajax",
+      verified: true,
+    }, source);
+    if (event) events.push(event);
+  }
+
+  if (events.length > 0) return dedupeEvents(events);
+  return extractStructuredHtmlEvents(html, source, options);
 }
 
 export function extractLibCalEvents(json, source = {}) {
@@ -747,8 +1137,11 @@ function scoreEvent(event) {
   let score = 0;
   if (event.startDateTime) score += 10;
   if (event.endDateTime) score += 3;
+  if (event.extractionMethod === "biblioevents") score += 8;
   if (event.extractionMethod === "json-ld") score += 8;
   if (event.extractionMethod === "ics") score += 7;
+  if (event.extractionMethod === "librarycalendar") score += 7;
+  if (event.extractionMethod === "drupal-views-ajax") score += 7;
   if (event.extractionMethod === "ticketmaster") score += 7;
   if (event.sourceMode === "recurring-template") score -= 2;
   if (event.verified) score += 3;

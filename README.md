@@ -39,9 +39,11 @@ Events are generated from `data/event-sources.json` and recurring templates in
 `data/event-templates.json` into `public/data/events.json`, with diagnostics in
 `public/data/event-build-report.json`. The event pipeline first attempts live
 structured extraction from official source pages (JSON-LD, ICS, RSS/XML, JSON,
-and dated HTML event cards). If a trusted source is reachable but does not expose
-parseable dated events, it expands the configured recurring templates so the app
-still has dated weekend options while the build report shows the fallback.
+LibCal, BiblioCommons events, LibraryCalendar cards, Drupal Views AJAX cards,
+and dated HTML event cards). If a trusted source is reachable but does not
+expose parseable dated events, it expands the configured recurring templates so
+the app still has dated weekend options while the build report shows the
+fallback.
 
 Images use the most specific trustworthy source available: OSM `image` tags
 first, OSM Wikimedia Commons references second, Wikidata P18 images third, and

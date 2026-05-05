@@ -298,6 +298,7 @@ function eventWhenLabel(event: FamilyEvent): string {
 const DATA_URL = `${import.meta.env.BASE_URL}data/bay-area-spots.json`;
 const EVENTS_URL = `${import.meta.env.BASE_URL}data/events.json`;
 const BOA_MUSEUMS_URL = `${import.meta.env.BASE_URL}data/boa-museums.json`;
+const CURATED_SPOTS_URL = `${import.meta.env.BASE_URL}data/curated-spots.json`;
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID ?? "";
 const GOOGLE_CONFIGURED = GOOGLE_CLIENT_ID.length > 0;
 
@@ -888,6 +889,7 @@ function App() {
     "idle" | "loading" | "syncing" | "synced" | "error"
   >("idle");
   const [remoteSpots, setRemoteSpots] = useState<Spot[]>(starterSpots);
+  const [curatedSpots, setCuratedSpots] = useState<Spot[]>([]);
   const [events, setEvents] = useState<FamilyEvent[]>([]);
   const [boaMuseums, setBoaMuseums] = useState<BoaMuseum[]>([]);
   const [weather, setWeather] = useState<WeatherForecast | null>(null);
@@ -1003,6 +1005,34 @@ function App() {
       active = false;
     };
   }, [inferredGeo]);
+
+  useEffect(() => {
+    let active = true;
+    fetch(CURATED_SPOTS_URL)
+      .then((response) => (response.ok ? response.json() : Promise.reject()))
+      .then((dataset: { spots?: Spot[] }) => {
+        if (!active) return;
+        if (Array.isArray(dataset.spots)) {
+          setCuratedSpots(
+            dataset.spots.map((s) => ({
+              ...s,
+              imageUrl:
+                s.imageUrl ||
+                pickCategoryImage(s.category as Category, s.id),
+              friendScore: s.friendScore ?? 80,
+              tags: s.tags ?? [],
+              note: s.note ?? "",
+            })),
+          );
+        }
+      })
+      .catch(() => {
+        // Curated list is optional.
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -1200,7 +1230,10 @@ function App() {
     setPage(1);
   }, [category, city, ageBand, cost, onlyOpen, pageSize, query, sortBy, vibe]);
 
-  const allSpots = useMemo(() => [...remoteSpots, ...customSpots], [customSpots, remoteSpots]);
+  const allSpots = useMemo(
+    () => [...remoteSpots, ...curatedSpots, ...customSpots],
+    [customSpots, curatedSpots, remoteSpots],
+  );
 
   const cityOptions = useMemo(() => {
     const counts = new Map<string, number>();

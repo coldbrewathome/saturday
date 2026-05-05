@@ -3,6 +3,8 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import {
   buildEventsDataset,
+  decodeHtmlEntities,
+  dedupeEvents,
   expandRecurringTemplates,
   extractEventsFromPayload,
   validateEventsDataset,
@@ -31,6 +33,9 @@ function templateMap(dataset) {
 }
 
 async function fetchSource(source, registry) {
+  if (source.sourceType === "drupalViewsAjax") {
+    return fetchDrupalViewsAjax(source, registry);
+  }
   if (source.sourceType === "libcal") {
     return fetchLibCal(source, registry);
   }
@@ -53,6 +58,17 @@ async function fetchSource(source, registry) {
     return fetchUrl(url.toString(), registry.defaults?.userAgent);
   }
   return fetchUrl(source.url, registry.defaults?.userAgent);
+}
+
+async function fetchSourcePayloads(source, registry) {
+  const urls = Array.isArray(source.urls) && source.urls.length > 0 ? source.urls : [source.url];
+  const payloads = [];
+  for (const url of urls) {
+    const sourceForUrl = { ...source, url };
+    const payload = await fetchSource(sourceForUrl, registry);
+    payloads.push({ ...payload, url, source: sourceForUrl });
+  }
+  return payloads;
 }
 
 async function fetchLibCal(source, registry) {
@@ -93,6 +109,82 @@ async function fetchLibCal(source, registry) {
   };
 }
 
+async function fetchDrupalViewsAjax(source, registry) {
+  const config = source.drupalViews || {};
+  const ajaxUrl = config.ajaxUrl || new URL("/views/ajax", source.url).toString();
+  const baseParams = {
+    view_name: config.viewName,
+    view_display_id: config.viewDisplayId,
+    view_args: config.viewArgs || "",
+    view_path: config.viewPath || new URL(source.url).pathname,
+  };
+  if (!baseParams.view_name || !baseParams.view_display_id) {
+    return { status: "fetch-error", reason: "missing Drupal Views config" };
+  }
+
+  const requests = Array.isArray(config.requests) && config.requests.length > 0
+    ? config.requests
+    : [{ label: "default", params: config.params || {} }];
+  const maxPages = Number(config.maxPages || 1);
+  const chunks = [];
+
+  for (const request of requests) {
+    const requestParams = request.params || {};
+    for (let page = 0; page < maxPages; page += 1) {
+      const body = new URLSearchParams({
+        ...baseParams,
+        ...requestParams,
+        page: String(page),
+      });
+      const payload = await fetchUrl(ajaxUrl, registry.defaults?.userAgent, {
+        method: "POST",
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+        },
+        body: body.toString(),
+      });
+      if (payload.status !== "ok") return payload;
+
+      let commands = [];
+      try {
+        commands = parseDrupalAjaxCommands(payload);
+      } catch (error) {
+        return {
+          status: "fetch-error",
+          reason: `invalid Drupal Views AJAX response: ${
+            error instanceof Error ? error.message : String(error)
+          }`,
+        };
+      }
+      const html = Array.isArray(commands)
+        ? commands
+            .filter((command) => command.command === "insert" && typeof command.data === "string")
+            .map((command) => command.data)
+            .join("\n")
+        : "";
+      if (!html || !/collection-card--event/i.test(html)) break;
+      chunks.push(`\n<!-- drupal-request:${request.label || "default"} page:${page} -->\n${html}`);
+    }
+  }
+
+  return {
+    status: "ok",
+    httpStatus: 200,
+    contentType: "text/html; source=drupal-views-ajax",
+    text: chunks.join("\n"),
+  };
+}
+
+function parseDrupalAjaxCommands(payload) {
+  if (payload.json) return payload.json;
+  let raw = payload.text || "[]";
+  const textarea = raw.match(/<textarea[^>]*>([\s\S]*?)<\/textarea>/i);
+  if (textarea) {
+    raw = decodeHtmlEntities(textarea[1]);
+  }
+  return JSON.parse(raw.trim() || "[]");
+}
+
 function extractQueryParam(url, key) {
   try {
     const parsed = new URL(url);
@@ -102,15 +194,17 @@ function extractQueryParam(url, key) {
   }
 }
 
-async function fetchUrl(url, userAgent) {
+async function fetchUrl(url, userAgent, init = {}) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const response = await fetch(url, {
+      ...init,
       signal: controller.signal,
       headers: {
         accept: "text/html,application/xhtml+xml,application/json,application/rss+xml,application/xml,text/calendar;q=0.9,*/*;q=0.8",
         "user-agent": userAgent || "saturday-with-friends/0.1 event-ingest",
+        ...(init.headers || {}),
       },
     });
     const contentType = response.headers.get("content-type") || "";
@@ -190,22 +284,38 @@ async function main() {
       liveEvents: 0,
       fallbackEvents: 0,
       eventCount: 0,
+      fetches: [],
     };
     let liveEvents = [];
 
     if (!offline && source.enabled !== false) {
-      const payload = await fetchSource(source, registry);
-      report.status = payload.status;
-      if (payload.reason) report.reason = payload.reason;
-      if (payload.httpStatus) report.httpStatus = payload.httpStatus;
-      if (payload.contentType) report.contentType = payload.contentType;
-      if (payload.status === "ok") {
-        const extracted = extractEventsFromPayload(payload, source, { now: new Date(generatedAt) });
-        liveEvents = filterToPlanningWindow(
+      const payloads = await fetchSourcePayloads(source, registry);
+      report.fetches = payloads.map((payload) => ({
+        url: payload.url,
+        status: payload.status,
+        reason: payload.reason,
+        httpStatus: payload.httpStatus,
+        contentType: payload.contentType,
+      }));
+      const firstOk = payloads.find((payload) => payload.status === "ok");
+      const firstPayload = firstOk || payloads[0] || {};
+      report.status = firstPayload.status || "fetch-error";
+      if (firstPayload.reason) report.reason = firstPayload.reason;
+      if (firstPayload.httpStatus) report.httpStatus = firstPayload.httpStatus;
+      if (firstPayload.contentType) report.contentType = firstPayload.contentType;
+      if (firstOk) {
+        const extracted = payloads
+          .filter((payload) => payload.status === "ok")
+          .flatMap((payload) => extractEventsFromPayload(
+            payload,
+            payload.source || source,
+            { now: new Date(generatedAt) },
+          ));
+        liveEvents = dedupeEvents(filterToPlanningWindow(
           extracted,
           generatedAt,
           registry.defaults?.windowDays || 45,
-        );
+        ));
         report.rejectedLiveEvents = extracted.length - liveEvents.length;
       }
     } else {

@@ -3,11 +3,15 @@ import assert from "node:assert/strict";
 import {
   buildEventsDataset,
   expandRecurringTemplates,
+  extractBiblioEvents,
+  extractDrupalCardEvents,
   extractHtmlEvents,
   extractIcsEvents,
   extractLibCalEvents,
+  extractLibraryCalendarEvents,
   extractJsonLdEvents,
   inferAgeBands,
+  parseDateTimeRange,
   parseLooseDate,
   validateEventsDataset,
 } from "../scripts/eventPipeline.mjs";
@@ -105,6 +109,98 @@ test("extractLibCalEvents reads San Mateo LibCal results", () => {
   assert.equal(events[0].extractionMethod, "libcal");
 });
 
+test("extractBiblioEvents parses BiblioCommons event cards", () => {
+  const html = `
+    <main>
+      <h2>Event items</h2>
+      <h3><a href="/v2/events/abc123">Toddler Storytime</a></h3>
+      <p>Monday, May 11 on May 11, 2026, 10:30am–11:00am 10:30am to 11:00am</p>
+      <a href="https://example.org/branch">Main Children's Room Event location: Main Children's Room</a>
+      <p>Songs, active rhymes and stories especially for ages 18 months to 3 years.</p>
+      <ul><li>Storytime Find more events in: Storytime</li><li>Families</li><li>Kids</li></ul>
+    </main>
+  `;
+
+  const events = extractBiblioEvents(html, {
+    ...source,
+    id: "oakland-library",
+    name: "Oakland Public Library",
+    url: "https://oaklandlibrary.bibliocommons.com/v2/events?audiences=60af9e2d8509742400e6e8ed",
+    sourceType: "biblioevents",
+  }, { now: new Date("2026-05-05T12:00:00Z") });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "Toddler Storytime");
+  assert.equal(events[0].venue, "Main Children's Room");
+  assert.equal(events[0].extractionMethod, "biblioevents");
+});
+
+test("extractLibraryCalendarEvents parses LibraryCalendar cards", () => {
+  const html = `
+    <div class="lc-event event-card lc-featured-event">
+      <div class="lc-featured-event-content">
+        <h2><a href="/event/saturday-storytime-28925">Saturday Storytime</a></h2>
+        <div class="lc-featured-event-info-item lc-featured-event-info-item--date">
+          Saturday, May 9, 2026 at 11:00am - 11:30am
+        </div>
+        <div class="lc-featured-event-location">John Pappas Legacy Room at Weekes Branch</div>
+        <div class="lc-event__age-groups">
+          <strong>Age Group:</strong><span>Babies &amp; Toddlers</span>, <span>Preschoolers</span>, <span>Kids</span>, <span>Families</span>
+        </div>
+        <div class="lc-event__body"><div class="field-item"><p>Stories, songs, and movement for kids.</p></div></div>
+      </div>
+    </div>
+  `;
+
+  const events = extractLibraryCalendarEvents(html, {
+    id: "hayward-library",
+    name: "Hayward Public Library",
+    url: "https://hayward.librarycalendar.com/events/month",
+    city: "Hayward",
+    category: "Library",
+    sourceType: "librarycalendar",
+  }, { now: new Date("2026-05-05T12:00:00Z") });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "Saturday Storytime");
+  assert.equal(events[0].city, "Hayward");
+  assert.equal(events[0].extractionMethod, "librarycalendar");
+});
+
+test("extractDrupalCardEvents parses Drupal Views AJAX cards", () => {
+  const html = `
+    <div class="col--6">
+      <div class="collection-card collection-card--horizontal-card collection-card--event collection-card--icon">
+        <a href="https://apm.activecommunities.com/ebparks/Activity_Search/59286" class="collection-card__link">
+          <div class="event-type-label event-type-label--drop-in-program event-type-label--with-icon">Drop-in Program</div>
+          <div class="collection-card__inner">
+            <h3 class="collection-card__title">Story Time</h3>
+            <div class="collection-card__teaser">
+              <time datetime="2026-05-08T17:30:00Z" class="datetime">Friday, May. 8, 2026, 10:30 AM</time>
+              <span class="teaser__tag teaser__tag--related-park">Crown Beach</span>, Alameda
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  `;
+
+  const events = extractDrupalCardEvents(html, {
+    id: "east-bay-parks",
+    name: "East Bay Regional Park District",
+    url: "https://www.ebparks.org/calendar",
+    city: "Oakland",
+    category: "Park",
+    sourceType: "drupalViewsAjax",
+  });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "Story Time");
+  assert.equal(events[0].venue, "Crown Beach");
+  assert.equal(events[0].city, "Alameda");
+  assert.equal(events[0].extractionMethod, "drupal-views-ajax");
+});
+
 test("extractHtmlEvents finds dated event cards and skips undated links", () => {
   const html = `
     <article class="event-card">
@@ -193,4 +289,8 @@ test("validateEventsDataset rejects adult-only events and accepts generated even
 test("inferAgeBands and parseLooseDate handle common calendar text", () => {
   assert.deepEqual(inferAgeBands("Baby lapsit for ages 0-3"), ["toddler"]);
   assert.equal(parseLooseDate("Family day on May 9, 2026 at 2pm"), "2026-05-09T14:00:00-07:00");
+  assert.deepEqual(parseDateTimeRange("Sunday, June 14, 9am - 12pm"), {
+    startDateTime: "2026-06-14T09:00:00-07:00",
+    endDateTime: "2026-06-14T12:00:00-07:00",
+  });
 });

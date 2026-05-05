@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-05T02:13:44.304Z",
+  "generatedAt": "2026-05-05T03:30:59.307Z",
   "registryPath": "data/event-sources.json",
   "outputPath": "public/data/events.json",
-  "eventCount": 251,
+  "eventCount": 411,
   "sourceCount": 33,
-  "liveEventCount": 55,
-  "fallbackEventCount": 196,
+  "liveEventCount": 287,
+  "fallbackEventCount": 124,
   "errors": [],
   "sources": [
     {
@@ -20,6 +20,14 @@
       "liveEvents": 0,
       "fallbackEvents": 32,
       "eventCount": 32,
+      "fetches": [
+        {
+          "url": "https://sfpl.org/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
@@ -27,14 +35,22 @@
     {
       "id": "oakland-library",
       "name": "Oakland Public Library",
-      "url": "https://oaklandlibrary.org/calendar",
-      "sourceType": "html",
+      "url": "https://oaklandlibrary.bibliocommons.com/v2/events?audiences=60af9e2d8509742400e6e8ed",
+      "sourceType": "biblioevents",
       "city": "Oakland",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 19,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 19,
+      "fetches": [
+        {
+          "url": "https://oaklandlibrary.bibliocommons.com/v2/events?audiences=60af9e2d8509742400e6e8ed",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0
@@ -50,6 +66,14 @@
       "liveEvents": 0,
       "fallbackEvents": 16,
       "eventCount": 16,
+      "fetches": [
+        {
+          "url": "https://www.berkeleypubliclibrary.org/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
@@ -57,17 +81,24 @@
     {
       "id": "alameda-library",
       "name": "Alameda Free Library",
-      "url": "https://www.alamedaca.gov/library",
+      "url": "https://www.alamedafree.org/Events-directory",
       "sourceType": "html",
       "city": "Alameda",
       "category": "Library",
-      "status": "ok-template-fallback",
+      "status": "http-error",
       "liveEvents": 0,
       "fallbackEvents": 4,
       "eventCount": 4,
-      "httpStatus": 200,
-      "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0
+      "fetches": [
+        {
+          "url": "https://www.alamedafree.org/Events-directory",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 403,
+      "contentType": "text/html; charset=UTF-8"
     },
     {
       "id": "san-mateo-library",
@@ -80,6 +111,14 @@
       "liveEvents": 54,
       "fallbackEvents": 0,
       "eventCount": 54,
+      "fetches": [
+        {
+          "url": "https://sanmateopublic.libcal.com/calendar/adults-teens?cid=16089&t=g&d=0000-00-00&cal=16089&inc=0",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json"
+        }
+      ],
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 139
@@ -87,7 +126,7 @@
     {
       "id": "redwood-city-library",
       "name": "Redwood City Public Library",
-      "url": "https://www.redwoodcity.org/library",
+      "url": "https://www.redwoodcity.org/departments/library/events",
       "sourceType": "html",
       "city": "Redwood City",
       "category": "Library",
@@ -95,6 +134,14 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://www.redwoodcity.org/departments/library/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0
@@ -102,42 +149,68 @@
     {
       "id": "palo-alto-library",
       "name": "Palo Alto City Library",
-      "url": "https://library.cityofpaloalto.org/calendar",
-      "sourceType": "html",
+      "url": "https://paloalto.bibliocommons.com/v2/events?audiences=59a6e0705e7f62711a36e6ab",
+      "sourceType": "biblioevents",
       "city": "Palo Alto",
       "category": "Library",
-      "status": "http-error",
-      "liveEvents": 0,
-      "fallbackEvents": 8,
-      "eventCount": 8,
-      "httpStatus": 404,
-      "contentType": "text/html; charset=UTF-8"
+      "status": "ok",
+      "liveEvents": 19,
+      "fallbackEvents": 0,
+      "eventCount": 19,
+      "fetches": [
+        {
+          "url": "https://paloalto.bibliocommons.com/v2/events?audiences=59a6e0705e7f62711a36e6ab",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
     },
     {
       "id": "mountain-view-library",
       "name": "Mountain View Public Library",
-      "url": "https://www.mountainview.gov/depts/library",
-      "sourceType": "html",
+      "url": "https://mountainview.libcal.com/calendar?cid=-1&t=g&d=0000-00-00&cal=-1&inc=0",
+      "sourceType": "libcal",
       "city": "Mountain View",
       "category": "Library",
-      "status": "http-error",
-      "liveEvents": 0,
-      "fallbackEvents": 4,
-      "eventCount": 4,
-      "httpStatus": 404,
-      "contentType": "text/html; charset=utf-8"
+      "status": "ok",
+      "liveEvents": 59,
+      "fallbackEvents": 0,
+      "eventCount": 59,
+      "fetches": [
+        {
+          "url": "https://mountainview.libcal.com/calendar?cid=-1&t=g&d=0000-00-00&cal=-1&inc=0",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json",
+      "rejectedLiveEvents": 62
     },
     {
       "id": "sjpl",
       "name": "San Jose Public Library",
-      "url": "https://www.sjpl.org/events",
-      "sourceType": "html",
+      "url": "https://sjpl.bibliocommons.com/v2/events?q=family",
+      "sourceType": "biblioevents",
       "city": "San Jose",
       "category": "Library",
-      "status": "ok-template-fallback",
-      "liveEvents": 0,
-      "fallbackEvents": 12,
-      "eventCount": 12,
+      "status": "ok",
+      "liveEvents": 8,
+      "fallbackEvents": 0,
+      "eventCount": 8,
+      "fetches": [
+        {
+          "url": "https://sjpl.bibliocommons.com/v2/events?q=family",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0
@@ -145,14 +218,22 @@
     {
       "id": "marin-library",
       "name": "Marin County Free Library",
-      "url": "https://marinlibrary.org/events",
-      "sourceType": "html",
+      "url": "https://marinlibrary.bibliocommons.com/v2/events?q=storytime",
+      "sourceType": "biblioevents",
       "city": "San Rafael",
       "category": "Library",
-      "status": "ok-template-fallback",
-      "liveEvents": 0,
-      "fallbackEvents": 4,
-      "eventCount": 4,
+      "status": "ok",
+      "liveEvents": 15,
+      "fallbackEvents": 0,
+      "eventCount": 15,
+      "fetches": [
+        {
+          "url": "https://marinlibrary.bibliocommons.com/v2/events?q=storytime",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0
@@ -168,6 +249,14 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://www.srpubliclibrary.org/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
@@ -175,14 +264,22 @@
     {
       "id": "ac-library",
       "name": "Alameda County Library",
-      "url": "https://aclibrary.org/locations",
-      "sourceType": "html",
+      "url": "https://aclibrary.bibliocommons.com/v2/events",
+      "sourceType": "biblioevents",
       "city": "Fremont",
       "category": "Library",
-      "status": "ok-template-fallback",
-      "liveEvents": 0,
-      "fallbackEvents": 4,
-      "eventCount": 4,
+      "status": "ok",
+      "liveEvents": 11,
+      "fallbackEvents": 0,
+      "eventCount": 11,
+      "fetches": [
+        {
+          "url": "https://aclibrary.bibliocommons.com/v2/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0
@@ -190,48 +287,76 @@
     {
       "id": "hayward-library",
       "name": "Hayward Public Library",
-      "url": "https://library.hayward-ca.gov/events",
-      "sourceType": "html",
+      "url": "https://hayward.librarycalendar.com/events/month",
+      "sourceType": "librarycalendar",
       "city": "Hayward",
       "category": "Library",
-      "status": "fetch-error",
-      "liveEvents": 0,
-      "fallbackEvents": 4,
-      "eventCount": 4,
-      "reason": "fetch failed"
+      "status": "ok",
+      "liveEvents": 6,
+      "fallbackEvents": 0,
+      "eventCount": 6,
+      "fetches": [
+        {
+          "url": "https://hayward.librarycalendar.com/events/month",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
     },
     {
       "id": "ccclib",
       "name": "Contra Costa County Library",
-      "url": "https://ccclib.org/events",
-      "sourceType": "html",
+      "url": "https://ccclib.bibliocommons.com/v2/events",
+      "sourceType": "biblioevents",
       "city": "Walnut Creek",
       "category": "Library",
-      "status": "ok-template-fallback",
-      "liveEvents": 0,
-      "fallbackEvents": 8,
-      "eventCount": 8,
+      "status": "ok",
+      "liveEvents": 2,
+      "fallbackEvents": 0,
+      "eventCount": 2,
+      "fetches": [
+        {
+          "url": "https://ccclib.bibliocommons.com/v2/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "richmond-library",
+      "name": "Richmond Public Library",
+      "url": "https://www.ci.richmond.ca.us/calendar.aspx?CID=17&view=list",
+      "sourceType": "html",
+      "city": "Richmond",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 11,
+      "fallbackEvents": 0,
+      "eventCount": 11,
+      "fetches": [
+        {
+          "url": "https://www.ci.richmond.ca.us/calendar.aspx?CID=17&view=list",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 1
     },
     {
-      "id": "richmond-library",
-      "name": "Richmond Public Library",
-      "url": "https://www.rpl.lib.ca.us/events",
-      "sourceType": "html",
-      "city": "Richmond",
-      "category": "Library",
-      "status": "fetch-error",
-      "liveEvents": 0,
-      "fallbackEvents": 4,
-      "eventCount": 4,
-      "reason": "fetch failed"
-    },
-    {
       "id": "cal-academy",
       "name": "California Academy of Sciences",
-      "url": "https://www.calacademy.org/daily-schedule",
+      "url": "https://www.calacademy.org/whats-happening",
       "sourceType": "html",
       "city": "San Francisco",
       "category": "Museum",
@@ -239,13 +364,21 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "eventCount": 8,
+      "fetches": [
+        {
+          "url": "https://www.calacademy.org/whats-happening",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
       "httpStatus": 404,
       "contentType": "text/html; charset=utf-8"
     },
     {
       "id": "exploratorium",
       "name": "Exploratorium",
-      "url": "https://www.exploratorium.edu/visit",
+      "url": "https://www.exploratorium.edu/visit/calendar",
       "sourceType": "html",
       "city": "San Francisco",
       "category": "Museum",
@@ -253,13 +386,21 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://www.exploratorium.edu/visit/calendar",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ],
       "httpStatus": 403,
       "contentType": "text/html"
     },
     {
       "id": "bay-area-discovery-museum",
       "name": "Bay Area Discovery Museum",
-      "url": "https://bayareadiscoverymuseum.org/visit",
+      "url": "https://bayareadiscoverymuseum.org/events/",
       "sourceType": "html",
       "city": "Sausalito",
       "category": "Museum",
@@ -267,6 +408,14 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://bayareadiscoverymuseum.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
@@ -282,6 +431,14 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://www.habitot.org/visit",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
@@ -297,6 +454,14 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://curiodyssey.org/visit",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
@@ -304,7 +469,7 @@
     {
       "id": "cdm-sj",
       "name": "Children's Discovery Museum of San Jose",
-      "url": "https://www.cdm.org/visit",
+      "url": "https://www.cdm.org/calendar/",
       "sourceType": "html",
       "city": "San Jose",
       "category": "Museum",
@@ -312,6 +477,14 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://www.cdm.org/calendar/",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
       "httpStatus": 403,
       "contentType": "text/html; charset=UTF-8"
     },
@@ -326,6 +499,14 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://www.thetech.org/visit",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0
@@ -341,6 +522,14 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://www.lawrencehallofscience.org/visit",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
@@ -356,22 +545,39 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://www.aquariumofthebay.org/visit",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
       "httpStatus": 404,
       "contentType": "text/html; charset=UTF-8"
     },
     {
       "id": "oakland-zoo",
       "name": "Oakland Zoo",
-      "url": "https://www.oaklandzoo.org/visit",
+      "url": "https://www.oaklandzoo.org/events",
       "sourceType": "html",
       "city": "Oakland",
       "category": "Zoo",
-      "status": "http-error",
+      "status": "ok-template-fallback",
       "liveEvents": 0,
       "fallbackEvents": 4,
       "eventCount": 4,
-      "httpStatus": 404,
-      "contentType": "text/html; charset=utf-8"
+      "fetches": [
+        {
+          "url": "https://www.oaklandzoo.org/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
     },
     {
       "id": "sf-zoo",
@@ -384,6 +590,14 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://www.sfzoo.org/visit",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
@@ -391,15 +605,25 @@
     {
       "id": "happy-hollow",
       "name": "Happy Hollow Park & Zoo",
-      "url": "https://www.hhpz.org/visit",
+      "url": "https://happyhollow.org/",
       "sourceType": "html",
       "city": "San Jose",
       "category": "Zoo",
-      "status": "fetch-error",
+      "status": "ok-template-fallback",
       "liveEvents": 0,
       "fallbackEvents": 4,
       "eventCount": 4,
-      "reason": "fetch failed"
+      "fetches": [
+        {
+          "url": "https://happyhollow.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
     },
     {
       "id": "fairyland",
@@ -412,6 +636,14 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://fairyland.org/visit",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
@@ -419,16 +651,25 @@
     {
       "id": "east-bay-parks",
       "name": "East Bay Regional Park District",
-      "url": "https://www.ebparks.org/events",
-      "sourceType": "html",
+      "url": "https://www.ebparks.org/calendar",
+      "sourceType": "drupalViewsAjax",
       "city": "Oakland",
       "category": "Park",
-      "status": "http-error",
-      "liveEvents": 0,
-      "fallbackEvents": 20,
-      "eventCount": 20,
-      "httpStatus": 404,
-      "contentType": "text/html; charset=UTF-8"
+      "status": "ok",
+      "liveEvents": 81,
+      "fallbackEvents": 0,
+      "eventCount": 81,
+      "fetches": [
+        {
+          "url": "https://www.ebparks.org/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; source=drupal-views-ajax"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; source=drupal-views-ajax",
+      "rejectedLiveEvents": 62
     },
     {
       "id": "don-edwards-nwr",
@@ -441,6 +682,14 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://www.fws.gov/refuge/don-edwards-san-francisco-bay/visit-us",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
@@ -448,16 +697,25 @@
     {
       "id": "slide-ranch",
       "name": "Slide Ranch",
-      "url": "https://slideranch.org/family-days",
+      "url": "https://www.slideranch.org/events",
       "sourceType": "html",
       "city": "Muir Beach",
       "category": "Farm",
-      "status": "http-error",
-      "liveEvents": 0,
-      "fallbackEvents": 4,
-      "eventCount": 4,
-      "httpStatus": 404,
-      "contentType": "text/html;charset=utf-8"
+      "status": "ok",
+      "liveEvents": 2,
+      "fallbackEvents": 0,
+      "eventCount": 2,
+      "fetches": [
+        {
+          "url": "https://www.slideranch.org/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html;charset=utf-8",
+      "rejectedLiveEvents": 0
     },
     {
       "id": "hidden-villa",
@@ -470,6 +728,14 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://hiddenvilla.org/visit",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
@@ -484,7 +750,8 @@
       "status": "disabled",
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 0
+      "eventCount": 0,
+      "fetches": []
     }
   ]
 }

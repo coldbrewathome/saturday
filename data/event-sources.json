@@ -107,6 +107,7 @@
       "South San Francisco",
       "St. Helena",
       "Suisun City",
+      "Sunol",
       "Sunnyvale",
       "Tiburon",
       "Union City",
@@ -145,10 +146,10 @@
     {
       "id": "oakland-library",
       "name": "Oakland Public Library",
-      "url": "https://oaklandlibrary.org/calendar",
+      "url": "https://oaklandlibrary.bibliocommons.com/v2/events?audiences=60af9e2d8509742400e6e8ed",
       "city": "Oakland",
       "category": "Library",
-      "sourceType": "html",
+      "sourceType": "biblioevents",
       "trust": "official",
       "fallbackEventIds": [
         "oakland-main-storytime",
@@ -176,7 +177,7 @@
     {
       "id": "alameda-library",
       "name": "Alameda Free Library",
-      "url": "https://www.alamedaca.gov/library",
+      "url": "https://www.alamedafree.org/Events-directory",
       "city": "Alameda",
       "category": "Library",
       "sourceType": "html",
@@ -199,7 +200,7 @@
     {
       "id": "redwood-city-library",
       "name": "Redwood City Public Library",
-      "url": "https://www.redwoodcity.org/library",
+      "url": "https://www.redwoodcity.org/departments/library/events",
       "city": "Redwood City",
       "category": "Library",
       "sourceType": "html",
@@ -209,10 +210,10 @@
     {
       "id": "palo-alto-library",
       "name": "Palo Alto City Library",
-      "url": "https://library.cityofpaloalto.org/calendar",
+      "url": "https://paloalto.bibliocommons.com/v2/events?audiences=59a6e0705e7f62711a36e6ab",
       "city": "Palo Alto",
       "category": "Library",
-      "sourceType": "html",
+      "sourceType": "biblioevents",
       "trust": "official",
       "fallbackEventIds": [
         "palo-alto-mitchell-storytime",
@@ -222,20 +223,23 @@
     {
       "id": "mountain-view-library",
       "name": "Mountain View Public Library",
-      "url": "https://www.mountainview.gov/depts/library",
+      "url": "https://mountainview.libcal.com/calendar?cid=-1&t=g&d=0000-00-00&cal=-1&inc=0",
       "city": "Mountain View",
       "category": "Library",
-      "sourceType": "html",
+      "sourceType": "libcal",
       "trust": "official",
+      "lat": 37.3894,
+      "lon": -122.0819,
+      "libcalCalendarId": -1,
       "fallbackEventIds": ["mountain-view-main-storytime"]
     },
     {
       "id": "sjpl",
       "name": "San Jose Public Library",
-      "url": "https://www.sjpl.org/events",
+      "url": "https://sjpl.bibliocommons.com/v2/events?q=family",
       "city": "San Jose",
       "category": "Library",
-      "sourceType": "html",
+      "sourceType": "biblioevents",
       "trust": "official",
       "fallbackEventIds": [
         "san-jose-king-storytime",
@@ -246,10 +250,10 @@
     {
       "id": "marin-library",
       "name": "Marin County Free Library",
-      "url": "https://marinlibrary.org/events",
+      "url": "https://marinlibrary.bibliocommons.com/v2/events?q=storytime",
       "city": "San Rafael",
       "category": "Library",
-      "sourceType": "html",
+      "sourceType": "biblioevents",
       "trust": "official",
       "fallbackEventIds": ["marin-civic-storytime"]
     },
@@ -266,30 +270,30 @@
     {
       "id": "ac-library",
       "name": "Alameda County Library",
-      "url": "https://aclibrary.org/locations",
+      "url": "https://aclibrary.bibliocommons.com/v2/events",
       "city": "Fremont",
       "category": "Library",
-      "sourceType": "html",
+      "sourceType": "biblioevents",
       "trust": "official",
       "fallbackEventIds": ["fremont-main-storytime"]
     },
     {
       "id": "hayward-library",
       "name": "Hayward Public Library",
-      "url": "https://library.hayward-ca.gov/events",
+      "url": "https://hayward.librarycalendar.com/events/month",
       "city": "Hayward",
       "category": "Library",
-      "sourceType": "html",
+      "sourceType": "librarycalendar",
       "trust": "official",
       "fallbackEventIds": ["hayward-main-storytime"]
     },
     {
       "id": "ccclib",
       "name": "Contra Costa County Library",
-      "url": "https://ccclib.org/events",
+      "url": "https://ccclib.bibliocommons.com/v2/events",
       "city": "Walnut Creek",
       "category": "Library",
-      "sourceType": "html",
+      "sourceType": "biblioevents",
       "trust": "official",
       "fallbackEventIds": [
         "walnut-creek-main-storytime",
@@ -299,7 +303,7 @@
     {
       "id": "richmond-library",
       "name": "Richmond Public Library",
-      "url": "https://www.rpl.lib.ca.us/events",
+      "url": "https://www.ci.richmond.ca.us/calendar.aspx?CID=17&view=list",
       "city": "Richmond",
       "category": "Library",
       "sourceType": "html",
@@ -309,7 +313,7 @@
     {
       "id": "cal-academy",
       "name": "California Academy of Sciences",
-      "url": "https://www.calacademy.org/daily-schedule",
+      "url": "https://www.calacademy.org/whats-happening",
       "city": "San Francisco",
       "category": "Museum",
       "sourceType": "html",
@@ -322,7 +326,7 @@
     {
       "id": "exploratorium",
       "name": "Exploratorium",
-      "url": "https://www.exploratorium.edu/visit",
+      "url": "https://www.exploratorium.edu/visit/calendar",
       "city": "San Francisco",
       "category": "Museum",
       "sourceType": "html",
@@ -332,7 +336,7 @@
     {
       "id": "bay-area-discovery-museum",
       "name": "Bay Area Discovery Museum",
-      "url": "https://bayareadiscoverymuseum.org/visit",
+      "url": "https://bayareadiscoverymuseum.org/events/",
       "city": "Sausalito",
       "category": "Museum",
       "sourceType": "html",
@@ -362,7 +366,7 @@
     {
       "id": "cdm-sj",
       "name": "Children's Discovery Museum of San Jose",
-      "url": "https://www.cdm.org/visit",
+      "url": "https://www.cdm.org/calendar/",
       "city": "San Jose",
       "category": "Museum",
       "sourceType": "html",
@@ -402,7 +406,7 @@
     {
       "id": "oakland-zoo",
       "name": "Oakland Zoo",
-      "url": "https://www.oaklandzoo.org/visit",
+      "url": "https://www.oaklandzoo.org/events",
       "city": "Oakland",
       "category": "Zoo",
       "sourceType": "html",
@@ -422,7 +426,7 @@
     {
       "id": "happy-hollow",
       "name": "Happy Hollow Park & Zoo",
-      "url": "https://www.hhpz.org/visit",
+      "url": "https://happyhollow.org/",
       "city": "San Jose",
       "category": "Zoo",
       "sourceType": "html",
@@ -442,11 +446,45 @@
     {
       "id": "east-bay-parks",
       "name": "East Bay Regional Park District",
-      "url": "https://www.ebparks.org/events",
+      "url": "https://www.ebparks.org/calendar",
       "city": "Oakland",
       "category": "Park",
-      "sourceType": "html",
+      "sourceType": "drupalViewsAjax",
       "trust": "official",
+      "drupalViews": {
+        "ajaxUrl": "https://www.ebparks.org/views/ajax",
+        "viewName": "ebp_event_calendar",
+        "viewDisplayId": "embed_1",
+        "viewPath": "/node/6264",
+        "maxPages": 6,
+        "defaultAudienceText": "all ages kids pre-school teens",
+        "requests": [
+          {
+            "label": "all-ages",
+            "params": {
+              "age": "247"
+            }
+          },
+          {
+            "label": "kids",
+            "params": {
+              "age": "248"
+            }
+          },
+          {
+            "label": "pre-school",
+            "params": {
+              "age": "250"
+            }
+          },
+          {
+            "label": "teens",
+            "params": {
+              "age": "251"
+            }
+          }
+        ]
+      },
       "fallbackEventIds": [
         "tilden-little-farm",
         "tilden-environmental-saturdays",
@@ -468,7 +506,7 @@
     {
       "id": "slide-ranch",
       "name": "Slide Ranch",
-      "url": "https://slideranch.org/family-days",
+      "url": "https://www.slideranch.org/events",
       "city": "Muir Beach",
       "category": "Farm",
       "sourceType": "html",
