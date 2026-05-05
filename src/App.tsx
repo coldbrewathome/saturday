@@ -26,6 +26,7 @@ import {
   API_CONFIGURED,
   createAiBrief,
   createPoll,
+  fetchAdminEvents,
   fetchGeo,
   getUserState,
   googleSignIn,
@@ -767,15 +768,23 @@ function App() {
 
   useEffect(() => {
     let active = true;
-    fetch(EVENTS_URL)
-      .then((response) => (response.ok ? response.json() : Promise.reject()))
-      .then((dataset: EventsDataset) => {
+    (async () => {
+      const adminPayload = await fetchAdminEvents();
+      if (!active) return;
+      if (adminPayload && adminPayload.events.length > 0) {
+        setEvents(adminPayload.events as FamilyEvent[]);
+        return;
+      }
+      try {
+        const response = await fetch(EVENTS_URL);
+        if (!response.ok) return;
+        const dataset = (await response.json()) as EventsDataset;
         if (!active) return;
         if (Array.isArray(dataset.events)) setEvents(dataset.events);
-      })
-      .catch(() => {
+      } catch {
         // Events are optional; failure is non-fatal.
-      });
+      }
+    })();
     return () => {
       active = false;
     };
@@ -1112,6 +1121,55 @@ function App() {
       .map((id) => byId.get(id))
       .filter((spot): spot is Spot => Boolean(spot));
   }, [activePlan, allSpots]);
+
+  const planNearbyEvents = useMemo(() => {
+    if (!activePlan || activePlanStops.length === 0 || events.length === 0) {
+      return [] as FamilyEvent[];
+    }
+    const stopPoints = activePlanStops
+      .filter((s) => typeof s.lat === "number" && typeof s.lon === "number")
+      .map((s) => ({ lat: s.lat as number, lon: s.lon as number }));
+    if (stopPoints.length === 0) return [];
+    const dist = (a: { lat: number; lon: number }, b: { lat: number; lon: number }) => {
+      const toRad = (deg: number) => (deg * Math.PI) / 180;
+      const R = 3958.8;
+      const dLat = toRad(b.lat - a.lat);
+      const dLon = toRad(b.lon - a.lon);
+      const lat1 = toRad(a.lat);
+      const lat2 = toRad(b.lat);
+      const x =
+        Math.sin(dLat / 2) ** 2 +
+        Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
+      return 2 * R * Math.asin(Math.sqrt(x));
+    };
+    const matchAge = activePlan.vibe ? activePlan.vibe : null;
+    const useAgeBand = ageBand;
+    const NEAR_RADIUS = 2.5;
+    const seen = new Set<string>();
+    const matches: Array<{ event: FamilyEvent; dist: number }> = [];
+    for (const event of events) {
+      if (seen.has(event.id)) continue;
+      if (!event.daysOfWeek.some((d) => d === 0 || d === 6)) continue;
+      if (
+        useAgeBand !== "any" &&
+        !event.ageBands.includes(useAgeBand)
+      ) {
+        continue;
+      }
+      let minDist = Infinity;
+      for (const point of stopPoints) {
+        const d = dist(point, { lat: event.lat, lon: event.lon });
+        if (d < minDist) minDist = d;
+      }
+      if (minDist <= NEAR_RADIUS) {
+        seen.add(event.id);
+        matches.push({ event, dist: minDist });
+      }
+    }
+    matches.sort((a, b) => a.dist - b.dist);
+    void matchAge;
+    return matches.slice(0, 4).map((m) => m.event);
+  }, [activePlan, activePlanStops, events, ageBand]);
 
   const planTotalTransit = useMemo(
     () => activePlanStops.reduce((sum, spot) => sum + spot.transitMinutes, 0),
@@ -1707,18 +1765,23 @@ function App() {
         {weekendEvents.length > 0 && (
           <section className="home-events" aria-label="Weekend events">
             <div className="home-events-head">
-              <h2>This weekend at the library</h2>
+              <h2>This weekend</h2>
               <p>
-                {weekendEvents.length} kid program{weekendEvents.length === 1 ? "" : "s"}
+                {weekendEvents.length} family program
+                {weekendEvents.length === 1 ? "" : "s"}
                 {ageBand !== "any" ? ` for ${ageBandLabels[ageBand].toLowerCase()}` : ""}
                 {inferredGeo?.city ? ` near ${inferredGeo.city}` : ""}
-                . Times vary by branch — tap through to confirm.
+                . Times vary by venue — tap through to confirm.
               </p>
             </div>
             <ul className="home-events-list">
               {weekendEvents.slice(0, 6).map((event) => (
-                <li key={event.id} className="home-event-card">
+                <li
+                  key={event.id}
+                  className={`home-event-card cat-${event.category.toLowerCase()}`}
+                >
                   <a href={event.url} target="_blank" rel="noreferrer">
+                    <span className="event-cat-chip">{event.category}</span>
                     <strong>{event.title}</strong>
                     <span className="home-event-meta">
                       {dayWindowLabel(event.daysOfWeek)} · {event.timeWindow}
@@ -2481,6 +2544,40 @@ function App() {
                     {`${window.location.origin}/#/p/${activePlan.pollId}`}
                   </a>
                 </div>
+              )}
+
+              {planNearbyEvents.length > 0 && (
+                <section className="plan-events" aria-label="Events near this plan">
+                  <h3>While you're nearby this weekend</h3>
+                  <p className="plan-events-sub">
+                    {planNearbyEvents.length} family program
+                    {planNearbyEvents.length === 1 ? "" : "s"} within 2.5 mi of a
+                    plan stop. Times vary — tap through to confirm.
+                  </p>
+                  <ul className="plan-events-list">
+                    {planNearbyEvents.map((event) => (
+                      <li
+                        key={event.id}
+                        className={`home-event-card cat-${event.category.toLowerCase()}`}
+                      >
+                        <a href={event.url} target="_blank" rel="noreferrer">
+                          <span className="event-cat-chip">{event.category}</span>
+                          <strong>{event.title}</strong>
+                          <span className="home-event-meta">
+                            {dayWindowLabel(event.daysOfWeek)} · {event.timeWindow}
+                            {" · "}
+                            {event.ageBands
+                              .map((b) => ageBandLabels[b].split(" ")[0])
+                              .join(", ")}
+                          </span>
+                          <span className="home-event-venue">
+                            {event.venue} · {event.city}
+                          </span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
               )}
 
               {activePlan.cautions && activePlan.cautions.length > 0 && (

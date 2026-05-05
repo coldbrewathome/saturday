@@ -123,6 +123,25 @@ export type GeoInfo = {
   lon: number | null;
 };
 
+export async function fetchAdminEvents(): Promise<{
+  events: unknown[];
+  source: string;
+} | null> {
+  if (!API_BASE) return null;
+  try {
+    const response = await fetch(`${API_BASE}/events`);
+    if (!response.ok) return null;
+    const body = (await response.json()) as {
+      source?: string;
+      events?: unknown[] | null;
+    };
+    if (!Array.isArray(body.events)) return null;
+    return { events: body.events, source: body.source ?? "admin" };
+  } catch {
+    return null;
+  }
+}
+
 export async function fetchGeo(): Promise<GeoInfo | null> {
   if (!API_BASE) return null;
   try {

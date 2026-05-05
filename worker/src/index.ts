@@ -37,6 +37,7 @@ interface Env {
   GOOGLE_CLIENT_ID?: string;
   AI_DAILY_LIMIT_PER_IP?: string;
   POLLS_DAILY_LIMIT_PER_IP?: string;
+  ADMIN_EMAILS?: string;
 }
 
 type SessionData = {
@@ -54,7 +55,7 @@ function corsHeaders(env: Env, origin: string | null): Record<string, string> {
   const allow = origin && allowed.includes(origin) ? origin : allowed[0] ?? "*";
   return {
     "access-control-allow-origin": allow,
-    "access-control-allow-methods": "GET,POST,PUT,OPTIONS",
+    "access-control-allow-methods": "GET,POST,PUT,DELETE,OPTIONS",
     "access-control-allow-headers": "content-type,authorization",
     "vary": "origin",
   };
@@ -276,6 +277,89 @@ async function logout(
 
 const USER_STATE_TTL_SECONDS = 60 * 60 * 24 * 365;
 const USER_STATE_MAX_BYTES = 200_000;
+const EVENTS_MAX_BYTES = 1_000_000;
+const EVENTS_KV_KEY = "admin:events";
+
+function isAdmin(env: Env, email: string | undefined): boolean {
+  if (!email || !env.ADMIN_EMAILS) return false;
+  const allow = env.ADMIN_EMAILS.split(",").map((s) => s.trim().toLowerCase());
+  return allow.includes(email.toLowerCase());
+}
+
+async function getEvents(
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  const raw = await env.POLLS.get(EVENTS_KV_KEY);
+  if (!raw) {
+    return json({ source: "fallback", events: null }, { status: 200 }, cors);
+  }
+  return new Response(raw, {
+    status: 200,
+    headers: {
+      "content-type": "application/json",
+      ...cors,
+    },
+  });
+}
+
+async function putAdminEvents(
+  request: Request,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  const session = await getSession(env, request);
+  if (!session) {
+    return json({ error: "sign in required" }, { status: 401 }, cors);
+  }
+  if (!isAdmin(env, session.data.email)) {
+    return json({ error: "admin access required" }, { status: 403 }, cors);
+  }
+  let payload: unknown;
+  try {
+    payload = await request.json();
+  } catch {
+    return json({ error: "invalid json" }, { status: 400 }, cors);
+  }
+  if (!payload || typeof payload !== "object") {
+    return json({ error: "events object required" }, { status: 400 }, cors);
+  }
+  const data = payload as { events?: unknown };
+  if (!Array.isArray(data.events)) {
+    return json({ error: "events array required" }, { status: 400 }, cors);
+  }
+  const body = JSON.stringify({
+    schemaVersion: 1,
+    generatedAt: new Date().toISOString(),
+    events: data.events,
+    source: "admin",
+  });
+  if (body.length > EVENTS_MAX_BYTES) {
+    return json({ error: "events payload too large" }, { status: 413 }, cors);
+  }
+  await env.POLLS.put(EVENTS_KV_KEY, body);
+  return json(
+    { ok: true, count: data.events.length, bytes: body.length },
+    { status: 200 },
+    cors,
+  );
+}
+
+async function deleteAdminEvents(
+  request: Request,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  const session = await getSession(env, request);
+  if (!session) {
+    return json({ error: "sign in required" }, { status: 401 }, cors);
+  }
+  if (!isAdmin(env, session.data.email)) {
+    return json({ error: "admin access required" }, { status: 403 }, cors);
+  }
+  await env.POLLS.delete(EVENTS_KV_KEY);
+  return json({ ok: true }, { status: 200 }, cors);
+}
 
 async function getUserState(
   request: Request,
@@ -657,6 +741,18 @@ export default {
 
     if (path === "/me/state" && request.method === "PUT") {
       return putUserState(request, env, cors);
+    }
+
+    if (path === "/events" && request.method === "GET") {
+      return getEvents(env, cors);
+    }
+
+    if (path === "/admin/events" && request.method === "PUT") {
+      return putAdminEvents(request, env, cors);
+    }
+
+    if (path === "/admin/events" && request.method === "DELETE") {
+      return deleteAdminEvents(request, env, cors);
     }
 
     if (path === "/geo" && request.method === "GET") {

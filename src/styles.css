@@ -1294,6 +1294,72 @@ h3 {
   font-weight: 800;
 }
 
+.event-cat-chip {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  padding: 2px 8px;
+  text-transform: uppercase;
+  width: fit-content;
+}
+
+.home-event-card.cat-library .event-cat-chip {
+  background: #eef3f7;
+  border-color: #d7e3ed;
+  color: var(--blue);
+}
+
+.home-event-card.cat-museum .event-cat-chip {
+  background: #f3e9d7;
+  border-color: #e0d2b3;
+  color: #8a5a1d;
+}
+
+.home-event-card.cat-zoo .event-cat-chip,
+.home-event-card.cat-park .event-cat-chip {
+  background: #e4f0e7;
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+.plan-events {
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 18px;
+}
+
+.plan-events h3 {
+  font-size: 1rem;
+}
+
+.plan-events-sub {
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.plan-events-list {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.home-event-card.cat-farm .event-cat-chip {
+  background: #fdecea;
+  border-color: #f4c2bc;
+  color: var(--coral);
+}
+
 @media (max-width: 720px) {
   .home-vibes {
     grid-template-columns: repeat(2, minmax(0, 1fr));
