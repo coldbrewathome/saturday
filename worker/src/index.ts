@@ -495,9 +495,17 @@ async function aiBrief(
     return json({ error: "invalid json" }, { status: 400 }, cors);
   }
 
-  const data = payload as { vibe?: unknown; spots?: unknown; ageBand?: unknown };
+  const data = payload as {
+    vibe?: unknown;
+    spots?: unknown;
+    ageBand?: unknown;
+    date?: unknown;
+    dayOfWeek?: unknown;
+  };
   const vibe = cleanText(data.vibe, 40) || "balanced";
   const ageBand = cleanText(data.ageBand, 40) || "";
+  const date = cleanText(data.date, 12) || "";
+  const dayOfWeek = cleanText(data.dayOfWeek, 12) || "";
   const spots = cleanStops(data.spots);
   if (spots.length === 0) {
     return json({ error: "spots required" }, { status: 400 }, cors);
@@ -522,8 +530,10 @@ async function aiBrief(
       input: JSON.stringify({
         vibe,
         ageBand: ageBand || "mixed ages",
+        today: date,
+        dayOfWeek,
         task:
-          "Build a kid-friendly weekend plan: choose 2-4 stops in order, give a brief title and summary aimed at the parent, explain the tradeoffs in rationale (mention age-fit), list source-data cautions, and return picks with the ordered stop ids. Output JSON only.",
+          "Build a kid-friendly weekend plan for the date above: choose 2-4 stops in order, give a brief title and summary aimed at the parent, explain the tradeoffs in rationale (mention age-fit explicitly), list source-data cautions, and return picks with the ordered stop ids. Make the picks feel different from a generic suggestion — use the day-of-week and shuffled candidate ordering to vary your choice. Output JSON only.",
         spots,
       }),
       max_output_tokens: 700,
@@ -584,6 +594,120 @@ async function aiBrief(
       picks,
       model: env.OPENAI_MODEL || "gpt-5.4",
       generatedAt: new Date().toISOString(),
+    },
+    { status: 200 },
+    cors,
+  );
+}
+
+async function aiSwap(
+  request: Request,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  const session = await getSession(env, request);
+  if (!session) {
+    return json({ error: "sign in required" }, { status: 401 }, cors);
+  }
+  const cap = await checkAndIncrementAiCap(request, env);
+  if (!cap.ok) {
+    return json(
+      { error: `Daily limit reached (${cap.limit} per IP). Try again tomorrow.` },
+      { status: 429 },
+      cors,
+    );
+  }
+  if (!env.OPENAI_API_KEY) {
+    return json({ error: "OPENAI_API_KEY is not configured" }, { status: 501 }, cors);
+  }
+
+  let payload: unknown;
+  try {
+    payload = await request.json();
+  } catch {
+    return json({ error: "invalid json" }, { status: 400 }, cors);
+  }
+  const data = payload as {
+    vibe?: unknown;
+    ageBand?: unknown;
+    date?: unknown;
+    dayOfWeek?: unknown;
+    currentPicks?: unknown;
+    replaceStopId?: unknown;
+    candidates?: unknown;
+  };
+  const vibe = cleanText(data.vibe, 40) || "balanced";
+  const ageBand = cleanText(data.ageBand, 40) || "";
+  const date = cleanText(data.date, 12) || "";
+  const dayOfWeek = cleanText(data.dayOfWeek, 12) || "";
+  const replaceStopId = cleanText(data.replaceStopId, 120);
+  if (!replaceStopId) {
+    return json({ error: "replaceStopId required" }, { status: 400 }, cors);
+  }
+  const currentPicks = cleanStops(data.currentPicks);
+  const candidates = cleanStops(data.candidates);
+  if (candidates.length === 0) {
+    return json({ error: "candidates required" }, { status: 400 }, cors);
+  }
+
+  const response = await fetch("https://api.openai.com/v1/responses", {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${env.OPENAI_API_KEY}`,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      model: env.OPENAI_MODEL || "gpt-5.4",
+      store: false,
+      reasoning: { effort: "low" },
+      text: {
+        format: { type: "json_object" },
+        verbosity: "low",
+      },
+      instructions:
+        "You are a Bay Area family-plan assistant. Replace ONE stop in an existing kid-friendly plan with a better-fitting alternative from the provided candidates. NEVER pick a candidate whose id already appears in currentPicks. Stay age-appropriate. Return only JSON {pick: {id, reason}} where reason is one short sentence for the parent.",
+      input: JSON.stringify({
+        vibe,
+        ageBand: ageBand || "mixed ages",
+        today: date,
+        dayOfWeek,
+        currentPicks,
+        replaceStopId,
+        candidates,
+        task:
+          "Pick one candidate to replace the stop with id=replaceStopId in currentPicks. Reject any candidate whose id appears in currentPicks. Output JSON {pick: {id, reason}} only.",
+      }),
+      max_output_tokens: 300,
+    }),
+  });
+
+  if (!response.ok) {
+    const detail = await response.text();
+    return json(
+      { error: `OpenAI request failed (${response.status})`, detail: detail.slice(0, 300) },
+      { status: 502 },
+      cors,
+    );
+  }
+
+  const raw = await response.json();
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(outputText(raw));
+  } catch {
+    return json({ error: "AI response was not valid JSON" }, { status: 502 }, cors);
+  }
+  const pickRaw = (parsed as { pick?: { id?: unknown; reason?: unknown } }).pick;
+  const id = pickRaw && typeof pickRaw.id === "string" ? pickRaw.id : "";
+  const usedIds = new Set(currentPicks.map((p) => p.id));
+  const validIds = new Set(candidates.map((c) => c.id));
+  if (!id || !validIds.has(id) || usedIds.has(id)) {
+    return json({ error: "AI returned an invalid pick" }, { status: 502 }, cors);
+  }
+  return json(
+    {
+      pick: { id, reason: cleanText(pickRaw?.reason, 200) },
+      model: env.OPENAI_MODEL || "gpt-5.4",
     },
     { status: 200 },
     cors,
@@ -725,6 +849,10 @@ export default {
 
     if (path === "/ai/brief" && request.method === "POST") {
       return aiBrief(request, env, cors);
+    }
+
+    if (path === "/ai/swap" && request.method === "POST") {
+      return aiSwap(request, env, cors);
     }
 
     if (path === "/auth/google" && request.method === "POST") {

@@ -1,0 +1,1282 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bay Area Event Aggregator Deck</title>
+    <link rel="icon" href="data:," />
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #17201b;
+        --muted: #5c665f;
+        --line: #d9dfd8;
+        --paper: #fbfaf5;
+        --surface: #ffffff;
+        --green: #2f6b4f;
+        --green-soft: #dfeee5;
+        --blue: #315f8c;
+        --blue-soft: #e6eef6;
+        --gold: #9c6a1d;
+        --gold-soft: #f4ead5;
+        --rose: #a33b3b;
+        --rose-soft: #f5e3df;
+        --shadow: 0 18px 45px rgba(23, 32, 27, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+      }
+
+      body {
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        background: var(--paper);
+        color: var(--ink);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .deck {
+        min-height: 100vh;
+        overflow: hidden;
+      }
+
+      .slides {
+        display: flex;
+        width: 100vw;
+        min-height: 100vh;
+        transition: transform 300ms ease;
+      }
+
+      .slide {
+        display: grid;
+        flex: 0 0 100vw;
+        width: 100vw;
+        min-width: 0;
+        min-height: 100vh;
+        padding: 56px clamp(24px, 5vw, 76px) 72px;
+        place-items: center;
+      }
+
+      .slide-inner {
+        width: min(1180px, 100%);
+        min-width: 0;
+      }
+
+      .kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0 0 18px;
+        color: var(--green);
+        font-size: 0.82rem;
+        font-weight: 760;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .kicker::before {
+        content: "";
+        width: 30px;
+        height: 2px;
+        background: currentColor;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        max-width: 980px;
+        margin-bottom: 24px;
+        font-size: clamp(2.7rem, 6vw, 5.8rem);
+        line-height: 0.96;
+        letter-spacing: 0;
+      }
+
+      h2 {
+        max-width: 980px;
+        margin-bottom: 22px;
+        font-size: clamp(2rem, 4vw, 4rem);
+        line-height: 1.02;
+        letter-spacing: 0;
+      }
+
+      h3 {
+        margin-bottom: 10px;
+        font-size: 1.08rem;
+        line-height: 1.2;
+        letter-spacing: 0;
+      }
+
+      .lead {
+        max-width: 790px;
+        margin-bottom: 32px;
+        color: var(--muted);
+        font-size: clamp(1.05rem, 2vw, 1.34rem);
+        line-height: 1.48;
+      }
+
+      .hero-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(300px, 0.78fr);
+        gap: clamp(28px, 5vw, 72px);
+        align-items: center;
+      }
+
+      .hero-panel {
+        border: 1px solid var(--line);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+        padding: 24px;
+        border-radius: 8px;
+      }
+
+      .bay-map {
+        position: relative;
+        height: 480px;
+        border: 1px solid var(--line);
+        background:
+          linear-gradient(90deg, rgba(49, 95, 140, 0.08) 1px, transparent 1px),
+          linear-gradient(rgba(49, 95, 140, 0.08) 1px, transparent 1px),
+          #f7fbf9;
+        background-size: 42px 42px;
+        overflow: hidden;
+        border-radius: 8px;
+      }
+
+      .bay-spine {
+        position: absolute;
+        left: 46%;
+        top: 8%;
+        width: 19%;
+        height: 84%;
+        background: #b8d7e3;
+        border: 2px solid #8dbacb;
+        clip-path: polygon(
+          42% 0,
+          70% 10%,
+          58% 23%,
+          78% 35%,
+          55% 47%,
+          68% 59%,
+          41% 74%,
+          55% 100%,
+          28% 92%,
+          35% 76%,
+          19% 61%,
+          33% 46%,
+          20% 31%,
+          35% 15%
+        );
+      }
+
+      .city-dot {
+        position: absolute;
+        width: 11px;
+        height: 11px;
+        border: 2px solid var(--surface);
+        background: var(--green);
+        border-radius: 999px;
+        box-shadow: 0 0 0 4px rgba(47, 107, 79, 0.13);
+      }
+
+      .city-label {
+        position: absolute;
+        padding: 5px 8px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.92);
+        color: var(--ink);
+        font-size: 0.74rem;
+        font-weight: 720;
+        border-radius: 6px;
+      }
+
+      .sf {
+        left: 37%;
+        top: 42%;
+      }
+
+      .sf-label {
+        left: 21%;
+        top: 39%;
+      }
+
+      .oak {
+        left: 56%;
+        top: 45%;
+      }
+
+      .oak-label {
+        left: 60%;
+        top: 42%;
+      }
+
+      .sj {
+        left: 63%;
+        top: 77%;
+      }
+
+      .sj-label {
+        left: 67%;
+        top: 74%;
+      }
+
+      .sr {
+        left: 41%;
+        top: 14%;
+      }
+
+      .sr-label {
+        left: 46%;
+        top: 11%;
+      }
+
+      .grid {
+        display: grid;
+        gap: 18px;
+      }
+
+      .grid.two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid.three {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .grid.four {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .card {
+        min-height: 168px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        padding: 22px;
+        border-radius: 8px;
+      }
+
+      .card.compact {
+        min-height: 118px;
+      }
+
+      .metric {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--green);
+        font-size: clamp(2rem, 4vw, 3.4rem);
+        font-weight: 840;
+        line-height: 0.98;
+      }
+
+      .label {
+        color: var(--muted);
+        font-size: 0.92rem;
+        line-height: 1.45;
+      }
+
+      .tag-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 20px;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        min-height: 30px;
+        padding: 6px 10px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--ink);
+        font-size: 0.84rem;
+        font-weight: 720;
+        border-radius: 999px;
+      }
+
+      .tag.green {
+        border-color: #b8d8c5;
+        background: var(--green-soft);
+        color: var(--green);
+      }
+
+      .tag.blue {
+        border-color: #bfd2e5;
+        background: var(--blue-soft);
+        color: var(--blue);
+      }
+
+      .tag.gold {
+        border-color: #e4cf9f;
+        background: var(--gold-soft);
+        color: var(--gold);
+      }
+
+      .tag.rose {
+        border-color: #e1bbb3;
+        background: var(--rose-soft);
+        color: var(--rose);
+      }
+
+      .source-stack {
+        display: grid;
+        grid-template-columns: 0.7fr 1fr 1fr;
+        gap: 14px;
+        align-items: stretch;
+      }
+
+      .source-tier {
+        border: 1px solid var(--line);
+        background: var(--surface);
+        padding: 20px;
+        border-radius: 8px;
+      }
+
+      .tier-label {
+        display: inline-flex;
+        min-width: 44px;
+        justify-content: center;
+        margin-bottom: 12px;
+        padding: 5px 8px;
+        background: var(--green);
+        color: #ffffff;
+        font-size: 0.78rem;
+        font-weight: 820;
+        border-radius: 999px;
+      }
+
+      .source-tier:nth-child(2) .tier-label {
+        background: var(--blue);
+      }
+
+      .source-tier:nth-child(3) .tier-label {
+        background: var(--gold);
+      }
+
+      .pipeline {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 14px;
+        align-items: stretch;
+      }
+
+      .stage {
+        position: relative;
+        min-height: 188px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        padding: 20px;
+        border-radius: 8px;
+      }
+
+      .stage::after {
+        content: ">";
+        position: absolute;
+        right: -13px;
+        top: 50%;
+        z-index: 2;
+        width: 24px;
+        height: 24px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--green);
+        display: grid;
+        place-items: center;
+        font-weight: 820;
+        transform: translateY(-50%);
+        border-radius: 999px;
+      }
+
+      .stage:last-child::after {
+        display: none;
+      }
+
+      .stage-num {
+        display: inline-grid;
+        width: 34px;
+        height: 34px;
+        margin-bottom: 14px;
+        place-items: center;
+        background: var(--green-soft);
+        color: var(--green);
+        font-weight: 840;
+        border-radius: 999px;
+      }
+
+      .schema {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        align-items: start;
+      }
+
+      pre {
+        margin: 0;
+        max-height: 560px;
+        overflow: auto;
+        border: 1px solid var(--line);
+        background: #101712;
+        color: #e9f2ed;
+        padding: 20px;
+        font-size: clamp(0.77rem, 1.3vw, 0.94rem);
+        line-height: 1.5;
+        border-radius: 8px;
+      }
+
+      code {
+        font-family:
+          "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      }
+
+      .list {
+        display: grid;
+        gap: 10px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .list li {
+        display: grid;
+        grid-template-columns: 28px minmax(0, 1fr);
+        gap: 10px;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .list li::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        margin-top: 7px;
+        background: var(--green);
+        border-radius: 999px;
+      }
+
+      .matrix {
+        display: grid;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .matrix-row,
+      .matrix-head {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr 1.2fr 1.4fr;
+      }
+
+      .matrix-head {
+        background: var(--green-soft);
+        color: var(--green);
+        font-size: 0.82rem;
+        font-weight: 820;
+        text-transform: uppercase;
+      }
+
+      .matrix-row:not(:last-child),
+      .matrix-head {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .matrix span {
+        min-width: 0;
+        padding: 14px;
+        font-size: 0.92rem;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+      }
+
+      .roadmap {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .week {
+        border: 1px solid var(--line);
+        background: var(--surface);
+        padding: 20px;
+        min-height: 240px;
+        border-radius: 8px;
+      }
+
+      .week strong {
+        display: block;
+        margin-bottom: 14px;
+        color: var(--green);
+        font-size: 1.1rem;
+      }
+
+      .architecture {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr 1fr;
+        gap: 18px;
+        align-items: center;
+      }
+
+      .lane {
+        display: grid;
+        gap: 12px;
+      }
+
+      .node {
+        border: 1px solid var(--line);
+        background: var(--surface);
+        padding: 18px;
+        min-height: 88px;
+        border-radius: 8px;
+      }
+
+      .node.accent {
+        border-color: #b8d8c5;
+        background: var(--green-soft);
+      }
+
+      .arrow-lane {
+        display: grid;
+        gap: 14px;
+      }
+
+      .arrow {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 10px;
+        align-items: center;
+        color: var(--muted);
+        font-size: 0.86rem;
+        font-weight: 720;
+        text-align: center;
+      }
+
+      .arrow::before,
+      .arrow::after {
+        content: "";
+        height: 1px;
+        background: var(--line);
+      }
+
+      .sources {
+        display: grid;
+        gap: 12px;
+      }
+
+      .source-link {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 12px;
+        align-items: center;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        padding: 14px 16px;
+        text-decoration: none;
+        border-radius: 8px;
+      }
+
+      .source-link span {
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .source-link b {
+        color: var(--ink);
+      }
+
+      .nav {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.88);
+        backdrop-filter: blur(14px);
+        box-shadow: 0 10px 30px rgba(23, 32, 27, 0.12);
+        border-radius: 999px;
+      }
+
+      .nav button {
+        width: 40px;
+        height: 40px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--ink);
+        font-size: 1.15rem;
+        font-weight: 820;
+        cursor: pointer;
+        border-radius: 999px;
+      }
+
+      .nav button:disabled {
+        cursor: default;
+        opacity: 0.35;
+      }
+
+      .progress {
+        min-width: 58px;
+        color: var(--muted);
+        font-size: 0.86rem;
+        font-weight: 760;
+        text-align: center;
+      }
+
+      .progress-bar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        z-index: 30;
+        height: 5px;
+        background: rgba(217, 223, 216, 0.8);
+      }
+
+      .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: var(--green);
+        transition: width 300ms ease;
+      }
+
+      .footer-note {
+        margin-top: 28px;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      @media (max-width: 980px) {
+        .slide {
+          min-height: auto;
+          padding: 42px 20px 92px;
+        }
+
+        .slides {
+          min-height: 100svh;
+        }
+
+        .hero-layout,
+        .schema,
+        .architecture,
+        .source-stack {
+          grid-template-columns: 1fr;
+        }
+
+        .grid.two,
+        .grid.three,
+        .grid.four,
+        .pipeline,
+        .roadmap {
+          grid-template-columns: 1fr;
+        }
+
+        .stage::after {
+          display: none;
+        }
+
+        .bay-map {
+          height: 340px;
+        }
+
+        .matrix {
+          overflow-x: auto;
+        }
+
+        .matrix-row,
+        .matrix-head {
+          min-width: 760px;
+        }
+      }
+
+      @media print {
+        body {
+          background: white;
+        }
+
+        .deck,
+        .slides {
+          display: block;
+          min-height: 0;
+          overflow: visible;
+        }
+
+        .slide {
+          display: block;
+          min-height: 100vh;
+          page-break-after: always;
+        }
+
+        .nav,
+        .progress-bar {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="deck" aria-live="polite">
+      <div class="progress-bar" aria-hidden="true">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="slides" id="slides">
+        <section class="slide">
+          <div class="slide-inner hero-layout">
+            <div>
+              <p class="kicker">Saturday With Friends</p>
+              <h1>Bay Area Event Aggregator</h1>
+              <p class="lead">
+                A source-backed automation plan that turns official Bay Area
+                city, library, parks, and ticketing calendars into event
+                recommendations the current app can browse, save, plan, and
+                share.
+              </p>
+              <div class="tag-row">
+                <span class="tag green">All Bay Area cities</span>
+                <span class="tag blue">Family-first filters</span>
+                <span class="tag gold">Automated refresh</span>
+                <span class="tag rose">Quality gates</span>
+              </div>
+            </div>
+            <div class="hero-panel">
+              <div class="bay-map" aria-label="Stylized Bay Area event coverage map">
+                <div class="bay-spine"></div>
+                <span class="city-dot sf"></span>
+                <span class="city-label sf-label">San Francisco</span>
+                <span class="city-dot oak"></span>
+                <span class="city-label oak-label">Oakland</span>
+                <span class="city-dot sj"></span>
+                <span class="city-label sj-label">San Jose</span>
+                <span class="city-dot sr"></span>
+                <span class="city-label sr-label">North Bay</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="slide-inner">
+            <p class="kicker">Current repo state</p>
+            <h2>The app already has a path for static data ingestion.</h2>
+            <div class="grid three">
+              <article class="card">
+                <span class="metric">899</span>
+                <h3>Current spot records</h3>
+                <p class="label">
+                  `public/data/bay-area-spots.json` is generated from
+                  OpenStreetMap and already powers browse, map, plan, and share
+                  flows.
+                </p>
+              </article>
+              <article class="card">
+                <span class="metric">33</span>
+                <h3>Seed event records</h3>
+                <p class="label">
+                  `public/data/events.json` exists as a local library-program
+                  seed. It is useful for product shape, but not yet a verified
+                  automated feed.
+                </p>
+              </article>
+              <article class="card">
+                <span class="metric">1</span>
+                <h3>Daily refresh job</h3>
+                <p class="label">
+                  `.github/workflows/refresh-data.yml` refreshes spots. Events
+                  should join this workflow after validation exists.
+                </p>
+              </article>
+            </div>
+            <p class="footer-note">
+              Existing code paths: `scripts/ingest-bay-area.mjs`,
+              `scripts/spotPipeline.mjs`, `src/App.tsx`, `worker/src/index.ts`.
+            </p>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="slide-inner">
+            <p class="kicker">Product target</p>
+            <h2>Move from places to time-aware weekend options.</h2>
+            <div class="grid two">
+              <article class="card">
+                <h3>Today</h3>
+                <ul class="list">
+                  <li>Users browse durable places like parks, museums, food, wellness, and shopping.</li>
+                  <li>The planner ranks spots by vibe, age band, distance, cost, and hours metadata.</li>
+                  <li>Share links preserve selected stops for group voting.</li>
+                </ul>
+              </article>
+              <article class="card">
+                <h3>With events</h3>
+                <ul class="list">
+                  <li>Users see dated family events that are actually happening this weekend.</li>
+                  <li>The planner can combine a timed event with nearby fallback stops.</li>
+                  <li>Share links carry event date, time, venue, and source URL so voters can evaluate plans.</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="slide-inner">
+            <p class="kicker">Coverage strategy</p>
+            <h2>Use an explicit source registry, not one giant scraper.</h2>
+            <div class="source-stack">
+              <article class="source-tier">
+                <span class="tier-label">Tier 1</span>
+                <h3>Official civic calendars</h3>
+                <p class="label">
+                  City events, library systems, county parks, recreation
+                  departments, museums, and public agencies. These become the
+                  most trusted source class.
+                </p>
+              </article>
+              <article class="source-tier">
+                <span class="tier-label">Tier 2</span>
+                <h3>Structured feeds</h3>
+                <p class="label">
+                  ICS, RSS, JSON feeds, JSON-LD `Event` markup, and sitemap
+                  pages. These are cheaper to maintain than page-specific
+                  scrapers.
+                </p>
+              </article>
+              <article class="source-tier">
+                <span class="tier-label">Tier 3</span>
+                <h3>Ticketing APIs</h3>
+                <p class="label">
+                  Ticketmaster can fill paid concerts, performances, and venues.
+                  Eventbrite should be source-specific because broad public
+                  search access is not a reliable foundation.
+                </p>
+              </article>
+            </div>
+            <div class="tag-row">
+              <span class="tag green">9 Bay Area counties</span>
+              <span class="tag blue">Cities plus unincorporated areas</span>
+              <span class="tag gold">Per-source confidence</span>
+              <span class="tag rose">No adult-only feeds</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="slide-inner">
+            <p class="kicker">Pipeline</p>
+            <h2>The automation has five jobs.</h2>
+            <div class="pipeline">
+              <article class="stage">
+                <span class="stage-num">1</span>
+                <h3>Discover</h3>
+                <p class="label">
+                  Read `data/event-sources.json`, fetch each source with
+                  source-specific rate limits, and store raw snapshots for
+                  debugging.
+                </p>
+              </article>
+              <article class="stage">
+                <span class="stage-num">2</span>
+                <h3>Extract</h3>
+                <p class="label">
+                  Parse ICS, RSS, JSON, JSON-LD, or HTML selectors into raw
+                  event candidates without mixing product rules into scrapers.
+                </p>
+              </article>
+              <article class="stage">
+                <span class="stage-num">3</span>
+                <h3>Normalize</h3>
+                <p class="label">
+                  Convert every candidate into one schema with timezone,
+                  geocoding, city, category, age bands, cost, and source URL.
+                </p>
+              </article>
+              <article class="stage">
+                <span class="stage-num">4</span>
+                <h3>Validate</h3>
+                <p class="label">
+                  Drop stale, duplicate, adult-only, locationless, and
+                  unsourced records. Keep reject reasons for operator review.
+                </p>
+              </article>
+              <article class="stage">
+                <span class="stage-num">5</span>
+                <h3>Publish</h3>
+                <p class="label">
+                  Write `public/data/events.json`, run tests, build the app,
+                  and commit only meaningful feed changes.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="slide-inner schema">
+            <div>
+              <p class="kicker">Event schema</p>
+              <h2>Use actual dates, not only day-of-week labels.</h2>
+              <p class="lead">
+                The existing seed uses recurring `daysOfWeek` plus
+                `timeWindow`. That works for a preview rail, but real planning
+                needs start and end datetimes so the app can rank, expire, and
+                share events correctly.
+              </p>
+              <ul class="list">
+                <li>`sourceUrl` is required so parents can verify details.</li>
+                <li>`confidence` separates official feeds from inferred data.</li>
+                <li>`rejectReasons` should live in the build report, not the user feed.</li>
+              </ul>
+            </div>
+            <pre><code>{
+  "id": "sfpl-main-2026-05-09-family-storytime",
+  "kind": "event",
+  "title": "Family Storytime",
+  "description": "Songs, rhymes, and picture books for kids 0-5.",
+  "venue": "SF Main Library",
+  "city": "San Francisco",
+  "neighborhood": "Civic Center",
+  "lat": 37.7796,
+  "lon": -122.4159,
+  "category": "Library",
+  "startDateTime": "2026-05-09T10:30:00-07:00",
+  "endDateTime": "2026-05-09T11:00:00-07:00",
+  "ageBands": ["toddler", "preschool"],
+  "cost": "Free",
+  "sourceName": "San Francisco Public Library",
+  "sourceUrl": "https://sfpl.org/events",
+  "fetchedAt": "2026-05-05T10:17:00-07:00",
+  "verified": true,
+  "confidence": 0.94
+}</code></pre>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="slide-inner">
+            <p class="kicker">Quality gates</p>
+            <h2>Parents should see fewer events, not noisier events.</h2>
+            <div class="matrix">
+              <div class="matrix-head">
+                <span>Gate</span>
+                <span>Required</span>
+                <span>Reject example</span>
+                <span>Why it matters</span>
+              </div>
+              <div class="matrix-row">
+                <span>Source URL</span>
+                <span>Yes</span>
+                <span>No original event page</span>
+                <span>Users need a place to verify time, tickets, and changes.</span>
+              </div>
+              <div class="matrix-row">
+                <span>Future datetime</span>
+                <span>Yes</span>
+                <span>Missing start time or past event</span>
+                <span>The app is making weekend plans, not an archive.</span>
+              </div>
+              <div class="matrix-row">
+                <span>Bay Area city</span>
+                <span>Yes</span>
+                <span>Venue outside coverage registry</span>
+                <span>Coverage should be explainable and auditable.</span>
+              </div>
+              <div class="matrix-row">
+                <span>Family suitability</span>
+                <span>Strict</span>
+                <span>21+, bar crawl, nightclub, adult comedy</span>
+                <span>The app is positioned around kids and family planning.</span>
+              </div>
+              <div class="matrix-row">
+                <span>Dedupe</span>
+                <span>Fuzzy</span>
+                <span>Same event from venue and ticketing API</span>
+                <span>Duplicate events damage ranking and planner trust.</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="slide-inner">
+            <p class="kicker">App integration</p>
+            <h2>Events should become first-class plan items.</h2>
+            <div class="architecture">
+              <div class="lane">
+                <div class="node">
+                  <h3>`events.json`</h3>
+                  <p class="label">Generated static feed with future events.</p>
+                </div>
+                <div class="node">
+                  <h3>`bay-area-spots.json`</h3>
+                  <p class="label">Existing durable place feed.</p>
+                </div>
+              </div>
+              <div class="arrow-lane">
+                <div class="arrow">merge by planner context</div>
+                <div class="node accent">
+                  <h3>`PlanItem` model</h3>
+                  <p class="label">
+                    One shared interface for spots and events: title, location,
+                    timing, cost, age fit, source URL, and display metadata.
+                  </p>
+                </div>
+                <div class="arrow">rank by date, distance, age, vibe</div>
+              </div>
+              <div class="lane">
+                <div class="node">
+                  <h3>Home rail</h3>
+                  <p class="label">Near-me events this weekend.</p>
+                </div>
+                <div class="node">
+                  <h3>Browse tab</h3>
+                  <p class="label">Events filter next to places.</p>
+                </div>
+                <div class="node">
+                  <h3>Plans and polls</h3>
+                  <p class="label">Share links include event date and venue.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="slide-inner">
+            <p class="kicker">Automation design</p>
+            <h2>Run small, observable refreshes instead of scraping blindly.</h2>
+            <div class="grid four">
+              <article class="card compact">
+                <h3>Hourly</h3>
+                <p class="label">
+                  Refresh high-change feeds for the next 14 days: libraries,
+                  city events, parks, ticketing APIs.
+                </p>
+              </article>
+              <article class="card compact">
+                <h3>Daily</h3>
+                <p class="label">
+                  Refresh lower-change calendars and rebuild the full 60-day
+                  event file.
+                </p>
+              </article>
+              <article class="card compact">
+                <h3>Weekly</h3>
+                <p class="label">
+                  Audit source coverage, dead links, selector failures, and
+                  cities with no active sources.
+                </p>
+              </article>
+              <article class="card compact">
+                <h3>Manual</h3>
+                <p class="label">
+                  Support `workflow_dispatch` for emergency refreshes before
+                  weekends or product demos.
+                </p>
+              </article>
+            </div>
+            <pre><code>npm run ingest:events
+npm run validate:events
+npm run test
+npm run build</code></pre>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="slide-inner">
+            <p class="kicker">Build report</p>
+            <h2>The hidden operator view is as important as the feed.</h2>
+            <div class="grid three">
+              <article class="card">
+                <h3>Coverage</h3>
+                <p class="label">
+                  Cities covered, cities missing sources, source count by county,
+                  and records by source type.
+                </p>
+              </article>
+              <article class="card">
+                <h3>Freshness</h3>
+                <p class="label">
+                  Last successful fetch, failures by source, stale feed warnings,
+                  and next event date per city.
+                </p>
+              </article>
+              <article class="card">
+                <h3>Reject reasons</h3>
+                <p class="label">
+                  Counts for duplicates, missing dates, no source URL, adult-only
+                  language, out-of-area venues, and parser failures.
+                </p>
+              </article>
+            </div>
+            <p class="footer-note">
+              Proposed output: `public/data/event-build-report.json` for
+              diagnostics and future admin UI.
+            </p>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="slide-inner">
+            <p class="kicker">Implementation plan</p>
+            <h2>A practical build path.</h2>
+            <div class="roadmap">
+              <article class="week">
+                <strong>Slice 1</strong>
+                <ul class="list">
+                  <li>Add `data/event-sources.json` with Bay Area coverage.</li>
+                  <li>Add source adapters for ICS, RSS, JSON-LD, and static JSON.</li>
+                  <li>Normalize into the new event schema.</li>
+                </ul>
+              </article>
+              <article class="week">
+                <strong>Slice 2</strong>
+                <ul class="list">
+                  <li>Add validation, dedupe, adult-only filtering, and reports.</li>
+                  <li>Generate `public/data/events.json` from real sources.</li>
+                  <li>Extend CI to validate and build the feed.</li>
+                </ul>
+              </article>
+              <article class="week">
+                <strong>Slice 3</strong>
+                <ul class="list">
+                  <li>Add Events browse UI with city, date, cost, and age filters.</li>
+                  <li>Let users save events into plans.</li>
+                  <li>Update planner scoring for timed events.</li>
+                </ul>
+              </article>
+              <article class="week">
+                <strong>Slice 4</strong>
+                <ul class="list">
+                  <li>Update Worker poll payloads for events.</li>
+                  <li>Add Ticketmaster as optional keyed source.</li>
+                  <li>Add coverage dashboard from build report.</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="slide-inner">
+            <p class="kicker">Source references</p>
+            <h2>Start with primary, maintainable sources.</h2>
+            <div class="sources">
+              <a
+                class="source-link"
+                href="https://census.bayareametro.gov/cities-counties"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <b>Bay Area Census cities and counties</b>
+                <span>Coverage registry basis</span>
+              </a>
+              <a
+                class="source-link"
+                href="https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <b>Ticketmaster Discovery API</b>
+                <span>Optional ticketed event connector</span>
+              </a>
+              <a
+                class="source-link"
+                href="https://sfpl.org/events"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <b>San Francisco Public Library events</b>
+                <span>Library connector pilot</span>
+              </a>
+              <a
+                class="source-link"
+                href="https://oaklandlibrary.org/calendar"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <b>Oakland Public Library calendar</b>
+                <span>Library connector pilot</span>
+              </a>
+              <a
+                class="source-link"
+                href="https://www.berkeleypubliclibrary.org/events"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <b>Berkeley Public Library events</b>
+                <span>Library connector pilot</span>
+              </a>
+            </div>
+            <p class="footer-note">
+              Eventbrite should be treated as an organizer-specific source, not
+              the primary broad discovery system.
+            </p>
+          </div>
+        </section>
+      </div>
+      <nav class="nav" aria-label="Slide navigation">
+        <button type="button" id="prevBtn" aria-label="Previous slide">&lt;</button>
+        <span class="progress" id="progressText">1 / 12</span>
+        <button type="button" id="nextBtn" aria-label="Next slide">&gt;</button>
+      </nav>
+    </main>
+    <script>
+      const slides = document.getElementById("slides");
+      const slideList = Array.from(document.querySelectorAll(".slide"));
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const progressText = document.getElementById("progressText");
+      const progressFill = document.getElementById("progressFill");
+      let index = 0;
+
+      function render() {
+        slides.style.transform = `translateX(${-index * 100}vw)`;
+        window.scrollTo(0, 0);
+        prevBtn.disabled = index === 0;
+        nextBtn.disabled = index === slideList.length - 1;
+        progressText.textContent = `${index + 1} / ${slideList.length}`;
+        progressFill.style.width = `${((index + 1) / slideList.length) * 100}%`;
+      }
+
+      function go(delta) {
+        index = Math.max(0, Math.min(slideList.length - 1, index + delta));
+        render();
+      }
+
+      prevBtn.addEventListener("click", () => go(-1));
+      nextBtn.addEventListener("click", () => go(1));
+      window.addEventListener("keydown", (event) => {
+        const handled = ["ArrowRight", "PageDown", "ArrowLeft", "PageUp", "Home", "End"];
+        if (!handled.includes(event.key)) return;
+        event.preventDefault();
+        if (event.key === "ArrowRight" || event.key === "PageDown") go(1);
+        if (event.key === "ArrowLeft" || event.key === "PageUp") go(-1);
+        if (event.key === "Home") {
+          index = 0;
+          render();
+        }
+        if (event.key === "End") {
+          index = slideList.length - 1;
+          render();
+        }
+      });
+      render();
+    </script>
+  </body>
+</html>

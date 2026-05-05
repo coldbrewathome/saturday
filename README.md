@@ -24,7 +24,9 @@ The Bay Area dataset is generated from OpenStreetMap through the Overpass API.
 
 ```bash
 npm run ingest:bay-area
+npm run ingest:events
 npm run validate:data
+npm run validate:events
 ```
 
 The generated file lives at `public/data/bay-area-spots.json`. It is sanitized,
@@ -32,6 +34,14 @@ deduplicated, validated, and balanced across food, outdoors, culture, wellness,
 and shopping (Nightlife is excluded from the kid-focused build). The GitHub
 Actions workflow in `.github/workflows/refresh-data.yml` refreshes the dataset
 daily and runs tests before committing data changes.
+
+Events are generated from `data/event-sources.json` and recurring templates in
+`data/event-templates.json` into `public/data/events.json`, with diagnostics in
+`public/data/event-build-report.json`. The event pipeline first attempts live
+structured extraction from official source pages (JSON-LD, ICS, RSS/XML, JSON,
+and dated HTML event cards). If a trusted source is reachable but does not expose
+parseable dated events, it expands the configured recurring templates so the app
+still has dated weekend options while the build report shows the fallback.
 
 Images use the most specific trustworthy source available: OSM `image` tags
 first, OSM Wikimedia Commons references second, Wikidata P18 images third, and

@@ -25,6 +25,7 @@ import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
   API_CONFIGURED,
   createAiBrief,
+  createAiSwap,
   createPoll,
   fetchAdminEvents,
   fetchGeo,
@@ -118,10 +119,30 @@ type FamilyEvent = {
   category: string;
   daysOfWeek: number[];
   timeWindow: "Morning" | "Afternoon" | "Evening";
+  startDateTime?: string | null;
+  endDateTime?: string | null;
   ageBands: AgeBand[];
   cost: string;
   url: string;
+  sourceName?: string;
+  sourceMode?: string;
   verified: boolean;
+};
+
+type BoaMuseum = {
+  id: string;
+  name: string;
+  city: string;
+  neighborhood: string;
+  lat: number;
+  lon: number;
+  url: string;
+};
+
+type BoaDataset = {
+  url?: string;
+  note?: string;
+  museums?: BoaMuseum[];
 };
 
 type EventsDataset = {
@@ -205,8 +226,59 @@ function dayWindowLabel(days: number[]): string {
   return sorted.map((d) => SHORT_DAY[d] ?? "?").join(" / ");
 }
 
+function nextBoaWeekend(now: Date = new Date()): { saturday: Date; sunday: Date } {
+  let year = now.getFullYear();
+  let month = now.getMonth();
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    const firstOfMonth = new Date(year, month, 1);
+    const offset = (6 - firstOfMonth.getDay() + 7) % 7;
+    const saturday = new Date(year, month, 1 + offset);
+    const sunday = new Date(year, month, 2 + offset);
+    if (sunday.getMonth() === month) {
+      const sundayEnd = new Date(year, month, 2 + offset, 23, 59, 59);
+      if (sundayEnd >= now) {
+        return { saturday, sunday };
+      }
+    }
+    month += 1;
+    if (month > 11) {
+      month = 0;
+      year += 1;
+    }
+  }
+  const fallback = new Date(year, month, 1);
+  return { saturday: fallback, sunday: fallback };
+}
+
+function formatWeekendRange(saturday: Date, sunday: Date): string {
+  const monthName = saturday.toLocaleDateString("en-US", { month: "short" });
+  if (saturday.getMonth() === sunday.getMonth()) {
+    return `${monthName} ${saturday.getDate()}–${sunday.getDate()}`;
+  }
+  const sundayMonth = sunday.toLocaleDateString("en-US", { month: "short" });
+  return `${monthName} ${saturday.getDate()} – ${sundayMonth} ${sunday.getDate()}`;
+}
+
+function eventWhenLabel(event: FamilyEvent): string {
+  if (!event.startDateTime) {
+    return `${dayWindowLabel(event.daysOfWeek)} · ${event.timeWindow}`;
+  }
+  const date = new Date(event.startDateTime);
+  if (Number.isNaN(date.getTime())) {
+    return `${dayWindowLabel(event.daysOfWeek)} · ${event.timeWindow}`;
+  }
+  return new Intl.DateTimeFormat(undefined, {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(date);
+}
+
 const DATA_URL = `${import.meta.env.BASE_URL}data/bay-area-spots.json`;
 const EVENTS_URL = `${import.meta.env.BASE_URL}data/events.json`;
+const BOA_MUSEUMS_URL = `${import.meta.env.BASE_URL}data/boa-museums.json`;
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID ?? "";
 const GOOGLE_CONFIGURED = GOOGLE_CLIENT_ID.length > 0;
 
@@ -704,6 +776,7 @@ function App() {
   >("idle");
   const [remoteSpots, setRemoteSpots] = useState<Spot[]>(starterSpots);
   const [events, setEvents] = useState<FamilyEvent[]>([]);
+  const [boaMuseums, setBoaMuseums] = useState<BoaMuseum[]>([]);
   const [dataMeta, setDataMeta] = useState<{
     generatedAt?: string;
     sourceName: string;
@@ -785,6 +858,22 @@ function App() {
         // Events are optional; failure is non-fatal.
       }
     })();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    fetch(BOA_MUSEUMS_URL)
+      .then((response) => (response.ok ? response.json() : Promise.reject()))
+      .then((dataset: BoaDataset) => {
+        if (!active) return;
+        if (Array.isArray(dataset.museums)) setBoaMuseums(dataset.museums);
+      })
+      .catch(() => {
+        // Optional: failure is non-fatal.
+      });
     return () => {
       active = false;
     };
@@ -1066,6 +1155,20 @@ function App() {
       ? "Family-friendly spots"
       : `For ${ageBandLabels[ageBand].toLowerCase()}`;
 
+  const boaWeekend = useMemo(() => nextBoaWeekend(new Date()), []);
+  const boaIsThisWeekend = useMemo(() => {
+    const now = new Date();
+    const sundayEnd = new Date(boaWeekend.sunday);
+    sundayEnd.setHours(23, 59, 59, 999);
+    const saturdayStart = new Date(boaWeekend.saturday);
+    saturdayStart.setHours(0, 0, 0, 0);
+    const weekStart = new Date(now);
+    weekStart.setDate(weekStart.getDate() - 7);
+    return saturdayStart <= now
+      ? now <= sundayEnd
+      : (saturdayStart.getTime() - now.getTime()) / (1000 * 60 * 60 * 24) <= 7;
+  }, [boaWeekend]);
+
   const weekendEvents = useMemo(() => {
     if (events.length === 0) return [] as FamilyEvent[];
     const matching = events.filter((event) => {
@@ -1286,6 +1389,106 @@ function App() {
     }
   }
 
+  const [swapBusyStopId, setSwapBusyStopId] = useState<string | null>(null);
+  const [swapError, setSwapError] = useState<string | null>(null);
+
+  async function swapStopWithAi(planId: string, stopId: string) {
+    if (!session) {
+      setSwapError("Sign in to use AI swap.");
+      return;
+    }
+    const plan = plans.find((p) => p.id === planId);
+    if (!plan || !plan.vibe) {
+      setSwapError("Only AI plans can be swapped.");
+      return;
+    }
+    const stopsById = new Map(allSpots.map((s) => [s.id, s] as const));
+    const currentStops = plan.stopIds
+      .map((id) => stopsById.get(id))
+      .filter((s): s is Spot => Boolean(s));
+    const currentPicks: StopSummary[] = currentStops.map((spot) => ({
+      id: spot.id,
+      name: spot.name,
+      neighborhood: spot.neighborhood,
+      category: spot.category,
+      cost: spot.cost,
+      transitMinutes: spot.transitMinutes,
+    }));
+    const usedIds = new Set(plan.stopIds);
+    const sortedAll = rankForVibe(
+      allSpots.filter((s) => !usedIds.has(s.id)),
+      plan.vibe,
+      ageBand === "any" ? undefined : ageBand,
+    );
+    const candidatesPool = sampleCandidates(sortedAll, 12);
+    const candidates: StopSummary[] = candidatesPool.map((spot) => ({
+      id: spot.id,
+      name: spot.name,
+      neighborhood: spot.neighborhood,
+      category: spot.category,
+      cost: spot.cost,
+      transitMinutes: spot.transitMinutes,
+      friendScore: scoreSpotForVibe(
+        spot,
+        plan.vibe!,
+        ageBand === "any" ? undefined : ageBand,
+      ),
+    }));
+    if (candidates.length === 0) {
+      setSwapError("No alternative spots available.");
+      return;
+    }
+
+    setSwapBusyStopId(stopId);
+    setSwapError(null);
+    try {
+      const today = new Date();
+      const result = await createAiSwap(
+        {
+          vibe: plan.vibe,
+          ageBand: ageBand === "any" ? undefined : ageBand,
+          date: today.toISOString().slice(0, 10),
+          dayOfWeek: today.toLocaleDateString("en-US", { weekday: "long" }),
+          replaceStopId: stopId,
+          currentPicks,
+          candidates,
+        },
+        session.token,
+      );
+      setPlans((current) =>
+        current.map((p) => {
+          if (p.id !== planId) return p;
+          const newStopIds = p.stopIds.map((id) =>
+            id === stopId ? result.pick.id : id,
+          );
+          const existingPicks = p.picks ?? [];
+          const newPicks = newStopIds.map((id, idx) => {
+            if (id === result.pick.id) {
+              return { id, reason: result.pick.reason };
+            }
+            return existingPicks[idx] ?? { id, reason: "" };
+          });
+          return { ...p, stopIds: newStopIds, picks: newPicks };
+        }),
+      );
+    } catch (error) {
+      setSwapError((error as Error).message);
+    } finally {
+      setSwapBusyStopId(null);
+    }
+  }
+
+  function sampleCandidates<T>(sorted: T[], size: number, poolSize = 30): T[] {
+    const pool = sorted.slice(0, poolSize);
+    if (pool.length <= size) return pool;
+    const shuffled = [...pool];
+    for (let i = shuffled.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled.slice(0, size);
+  }
+
   async function selectVibeFromHome(nextVibe: PlannerVibe) {
     setVibe(nextVibe);
     setHomeError(null);
@@ -1319,7 +1522,7 @@ function App() {
     }
 
     if (session && API_CONFIGURED) {
-      const stopPayload: StopSummary[] = candidatePool.slice(0, 12).map((spot) => ({
+      const stopPayload: StopSummary[] = sampleCandidates(candidatePool, 12).map((spot) => ({
         id: spot.id,
         name: spot.name,
         neighborhood: spot.neighborhood,
@@ -1340,8 +1543,15 @@ function App() {
         ),
       }));
       try {
+        const today = new Date();
         const result = await createAiBrief(
-          { vibe: nextVibe, spots: stopPayload },
+          {
+            vibe: nextVibe,
+            spots: stopPayload,
+            ageBand: ageBand === "any" ? undefined : ageBand,
+            date: today.toISOString().slice(0, 10),
+            dayOfWeek: today.toLocaleDateString("en-US", { weekday: "long" }),
+          },
           session.token,
         );
         const stopIds =
@@ -1420,7 +1630,7 @@ function App() {
       });
       return;
     }
-    const spots: StopSummary[] = source.slice(0, 12).map((spot) => ({
+    const spots: StopSummary[] = sampleCandidates(source, 12).map((spot) => ({
       id: spot.id,
       name: spot.name,
       neighborhood: spot.neighborhood,
@@ -1443,11 +1653,14 @@ function App() {
 
     setAiState({ status: "loading" });
     try {
+      const today = new Date();
       const result = await createAiBrief(
         {
           vibe,
           spots,
           ageBand: ageBand === "any" ? undefined : ageBand,
+          date: today.toISOString().slice(0, 10),
+          dayOfWeek: today.toLocaleDateString("en-US", { weekday: "long" }),
         },
         session.token,
       );
@@ -1762,6 +1975,44 @@ function App() {
           <p className="home-status error">{homeError}</p>
         )}
 
+        {boaMuseums.length > 0 && (
+          <section className="boa-banner" aria-label="Bank of America Museums on Us">
+            <div className="boa-head">
+              <p className="eyebrow">Free museum weekend</p>
+              <h2>
+                BoA Museums on Us · {formatWeekendRange(
+                  boaWeekend.saturday,
+                  boaWeekend.sunday,
+                )}
+                {boaIsThisWeekend ? " (this weekend!)" : ""}
+              </h2>
+              <p className="boa-sub">
+                Bank of America / Merrill Lynch cardholders get free general admission
+                Saturday and Sunday. Bring your card + ID. Some special exhibits cost
+                extra — confirm with each museum.
+              </p>
+            </div>
+            <ul className="boa-list">
+              {boaMuseums.map((m) => (
+                <li key={m.id}>
+                  <a href={m.url} target="_blank" rel="noreferrer">
+                    <strong>{m.name}</strong>
+                    <span>{m.city} · {m.neighborhood}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <a
+              className="boa-source"
+              href="https://museums.bankofamerica.com"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Full Museums on Us partner list →
+            </a>
+          </section>
+        )}
+
         {weekendEvents.length > 0 && (
           <section className="home-events" aria-label="Weekend events">
             <div className="home-events-head">
@@ -1784,7 +2035,7 @@ function App() {
                     <span className="event-cat-chip">{event.category}</span>
                     <strong>{event.title}</strong>
                     <span className="home-event-meta">
-                      {dayWindowLabel(event.daysOfWeek)} · {event.timeWindow}
+                      {eventWhenLabel(event)}
                       {" · "}
                       {event.ageBands
                         .map((b) => ageBandLabels[b].split(" ")[0])
@@ -2407,6 +2658,14 @@ function App() {
               {activePlan.summary && (
                 <p className="plan-ai-summary">{activePlan.summary}</p>
               )}
+              {swapBusyStopId && (
+                <p className="plan-ai-summary">Swapping with AI…</p>
+              )}
+              {swapError && !swapBusyStopId && (
+                <p className="plan-ai-summary" style={{ borderLeftColor: "var(--coral)" }}>
+                  {swapError}
+                </p>
+              )}
               {activePlan.rationale && activePlan.rationale.length > 0 && (
                 <ul className="plan-rationale">
                   {activePlan.rationale.map((item) => (
@@ -2437,6 +2696,21 @@ function App() {
                         {aiReason && <em className="plan-stop-reason">{aiReason}</em>}
                       </div>
                       <div className="plan-stop-actions">
+                        {activePlan.source === "ai" && (
+                          <button
+                            title="Swap with AI choice"
+                            disabled={
+                              !session ||
+                              !API_CONFIGURED ||
+                              swapBusyStopId !== null
+                            }
+                            onClick={() =>
+                              swapStopWithAi(activePlan.id, spot.id)
+                            }
+                          >
+                            <Sparkles aria-hidden="true" />
+                          </button>
+                        )}
                         <button
                           title="Move up"
                           disabled={index === 0}
@@ -2564,7 +2838,7 @@ function App() {
                           <span className="event-cat-chip">{event.category}</span>
                           <strong>{event.title}</strong>
                           <span className="home-event-meta">
-                            {dayWindowLabel(event.daysOfWeek)} · {event.timeWindow}
+                            {eventWhenLabel(event)}
                             {" · "}
                             {event.ageBands
                               .map((b) => ageBandLabels[b].split(" ")[0])

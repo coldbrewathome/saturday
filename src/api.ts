@@ -91,7 +91,13 @@ export async function postVote(
 }
 
 export async function createAiBrief(
-  body: { vibe: string; spots: StopSummary[]; ageBand?: string },
+  body: {
+    vibe: string;
+    spots: StopSummary[];
+    ageBand?: string;
+    date?: string;
+    dayOfWeek?: string;
+  },
   sessionToken: string,
 ): Promise<AiBriefResponse> {
   const response = await fetch(`${requireApi()}/ai/brief`, {
@@ -151,6 +157,39 @@ export async function fetchGeo(): Promise<GeoInfo | null> {
   } catch {
     return null;
   }
+}
+
+export async function createAiSwap(
+  body: {
+    vibe: string;
+    ageBand?: string;
+    date?: string;
+    dayOfWeek?: string;
+    replaceStopId: string;
+    currentPicks: StopSummary[];
+    candidates: StopSummary[];
+  },
+  sessionToken: string,
+): Promise<{ pick: { id: string; reason: string }; model: string }> {
+  const response = await fetch(`${requireApi()}/ai/swap`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      authorization: `Bearer ${sessionToken}`,
+    },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) {
+    let detail = "";
+    try {
+      const data = (await response.json()) as { error?: string };
+      detail = data?.error ? `: ${data.error}` : "";
+    } catch {
+      // ignore
+    }
+    throw new Error(`Swap failed (${response.status})${detail}`);
+  }
+  return response.json();
 }
 
 export async function googleSignIn(
