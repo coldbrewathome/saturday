@@ -278,6 +278,7 @@ export function extractJsonLdEvents(html, source = {}) {
     try {
       const parsed = JSON.parse(raw);
       for (const item of walkJsonLd(parsed)) {
+        const signalText = `${item.name || ""} ${item.description || ""} ${sourceAudienceText(source)}`;
         events.push(normalizeRawEvent({
           title: item.name,
           description: item.description,
@@ -285,15 +286,17 @@ export function extractJsonLdEvents(html, source = {}) {
           city: item.location?.address?.addressLocality || source.city,
           lat: item.location?.geo?.latitude,
           lon: item.location?.geo?.longitude,
-          category: source.category || inferCategory(`${item.name} ${item.description}`),
+          category: source.category || inferCategory(signalText),
           startDateTime: item.startDate,
           endDateTime: item.endDate,
+          ageBands: inferAgeBands(signalText),
           url: item.url,
-          cost: item.isAccessibleForFree === true ? "Free" : inferCost(`${item.name} ${item.description}`),
+          cost: item.isAccessibleForFree === true ? "Free" : inferCost(signalText),
           sourceId: source.id,
           sourceName: source.name,
           sourceUrl: source.url,
           extractionMethod: "json-ld",
+          verified: true,
         }, source));
       }
     } catch {
@@ -819,7 +822,7 @@ export function extractEventListEvents(html, source = {}, options = {}) {
   const lines = htmlToLines(html);
   const now = options.now || new Date();
   const config = eventListOptions(source);
-  const events = [];
+  const events = [...extractJsonLdEvents(html, source)];
 
   for (let index = 0; index < lines.length; index += 1) {
     const range = parseDateLineRange(lines[index], source, now);

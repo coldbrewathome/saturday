@@ -1500,6 +1500,56 @@ function App() {
   const targetDateObj = useMemo(() => parseIsoDate(targetDate), [targetDate]);
   const targetDayOfWeek = targetDateObj.getDay();
 
+  const nearTermEvents = useMemo(() => {
+    if (events.length === 0) return [] as FamilyEvent[];
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    const todayDow = today.getDay();
+    const tomorrowDow = tomorrow.getDay();
+    const matching = events.filter((event) => {
+      const hits =
+        event.daysOfWeek.includes(todayDow) ||
+        event.daysOfWeek.includes(tomorrowDow);
+      if (!hits) return false;
+      if (ageBand !== "any" && !event.ageBands.includes(ageBand)) return false;
+      return true;
+    });
+    if (!inferredGeo?.lat || !inferredGeo?.lon) return matching.slice(0, 6);
+    const here = { lat: inferredGeo.lat, lon: inferredGeo.lon };
+    const distOf = (event: FamilyEvent) => {
+      const toRad = (deg: number) => (deg * Math.PI) / 180;
+      const R = 3958.8;
+      const dLat = toRad(event.lat - here.lat);
+      const dLon = toRad(event.lon - here.lon);
+      const lat1 = toRad(here.lat);
+      const lat2 = toRad(event.lat);
+      const x =
+        Math.sin(dLat / 2) ** 2 +
+        Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
+      return 2 * R * Math.asin(Math.sqrt(x));
+    };
+    return [...matching]
+      .sort((a, b) => distOf(a) - distOf(b))
+      .slice(0, 6);
+  }, [events, ageBand, inferredGeo]);
+
+  const nearTermLabel = useMemo(() => {
+    const today = new Date();
+    const todayDow = today.getDay();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    const tomorrowDow = tomorrow.getDay();
+    const todayHits = nearTermEvents.some((e) => e.daysOfWeek.includes(todayDow));
+    const tomorrowHits = nearTermEvents.some((e) =>
+      e.daysOfWeek.includes(tomorrowDow),
+    );
+    if (todayHits && tomorrowHits) return "today + tomorrow";
+    if (todayHits) return "today";
+    if (tomorrowHits) return "tomorrow";
+    return "soon";
+  }, [nearTermEvents]);
+
   const weekendEvents = useMemo(() => {
     if (events.length === 0) return [] as FamilyEvent[];
     const matching = events.filter((event) => {
@@ -2732,6 +2782,46 @@ function App() {
               <em className="filter-count">{activeFilterCount}</em>
             )}
           </button>
+          {nearTermEvents.length > 0 && (
+            <section
+              className="home-events browse-near-events"
+              aria-label="Events happening soon"
+            >
+              <div className="home-events-head">
+                <h2>Happening {nearTermLabel}</h2>
+                <p>
+                  {nearTermEvents.length} family program
+                  {nearTermEvents.length === 1 ? "" : "s"}
+                  {ageBand !== "any" ? ` for ${ageBandLabels[ageBand].toLowerCase()}` : ""}
+                  {inferredGeo?.city ? ` near ${inferredGeo.city}` : ""}.
+                  Tap through to confirm times.
+                </p>
+              </div>
+              <ul className="home-events-list">
+                {nearTermEvents.map((event) => (
+                  <li
+                    key={event.id}
+                    className={`home-event-card cat-${event.category.toLowerCase()}`}
+                  >
+                    <a href={event.url} target="_blank" rel="noreferrer">
+                      <span className="event-cat-chip">{event.category}</span>
+                      <strong>{event.title}</strong>
+                      <span className="home-event-meta">
+                        {dayWindowLabel(event.daysOfWeek)} · {event.timeWindow}
+                        {" · "}
+                        {event.ageBands
+                          .map((b) => ageBandLabels[b].split(" ")[0])
+                          .join(", ")}
+                      </span>
+                      <span className="home-event-venue">
+                        {event.venue} · {event.city}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
           <SpotMap spots={filteredSpots} />
           <div className="section-heading">
             <div>
