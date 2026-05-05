@@ -1556,11 +1556,24 @@ function App() {
       transitMinutes: spot.transitMinutes,
     }));
     const usedIds = new Set(plan.stopIds);
-    const sortedAll = rankForVibe(
+    const remainingStops = currentStops.filter((s) => s.id !== stopId);
+    const swapAnchor =
+      planCentroid(remainingStops) ??
+      planCentroid(currentStops) ??
+      (inferredGeo?.lat && inferredGeo?.lon
+        ? { lat: inferredGeo.lat, lon: inferredGeo.lon }
+        : { lat: 37.7749, lon: -122.4194 });
+    const localPool = clusterAround(
       allSpots.filter((s) => !usedIds.has(s.id)),
+      swapAnchor,
+      6,
+      18,
+    );
+    const sortedAll = rankForVibe(
+      localPool,
       plan.vibe,
       ageBand === "any" ? undefined : ageBand,
-    );
+    ) as unknown as Spot[];
     const candidatesPool = sampleCandidates(sortedAll, 12);
     const candidates: StopSummary[] = candidatesPool.map((spot) => ({
       id: spot.id,
@@ -1676,26 +1689,11 @@ function App() {
     setHomeError(null);
     setHomeBusy(true);
 
-    const candidatePool: Spot[] = (() => {
-      if (!inferredGeo?.lat || !inferredGeo?.lon) return allSpots;
-      const here = { lat: inferredGeo.lat, lon: inferredGeo.lon };
-      const ranked = allSpots
-        .filter(
-          (spot) =>
-            typeof spot.lat === "number" && typeof spot.lon === "number",
-        )
-        .map((spot) => ({
-          spot,
-          dist: haversineMiles(here, {
-            lat: spot.lat as number,
-            lon: spot.lon as number,
-          }),
-        }))
-        .sort((a, b) => a.dist - b.dist)
-        .slice(0, 60)
-        .map((entry) => entry.spot);
-      return ranked.length > 0 ? ranked : allSpots;
-    })();
+    const anchor =
+      inferredGeo?.lat && inferredGeo?.lon
+        ? { lat: inferredGeo.lat, lon: inferredGeo.lon }
+        : { lat: 37.7749, lon: -122.4194 };
+    const candidatePool = clusterAround(allSpots, anchor, 8, 24);
 
     if (candidatePool.length === 0) {
       setHomeBusy(false);
@@ -1810,14 +1808,21 @@ function App() {
       });
       return;
     }
-    const source = savedSpots.length > 0 ? savedSpots : filteredSpots;
-    if (source.length === 0) {
+    const baseSource = savedSpots.length > 0 ? savedSpots : filteredSpots;
+    if (baseSource.length === 0) {
       setAiState({
         status: "error",
         error: "Save spots or adjust filters so the AI has candidates.",
       });
       return;
     }
+    const anchor =
+      planCentroid(savedSpots) ??
+      (inferredGeo?.lat && inferredGeo?.lon
+        ? { lat: inferredGeo.lat, lon: inferredGeo.lon }
+        : { lat: 37.7749, lon: -122.4194 });
+    const source =
+      savedSpots.length > 0 ? baseSource : clusterAround(baseSource, anchor, 8, 24);
     const spots: StopSummary[] = sampleCandidates(source, 12).map((spot) => ({
       id: spot.id,
       name: spot.name,
@@ -1913,6 +1918,57 @@ function App() {
       Math.sin(dLat / 2) ** 2 +
       Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
     return 2 * R * Math.asin(Math.sqrt(x));
+  }
+
+  function clusterAround(
+    spots: Spot[],
+    anchor: { lat: number; lon: number },
+    initialRadiusMiles: number,
+    minPoolSize: number,
+  ): Spot[] {
+    const withCoords = spots.filter(
+      (s) =>
+        typeof s.lat === "number" &&
+        typeof s.lon === "number" &&
+        Number.isFinite(s.lat) &&
+        Number.isFinite(s.lon),
+    );
+    const ranked = withCoords
+      .map((spot) => ({
+        spot,
+        dist: haversineMiles(anchor, {
+          lat: spot.lat as number,
+          lon: spot.lon as number,
+        }),
+      }))
+      .sort((a, b) => a.dist - b.dist);
+    let radius = initialRadiusMiles;
+    while (radius <= 60) {
+      const within = ranked.filter((entry) => entry.dist <= radius);
+      if (within.length >= minPoolSize) {
+        return within.map((entry) => entry.spot);
+      }
+      radius += 5;
+    }
+    return ranked.slice(0, Math.max(minPoolSize, 30)).map((entry) => entry.spot);
+  }
+
+  function planCentroid(stops: Spot[]): { lat: number; lon: number } | null {
+    const withCoords = stops.filter(
+      (s) =>
+        typeof s.lat === "number" &&
+        typeof s.lon === "number" &&
+        Number.isFinite(s.lat) &&
+        Number.isFinite(s.lon),
+    );
+    if (withCoords.length === 0) return null;
+    const lat =
+      withCoords.reduce((sum, s) => sum + (s.lat as number), 0) /
+      withCoords.length;
+    const lon =
+      withCoords.reduce((sum, s) => sum + (s.lon as number), 0) /
+      withCoords.length;
+    return { lat, lon };
   }
 
   function distanceFromUser(spot: Spot): number | null {
