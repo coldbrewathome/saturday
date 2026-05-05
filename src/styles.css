@@ -841,6 +841,40 @@ h3 {
   font-family: inherit;
 }
 
+.plan-map {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  height: 260px;
+  margin: 4px 0 18px;
+  overflow: hidden;
+}
+
+.plan-pin {
+  background: transparent;
+  border: 0;
+}
+
+.plan-pin span {
+  align-items: center;
+  background: var(--accent);
+  border: 2px solid #ffffff;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  color: #ffffff;
+  display: flex;
+  font-size: 0.86rem;
+  font-weight: 900;
+  height: 26px;
+  justify-content: center;
+  width: 26px;
+}
+
+@media (max-width: 520px) {
+  .plan-map {
+    height: 220px;
+  }
+}
+
 .leaflet-popup-content {
   font-size: 0.86rem;
   line-height: 1.35;

@@ -688,6 +688,100 @@ function SpotMap({ spots }: { spots: Spot[] }) {
   );
 }
 
+function PlanMap({ stops }: { stops: Spot[] }) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<LeafletMap | null>(null);
+  const layerRef = useRef<LayerGroup | null>(null);
+
+  const plotted = useMemo(
+    () =>
+      stops.filter(
+        (s) =>
+          typeof s.lat === "number" &&
+          typeof s.lon === "number" &&
+          Number.isFinite(s.lat) &&
+          Number.isFinite(s.lon),
+      ),
+    [stops],
+  );
+
+  useEffect(() => {
+    if (!containerRef.current || mapRef.current) return;
+    const map = L.map(containerRef.current, {
+      center: bayAreaMapCenter,
+      zoom: 11,
+      scrollWheelZoom: false,
+    });
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors",
+      maxZoom: 18,
+    }).addTo(map);
+    const layer = L.layerGroup().addTo(map);
+    mapRef.current = map;
+    layerRef.current = layer;
+    return () => {
+      map.remove();
+      mapRef.current = null;
+      layerRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    const layer = layerRef.current;
+    if (!map || !layer) return;
+    layer.clearLayers();
+    if (plotted.length === 0) {
+      map.setView(bayAreaMapCenter, 10);
+      return;
+    }
+    const points: Array<[number, number]> = [];
+    plotted.forEach((spot, idx) => {
+      const lat = spot.lat as number;
+      const lon = spot.lon as number;
+      points.push([lat, lon]);
+      const icon = L.divIcon({
+        className: "plan-pin",
+        html: `<span>${idx + 1}</span>`,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14],
+      });
+      L.marker([lat, lon], { icon })
+        .bindPopup(
+          `<strong>${idx + 1}. ${spot.name}</strong><br/>${spot.neighborhood} · ${spot.category}`,
+        )
+        .addTo(layer);
+    });
+    if (points.length > 1) {
+      L.polyline(points, {
+        color: "#276749",
+        weight: 3,
+        opacity: 0.65,
+        dashArray: "6 8",
+      }).addTo(layer);
+    }
+    if (points.length === 1) {
+      map.setView(points[0], 14);
+    } else {
+      map.fitBounds(L.latLngBounds(points), {
+        maxZoom: 14,
+        padding: [40, 40],
+      });
+    }
+  }, [plotted]);
+
+  if (stops.length === 0) return null;
+
+  return (
+    <div
+      className="plan-map"
+      role="img"
+      aria-label="Map of plan stops in order"
+      ref={containerRef}
+    />
+  );
+}
+
 function readStoredArray<T>(key: string, fallback: T[]): T[] {
   try {
     const raw = window.localStorage.getItem(key);
@@ -2815,6 +2909,10 @@ function App() {
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
+              )}
+
+              {activePlanStops.length > 0 && (
+                <PlanMap stops={activePlanStops} />
               )}
 
               {activePlanStops.length === 0 ? (
