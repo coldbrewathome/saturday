@@ -29,6 +29,8 @@ import {
   createPoll,
   fetchAdminEvents,
   fetchGeo,
+  fetchWeather,
+  type WeatherForecast,
   getUserState,
   googleSignIn,
   logoutSession,
@@ -202,6 +204,15 @@ const categories: Category[] = [
 
 const ageBandOptions = Object.entries(ageBandLabels) as Array<[AgeBand, string]>;
 
+const PREFERENCE_OPTIONS: Array<{ id: string; label: string; hint: string }> = [
+  { id: "stroller-friendly", label: "Stroller-friendly", hint: "Smooth paths, no stairs-only" },
+  { id: "no-crowds", label: "No big crowds", hint: "Avoid busy weekend museums" },
+  { id: "loves-animals", label: "Loves animals", hint: "Bias toward zoos / farms / wildlife" },
+  { id: "indoor-when-rainy", label: "Indoor if rainy", hint: "Hard rule when forecast is wet" },
+  { id: "near-only", label: "Within 30 min", hint: "Skip far stops" },
+  { id: "free-only", label: "Free / cheap only", hint: "Avoid $$$ admission" },
+];
+
 const costs: Cost[] = ["Free", "$", "$$", "$$$", "Unknown"];
 const vibeOptions = Object.entries(vibeLabels) as Array<[PlannerVibe, string]>;
 
@@ -224,6 +235,14 @@ function dayWindowLabel(days: number[]): string {
   if (days.length === 1) return SHORT_DAY[days[0]] ?? "Weekly";
   const sorted = [...days].sort((a, b) => a - b);
   return sorted.map((d) => SHORT_DAY[d] ?? "?").join(" / ");
+}
+
+function weatherTone(label: string): "wet" | "dry" | "mixed" {
+  const wet = ["Rainy", "Drizzly", "Stormy", "Showers", "Snowy"];
+  const dry = ["Clear", "Mostly sunny"];
+  if (wet.includes(label)) return "wet";
+  if (dry.includes(label)) return "dry";
+  return "mixed";
 }
 
 function nextBoaWeekend(now: Date = new Date()): { saturday: Date; sunday: Date } {
@@ -777,6 +796,15 @@ function App() {
   const [remoteSpots, setRemoteSpots] = useState<Spot[]>(starterSpots);
   const [events, setEvents] = useState<FamilyEvent[]>([]);
   const [boaMuseums, setBoaMuseums] = useState<BoaMuseum[]>([]);
+  const [weather, setWeather] = useState<WeatherForecast | null>(null);
+  const [preferences, setPreferences] = useState<string[]>(() => {
+    try {
+      const raw = window.localStorage.getItem("saturday.preferences");
+      return raw ? (JSON.parse(raw) as string[]) : [];
+    } catch {
+      return [];
+    }
+  });
   const [dataMeta, setDataMeta] = useState<{
     generatedAt?: string;
     sourceName: string;
@@ -862,6 +890,25 @@ function App() {
       active = false;
     };
   }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem(
+      "saturday.preferences",
+      JSON.stringify(preferences),
+    );
+  }, [preferences]);
+
+  useEffect(() => {
+    if (!inferredGeo?.lat || !inferredGeo?.lon) return;
+    let active = true;
+    fetchWeather(inferredGeo.lat, inferredGeo.lon).then((forecast) => {
+      if (!active) return;
+      if (forecast) setWeather(forecast);
+    });
+    return () => {
+      active = false;
+    };
+  }, [inferredGeo]);
 
   useEffect(() => {
     let active = true;
@@ -1452,6 +1499,8 @@ function App() {
           replaceStopId: stopId,
           currentPicks,
           candidates,
+          weather,
+          preferences,
         },
         session.token,
       );
@@ -1476,6 +1525,45 @@ function App() {
     } finally {
       setSwapBusyStopId(null);
     }
+  }
+
+  function applyLocalBias(
+    spots: Spot[],
+    forecast: WeatherForecast | null,
+    prefs: string[],
+  ): Spot[] {
+    let working = spots;
+    if (prefs.includes("free-only")) {
+      working = working.filter((s) => s.cost === "Free" || s.cost === "$");
+    }
+    if (prefs.includes("near-only")) {
+      working = working.filter((s) => s.transitMinutes <= 30);
+    }
+    if (prefs.includes("loves-animals")) {
+      working = [...working].sort((a, b) => {
+        const score = (s: Spot) => {
+          const t = `${s.name} ${s.category} ${s.tags.join(" ")}`.toLowerCase();
+          if (/zoo|aquarium|farm|wildlife|animal/.test(t)) return 1;
+          return 0;
+        };
+        return score(b) - score(a);
+      });
+    }
+    const wet =
+      (forecast?.saturday?.precipChance ?? 0) >= 50 ||
+      forecast?.saturday?.label === "Rainy" ||
+      forecast?.saturday?.label === "Stormy" ||
+      forecast?.saturday?.label === "Showers" ||
+      (prefs.includes("indoor-when-rainy") &&
+        (forecast?.saturday?.precipChance ?? 0) >= 30);
+    if (wet) {
+      working = [...working].sort((a, b) => {
+        const indoor = (s: Spot) =>
+          s.category === "Culture" || s.category === "Wellness" ? 1 : 0;
+        return indoor(b) - indoor(a);
+      });
+    }
+    return working;
   }
 
   function sampleCandidates<T>(sorted: T[], size: number, poolSize = 30): T[] {
@@ -1551,6 +1639,8 @@ function App() {
             ageBand: ageBand === "any" ? undefined : ageBand,
             date: today.toISOString().slice(0, 10),
             dayOfWeek: today.toLocaleDateString("en-US", { weekday: "long" }),
+            weather,
+            preferences,
           },
           session.token,
         );
@@ -1586,10 +1676,14 @@ function App() {
     }
 
     // Local deterministic fallback (no auth required)
-    const ranked = rankForVibe(
-      candidatePool,
-      nextVibe,
-      ageBand === "any" ? undefined : ageBand,
+    const ranked = applyLocalBias(
+      rankForVibe(
+        candidatePool,
+        nextVibe,
+        ageBand === "any" ? undefined : ageBand,
+      ) as unknown as Spot[],
+      weather,
+      preferences,
     ).slice(0, 3);
     if (ranked.length === 0) {
       setHomeBusy(false);
@@ -1661,6 +1755,8 @@ function App() {
           ageBand: ageBand === "any" ? undefined : ageBand,
           date: today.toISOString().slice(0, 10),
           dayOfWeek: today.toLocaleDateString("en-US", { weekday: "long" }),
+          weather,
+          preferences,
         },
         session.token,
       );
@@ -1951,6 +2047,53 @@ function App() {
                 {label}
               </button>
             ))}
+          </div>
+        </div>
+
+        {(weather?.saturday || weather?.sunday) && (
+          <div className="home-weather" aria-label="Weekend weather">
+            {weather.saturday && (
+              <span className={`weather-pill weather-${weatherTone(weather.saturday.label)}`}>
+                <strong>Sat</strong> {weather.saturday.label} · {weather.saturday.tempMaxF}°
+                {weather.saturday.precipChance >= 30
+                  ? ` · ${weather.saturday.precipChance}% rain`
+                  : ""}
+              </span>
+            )}
+            {weather.sunday && (
+              <span className={`weather-pill weather-${weatherTone(weather.sunday.label)}`}>
+                <strong>Sun</strong> {weather.sunday.label} · {weather.sunday.tempMaxF}°
+                {weather.sunday.precipChance >= 30
+                  ? ` · ${weather.sunday.precipChance}% rain`
+                  : ""}
+              </span>
+            )}
+          </div>
+        )}
+
+        <div className="home-prefs" role="group" aria-label="Family preferences">
+          <span className="filter-label">Your family fit (optional)</span>
+          <div className="pref-chips">
+            {PREFERENCE_OPTIONS.map((option) => {
+              const active = preferences.includes(option.id);
+              return (
+                <button
+                  key={option.id}
+                  className={active ? "pref-chip active" : "pref-chip"}
+                  title={option.hint}
+                  onClick={() =>
+                    setPreferences((current) =>
+                      active
+                        ? current.filter((p) => p !== option.id)
+                        : [...current, option.id],
+                    )
+                  }
+                >
+                  {active ? "✓ " : ""}
+                  {option.label}
+                </button>
+              );
+            })}
           </div>
         </div>
 

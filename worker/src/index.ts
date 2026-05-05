@@ -501,11 +501,22 @@ async function aiBrief(
     ageBand?: unknown;
     date?: unknown;
     dayOfWeek?: unknown;
+    weather?: unknown;
+    preferences?: unknown;
   };
   const vibe = cleanText(data.vibe, 40) || "balanced";
   const ageBand = cleanText(data.ageBand, 40) || "";
   const date = cleanText(data.date, 12) || "";
   const dayOfWeek = cleanText(data.dayOfWeek, 12) || "";
+  const weather =
+    data.weather && typeof data.weather === "object" ? data.weather : undefined;
+  const preferences = Array.isArray(data.preferences)
+    ? data.preferences
+        .filter((p): p is string => typeof p === "string")
+        .map((p) => cleanText(p, 40))
+        .filter(Boolean)
+        .slice(0, 8)
+    : [];
   const spots = cleanStops(data.spots);
   if (spots.length === 0) {
     return json({ error: "spots required" }, { status: 400 }, cors);
@@ -532,8 +543,10 @@ async function aiBrief(
         ageBand: ageBand || "mixed ages",
         today: date,
         dayOfWeek,
+        weather,
+        preferences,
         task:
-          "Build a kid-friendly weekend plan for the date above: choose 2-4 stops in order, give a brief title and summary aimed at the parent, explain the tradeoffs in rationale (mention age-fit explicitly), list source-data cautions, and return picks with the ordered stop ids. Make the picks feel different from a generic suggestion — use the day-of-week and shuffled candidate ordering to vary your choice. Output JSON only.",
+          "Build a kid-friendly weekend plan for the date above: choose 2-4 stops in order, give a brief title and summary aimed at the parent, explain the tradeoffs in rationale (mention age-fit explicitly, AND mention the weather + family preferences when relevant), list source-data cautions, and return picks with the ordered stop ids. If weather has high precipChance or label is Rainy/Showers/Stormy, lean indoor (Museum, Library, Wellness). Honor each item in 'preferences' as a hard constraint. Make the picks feel different from a generic suggestion — use the day-of-week and shuffled candidate ordering to vary your choice. Output JSON only.",
         spots,
       }),
       max_output_tokens: 700,
@@ -600,6 +613,111 @@ async function aiBrief(
   );
 }
 
+function weatherCodeLabel(code: number): string {
+  if (code === 0) return "Clear";
+  if (code === 1 || code === 2) return "Mostly sunny";
+  if (code === 3) return "Cloudy";
+  if (code === 45 || code === 48) return "Foggy";
+  if (code >= 51 && code <= 57) return "Drizzly";
+  if (code >= 61 && code <= 67) return "Rainy";
+  if (code >= 71 && code <= 86) return "Snowy";
+  if (code >= 80 && code <= 82) return "Showers";
+  if (code >= 95) return "Stormy";
+  return "Mixed";
+}
+
+async function getWeather(
+  request: Request,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  const url = new URL(request.url);
+  const lat = parseFloat(url.searchParams.get("lat") || "");
+  const lon = parseFloat(url.searchParams.get("lon") || "");
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+    return json({ error: "lat,lon required" }, { status: 400 }, cors);
+  }
+  const round = (n: number) => Math.round(n * 100) / 100;
+  const cacheKey = `weather:${round(lat)},${round(lon)}`;
+  const cached = await env.POLLS.get(cacheKey);
+  if (cached) {
+    return new Response(cached, {
+      status: 200,
+      headers: {
+        "content-type": "application/json",
+        "x-cache": "HIT",
+        ...cors,
+      },
+    });
+  }
+
+  const apiUrl =
+    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+    `&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max` +
+    `&timezone=auto&forecast_days=10&temperature_unit=fahrenheit`;
+  const response = await fetch(apiUrl, {
+    headers: { "User-Agent": "weekend-with-kids/0.1" },
+  });
+  if (!response.ok) {
+    return json({ error: "weather lookup failed" }, { status: 502 }, cors);
+  }
+  const data = (await response.json()) as {
+    daily?: {
+      time?: string[];
+      weathercode?: number[];
+      temperature_2m_max?: number[];
+      temperature_2m_min?: number[];
+      precipitation_probability_max?: number[];
+    };
+  };
+  const daily = data.daily;
+  if (!daily || !Array.isArray(daily.time)) {
+    return json({ error: "weather format unexpected" }, { status: 502 }, cors);
+  }
+
+  type Day = {
+    date: string;
+    weatherCode: number;
+    label: string;
+    tempMaxF: number;
+    tempMinF: number;
+    precipChance: number;
+  };
+  let saturday: Day | null = null;
+  let sunday: Day | null = null;
+  for (let i = 0; i < daily.time.length; i += 1) {
+    const date = new Date(`${daily.time[i]}T12:00:00`);
+    const dow = date.getDay();
+    const code = daily.weathercode?.[i] ?? -1;
+    const entry: Day = {
+      date: daily.time[i],
+      weatherCode: code,
+      label: weatherCodeLabel(code),
+      tempMaxF: Math.round(daily.temperature_2m_max?.[i] ?? 0),
+      tempMinF: Math.round(daily.temperature_2m_min?.[i] ?? 0),
+      precipChance: daily.precipitation_probability_max?.[i] ?? 0,
+    };
+    if (dow === 6 && !saturday) saturday = entry;
+    if (dow === 0 && !sunday) sunday = entry;
+    if (saturday && sunday) break;
+  }
+
+  const body = JSON.stringify({
+    saturday,
+    sunday,
+    fetchedAt: new Date().toISOString(),
+  });
+  await env.POLLS.put(cacheKey, body, { expirationTtl: 60 * 60 });
+  return new Response(body, {
+    status: 200,
+    headers: {
+      "content-type": "application/json",
+      "x-cache": "MISS",
+      ...cors,
+    },
+  });
+}
+
 async function aiSwap(
   request: Request,
   env: Env,
@@ -635,12 +753,23 @@ async function aiSwap(
     currentPicks?: unknown;
     replaceStopId?: unknown;
     candidates?: unknown;
+    weather?: unknown;
+    preferences?: unknown;
   };
   const vibe = cleanText(data.vibe, 40) || "balanced";
   const ageBand = cleanText(data.ageBand, 40) || "";
   const date = cleanText(data.date, 12) || "";
   const dayOfWeek = cleanText(data.dayOfWeek, 12) || "";
   const replaceStopId = cleanText(data.replaceStopId, 120);
+  const weather =
+    data.weather && typeof data.weather === "object" ? data.weather : undefined;
+  const preferences = Array.isArray(data.preferences)
+    ? data.preferences
+        .filter((p): p is string => typeof p === "string")
+        .map((p) => cleanText(p, 40))
+        .filter(Boolean)
+        .slice(0, 8)
+    : [];
   if (!replaceStopId) {
     return json({ error: "replaceStopId required" }, { status: 400 }, cors);
   }
@@ -671,11 +800,13 @@ async function aiSwap(
         ageBand: ageBand || "mixed ages",
         today: date,
         dayOfWeek,
+        weather,
+        preferences,
         currentPicks,
         replaceStopId,
         candidates,
         task:
-          "Pick one candidate to replace the stop with id=replaceStopId in currentPicks. Reject any candidate whose id appears in currentPicks. Output JSON {pick: {id, reason}} only.",
+          "Pick one candidate to replace the stop with id=replaceStopId in currentPicks. Reject any candidate whose id appears in currentPicks. Honor 'preferences' as constraints. If weather is rainy/stormy, lean indoor. Output JSON {pick: {id, reason}} only.",
       }),
       max_output_tokens: 300,
     }),
@@ -853,6 +984,10 @@ export default {
 
     if (path === "/ai/swap" && request.method === "POST") {
       return aiSwap(request, env, cors);
+    }
+
+    if (path === "/weather" && request.method === "GET") {
+      return getWeather(request, env, cors);
     }
 
     if (path === "/auth/google" && request.method === "POST") {

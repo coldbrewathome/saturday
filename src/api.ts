@@ -97,6 +97,8 @@ export async function createAiBrief(
     ageBand?: string;
     date?: string;
     dayOfWeek?: string;
+    weather?: WeatherForecast | null;
+    preferences?: string[];
   },
   sessionToken: string,
 ): Promise<AiBriefResponse> {
@@ -119,6 +121,37 @@ export async function createAiBrief(
     throw new Error(`AI brief failed (${response.status})${detail}`);
   }
   return response.json();
+}
+
+export type WeatherDay = {
+  date: string;
+  weatherCode: number;
+  label: string;
+  tempMaxF: number;
+  tempMinF: number;
+  precipChance: number;
+};
+
+export type WeatherForecast = {
+  saturday: WeatherDay | null;
+  sunday: WeatherDay | null;
+  fetchedAt: string;
+};
+
+export async function fetchWeather(
+  lat: number,
+  lon: number,
+): Promise<WeatherForecast | null> {
+  if (!API_BASE) return null;
+  try {
+    const response = await fetch(
+      `${API_BASE}/weather?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}`,
+    );
+    if (!response.ok) return null;
+    return (await response.json()) as WeatherForecast;
+  } catch {
+    return null;
+  }
 }
 
 export type GeoInfo = {
@@ -168,6 +201,8 @@ export async function createAiSwap(
     replaceStopId: string;
     currentPicks: StopSummary[];
     candidates: StopSummary[];
+    weather?: WeatherForecast | null;
+    preferences?: string[];
   },
   sessionToken: string,
 ): Promise<{ pick: { id: string; reason: string }; model: string }> {
