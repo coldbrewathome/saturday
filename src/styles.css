@@ -718,7 +718,8 @@ h3 {
   justify-content: center;
   padding: 20px;
   position: fixed;
-  z-index: 20;
+  /* Leaflet panes default to 200-800; we have to clear that ceiling. */
+  z-index: 1000;
 }
 
 .spot-form {

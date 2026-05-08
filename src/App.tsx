@@ -1500,22 +1500,36 @@ function App() {
   const targetDateObj = useMemo(() => parseIsoDate(targetDate), [targetDate]);
   const targetDayOfWeek = targetDateObj.getDay();
 
+  const daysThroughSunday = useMemo(() => {
+    // Days-of-week from today through the coming Sunday (inclusive).
+    // Sunday → [0]; Wednesday → [3,4,5,6,0]; Saturday → [6,0].
+    const start = new Date().getDay();
+    const out: number[] = [];
+    let dow = start;
+    for (let i = 0; i < 7; i += 1) {
+      out.push(dow);
+      if (dow === 0) break;
+      dow = (dow + 1) % 7;
+    }
+    return out;
+  }, []);
+
   const nearTermEvents = useMemo(() => {
     if (events.length === 0) return [] as FamilyEvent[];
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-    const todayDow = today.getDay();
-    const tomorrowDow = tomorrow.getDay();
+    const inWindow = new Set(daysThroughSunday);
     const matching = events.filter((event) => {
-      const hits =
-        event.daysOfWeek.includes(todayDow) ||
-        event.daysOfWeek.includes(tomorrowDow);
+      const hits = event.daysOfWeek.some((d) => inWindow.has(d));
       if (!hits) return false;
       if (ageBand !== "any" && !event.ageBands.includes(ageBand)) return false;
       return true;
     });
-    if (!inferredGeo?.lat || !inferredGeo?.lon) return matching.slice(0, 6);
+    const weekendishFirst = (event: FamilyEvent) =>
+      event.daysOfWeek.some((d) => d === 0 || d === 6) ? 0 : 1;
+    if (!inferredGeo?.lat || !inferredGeo?.lon) {
+      return [...matching]
+        .sort((a, b) => weekendishFirst(a) - weekendishFirst(b))
+        .slice(0, 8);
+    }
     const here = { lat: inferredGeo.lat, lon: inferredGeo.lon };
     const distOf = (event: FamilyEvent) => {
       const toRad = (deg: number) => (deg * Math.PI) / 180;
@@ -1530,25 +1544,20 @@ function App() {
       return 2 * R * Math.asin(Math.sqrt(x));
     };
     return [...matching]
-      .sort((a, b) => distOf(a) - distOf(b))
-      .slice(0, 6);
-  }, [events, ageBand, inferredGeo]);
+      .sort((a, b) => {
+        const wd = weekendishFirst(a) - weekendishFirst(b);
+        if (wd !== 0) return wd;
+        return distOf(a) - distOf(b);
+      })
+      .slice(0, 8);
+  }, [events, ageBand, inferredGeo, daysThroughSunday]);
 
   const nearTermLabel = useMemo(() => {
-    const today = new Date();
-    const todayDow = today.getDay();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-    const tomorrowDow = tomorrow.getDay();
-    const todayHits = nearTermEvents.some((e) => e.daysOfWeek.includes(todayDow));
-    const tomorrowHits = nearTermEvents.some((e) =>
-      e.daysOfWeek.includes(tomorrowDow),
-    );
-    if (todayHits && tomorrowHits) return "today + tomorrow";
-    if (todayHits) return "today";
-    if (tomorrowHits) return "tomorrow";
-    return "soon";
-  }, [nearTermEvents]);
+    const todayDow = new Date().getDay();
+    if (todayDow === 0) return "today (Sunday)";
+    if (todayDow === 6) return "this weekend";
+    return "this weekend";
+  }, []);
 
   const weekendEvents = useMemo(() => {
     if (events.length === 0) return [] as FamilyEvent[];
