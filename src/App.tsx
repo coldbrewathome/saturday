@@ -107,6 +107,8 @@ type Spot = {
   friendScore?: number;
   wikidataId?: string | null;
   wikipedia?: string | null;
+  googleRating?: number;
+  googleRatingCount?: number;
 };
 
 type FamilyEvent = {
@@ -388,6 +390,7 @@ function eventToPlanningSpot(event: FamilyEvent, transitMinutes: number): Spot {
 }
 
 const DATA_URL = `${import.meta.env.BASE_URL}data/bay-area-spots.json`;
+const ENRICHMENT_URL = `${import.meta.env.BASE_URL}data/bay-area-enrichment.json`;
 const EVENTS_URL = `${import.meta.env.BASE_URL}data/events.json`;
 const BOA_MUSEUMS_URL = `${import.meta.env.BASE_URL}data/boa-museums.json`;
 const CURATED_SPOTS_URL = `${import.meta.env.BASE_URL}data/curated-spots.json`;
@@ -470,6 +473,14 @@ const DAY_KEYS: Array<keyof WeekSchedule> = [
   "sat",
 ];
 const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+function formatRatingCount(count: number): string {
+  if (count >= 1000) {
+    const k = count / 1000;
+    return `${k >= 10 ? Math.round(k) : k.toFixed(1)}k`;
+  }
+  return String(count);
+}
 
 function formatMinutes(mins: number): string {
   const total = mins % 1440;
@@ -1017,15 +1028,25 @@ function App() {
   useEffect(() => {
     let active = true;
 
-    fetch(DATA_URL)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Data request failed: ${response.status}`);
-        }
+    const datasetPromise = fetch(DATA_URL).then((response) => {
+      if (!response.ok) {
+        throw new Error(`Data request failed: ${response.status}`);
+      }
+      return response.json() as Promise<SpotDataset>;
+    });
+    // Sidecar is optional; produced by `npm run match:places:osm`.
+    const enrichmentPromise = fetch(ENRICHMENT_URL)
+      .then((response) =>
+        response.ok
+          ? (response.json() as Promise<{
+              entries?: Record<string, Partial<Spot>>;
+            }>)
+          : null,
+      )
+      .catch(() => null);
 
-        return response.json() as Promise<SpotDataset>;
-      })
-      .then((dataset) => {
+    Promise.all([datasetPromise, enrichmentPromise])
+      .then(([dataset, enrichment]) => {
         if (!active) {
           return;
         }
@@ -1034,7 +1055,12 @@ function App() {
           throw new Error("Data file does not contain spots.");
         }
 
-        setRemoteSpots(dataset.spots);
+        const enrichmentEntries = enrichment?.entries ?? {};
+        const merged = dataset.spots.map((spot) => {
+          const extra = enrichmentEntries[spot.id];
+          return extra ? { ...spot, ...extra } : spot;
+        });
+        setRemoteSpots(merged);
         setDataMeta({
           generatedAt: dataset.generatedAt,
           sourceName: dataset.source?.name || "Generated Bay Area data",
@@ -3000,6 +3026,21 @@ function App() {
                         <Users aria-hidden="true" />
                         {spot.groupSize}
                       </span>
+                      {typeof spot.googleRating === "number" && (
+                        <span
+                          className="rating-chip"
+                          title={
+                            spot.googleRatingCount
+                              ? `Google rating · ${spot.googleRatingCount.toLocaleString()} reviews`
+                              : "Google rating"
+                          }
+                        >
+                          ★ {spot.googleRating.toFixed(1)}
+                          {spot.googleRatingCount
+                            ? ` · ${formatRatingCount(spot.googleRatingCount)}`
+                            : ""}
+                        </span>
+                      )}
                       <span>{spot.cost}</span>
                       <span>{spot.timeWindow}</span>
                       <span>{spot.planning}</span>
@@ -3326,6 +3367,14 @@ function App() {
                         <span>
                           {spot.neighborhood} · {spot.category} · {spot.cost} ·{" "}
                           {spot.transitMinutes} min
+                          {typeof spot.googleRating === "number" && (
+                            <>
+                              {" "}· ★ {spot.googleRating.toFixed(1)}
+                              {spot.googleRatingCount
+                                ? ` (${formatRatingCount(spot.googleRatingCount)})`
+                                : ""}
+                            </>
+                          )}
                         </span>
                         {aiReason && <em className="plan-stop-reason">{aiReason}</em>}
                       </div>

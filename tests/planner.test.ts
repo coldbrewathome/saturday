@@ -90,6 +90,39 @@ describe("planner scoring", () => {
     );
   });
 
+  it("lifts highly-rated venues above mediocre ones", () => {
+    const great = {
+      ...baseSpot,
+      id: "great",
+      googleRating: 4.7,
+      googleRatingCount: 800,
+    };
+    const meh = {
+      ...baseSpot,
+      id: "meh",
+      googleRating: 3.4,
+      googleRatingCount: 800,
+    };
+
+    expect(scoreSpotForVibe(great, "balanced")).toBeGreaterThan(
+      scoreSpotForVibe(meh, "balanced"),
+    );
+  });
+
+  it("ignores ratings without enough reviews to be stable", () => {
+    const noisySingleReview = {
+      ...baseSpot,
+      id: "noisy",
+      googleRating: 5.0,
+      googleRatingCount: 3,
+    };
+    const baseline = { ...baseSpot, id: "baseline" };
+
+    expect(scoreSpotForVibe(noisySingleReview, "balanced")).toBe(
+      scoreSpotForVibe(baseline, "balanced"),
+    );
+  });
+
   it("penalizes long travel for low effort plans", () => {
     const close = { ...baseSpot, transitMinutes: 8 };
     const far = { ...baseSpot, id: "far", transitMinutes: 65 };

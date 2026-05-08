@@ -25,6 +25,8 @@ export type PlannerSpot = {
   kidsFriendly?: boolean | null;
   dataSource?: string;
   tags?: string[];
+  googleRating?: number;
+  googleRatingCount?: number;
 };
 
 export type PlannerBrief = {
@@ -74,6 +76,20 @@ export function scoreSpotForVibe(
     spot.tags?.some((tag) => tag.toLowerCase() === "event")
   ) {
     score += 8;
+  }
+
+  // Google rating signal — only trust ratings with enough reviews to be stable.
+  // 4.5+ is a meaningful boost, sub-3.5 actively penalizes.
+  if (
+    typeof spot.googleRating === "number" &&
+    (spot.googleRatingCount ?? 0) >= 25
+  ) {
+    const r = spot.googleRating;
+    if (r >= 4.7) score += 12;
+    else if (r >= 4.5) score += 8;
+    else if (r >= 4.2) score += 4;
+    else if (r < 3.5) score -= 10;
+    else if (r < 3.8) score -= 4;
   }
 
   // Passive retail is useful for a specific culture/tween browse, but it should
