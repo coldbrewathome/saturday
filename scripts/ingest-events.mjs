@@ -270,7 +270,20 @@ async function main() {
 
   for (const source of registry.sources || []) {
     if (source.enabled === false && source.sourceType !== "ticketmaster") {
-      sourceReports.push({ id: source.id, name: source.name, status: "disabled" });
+      sourceReports.push({
+        id: source.id,
+        name: source.name,
+        url: source.url,
+        sourceType: source.sourceType || "html",
+        city: source.city,
+        category: source.category,
+        status: "disabled",
+        reason: source.disabledReason || source.notes,
+        liveEvents: 0,
+        fallbackEvents: 0,
+        eventCount: 0,
+        fetches: [],
+      });
       continue;
     }
     const report = {
@@ -286,6 +299,9 @@ async function main() {
       eventCount: 0,
       fetches: [],
     };
+    if (source.disabledReason || source.notes) {
+      report.reason = source.disabledReason || source.notes;
+    }
     let liveEvents = [];
 
     if (!offline && source.enabled !== false) {

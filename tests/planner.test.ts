@@ -40,6 +40,56 @@ describe("planner scoring", () => {
     );
   });
 
+  it("keeps passive shopping from becoming default school-age filler", () => {
+    const comicsShop = {
+      ...baseSpot,
+      id: "comics",
+      category: "Shopping",
+      cost: "Unknown",
+      mood: "Browse together",
+      planning: "Walk-in",
+      friendScore: 71,
+    };
+    const libraryProgram = {
+      ...baseSpot,
+      id: "library-program",
+      category: "Culture",
+      cost: "Free",
+      mood: "Scheduled family program",
+      friendScore: 76,
+    };
+
+    expect(scoreSpotForVibe(libraryProgram, "balanced", "school-age")).toBeGreaterThan(
+      scoreSpotForVibe(comicsShop, "balanced", "school-age"),
+    );
+  });
+
+  it("lifts scheduled family events above generic filler candidates", () => {
+    const scheduledEvent = {
+      ...baseSpot,
+      id: "event",
+      category: "Culture",
+      cost: "Free",
+      planning: "Sat, May 9, 10:30 AM. Confirm details with the library.",
+      dataSource: "family-event",
+      tags: ["event", "scheduled", "family", "library", "school-age"],
+      friendScore: 78,
+      kidsFriendly: true,
+    };
+    const genericShop = {
+      ...baseSpot,
+      id: "generic-shop",
+      category: "Shopping",
+      cost: "Unknown",
+      friendScore: 78,
+      kidsFriendly: true,
+    };
+
+    expect(scoreSpotForVibe(scheduledEvent, "balanced", "school-age")).toBeGreaterThan(
+      scoreSpotForVibe(genericShop, "balanced", "school-age"),
+    );
+  });
+
   it("penalizes long travel for low effort plans", () => {
     const close = { ...baseSpot, transitMinutes: 8 };
     const far = { ...baseSpot, id: "far", transitMinutes: 65 };

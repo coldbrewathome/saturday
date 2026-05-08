@@ -248,6 +248,83 @@
       ]
     },
     {
+      "id": "sccl-campbell",
+      "name": "Santa Clara County Library - Campbell",
+      "url": "https://sccl.bibliocommons.com/v2/events?locations=CA",
+      "city": "Campbell",
+      "category": "Library",
+      "sourceType": "biblioevents",
+      "trust": "official",
+      "lat": 37.2874,
+      "lon": -121.949
+    },
+    {
+      "id": "sccl-cupertino",
+      "name": "Santa Clara County Library - Cupertino",
+      "url": "https://sccl.bibliocommons.com/v2/events?locations=CU",
+      "city": "Cupertino",
+      "category": "Library",
+      "sourceType": "biblioevents",
+      "trust": "official",
+      "lat": 37.3181,
+      "lon": -122.0286
+    },
+    {
+      "id": "sccl-gilroy",
+      "name": "Santa Clara County Library - Gilroy",
+      "url": "https://sccl.bibliocommons.com/v2/events?locations=GI",
+      "city": "Gilroy",
+      "category": "Library",
+      "sourceType": "biblioevents",
+      "trust": "official",
+      "lat": 37.0046,
+      "lon": -121.5663
+    },
+    {
+      "id": "sccl-los-altos",
+      "name": "Santa Clara County Library - Los Altos",
+      "url": "https://sccl.bibliocommons.com/v2/events?locations=LA",
+      "city": "Los Altos",
+      "category": "Library",
+      "sourceType": "biblioevents",
+      "trust": "official",
+      "lat": 37.3852,
+      "lon": -122.1141
+    },
+    {
+      "id": "sccl-milpitas",
+      "name": "Santa Clara County Library - Milpitas",
+      "url": "https://sccl.bibliocommons.com/v2/events?locations=MI",
+      "city": "Milpitas",
+      "category": "Library",
+      "sourceType": "biblioevents",
+      "trust": "official",
+      "lat": 37.4321,
+      "lon": -121.9078
+    },
+    {
+      "id": "sccl-morgan-hill",
+      "name": "Santa Clara County Library - Morgan Hill",
+      "url": "https://sccl.bibliocommons.com/v2/events?locations=MH",
+      "city": "Morgan Hill",
+      "category": "Library",
+      "sourceType": "biblioevents",
+      "trust": "official",
+      "lat": 37.1305,
+      "lon": -121.6544
+    },
+    {
+      "id": "sccl-saratoga",
+      "name": "Santa Clara County Library - Saratoga",
+      "url": "https://sccl.bibliocommons.com/v2/events?locations=SA",
+      "city": "Saratoga",
+      "category": "Library",
+      "sourceType": "biblioevents",
+      "trust": "official",
+      "lat": 37.2675,
+      "lon": -122.0326
+    },
+    {
       "id": "marin-library",
       "name": "Marin County Free Library",
       "url": "https://marinlibrary.bibliocommons.com/v2/events?q=storytime",
@@ -522,6 +599,29 @@
       "sourceType": "html",
       "trust": "official",
       "fallbackEventIds": ["hidden-villa-saturdays"]
+    },
+    {
+      "id": "midpen-open-space",
+      "name": "Midpeninsula Regional Open Space District",
+      "url": "https://www.openspace.org/get-involved/events-activities",
+      "urls": [
+        "https://www.openspace.org/get-involved/events-activities",
+        "https://www.openspace.org/get-involved/events-activities?page=1",
+        "https://www.openspace.org/get-involved/events-activities?page=2",
+        "https://www.openspace.org/get-involved/events-activities?page=3",
+        "https://www.openspace.org/get-involved/events-activities?page=4",
+        "https://www.openspace.org/get-involved/events-activities?page=5",
+        "https://www.openspace.org/get-involved/events-activities?page=6"
+      ],
+      "city": "Los Altos",
+      "category": "Park",
+      "sourceType": "midpenTable",
+      "trust": "official",
+      "lat": 37.3327,
+      "lon": -122.0867,
+      "defaultAudienceText": "family kids school-age tween nature guided hike",
+      "defaultDurationMinutes": 120,
+      "maxFamilyMiles": 4.5
     },
     {
       "id": "sf-cherry-blossom",
@@ -1040,6 +1140,39 @@
           "requiredText": ["September 12-13, 2026", "11 a.m. to 7 p.m.", "10 a.m. to 6 p.m."]
         }
       ]
+    },
+    {
+      "id": "sunnyvale-library-calendar",
+      "name": "Sunnyvale Public Library / City Events",
+      "url": "https://www.library.sunnyvale.ca.gov/events/kids-events",
+      "city": "Sunnyvale",
+      "category": "Library",
+      "sourceType": "html",
+      "trust": "official",
+      "enabled": false,
+      "disabledReason": "Official Sunnyvale library/city calendar pages and event detail/ICS endpoints return Akamai 403 Access Denied to automated fetches in this environment."
+    },
+    {
+      "id": "santa-clara-city-library",
+      "name": "Santa Clara City Library",
+      "url": "https://www.sclibrary.org/calendar/events",
+      "city": "Santa Clara",
+      "category": "Library",
+      "sourceType": "html",
+      "trust": "official",
+      "enabled": false,
+      "disabledReason": "Official Santa Clara City Library calendar returns Akamai/CivicPlus 403 Access Denied to automated fetches in this environment."
+    },
+    {
+      "id": "santa-clara-county-parks",
+      "name": "Santa Clara County Parks",
+      "url": "https://parks.santaclaracounty.gov/events",
+      "city": "San Jose",
+      "category": "Park",
+      "sourceType": "html",
+      "trust": "official",
+      "enabled": false,
+      "disabledReason": "Official Santa Clara County Parks event page returns a Cloudflare challenge/block page to automated fetches in this environment."
     },
     {
       "id": "ticketmaster-bay-area-family",

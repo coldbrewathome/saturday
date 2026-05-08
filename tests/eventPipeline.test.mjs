@@ -10,6 +10,7 @@ import {
   extractIcsEvents,
   extractLibCalEvents,
   extractLibraryCalendarEvents,
+  extractMidpenTableEvents,
   extractJsonLdEvents,
   extractOfficialTextEvents,
   inferAgeBands,
@@ -248,6 +249,52 @@ test("extractEventListEvents reads official festival list pages", () => {
   assert.equal(events[0].title, "Manilatown Ancestral Ensemble (Kids' Show)");
   assert.equal(events[0].venue, "Children's Garden, Yerba Buena Gardens");
   assert.equal(events[0].extractionMethod, "event-list");
+});
+
+test("extractMidpenTableEvents reads guided open-space rows and filters unsuitable rows", () => {
+  const html = `
+    <table>
+      <tr>
+        <td class="views-field views-field-type-guided-activity"><div>Guided Activity</div></td>
+        <td class="views-field views-field-title"><a href="/events/guided-activities/butterflies-picchetti-ranch">Butterflies of Picchetti Ranch</a></td>
+        <td class="views-field views-field-aggregated-dates"><div class="activity-search-date">Saturday, May 09, 2026</div><div class="activity-search-time">10:00 am</div></td>
+        <td class="views-field views-field-field-activity-type"><div class="icon-link__name sr-only">Hike</div></td>
+        <td class="views-field views-field-field-preserve-term-1">Picchetti Ranch Preserve</td>
+        <td class="views-field views-field-field-aprox-total-miles">3</td>
+      </tr>
+      <tr>
+        <td class="views-field views-field-type-volunteer-project"><div>Volunteer Project</div></td>
+        <td class="views-field views-field-title"><a href="/events/volunteer-projects/habitat-restoration">Habitat Restoration</a></td>
+        <td class="views-field views-field-aggregated-dates"><div class="activity-search-date">Saturday, May 09, 2026</div><div class="activity-search-time">9:30 a.m.</div></td>
+        <td class="views-field views-field-field-preserve-term-1">Rancho San Antonio Preserve</td>
+      </tr>
+      <tr>
+        <td class="views-field views-field-type-guided-activity"><div>Guided Activity</div></td>
+        <td class="views-field views-field-title"><a href="/events/guided-activities/long-hike">Long Hike</a></td>
+        <td class="views-field views-field-aggregated-dates"><div class="activity-search-date">Sunday, May 10, 2026</div><div class="activity-search-time">9:00 a.m.</div></td>
+        <td class="views-field views-field-field-activity-type"><div class="icon-link__name sr-only">Hike</div></td>
+        <td class="views-field views-field-field-preserve-term-1">Russian Ridge Preserve</td>
+        <td class="views-field views-field-field-aprox-total-miles">7</td>
+      </tr>
+    </table>
+  `;
+
+  const events = extractMidpenTableEvents(html, {
+    id: "midpen-open-space",
+    name: "Midpeninsula Regional Open Space District",
+    url: "https://www.openspace.org/get-involved/events-activities",
+    city: "Los Altos",
+    category: "Park",
+    sourceType: "midpenTable",
+    defaultAudienceText: "family kids school-age tween nature guided hike",
+    maxFamilyMiles: 4.5,
+  }, { now: new Date("2026-05-05T12:00:00Z") });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "Butterflies of Picchetti Ranch");
+  assert.equal(events[0].venue, "Picchetti Ranch Preserve");
+  assert.equal(events[0].extractionMethod, "midpen-table");
+  assert.equal(events[0].startDateTime, "2026-05-09T17:00:00.000Z");
 });
 
 test("extractOfficialTextEvents verifies configured festival events from page text", () => {

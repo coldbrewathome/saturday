@@ -863,6 +863,108 @@ export function extractEventListEvents(html, source = {}, options = {}) {
   return dedupeEvents(events);
 }
 
+function normalizeMeridiemText(value) {
+  return stripUnsafeText(value, 80)
+    .replace(/\ba\.m\./gi, "am")
+    .replace(/\bp\.m\./gi, "pm")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function cellTextByClass(row, className, maxLength = 180) {
+  const pattern = new RegExp(
+    `<td[^>]+class=["'][^"']*${className}[^"']*["'][^>]*>([\\s\\S]*?)<\\/td>`,
+    "i",
+  );
+  return stripUnsafeText(row.match(pattern)?.[1] || "", maxLength);
+}
+
+function midpenRowActivity(row) {
+  return (
+    stripUnsafeText(
+      row.match(/views-field-type[\s\S]*?<div[^>]*>([\s\S]*?)<\/div>/i)?.[1] || "",
+      80,
+    ) || cellTextByClass(row, "views-field-type", 80)
+  );
+}
+
+export function extractMidpenTableEvents(html, source = {}, options = {}) {
+  const rows = html.match(/<tr\b[\s\S]*?<\/tr>/gi) || [];
+  const now = options.now || new Date();
+  const maxMiles = Number(source.maxFamilyMiles || 4.5);
+  const durationMinutes = Number(source.defaultDurationMinutes || 120);
+  const events = [];
+
+  for (const row of rows) {
+    const activity = midpenRowActivity(row);
+    if (!/guided activity/i.test(activity)) continue;
+
+    const titleMatch = row.match(
+      /views-field-title[\s\S]*?<a[^>]+href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/i,
+    );
+    const title = cleanEventTitle(titleMatch?.[2] || "");
+    if (!title || isGenericPageTitle(title)) continue;
+
+    const dateText = stripUnsafeText(
+      row.match(/class=["']activity-search-date["'][^>]*>([\s\S]*?)<\/div>/i)?.[1] || "",
+      100,
+    );
+    const timeText = normalizeMeridiemText(
+      row.match(/class=["']activity-search-time["'][^>]*>([\s\S]*?)<\/div>/i)?.[1] || "",
+    );
+    const startDateTime = parseLooseDate(`${dateText} at ${timeText}`, now);
+    if (!startDateTime) continue;
+
+    const preserve = cellTextByClass(row, "views-field-field-preserve-term-1", 120) || source.name;
+    const milesText = cellTextByClass(row, "views-field-field-aprox-total-miles", 40);
+    const miles = Number.parseFloat(milesText);
+    if (Number.isFinite(miles) && miles > maxMiles) continue;
+
+    const subType =
+      stripUnsafeText(row.match(/icon-link__name[^>]*>([\s\S]*?)<\/div>/i)?.[1] || "", 80) ||
+      stripUnsafeText(row.match(/alt=["']([^"']+)["']/i)?.[1] || "", 80) ||
+      "Outdoor activity";
+    const signalText = [
+      title,
+      activity,
+      subType,
+      preserve,
+      sourceAudienceText(source),
+    ].join(" ");
+    if (!isEventish(signalText) || !hasFamilySignal(signalText) || hasAdultOnlySignal(signalText)) {
+      continue;
+    }
+    const ageBands = inferAgeBands(signalText);
+    if (ageBands.length === 0) continue;
+
+    const distanceNote = Number.isFinite(miles) ? ` ${miles} mile route.` : "";
+    const event = normalizeRawEvent({
+      title,
+      description:
+        `Guided Midpen open-space ${subType.toLowerCase()} at ${preserve}.${distanceNote} Confirm distance, registration, and age fit on the official listing.`,
+      venue: preserve,
+      city: source.city,
+      neighborhood: preserve,
+      lat: source.lat,
+      lon: source.lon,
+      category: source.category || "Park",
+      startDateTime,
+      endDateTime: addMinutesToLocalIso(startDateTime, durationMinutes),
+      ageBands,
+      cost: source.cost || inferCost(signalText),
+      url: sanitizeUrl(titleMatch?.[1] || source.url, source.url) || source.url,
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.url,
+      extractionMethod: "midpen-table",
+      verified: true,
+    }, source);
+    if (event) events.push(event);
+  }
+
+  return dedupeEvents(events);
+}
+
 function searchablePageText(html) {
   return decodeHtmlEntities(html)
     .replace(/<[^>]*>/g, " ")
@@ -1108,6 +1210,9 @@ export function extractEventsFromPayload(payload, source = {}, options = {}) {
   }
   if (source.sourceType === "officialTextEvents") {
     return extractOfficialTextEvents(text, source, options);
+  }
+  if (source.sourceType === "midpenTable") {
+    return extractMidpenTableEvents(text, source, options);
   }
   if (source.sourceType === "ticketmaster") {
     return extractTicketmasterEvents(payload.json, source);
@@ -1392,6 +1497,7 @@ function scoreEvent(event) {
   if (event.extractionMethod === "event-list") score += 7;
   if (event.extractionMethod === "official-text-event") score += 7;
   if (event.extractionMethod === "official-recurring-event") score += 7;
+  if (event.extractionMethod === "midpen-table") score += 7;
   if (event.extractionMethod === "ticketmaster") score += 7;
   if (event.sourceMode === "recurring-template") score -= 2;
   if (event.verified) score += 3;

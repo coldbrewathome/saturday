@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-05T06:00:31.868Z",
+  "generatedAt": "2026-05-08T02:30:18.846Z",
   "registryPath": "data/event-sources.json",
   "outputPath": "public/data/events.json",
-  "eventCount": 432,
-  "sourceCount": 44,
-  "liveEventCount": 308,
+  "eventCount": 529,
+  "sourceCount": 55,
+  "liveEventCount": 405,
   "fallbackEventCount": 124,
   "errors": [],
   "sources": [
@@ -40,9 +40,9 @@
       "city": "Oakland",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 19,
+      "liveEvents": 18,
       "fallbackEvents": 0,
-      "eventCount": 19,
+      "eventCount": 18,
       "fetches": [
         {
           "url": "https://oaklandlibrary.bibliocommons.com/v2/events?audiences=60af9e2d8509742400e6e8ed",
@@ -108,9 +108,9 @@
       "city": "San Mateo",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 54,
+      "liveEvents": 50,
       "fallbackEvents": 0,
-      "eventCount": 54,
+      "eventCount": 50,
       "fetches": [
         {
           "url": "https://sanmateopublic.libcal.com/calendar/adults-teens?cid=16089&t=g&d=0000-00-00&cal=16089&inc=0",
@@ -121,7 +121,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 139
+      "rejectedLiveEvents": 140
     },
     {
       "id": "redwood-city-library",
@@ -177,9 +177,9 @@
       "city": "Mountain View",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 59,
+      "liveEvents": 57,
       "fallbackEvents": 0,
-      "eventCount": 59,
+      "eventCount": 57,
       "fetches": [
         {
           "url": "https://mountainview.libcal.com/calendar?cid=-1&t=g&d=0000-00-00&cal=-1&inc=0",
@@ -200,12 +200,173 @@
       "city": "San Jose",
       "category": "Library",
       "status": "ok",
+      "liveEvents": 9,
+      "fallbackEvents": 0,
+      "eventCount": 9,
+      "fetches": [
+        {
+          "url": "https://sjpl.bibliocommons.com/v2/events?q=family",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "sccl-campbell",
+      "name": "Santa Clara County Library - Campbell",
+      "url": "https://sccl.bibliocommons.com/v2/events?locations=CA",
+      "sourceType": "biblioevents",
+      "city": "Campbell",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 6,
+      "fallbackEvents": 0,
+      "eventCount": 6,
+      "fetches": [
+        {
+          "url": "https://sccl.bibliocommons.com/v2/events?locations=CA",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 3
+    },
+    {
+      "id": "sccl-cupertino",
+      "name": "Santa Clara County Library - Cupertino",
+      "url": "https://sccl.bibliocommons.com/v2/events?locations=CU",
+      "sourceType": "biblioevents",
+      "city": "Cupertino",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 14,
+      "fallbackEvents": 0,
+      "eventCount": 14,
+      "fetches": [
+        {
+          "url": "https://sccl.bibliocommons.com/v2/events?locations=CU",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "sccl-gilroy",
+      "name": "Santa Clara County Library - Gilroy",
+      "url": "https://sccl.bibliocommons.com/v2/events?locations=GI",
+      "sourceType": "biblioevents",
+      "city": "Gilroy",
+      "category": "Library",
+      "status": "ok",
       "liveEvents": 8,
       "fallbackEvents": 0,
       "eventCount": 8,
       "fetches": [
         {
-          "url": "https://sjpl.bibliocommons.com/v2/events?q=family",
+          "url": "https://sccl.bibliocommons.com/v2/events?locations=GI",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "sccl-los-altos",
+      "name": "Santa Clara County Library - Los Altos",
+      "url": "https://sccl.bibliocommons.com/v2/events?locations=LA",
+      "sourceType": "biblioevents",
+      "city": "Los Altos",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 10,
+      "fallbackEvents": 0,
+      "eventCount": 10,
+      "fetches": [
+        {
+          "url": "https://sccl.bibliocommons.com/v2/events?locations=LA",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "sccl-milpitas",
+      "name": "Santa Clara County Library - Milpitas",
+      "url": "https://sccl.bibliocommons.com/v2/events?locations=MI",
+      "sourceType": "biblioevents",
+      "city": "Milpitas",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 12,
+      "fallbackEvents": 0,
+      "eventCount": 12,
+      "fetches": [
+        {
+          "url": "https://sccl.bibliocommons.com/v2/events?locations=MI",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "sccl-morgan-hill",
+      "name": "Santa Clara County Library - Morgan Hill",
+      "url": "https://sccl.bibliocommons.com/v2/events?locations=MH",
+      "sourceType": "biblioevents",
+      "city": "Morgan Hill",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 14,
+      "fallbackEvents": 0,
+      "eventCount": 14,
+      "fetches": [
+        {
+          "url": "https://sccl.bibliocommons.com/v2/events?locations=MH",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "sccl-saratoga",
+      "name": "Santa Clara County Library - Saratoga",
+      "url": "https://sccl.bibliocommons.com/v2/events?locations=SA",
+      "sourceType": "biblioevents",
+      "city": "Saratoga",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 10,
+      "fallbackEvents": 0,
+      "eventCount": 10,
+      "fetches": [
+        {
+          "url": "https://sccl.bibliocommons.com/v2/events?locations=SA",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -223,9 +384,9 @@
       "city": "San Rafael",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 15,
+      "liveEvents": 16,
       "fallbackEvents": 0,
-      "eventCount": 15,
+      "eventCount": 16,
       "fetches": [
         {
           "url": "https://marinlibrary.bibliocommons.com/v2/events?q=storytime",
@@ -269,9 +430,9 @@
       "city": "Fremont",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 11,
+      "liveEvents": 10,
       "fallbackEvents": 0,
-      "eventCount": 11,
+      "eventCount": 10,
       "fetches": [
         {
           "url": "https://aclibrary.bibliocommons.com/v2/events",
@@ -315,9 +476,9 @@
       "city": "Walnut Creek",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://ccclib.bibliocommons.com/v2/events",
@@ -632,21 +793,18 @@
       "sourceType": "html",
       "city": "Oakland",
       "category": "Park",
-      "status": "ok-template-fallback",
+      "status": "fetch-error",
       "liveEvents": 0,
       "fallbackEvents": 4,
       "eventCount": 4,
       "fetches": [
         {
           "url": "https://fairyland.org/visit",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "reason": "This operation was aborted"
     },
     {
       "id": "east-bay-parks",
@@ -656,9 +814,9 @@
       "city": "Oakland",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 81,
+      "liveEvents": 79,
       "fallbackEvents": 0,
-      "eventCount": 81,
+      "eventCount": 79,
       "fetches": [
         {
           "url": "https://www.ebparks.org/calendar",
@@ -669,7 +827,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; source=drupal-views-ajax",
-      "rejectedLiveEvents": 62
+      "rejectedLiveEvents": 61
     },
     {
       "id": "don-edwards-nwr",
@@ -741,6 +899,65 @@
       "rejectedLiveEvents": 0
     },
     {
+      "id": "midpen-open-space",
+      "name": "Midpeninsula Regional Open Space District",
+      "url": "https://www.openspace.org/get-involved/events-activities",
+      "sourceType": "midpenTable",
+      "city": "Los Altos",
+      "category": "Park",
+      "status": "ok",
+      "liveEvents": 27,
+      "fallbackEvents": 0,
+      "eventCount": 27,
+      "fetches": [
+        {
+          "url": "https://www.openspace.org/get-involved/events-activities",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        },
+        {
+          "url": "https://www.openspace.org/get-involved/events-activities?page=1",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        },
+        {
+          "url": "https://www.openspace.org/get-involved/events-activities?page=2",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        },
+        {
+          "url": "https://www.openspace.org/get-involved/events-activities?page=3",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        },
+        {
+          "url": "https://www.openspace.org/get-involved/events-activities?page=4",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        },
+        {
+          "url": "https://www.openspace.org/get-involved/events-activities?page=5",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        },
+        {
+          "url": "https://www.openspace.org/get-involved/events-activities?page=6",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 17
+    },
+    {
       "id": "sf-cherry-blossom",
       "name": "Northern California Cherry Blossom Festival",
       "url": "https://sfcherryblossom.org/faqs/",
@@ -800,9 +1017,9 @@
       "city": "San Francisco",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://ybgfestival.org/childrens-garden-series/",
@@ -813,7 +1030,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 10
+      "rejectedLiveEvents": 9
     },
     {
       "id": "ybgfestival-great-lawn",
@@ -823,9 +1040,9 @@
       "city": "San Francisco",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 11,
+      "liveEvents": 12,
       "fallbackEvents": 0,
-      "eventCount": 11,
+      "eventCount": 12,
       "fetches": [
         {
           "url": "https://ybgfestival.org/venue/greatlawn/",
@@ -836,7 +1053,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 31
+      "rejectedLiveEvents": 32
     },
     {
       "id": "stern-grove",
@@ -846,9 +1063,9 @@
       "city": "San Francisco",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://www.sterngrove.org/lineup2026",
@@ -865,7 +1082,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html;charset=utf-8",
-      "rejectedLiveEvents": 10
+      "rejectedLiveEvents": 9
     },
     {
       "id": "oakland-first-fridays",
@@ -1006,6 +1223,48 @@
       "rejectedLiveEvents": 2
     },
     {
+      "id": "sunnyvale-library-calendar",
+      "name": "Sunnyvale Public Library / City Events",
+      "url": "https://www.library.sunnyvale.ca.gov/events/kids-events",
+      "sourceType": "html",
+      "city": "Sunnyvale",
+      "category": "Library",
+      "status": "disabled",
+      "reason": "Official Sunnyvale library/city calendar pages and event detail/ICS endpoints return Akamai 403 Access Denied to automated fetches in this environment.",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": []
+    },
+    {
+      "id": "santa-clara-city-library",
+      "name": "Santa Clara City Library",
+      "url": "https://www.sclibrary.org/calendar/events",
+      "sourceType": "html",
+      "city": "Santa Clara",
+      "category": "Library",
+      "status": "disabled",
+      "reason": "Official Santa Clara City Library calendar returns Akamai/CivicPlus 403 Access Denied to automated fetches in this environment.",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": []
+    },
+    {
+      "id": "santa-clara-county-parks",
+      "name": "Santa Clara County Parks",
+      "url": "https://parks.santaclaracounty.gov/events",
+      "sourceType": "html",
+      "city": "San Jose",
+      "category": "Park",
+      "status": "disabled",
+      "reason": "Official Santa Clara County Parks event page returns a Cloudflare challenge/block page to automated fetches in this environment.",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": []
+    },
+    {
       "id": "ticketmaster-bay-area-family",
       "name": "Ticketmaster Bay Area Family Events",
       "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -1016,7 +1275,8 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
-      "fetches": []
+      "fetches": [],
+      "reason": "Enable after adding an API key. Query params are built by ingest-events.mjs."
     }
   ]
 }

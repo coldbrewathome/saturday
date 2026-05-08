@@ -23,6 +23,8 @@ export type PlannerSpot = {
   openingHours?: string | null;
   friendScore?: number;
   kidsFriendly?: boolean | null;
+  dataSource?: string;
+  tags?: string[];
 };
 
 export type PlannerBrief = {
@@ -67,6 +69,16 @@ export function scoreSpotForVibe(
   if (spot.kidsFriendly === false) score -= 25;
   if (spot.cost === "Free") score += 4;
   if (spot.cost === "$") score += 2;
+  if (
+    spot.dataSource === "family-event" ||
+    spot.tags?.some((tag) => tag.toLowerCase() === "event")
+  ) {
+    score += 8;
+  }
+
+  // Passive retail is useful for a specific culture/tween browse, but it should
+  // not fill ordinary kid plans ahead of parks, libraries, events, or active stops.
+  if (spot.category === "Shopping" && vibe !== "culture") score -= 12;
 
   if (vibe === "low-effort") {
     score -= spot.transitMinutes * 0.65;
@@ -102,6 +114,7 @@ export function scoreSpotForVibe(
   if (ageBand === "school-age") {
     if (spot.category === "Wellness") score += 5;
     if (spot.category === "Culture") score += 4;
+    if (spot.category === "Shopping") score -= 6;
   }
   if (ageBand === "tween") {
     if (spot.category === "Wellness") score += 6;

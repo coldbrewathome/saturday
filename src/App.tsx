@@ -1918,15 +1918,37 @@ function App() {
     return working;
   }
 
-  function sampleCandidates<T>(sorted: T[], size: number, poolSize = 30): T[] {
+  function sampleCandidates<T extends { category?: string; id?: string }>(
+    sorted: T[],
+    size: number,
+    poolSize = 36,
+  ): T[] {
     const pool = sorted.slice(0, poolSize);
     if (pool.length <= size) return pool;
-    const shuffled = [...pool];
+    const byCategory = interleaveByCategory(pool as unknown as Spot[]) as unknown as T[];
+    const seeded = byCategory.slice(0, Math.min(byCategory.length, size * 2));
+    const shuffled = [...seeded];
     for (let i = shuffled.length - 1; i > 0; i -= 1) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
-    return shuffled.slice(0, size);
+    const picked: T[] = [];
+    const seen = new Set<string>();
+    for (const item of shuffled) {
+      const key = item.id || `${item.category || "item"}-${picked.length}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      picked.push(item);
+      if (picked.length >= size) return picked;
+    }
+    for (const item of byCategory) {
+      const key = item.id || `${item.category || "item"}-${picked.length}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      picked.push(item);
+      if (picked.length >= size) break;
+    }
+    return picked;
   }
 
   async function selectVibeFromHome(nextVibe: PlannerVibe) {
@@ -1947,7 +1969,16 @@ function App() {
     }
 
     if (session && API_CONFIGURED) {
-      const stopPayload: StopSummary[] = sampleCandidates(candidatePool, 12).map((spot) => ({
+      const rankedCandidates = applyLocalBias(
+        rankForVibe(
+          candidatePool,
+          nextVibe,
+          ageBand === "any" ? undefined : ageBand,
+        ) as unknown as Spot[],
+        weather,
+        preferences,
+      );
+      const stopPayload: StopSummary[] = sampleCandidates(rankedCandidates, 12).map((spot) => ({
         id: spot.id,
         name: spot.name,
         neighborhood: spot.neighborhood,
@@ -2070,7 +2101,16 @@ function App() {
         : { lat: 37.7749, lon: -122.4194 });
     const source =
       savedSpots.length > 0 ? baseSource : clusterAround(baseSource, anchor, 8, 24);
-    const spots: StopSummary[] = sampleCandidates(source, 12).map((spot) => ({
+    const rankedSource = applyLocalBias(
+      rankForVibe(
+        source,
+        vibe,
+        ageBand === "any" ? undefined : ageBand,
+      ) as unknown as Spot[],
+      weather,
+      preferences,
+    );
+    const spots: StopSummary[] = sampleCandidates(rankedSource, 12).map((spot) => ({
       id: spot.id,
       name: spot.name,
       neighborhood: spot.neighborhood,
