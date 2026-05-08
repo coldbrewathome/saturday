@@ -17,6 +17,11 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # The event pipeline uses local-time math (parseIcsDate hard-codes -07:00,
+      # inferTimeWindowFromDate calls Date#getHours). Pin the runner to Pacific
+      # so tests and validators behave the same as developer machines.
+      TZ: America/Los_Angeles
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
