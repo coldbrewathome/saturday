@@ -991,22 +991,80 @@ function SpotMap({
   );
 }
 
-function PlanMap({ stops }: { stops: Spot[] }) {
+function PlanMap({
+  stops,
+  events,
+}: {
+  stops: Spot[];
+  events?: FamilyEvent[];
+}) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<LeafletMap | null>(null);
   const layerRef = useRef<LayerGroup | null>(null);
 
-  const plotted = useMemo(
-    () =>
-      stops.filter(
-        (s) =>
-          typeof s.lat === "number" &&
-          typeof s.lon === "number" &&
-          Number.isFinite(s.lat) &&
-          Number.isFinite(s.lon),
-      ),
-    [stops],
-  );
+  // Build a single ordered visit sequence: stops in their plan order, then
+  // events sorted by start time. Each gets a 1-based visit number for the pin
+  // and the polyline connects them in that order.
+  const sequence = useMemo(() => {
+    const items: Array<{
+      kind: "spot" | "event";
+      lat: number;
+      lon: number;
+      label: string;
+      sublabel: string;
+    }> = [];
+    for (const spot of stops) {
+      if (
+        typeof spot.lat === "number" &&
+        typeof spot.lon === "number" &&
+        Number.isFinite(spot.lat) &&
+        Number.isFinite(spot.lon)
+      ) {
+        items.push({
+          kind: "spot",
+          lat: spot.lat,
+          lon: spot.lon,
+          label: spot.name,
+          sublabel: `${spot.neighborhood} · ${spot.category}`,
+        });
+      }
+    }
+    const orderedEvents = (events ?? [])
+      .filter(
+        (e) =>
+          typeof e.lat === "number" &&
+          typeof e.lon === "number" &&
+          Number.isFinite(e.lat) &&
+          Number.isFinite(e.lon),
+      )
+      .sort((a, b) => {
+        const aT = a.startDateTime
+          ? new Date(a.startDateTime).getTime()
+          : Infinity;
+        const bT = b.startDateTime
+          ? new Date(b.startDateTime).getTime()
+          : Infinity;
+        return aT - bT;
+      });
+    for (const event of orderedEvents) {
+      const date = event.startDateTime ? new Date(event.startDateTime) : null;
+      const when = date
+        ? date.toLocaleDateString(undefined, {
+            weekday: "short",
+            month: "short",
+            day: "numeric",
+          })
+        : event.timeWindow;
+      items.push({
+        kind: "event",
+        lat: event.lat,
+        lon: event.lon,
+        label: event.title,
+        sublabel: `${when} · ${event.venue}`,
+      });
+    }
+    return items;
+  }, [stops, events]);
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -1014,9 +1072,9 @@ function PlanMap({ stops }: { stops: Spot[] }) {
       center: bayAreaMapCenter,
       zoom: 11,
       scrollWheelZoom: false,
+      attributionControl: false,
     });
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "&copy; OpenStreetMap contributors",
       maxZoom: 18,
     }).addTo(map);
     const layer = L.layerGroup().addTo(map);
@@ -1034,24 +1092,22 @@ function PlanMap({ stops }: { stops: Spot[] }) {
     const layer = layerRef.current;
     if (!map || !layer) return;
     layer.clearLayers();
-    if (plotted.length === 0) {
+    if (sequence.length === 0) {
       map.setView(bayAreaMapCenter, 10);
       return;
     }
     const points: Array<[number, number]> = [];
-    plotted.forEach((spot, idx) => {
-      const lat = spot.lat as number;
-      const lon = spot.lon as number;
-      points.push([lat, lon]);
+    sequence.forEach((item, idx) => {
+      points.push([item.lat, item.lon]);
       const icon = L.divIcon({
-        className: "plan-pin",
+        className: `plan-pin plan-pin-${item.kind}`,
         html: `<span>${idx + 1}</span>`,
         iconSize: [28, 28],
         iconAnchor: [14, 14],
       });
-      L.marker([lat, lon], { icon })
+      L.marker([item.lat, item.lon], { icon })
         .bindPopup(
-          `<strong>${idx + 1}. ${spot.name}</strong><br/>${spot.neighborhood} · ${spot.category}`,
+          `<strong>${idx + 1}. ${item.label}</strong><br/>${item.sublabel}`,
         )
         .addTo(layer);
     });
@@ -1071,15 +1127,15 @@ function PlanMap({ stops }: { stops: Spot[] }) {
         padding: [40, 40],
       });
     }
-  }, [plotted]);
+  }, [sequence]);
 
-  if (stops.length === 0) return null;
+  if (sequence.length === 0) return null;
 
   return (
     <div
       className="plan-map"
       role="img"
-      aria-label="Map of plan stops in order"
+      aria-label="Map of plan stops and events in visit order"
       ref={containerRef}
     />
   );
@@ -4083,8 +4139,8 @@ function App() {
                 </ul>
               )}
 
-              {activePlanStops.length > 0 && (
-                <PlanMap stops={activePlanStops} />
+              {(activePlanStops.length > 0 || activePlanEvents.length > 0) && (
+                <PlanMap stops={activePlanStops} events={activePlanEvents} />
               )}
 
               {activePlanEvents.length > 0 && (
