@@ -986,6 +986,9 @@ function App() {
     }
   });
   const [geoState, setGeoState] = useState<"idle" | "requesting" | "denied">("idle");
+  const [geoErrorReason, setGeoErrorReason] = useState<
+    "denied" | "unavailable" | "timeout" | "unsupported" | null
+  >(null);
   const [shareState, setShareState] = useState<{
     status: "idle" | "sharing" | "shared" | "error";
     url?: string;
@@ -2786,15 +2789,34 @@ function App() {
     return haversineMiles(userLocation, { lat: spot.lat, lon: spot.lon });
   }
 
-  function requestUserLocation() {
+  async function requestUserLocation() {
     if (!("geolocation" in navigator)) {
       setGeoState("denied");
-      window.alert(
-        "Your browser doesn't support location. Try a different browser, or set a location manually in filters.",
-      );
+      setGeoErrorReason("unsupported");
       return;
     }
+    // If the browser already knows permission is denied, skip the doomed
+    // getCurrentPosition() and surface our modal immediately. iOS Chrome
+    // silently swallows the prompt in this state so without the check the
+    // user just sees a frozen-looking button.
+    if (
+      typeof navigator.permissions?.query === "function"
+    ) {
+      try {
+        const status = await navigator.permissions.query({
+          name: "geolocation" as PermissionName,
+        });
+        if (status.state === "denied") {
+          setGeoState("denied");
+          setGeoErrorReason("denied");
+          return;
+        }
+      } catch {
+        // Permissions API not supported — fall through to the request.
+      }
+    }
     setGeoState("requesting");
+    setGeoErrorReason(null);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const next = {
@@ -2804,26 +2826,19 @@ function App() {
         setUserLocation(next);
         window.localStorage.setItem("saturday.userLocation", JSON.stringify(next));
         setGeoState("idle");
+        setGeoErrorReason(null);
         setSortBy("nearest");
       },
       (err) => {
         setGeoState("denied");
-        // Surface the failure so the user knows why nothing happened. The
-        // browser silently swallows the prompt when permission has been
-        // denied previously; without this they would just see the button
-        // light up red and have no idea what to do.
         if (err.code === err.PERMISSION_DENIED) {
-          window.alert(
-            "Location permission is blocked for famhop.com.\n\n" +
-              "iOS Chrome: tap the ••• menu → Settings → Privacy → Location → allow for famhop.com, then refresh.\n" +
-              "Desktop: click the lock icon in the address bar and allow Location.",
-          );
+          setGeoErrorReason("denied");
         } else if (err.code === err.POSITION_UNAVAILABLE) {
-          window.alert(
-            "Couldn't determine your location right now. Make sure Location Services are turned on for your browser.",
-          );
+          setGeoErrorReason("unavailable");
         } else if (err.code === err.TIMEOUT) {
-          window.alert("Location request timed out. Try again with a stronger signal.");
+          setGeoErrorReason("timeout");
+        } else {
+          setGeoErrorReason("denied");
         }
       },
       { enableHighAccuracy: false, timeout: 8000, maximumAge: 600000 },
@@ -3833,6 +3848,17 @@ function App() {
                 Reset filters
               </button>
             </div>
+          )}
+
+          {geoErrorReason && (
+            <GeoErrorModal
+              reason={geoErrorReason}
+              onClose={() => setGeoErrorReason(null)}
+              onRetry={() => {
+                setGeoErrorReason(null);
+                requestUserLocation();
+              }}
+            />
           )}
           {/* legacy card grid removed — map + bottom sheet replaces it */}
           {false && (
@@ -4845,6 +4871,170 @@ function App() {
           </div>
         </div>
       </footer>
+    </div>
+  );
+}
+
+function GeoErrorModal({
+  reason,
+  onRetry,
+  onClose,
+}: {
+  reason: "denied" | "unavailable" | "timeout" | "unsupported";
+  onRetry: () => void;
+  onClose: () => void;
+}) {
+  const ua =
+    typeof navigator !== "undefined" ? navigator.userAgent : "";
+  const isIos = /iPhone|iPad|iPod/.test(ua);
+  const isIosChrome = isIos && /CriOS/.test(ua);
+  const isIosSafari = isIos && !isIosChrome && /Safari/.test(ua);
+  const isAndroid = /Android/.test(ua);
+  const browserName = isIosChrome
+    ? "Chrome"
+    : isIosSafari
+      ? "Safari"
+      : "your browser";
+
+  let title = "Allow location to find spots near you";
+  let lead =
+    "We need your permission to read your device location.";
+  if (reason === "unavailable") {
+    title = "Couldn't get a location fix";
+    lead =
+      "Location Services may be off, or your device can't get a fix right now.";
+  } else if (reason === "timeout") {
+    title = "Location request timed out";
+    lead = "We didn't hear back in time. Try again with a stronger signal.";
+  } else if (reason === "unsupported") {
+    title = "This browser doesn't support location";
+    lead = "Try Safari or Chrome, or pick a city manually in the filters.";
+  }
+
+  return (
+    <div
+      className="geo-error-backdrop"
+      role="presentation"
+      onClick={onClose}
+    >
+      <div
+        className="geo-error-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          className="geo-error-close"
+          type="button"
+          onClick={onClose}
+          aria-label="Close"
+        >
+          <X aria-hidden="true" />
+        </button>
+        <h3>{title}</h3>
+        <p className="geo-error-lead">{lead}</p>
+
+        {reason === "denied" && (
+          <div className="geo-error-steps">
+            {isIosChrome && (
+              <>
+                <p className="geo-error-platform">On iOS Chrome</p>
+                <ol>
+                  <li>
+                    Open the iOS <strong>Settings</strong> app (the grey gears
+                    icon, not Chrome's menu).
+                  </li>
+                  <li>
+                    Scroll down and tap <strong>Chrome</strong>.
+                  </li>
+                  <li>
+                    Tap <strong>Location</strong> and choose{" "}
+                    <strong>While Using the App</strong>.
+                  </li>
+                  <li>
+                    Come back to this tab and tap{" "}
+                    <strong>Try again</strong> below.
+                  </li>
+                </ol>
+              </>
+            )}
+            {isIosSafari && (
+              <>
+                <p className="geo-error-platform">On iOS Safari</p>
+                <ol>
+                  <li>
+                    Open the iOS <strong>Settings</strong> app.
+                  </li>
+                  <li>
+                    Scroll to <strong>Safari</strong> → <strong>Location</strong>.
+                  </li>
+                  <li>
+                    Choose <strong>Ask</strong> or{" "}
+                    <strong>Allow</strong>.
+                  </li>
+                  <li>
+                    Reload famhop.com — Safari will prompt again on the next tap.
+                  </li>
+                </ol>
+              </>
+            )}
+            {isAndroid && (
+              <>
+                <p className="geo-error-platform">On Android</p>
+                <ol>
+                  <li>
+                    Tap the <strong>lock icon</strong> in {browserName}'s
+                    address bar.
+                  </li>
+                  <li>
+                    Tap <strong>Permissions</strong> → <strong>Location</strong>.
+                  </li>
+                  <li>
+                    Switch <strong>Location</strong> on, then tap{" "}
+                    <strong>Try again</strong>.
+                  </li>
+                </ol>
+              </>
+            )}
+            {!isIos && !isAndroid && (
+              <>
+                <p className="geo-error-platform">On desktop</p>
+                <ol>
+                  <li>
+                    Click the <strong>lock icon</strong> in the address bar at{" "}
+                    <code>famhop.com</code>.
+                  </li>
+                  <li>
+                    Find <strong>Location</strong> and switch it to{" "}
+                    <strong>Allow</strong>.
+                  </li>
+                  <li>
+                    Tap <strong>Try again</strong> below.
+                  </li>
+                </ol>
+              </>
+            )}
+          </div>
+        )}
+
+        <div className="geo-error-actions">
+          <button
+            type="button"
+            className="primary-button"
+            onClick={onRetry}
+          >
+            Try again
+          </button>
+          <button
+            type="button"
+            className="text-button geo-error-dismiss"
+            onClick={onClose}
+          >
+            Not now
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

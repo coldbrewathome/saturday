@@ -939,6 +939,113 @@ h3 {
   }
 }
 
+.geo-error-backdrop {
+  align-items: center;
+  background: rgba(20, 24, 28, 0.55);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 16px;
+  position: fixed;
+  z-index: 1100;
+  animation: geoBackdropIn 160ms ease-out;
+}
+
+@keyframes geoBackdropIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.geo-error-modal {
+  background: var(--surface);
+  border-radius: 14px;
+  box-shadow: 0 24px 60px rgba(20, 24, 28, 0.32);
+  max-width: 460px;
+  padding: 22px 22px 20px;
+  position: relative;
+  width: 100%;
+  animation: geoModalIn 180ms ease-out;
+}
+
+@keyframes geoModalIn {
+  from { transform: translateY(12px); opacity: 0.7; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.geo-error-modal h3 {
+  font-size: 1.18rem;
+  letter-spacing: 0;
+  margin: 0 36px 6px 0;
+}
+
+.geo-error-lead {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 800;
+  margin: 0 0 14px;
+}
+
+.geo-error-close {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  display: inline-flex;
+  height: 30px;
+  justify-content: center;
+  padding: 0;
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  width: 30px;
+}
+.geo-error-close:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.geo-error-platform {
+  color: var(--accent-strong);
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  margin: 4px 0 6px;
+  text-transform: uppercase;
+}
+
+.geo-error-steps ol {
+  color: var(--ink);
+  font-size: 0.9rem;
+  line-height: 1.45;
+  margin: 0 0 12px;
+  padding-left: 22px;
+}
+
+.geo-error-steps li {
+  margin-bottom: 6px;
+}
+
+.geo-error-steps code {
+  background: var(--surface-strong);
+  border-radius: 4px;
+  font-size: 0.84rem;
+  padding: 1px 6px;
+}
+
+.geo-error-actions {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.geo-error-dismiss {
+  color: var(--muted);
+  font-weight: 800;
+  padding: 6px 10px;
+}
+
 .sheet-note {
   color: #4b5563;
   font-size: 0.88rem;
