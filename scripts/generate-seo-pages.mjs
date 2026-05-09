@@ -17,10 +17,27 @@ const ROOT = path.resolve(__dirname, "..");
 const DIST = path.join(ROOT, "dist");
 const DATA = path.join(ROOT, "public", "data");
 
-const SITE = "https://famhop.com";
-const BRAND = "FamHop";
-const BRAND_TAG = "Bay Area family weekend planner";
-const OG_IMAGE = `${SITE}/og-image.png`;
+// SEO output adapts to the same VITE_APP_AUDIENCE the SPA reads. Defaults
+// to the kids brand. Override with VITE_APP_AUDIENCE=adults at build time
+// (the `npm run build:adults` script sets it via .env.adults + Vite).
+const APP_AUDIENCE = process.env.VITE_APP_AUDIENCE || "kids";
+const IS_ADULTS = APP_AUDIENCE === "adults";
+
+const SITE = process.env.VITE_APP_SITE_URL?.replace(/\/$/, "") ||
+  (IS_ADULTS ? "https://nighthop.pages.dev" : "https://famhop.com");
+const BRAND = process.env.VITE_APP_BRAND || (IS_ADULTS ? "NightHop" : "FamHop");
+const BRAND_TAG = IS_ADULTS
+  ? "Bay Area night-out planner"
+  : "Bay Area family weekend planner";
+const OG_IMAGE = process.env.VITE_APP_OG_IMAGE || `${SITE}/og-image.png`;
+// Filter the data feed to the app's audience the same way the SPA does at
+// runtime, so static SEO pages never expose entries the app would hide.
+function audienceVisible(item) {
+  if (!item) return false;
+  const tags = Array.isArray(item.audiences) ? item.audiences : null;
+  if (!tags || tags.length === 0) return true;
+  return tags.includes(APP_AUDIENCE) || tags.includes("all");
+}
 
 // Defined inline because generateCategoryPages references it during the
 // top-level execution. Keep ordering stable.
@@ -138,8 +155,12 @@ if (!fs.existsSync(DIST)) {
 const spotsDoc = readJson(path.join(DATA, "bay-area-spots.json"));
 const eventsDoc = readJson(path.join(DATA, "events.json"));
 
-const spots = Array.isArray(spotsDoc?.spots) ? spotsDoc.spots : [];
-const events = Array.isArray(eventsDoc?.events) ? eventsDoc.events : [];
+const spots = (Array.isArray(spotsDoc?.spots) ? spotsDoc.spots : []).filter(
+  audienceVisible,
+);
+const events = (Array.isArray(eventsDoc?.events) ? eventsDoc.events : []).filter(
+  audienceVisible,
+);
 
 const sitemapEntries = [
   { loc: `${SITE}/`, lastmod: today(), changefreq: "daily", priority: 1.0 },

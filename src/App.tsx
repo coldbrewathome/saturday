@@ -71,7 +71,6 @@ import {
   plannerTransportOptions,
   rankForVibe,
   scoreSpotForVibe,
-  vibeLabels,
   type AgeBand,
   type PlannerProfile,
   type PlannerPreferenceId,
@@ -245,18 +244,12 @@ const categories: Category[] = [
 const ageBandOptions = Object.entries(ageBandLabels) as Array<[AgeBand, string]>;
 
 const costs: Cost[] = ["Free", "$", "$$", "$$$", "Unknown"];
-const vibeOptions = Object.entries(vibeLabels) as Array<[PlannerVibe, string]>;
-
-const vibeBlurbs: Record<PlannerVibe, string> = {
-  balanced: "A bit of everything",
-  "low-effort": "Walk-in, easy outings",
-  active: "Run them around",
-  "food-first": "Family-friendly bites",
-  culture: "Museums, libraries, story-time",
-};
+const vibeOptions = Object.entries(APP_VIBE_LABELS) as Array<
+  [PlannerVibe, string]
+>;
 
 function vibeBlurb(vibe: PlannerVibe): string {
-  return vibeBlurbs[vibe];
+  return APP_VIBE_BLURBS[vibe];
 }
 
 function optionLabel<T extends string>(
@@ -456,6 +449,8 @@ import {
   APP_HERO_TITLE,
   APP_PARTNERS_LABEL,
   APP_TAGLINE,
+  APP_VIBE_BLURBS,
+  APP_VIBE_LABELS,
   SHOW_AGE_BAND_UI,
   audienceVisible,
 } from "./appConfig";
@@ -878,6 +873,7 @@ type FeaturedPlan = {
   accent?: string;
   stopIds: string[];
   eventIds?: string[];
+  audiences?: Audience[];
 };
 
 type AppRoute = {
@@ -1233,7 +1229,9 @@ function App() {
       .then((response) => (response.ok ? response.json() : Promise.reject()))
       .then((dataset: { plans?: FeaturedPlan[] }) => {
         if (!active) return;
-        if (Array.isArray(dataset.plans)) setFeaturedPlans(dataset.plans);
+        if (Array.isArray(dataset.plans)) {
+          setFeaturedPlans(dataset.plans.filter(audienceVisible));
+        }
       })
       .catch(() => {
         // Featured plans are optional.
@@ -2569,7 +2567,7 @@ function App() {
         const id = `plan-${Date.now()}`;
         const plan: Plan = {
           id,
-          name: result.brief.title || `${vibeLabels[nextVibe]} plan`,
+          name: result.brief.title || `${APP_VIBE_LABELS[nextVibe]} plan`,
           stopIds,
           createdAt: new Date().toISOString(),
           source: "ai",
@@ -2612,7 +2610,7 @@ function App() {
     const id = `plan-${Date.now()}`;
     const plan: Plan = {
       id,
-      name: `${vibeLabels[nextVibe]} plan`,
+      name: `${APP_VIBE_LABELS[nextVibe]} plan`,
       stopIds: ranked.map((s) => s.id),
       createdAt: new Date().toISOString(),
       source: "manual",
@@ -2709,7 +2707,7 @@ function App() {
       const id = `plan-${Date.now()}`;
       const plan: Plan = {
         id,
-        name: result.brief.title || `${vibeLabels[vibe]} plan`,
+        name: result.brief.title || `${APP_VIBE_LABELS[vibe]} plan`,
         stopIds,
         createdAt: new Date().toISOString(),
         source: "ai",
@@ -4320,7 +4318,7 @@ function App() {
                   <span className="badge-ai">
                     <Sparkles aria-hidden="true" />
                     AI suggested
-                    {activePlan.vibe ? ` · ${vibeLabels[activePlan.vibe]}` : ""}
+                    {activePlan.vibe ? ` · ${APP_VIBE_LABELS[activePlan.vibe]}` : ""}
                   </span>
                 )}
                 <span>

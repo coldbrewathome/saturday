@@ -3,7 +3,8 @@
   "note": "Adult-audience event sources (breweries, comedy clubs, music venues, 21+ festivals, brewery calendars, etc). Every event from a source listed here is automatically tagged audiences: ['adults']. Keep kid-facing libraries / museums / family farms in event-sources.json. Source schema is identical to event-sources.json — see scripts/eventPipeline.mjs.",
   "defaults": {
     "windowDays": 30,
-    "audiences": ["adults"]
+    "audiences": ["adults"],
+    "userAgent": "nighthop/0.1 event-ingest"
   },
   "coverage": {
     "cities": [
@@ -32,5 +33,78 @@
       "Santa Rosa"
     ]
   },
-  "sources": []
+  "sources": [
+    {
+      "id": "the-independent-sf",
+      "name": "The Independent",
+      "url": "https://www.theindependentsf.com/calendar",
+      "city": "San Francisco",
+      "neighborhood": "Western Addition",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 37.7755,
+      "lon": -122.4373
+    },
+    {
+      "id": "great-american-music-hall",
+      "name": "Great American Music Hall",
+      "url": "https://gamh.com/calendar",
+      "city": "San Francisco",
+      "neighborhood": "Tenderloin",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 37.7842,
+      "lon": -122.4178
+    },
+    {
+      "id": "the-uc-theatre",
+      "name": "The UC Theatre",
+      "url": "https://theuctheatre.org/calendar",
+      "city": "Berkeley",
+      "neighborhood": "Downtown Berkeley",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 37.8718,
+      "lon": -122.2683
+    },
+    {
+      "id": "punch-line-sf",
+      "name": "Punch Line San Francisco",
+      "url": "https://www.punchlinecomedyclub.com/shows",
+      "city": "San Francisco",
+      "neighborhood": "Financial District",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 37.7944,
+      "lon": -122.3998
+    },
+    {
+      "id": "cobbs-comedy",
+      "name": "Cobb's Comedy Club",
+      "url": "https://www.cobbscomedy.com/shows",
+      "city": "San Francisco",
+      "neighborhood": "North Beach",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 37.8013,
+      "lon": -122.4146
+    },
+    {
+      "id": "the-fillmore",
+      "name": "The Fillmore",
+      "url": "https://www.thefillmore.com/calendar",
+      "city": "San Francisco",
+      "neighborhood": "Western Addition",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 37.7842,
+      "lon": -122.4327
+    }
+  ]
 }

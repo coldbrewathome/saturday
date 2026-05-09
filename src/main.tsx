@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import { APP_AUDIENCE } from "./appConfig";
 import PollView from "./PollView";
 import "./styles.css";
+
+// Stamp the audience on the document root so audience-specific CSS variable
+// overrides (e.g. a violet accent for the adults app) can hang off it.
+document.documentElement.setAttribute("data-app-audience", APP_AUDIENCE);
 
 function readPollIdFromHash(): string | null {
   const match = window.location.hash.match(/^#\/p\/([\w-]+)$/);

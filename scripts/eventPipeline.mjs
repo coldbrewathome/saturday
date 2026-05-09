@@ -98,6 +98,9 @@ const GENERIC_PAGE_TITLES = [
 ];
 
 const CATEGORY_BY_TEXT = [
+  ["Comedy", /\b(comedy|stand[\s-]?up|improv|comedian)\b/i],
+  ["Music", /\b(concert|live music|tour\b|band\b|dj\b|residency|gig|on stage|setlist|opening act)\b/i],
+  ["Brewery", /\b(brewery|tap room|tasting room|brewpub|beer release|cask)\b/i],
   ["Festival", /\b(festival|parade|street fair|art & wine|carnaval|pride|night market)\b/i],
   ["Community", /\b(community|open streets|first friday|block party)\b/i],
   ["Library", /\b(library|storytime|book|lego|maker|craft|reading)\b/i],
@@ -108,6 +111,77 @@ const CATEGORY_BY_TEXT = [
 ];
 
 const AGE_BANDS = ["toddler", "preschool", "school-age", "tween"];
+
+// City centroid fallback for events whose source provides only a city string
+// (e.g. East Bay Regional Parks events spread across Antioch/Sunol/Berkeley/
+// Oakland/Fremont). Without this every event falls to the SF default and 100+
+// markers stack on top of each other in downtown SF.
+const CITY_CENTROIDS = {
+  "san francisco": [37.7796, -122.4156],
+  oakland: [37.8044, -122.2712],
+  berkeley: [37.8715, -122.273],
+  alameda: [37.7652, -122.2416],
+  emeryville: [37.8313, -122.2852],
+  richmond: [37.9358, -122.3477],
+  hayward: [37.6688, -122.0808],
+  fremont: [37.5485, -121.9886],
+  newark: [37.5297, -122.0402],
+  "union city": [37.5934, -122.0438],
+  "san leandro": [37.7249, -122.156],
+  "castro valley": [37.6941, -122.0863],
+  pleasanton: [37.6624, -121.8747],
+  livermore: [37.6819, -121.768],
+  dublin: [37.7022, -121.9358],
+  "walnut creek": [37.9101, -122.0652],
+  concord: [37.978, -122.0311],
+  martinez: [38.0194, -122.1341],
+  pittsburg: [38.028, -121.8847],
+  antioch: [38.005, -121.8058],
+  brentwood: [37.9319, -121.6957],
+  oakley: [37.9974, -121.712],
+  sunol: [37.5951, -121.8866],
+  "bay point": [38.0271, -121.9609],
+  clayton: [37.9407, -121.9358],
+  "san jose": [37.3382, -121.8863],
+  "santa clara": [37.3541, -121.9552],
+  sunnyvale: [37.3688, -122.0363],
+  "mountain view": [37.3894, -122.0819],
+  "palo alto": [37.4419, -122.143],
+  "los altos": [37.3852, -122.1141],
+  saratoga: [37.2675, -122.0326],
+  cupertino: [37.3181, -122.0286],
+  campbell: [37.2874, -121.949],
+  milpitas: [37.4321, -121.9078],
+  "morgan hill": [37.1305, -121.6544],
+  gilroy: [37.0046, -121.5663],
+  "redwood city": [37.4852, -122.2364],
+  "san mateo": [37.5685, -122.3247],
+  burlingame: [37.5841, -122.3661],
+  "foster city": [37.5585, -122.2711],
+  belmont: [37.5202, -122.2758],
+  "half moon bay": [37.4636, -122.4286],
+  pacifica: [37.6138, -122.4869],
+  "south san francisco": [37.6547, -122.4077],
+  daly: [37.6879, -122.4702],
+  "daly city": [37.6879, -122.4702],
+  "san rafael": [37.9735, -122.5311],
+  novato: [38.1074, -122.5697],
+  mill: [37.906, -122.545],
+  "mill valley": [37.906, -122.545],
+  sausalito: [37.8591, -122.4853],
+  larkspur: [37.9341, -122.5353],
+  "muir beach": [37.8624, -122.5735],
+  petaluma: [38.2324, -122.6367],
+  "santa rosa": [38.4404, -122.7141],
+  fairfield: [38.2493, -122.04],
+  vallejo: [38.1041, -122.2566],
+  vacaville: [38.3566, -121.9877],
+};
+function lookupCityCentroid(city) {
+  if (typeof city !== "string") return null;
+  const key = city.trim().toLowerCase();
+  return CITY_CENTROIDS[key] || null;
+}
 
 export function stripUnsafeText(value, maxLength = 260) {
   if (typeof value !== "string") return "";
@@ -1212,8 +1286,18 @@ export function normalizeRawEvent(raw, source = {}) {
     venue: stripUnsafeText(raw.venue || source.name || title, 100),
     city: stripUnsafeText(raw.city || source.city || "Bay Area", 80),
     neighborhood: stripUnsafeText(raw.neighborhood || raw.city || source.city || "Bay Area", 80),
-    lat: Number(raw.lat ?? source.lat ?? 37.7749),
-    lon: Number(raw.lon ?? source.lon ?? -122.4194),
+    lat: Number(
+      raw.lat ??
+        source.lat ??
+        lookupCityCentroid(raw.city || source.city)?.[0] ??
+        37.7749,
+    ),
+    lon: Number(
+      raw.lon ??
+        source.lon ??
+        lookupCityCentroid(raw.city || source.city)?.[1] ??
+        -122.4194,
+    ),
     category,
     daysOfWeek: Array.isArray(raw.daysOfWeek) && raw.daysOfWeek.length > 0
       ? raw.daysOfWeek.map(Number).filter((day) => day >= 0 && day <= 6)
