@@ -1119,7 +1119,7 @@ function App() {
   const [plans, setPlans] = useState<Plan[]>(() =>
     readStoredArray("saturday.plans", []),
   );
-  const [view, setView] = useState<"home" | "browse" | "plans">("home");
+  const [view, setView] = useState<"home" | "browse" | "plans">("browse");
   const [inferredGeo, setInferredGeo] = useState<{ city: string | null; lat: number | null; lon: number | null } | null>(null);
   const [homeBusy, setHomeBusy] = useState(false);
   const [homeError, setHomeError] = useState<string | null>(null);
@@ -2792,13 +2792,6 @@ function App() {
       </header>
 
       <nav className="view-tabs" aria-label="View">
-        <button
-          className={view === "home" ? "active" : ""}
-          onClick={() => setView("home")}
-        >
-          <Sparkles aria-hidden="true" />
-          Decide
-        </button>
         <button
           className={view === "browse" ? "active" : ""}
           onClick={() => setView("browse")}
