@@ -870,6 +870,8 @@ function SpotMap({
     };
   }, []);
 
+  // Render markers. Re-runs on selection so the active pin gets restyled, but
+  // never recenters/refits the map — that would yank a user who has panned.
   useEffect(() => {
     const map = mapRef.current;
     const layer = layerRef.current;
@@ -877,12 +879,9 @@ function SpotMap({
 
     layer.clearLayers();
 
-    const points: Array<[number, number]> = [];
-
     for (const spot of plottedSpots) {
       const lat = spot.lat as number;
       const lon = spot.lon as number;
-      points.push([lat, lon]);
       const isOutdoor =
         spot.category === "Outdoors" || spot.category === "Wellness";
       const isSelected =
@@ -899,13 +898,10 @@ function SpotMap({
     }
 
     for (const event of plottedEvents) {
-      const lat = event.lat;
-      const lon = event.lon;
-      points.push([lat, lon]);
       const highlighted = highlightedEventIds?.has(event.id) ?? false;
       const isSelected =
         selected?.kind === "event" && selected.id === event.id;
-      L.circleMarker([lat, lon], {
+      L.circleMarker([event.lat, event.lon], {
         radius: isSelected ? 12 : highlighted ? 10 : 7,
         color: "#ffffff",
         weight: 2,
@@ -917,6 +913,21 @@ function SpotMap({
         )
         .addTo(layer);
     }
+  }, [plottedSpots, plottedEvents, highlightedEventIds, selected]);
+
+  // Frame the map once when the underlying point set changes — but never on
+  // selection alone, so clicking a pin doesn't snap the view.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    const points: Array<[number, number]> = [];
+    for (const spot of plottedSpots) {
+      points.push([spot.lat as number, spot.lon as number]);
+    }
+    for (const event of plottedEvents) {
+      points.push([event.lat, event.lon]);
+    }
 
     if (points.length === 0) {
       map.setView(bayAreaMapCenter, 9);
@@ -924,11 +935,10 @@ function SpotMap({
     }
     if (points.length === 1) {
       map.setView(points[0], 13);
-    } else {
-      const bounds = L.latLngBounds(points);
-      map.fitBounds(bounds, { maxZoom: 13, padding: [28, 28] });
+      return;
     }
-  }, [plottedSpots, plottedEvents, highlightedEventIds, selected]);
+    map.fitBounds(L.latLngBounds(points), { maxZoom: 13, padding: [28, 28] });
+  }, [plottedSpots, plottedEvents]);
 
   return (
     <div
