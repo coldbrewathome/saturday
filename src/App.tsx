@@ -4342,50 +4342,6 @@ function App() {
             New plan
           </button>
 
-          <div className="ai-suggest">
-            <label className="select-field">
-              <span>Vibe</span>
-              <select
-                value={vibe}
-                onChange={(event) => setVibe(event.target.value as PlannerVibe)}
-              >
-                {vibeOptions.map(([value, label]) => (
-                  <option key={value} value={value}>
-                    {label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <button
-              className="secondary-button wide"
-              disabled={
-                !API_CONFIGURED ||
-                !session ||
-                aiState.status === "loading" ||
-                (savedSpots.length === 0 && filteredSpots.length === 0)
-              }
-              title={
-                !API_CONFIGURED
-                  ? "Backend not deployed in this preview"
-                  : !session
-                    ? "Sign in with Google to use AI suggest"
-                    : undefined
-              }
-              onClick={createAiPlan}
-            >
-              <Sparkles aria-hidden="true" />
-              {aiState.status === "loading" ? "Thinking…" : "AI suggest"}
-            </button>
-            <p className="ai-suggest-hint">
-              {savedSpots.length > 0
-                ? `Uses your ${savedSpots.length} saved spot${savedSpots.length === 1 ? "" : "s"} as candidates.`
-                : "Uses your current Browse filters as candidates."}
-            </p>
-            {aiState.status === "error" && (
-              <p className="ai-suggest-error">{aiState.error}</p>
-            )}
-          </div>
-
           {plans.length === 0 ? (
             <p className="empty-state">
               Build a small itinerary from your saved spots.
@@ -4595,21 +4551,6 @@ function App() {
                             )}
                           </div>
                           <div className="plan-stop-actions">
-                            {activePlan.source === "ai" && (
-                              <button
-                                title="Swap with AI choice"
-                                disabled={
-                                  !session ||
-                                  !API_CONFIGURED ||
-                                  swapBusyStopId !== null
-                                }
-                                onClick={() =>
-                                  swapStopWithAi(activePlan.id, spot.id)
-                                }
-                              >
-                                <Sparkles aria-hidden="true" />
-                              </button>
-                            )}
                             <button
                               title="Move up"
                               disabled={index === 0}
