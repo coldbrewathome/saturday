@@ -61,6 +61,28 @@ async function fetchSource(source, registry) {
 }
 
 async function fetchSourcePayloads(source, registry) {
+  if (source.followEventLinks === true) {
+    const landingPayload = await fetchSource(source, registry);
+    const payloads = [{ ...landingPayload, url: source.url, source }];
+    if (landingPayload.status !== "ok") return payloads;
+    const links = extractOpenCitiesEventLinks(
+      landingPayload.text || "",
+      source.url,
+      Number(source.maxEventLinks || 12),
+    );
+    for (const url of links) {
+      const detailSource = {
+        ...source,
+        url,
+        homeUrl: source.url,
+        followEventLinks: false,
+      };
+      const payload = await fetchSource(detailSource, registry);
+      payloads.push({ ...payload, url, source: detailSource });
+    }
+    return payloads;
+  }
+
   const urls = Array.isArray(source.urls) && source.urls.length > 0 ? source.urls : [source.url];
   const payloads = [];
   for (const url of urls) {
@@ -69,6 +91,25 @@ async function fetchSourcePayloads(source, registry) {
     payloads.push({ ...payload, url, source: sourceForUrl });
   }
   return payloads;
+}
+
+function extractOpenCitiesEventLinks(html, baseUrl, maxLinks) {
+  const links = [];
+  const seen = new Set();
+  for (const match of html.matchAll(/<a[^>]+href=["']([^"']*Events-Directory[^"']+)["']/gi)) {
+    const raw = decodeHtmlEntities(match[1]);
+    let href;
+    try {
+      href = new URL(raw, baseUrl).toString();
+    } catch {
+      continue;
+    }
+    if (seen.has(href)) continue;
+    seen.add(href);
+    links.push(href);
+    if (links.length >= maxLinks) break;
+  }
+  return links;
 }
 
 async function fetchLibCal(source, registry) {

@@ -1,0 +1,382 @@
+import { useEffect, useMemo, useRef } from "react";
+import L, { type LayerGroup, type Map as LeafletMap } from "leaflet";
+import "leaflet/dist/leaflet.css";
+import type { Spot, FamilyEvent } from "./App";
+
+export type MapSelection =
+  | { kind: "spot"; id: string }
+  | { kind: "event"; id: string };
+
+export type PlanMapItem =
+  | { kind: "spot"; lat: number; lon: number; label: string; sublabel: string }
+  | { kind: "event"; lat: number; lon: number; label: string; sublabel: string };
+
+const bayAreaMapCenter: [number, number] = [37.7749, -122.4194];
+const MAP_VIEW_STORAGE_KEY = "saturday.mapView";
+
+function loadStoredMapView(): { lat: number; lon: number; zoom: number } | null {
+  try {
+    const raw = window.localStorage.getItem(MAP_VIEW_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (
+      typeof parsed?.lat === "number" &&
+      typeof parsed?.lon === "number" &&
+      typeof parsed?.zoom === "number"
+    ) {
+      return parsed;
+    }
+  } catch {
+    // ignore
+  }
+  return null;
+}
+
+export function SpotMap({
+  spots,
+  events,
+  highlightedEventIds,
+  selected,
+  onSelect,
+}: {
+  spots: Spot[];
+  events?: FamilyEvent[];
+  highlightedEventIds?: Set<string>;
+  selected?: MapSelection | null;
+  onSelect?: (sel: MapSelection) => void;
+}) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<LeafletMap | null>(null);
+  const layerRef = useRef<LayerGroup | null>(null);
+  // Stable reference to the latest onSelect — re-binding avoids stale closures
+  // without forcing the marker layer to rebuild every time the parent re-renders.
+  const onSelectRef = useRef(onSelect);
+  useEffect(() => {
+    onSelectRef.current = onSelect;
+  }, [onSelect]);
+  // Once the user has a stored view (or pans/zooms), the auto-fit step stops
+  // overriding it. Without this, every data-set change would yank them back
+  // to the all-points framing.
+  const hasUserViewRef = useRef<boolean>(loadStoredMapView() !== null);
+
+  const plottedSpots = useMemo(
+    () =>
+      spots.filter(
+        (spot) =>
+          typeof spot.lat === "number" &&
+          typeof spot.lon === "number" &&
+          Number.isFinite(spot.lat) &&
+          Number.isFinite(spot.lon),
+      ),
+    [spots],
+  );
+  const plottedEvents = useMemo(
+    () =>
+      (events ?? []).filter(
+        (event) =>
+          typeof event.lat === "number" &&
+          typeof event.lon === "number" &&
+          Number.isFinite(event.lat) &&
+          Number.isFinite(event.lon),
+      ),
+    [events],
+  );
+
+  useEffect(() => {
+    if (!containerRef.current || mapRef.current) {
+      return;
+    }
+
+    const stored = loadStoredMapView();
+    const map = L.map(containerRef.current, {
+      center: stored ? [stored.lat, stored.lon] : bayAreaMapCenter,
+      zoom: stored ? stored.zoom : 10,
+      scrollWheelZoom: true,
+      attributionControl: false,
+    });
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 18,
+    }).addTo(map);
+
+    const layer = L.layerGroup().addTo(map);
+    mapRef.current = map;
+    layerRef.current = layer;
+
+    const handleMoveEnd = () => {
+      const c = map.getCenter();
+      try {
+        window.localStorage.setItem(
+          MAP_VIEW_STORAGE_KEY,
+          JSON.stringify({ lat: c.lat, lon: c.lng, zoom: map.getZoom() }),
+        );
+      } catch {
+        // ignore quota / privacy errors
+      }
+      hasUserViewRef.current = true;
+    };
+    map.on("moveend", handleMoveEnd);
+
+    // Leaflet captures container size at init. If the .map-shell parent finishes
+    // laying out (flex stretch) after the map mounts, the canvas stays at the
+    // initial small size unless we tell Leaflet to recompute. Invalidate once
+    // on next frame and observe further resizes.
+    requestAnimationFrame(() => map.invalidateSize());
+    const resizeObserver = new ResizeObserver(() => map.invalidateSize());
+    resizeObserver.observe(containerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+      map.off("moveend", handleMoveEnd);
+      map.remove();
+      mapRef.current = null;
+      layerRef.current = null;
+    };
+  }, []);
+
+  // Render markers. Re-runs on selection so the active pin gets restyled, but
+  // never recenters/refits the map — that would yank a user who has panned.
+  useEffect(() => {
+    const map = mapRef.current;
+    const layer = layerRef.current;
+    if (!map || !layer) return;
+
+    layer.clearLayers();
+
+    for (const spot of plottedSpots) {
+      const lat = spot.lat as number;
+      const lon = spot.lon as number;
+      const isOutdoor =
+        spot.category === "Outdoors" || spot.category === "Wellness";
+      const isSelected =
+        selected?.kind === "spot" && selected.id === spot.id;
+      L.circleMarker([lat, lon], {
+        radius: isSelected ? 8 : isOutdoor ? 6 : 5,
+        color: isOutdoor ? "#276749" : "#65746b",
+        weight: isSelected ? 2 : 1,
+        fillColor: isOutdoor ? "#276749" : "#a3b1a8",
+        fillOpacity: 0.75,
+      })
+        .on("click", () => onSelectRef.current?.({ kind: "spot", id: spot.id }))
+        .addTo(layer);
+    }
+
+    for (const event of plottedEvents) {
+      const highlighted = highlightedEventIds?.has(event.id) ?? false;
+      const isSelected =
+        selected?.kind === "event" && selected.id === event.id;
+      L.circleMarker([event.lat, event.lon], {
+        radius: isSelected ? 12 : highlighted ? 10 : 7,
+        color: "#ffffff",
+        weight: 2,
+        fillColor: highlighted ? "#b85c38" : "#d68f6e",
+        fillOpacity: 0.95,
+      })
+        .on("click", () =>
+          onSelectRef.current?.({ kind: "event", id: event.id }),
+        )
+        .addTo(layer);
+    }
+  }, [plottedSpots, plottedEvents, highlightedEventIds, selected]);
+
+  // Frame the map once when the underlying point set changes — but never on
+  // selection alone, and never if the user already has a saved/manual view.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    if (hasUserViewRef.current) return;
+
+    const points: Array<[number, number]> = [];
+    for (const spot of plottedSpots) {
+      points.push([spot.lat as number, spot.lon as number]);
+    }
+    for (const event of plottedEvents) {
+      points.push([event.lat, event.lon]);
+    }
+
+    if (points.length === 0) {
+      map.setView(bayAreaMapCenter, 9);
+      return;
+    }
+    if (points.length === 1) {
+      map.setView(points[0], 13);
+      return;
+    }
+    map.fitBounds(L.latLngBounds(points), { maxZoom: 13, padding: [28, 28] });
+  }, [plottedSpots, plottedEvents]);
+
+  return (
+    <div
+      className="map-canvas map-canvas-fill"
+      ref={containerRef}
+      aria-label="Map of Bay Area spots and events"
+    />
+  );
+}
+
+export function PlanMap({
+  stops,
+  events,
+  items,
+}: {
+  stops: Spot[];
+  events?: FamilyEvent[];
+  items?: PlanMapItem[];
+}) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<LeafletMap | null>(null);
+  const layerRef = useRef<LayerGroup | null>(null);
+
+  // Build a single ordered visit sequence. Callers may pass a pre-ordered
+  // `items` array (drives by Plan.itemOrder); otherwise we fall back to
+  // "stops in stopIds order, then events sorted by start time".
+  const sequence = useMemo<PlanMapItem[]>(() => {
+    if (items && items.length > 0) {
+      return items.filter(
+        (it) =>
+          typeof it.lat === "number" &&
+          typeof it.lon === "number" &&
+          Number.isFinite(it.lat) &&
+          Number.isFinite(it.lon),
+      );
+    }
+    const fallback: PlanMapItem[] = [];
+    for (const spot of stops) {
+      if (
+        typeof spot.lat === "number" &&
+        typeof spot.lon === "number" &&
+        Number.isFinite(spot.lat) &&
+        Number.isFinite(spot.lon)
+      ) {
+        fallback.push({
+          kind: "spot",
+          lat: spot.lat,
+          lon: spot.lon,
+          label: spot.name,
+          sublabel: `${spot.neighborhood} · ${spot.category}`,
+        });
+      }
+    }
+    const orderedEvents = (events ?? [])
+      .filter(
+        (e) =>
+          typeof e.lat === "number" &&
+          typeof e.lon === "number" &&
+          Number.isFinite(e.lat) &&
+          Number.isFinite(e.lon),
+      )
+      .sort((a, b) => {
+        const aT = a.startDateTime
+          ? new Date(a.startDateTime).getTime()
+          : Infinity;
+        const bT = b.startDateTime
+          ? new Date(b.startDateTime).getTime()
+          : Infinity;
+        return aT - bT;
+      });
+    for (const event of orderedEvents) {
+      const date = event.startDateTime ? new Date(event.startDateTime) : null;
+      const when = date
+        ? date.toLocaleDateString(undefined, {
+            weekday: "short",
+            month: "short",
+            day: "numeric",
+          })
+        : event.timeWindow;
+      fallback.push({
+        kind: "event",
+        lat: event.lat,
+        lon: event.lon,
+        label: event.title,
+        sublabel: `${when} · ${event.venue}`,
+      });
+    }
+    return fallback;
+  }, [stops, events, items]);
+
+  useEffect(() => {
+    if (!containerRef.current || mapRef.current) return;
+    const map = L.map(containerRef.current, {
+      center: bayAreaMapCenter,
+      zoom: 11,
+      scrollWheelZoom: false,
+      attributionControl: false,
+    });
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 18,
+    }).addTo(map);
+    const layer = L.layerGroup().addTo(map);
+    mapRef.current = map;
+    layerRef.current = layer;
+    // When the user navigates back from PollView, the plan-detail layout may
+    // not be measured yet at mount time, so Leaflet caches a 0×0 canvas and
+    // the map renders blank. Invalidate on next frame and observe further
+    // resizes so the canvas stays in sync with the container.
+    requestAnimationFrame(() => map.invalidateSize());
+    const resizeObserver = new ResizeObserver(() => map.invalidateSize());
+    resizeObserver.observe(containerRef.current);
+    return () => {
+      resizeObserver.disconnect();
+      map.remove();
+      mapRef.current = null;
+      layerRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    const layer = layerRef.current;
+    if (!map || !layer) return;
+    layer.clearLayers();
+    // Re-running for new data is also a good time to nudge Leaflet — covers
+    // the case where the parent container was 0×0 at mount (e.g. when the
+    // plan detail re-renders after coming back from /p/<pollId>).
+    requestAnimationFrame(() => map.invalidateSize());
+    if (sequence.length === 0) {
+      map.setView(bayAreaMapCenter, 10);
+      return;
+    }
+    const points: Array<[number, number]> = [];
+    sequence.forEach((item, idx) => {
+      points.push([item.lat, item.lon]);
+      const icon = L.divIcon({
+        className: `plan-pin plan-pin-${item.kind}`,
+        html: `<span>${idx + 1}</span>`,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14],
+      });
+      L.marker([item.lat, item.lon], { icon })
+        .bindPopup(
+          `<strong>${idx + 1}. ${item.label}</strong><br/>${item.sublabel}`,
+        )
+        .addTo(layer);
+    });
+    if (points.length > 1) {
+      L.polyline(points, {
+        color: "#276749",
+        weight: 3,
+        opacity: 0.65,
+        dashArray: "6 8",
+      }).addTo(layer);
+    }
+    if (points.length === 1) {
+      map.setView(points[0], 14);
+    } else {
+      map.fitBounds(L.latLngBounds(points), {
+        maxZoom: 14,
+        padding: [40, 40],
+      });
+    }
+  }, [sequence]);
+
+  if (sequence.length === 0) return null;
+
+  return (
+    <div
+      className="plan-map"
+      role="img"
+      aria-label="Map of plan stops and events in visit order"
+      ref={containerRef}
+    />
+  );
+}

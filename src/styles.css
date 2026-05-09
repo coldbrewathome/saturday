@@ -2558,6 +2558,54 @@ h3 {
   color: var(--coral);
 }
 
+.share-quick-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.share-quick-link {
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  gap: 5px;
+  padding: 6px 12px;
+  text-decoration: none;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.share-quick-link:hover {
+  background: var(--surface-strong);
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+.share-quick-link svg {
+  height: 14px;
+  width: 14px;
+}
+
+.share-quick-link.sms { color: #047857; }
+.share-quick-link.sms:hover { background: #ecfdf5; border-color: #34d399; color: #065f46; }
+
+.share-quick-link.whatsapp { color: #128c7e; }
+.share-quick-link.whatsapp:hover { background: #e7f8f4; border-color: #25d366; color: #0e6b5e; }
+
+.share-quick-link.email { color: #1d4ed8; }
+.share-quick-link.email:hover { background: #eff6ff; border-color: #3b82f6; color: #1e3a8a; }
+
+.share-quick-link.native,
+.share-quick-link.copy { color: var(--ink); }
+.share-quick-link.copy:hover { background: var(--surface-strong); border-color: var(--accent); color: var(--accent-strong); }
+
 .poll-shell {
   margin: 0 auto;
   max-width: 720px;
@@ -2727,11 +2775,12 @@ h3 {
   gap: 4px;
   min-height: 72px;
   padding: 10px;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
 }
 
 .vote-button svg {
-  height: 20px;
-  width: 20px;
+  height: 22px;
+  width: 22px;
 }
 
 .vote-button span {
@@ -2748,16 +2797,41 @@ h3 {
   padding: 2px 8px;
 }
 
-.vote-button.active {
-  background: #fdece7;
-  border-color: var(--accent);
-  color: var(--accent-strong);
+.vote-button.vote-up { color: #166534; }
+.vote-button.vote-up svg { color: #16a34a; }
+.vote-button.vote-up:hover { background: #f0fdf4; border-color: #bbf7d0; }
+.vote-button.vote-up.active {
+  background: #dcfce7;
+  border-color: #16a34a;
+  color: #14532d;
+  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.18);
 }
+.vote-button.vote-up.active svg { color: #15803d; }
+.vote-button.vote-up.active em { background: #16a34a; color: #ffffff; }
 
-.vote-button.active em {
-  background: var(--accent);
-  color: #ffffff;
+.vote-button.vote-meh { color: #854d0e; }
+.vote-button.vote-meh svg { color: #ca8a04; }
+.vote-button.vote-meh:hover { background: #fefce8; border-color: #fde68a; }
+.vote-button.vote-meh.active {
+  background: #fef3c7;
+  border-color: #d97706;
+  color: #78350f;
+  box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.18);
 }
+.vote-button.vote-meh.active svg { color: #b45309; }
+.vote-button.vote-meh.active em { background: #d97706; color: #ffffff; }
+
+.vote-button.vote-down { color: #7f1d1d; }
+.vote-button.vote-down svg { color: #dc2626; }
+.vote-button.vote-down:hover { background: #fef2f2; border-color: #fecaca; }
+.vote-button.vote-down.active {
+  background: #fee2e2;
+  border-color: #dc2626;
+  color: #7f1d1d;
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.18);
+}
+.vote-button.vote-down.active svg { color: #b91c1c; }
+.vote-button.vote-down.active em { background: #dc2626; color: #ffffff; }
 
 .vote-button:disabled {
   cursor: not-allowed;

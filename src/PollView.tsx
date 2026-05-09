@@ -253,7 +253,7 @@ export default function PollView({ pollId }: { pollId: string }) {
                     return (
                       <button
                         key={value}
-                        className={active ? "vote-button active" : "vote-button"}
+                        className={`vote-button vote-${value}${active ? " active" : ""}`}
                         disabled={submitting}
                         onClick={() => vote(stop.id, value)}
                       >
@@ -303,7 +303,7 @@ export default function PollView({ pollId }: { pollId: string }) {
                   return (
                     <button
                       key={value}
-                      className={active ? "vote-button active" : "vote-button"}
+                      className={`vote-button vote-${value}${active ? " active" : ""}`}
                       disabled={submitting}
                       onClick={() => vote(event.id, value)}
                     >

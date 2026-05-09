@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-09T05:06:30.800Z",
+  "generatedAt": "2026-05-09T07:37:28.449Z",
   "registryPath": "data/event-sources.json",
   "outputPath": "public/data/events.json",
-  "eventCount": 568,
-  "sourceCount": 77,
-  "liveEventCount": 444,
+  "eventCount": 597,
+  "sourceCount": 78,
+  "liveEventCount": 473,
   "fallbackEventCount": 124,
   "errors": [],
   "sources": [
@@ -193,6 +193,41 @@
       "rejectedLiveEvents": 0
     },
     {
+      "id": "palo-alto-childrens-theatre",
+      "name": "Palo Alto Children's Theatre",
+      "url": "https://www.paloalto.gov/Departments/Community-Services/Arts-Sciences/Palo-Alto-Childrens-Theatre",
+      "sourceType": "openCitiesEvent",
+      "city": "Palo Alto",
+      "category": "Culture",
+      "status": "ok",
+      "liveEvents": 14,
+      "fallbackEvents": 0,
+      "eventCount": 14,
+      "fetches": [
+        {
+          "url": "https://www.paloalto.gov/Departments/Community-Services/Arts-Sciences/Palo-Alto-Childrens-Theatre",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        },
+        {
+          "url": "https://www.paloalto.gov/Events-Directory/Community-Services/Main-Stage-Roald-Dahls-Matilda",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        },
+        {
+          "url": "https://www.paloalto.gov/Events-Directory/Community-Services/Playhouse-Series-The-Three-Little-Pigs",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 6
+    },
+    {
       "id": "mountain-view-library",
       "name": "Mountain View Public Library",
       "url": "https://mountainview.libcal.com/calendar?cid=-1&t=g&d=0000-00-00&cal=-1&inc=0",
@@ -213,7 +248,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 68
+      "rejectedLiveEvents": 66
     },
     {
       "id": "sjpl",
@@ -223,9 +258,9 @@
       "city": "San Jose",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 8,
+      "liveEvents": 9,
       "fallbackEvents": 0,
-      "eventCount": 8,
+      "eventCount": 9,
       "fetches": [
         {
           "url": "https://sjpl.bibliocommons.com/v2/events?q=family",
@@ -522,9 +557,9 @@
       "city": "Walnut Creek",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 4,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 4,
       "fetches": [
         {
           "url": "https://ccclib.bibliocommons.com/v2/events",
@@ -634,21 +669,18 @@
       "sourceType": "html",
       "city": "Berkeley",
       "category": "Museum",
-      "status": "ok-template-fallback",
+      "status": "fetch-error",
       "liveEvents": 0,
       "fallbackEvents": 4,
       "eventCount": 4,
       "fetches": [
         {
           "url": "https://www.habitot.org/visit",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "reason": "This operation was aborted"
     },
     {
       "id": "curiodyssey",
@@ -749,9 +781,9 @@
       "city": "Oakland",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 5,
+      "liveEvents": 6,
       "fallbackEvents": 0,
-      "eventCount": 5,
+      "eventCount": 6,
       "fetches": [
         {
           "url": "https://chabotspace.org/programs/calendar-view/",
@@ -762,7 +794,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 26
+      "rejectedLiveEvents": 25
     },
     {
       "id": "hiller-aviation",
@@ -932,9 +964,9 @@
       "city": "Oakland",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 92,
+      "liveEvents": 101,
       "fallbackEvents": 0,
-      "eventCount": 92,
+      "eventCount": 101,
       "fetches": [
         {
           "url": "https://www.ebparks.org/calendar",
@@ -945,7 +977,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; source=drupal-views-ajax",
-      "rejectedLiveEvents": 48
+      "rejectedLiveEvents": 47
     },
     {
       "id": "don-edwards-nwr",
@@ -1158,9 +1190,9 @@
       "city": "San Francisco",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 6,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 6,
       "fetches": [
         {
           "url": "https://ybgfestival.org/childrens-garden-series/",
@@ -1171,7 +1203,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 9
+      "rejectedLiveEvents": 16
     },
     {
       "id": "ybgfestival-great-lawn",
@@ -1194,7 +1226,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 32
+      "rejectedLiveEvents": 33
     },
     {
       "id": "stern-grove",

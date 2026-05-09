@@ -19,10 +19,31 @@ export type PlannerPreferenceId =
 
 export type PlannerWeatherTone = "wet" | "dry" | "mixed";
 
+const plannerTransportModes = ["any", "drive", "transit", "walk-stroller"] as const;
+const plannerBudgetLevels = ["any", "free", "under-25"] as const;
+const plannerPlanLengths = ["quick", "half-day", "full-day"] as const;
+const plannerCrowdTolerances = ["balanced", "quiet", "busy-ok"] as const;
+const plannerSettingPreferences = ["any", "indoor", "outdoor"] as const;
+
+export type PlannerTransportMode = (typeof plannerTransportModes)[number];
+export type PlannerBudgetLevel = (typeof plannerBudgetLevels)[number];
+export type PlannerPlanLength = (typeof plannerPlanLengths)[number];
+export type PlannerCrowdTolerance = (typeof plannerCrowdTolerances)[number];
+export type PlannerSettingPreference = (typeof plannerSettingPreferences)[number];
+
+export type PlannerProfile = {
+  transportMode: PlannerTransportMode;
+  budget: PlannerBudgetLevel;
+  planLength: PlannerPlanLength;
+  crowdTolerance: PlannerCrowdTolerance;
+  setting: PlannerSettingPreference;
+};
+
 export type PlannerScoringOptions = {
   ageBand?: AgeBand;
   preferences?: PlannerPreferenceId[];
   weather?: PlannerWeatherTone;
+  profile?: Partial<PlannerProfile> | null;
 };
 
 export type PlannerSpot = {
@@ -123,6 +144,112 @@ export const plannerPreferenceOptions: Array<{
   },
 ];
 
+export const defaultPlannerProfile: PlannerProfile = {
+  transportMode: "any",
+  budget: "any",
+  planLength: "half-day",
+  crowdTolerance: "balanced",
+  setting: "any",
+};
+
+export const plannerTransportOptions: Array<{
+  id: PlannerTransportMode;
+  label: string;
+  hint: string;
+}> = [
+  {
+    id: "any",
+    label: "Any",
+    hint: "Use the best nearby cluster without a transport bias",
+  },
+  {
+    id: "drive",
+    label: "Drive",
+    hint: "Prefer easier parking and shorter car-style hops",
+  },
+  {
+    id: "transit",
+    label: "Transit",
+    hint: "Prefer compact plans and places with transit cues",
+  },
+  {
+    id: "walk-stroller",
+    label: "Walk / stroller",
+    hint: "Prefer short, accessible, low-friction stops",
+  },
+];
+
+export const plannerBudgetOptions: Array<{
+  id: PlannerBudgetLevel;
+  label: string;
+  hint: string;
+}> = [
+  { id: "any", label: "Any", hint: "Do not filter by cost" },
+  { id: "free", label: "Free", hint: "Only free or very low-cost ideas" },
+  { id: "under-25", label: "Under $25", hint: "Prefer low-cost family plans" },
+];
+
+export const plannerPlanLengthOptions: Array<{
+  id: PlannerPlanLength;
+  label: string;
+  hint: string;
+}> = [
+  { id: "quick", label: "Quick", hint: "Short travel and easy exits" },
+  { id: "half-day", label: "Half day", hint: "A balanced 2-3 stop outing" },
+  { id: "full-day", label: "Bigger day", hint: "Allow stronger destinations" },
+];
+
+export const plannerCrowdOptions: Array<{
+  id: PlannerCrowdTolerance;
+  label: string;
+  hint: string;
+}> = [
+  { id: "balanced", label: "Balanced", hint: "No special crowd preference" },
+  { id: "quiet", label: "Quiet", hint: "Prefer calmer places and easy exits" },
+  { id: "busy-ok", label: "Busy ok", hint: "Events and weekend magnets are fine" },
+];
+
+export const plannerSettingOptions: Array<{
+  id: PlannerSettingPreference;
+  label: string;
+  hint: string;
+}> = [
+  { id: "any", label: "Any", hint: "Indoor or outdoor can work" },
+  { id: "indoor", label: "Indoor", hint: "Prefer weather-protected stops" },
+  { id: "outdoor", label: "Outdoor", hint: "Prefer parks, gardens, trails, and play" },
+];
+
+function oneOf<T extends string>(value: unknown, options: readonly T[]): value is T {
+  return typeof value === "string" && options.includes(value as T);
+}
+
+export function normalizePlannerProfile(
+  input?: Partial<PlannerProfile> | null,
+): PlannerProfile {
+  const transportMode = input?.transportMode;
+  const budget = input?.budget;
+  const planLength = input?.planLength;
+  const crowdTolerance = input?.crowdTolerance;
+  const setting = input?.setting;
+  return {
+    transportMode: oneOf(transportMode, plannerTransportModes)
+      ? transportMode
+      : defaultPlannerProfile.transportMode,
+    budget: oneOf(budget, plannerBudgetLevels)
+      ? budget
+      : defaultPlannerProfile.budget,
+    planLength: oneOf(planLength, plannerPlanLengths)
+      ? planLength
+      : defaultPlannerProfile.planLength,
+    crowdTolerance: oneOf(crowdTolerance, plannerCrowdTolerances)
+      ? crowdTolerance
+      : defaultPlannerProfile.crowdTolerance,
+    setting: oneOf(setting, plannerSettingPreferences)
+      ? setting
+      : defaultPlannerProfile.setting,
+  };
+}
+
 function normalizeScoringOptions(
   input?: AgeBand | PlannerScoringOptions,
 ): PlannerScoringOptions {
@@ -157,19 +284,56 @@ function hasPreference(
   return preferences?.includes(id) ?? false;
 }
 
+function isLowCost(cost: string) {
+  return cost === "Free" || cost === "$";
+}
+
+function spotLooksIndoor(spot: PlannerSpot, text: string) {
+  return (
+    spot.category === "Culture" ||
+    spot.category === "Food" ||
+    spot.category === "Wellness" ||
+    spot.category === "Shopping" ||
+    /\b(indoor|inside|covered|library|museum|story|cafe|restaurant|aquarium|gym|greenhouse)\b/.test(
+      text,
+    )
+  );
+}
+
+function spotLooksOutdoor(spot: PlannerSpot, text: string) {
+  return (
+    spot.category === "Outdoors" ||
+    /\b(outdoor|outside|park|garden|trail|beach|playground|picnic|farm|zoo|wildlife|nature)\b/.test(
+      text,
+    )
+  );
+}
+
+function hasTransitCue(text: string) {
+  return /\b(bart|caltrain|muni|ferry|bus|transit|station|downtown|walkable)\b/.test(text);
+}
+
+function hasParkingCue(spot: PlannerSpot, text: string) {
+  return spot.parkingNearby === true || /\b(parking|lot|garage)\b/.test(text);
+}
+
 export function spotPassesPlannerPreferences(
   spot: PlannerSpot,
   input?: PlannerScoringOptions,
 ): boolean {
   const options = normalizeScoringOptions(input);
   const preferences = options.preferences ?? [];
+  const profile = normalizePlannerProfile(options.profile);
   const text = textForSpot(spot);
 
   if (
     hasPreference(preferences, "free-only") &&
-    spot.cost !== "Free" &&
-    spot.cost !== "$"
+    !isLowCost(spot.cost)
   ) {
+    return false;
+  }
+
+  if (profile.budget !== "any" && !isLowCost(spot.cost)) {
     return false;
   }
 
@@ -180,12 +344,24 @@ export function spotPassesPlannerPreferences(
     return false;
   }
 
+  if (profile.planLength === "quick" && spot.transitMinutes > 35) {
+    return false;
+  }
+
   if (
     hasPreference(preferences, "indoor-when-rainy") &&
     options.weather === "wet" &&
     spot.category === "Outdoors" &&
     !/\b(indoor|covered|greenhouse)\b/.test(text)
   ) {
+    return false;
+  }
+
+  if (profile.setting === "indoor" && !spotLooksIndoor(spot, text)) {
+    return false;
+  }
+
+  if (profile.setting === "outdoor" && !spotLooksOutdoor(spot, text)) {
     return false;
   }
 
@@ -207,6 +383,7 @@ export function scoreSpotForVibe(
   const options = normalizeScoringOptions(input);
   const ageBand = options.ageBand;
   const preferences = options.preferences ?? [];
+  const profile = normalizePlannerProfile(options.profile);
   const text = textForSpot(spot);
 
   // Base: every spot is being evaluated as a kid/family option.
@@ -368,7 +545,154 @@ export function scoreSpotForVibe(
     else score -= 5;
   }
 
+  if (profile.budget === "free" || profile.budget === "under-25") {
+    if (spot.cost === "Free") score += profile.budget === "free" ? 18 : 14;
+    else if (spot.cost === "$") score += 9;
+    else score -= 18;
+  }
+
+  if (profile.planLength === "quick") {
+    if (spot.transitMinutes <= 15) score += 14;
+    else if (spot.transitMinutes <= 25) score += 8;
+    if (spot.planning === "Walk-in" || spot.planning === "Flexible") score += 10;
+    if (/\b(short|quick|easy|drop-in|walk-in|flexible)\b/.test(text)) score += 6;
+    if (/\b(reservation|book|ticketed|timed entry)\b/.test(text)) score -= 6;
+  } else if (profile.planLength === "full-day") {
+    if (spot.dataSource === "family-event") score += 6;
+    if (spot.category === "Outdoors" || spot.category === "Culture") score += 5;
+    if (spot.transitMinutes > 40 && (spot.friendScore ?? 0) < 82) score -= 5;
+  }
+
+  if (profile.transportMode === "drive") {
+    if (hasParkingCue(spot, text)) score += 7;
+    if (spot.parkingNearby === false) score -= 5;
+    if (spot.transitMinutes > 45) score -= 6;
+  }
+
+  if (profile.transportMode === "transit") {
+    if (spot.transitMinutes <= 25) score += 9;
+    else if (spot.transitMinutes <= 40) score += 4;
+    else score -= 10;
+    if (hasTransitCue(text)) score += 8;
+  }
+
+  if (profile.transportMode === "walk-stroller") {
+    if (spot.transitMinutes <= 15) score += 12;
+    else if (spot.transitMinutes <= 25) score += 6;
+    else score -= 12;
+    if (spot.wheelchair === "yes") score += 8;
+    if (/\b(stroller|accessible|paved|flat|walkable|easy exit|library|playground)\b/.test(text)) {
+      score += 7;
+    }
+    if (/\b(stairs|steep|scramble|long hike)\b/.test(text)) score -= 12;
+  }
+
+  if (profile.crowdTolerance === "quiet") {
+    if (/\b(quiet|calm|small|garden|trail|library|picnic|easy exit|low crowd)\b/.test(text)) {
+      score += 11;
+    }
+    if (
+      spot.category === "Shopping" ||
+      /\b(festival|market|mall|popular|crowd|busy|ticketed)\b/.test(text)
+    ) {
+      score -= 10;
+    }
+  }
+
+  if (profile.crowdTolerance === "busy-ok") {
+    if (spot.dataSource === "family-event") score += 4;
+    if (/\b(festival|market|program|performance|event|popular)\b/.test(text)) {
+      score += 5;
+    }
+  }
+
+  if (profile.setting === "indoor") {
+    if (spotLooksIndoor(spot, text)) score += 14;
+    if (spot.category === "Outdoors" && !/\b(covered|greenhouse)\b/.test(text)) score -= 18;
+  }
+
+  if (profile.setting === "outdoor") {
+    if (spotLooksOutdoor(spot, text)) score += 16;
+    if (spot.category === "Shopping") score -= 8;
+  }
+
   return Math.round(score);
+}
+
+export function describePlannerMatch(
+  spot: PlannerSpot,
+  input?: PlannerScoringOptions,
+): string[] {
+  const options = normalizeScoringOptions(input);
+  const preferences = options.preferences ?? [];
+  const profile = normalizePlannerProfile(options.profile);
+  const text = textForSpot(spot);
+  const reasons: string[] = [];
+
+  if (spot.dataSource === "family-event") {
+    reasons.push("scheduled family event");
+  }
+  if (options.ageBand) {
+    reasons.push(`fits ${ageBandLabels[options.ageBand].toLowerCase()}`);
+  }
+  if ((profile.budget !== "any" || hasPreference(preferences, "free-only")) && isLowCost(spot.cost)) {
+    reasons.push(spot.cost === "Free" ? "free" : "low cost");
+  }
+  if (
+    (profile.planLength === "quick" || hasPreference(preferences, "near-only")) &&
+    spot.transitMinutes <= 30
+  ) {
+    reasons.push(`${spot.transitMinutes} min away`);
+  }
+  if (profile.transportMode === "drive" && hasParkingCue(spot, text)) {
+    reasons.push("parking looks easier");
+  }
+  if (profile.transportMode === "transit" && (spot.transitMinutes <= 30 || hasTransitCue(text))) {
+    reasons.push("better transit fit");
+  }
+  if (
+    profile.transportMode === "walk-stroller" &&
+    (spot.transitMinutes <= 25 || spot.wheelchair === "yes" || /\b(stroller|accessible|paved|flat)\b/.test(text))
+  ) {
+    reasons.push("stroller-friendly");
+  }
+  if (
+    (profile.setting === "indoor" ||
+      (hasPreference(preferences, "indoor-when-rainy") && options.weather === "wet")) &&
+    spotLooksIndoor(spot, text)
+  ) {
+    reasons.push("weather-safe indoor option");
+  }
+  if (
+    (profile.setting === "outdoor" || hasPreference(preferences, "parks-nature")) &&
+    spotLooksOutdoor(spot, text)
+  ) {
+    reasons.push("outdoor play/nature fit");
+  }
+  if (
+    (profile.crowdTolerance === "quiet" || hasPreference(preferences, "no-crowds")) &&
+    /\b(quiet|calm|garden|trail|library|picnic|easy exit|low crowd)\b/.test(text)
+  ) {
+    reasons.push("calmer crowd profile");
+  }
+  if (
+    hasPreference(preferences, "libraries-museums") &&
+    (spot.category === "Culture" || /\b(library|museum|story|exhibit|science)\b/.test(text))
+  ) {
+    reasons.push("library/museum interest match");
+  }
+  if (
+    hasPreference(preferences, "loves-animals") &&
+    /\b(zoo|aquarium|farm|wildlife|animal|bird|nature center)\b/.test(text)
+  ) {
+    reasons.push("animal interest match");
+  }
+
+  if (reasons.length === 0) {
+    reasons.push(`${spot.category.toLowerCase()} fit in ${spot.neighborhood}`);
+  }
+
+  return Array.from(new Set(reasons)).slice(0, 3);
 }
 
 export function rankForVibe(

@@ -1,7 +1,8 @@
-# Weekend With Kids
+# FamHop
 
-A Vite React app for planning the weekend with the kids in the Bay Area —
-parks, libraries, museums, family-friendly venues, and family events.
+A Vite React app (famhop.com) for planning the weekend with the kids in the
+Bay Area — parks, libraries, museums, family-friendly venues, and family
+events.
 
 ## Run locally
 

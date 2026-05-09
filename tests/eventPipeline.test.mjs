@@ -12,6 +12,7 @@ import {
   extractLibraryCalendarEvents,
   extractMidpenTableEvents,
   extractJsonLdEvents,
+  extractOpenCitiesEventEvents,
   extractOfficialTextEvents,
   inferAgeBands,
   parseDateTimeRange,
@@ -136,6 +137,50 @@ test("extractBiblioEvents parses BiblioCommons event cards", () => {
   assert.equal(events[0].title, "Toddler Storytime");
   assert.equal(events[0].venue, "Main Children's Room");
   assert.equal(events[0].extractionMethod, "biblioevents");
+});
+
+test("extractOpenCitiesEventEvents expands multi-date event pages", () => {
+  const html = `
+    <h1 class="oc-page-title">Playhouse Series: The Three Little Pigs</h1>
+    <meta name="description" content="Story-teller style theatre for young audience members, suggested ages two to six years old." />
+    <ul class="multi-date-list future-events-list">
+      <li class="multi-date-item" data-start-year='2026' data-start-month='05' data-start-day='30' data-end-year='2026' data-end-month='05' data-end-day='30' data-start-hour='10' data-start-mins='00' data-end-hour='11' data-end-mins='00'>
+        Saturday, May 30, 2026 | 10:00 AM - 11:00 AM
+      </li>
+      <li class="multi-date-item" data-start-year='2026' data-start-month='05' data-start-day='30' data-end-year='2026' data-end-month='05' data-end-day='30' data-start-hour='12' data-start-mins='00' data-end-hour='13' data-end-mins='00'>
+        Saturday, May 30, 2026 | 12:00 PM - 01:00 PM
+      </li>
+      <li class="multi-date-item" data-start-year='2026' data-start-month='05' data-start-day='31' data-end-year='2026' data-end-month='05' data-end-day='31' data-start-hour='14' data-start-mins='00' data-end-hour='15' data-end-mins='00'>
+        Sunday, May 31, 2026 | 02:00 PM - 03:00 PM
+      </li>
+    </ul>
+    <h3 class="side-box-cost">Cost</h3>
+    <p class="side-box-cost">$17</p>
+  `;
+
+  const events = extractOpenCitiesEventEvents(html, {
+    id: "palo-alto-childrens-theatre",
+    name: "Palo Alto Children's Theatre",
+    url: "https://www.paloalto.gov/Events-Directory/Community-Services/Playhouse-Series-The-Three-Little-Pigs",
+    homeUrl: "https://www.paloalto.gov/Departments/Community-Services/Arts-Sciences/Palo-Alto-Childrens-Theatre",
+    city: "Palo Alto",
+    neighborhood: "Palo Alto",
+    venue: "Palo Alto Children's Theatre",
+    category: "Culture",
+    sourceType: "openCitiesEvent",
+    lat: 37.444752,
+    lon: -122.145844,
+    defaultAudienceText: "families children toddler preschool theatre performance",
+  });
+
+  assert.equal(events.length, 3);
+  assert.equal(events[0].title, "Playhouse Series: The Three Little Pigs");
+  assert.equal(events[0].startDateTime, "2026-05-30T17:00:00.000Z");
+  assert.equal(events[1].startDateTime, "2026-05-30T19:00:00.000Z");
+  assert.equal(events[2].startDateTime, "2026-05-31T21:00:00.000Z");
+  assert.equal(events[0].cost, "$17");
+  assert.equal(events[0].sourceMode, "open-cities-event");
+  assert.deepEqual(events[0].ageBands, ["toddler", "preschool", "school-age"]);
 });
 
 test("extractLibraryCalendarEvents parses LibraryCalendar cards", () => {

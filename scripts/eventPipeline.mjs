@@ -1088,6 +1088,88 @@ export function extractOfficialTextEvents(html, source = {}, options = {}) {
   ]);
 }
 
+function openCitiesEventTitle(html, source = {}) {
+  return cleanEventTitle(
+    html.match(/<h1[^>]*class=["'][^"']*oc-page-title[^"']*["'][^>]*>([\s\S]*?)<\/h1>/i)?.[1] ||
+      pageTitle(html).replace(/\s+[-–]\s+City of Palo Alto.*$/i, "") ||
+      source.name ||
+      "",
+  );
+}
+
+function openCitiesEventDescription(html, title) {
+  const meta = pageDescription(html);
+  if (meta) return meta;
+  const firstParagraph = html.match(/<p[^>]*>([\s\S]*?)<\/p>/i)?.[1] || "";
+  return descriptionFromLines(htmlToLines(firstParagraph), title, "");
+}
+
+function openCitiesCost(html) {
+  for (const match of html.matchAll(/<p[^>]+class=["'][^"']*side-box-cost[^"']*["'][^>]*>([\s\S]*?)<\/p>/gi)) {
+    const text = stripUnsafeText(match[1], 80);
+    if (text && !/^cost$/i.test(text)) return text;
+  }
+  return "";
+}
+
+function openCitiesAttr(attrs, name) {
+  return attrs.match(new RegExp(`${name}=['"]([^'"]+)['"]`, "i"))?.[1] || "";
+}
+
+function openCitiesDateTime(attrs, prefix) {
+  const year = openCitiesAttr(attrs, `${prefix}-year`);
+  const month = openCitiesAttr(attrs, `${prefix}-month`);
+  const day = openCitiesAttr(attrs, `${prefix}-day`);
+  const hour = openCitiesAttr(attrs, `${prefix}-hour`) || "10";
+  const minute = openCitiesAttr(attrs, `${prefix}-mins`) || "00";
+  if (!year || !month || !day) return null;
+  return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}T${hour.padStart(2, "0")}:${minute.padStart(2, "0")}:00-07:00`;
+}
+
+export function extractOpenCitiesEventEvents(html, source = {}) {
+  const title = openCitiesEventTitle(html, source);
+  if (!title || isGenericPageTitle(title)) return [];
+
+  const description = openCitiesEventDescription(html, title);
+  const cost = openCitiesCost(html) || source.cost || inferCost(`${title} ${description}`);
+  const signalText = `${title} ${description} ${sourceAudienceText(source)}`;
+  if (hasAdultOnlySignal(signalText)) return [];
+
+  const events = [];
+  const blocks = html.matchAll(/<li[^>]+class=["'][^"']*multi-date-item[^"']*["']([^>]*)>([\s\S]*?)<\/li>/gi);
+  for (const match of blocks) {
+    const attrs = match[1] || "";
+    const startDateTime = openCitiesDateTime(attrs, "data-start");
+    if (!startDateTime) continue;
+    const endDateTime =
+      openCitiesDateTime(attrs, "data-end") ||
+      addMinutesToLocalIso(startDateTime, Number(source.defaultDurationMinutes || 60));
+    const event = normalizeRawEvent({
+      title,
+      description,
+      venue: source.venue || source.name,
+      city: source.city,
+      neighborhood: source.neighborhood || source.city,
+      lat: source.lat,
+      lon: source.lon,
+      category: source.category || inferCategory(signalText, "Culture"),
+      startDateTime,
+      endDateTime,
+      ageBands: inferAgeBands(signalText),
+      cost,
+      url: source.url,
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.homeUrl || source.url,
+      extractionMethod: "open-cities-event",
+      verified: true,
+    }, source);
+    if (event) events.push(event);
+  }
+
+  return dedupeEvents(events);
+}
+
 export function normalizeDateTime(value) {
   const raw = stripUnsafeText(value, 120);
   if (!raw) return null;
@@ -1223,6 +1305,9 @@ export function extractEventsFromPayload(payload, source = {}, options = {}) {
   }
   if (source.sourceType === "officialTextEvents") {
     return extractOfficialTextEvents(text, source, options);
+  }
+  if (source.sourceType === "openCitiesEvent") {
+    return extractOpenCitiesEventEvents(text, source, options);
   }
   if (source.sourceType === "midpenTable") {
     return extractMidpenTableEvents(text, source, options);
@@ -1483,7 +1568,7 @@ export function dedupeEvents(events) {
     const key = [
       slugify(event.title),
       slugify(event.venue),
-      event.startDateTime ? event.startDateTime.slice(0, 10) : "",
+      event.startDateTime || "",
     ].join("|");
     const existing = best.get(key);
     if (!existing || scoreEvent(event) > scoreEvent(existing)) {

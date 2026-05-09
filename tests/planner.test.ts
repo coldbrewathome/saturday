@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildPlannerBrief,
+  describePlannerMatch,
   rankForVibe,
   scoreSpotForVibe,
   type PlannerSpot,
@@ -179,6 +180,64 @@ describe("planner scoring", () => {
     });
 
     expect(ranked.map((spot) => spot.id)).toEqual(["free-close"]);
+  });
+
+  it("uses the structured planner profile as hard constraints", () => {
+    const quickFreeIndoor = {
+      ...baseSpot,
+      id: "quick-free-indoor",
+      category: "Culture",
+      cost: "Free",
+      transitMinutes: 15,
+      mood: "Indoor library story time",
+    };
+    const farOutdoorPaid = {
+      ...baseSpot,
+      id: "far-outdoor-paid",
+      category: "Outdoors",
+      cost: "$$$",
+      transitMinutes: 50,
+      mood: "Ticketed outdoor festival",
+      friendScore: 140,
+    };
+
+    const ranked = rankForVibe([farOutdoorPaid, quickFreeIndoor], "balanced", {
+      profile: {
+        budget: "under-25",
+        planLength: "quick",
+        setting: "indoor",
+      },
+    });
+
+    expect(ranked.map((spot) => spot.id)).toEqual(["quick-free-indoor"]);
+  });
+
+  it("explains why a local pick matched the family profile", () => {
+    const library = {
+      ...baseSpot,
+      id: "library",
+      category: "Culture",
+      cost: "Free",
+      transitMinutes: 12,
+      mood: "Quiet indoor library story session",
+      tags: ["library", "story", "quiet"],
+      dataSource: "family-event",
+    };
+
+    const reasons = describePlannerMatch(library, {
+      ageBand: "preschool",
+      preferences: ["libraries-museums", "free-only"],
+      profile: {
+        budget: "free",
+        planLength: "quick",
+        crowdTolerance: "quiet",
+        setting: "indoor",
+      },
+    });
+
+    expect(reasons.join(" ")).toContain("scheduled family event");
+    expect(reasons.join(" ")).toContain("preschool");
+    expect(reasons.join(" ")).toContain("free");
   });
 });
 

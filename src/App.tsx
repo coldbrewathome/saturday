@@ -7,9 +7,12 @@ import {
   ChevronRight,
   Clock3,
   Database,
+  Copy,
   ExternalLink,
   List,
+  Mail,
   MapPin,
+  MessageCircle,
   Plus,
   RotateCcw,
   Search,
@@ -4504,6 +4507,10 @@ function App() {
                 <div className="share-banner">
                   <strong>Link copied to clipboard.</strong>
                   <a href={shareState.url}>{shareState.url}</a>
+                  <ShareQuickLinks
+                    url={shareState.url}
+                    title={activePlan.name || "Untitled plan"}
+                  />
                 </div>
               )}
               {shareState.status === "error" && (
@@ -4518,6 +4525,10 @@ function App() {
                   <a href={`${window.location.origin}/#/p/${activePlan.pollId}`}>
                     {`${window.location.origin}/#/p/${activePlan.pollId}`}
                   </a>
+                  <ShareQuickLinks
+                    url={`${window.location.origin}/#/p/${activePlan.pollId}`}
+                    title={activePlan.name || "Untitled plan"}
+                  />
                 </div>
               )}
 
@@ -4717,6 +4728,84 @@ function App() {
           </div>
         </div>
       </footer>
+    </div>
+  );
+}
+
+function ShareQuickLinks({ url, title }: { url: string; title: string }) {
+  const text = `Vote on "${title}" — ${url}`;
+  const enc = encodeURIComponent(text);
+  const subject = encodeURIComponent(`Vote on "${title}"`);
+  const body = encodeURIComponent(`${text}`);
+  const isApple =
+    typeof navigator !== "undefined" &&
+    /(iPhone|iPad|iPod|Macintosh)/i.test(navigator.userAgent);
+  const smsHref = isApple ? `sms:&body=${enc}` : `sms:?body=${enc}`;
+
+  async function nativeShare() {
+    if (typeof navigator !== "undefined" && (navigator as Navigator).share) {
+      try {
+        await (navigator as Navigator).share({ title, text, url });
+      } catch {
+        /* user cancelled */
+      }
+    }
+  }
+
+  async function copyLink() {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  const canNativeShare =
+    typeof navigator !== "undefined" && !!(navigator as Navigator).share;
+
+  return (
+    <div className="share-quick-links" role="group" aria-label="Share via">
+      <a
+        className="share-quick-link sms"
+        href={smsHref}
+        aria-label="Share via Messages"
+      >
+        <MessageCircle aria-hidden="true" /> Messages
+      </a>
+      <a
+        className="share-quick-link whatsapp"
+        href={`https://wa.me/?text=${enc}`}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Share via WhatsApp"
+      >
+        <MessageCircle aria-hidden="true" /> WhatsApp
+      </a>
+      <a
+        className="share-quick-link email"
+        href={`mailto:?subject=${subject}&body=${body}`}
+        aria-label="Share via Email"
+      >
+        <Mail aria-hidden="true" /> Email
+      </a>
+      {canNativeShare && (
+        <button
+          type="button"
+          className="share-quick-link native"
+          onClick={nativeShare}
+          aria-label="More share options"
+        >
+          <Share2 aria-hidden="true" /> More
+        </button>
+      )}
+      <button
+        type="button"
+        className="share-quick-link copy"
+        onClick={copyLink}
+        aria-label="Copy link"
+      >
+        <Copy aria-hidden="true" /> Copy
+      </button>
     </div>
   );
 }
