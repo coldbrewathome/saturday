@@ -8,12 +8,12 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   --surface: #ffffff;
-  --surface-strong: #fff6ee;
+  --surface-strong: #fef9ed;
   --line: #ede2d6;
   --muted: #6b7280;
   --ink: #1f2937;
-  --accent: #ff6b5b;
-  --accent-strong: #e04e3c;
+  --accent: #f59e0b;
+  --accent-strong: #d97706;
   --blue: #335c81;
   --coral: #b85c38;
   --shadow: 0 18px 45px rgba(31, 27, 23, 0.10);
@@ -295,7 +295,7 @@ h3 {
 }
 
 .segmented button.active {
-  background: #fdece7;
+  background: #fef3d8;
   border-color: var(--accent);
   color: var(--accent-strong);
 }
@@ -2917,5 +2917,63 @@ h3 {
 
   .signin-wrap {
     justify-items: start;
+  }
+}
+
+.app-footer {
+  margin: 48px auto 0;
+  padding: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.app-footer-inner {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+  justify-content: space-between;
+  margin: 0 auto;
+  max-width: 1500px;
+}
+
+.app-footer-brand {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  gap: 2px;
+}
+
+.app-footer-brand strong {
+  color: var(--ink);
+  font-size: 1rem;
+}
+
+.app-footer-brand span {
+  color: var(--muted);
+}
+
+.app-footer-meta {
+  align-items: center;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+  gap: 6px 8px;
+}
+
+.app-footer-meta a {
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.app-footer-meta a:hover {
+  color: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .app-footer-inner {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
