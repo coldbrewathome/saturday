@@ -1099,6 +1099,7 @@ function App() {
   const [city, setCity] = useState("All");
   const [cost, setCost] = useState<Cost | "All">("All");
   const [onlyOpen, setOnlyOpen] = useState(false);
+  const [weekendOnly, setWeekendOnly] = useState(false);
   const [sortBy, setSortBy] = useState<"best" | "nearest" | "price" | "name">(
     "best",
   );
@@ -1836,23 +1837,31 @@ function App() {
 
   // Events shown as pins on the map: anything in the next ~14 days that matches
   // the active age band. Highlight set narrows to the current weekend.
+  // The "This weekend events" toggle hard-restricts to Sat/Sun within 7 days.
   const mapEvents = useMemo(() => {
     if (events.length === 0) return [] as FamilyEvent[];
     const now = Date.now();
     const horizon = now + 14 * 24 * 60 * 60 * 1000;
+    const weekendHorizon = now + 7 * 24 * 60 * 60 * 1000;
     return events.filter((event) => {
       if (ageBand !== "any" && !event.ageBands.includes(ageBand)) return false;
       if (event.startDateTime) {
         const t = new Date(event.startDateTime).getTime();
-        if (Number.isFinite(t) && (t < now - 12 * 60 * 60 * 1000 || t > horizon))
-          return false;
+        if (Number.isFinite(t)) {
+          if (t < now - 12 * 60 * 60 * 1000 || t > horizon) return false;
+          if (weekendOnly) {
+            const dow = new Date(event.startDateTime).getDay();
+            if (dow !== 0 && dow !== 6) return false;
+            if (t > weekendHorizon) return false;
+          }
+        }
       } else {
         // Recurring without a specific date — keep weekend recurrences.
         if (!event.daysOfWeek.some((d) => d === 0 || d === 6)) return false;
       }
       return true;
     });
-  }, [events, ageBand]);
+  }, [events, ageBand, weekendOnly]);
 
   const highlightedEventIds = useMemo(() => {
     const ids = new Set<string>();
@@ -1908,8 +1917,9 @@ function App() {
     if (city !== "All") n += 1;
     if (cost !== "All") n += 1;
     if (onlyOpen) n += 1;
+    if (weekendOnly) n += 1;
     return n;
-  }, [query, ageBand, category, city, cost, onlyOpen]);
+  }, [query, ageBand, category, city, cost, onlyOpen, weekendOnly]);
 
   const activePlan = useMemo(
     () => plans.find((plan) => plan.id === activePlanId) ?? null,
@@ -3250,6 +3260,15 @@ function App() {
             <span>Open now</span>
           </label>
 
+          <label className="switch-row">
+            <input
+              type="checkbox"
+              checked={weekendOnly}
+              onChange={(event) => setWeekendOnly(event.target.checked)}
+            />
+            <span>This weekend events</span>
+          </label>
+
           <label className="select-field">
             <span>Sort</span>
             <select
@@ -3732,37 +3751,42 @@ function App() {
             <span>Saved</span>
           </div>
           {savedSpots.length === 0 && savedEvents.length === 0 ? (
-            <p className="empty-state">Save a few group spots to compare your day.</p>
+            <p className="empty-state">
+              Save a few places or events from the map to plan your day.
+            </p>
           ) : (
             <>
               {savedSpots.length > 0 && (
                 <button
                   className="primary-button wide"
                   onClick={() => createPlanFromSaved()}
-                  title="Create a plan with all saved spots in order"
+                  title="Create a plan with all saved places in order"
                 >
                   <List aria-hidden="true" />
-                  Plan from saved ({savedSpots.length})
+                  Plan from places ({savedSpots.length})
                 </button>
               )}
               {savedSpots.length > 0 && (
-                <div className="saved-list">
-                  {savedSpots.map((spot) => (
-                    <div className="saved-item" key={spot.id}>
-                      <div>
-                        <strong>{spot.name}</strong>
-                        <span>{spot.neighborhood}</span>
+                <>
+                  <p className="saved-subhead">Places ({savedSpots.length})</p>
+                  <div className="saved-list">
+                    {savedSpots.map((spot) => (
+                      <div className="saved-item" key={spot.id}>
+                        <div>
+                          <strong>{spot.name}</strong>
+                          <span>{spot.neighborhood}</span>
+                        </div>
+                        <button
+                          className="icon-button"
+                          title="Remove saved place"
+                          onClick={() => toggleSaved(spot.id)}
+                        >
+                          <Trash2 aria-hidden="true" />
+                        </button>
                       </div>
-                      <button
-                        className="icon-button"
-                        title="Remove saved spot"
-                        onClick={() => toggleSaved(spot.id)}
-                      >
-                        <Trash2 aria-hidden="true" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                </>
               )}
               {savedEvents.length > 0 && (
                 <>
