@@ -10,7 +10,14 @@ declare global {
           }) => void;
           renderButton: (
             element: HTMLElement,
-            options: { theme?: string; size?: string; text?: string; shape?: string },
+            options: {
+              theme?: string;
+              size?: string;
+              text?: string;
+              shape?: string;
+              type?: string;
+              width?: number;
+            },
           ) => void;
           disableAutoSelect: () => void;
         };

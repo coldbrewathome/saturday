@@ -1410,11 +1410,14 @@ function App() {
         });
         if (signInButtonRef.current) {
           signInButtonRef.current.innerHTML = "";
+          // Compact icon variant — fits in the top-right corner on mobile and
+          // stays subtle on desktop. Tapping the Google "G" still triggers the
+          // standard credential flow.
           window.google.accounts.id.renderButton(signInButtonRef.current, {
             theme: "outline",
             size: "medium",
-            text: "signin_with",
-            shape: "pill",
+            type: "icon",
+            shape: "circle",
           });
         }
       })
@@ -2883,24 +2886,11 @@ function App() {
   return (
     <div className="app-shell">
       <header className="topbar">
-        <div>
+        <div className="topbar-title">
           <p className="eyebrow">Plan · Hop · Repeat.</p>
           <h1>FamHop</h1>
         </div>
-        <div className="data-banner" title={dataMeta.sourceName}>
-          <Database aria-hidden="true" />
-          <div>
-            <strong>
-              {dataMeta.loading ? "Loading Bay Area data" : `${dataMeta.count} Bay Area spots`}
-            </strong>
-            <span>
-              {dataMeta.error
-                ? "Using fallback data"
-                : `Refreshed ${formatGeneratedAt(dataMeta.generatedAt)}`}
-            </span>
-          </div>
-        </div>
-        <div className="topbar-actions">
+        <div className="topbar-auth">
           {GOOGLE_CONFIGURED ? (
             session ? (
               <div className="user-chip" title={session.user.email}>
@@ -2943,6 +2933,21 @@ function App() {
               </div>
             )
           ) : null}
+        </div>
+        <div className="data-banner" title={dataMeta.sourceName}>
+          <Database aria-hidden="true" />
+          <div>
+            <strong>
+              {dataMeta.loading ? "Loading Bay Area data" : `${dataMeta.count} Bay Area spots`}
+            </strong>
+            <span>
+              {dataMeta.error
+                ? "Using fallback data"
+                : `Refreshed ${formatGeneratedAt(dataMeta.generatedAt)}`}
+            </span>
+          </div>
+        </div>
+        <div className="topbar-actions">
           <button className="icon-button" title="Reset filters" onClick={resetFilters}>
             <RotateCcw aria-hidden="true" />
           </button>
@@ -2953,22 +2958,39 @@ function App() {
         </div>
       </header>
 
-      <nav className="view-tabs" aria-label="View">
-        <button
-          className={view === "browse" ? "active" : ""}
-          onClick={() => setView("browse")}
-        >
-          <Search aria-hidden="true" />
-          Browse
-        </button>
-        <button
-          className={view === "plans" ? "active" : ""}
-          onClick={() => setView("plans")}
-        >
-          <List aria-hidden="true" />
-          Plans ({plans.length})
-        </button>
-      </nav>
+      <div className="view-bar">
+        <nav className="view-tabs" aria-label="View">
+          <button
+            className={view === "browse" ? "active" : ""}
+            onClick={() => setView("browse")}
+          >
+            <Search aria-hidden="true" />
+            Browse
+          </button>
+          <button
+            className={view === "plans" ? "active" : ""}
+            onClick={() => setView("plans")}
+          >
+            <List aria-hidden="true" />
+            Plans ({plans.length})
+          </button>
+        </nav>
+        {view === "browse" && (
+          <button
+            className="filter-trigger view-bar-filter"
+            type="button"
+            onClick={() => setFiltersOpen(true)}
+            aria-expanded={filtersOpen}
+            aria-controls="spot-filters"
+          >
+            <SlidersHorizontal aria-hidden="true" />
+            Filters
+            {activeFilterCount > 0 && (
+              <em className="filter-count">{activeFilterCount}</em>
+            )}
+          </button>
+        )}
+      </div>
 
       {view === "home" ? (
       <main className="home-screen" aria-label="Plan the weekend with the kids">
@@ -3454,19 +3476,6 @@ function App() {
         </aside>
 
         <section className="spots-area" aria-label="Visit spots">
-          <button
-            className="filter-trigger"
-            type="button"
-            onClick={() => setFiltersOpen(true)}
-            aria-expanded={filtersOpen}
-            aria-controls="spot-filters"
-          >
-            <SlidersHorizontal aria-hidden="true" />
-            Filters
-            {activeFilterCount > 0 && (
-              <em className="filter-count">{activeFilterCount}</em>
-            )}
-          </button>
           {featuredPlans.length > 0 && (
             <section
               className="featured-rail"
@@ -3519,6 +3528,9 @@ function App() {
               highlightedEventIds={highlightedEventIds}
               selected={mapSelection}
               onSelect={setMapSelection}
+              userLocation={userLocation}
+              geoState={geoState}
+              onRequestLocation={requestUserLocation}
             />
             <div className="map-overlay" aria-label="Map summary">
               <div>

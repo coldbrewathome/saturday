@@ -38,16 +38,24 @@ export function SpotMap({
   highlightedEventIds,
   selected,
   onSelect,
+  userLocation,
+  geoState,
+  onRequestLocation,
 }: {
   spots: Spot[];
   events?: FamilyEvent[];
   highlightedEventIds?: Set<string>;
   selected?: MapSelection | null;
   onSelect?: (sel: MapSelection) => void;
+  userLocation?: { lat: number; lon: number } | null;
+  geoState?: "idle" | "requesting" | "denied";
+  onRequestLocation?: () => void;
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<LeafletMap | null>(null);
   const layerRef = useRef<LayerGroup | null>(null);
+  const userLayerRef = useRef<LayerGroup | null>(null);
+  const recenteredKeyRef = useRef<string | null>(null);
   // Stable reference to the latest onSelect — re-binding avoids stale closures
   // without forcing the marker layer to rebuild every time the parent re-renders.
   const onSelectRef = useRef(onSelect);
@@ -100,8 +108,10 @@ export function SpotMap({
     }).addTo(map);
 
     const layer = L.layerGroup().addTo(map);
+    const userLayer = L.layerGroup().addTo(map);
     mapRef.current = map;
     layerRef.current = layer;
+    userLayerRef.current = userLayer;
 
     const handleMoveEnd = () => {
       const c = map.getCenter();
@@ -131,8 +141,41 @@ export function SpotMap({
       map.remove();
       mapRef.current = null;
       layerRef.current = null;
+      userLayerRef.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    const layer = userLayerRef.current;
+    if (!map || !layer) return;
+    layer.clearLayers();
+    if (!userLocation) return;
+    L.circleMarker([userLocation.lat, userLocation.lon], {
+      radius: 8,
+      color: "#ffffff",
+      weight: 3,
+      fillColor: "#2563eb",
+      fillOpacity: 0.95,
+    }).addTo(layer);
+    L.circle([userLocation.lat, userLocation.lon], {
+      radius: 90,
+      color: "#2563eb",
+      weight: 1,
+      fillColor: "#2563eb",
+      fillOpacity: 0.12,
+    }).addTo(layer);
+
+    // Recenter only when the user explicitly requests it (i.e. when the
+    // location coordinates change), not when the map happens to mount with a
+    // pre-existing saved location — otherwise we'd yank a returning visitor's
+    // saved view.
+    const key = `${userLocation.lat.toFixed(5)},${userLocation.lon.toFixed(5)}`;
+    if (recenteredKeyRef.current !== null && recenteredKeyRef.current !== key) {
+      map.setView([userLocation.lat, userLocation.lon], 13, { animate: true });
+    }
+    recenteredKeyRef.current = key;
+  }, [userLocation]);
 
   // Render markers. Re-runs on selection so the active pin gets restyled, but
   // never recenters/refits the map — that would yank a user who has panned.
@@ -205,12 +248,63 @@ export function SpotMap({
     map.fitBounds(L.latLngBounds(points), { maxZoom: 13, padding: [28, 28] });
   }, [plottedSpots, plottedEvents]);
 
+  function handleLocateClick() {
+    if (!onRequestLocation) return;
+    if (userLocation && mapRef.current) {
+      mapRef.current.setView([userLocation.lat, userLocation.lon], 13, {
+        animate: true,
+      });
+    }
+    onRequestLocation();
+  }
+
   return (
-    <div
-      className="map-canvas map-canvas-fill"
-      ref={containerRef}
-      aria-label="Map of Bay Area spots and events"
-    />
+    <div className="map-canvas-wrap">
+      <div
+        className="map-canvas map-canvas-fill"
+        ref={containerRef}
+        aria-label="Map of Bay Area spots and events"
+      />
+      {onRequestLocation && (
+        <button
+          type="button"
+          className={`map-locate-button${userLocation ? " has-location" : ""}`}
+          onClick={handleLocateClick}
+          disabled={geoState === "requesting"}
+          title={
+            geoState === "denied"
+              ? "Location blocked — enable in browser settings"
+              : userLocation
+                ? "Re-center on your location"
+                : "Center map on your location"
+          }
+          aria-label={
+            userLocation
+              ? "Re-center map on your location"
+              : "Center map on your location"
+          }
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="3" />
+            <circle cx="12" cy="12" r="9" />
+            <line x1="12" y1="2" x2="12" y2="5" />
+            <line x1="12" y1="19" x2="12" y2="22" />
+            <line x1="2" y1="12" x2="5" y2="12" />
+            <line x1="19" y1="12" x2="22" y2="12" />
+          </svg>
+        </button>
+      )}
+    </div>
   );
 }
 
