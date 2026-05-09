@@ -476,6 +476,80 @@ function formatRatingCount(count: number): string {
   return String(count);
 }
 
+const SHORT_DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const DAY_INDEX: Record<string, number> = {
+  sunday: 0,
+  monday: 1,
+  tuesday: 2,
+  wednesday: 3,
+  thursday: 4,
+  friday: 5,
+  saturday: 6,
+};
+
+// "9:30 AM" → "9:30am", "9:00 AM" → "9am", "12:00 PM" → "noon"
+function normalizeClock(token: string): string {
+  const m = token.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if (!m) return token.trim();
+  const hour = Number(m[1]);
+  const minute = Number(m[2]);
+  const ampm = m[3].toLowerCase();
+  if (hour === 12 && minute === 0) return ampm === "pm" ? "noon" : "midnight";
+  const h = hour % 12 === 0 ? 12 : hour;
+  return minute === 0 ? `${h}${ampm}` : `${h}:${m[2]}${ampm}`;
+}
+
+function normalizeHourSpan(span: string): string {
+  // Google emits an en-dash; some sources use hyphen or "to".
+  const parts = span.split(/\s*[–-]\s*| to /);
+  if (parts.length !== 2) return span.trim();
+  return `${normalizeClock(parts[0])}–${normalizeClock(parts[1])}`;
+}
+
+// "Monday: 9:30 AM – 6:00 PM; Tuesday: ... ; Sunday: ..." → "Daily 9:30am–6pm"
+// or "Mon–Fri 9am–5pm · Sat–Sun 10am–4pm". Returns null if input doesn't look
+// like the verbose Google weekdayDescriptions format.
+function compactHoursLabel(raw: string): string | null {
+  if (!raw || !raw.includes(":") || !raw.includes(";")) return null;
+  const segments = raw.split(/\s*;\s*/);
+  if (segments.length !== 7) return null;
+  const byDay = new Array<string>(7).fill("");
+  for (const segment of segments) {
+    const sep = segment.indexOf(":");
+    if (sep < 0) return null;
+    const day = segment.slice(0, sep).trim().toLowerCase();
+    const hours = segment.slice(sep + 1).trim();
+    const idx = DAY_INDEX[day];
+    if (idx === undefined || !hours) return null;
+    byDay[idx] = /closed/i.test(hours) ? "Closed" : normalizeHourSpan(hours);
+  }
+  // Reorder Mon–Sun for natural reading.
+  const ordered = [1, 2, 3, 4, 5, 6, 0].map((i) => ({
+    day: SHORT_DAYS[i],
+    hours: byDay[i],
+  }));
+  // Group consecutive days with identical hours.
+  const groups: Array<{ start: string; end: string; hours: string; span: number }> = [];
+  for (const entry of ordered) {
+    const last = groups[groups.length - 1];
+    if (last && last.hours === entry.hours) {
+      last.end = entry.day;
+      last.span += 1;
+    } else {
+      groups.push({ start: entry.day, end: entry.day, hours: entry.hours, span: 1 });
+    }
+  }
+  if (groups.length === 1 && groups[0].span === 7) {
+    return `Daily ${groups[0].hours}`;
+  }
+  return groups
+    .map((g) => {
+      const range = g.start === g.end ? g.start : `${g.start}–${g.end}`;
+      return `${range} ${g.hours}`;
+    })
+    .join(" · ");
+}
+
 function formatMinutes(mins: number): string {
   const total = mins % 1440;
   if (total === 0) return "midnight";
@@ -3015,12 +3089,17 @@ function App() {
                     {(() => {
                       const status = describeStatus(spot);
                       if (status.kind === "unknown") {
-                        return spot.openingHours ? (
-                          <p className="hours-line muted">
+                        if (!spot.openingHours) return null;
+                        const compact = compactHoursLabel(spot.openingHours);
+                        return (
+                          <p
+                            className="hours-line muted"
+                            title={compact ? spot.openingHours : undefined}
+                          >
                             <Clock3 aria-hidden="true" />
-                            Hours: {spot.openingHours}
+                            {compact ?? `Hours: ${spot.openingHours}`}
                           </p>
-                        ) : null;
+                        );
                       }
                       const cls =
                         status.kind === "open" || status.kind === "always"
@@ -3055,10 +3134,6 @@ function App() {
                           </span>
                         );
                       })()}
-                      <span>
-                        <Users aria-hidden="true" />
-                        {spot.groupSize}
-                      </span>
                       {typeof spot.googleRating === "number" && (
                         <span
                           className="rating-chip"
@@ -3075,8 +3150,6 @@ function App() {
                         </span>
                       )}
                       <span>{spot.cost}</span>
-                      <span>{spot.timeWindow}</span>
-                      <span>{spot.planning}</span>
                     </div>
 
                     {(spot.wheelchair === "yes" ||
@@ -3140,7 +3213,7 @@ function App() {
 
                     <div className="card-footer">
                       <button
-                        className="text-button"
+                        className={`text-button ${visited ? "is-active" : ""}`}
                         onClick={() => toggleVisited(spot.id)}
                       >
                         {visited ? (
