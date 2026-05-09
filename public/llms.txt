@@ -1,0 +1,58 @@
+# FamHop
+
+> FamHop is a free San Francisco Bay Area weekend planner for families with kids. Visitors pick a "vibe" and FamHop builds a 3-stop plan combining family-friendly parks, libraries, museums, zoos, farms, and weekend events — then they can share a link with co-parents and friends who vote Yes / Maybe / Skip on each stop.
+
+The site is a JavaScript single-page app at https://famhop.com. The data layer ships static JSON files so AI crawlers can read place and event metadata directly without executing JavaScript.
+
+## How to use FamHop
+
+1. Pick a vibe (chill, adventure, museum day, library hop, outdoors, food, etc.) on the home screen.
+2. Optionally select an age band (toddler, preschool, school-age, tween) and a date.
+3. FamHop returns a 3-stop plan tuned to the inferred or chosen city.
+4. Tap Share to mint a vote link. Anyone who follows the link can vote on each stop without signing up.
+
+## Coverage
+
+FamHop covers the nine-county San Francisco Bay Area:
+
+- San Francisco
+- Peninsula: Palo Alto, Mountain View, Sunnyvale, Redwood City, San Mateo, Burlingame, Foster City, Belmont, Half Moon Bay
+- South Bay: San Jose, Santa Clara, Cupertino, Los Altos, Saratoga, Campbell, Milpitas, Morgan Hill, Gilroy
+- East Bay: Oakland, Berkeley, Alameda, Fremont, Hayward, Walnut Creek, Richmond, Concord, Pleasanton, Livermore
+- North Bay: Marin County, San Rafael, Santa Rosa, Petaluma
+- Solano County: Fairfield, Vallejo, Vacaville
+
+## Data sources
+
+Place data is sourced from OpenStreetMap (ODbL), with imagery and attribution from Wikimedia Commons / Wikidata where available. Events are pulled from the official calendars of Bay Area public libraries, museums, parks, zoos, and family festivals using their published JSON-LD, iCal, RSS, LibCal, and structured-HTML feeds.
+
+## Key data files (machine-readable)
+
+- Bay Area places: https://famhop.com/data/bay-area-spots.json
+- Family events: https://famhop.com/data/events.json
+- Per-source build report: https://famhop.com/data/event-build-report.json
+
+## SEO surfaces
+
+- Home: https://famhop.com/
+- Per-place pages: https://famhop.com/spot/{slug}/
+- Per-event pages: https://famhop.com/event/{slug}/
+- Per-city pages: https://famhop.com/city/{slug}/
+- Per-category pages: https://famhop.com/category/{library|museum|park|festival|zoo|farm|community}/
+- This weekend: https://famhop.com/this-weekend/
+- Sitemap: https://famhop.com/sitemap.xml
+
+Each per-place, per-event, and per-city page ships full schema.org structured data (Place / TouristAttraction / Restaurant / Event / CollectionPage) and is safe to cite directly.
+
+## What FamHop does NOT do
+
+- It is not a ticketing or booking platform. Tickets and registration are handled by each venue's own site, linked from the event page.
+- It does not collect kids' personal data. Sign-in is optional, used only to sync saved places and plans across the user's own devices.
+- It does not currently cover regions outside the Bay Area.
+
+## Brand
+
+- Product name: FamHop
+- Tagline: Plan · Hop · Repeat.
+- Domain: famhop.com
+- Contact: kaining.usc@gmail.com

@@ -11,7 +11,7 @@
     />
     <meta
       name="keywords"
-      content="famhop, weekend with kids, bay area family activities, things to do with kids, san francisco family, kids events bay area, family weekend planner, toddler activities, family-friendly parks"
+      content="famhop, weekend with kids, bay area family activities, things to do with kids, kids events bay area, family weekend planner, library storytime, free kids events, toddler activities, family-friendly parks, museums for kids, share family plan, vote on weekend plan"
     />
     <link rel="canonical" href="https://famhop.com/" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -29,10 +29,10 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="FamHop" />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:title" content="FamHop — Bay Area family activities, parks, museums & events" />
+    <meta property="og:title" content="FamHop — Plan the weekend with the kids" />
     <meta
       property="og:description"
-      content="Pick a vibe. Get a 3-stop family plan with Bay Area parks, museums and weekend events. Share with co-parents to vote."
+      content="Pick a vibe. Get a 3-stop Bay Area family plan with parks, libraries, museums and weekend events — then share with co-parents to vote."
     />
     <meta property="og:image" content="https://famhop.com/og-image.png" />
     <meta property="og:image:width" content="1200" />
@@ -42,15 +42,15 @@
     <meta property="og:url" content="https://famhop.com/" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="FamHop — Bay Area family activities, parks, museums & events" />
+    <meta name="twitter:title" content="FamHop — Plan the weekend with the kids" />
     <meta
       name="twitter:description"
-      content="Pick a vibe. Get a 3-stop family plan with Bay Area parks, museums and weekend events. Share with co-parents to vote."
+      content="Pick a vibe. Get a 3-stop Bay Area family plan — then share with co-parents to vote."
     />
     <meta name="twitter:image" content="https://famhop.com/og-image.png" />
     <meta name="twitter:image:alt" content="FamHop — plan a great day with the kids, in seconds" />
 
-    <meta name="theme-color" content="#ff6b5b" />
+    <meta name="theme-color" content="#f59e0b" />
 
     <script type="application/ld+json">
       {
@@ -61,8 +61,18 @@
             "@id": "https://famhop.com/#website",
             "url": "https://famhop.com/",
             "name": "FamHop",
+            "alternateName": ["FamHop weekend planner", "famhop.com"],
             "description": "Plan a Bay Area weekend with the kids. Pick a vibe and get a 3-stop family plan with parks, libraries, museums and family-friendly events.",
-            "inLanguage": "en-US"
+            "inLanguage": "en-US",
+            "publisher": { "@id": "https://famhop.com/#org" }
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://famhop.com/#org",
+            "name": "FamHop",
+            "url": "https://famhop.com/",
+            "logo": "https://famhop.com/icon-512.png",
+            "slogan": "Plan · Hop · Repeat."
           },
           {
             "@type": "WebApplication",
@@ -72,7 +82,15 @@
             "applicationCategory": "LifestyleApplication",
             "operatingSystem": "Web",
             "browserRequirements": "Requires JavaScript",
-            "description": "Family weekend planner for the San Francisco Bay Area. Build a 3-stop plan of parks, libraries, museums and weekend events, then share with co-parents to vote.",
+            "description": "Family weekend planner for the San Francisco Bay Area. Build a 3-stop plan of parks, libraries, museums and weekend events, then share a vote-link with co-parents.",
+            "featureList": [
+              "Pick-a-vibe 3-stop family plan in one tap",
+              "Bay Area parks, libraries, museums and family venues",
+              "Live weekend events by city and category",
+              "Share a vote link with co-parents and friends",
+              "Filter by age band: toddler, preschool, school-age, tween",
+              "Find me on the map and sort spots by distance"
+            ],
             "areaServed": {
               "@type": "Place",
               "name": "San Francisco Bay Area"
@@ -80,13 +98,67 @@
             "audience": {
               "@type": "PeopleAudience",
               "suggestedMinAge": 0,
-              "suggestedMaxAge": 12
+              "suggestedMaxAge": 14
             },
             "offers": {
               "@type": "Offer",
               "price": "0",
               "priceCurrency": "USD"
             }
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://famhop.com/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What is FamHop?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "FamHop is a free San Francisco Bay Area weekend planner for families. Pick a vibe (chill, adventure, museum day…) and FamHop builds a 3-stop plan combining family-friendly parks, libraries, museums, and weekend events, then lets you share a link so co-parents and friends can vote on each stop."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is FamHop free to use?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. FamHop is free for visitors. The places and events themselves vary — most parks and library events are free, while museums and ticketed events show their price on each card."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How does the share-and-vote feature work?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "After you build a plan, tap Share to generate a vote link. Anyone you send it to can vote Yes / Maybe / Skip on each stop without signing up. The plan creator sees the running tally to settle on what the family is doing."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Where do FamHop's events come from?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Events are pulled directly from public source pages (libraries like SFPL, SJPL, Oakland; parks; museums; family festivals) using their official event calendars in JSON-LD, iCal, RSS, LibCal, and dated HTML formats. The full list of sources is in the project's data/event-sources.json."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What ages does FamHop cover?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "FamHop covers four age bands you can filter by: toddler (0–2), preschool (3–5), school-age (6–9), and tween (10–14). Plans, the AI suggester and the event list all bias toward your selected band."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Where does FamHop work?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "FamHop covers the San Francisco Bay Area: San Francisco, the Peninsula (Palo Alto, Redwood City, San Mateo, Mountain View, Sunnyvale), the South Bay (San Jose, Santa Clara, Cupertino, Los Altos, Saratoga, Campbell, Milpitas, Morgan Hill, Gilroy), the East Bay (Oakland, Berkeley, Alameda, Fremont, Hayward, Walnut Creek, Richmond), and the North Bay (Marin, San Rafael)."
+                }
+              }
+            ]
           }
         ]
       }
@@ -96,23 +168,49 @@
     <div id="root">
       <noscript>
         <header>
-          <h1>FamHop — Bay Area family activities</h1>
+          <h1>FamHop — Plan the weekend with the kids in the Bay Area</h1>
           <p>
-            Plan a weekend with the kids in the San Francisco Bay Area. Pick a vibe and
-            get a 3-stop family plan with parks, libraries, museums and family-friendly
-            events, then share it with co-parents to vote.
+            FamHop is a free San Francisco Bay Area weekend planner for families. Pick a
+            vibe and get a 3-stop plan combining parks, libraries, museums, family farms
+            and weekend events. Share a link with co-parents and friends and let them
+            vote Yes / Maybe / Skip on each stop.
           </p>
         </header>
         <section>
           <h2>What you can do on FamHop</h2>
           <ul>
-            <li>Browse Bay Area parks, libraries, museums and family venues.</li>
+            <li>Browse 1,500+ family-friendly Bay Area spots — parks, libraries, museums, zoos and farms.</li>
+            <li>See hundreds of upcoming weekend events, including library storytimes, museum free days, and family festivals.</li>
             <li>Filter by age band: toddler, preschool, school-age and tween.</li>
-            <li>Find weekend events for kids across San Francisco, the Peninsula, the East Bay and the South Bay.</li>
-            <li>Build a 3-stop plan and share a link so family can vote.</li>
+            <li>Sort by distance using your current location, or browse by city.</li>
+            <li>Build a 3-stop plan and share a link so co-parents and friends can vote.</li>
           </ul>
-          <p>FamHop needs JavaScript to run — please enable it to plan your weekend.</p>
         </section>
+        <section>
+          <h2>Browse by city</h2>
+          <p>
+            Family activities in <a href="/city/san-francisco/">San Francisco</a>,
+            <a href="/city/oakland/">Oakland</a>, <a href="/city/berkeley/">Berkeley</a>,
+            <a href="/city/san-jose/">San Jose</a>, <a href="/city/palo-alto/">Palo Alto</a>,
+            <a href="/city/mountain-view/">Mountain View</a>, <a href="/city/sunnyvale/">Sunnyvale</a>,
+            <a href="/city/santa-clara/">Santa Clara</a>, <a href="/city/fremont/">Fremont</a>,
+            <a href="/city/redwood-city/">Redwood City</a>, <a href="/city/san-mateo/">San Mateo</a>,
+            <a href="/city/walnut-creek/">Walnut Creek</a>, and more.
+          </p>
+        </section>
+        <section>
+          <h2>Browse by category</h2>
+          <p>
+            <a href="/category/library/">Library events for kids</a>,
+            <a href="/category/museum/">museums</a>,
+            <a href="/category/park/">parks and outdoors</a>,
+            <a href="/category/festival/">festivals</a>,
+            <a href="/category/zoo/">zoos</a>,
+            <a href="/category/farm/">family farms</a>, plus
+            <a href="/this-weekend/">things to do this weekend</a>.
+          </p>
+        </section>
+        <p><strong>Heads-up:</strong> FamHop is an interactive planner — please enable JavaScript to plan, share and vote.</p>
       </noscript>
     </div>
     <script type="module" src="/src/main.tsx"></script>

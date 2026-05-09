@@ -22,8 +22,76 @@ const BRAND = "FamHop";
 const BRAND_TAG = "Bay Area family weekend planner";
 const OG_IMAGE = `${SITE}/og-image.png`;
 
+// Defined inline because generateCategoryPages references it during the
+// top-level execution. Keep ordering stable.
+const CATEGORY_PAGES = [
+  {
+    slug: "library",
+    label: "Library events",
+    title: "Bay Area library events for kids",
+    blurb:
+      "Free family storytimes, maker programs, and special weekend events at public libraries across the San Francisco Bay Area — SFPL, OPL, SJPL, county systems, and more.",
+    spotMatch: (s) => /library/i.test(`${s.name} ${s.tags?.join(" ") || ""}`),
+    eventMatch: (e) => e.category === "Library",
+  },
+  {
+    slug: "museum",
+    label: "Museums",
+    title: "Bay Area museums for kids and families",
+    blurb:
+      "Family-friendly museums in the Bay Area: hands-on science, art, history, and children's museums, plus their upcoming free days and family programs.",
+    spotMatch: (s) => /museum|science/i.test(`${s.name} ${s.tags?.join(" ") || ""}`),
+    eventMatch: (e) => e.category === "Museum",
+  },
+  {
+    slug: "park",
+    label: "Parks & outdoors",
+    title: "Bay Area parks and outdoor spots for kids",
+    blurb:
+      "Family-friendly parks, playgrounds, regional open space and outdoor adventures across San Francisco, the Peninsula, the East Bay, and the South Bay.",
+    spotMatch: (s) => s.category === "Outdoors" || s.category === "Wellness",
+    eventMatch: (e) => e.category === "Park",
+  },
+  {
+    slug: "festival",
+    label: "Festivals",
+    title: "Bay Area family festivals and weekend events",
+    blurb:
+      "Free and ticketed family festivals, street fairs, cultural celebrations, and weekend events for kids in the Bay Area.",
+    spotMatch: () => false,
+    eventMatch: (e) => e.category === "Festival",
+  },
+  {
+    slug: "zoo",
+    label: "Zoos & aquariums",
+    title: "Bay Area zoos and aquariums for kids",
+    blurb:
+      "Family-friendly zoos and aquariums in the Bay Area — daily animal programs, Junior Keeper days, and weekend events.",
+    spotMatch: (s) => /zoo|aquarium/i.test(`${s.name} ${s.tags?.join(" ") || ""}`),
+    eventMatch: (e) => e.category === "Zoo",
+  },
+  {
+    slug: "farm",
+    label: "Family farms",
+    title: "Family farms and U-pick spots in the Bay Area",
+    blurb:
+      "Bay Area family farms, petting zoos, U-pick orchards, and farm-day events for kids across the Peninsula, South Bay, and East Bay.",
+    spotMatch: (s) => /farm|orchard/i.test(`${s.name} ${s.tags?.join(" ") || ""}`),
+    eventMatch: (e) => e.category === "Farm",
+  },
+  {
+    slug: "community",
+    label: "Community events",
+    title: "Bay Area community events for families",
+    blurb:
+      "Open houses, free previews, neighborhood events, and community gatherings for families across the Bay Area.",
+    spotMatch: () => false,
+    eventMatch: (e) => e.category === "Community",
+  },
+];
+
 const PAGE_CSS = `
-:root{--bg:#FFF6EE;--ink:#22221f;--muted:#5b5b54;--brand:#ff6b5b;--card:#fff;--line:rgba(34,34,31,.08);}
+:root{--bg:#FFF6EE;--ink:#22221f;--muted:#5b5b54;--brand:#f59e0b;--brand-strong:#d97706;--card:#fff;--line:rgba(34,34,31,.08);}
 *{box-sizing:border-box}
 body{margin:0;font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);}
 a{color:var(--brand);text-decoration:none}
@@ -80,11 +148,13 @@ const sitemapEntries = [
 const spotSlugs = generateSpotPages(spots);
 const eventSlugs = generateEventPages(events);
 const citySlugs = generateCityPages(spots, events, spotSlugs, eventSlugs);
+const categorySlugs = generateCategoryPages(spots, events);
+const wroteThisWeekend = generateThisWeekendPage(events);
 
 writeSitemap(sitemapEntries);
 
 console.log(
-  `[seo] wrote ${spotSlugs.size} spot pages, ${eventSlugs.size} event pages, ${citySlugs.size} city pages, sitemap with ${sitemapEntries.length} URLs.`,
+  `[seo] wrote ${spotSlugs.size} spot pages, ${eventSlugs.size} event pages, ${citySlugs.size} city pages, ${categorySlugs.size} category pages${wroteThisWeekend ? ", a this-weekend page" : ""}, sitemap with ${sitemapEntries.length} URLs.`,
 );
 
 // ---------------------------------------------------------------------------
@@ -345,9 +415,16 @@ function buildEventJsonLd(event, canonical) {
     description: buildEventDescription(event, formatEventDate(event)),
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     eventStatus: "https://schema.org/EventScheduled",
+    isAccessibleForFree:
+      typeof event.cost === "string" && /free/i.test(event.cost),
   };
   if (event.startDateTime) node.startDate = event.startDateTime;
   if (event.endDateTime) node.endDate = event.endDateTime;
+  if (event.imageUrl) {
+    node.image = event.imageUrl;
+  } else {
+    node.image = OG_IMAGE;
+  }
   const venue = event.venue || event.city;
   if (venue) {
     node.location = {
@@ -368,6 +445,13 @@ function buildEventJsonLd(event, canonical) {
       };
     }
   }
+  if (event.sourceName) {
+    node.organizer = {
+      "@type": "Organization",
+      name: event.sourceName,
+      url: event.sourceUrl || event.url || canonical,
+    };
+  }
   if (event.url) {
     node.offers = {
       "@type": "Offer",
@@ -375,6 +459,12 @@ function buildEventJsonLd(event, canonical) {
       availability: "https://schema.org/InStock",
       price: event.cost && /free/i.test(event.cost) ? "0" : undefined,
       priceCurrency: "USD",
+    };
+  }
+  if (Array.isArray(event.ageBands) && event.ageBands.length) {
+    node.audience = {
+      "@type": "PeopleAudience",
+      audienceType: event.ageBands.join(", "),
     };
   }
   return node;
@@ -542,6 +632,245 @@ function generateCityPages(spotItems, eventItems, spotSlugMap, eventSlugMap) {
 }
 
 // ---------------------------------------------------------------------------
+// Categories
+// ---------------------------------------------------------------------------
+
+function generateCategoryPages(spotItems, eventItems) {
+  const slugs = new Set();
+  const eventSlugLookup = buildEventSlugLookup(eventItems);
+  const spotSlugLookup = buildSpotSlugLookup(spotItems);
+
+  for (const cat of CATEGORY_PAGES) {
+    const matchingSpots = spotItems
+      .filter((s) => cat.spotMatch(s))
+      .sort((a, b) => (b.friendScore || 0) - (a.friendScore || 0))
+      .slice(0, 30);
+    const matchingEvents = eventItems
+      .filter((e) => cat.eventMatch(e))
+      .sort((a, b) => (a.startDateTime || "").localeCompare(b.startDateTime || ""))
+      .slice(0, 40);
+
+    if (matchingSpots.length + matchingEvents.length === 0) continue;
+
+    const canonical = `${SITE}/category/${cat.slug}/`;
+    const description =
+      `${cat.blurb} Browse ${matchingSpots.length} family-friendly spots and ${matchingEvents.length} upcoming events on ${BRAND}.`.slice(
+        0,
+        300,
+      );
+
+    const spotsList = matchingSpots.length
+      ? `<section><h2>${esc(cat.label)} spots</h2><ul class="card-list">${matchingSpots
+          .map((s) => {
+            const sslug = spotSlugLookup.get(s);
+            if (!sslug) return "";
+            return `<li><a href="/spot/${esc(sslug)}/"><strong>${esc(s.name)}</strong>${s.neighborhood ? `<span> · ${esc(s.neighborhood)}</span>` : ""}</a>${s.note ? `<p>${esc(s.note)}</p>` : ""}</li>`;
+          })
+          .join("")}</ul></section>`
+      : "";
+
+    const eventsList = matchingEvents.length
+      ? `<section><h2>Upcoming ${esc(cat.label.toLowerCase())}</h2><ul class="card-list">${matchingEvents
+          .map((e) => {
+            const eslug = eventSlugLookup.get(e);
+            if (!eslug) return "";
+            const dateStr = formatEventDate(e);
+            return `<li><a href="/event/${esc(eslug)}/"><strong>${esc(e.title)}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}</a>${e.venue ? `<p>${esc(e.venue)}${e.city ? `, ${esc(e.city)}` : ""}${e.cost && e.cost !== "Unknown" ? ` · ${esc(e.cost)}` : ""}</p>` : ""}</li>`;
+          })
+          .join("")}</ul></section>`
+      : "";
+
+    const body = `
+      <p class="lede">${esc(description)}</p>
+      <p class="cta-row"><a class="cta" href="/">Plan a day with ${BRAND}</a> <a class="cta-secondary" href="/this-weekend/">This weekend's events</a></p>
+      ${eventsList}
+      ${spotsList}
+    `;
+
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "@id": `${canonical}#page`,
+      url: canonical,
+      name: cat.title,
+      description,
+      isPartOf: { "@id": `${SITE}/#website` },
+      about: {
+        "@type": "Place",
+        name: "San Francisco Bay Area",
+      },
+    };
+
+    const html = renderShell({
+      title: `${cat.title} — ${BRAND}`,
+      description,
+      canonical,
+      ogImage: OG_IMAGE,
+      jsonLd,
+      breadcrumb: [
+        { name: BRAND, url: `${SITE}/` },
+        { name: cat.label, url: canonical },
+      ],
+      h1: cat.title,
+      eyebrow: BRAND_TAG,
+      body,
+    });
+
+    writePage(`category/${cat.slug}/index.html`, html);
+    slugs.add(cat.slug);
+
+    sitemapEntries.push({
+      loc: canonical,
+      lastmod: today(),
+      changefreq: "daily",
+      priority: 0.85,
+    });
+  }
+  return slugs;
+}
+
+// ---------------------------------------------------------------------------
+// This weekend
+// ---------------------------------------------------------------------------
+
+function generateThisWeekendPage(eventItems) {
+  const eventSlugLookup = buildEventSlugLookup(eventItems);
+  const now = new Date();
+  // Snap to the upcoming Saturday/Sunday in Pacific time. If today is Sat or
+  // Sun, "this weekend" means today + tomorrow; otherwise it means the next
+  // weekend (Sat 00:00 → Sun 23:59 Pacific).
+  const dow = now.getDay();
+  const daysToSat = dow === 6 ? 0 : (6 - dow + 7) % 7;
+  const sat = new Date(now);
+  sat.setDate(sat.getDate() + daysToSat);
+  sat.setHours(0, 0, 0, 0);
+  const monMidnight = new Date(sat);
+  monMidnight.setDate(sat.getDate() + 2);
+
+  const upcoming = eventItems
+    .filter((e) => {
+      if (!e.startDateTime) return false;
+      const t = new Date(e.startDateTime).getTime();
+      return Number.isFinite(t) && t >= sat.getTime() && t < monMidnight.getTime();
+    })
+    .sort((a, b) =>
+      (a.startDateTime || "").localeCompare(b.startDateTime || ""),
+    );
+
+  if (upcoming.length === 0) return false;
+
+  const canonical = `${SITE}/this-weekend/`;
+  const weekendLabel = sat.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    timeZone: "America/Los_Angeles",
+  });
+  const title = `Things to do with kids this weekend in the Bay Area — ${BRAND}`;
+  const description = `Family-friendly things to do in the Bay Area this weekend (starting ${weekendLabel}): ${upcoming.length} events including library storytimes, museum free days, festivals, and family farm activities. Build a 3-stop plan in seconds with ${BRAND}.`.slice(
+    0,
+    300,
+  );
+
+  // Group by category for scannability.
+  const byCat = new Map();
+  for (const e of upcoming) {
+    const k = e.category || "Other";
+    if (!byCat.has(k)) byCat.set(k, []);
+    byCat.get(k).push(e);
+  }
+  const sections = [...byCat.entries()].map(([cat, list]) => {
+    const items = list
+      .map((e) => {
+        const eslug = eventSlugLookup.get(e);
+        if (!eslug) return "";
+        const dateStr = formatEventDate(e);
+        return `<li><a href="/event/${esc(eslug)}/"><strong>${esc(e.title)}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}</a>${e.venue ? `<p>${esc(e.venue)}${e.city ? `, ${esc(e.city)}` : ""}${e.cost && e.cost !== "Unknown" ? ` · ${esc(e.cost)}` : ""}</p>` : ""}</li>`;
+      })
+      .join("");
+    return `<section><h2>${esc(cat)}</h2><ul class="card-list">${items}</ul></section>`;
+  });
+
+  const body = `
+    <p class="lede">${esc(description)}</p>
+    <p class="cta-row"><a class="cta" href="/">Plan a 3-stop day with ${BRAND}</a></p>
+    ${sections.join("")}
+  `;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": `${canonical}#page`,
+    url: canonical,
+    name: "Things to do with kids this weekend in the Bay Area",
+    description,
+    isPartOf: { "@id": `${SITE}/#website` },
+    about: {
+      "@type": "Place",
+      name: "San Francisco Bay Area",
+    },
+  };
+
+  const html = renderShell({
+    title,
+    description,
+    canonical,
+    ogImage: OG_IMAGE,
+    jsonLd,
+    breadcrumb: [
+      { name: BRAND, url: `${SITE}/` },
+      { name: "This weekend", url: canonical },
+    ],
+    h1: "Things to do with kids this weekend in the Bay Area",
+    eyebrow: BRAND_TAG,
+    body,
+  });
+
+  writePage("this-weekend/index.html", html);
+
+  sitemapEntries.push({
+    loc: canonical,
+    lastmod: today(),
+    changefreq: "daily",
+    priority: 0.95,
+  });
+  return true;
+}
+
+function buildEventSlugLookup(eventItems) {
+  const map = new Map();
+  const used = new Set();
+  for (const event of eventItems) {
+    if (!event || typeof event.title !== "string") continue;
+    const id = typeof event.id === "string" ? event.id : "";
+    let base = slugify(id) || slugify(`${event.title} ${event.venue ?? ""}`);
+    if (!base) continue;
+    let s = base;
+    let n = 2;
+    while (used.has(s)) s = `${base}-${n++}`;
+    used.add(s);
+    map.set(event, s);
+  }
+  return map;
+}
+
+function buildSpotSlugLookup(spotItems) {
+  const map = new Map();
+  const used = new Map();
+  for (const spot of spotItems) {
+    if (!spot || typeof spot.name !== "string") continue;
+    const baseSlug = slugify(`${spot.name} ${spot.neighborhood ?? ""}`);
+    if (!baseSlug) continue;
+    let s = baseSlug;
+    let n = 2;
+    while (used.has(s)) s = `${baseSlug}-${n++}`;
+    used.set(s, true);
+    map.set(spot, s);
+  }
+  return map;
+}
+
+// ---------------------------------------------------------------------------
 // Sitemap
 // ---------------------------------------------------------------------------
 
@@ -613,7 +942,7 @@ function renderShell({ title, description, canonical, ogImage, jsonLd, breadcrum
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(description)}">
 <meta name="twitter:image" content="${esc(ogImage)}">
-<meta name="theme-color" content="#ff6b5b">
+<meta name="theme-color" content="#f59e0b">
 <style>${PAGE_CSS}</style>
 ${allLd.map((node) => `<script type="application/ld+json">${safeJsonScript(node)}</script>`).join("\n")}
 </head>
