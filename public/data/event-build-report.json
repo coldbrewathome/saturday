@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-09T01:07:29.104Z",
+  "generatedAt": "2026-05-09T05:06:30.800Z",
   "registryPath": "data/event-sources.json",
   "outputPath": "public/data/events.json",
-  "eventCount": 547,
-  "sourceCount": 62,
-  "liveEventCount": 423,
+  "eventCount": 568,
+  "sourceCount": 77,
+  "liveEventCount": 444,
   "fallbackEventCount": 124,
   "errors": [],
   "sources": [
@@ -131,9 +131,9 @@
       "city": "San Mateo",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 11,
+      "liveEvents": 10,
       "fallbackEvents": 0,
-      "eventCount": 11,
+      "eventCount": 10,
       "fetches": [
         {
           "url": "https://smcl.bibliocommons.com/v2/events",
@@ -268,18 +268,21 @@
       "sourceType": "biblioevents",
       "city": "Cupertino",
       "category": "Library",
-      "status": "fetch-error",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 14,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 14,
       "fetches": [
         {
           "url": "https://sccl.bibliocommons.com/v2/events?locations=CU",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ],
-      "reason": "This operation was aborted"
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
     },
     {
       "id": "sccl-gilroy",
@@ -929,9 +932,9 @@
       "city": "Oakland",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 91,
+      "liveEvents": 92,
       "fallbackEvents": 0,
-      "eventCount": 91,
+      "eventCount": 92,
       "fetches": [
         {
           "url": "https://www.ebparks.org/calendar",
@@ -942,7 +945,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; source=drupal-views-ajax",
-      "rejectedLiveEvents": 49
+      "rejectedLiveEvents": 48
     },
     {
       "id": "don-edwards-nwr",
@@ -1429,6 +1432,368 @@
       "eventCount": 0,
       "fetches": [],
       "reason": "Enable after adding an API key. Query params are built by ingest-events.mjs."
+    },
+    {
+      "id": "stanford-powwow",
+      "name": "Stanford Powwow",
+      "url": "https://www.stanfordpowwow.com/",
+      "sourceType": "officialTextEvents",
+      "city": "Stanford",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 2,
+      "fallbackEvents": 0,
+      "eventCount": 2,
+      "fetches": [
+        {
+          "url": "https://www.stanfordpowwow.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "hmb-wine-jazz-festival",
+      "name": "Half Moon Bay Wine & Jazz Festival",
+      "url": "https://hmbwineandjazzfest.com/",
+      "sourceType": "officialTextEvents",
+      "city": "Half Moon Bay",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://hmbwineandjazzfest.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "taiwanese-american-cultural-festival",
+      "name": "Taiwanese American Cultural Festival",
+      "url": "https://www.tap-sf.org/tacf",
+      "sourceType": "officialTextEvents",
+      "city": "San Francisco",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://www.tap-sf.org/tacf",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html;charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "svmbc-scout-o-rama",
+      "name": "Scout-O-Rama (Silicon Valley Monterey Bay Council)",
+      "url": "https://svmbc.org/activities/sor/",
+      "sourceType": "officialTextEvents",
+      "city": "San Jose",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://svmbc.org/activities/sor/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "kumu-hula-may-day",
+      "name": "Hawaiian May Day Festival (Kumu Hula Association of Northern California)",
+      "url": "https://www.kumuhulaassociation.com/mayday",
+      "sourceType": "officialTextEvents",
+      "city": "Pleasanton",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://www.kumuhulaassociation.com/mayday",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "berkeley-mothers-day-hat-tea",
+      "name": "Berkeley Mother's Day: Hats and High Tea",
+      "url": "https://berkeleyca.gov/community-recreation/events/mothers-day-hats-and-high-tea-0",
+      "sourceType": "officialTextEvents",
+      "city": "Berkeley",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://berkeleyca.gov/community-recreation/events/mothers-day-hats-and-high-tea-0",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "golden-gate-park-band",
+      "name": "Golden Gate Park Band",
+      "url": "https://goldengateparkband.org/concerts/",
+      "sourceType": "officialTextEvents",
+      "city": "San Francisco",
+      "category": "Music",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://goldengateparkband.org/concerts/",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ],
+      "httpStatus": 404,
+      "contentType": "text/html;charset=utf-8"
+    },
+    {
+      "id": "redwood-city-almost-mothers-day",
+      "name": "Redwood City \"Almost\" Mother's Day Kids' Concert",
+      "url": "https://www.redwoodcity.org/residents/redwood-city-events/children-s-events/almost-mothers-day-kids-concert",
+      "sourceType": "officialTextEvents",
+      "city": "Redwood City",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.redwoodcity.org/residents/redwood-city-events/children-s-events/almost-mothers-day-kids-concert",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "gilroy-gardens",
+      "name": "Gilroy Gardens Family Theme Park",
+      "url": "https://www.gilroygardens.org/calendar-hours/",
+      "sourceType": "officialTextEvents",
+      "city": "Gilroy",
+      "category": "Park",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://www.gilroygardens.org/calendar-hours/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        },
+        {
+          "url": "https://www.gilroygardens.org/mothers-day/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "inner-sunset-flea",
+      "name": "Inner Sunset Flea Market",
+      "url": "https://isflea.com/",
+      "sourceType": "html",
+      "city": "San Francisco",
+      "category": "Market",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://isflea.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "reason": "Recurring 2nd Sunday April through November on Irving Street between 9th and 11th Avenues. Free admission.",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "niles-canyon-railway",
+      "name": "Niles Canyon Railway",
+      "url": "https://www.ncry.org/ride/2026-train-rides/",
+      "sourceType": "html",
+      "city": "Sunol",
+      "category": "Outdoors",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.ncry.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        },
+        {
+          "url": "https://www.ncry.org/ride/2026-train-rides/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "reason": "Heritage railway running scenic train rides on the second and third weekends Mar–Oct from the Sunol Depot. Departures 10:30am and 1pm. Tickets required.",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "sf-botanical-garden",
+      "name": "San Francisco Botanical Garden",
+      "url": "https://www.sfbg.org/",
+      "sourceType": "html",
+      "city": "San Francisco",
+      "category": "Outdoors",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.sfbg.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "reason": "Free for SF residents with proof of residency. Visit page for hours and seasonal programs.",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "sf-conservatory-of-flowers",
+      "name": "Conservatory of Flowers",
+      "url": "https://conservatoryofflowers.org/",
+      "sourceType": "html",
+      "city": "San Francisco",
+      "category": "Outdoors",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://conservatoryofflowers.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "reason": "Historic Victorian glasshouse in Golden Gate Park. Free for SF residents on the first Tuesday of the month.",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "sf-japanese-tea-garden",
+      "name": "Japanese Tea Garden",
+      "url": "https://www.japaneseteagardensf.com/",
+      "sourceType": "html",
+      "city": "San Francisco",
+      "category": "Outdoors",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.japaneseteagardensf.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "reason": "Free admission for SF residents Mon/Wed/Fri before 10am with proof of residency.",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "ardenwood-historic-farm",
+      "name": "Ardenwood Historic Farm",
+      "url": "https://www.ebparks.org/parks/ardenwood",
+      "sourceType": "html",
+      "city": "Fremont",
+      "category": "Outdoors",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.ebparks.org/parks/ardenwood",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "reason": "1880s working farm operated by East Bay Regional Park District. Tours, hayrides, blacksmith demonstrations.",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
     }
   ]
 }

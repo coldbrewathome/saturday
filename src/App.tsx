@@ -46,11 +46,20 @@ import {
 } from "./auth";
 import {
   ageBandLabels,
+  defaultPlannerProfile,
+  describePlannerMatch,
+  normalizePlannerProfile,
+  plannerBudgetOptions,
+  plannerCrowdOptions,
+  plannerPlanLengthOptions,
   plannerPreferenceOptions,
+  plannerSettingOptions,
+  plannerTransportOptions,
   rankForVibe,
   scoreSpotForVibe,
   vibeLabels,
   type AgeBand,
+  type PlannerProfile,
   type PlannerPreferenceId,
   type PlannerScoringOptions,
   type PlannerVibe,
@@ -197,6 +206,7 @@ export type Plan = {
   cautions?: string[];
   picks?: Array<{ id: string; reason: string }>;
   aiModel?: string;
+  profile?: PlannerProfile;
 };
 
 const categories: Category[] = [
@@ -222,6 +232,13 @@ const vibeBlurbs: Record<PlannerVibe, string> = {
 
 function vibeBlurb(vibe: PlannerVibe): string {
   return vibeBlurbs[vibe];
+}
+
+function optionLabel<T extends string>(
+  options: Array<{ id: T; label: string }>,
+  id: T,
+): string {
+  return options.find((option) => option.id === id)?.label ?? id;
 }
 
 const SHORT_DAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -767,10 +784,32 @@ const pageSizeOptions = [24, 48, 96];
 
 const bayAreaMapCenter: [number, number] = [37.7749, -122.4194];
 
-function SpotMap({ spots }: { spots: Spot[] }) {
+type MapSelection =
+  | { kind: "spot"; id: string }
+  | { kind: "event"; id: string };
+
+function SpotMap({
+  spots,
+  events,
+  highlightedEventIds,
+  selected,
+  onSelect,
+}: {
+  spots: Spot[];
+  events?: FamilyEvent[];
+  highlightedEventIds?: Set<string>;
+  selected?: MapSelection | null;
+  onSelect?: (sel: MapSelection) => void;
+}) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<LeafletMap | null>(null);
   const layerRef = useRef<LayerGroup | null>(null);
+  // Stable reference to the latest onSelect — re-binding avoids stale closures
+  // without forcing the marker layer to rebuild every time the parent re-renders.
+  const onSelectRef = useRef(onSelect);
+  useEffect(() => {
+    onSelectRef.current = onSelect;
+  }, [onSelect]);
 
   const plottedSpots = useMemo(
     () =>
@@ -783,6 +822,17 @@ function SpotMap({ spots }: { spots: Spot[] }) {
       ),
     [spots],
   );
+  const plottedEvents = useMemo(
+    () =>
+      (events ?? []).filter(
+        (event) =>
+          typeof event.lat === "number" &&
+          typeof event.lon === "number" &&
+          Number.isFinite(event.lat) &&
+          Number.isFinite(event.lon),
+      ),
+    [events],
+  );
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) {
@@ -791,8 +841,8 @@ function SpotMap({ spots }: { spots: Spot[] }) {
 
     const map = L.map(containerRef.current, {
       center: bayAreaMapCenter,
-      zoom: 9,
-      scrollWheelZoom: false,
+      zoom: 10,
+      scrollWheelZoom: true,
     });
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -814,55 +864,69 @@ function SpotMap({ spots }: { spots: Spot[] }) {
   useEffect(() => {
     const map = mapRef.current;
     const layer = layerRef.current;
-    if (!map || !layer) {
-      return;
-    }
+    if (!map || !layer) return;
 
     layer.clearLayers();
 
-    if (plottedSpots.length === 0) {
-      map.setView(bayAreaMapCenter, 9);
-      return;
-    }
-
     const points: Array<[number, number]> = [];
+
     for (const spot of plottedSpots) {
       const lat = spot.lat as number;
       const lon = spot.lon as number;
       points.push([lat, lon]);
+      const isOutdoor =
+        spot.category === "Outdoors" || spot.category === "Wellness";
+      const isSelected =
+        selected?.kind === "spot" && selected.id === spot.id;
       L.circleMarker([lat, lon], {
-        radius: 5,
-        color: "#276749",
-        weight: 1,
-        fillColor: "#276749",
-        fillOpacity: 0.7,
+        radius: isSelected ? 8 : isOutdoor ? 6 : 5,
+        color: isOutdoor ? "#276749" : "#65746b",
+        weight: isSelected ? 2 : 1,
+        fillColor: isOutdoor ? "#276749" : "#a3b1a8",
+        fillOpacity: 0.75,
       })
-        .bindPopup(
-          `<strong>${spot.name}</strong><br/>${spot.neighborhood} · ${spot.category}`,
+        .on("click", () => onSelectRef.current?.({ kind: "spot", id: spot.id }))
+        .addTo(layer);
+    }
+
+    for (const event of plottedEvents) {
+      const lat = event.lat;
+      const lon = event.lon;
+      points.push([lat, lon]);
+      const highlighted = highlightedEventIds?.has(event.id) ?? false;
+      const isSelected =
+        selected?.kind === "event" && selected.id === event.id;
+      L.circleMarker([lat, lon], {
+        radius: isSelected ? 12 : highlighted ? 10 : 7,
+        color: "#ffffff",
+        weight: 2,
+        fillColor: highlighted ? "#b85c38" : "#d68f6e",
+        fillOpacity: 0.95,
+      })
+        .on("click", () =>
+          onSelectRef.current?.({ kind: "event", id: event.id }),
         )
         .addTo(layer);
     }
 
+    if (points.length === 0) {
+      map.setView(bayAreaMapCenter, 9);
+      return;
+    }
     if (points.length === 1) {
       map.setView(points[0], 13);
     } else {
       const bounds = L.latLngBounds(points);
       map.fitBounds(bounds, { maxZoom: 13, padding: [28, 28] });
     }
-  }, [plottedSpots]);
+  }, [plottedSpots, plottedEvents, highlightedEventIds, selected]);
 
   return (
-    <section className="map-panel" aria-label="Map of filtered Bay Area spots">
-      <div className="map-copy">
-        <p>Map view</p>
-        <h2>Where the current matches are clustered</h2>
-      </div>
-      <div className="map-meta">
-        <span>{plottedSpots.length} mapped</span>
-        <span>{spots.length - plottedSpots.length} without coordinates</span>
-      </div>
-      <div className="map-canvas" ref={containerRef} />
-    </section>
+    <div
+      className="map-canvas map-canvas-fill"
+      ref={containerRef}
+      aria-label="Map of Bay Area spots and events"
+    />
   );
 }
 
@@ -1068,6 +1132,7 @@ function App() {
   const [remoteSpots, setRemoteSpots] = useState<Spot[]>(starterSpots);
   const [curatedSpots, setCuratedSpots] = useState<Spot[]>([]);
   const [events, setEvents] = useState<FamilyEvent[]>([]);
+  const [mapSelection, setMapSelection] = useState<MapSelection | null>(null);
   const [boaMuseums, setBoaMuseums] = useState<BoaMuseum[]>([]);
   const [weather, setWeather] = useState<WeatherForecast | null>(null);
   const [preferences, setPreferences] = useState<PlannerPreferenceId[]>(() => {
@@ -1080,6 +1145,14 @@ function App() {
       );
     } catch {
       return [];
+    }
+  });
+  const [plannerProfile, setPlannerProfile] = useState<PlannerProfile>(() => {
+    try {
+      const raw = window.localStorage.getItem("saturday.plannerProfile");
+      return normalizePlannerProfile(raw ? JSON.parse(raw) : null);
+    } catch {
+      return defaultPlannerProfile;
     }
   });
   const [targetDate, setTargetDate] = useState<string>(() => {
@@ -1197,16 +1270,25 @@ function App() {
   }, [preferences]);
 
   useEffect(() => {
-    if (!inferredGeo?.lat || !inferredGeo?.lon) return;
+    window.localStorage.setItem(
+      "saturday.plannerProfile",
+      JSON.stringify(plannerProfile),
+    );
+  }, [plannerProfile]);
+
+  useEffect(() => {
+    const lat = userLocation?.lat ?? inferredGeo?.lat;
+    const lon = userLocation?.lon ?? inferredGeo?.lon;
+    if (!lat || !lon) return;
     let active = true;
-    fetchWeather(inferredGeo.lat, inferredGeo.lon).then((forecast) => {
+    fetchWeather(lat, lon).then((forecast) => {
       if (!active) return;
       if (forecast) setWeather(forecast);
     });
     return () => {
       active = false;
     };
-  }, [inferredGeo]);
+  }, [inferredGeo, userLocation]);
 
   useEffect(() => {
     let active = true;
@@ -1426,7 +1508,19 @@ function App() {
 
   useEffect(() => {
     setAiState({ status: "idle" });
-  }, [category, city, ageBand, cost, onlyOpen, preferences, query, savedIds, targetDate, vibe]);
+  }, [
+    category,
+    city,
+    ageBand,
+    cost,
+    onlyOpen,
+    plannerProfile,
+    preferences,
+    query,
+    savedIds,
+    targetDate,
+    vibe,
+  ]);
 
   useEffect(() => {
     setPage(1);
@@ -1439,6 +1533,13 @@ function App() {
 
   const targetDateObj = useMemo(() => parseIsoDate(targetDate), [targetDate]);
   const targetDayOfWeek = targetDateObj.getDay();
+  const plannerAnchor = useMemo(() => {
+    if (userLocation) return userLocation;
+    if (inferredGeo?.lat && inferredGeo?.lon) {
+      return { lat: inferredGeo.lat, lon: inferredGeo.lon };
+    }
+    return null;
+  }, [inferredGeo, userLocation]);
   const plannerWeather = useMemo(() => {
     const forecast =
       targetDayOfWeek === 6
@@ -1452,9 +1553,21 @@ function App() {
     () => ({
       ageBand: ageBand === "any" ? undefined : ageBand,
       preferences,
+      profile: plannerProfile,
       weather: plannerWeather,
     }),
-    [ageBand, plannerWeather, preferences],
+    [ageBand, plannerProfile, plannerWeather, preferences],
+  );
+  const plannerProfileSummary = useMemo(
+    () =>
+      [
+        optionLabel(plannerPlanLengthOptions, plannerProfile.planLength),
+        optionLabel(plannerBudgetOptions, plannerProfile.budget),
+        optionLabel(plannerTransportOptions, plannerProfile.transportMode),
+        optionLabel(plannerCrowdOptions, plannerProfile.crowdTolerance),
+        optionLabel(plannerSettingOptions, plannerProfile.setting),
+      ].join(" · "),
+    [plannerProfile],
   );
 
   const boaWeekend = useMemo(() => nextBoaWeekend(new Date()), []);
@@ -1504,10 +1617,7 @@ function App() {
 
   const eventActivitySpots = useMemo<Spot[]>(() => {
     const now = new Date();
-    const anchor =
-      inferredGeo?.lat && inferredGeo?.lon
-        ? { lat: inferredGeo.lat, lon: inferredGeo.lon }
-        : { lat: 37.7749, lon: -122.4194 };
+    const anchor = plannerAnchor ?? { lat: 37.7749, lon: -122.4194 };
     return events
       .filter((event) => isActualPlanningEvent(event, now, ageBand))
       .map((event) => {
@@ -1520,7 +1630,7 @@ function App() {
             : 25;
         return eventToPlanningSpot(event, transitMinutes);
       });
-  }, [ageBand, events, inferredGeo]);
+  }, [ageBand, events, plannerAnchor]);
 
   const planningSpots = useMemo(
     () => [...allSpots, ...eventActivitySpots, ...boaActivitySpots],
@@ -1646,12 +1756,12 @@ function App() {
     });
     const weekendishFirst = (event: FamilyEvent) =>
       event.daysOfWeek.some((d) => d === 0 || d === 6) ? 0 : 1;
-    if (!inferredGeo?.lat || !inferredGeo?.lon) {
+    if (!plannerAnchor) {
       return [...matching]
         .sort((a, b) => weekendishFirst(a) - weekendishFirst(b))
         .slice(0, 8);
     }
-    const here = { lat: inferredGeo.lat, lon: inferredGeo.lon };
+    const here = plannerAnchor;
     const distOf = (event: FamilyEvent) => {
       const toRad = (deg: number) => (deg * Math.PI) / 180;
       const R = 3958.8;
@@ -1671,7 +1781,7 @@ function App() {
         return distOf(a) - distOf(b);
       })
       .slice(0, 8);
-  }, [events, ageBand, inferredGeo, daysThroughSunday]);
+  }, [events, ageBand, plannerAnchor, daysThroughSunday]);
 
   const nearTermLabel = useMemo(() => {
     const todayDow = new Date().getDay();
@@ -1680,6 +1790,43 @@ function App() {
     return "this weekend";
   }, []);
 
+  // Events shown as pins on the map: anything in the next ~14 days that matches
+  // the active age band. Highlight set narrows to the current weekend.
+  const mapEvents = useMemo(() => {
+    if (events.length === 0) return [] as FamilyEvent[];
+    const now = Date.now();
+    const horizon = now + 14 * 24 * 60 * 60 * 1000;
+    return events.filter((event) => {
+      if (ageBand !== "any" && !event.ageBands.includes(ageBand)) return false;
+      if (event.startDateTime) {
+        const t = new Date(event.startDateTime).getTime();
+        if (Number.isFinite(t) && (t < now - 12 * 60 * 60 * 1000 || t > horizon))
+          return false;
+      } else {
+        // Recurring without a specific date — keep weekend recurrences.
+        if (!event.daysOfWeek.some((d) => d === 0 || d === 6)) return false;
+      }
+      return true;
+    });
+  }, [events, ageBand]);
+
+  const highlightedEventIds = useMemo(() => {
+    const ids = new Set<string>();
+    const now = Date.now();
+    const weekendHorizon = now + 7 * 24 * 60 * 60 * 1000;
+    for (const event of mapEvents) {
+      if (event.startDateTime) {
+        const t = new Date(event.startDateTime).getTime();
+        if (Number.isFinite(t) && t >= now - 6 * 60 * 60 * 1000 && t <= weekendHorizon) {
+          ids.add(event.id);
+        }
+      } else if (event.daysOfWeek.some((d) => d === 0 || d === 6)) {
+        ids.add(event.id);
+      }
+    }
+    return ids;
+  }, [mapEvents]);
+
   const weekendEvents = useMemo(() => {
     if (events.length === 0) return [] as FamilyEvent[];
     const matching = events.filter((event) => {
@@ -1687,8 +1834,8 @@ function App() {
       if (ageBand !== "any" && !event.ageBands.includes(ageBand)) return false;
       return true;
     });
-    if (!inferredGeo?.lat || !inferredGeo?.lon) return matching;
-    const here = { lat: inferredGeo.lat, lon: inferredGeo.lon };
+    if (!plannerAnchor) return matching;
+    const here = plannerAnchor;
     return matching
       .map((event) => ({
         event,
@@ -1707,7 +1854,7 @@ function App() {
       }))
       .sort((a, b) => a.dist - b.dist)
       .map((entry) => entry.event);
-  }, [events, ageBand, inferredGeo, targetDayOfWeek]);
+  }, [events, ageBand, plannerAnchor, targetDayOfWeek]);
 
   const activeFilterCount = useMemo(() => {
     let n = 0;
@@ -1935,9 +2082,8 @@ function App() {
     const swapAnchor =
       planCentroid(remainingStops) ??
       planCentroid(currentStops) ??
-      (inferredGeo?.lat && inferredGeo?.lon
-        ? { lat: inferredGeo.lat, lon: inferredGeo.lon }
-        : { lat: 37.7749, lon: -122.4194 });
+      plannerAnchor ??
+      { lat: 37.7749, lon: -122.4194 };
     const localPool = clusterAround(
       planningSpots.filter((s) => !usedIds.has(s.id)),
       swapAnchor,
@@ -1983,6 +2129,7 @@ function App() {
           candidates,
           weather,
           preferences,
+          profile: plannerProfile,
         },
         session.token,
       );
@@ -2104,10 +2251,7 @@ function App() {
     setHomeError(null);
     setHomeBusy(true);
 
-    const anchor =
-      inferredGeo?.lat && inferredGeo?.lon
-        ? { lat: inferredGeo.lat, lon: inferredGeo.lon }
-        : { lat: 37.7749, lon: -122.4194 };
+    const anchor = plannerAnchor ?? { lat: 37.7749, lon: -122.4194 };
     const candidatePool = clusterAround(planningSpots, anchor, 8, 24);
 
     if (candidatePool.length === 0) {
@@ -2157,6 +2301,7 @@ function App() {
             dayOfWeek: planDate.toLocaleDateString("en-US", { weekday: "long" }),
             weather,
             preferences,
+            profile: plannerProfile,
           },
           session.token,
         );
@@ -2177,6 +2322,7 @@ function App() {
           cautions: result.brief.cautions,
           picks: result.picks,
           aiModel: result.model,
+          profile: plannerProfile,
         };
         setPlans((current) => [...current, plan]);
         setActivePlanId(id);
@@ -2215,8 +2361,13 @@ function App() {
       source: "manual",
       vibe: nextVibe,
       summary: session
-        ? undefined
-        : "Picked locally. Sign in with Google to use AI for richer suggestions and to save plans across devices.",
+        ? `Picked locally for: ${plannerProfileSummary}.`
+        : `Picked locally for: ${plannerProfileSummary}. Sign in with Google to use AI for richer suggestions and to save plans across devices.`,
+      picks: ranked.map((spot) => ({
+        id: spot.id,
+        reason: `Matched because ${describePlannerMatch(spot, scoringOptions).join(", ")}.`,
+      })),
+      profile: plannerProfile,
     };
     setPlans((current) => [...current, plan]);
     setActivePlanId(id);
@@ -2244,9 +2395,8 @@ function App() {
     }
     const anchor =
       planCentroid(savedSpots) ??
-      (inferredGeo?.lat && inferredGeo?.lon
-        ? { lat: inferredGeo.lat, lon: inferredGeo.lon }
-        : { lat: 37.7749, lon: -122.4194 });
+      plannerAnchor ??
+      { lat: 37.7749, lon: -122.4194 };
     const source =
       savedSpots.length > 0 ? baseSource : clusterAround(baseSource, anchor, 8, 24);
     const rankedSource = applyLocalBias(
@@ -2291,6 +2441,7 @@ function App() {
           dayOfWeek: planDate.toLocaleDateString("en-US", { weekday: "long" }),
           weather,
           preferences,
+          profile: plannerProfile,
         },
         session.token,
       );
@@ -2311,6 +2462,7 @@ function App() {
         cautions: result.brief.cautions,
         picks: result.picks,
         aiModel: result.model,
+        profile: plannerProfile,
       };
       setPlans((current) => [...current, plan]);
       setActivePlanId(id);
@@ -2467,7 +2619,16 @@ function App() {
     setCost("All");
     setOnlyOpen(false);
     setSortBy("best");
+    setPreferences([]);
+    setPlannerProfile(defaultPlannerProfile);
     setPage(1);
+  }
+
+  function updatePlannerProfile<Key extends keyof PlannerProfile>(
+    key: Key,
+    value: PlannerProfile[Key],
+  ) {
+    setPlannerProfile((current) => normalizePlannerProfile({ ...current, [key]: value }));
   }
 
   function addSpot(event: FormEvent<HTMLFormElement>) {
@@ -2674,6 +2835,141 @@ function App() {
           </div>
         </div>
 
+        <div className="home-base" role="group" aria-label="Home base">
+          <span className="filter-label">Home base</span>
+          <div className="home-base-row">
+            {userLocation ? (
+              <button
+                className="geo-button active"
+                type="button"
+                onClick={clearUserLocation}
+                title={`Using your location (${userLocation.lat.toFixed(2)}, ${userLocation.lon.toFixed(2)})`}
+              >
+                <MapPin aria-hidden="true" />
+                Using my location
+              </button>
+            ) : (
+              <button
+                className="geo-button"
+                type="button"
+                disabled={geoState === "requesting"}
+                onClick={requestUserLocation}
+              >
+                <MapPin aria-hidden="true" />
+                {geoState === "requesting" ? "Locating…" : "Use my location"}
+              </button>
+            )}
+            <span className="home-base-status">
+              {userLocation
+                ? "Distance sorted from you"
+                : inferredGeo?.city
+                  ? `Using ${inferredGeo.city}`
+                  : "Using SF baseline"}
+            </span>
+          </div>
+          {geoState === "denied" && (
+            <p className="geo-status error">
+              Location permission denied. Enable it in your browser settings to sort by distance from you.
+            </p>
+          )}
+        </div>
+
+        <div className="home-profile" role="group" aria-label="Plan details">
+          <span className="filter-label">Plan details</span>
+          <div className="profile-grid">
+            <label className="profile-field">
+              <span>Time</span>
+              <select
+                value={plannerProfile.planLength}
+                onChange={(event) =>
+                  updatePlannerProfile(
+                    "planLength",
+                    event.target.value as PlannerProfile["planLength"],
+                  )
+                }
+              >
+                {plannerPlanLengthOptions.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="profile-field">
+              <span>Budget</span>
+              <select
+                value={plannerProfile.budget}
+                onChange={(event) =>
+                  updatePlannerProfile(
+                    "budget",
+                    event.target.value as PlannerProfile["budget"],
+                  )
+                }
+              >
+                {plannerBudgetOptions.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="profile-field">
+              <span>Travel</span>
+              <select
+                value={plannerProfile.transportMode}
+                onChange={(event) =>
+                  updatePlannerProfile(
+                    "transportMode",
+                    event.target.value as PlannerProfile["transportMode"],
+                  )
+                }
+              >
+                {plannerTransportOptions.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="profile-field">
+              <span>Crowds</span>
+              <select
+                value={plannerProfile.crowdTolerance}
+                onChange={(event) =>
+                  updatePlannerProfile(
+                    "crowdTolerance",
+                    event.target.value as PlannerProfile["crowdTolerance"],
+                  )
+                }
+              >
+                {plannerCrowdOptions.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="profile-field">
+              <span>Setting</span>
+              <select
+                value={plannerProfile.setting}
+                onChange={(event) =>
+                  updatePlannerProfile(
+                    "setting",
+                    event.target.value as PlannerProfile["setting"],
+                  )
+                }
+              >
+                {plannerSettingOptions.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+        </div>
+
         {(weather?.saturday || weather?.sunday) && (
           <div className="home-weather" aria-label="Weekend weather">
             {weather.saturday && (
@@ -2696,7 +2992,7 @@ function App() {
         )}
 
         <div className="home-prefs" role="group" aria-label="Family preferences">
-          <span className="filter-label">Your family fit (optional)</span>
+          <span className="filter-label">Interests + constraints</span>
           <div className="pref-chips">
             {plannerPreferenceOptions.map((option) => {
               const active = preferences.includes(option.id);
@@ -2970,93 +3266,184 @@ function App() {
               <em className="filter-count">{activeFilterCount}</em>
             )}
           </button>
-          {nearTermEvents.length > 0 && (
-            <section
-              className="home-events browse-near-events"
-              aria-label="Events happening soon"
-            >
-              <div className="home-events-head">
-                <h2>Happening {nearTermLabel}</h2>
-                <p>
-                  {nearTermEvents.length} family program
-                  {nearTermEvents.length === 1 ? "" : "s"}
-                  {ageBand !== "any" ? ` for ${ageBandLabels[ageBand].toLowerCase()}` : ""}
-                  {inferredGeo?.city ? ` near ${inferredGeo.city}` : ""}.
-                  Tap through to confirm times.
-                </p>
+          <div className="map-shell">
+            <SpotMap
+              spots={filteredSpots}
+              events={mapEvents}
+              highlightedEventIds={highlightedEventIds}
+              selected={mapSelection}
+              onSelect={setMapSelection}
+            />
+            <div className="map-overlay" aria-label="Map summary">
+              <div>
+                <strong>{filteredSpots.length}</strong> spots
               </div>
-              <ul className="home-events-list">
-                {nearTermEvents.map((event) => (
-                  <li
-                    key={event.id}
-                    className={`home-event-card cat-${event.category.toLowerCase()}`}
-                  >
-                    <a href={event.url} target="_blank" rel="noreferrer">
-                      <span className="event-cat-chip">{event.category}</span>
-                      <strong>{event.title}</strong>
-                      <span className="home-event-meta">
-                        {dayWindowLabel(event.daysOfWeek)} · {event.timeWindow}
-                        {" · "}
-                        {event.ageBands
-                          .map((b) => ageBandLabels[b].split(" ")[0])
-                          .join(", ")}
-                      </span>
-                      <span className="home-event-venue">
-                        {event.venue} · {event.city}
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-          <SpotMap spots={filteredSpots} />
-          <div className="section-heading">
-            <div>
-              <p>{filteredSpots.length} matches</p>
-              <h2>{selectedLabel}</h2>
+              <div>
+                <strong>{mapEvents.length}</strong> events
+                {highlightedEventIds.size > 0 && (
+                  <span className="map-overlay-highlight">
+                    · {highlightedEventIds.size} this week
+                  </span>
+                )}
+              </div>
             </div>
-            <div className="stat-strip" aria-label="Plan stats">
-              <span>{dataMeta.loading ? "loading" : `${remoteSpots.length} source spots`}</span>
+            <div className="map-legend" aria-label="Map legend">
               <span>
-                {filteredSpots.length === 0
-                  ? "0 shown"
-                  : `${pageStart + 1}-${pageEnd} shown`}
+                <span className="legend-dot dot-event-hot" /> Time-sensitive
               </span>
-              {dataMeta.imageStats && (
-                <span>
-                  {(dataMeta.imageStats.wikidata ?? 0) + (dataMeta.imageStats.tagged ?? 0)} place
-                  images
-                </span>
-              )}
-              <span>{savedSpots.length} saved</span>
-              <span>{visitedIds.length} visited</span>
+              <span>
+                <span className="legend-dot dot-event" /> Event
+              </span>
+              <span>
+                <span className="legend-dot dot-park" /> Park / outdoors
+              </span>
+              <span>
+                <span className="legend-dot dot-spot" /> Other
+              </span>
             </div>
           </div>
 
-          {filteredSpots.length === 0 ? (
+          {(() => {
+            if (!mapSelection) return null;
+            if (mapSelection.kind === "spot") {
+              const spot = allSpots.find((s) => s.id === mapSelection.id);
+              if (!spot) return null;
+              const saved = savedIds.includes(spot.id);
+              const visited = visitedIds.includes(spot.id);
+              return (
+                <div className="bottom-sheet" role="dialog" aria-label={spot.name}>
+                  <button
+                    className="bottom-sheet-close"
+                    onClick={() => setMapSelection(null)}
+                    aria-label="Close"
+                  >
+                    <X aria-hidden="true" />
+                  </button>
+                  <div className="sheet-spot">
+                    <img
+                      className="sheet-thumb"
+                      src={spot.imageUrl}
+                      alt={spot.name}
+                      loading="lazy"
+                    />
+                    <div className="sheet-body">
+                      <p className="spot-category">{spot.category}</p>
+                      <h3>{spot.name}</h3>
+                      <p className="sheet-note">{spot.note}</p>
+                      <div className="sheet-meta">
+                        <span>{spot.neighborhood}</span>
+                        {typeof spot.googleRating === "number" && (
+                          <span className="rating-chip">
+                            ★ {spot.googleRating.toFixed(1)}
+                            {spot.googleRatingCount
+                              ? ` · ${formatRatingCount(spot.googleRatingCount)}`
+                              : ""}
+                          </span>
+                        )}
+                        <span>{spot.cost}</span>
+                        {spot.openingHours &&
+                          (() => {
+                            const compact = compactHoursLabel(spot.openingHours);
+                            return compact ? <span>{compact}</span> : null;
+                          })()}
+                      </div>
+                      <div className="sheet-actions">
+                        <button
+                          className={`sheet-action ${saved ? "is-active" : ""}`}
+                          onClick={() => toggleSaved(spot.id)}
+                        >
+                          <Bookmark aria-hidden="true" />
+                          {saved ? "Saved" : "Save"}
+                        </button>
+                        <button
+                          className={`sheet-action ${visited ? "is-active" : ""}`}
+                          onClick={() => toggleVisited(spot.id)}
+                        >
+                          <Check aria-hidden="true" />
+                          {visited ? "Visited" : "Mark visited"}
+                        </button>
+                        {spot.website && (
+                          <a
+                            className="sheet-action"
+                            href={spot.website}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <ExternalLink aria-hidden="true" />
+                            Website
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+            const event = events.find((e) => e.id === mapSelection.id);
+            if (!event) return null;
+            const eventDate = event.startDateTime
+              ? new Date(event.startDateTime)
+              : null;
+            return (
+              <div className="bottom-sheet" role="dialog" aria-label={event.title}>
+                <button
+                  className="bottom-sheet-close"
+                  onClick={() => setMapSelection(null)}
+                  aria-label="Close"
+                >
+                  <X aria-hidden="true" />
+                </button>
+                <div className="sheet-event">
+                  <p className={`event-cat-chip cat-${event.category.toLowerCase()}`}>
+                    Event · {event.category}
+                  </p>
+                  <h3>{event.title}</h3>
+                  <p className="sheet-note">{event.description}</p>
+                  <div className="sheet-meta">
+                    <span>{event.venue} · {event.city}</span>
+                    <span>
+                      {eventDate
+                        ? eventDate.toLocaleDateString(undefined, {
+                            weekday: "short",
+                            month: "short",
+                            day: "numeric",
+                          })
+                        : dayWindowLabel(event.daysOfWeek)}{" "}
+                      · {event.timeWindow}
+                    </span>
+                    {event.cost && <span>{event.cost}</span>}
+                  </div>
+                  <div className="sheet-actions">
+                    <a
+                      className="sheet-action"
+                      href={event.url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <ExternalLink aria-hidden="true" />
+                      Open event page
+                    </a>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+
+          {filteredSpots.length === 0 && mapEvents.length === 0 && (
             <div className="empty-results">
-              <h3>No matching spots</h3>
+              <h3>No matches on the map</h3>
               <p>
-                Your current filters didn't match any of the {allSpots.length}
-                {" "}spots in the dataset.
+                Your current filters didn't match any of the {allSpots.length} spots.
+                Loosen them or reset.
               </p>
-              <ul>
-                {query && <li>Search: "{query}"</li>}
-                {ageBand !== "any" && (
-                  <li>Age: {ageBandLabels[ageBand]}</li>
-                )}
-                {category !== "All" && <li>Category: {category}</li>}
-                {city !== "All" && <li>Area: {city}</li>}
-                {cost !== "All" && <li>Cost: {cost}</li>}
-                {onlyOpen && <li>Open now only</li>}
-              </ul>
               <button className="primary-button" onClick={resetFilters}>
                 <RotateCcw aria-hidden="true" />
                 Reset filters
               </button>
             </div>
-          ) : (
+          )}
+          {/* legacy card grid removed — map + bottom sheet replaces it */}
+          {false && (
           <div className="spot-grid">
             {paginatedSpots.map((spot) => {
               const saved = savedIds.includes(spot.id);
@@ -3158,30 +3545,6 @@ function App() {
                       <span>{spot.cost}</span>
                     </div>
 
-                    {(spot.wheelchair === "yes" ||
-                      spot.wheelchair === "limited" ||
-                      spot.dogsAllowed === true ||
-                      spot.kidsFriendly === true ||
-                      spot.parkingNearby === true) && (
-                      <div className="feature-chips">
-                        {spot.wheelchair === "yes" && (
-                          <span title="Wheelchair accessible">♿ Accessible</span>
-                        )}
-                        {spot.wheelchair === "limited" && (
-                          <span title="Wheelchair access limited">♿ Limited</span>
-                        )}
-                        {spot.dogsAllowed === true && (
-                          <span title="Dogs allowed">🐕 Dogs OK</span>
-                        )}
-                        {spot.kidsFriendly === true && (
-                          <span title="Kid-friendly">👶 Kids</span>
-                        )}
-                        {spot.parkingNearby === true && (
-                          <span title="Parking on site">🅿 Parking</span>
-                        )}
-                      </div>
-                    )}
-
                     {(() => {
                       const visibleTags = spot.tags
                         .filter((item) => {
@@ -3191,8 +3554,40 @@ function App() {
                           return true;
                         })
                         .slice(0, 4);
-                      return visibleTags.length === 0 ? null : (
+                      const hasFeatures =
+                        spot.wheelchair === "yes" ||
+                        spot.wheelchair === "limited" ||
+                        spot.dogsAllowed === true ||
+                        spot.kidsFriendly === true ||
+                        spot.parkingNearby === true;
+                      if (!hasFeatures && visibleTags.length === 0) return null;
+                      return (
                         <div className="tag-row">
+                          {spot.kidsFriendly === true && (
+                            <span className="chip-feature" title="Kid-friendly">
+                              👶 Kids
+                            </span>
+                          )}
+                          {spot.wheelchair === "yes" && (
+                            <span className="chip-feature" title="Wheelchair accessible">
+                              ♿ Accessible
+                            </span>
+                          )}
+                          {spot.wheelchair === "limited" && (
+                            <span className="chip-feature" title="Wheelchair access limited">
+                              ♿ Limited
+                            </span>
+                          )}
+                          {spot.dogsAllowed === true && (
+                            <span className="chip-feature" title="Dogs allowed">
+                              🐕 Dogs OK
+                            </span>
+                          )}
+                          {spot.parkingNearby === true && (
+                            <span className="chip-feature" title="Parking on site">
+                              🅿 Parking
+                            </span>
+                          )}
                           {visibleTags.map((item) => (
                             <span key={item}>{item}</span>
                           ))}
@@ -3200,24 +3595,20 @@ function App() {
                       );
                     })()}
 
-                    {(spot.website || spot.sourceUrl) && (
-                      <div className="source-row">
-                        {spot.website && (
-                          <a href={spot.website} target="_blank" rel="noreferrer">
-                            Website
-                            <ExternalLink aria-hidden="true" />
-                          </a>
-                        )}
-                        {spot.sourceUrl && (
-                          <a href={spot.sourceUrl} target="_blank" rel="noreferrer">
-                            OSM source
-                            <ExternalLink aria-hidden="true" />
-                          </a>
-                        )}
-                      </div>
-                    )}
-
                     <div className="card-footer">
+                      {spot.website ? (
+                        <a
+                          className="text-button"
+                          href={spot.website}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Website
+                          <ExternalLink aria-hidden="true" />
+                        </a>
+                      ) : (
+                        <span />
+                      )}
                       <button
                         className={`text-button ${visited ? "is-active" : ""}`}
                         onClick={() => toggleVisited(spot.id)}
@@ -3239,7 +3630,7 @@ function App() {
           </div>
           )}
 
-          {filteredSpots.length > 0 && (
+          {false && filteredSpots.length > 0 && (
             <div className="pagination-bar" aria-label="Spot pagination">
               <span>
                 Showing {pageStart + 1}-{pageEnd} of {filteredSpots.length}

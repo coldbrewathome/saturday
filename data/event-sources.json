@@ -107,6 +107,7 @@
       "Sonoma",
       "South San Francisco",
       "St. Helena",
+      "Stanford",
       "Suisun City",
       "Sunol",
       "Sunnyvale",
@@ -1269,6 +1270,359 @@
       "enabled": false,
       "requiresEnv": "TICKETMASTER_API_KEY",
       "notes": "Enable after adding an API key. Query params are built by ingest-events.mjs."
+    },
+    {
+      "id": "stanford-powwow",
+      "name": "Stanford Powwow",
+      "url": "https://www.stanfordpowwow.com/",
+      "city": "Stanford",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 37.4275,
+      "lon": -122.1697,
+      "officialTextEvents": [
+        {
+          "id": "stanford-powwow-2026-05-08",
+          "title": "55th Annual Stanford Powwow",
+          "description": "Native American dance, music, food, and information vendors at Eucalyptus Grove. Mother's Day weekend tradition open to the public.",
+          "venue": "Eucalyptus Grove, Stanford University",
+          "neighborhood": "Stanford",
+          "startDateTime": "2026-05-08T19:00:00-07:00",
+          "endDateTime": "2026-05-08T22:00:00-07:00",
+          "ageBands": ["preschool", "school-age", "tween"],
+          "cost": "Free",
+          "url": "https://www.stanfordpowwow.com/",
+          "requiredText": ["Stanford Powwow", "May 8", "Eucalyptus Grove"]
+        },
+        {
+          "id": "stanford-powwow-2026-05-09",
+          "title": "55th Annual Stanford Powwow",
+          "description": "Saturday day of the Stanford Powwow at Eucalyptus Grove with Grand Entries at 1pm and 7pm.",
+          "venue": "Eucalyptus Grove, Stanford University",
+          "neighborhood": "Stanford",
+          "startDateTime": "2026-05-09T11:00:00-07:00",
+          "endDateTime": "2026-05-09T22:00:00-07:00",
+          "ageBands": ["preschool", "school-age", "tween"],
+          "cost": "Free",
+          "url": "https://www.stanfordpowwow.com/",
+          "requiredText": ["Stanford Powwow", "May 9", "Eucalyptus Grove"]
+        },
+        {
+          "id": "stanford-powwow-2026-05-10",
+          "title": "55th Annual Stanford Powwow",
+          "description": "Final day (Mother's Day) of the Stanford Powwow at Eucalyptus Grove. Grand Entry at 1pm.",
+          "venue": "Eucalyptus Grove, Stanford University",
+          "neighborhood": "Stanford",
+          "startDateTime": "2026-05-10T11:00:00-07:00",
+          "endDateTime": "2026-05-10T18:00:00-07:00",
+          "ageBands": ["preschool", "school-age", "tween"],
+          "cost": "Free",
+          "url": "https://www.stanfordpowwow.com/",
+          "requiredText": ["Stanford Powwow", "May 10", "Eucalyptus Grove"]
+        }
+      ]
+    },
+    {
+      "id": "hmb-wine-jazz-festival",
+      "name": "Half Moon Bay Wine & Jazz Festival",
+      "url": "https://hmbwineandjazzfest.com/",
+      "city": "Half Moon Bay",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 37.4636,
+      "lon": -122.4286,
+      "officialTextEvents": [
+        {
+          "id": "hmb-wine-jazz-2026-05-09",
+          "title": "Half Moon Bay Wine & Jazz Festival",
+          "description": "Fifth annual wine tasting and live jazz on Main Street, with 50 California wineries, food, and a craft beer & cider garden.",
+          "venue": "Main Street, Downtown Half Moon Bay",
+          "neighborhood": "Downtown",
+          "startDateTime": "2026-05-09T12:00:00-07:00",
+          "endDateTime": "2026-05-09T17:00:00-07:00",
+          "ageBands": ["tween"],
+          "cost": "$68 GA / $175 VIP",
+          "url": "https://hmbwineandjazzfest.com/",
+          "requiredText": ["Half Moon Bay Wine & Jazz", "May 9, 2026", "Main"]
+        }
+      ]
+    },
+    {
+      "id": "taiwanese-american-cultural-festival",
+      "name": "Taiwanese American Cultural Festival",
+      "url": "https://www.tap-sf.org/tacf",
+      "city": "San Francisco",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 37.7880,
+      "lon": -122.4074,
+      "officialTextEvents": [
+        {
+          "id": "taiwanese-american-cultural-festival-2026-05-09",
+          "title": "Taiwanese American Cultural Festival",
+          "description": "33rd annual Taiwanese American Cultural Festival at Union Square. Vendors, traditional and contemporary performances, Taiwanese food, family-friendly.",
+          "venue": "Union Square",
+          "neighborhood": "Union Square",
+          "startDateTime": "2026-05-09T10:00:00-07:00",
+          "endDateTime": "2026-05-09T16:00:00-07:00",
+          "ageBands": ["toddler", "preschool", "school-age", "tween"],
+          "cost": "Free",
+          "url": "https://www.tap-sf.org/tacf",
+          "requiredText": ["Taiwanese American Cultural Festival", "Union Square", "May 9"]
+        }
+      ]
+    },
+    {
+      "id": "svmbc-scout-o-rama",
+      "name": "Scout-O-Rama (Silicon Valley Monterey Bay Council)",
+      "url": "https://svmbc.org/activities/sor/",
+      "city": "San Jose",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 37.3502,
+      "lon": -121.8804,
+      "officialTextEvents": [
+        {
+          "id": "svmbc-scout-o-rama-2026-05-09",
+          "title": "Scout-O-Rama Community Family Festival",
+          "description": "100+ hands-on family activities at History Park: archery, water rockets, tomahawk throwing, fire trucks, pinewood derby, slacklining, crafts, life-size mazes, plus live entertainment.",
+          "venue": "History Park, San Jose",
+          "neighborhood": "Kelley Park",
+          "startDateTime": "2026-05-09T10:15:00-07:00",
+          "endDateTime": "2026-05-09T16:00:00-07:00",
+          "ageBands": ["preschool", "school-age", "tween"],
+          "cost": "$10 / family",
+          "url": "https://svmbc.org/activities/sor/",
+          "requiredText": ["Scout-O-Rama", "History Park", "May 9"]
+        }
+      ]
+    },
+    {
+      "id": "kumu-hula-may-day",
+      "name": "Hawaiian May Day Festival (Kumu Hula Association of Northern California)",
+      "url": "https://www.kumuhulaassociation.com/mayday",
+      "city": "Pleasanton",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 37.6783,
+      "lon": -121.8830,
+      "officialTextEvents": [
+        {
+          "id": "kumu-hula-may-day-2026-05-09",
+          "title": "Hawaiian May Day Festival",
+          "description": "Mother's Day weekend celebration of Hawaiian and Polynesian culture: hula hālau, Hawaiian/reggae music, ethnic food, and craft vendors at the Alameda County Fairgrounds.",
+          "venue": "Alameda County Fairgrounds",
+          "neighborhood": "Pleasanton",
+          "startDateTime": "2026-05-09T10:00:00-07:00",
+          "endDateTime": "2026-05-09T18:00:00-07:00",
+          "ageBands": ["preschool", "school-age", "tween"],
+          "cost": "$25 adult / $20 senior, child 6-12 / Free under 6",
+          "url": "https://www.kumuhulaassociation.com/mayday",
+          "requiredText": ["May Day", "Alameda County Fairgrounds", "May 9"]
+        },
+        {
+          "id": "kumu-hula-may-day-2026-05-10",
+          "title": "Hawaiian May Day Festival",
+          "description": "Mother's Day Hawaiian and Polynesian cultural celebration at the Alameda County Fairgrounds.",
+          "venue": "Alameda County Fairgrounds",
+          "neighborhood": "Pleasanton",
+          "startDateTime": "2026-05-10T11:00:00-07:00",
+          "endDateTime": "2026-05-10T18:00:00-07:00",
+          "ageBands": ["preschool", "school-age", "tween"],
+          "cost": "$25 adult / $20 senior, child 6-12 / Free under 6",
+          "url": "https://www.kumuhulaassociation.com/mayday",
+          "requiredText": ["May Day", "Alameda County Fairgrounds", "May 10"]
+        }
+      ]
+    },
+    {
+      "id": "berkeley-mothers-day-hat-tea",
+      "name": "Berkeley Mother's Day: Hats and High Tea",
+      "url": "https://berkeleyca.gov/community-recreation/events/mothers-day-hats-and-high-tea-0",
+      "city": "Berkeley",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 37.8807,
+      "lon": -122.2545,
+      "officialTextEvents": [
+        {
+          "id": "berkeley-mothers-day-hat-tea-2026-05-09",
+          "title": "Mother's Day Hats and High Tea at Berkeley Rose Garden",
+          "description": "Free family-friendly Mother's Day celebration with live jazz, charcuterie, desserts, kids' card-making, bead jewelry, glitter tattoos, and a bubble show at the Berkeley Rose Garden.",
+          "venue": "Berkeley Rose Garden, 1201 Euclid Avenue",
+          "neighborhood": "North Berkeley",
+          "startDateTime": "2026-05-09T14:00:00-07:00",
+          "endDateTime": "2026-05-09T17:00:00-07:00",
+          "ageBands": ["toddler", "preschool", "school-age", "tween"],
+          "cost": "Free",
+          "url": "https://berkeleyca.gov/community-recreation/events/mothers-day-hats-and-high-tea-0",
+          "requiredText": ["Mother", "Hats", "High Tea", "Berkeley Rose Garden"]
+        }
+      ]
+    },
+    {
+      "id": "golden-gate-park-band",
+      "name": "Golden Gate Park Band",
+      "url": "https://goldengateparkband.org/concerts/",
+      "city": "San Francisco",
+      "category": "Music",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 37.7702,
+      "lon": -122.4677,
+      "officialTextEvents": [
+        {
+          "id": "golden-gate-park-band-mothers-day-2026-05-10",
+          "title": "Golden Gate Park Band Mother's Day Pops Concert",
+          "description": "Free outdoor concert at the Spreckels Temple of Music in honor of Mother's Day. Works by Leroy Anderson, Gilbert & Sullivan, and a clarinet premiere.",
+          "venue": "Spreckels Temple of Music, Music Concourse, Golden Gate Park",
+          "neighborhood": "Golden Gate Park",
+          "startDateTime": "2026-05-10T13:00:00-07:00",
+          "endDateTime": "2026-05-10T14:30:00-07:00",
+          "ageBands": ["preschool", "school-age", "tween"],
+          "cost": "Free",
+          "url": "https://goldengateparkband.org/concerts/",
+          "requiredText": ["Mother", "May 10", "Spreckels Temple of Music"]
+        }
+      ]
+    },
+    {
+      "id": "redwood-city-almost-mothers-day",
+      "name": "Redwood City \"Almost\" Mother's Day Kids' Concert",
+      "url": "https://www.redwoodcity.org/residents/redwood-city-events/children-s-events/almost-mothers-day-kids-concert",
+      "city": "Redwood City",
+      "category": "Music",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 37.4744,
+      "lon": -122.2160,
+      "officialTextEvents": [
+        {
+          "id": "redwood-city-almost-mothers-day-2026-05-09",
+          "title": "\"Almost\" Mother's Day Kids' Concert",
+          "description": "Kids' concert with kindie rocker Andy Z and the Andyland Band, plus an inflatable playland and Mother's Day gift craft area at Red Morton Park (next to Magical Bridge Playground).",
+          "venue": "Red Morton Park, 939 Valota Road",
+          "neighborhood": "Centennial",
+          "startDateTime": "2026-05-09T10:00:00-07:00",
+          "endDateTime": "2026-05-09T12:00:00-07:00",
+          "ageBands": ["toddler", "preschool", "school-age"],
+          "cost": "Free",
+          "url": "https://www.redwoodcity.org/residents/redwood-city-events/children-s-events/almost-mothers-day-kids-concert",
+          "requiredText": ["Almost", "Mother", "Andy Z", "Red Morton"]
+        }
+      ]
+    },
+    {
+      "id": "gilroy-gardens",
+      "name": "Gilroy Gardens Family Theme Park",
+      "url": "https://www.gilroygardens.org/calendar-hours/",
+      "urls": [
+        "https://www.gilroygardens.org/calendar-hours/",
+        "https://www.gilroygardens.org/mothers-day/"
+      ],
+      "city": "Gilroy",
+      "category": "Park",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 37.0288,
+      "lon": -121.6212,
+      "officialTextEvents": [
+        {
+          "id": "gilroy-gardens-mothers-day-2026-05-10",
+          "title": "Gilroy Gardens Mother's Day (Mom Free with Child Admission)",
+          "description": "Mom and grandma get in free with the purchase of a child admission. Mother's Day Tea Party on the Creekside Terrace also available.",
+          "venue": "Gilroy Gardens, 3050 Hecker Pass Hwy",
+          "neighborhood": "West Gilroy",
+          "startDateTime": "2026-05-10T10:00:00-07:00",
+          "endDateTime": "2026-05-10T18:00:00-07:00",
+          "ageBands": ["toddler", "preschool", "school-age"],
+          "cost": "Free for moms (with child admission)",
+          "url": "https://www.gilroygardens.org/mothers-day/",
+          "requiredText": ["Mother", "free", "Gilroy Gardens"]
+        }
+      ]
+    },
+    {
+      "id": "inner-sunset-flea",
+      "name": "Inner Sunset Flea Market",
+      "url": "https://isflea.com/",
+      "city": "San Francisco",
+      "category": "Market",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 37.7637,
+      "lon": -122.4663,
+      "notes": "Recurring 2nd Sunday April through November on Irving Street between 9th and 11th Avenues. Free admission."
+    },
+    {
+      "id": "niles-canyon-railway",
+      "name": "Niles Canyon Railway",
+      "url": "https://www.ncry.org/ride/2026-train-rides/",
+      "urls": [
+        "https://www.ncry.org/",
+        "https://www.ncry.org/ride/2026-train-rides/"
+      ],
+      "city": "Sunol",
+      "category": "Outdoors",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 37.5949,
+      "lon": -121.8895,
+      "notes": "Heritage railway running scenic train rides on the second and third weekends Mar–Oct from the Sunol Depot. Departures 10:30am and 1pm. Tickets required."
+    },
+    {
+      "id": "sf-botanical-garden",
+      "name": "San Francisco Botanical Garden",
+      "url": "https://www.sfbg.org/",
+      "city": "San Francisco",
+      "category": "Outdoors",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 37.7665,
+      "lon": -122.4708,
+      "notes": "Free for SF residents with proof of residency. Visit page for hours and seasonal programs."
+    },
+    {
+      "id": "sf-conservatory-of-flowers",
+      "name": "Conservatory of Flowers",
+      "url": "https://conservatoryofflowers.org/",
+      "city": "San Francisco",
+      "category": "Outdoors",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 37.7726,
+      "lon": -122.4604,
+      "notes": "Historic Victorian glasshouse in Golden Gate Park. Free for SF residents on the first Tuesday of the month."
+    },
+    {
+      "id": "sf-japanese-tea-garden",
+      "name": "Japanese Tea Garden",
+      "url": "https://www.japaneseteagardensf.com/",
+      "city": "San Francisco",
+      "category": "Outdoors",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 37.7702,
+      "lon": -122.4703,
+      "notes": "Free admission for SF residents Mon/Wed/Fri before 10am with proof of residency."
+    },
+    {
+      "id": "ardenwood-historic-farm",
+      "name": "Ardenwood Historic Farm",
+      "url": "https://www.ebparks.org/parks/ardenwood",
+      "city": "Fremont",
+      "category": "Outdoors",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 37.5577,
+      "lon": -122.0613,
+      "notes": "1880s working farm operated by East Bay Regional Park District. Tours, hayrides, blacksmith demonstrations."
     }
   ]
 }
