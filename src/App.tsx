@@ -2789,6 +2789,9 @@ function App() {
   function requestUserLocation() {
     if (!("geolocation" in navigator)) {
       setGeoState("denied");
+      window.alert(
+        "Your browser doesn't support location. Try a different browser, or set a location manually in filters.",
+      );
       return;
     }
     setGeoState("requesting");
@@ -2803,8 +2806,25 @@ function App() {
         setGeoState("idle");
         setSortBy("nearest");
       },
-      () => {
+      (err) => {
         setGeoState("denied");
+        // Surface the failure so the user knows why nothing happened. The
+        // browser silently swallows the prompt when permission has been
+        // denied previously; without this they would just see the button
+        // light up red and have no idea what to do.
+        if (err.code === err.PERMISSION_DENIED) {
+          window.alert(
+            "Location permission is blocked for famhop.com.\n\n" +
+              "iOS Chrome: tap the ••• menu → Settings → Privacy → Location → allow for famhop.com, then refresh.\n" +
+              "Desktop: click the lock icon in the address bar and allow Location.",
+          );
+        } else if (err.code === err.POSITION_UNAVAILABLE) {
+          window.alert(
+            "Couldn't determine your location right now. Make sure Location Services are turned on for your browser.",
+          );
+        } else if (err.code === err.TIMEOUT) {
+          window.alert("Location request timed out. Try again with a stronger signal.");
+        }
       },
       { enableHighAccuracy: false, timeout: 8000, maximumAge: 600000 },
     );
