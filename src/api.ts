@@ -17,6 +17,20 @@ export type StopSummary = {
   friendScore?: number;
 };
 
+export type EventSummary = {
+  id: string;
+  title: string;
+  venue: string;
+  city: string;
+  startDateTime?: string;
+  timeWindow?: string;
+  url?: string;
+  category?: string;
+  cost?: string;
+};
+
+export type ItemOrderRef = { kind: "spot" | "event"; id: string };
+
 export type AiBriefResponse = {
   brief: {
     title: string;
@@ -35,6 +49,8 @@ export type PollSnapshot = {
   pollId: string;
   title: string;
   stops: StopSummary[];
+  events?: EventSummary[];
+  itemOrder?: ItemOrderRef[];
   tallies: Tallies;
   voterCount: number;
   createdAt: string;
@@ -54,6 +70,8 @@ function requireApi(): string {
 export async function createPoll(body: {
   title: string;
   stops: StopSummary[];
+  events?: EventSummary[];
+  itemOrder?: ItemOrderRef[];
 }): Promise<{ pollId: string; ownerToken: string }> {
   const response = await fetch(`${requireApi()}/polls`, {
     method: "POST",
@@ -99,6 +117,7 @@ export async function createAiBrief(
     dayOfWeek?: string;
     weather?: WeatherForecast | null;
     preferences?: string[];
+    profile?: Record<string, string>;
   },
   sessionToken: string,
 ): Promise<AiBriefResponse> {
@@ -203,6 +222,7 @@ export async function createAiSwap(
     candidates: StopSummary[];
     weather?: WeatherForecast | null;
     preferences?: string[];
+    profile?: Record<string, string>;
   },
   sessionToken: string,
 ): Promise<{ pick: { id: string; reason: string }; model: string }> {

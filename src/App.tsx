@@ -36,6 +36,8 @@ import {
   logoutSession,
   putUserState,
   StopSummary,
+  type EventSummary,
+  type ItemOrderRef,
 } from "./api";
 import {
   clearSession,
@@ -192,11 +194,17 @@ type NewSpotForm = {
   note: string;
 };
 
+export type PlanItemRef = { kind: "spot" | "event"; id: string };
+
 export type Plan = {
   id: string;
   name: string;
   stopIds: string[];
   eventIds?: string[];
+  // Mixed visit order (newest field). When present, drives the plan/map/poll
+  // rendering; otherwise we fall back to "stops in stopIds order, then events
+  // in date order" so existing plans keep working.
+  itemOrder?: PlanItemRef[];
   createdAt: string;
   pollId?: string;
   ownerToken?: string;
@@ -991,28 +999,37 @@ function SpotMap({
   );
 }
 
+type PlanMapItem =
+  | { kind: "spot"; lat: number; lon: number; label: string; sublabel: string }
+  | { kind: "event"; lat: number; lon: number; label: string; sublabel: string };
+
 function PlanMap({
   stops,
   events,
+  items,
 }: {
   stops: Spot[];
   events?: FamilyEvent[];
+  items?: PlanMapItem[];
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<LeafletMap | null>(null);
   const layerRef = useRef<LayerGroup | null>(null);
 
-  // Build a single ordered visit sequence: stops in their plan order, then
-  // events sorted by start time. Each gets a 1-based visit number for the pin
-  // and the polyline connects them in that order.
-  const sequence = useMemo(() => {
-    const items: Array<{
-      kind: "spot" | "event";
-      lat: number;
-      lon: number;
-      label: string;
-      sublabel: string;
-    }> = [];
+  // Build a single ordered visit sequence. Callers may pass a pre-ordered
+  // `items` array (drives by Plan.itemOrder); otherwise we fall back to
+  // "stops in stopIds order, then events sorted by start time".
+  const sequence = useMemo<PlanMapItem[]>(() => {
+    if (items && items.length > 0) {
+      return items.filter(
+        (it) =>
+          typeof it.lat === "number" &&
+          typeof it.lon === "number" &&
+          Number.isFinite(it.lat) &&
+          Number.isFinite(it.lon),
+      );
+    }
+    const fallback: PlanMapItem[] = [];
     for (const spot of stops) {
       if (
         typeof spot.lat === "number" &&
@@ -1020,7 +1037,7 @@ function PlanMap({
         Number.isFinite(spot.lat) &&
         Number.isFinite(spot.lon)
       ) {
-        items.push({
+        fallback.push({
           kind: "spot",
           lat: spot.lat,
           lon: spot.lon,
@@ -1055,7 +1072,7 @@ function PlanMap({
             day: "numeric",
           })
         : event.timeWindow;
-      items.push({
+      fallback.push({
         kind: "event",
         lat: event.lat,
         lon: event.lon,
@@ -1063,8 +1080,8 @@ function PlanMap({
         sublabel: `${when} · ${event.venue}`,
       });
     }
-    return items;
-  }, [stops, events]);
+    return fallback;
+  }, [stops, events, items]);
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -2050,6 +2067,44 @@ function App() {
       });
   }, [activePlan, events]);
 
+  // Single ordered visit sequence used by the plan detail, the plan map, and
+  // the share payload. Honors plan.itemOrder when set, otherwise falls back
+  // to "stops in stopIds order, then events sorted by start date".
+  type PlanItem =
+    | { kind: "spot"; id: string; spot: Spot }
+    | { kind: "event"; id: string; event: FamilyEvent };
+  const activePlanItems = useMemo<PlanItem[]>(() => {
+    if (!activePlan) return [];
+    const stopMap = new Map(activePlanStops.map((s) => [s.id, s] as const));
+    const eventMap = new Map(activePlanEvents.map((e) => [e.id, e] as const));
+    const order =
+      activePlan.itemOrder ??
+      [
+        ...activePlan.stopIds.map((id) => ({ kind: "spot" as const, id })),
+        ...activePlanEvents.map((e) => ({ kind: "event" as const, id: e.id })),
+      ];
+    const out: PlanItem[] = [];
+    for (const ref of order) {
+      if (ref.kind === "spot") {
+        const spot = stopMap.get(ref.id);
+        if (spot) out.push({ kind: "spot", id: ref.id, spot });
+      } else {
+        const event = eventMap.get(ref.id);
+        if (event) out.push({ kind: "event", id: ref.id, event });
+      }
+    }
+    // Catch any items present in stopIds/eventIds but missing from the order
+    // (e.g. legacy plans with a partial itemOrder, or transient race conditions).
+    const seen = new Set(out.map((it) => `${it.kind}:${it.id}`));
+    for (const spot of activePlanStops) {
+      if (!seen.has(`spot:${spot.id}`)) out.push({ kind: "spot", id: spot.id, spot });
+    }
+    for (const event of activePlanEvents) {
+      if (!seen.has(`event:${event.id}`)) out.push({ kind: "event", id: event.id, event });
+    }
+    return out;
+  }, [activePlan, activePlanStops, activePlanEvents]);
+
   const planNearbyEvents = useMemo(() => {
     if (!activePlan || activePlanStops.length === 0 || events.length === 0) {
       return [] as FamilyEvent[];
@@ -2151,11 +2206,17 @@ function App() {
     }
     const id = `plan-${Date.now()}`;
     const totalCount = savedSpots.length + savedEvents.length;
+    const stopIds = savedSpots.map((spot) => spot.id);
+    const eventIds = savedEvents.map((event) => event.id);
     const next: Plan = {
       id,
       name: `Saved plan (${totalCount})`,
-      stopIds: savedSpots.map((spot) => spot.id),
-      eventIds: savedEvents.map((event) => event.id),
+      stopIds,
+      eventIds,
+      itemOrder: [
+        ...stopIds.map((sid) => ({ kind: "spot" as const, id: sid })),
+        ...eventIds.map((eid) => ({ kind: "event" as const, id: eid })),
+      ],
       createdAt: new Date().toISOString(),
       source: "manual",
     };
@@ -2170,7 +2231,15 @@ function App() {
         if (plan.id !== planId) return plan;
         const existing = plan.eventIds ?? [];
         if (existing.includes(eventId)) return plan;
-        return { ...plan, eventIds: [...existing, eventId] };
+        const order = plan.itemOrder ?? [
+          ...plan.stopIds.map((sid) => ({ kind: "spot" as const, id: sid })),
+          ...existing.map((eid) => ({ kind: "event" as const, id: eid })),
+        ];
+        return {
+          ...plan,
+          eventIds: [...existing, eventId],
+          itemOrder: [...order, { kind: "event" as const, id: eventId }],
+        };
       }),
     );
   }
@@ -2179,9 +2248,44 @@ function App() {
     setPlans((current) =>
       current.map((plan) =>
         plan.id === planId
-          ? { ...plan, eventIds: (plan.eventIds ?? []).filter((id) => id !== eventId) }
+          ? {
+              ...plan,
+              eventIds: (plan.eventIds ?? []).filter((id) => id !== eventId),
+              itemOrder: (plan.itemOrder ?? []).filter(
+                (item) => !(item.kind === "event" && item.id === eventId),
+              ),
+            }
           : plan,
       ),
+    );
+  }
+
+  function moveItemInPlan(
+    planId: string,
+    item: PlanItemRef,
+    delta: number,
+  ) {
+    setPlans((current) =>
+      current.map((plan) => {
+        if (plan.id !== planId) return plan;
+        const order =
+          plan.itemOrder ??
+          [
+            ...plan.stopIds.map((sid) => ({ kind: "spot" as const, id: sid })),
+            ...(plan.eventIds ?? []).map((eid) => ({
+              kind: "event" as const,
+              id: eid,
+            })),
+          ];
+        const idx = order.findIndex(
+          (it) => it.kind === item.kind && it.id === item.id,
+        );
+        const swap = idx + delta;
+        if (idx < 0 || swap < 0 || swap >= order.length) return plan;
+        const next = [...order];
+        [next[idx], next[swap]] = [next[swap], next[idx]];
+        return { ...plan, itemOrder: next };
+      }),
     );
   }
 
@@ -2200,11 +2304,23 @@ function App() {
 
   function addStopToPlan(planId: string, stopId: string) {
     setPlans((current) =>
-      current.map((plan) =>
-        plan.id === planId && !plan.stopIds.includes(stopId)
-          ? { ...plan, stopIds: [...plan.stopIds, stopId] }
-          : plan,
-      ),
+      current.map((plan) => {
+        if (plan.id !== planId || plan.stopIds.includes(stopId)) return plan;
+        const order =
+          plan.itemOrder ??
+          [
+            ...plan.stopIds.map((sid) => ({ kind: "spot" as const, id: sid })),
+            ...(plan.eventIds ?? []).map((eid) => ({
+              kind: "event" as const,
+              id: eid,
+            })),
+          ];
+        return {
+          ...plan,
+          stopIds: [...plan.stopIds, stopId],
+          itemOrder: [...order, { kind: "spot" as const, id: stopId }],
+        };
+      }),
     );
     setAddStopChoice("");
   }
@@ -2216,6 +2332,9 @@ function App() {
           ? {
               ...plan,
               stopIds: plan.stopIds.filter((id) => id !== stopId),
+              itemOrder: (plan.itemOrder ?? []).filter(
+                (item) => !(item.kind === "spot" && item.id === stopId),
+              ),
             }
           : plan,
       ),
@@ -2223,7 +2342,10 @@ function App() {
   }
 
   async function sharePlan() {
-    if (!activePlan || activePlanStops.length === 0) {
+    if (
+      !activePlan ||
+      (activePlanStops.length === 0 && activePlanEvents.length === 0)
+    ) {
       return;
     }
     setShareState({ status: "sharing" });
@@ -2236,18 +2358,39 @@ function App() {
       cost: spot.cost,
       transitMinutes: spot.transitMinutes,
     }));
+    const eventPayload: EventSummary[] = activePlanEvents.map((event) => ({
+      id: event.id,
+      title: event.title,
+      venue: event.venue,
+      city: event.city,
+      startDateTime: event.startDateTime ?? undefined,
+      timeWindow: event.timeWindow,
+      url: event.url,
+      category: event.category,
+      cost: event.cost,
+    }));
+    const itemOrderPayload: ItemOrderRef[] = activePlanItems.map((it) => ({
+      kind: it.kind,
+      id: it.id,
+    }));
+    const planTitle = activePlan.name || "Untitled plan";
     try {
       const result = await createPoll({
-        title: activePlan.name || "Untitled plan",
+        title: planTitle,
         stops: stopPayload,
+        events: eventPayload,
+        itemOrder: itemOrderPayload,
       });
       const url = `${window.location.origin}/#/p/${result.pollId}`;
       updatePlan(activePlan.id, {
         pollId: result.pollId,
         ownerToken: result.ownerToken,
       });
+      // Share text uses the plan's own name so when texted/messaged it reads
+      // "Vote on 'Saturday with kids' — …" instead of a generic URL.
+      const shareText = `Vote on "${planTitle}" — ${url}`;
       try {
-        await navigator.clipboard.writeText(url);
+        await navigator.clipboard.writeText(shareText);
       } catch {
         // ignore clipboard failures
       }
@@ -4153,55 +4296,150 @@ function App() {
                 </ul>
               )}
 
-              {(activePlanStops.length > 0 || activePlanEvents.length > 0) && (
-                <PlanMap stops={activePlanStops} events={activePlanEvents} />
+              {activePlanItems.length > 0 && (
+                <PlanMap
+                  stops={activePlanStops}
+                  events={activePlanEvents}
+                  items={activePlanItems
+                    .map((it) => {
+                      if (it.kind === "spot") {
+                        if (
+                          typeof it.spot.lat !== "number" ||
+                          typeof it.spot.lon !== "number"
+                        ) {
+                          return null;
+                        }
+                        return {
+                          kind: "spot" as const,
+                          lat: it.spot.lat,
+                          lon: it.spot.lon,
+                          label: it.spot.name,
+                          sublabel: `${it.spot.neighborhood} · ${it.spot.category}`,
+                        };
+                      }
+                      const date = it.event.startDateTime
+                        ? new Date(it.event.startDateTime)
+                        : null;
+                      const when = date
+                        ? date.toLocaleDateString(undefined, {
+                            weekday: "short",
+                            month: "short",
+                            day: "numeric",
+                          })
+                        : it.event.timeWindow;
+                      return {
+                        kind: "event" as const,
+                        lat: it.event.lat,
+                        lon: it.event.lon,
+                        label: it.event.title,
+                        sublabel: `${when} · ${it.event.venue}`,
+                      };
+                    })
+                    .filter((x): x is PlanMapItem => x !== null)}
+                />
               )}
 
-              {activePlanEvents.length > 0 && (
-                <div className="plan-events">
-                  <p className="plan-events-head">
-                    Scheduled events ({activePlanEvents.length})
-                  </p>
-                  <ul className="plan-event-list">
-                    {activePlanEvents.map((event) => {
-                      const date = event.startDateTime
-                        ? new Date(event.startDateTime)
-                        : null;
+              {(() => {
+                const dates = new Set(
+                  activePlanEvents
+                    .map((e) =>
+                      e.startDateTime
+                        ? new Date(e.startDateTime).toDateString()
+                        : null,
+                    )
+                    .filter((d): d is string => Boolean(d)),
+                );
+                if (dates.size > 1) {
+                  return (
+                    <p className="plan-warning">
+                      ⚠ Events span {dates.size} different days — this plan
+                      covers more than one day.
+                    </p>
+                  );
+                }
+                return null;
+              })()}
+
+              {activePlanItems.length === 0 ? (
+                <p className="empty-state">
+                  Add places or events from your saved list to build the day.
+                </p>
+              ) : (
+                <ol className="plan-stops">
+                  {activePlanItems.map((item, index) => {
+                    const isLast = index === activePlanItems.length - 1;
+                    if (item.kind === "spot") {
+                      const spot = item.spot;
+                      const aiReason = activePlan.picks?.find(
+                        (pick) => pick.id === spot.id,
+                      )?.reason;
                       return (
-                        <li className="plan-event" key={event.id}>
-                          <div className="plan-event-info">
-                            <strong>{event.title}</strong>
+                        <li className="plan-stop" key={`spot:${spot.id}`}>
+                          <span className="plan-stop-index">{index + 1}</span>
+                          <div className="plan-stop-info">
+                            <strong>{spot.name}</strong>
                             <span>
-                              {date
-                                ? date.toLocaleDateString(undefined, {
-                                    weekday: "short",
-                                    month: "short",
-                                    day: "numeric",
-                                  })
-                                : dayWindowLabel(event.daysOfWeek)}
-                              {date
-                                ? ` · ${date.toLocaleTimeString(undefined, {
-                                    hour: "numeric",
-                                    minute: "2-digit",
-                                  })}`
-                                : ` · ${event.timeWindow}`}{" "}
-                              · {event.venue}
-                              {event.cost ? ` · ${event.cost}` : ""}
+                              {spot.neighborhood} · {spot.category} · {spot.cost} ·{" "}
+                              {spot.transitMinutes} min
+                              {typeof spot.googleRating === "number" && (
+                                <>
+                                  {" "}· ★ {spot.googleRating.toFixed(1)}
+                                  {spot.googleRatingCount
+                                    ? ` (${formatRatingCount(spot.googleRatingCount)})`
+                                    : ""}
+                                </>
+                              )}
                             </span>
+                            {aiReason && (
+                              <em className="plan-stop-reason">{aiReason}</em>
+                            )}
                           </div>
-                          <div className="plan-event-actions">
-                            <a
-                              href={event.url}
-                              target="_blank"
-                              rel="noreferrer"
-                              title="Open event page"
-                            >
-                              <ExternalLink aria-hidden="true" />
-                            </a>
+                          <div className="plan-stop-actions">
+                            {activePlan.source === "ai" && (
+                              <button
+                                title="Swap with AI choice"
+                                disabled={
+                                  !session ||
+                                  !API_CONFIGURED ||
+                                  swapBusyStopId !== null
+                                }
+                                onClick={() =>
+                                  swapStopWithAi(activePlan.id, spot.id)
+                                }
+                              >
+                                <Sparkles aria-hidden="true" />
+                              </button>
+                            )}
                             <button
-                              title="Remove event from plan"
+                              title="Move up"
+                              disabled={index === 0}
                               onClick={() =>
-                                removeEventFromPlan(activePlan.id, event.id)
+                                moveItemInPlan(
+                                  activePlan.id,
+                                  { kind: "spot", id: spot.id },
+                                  -1,
+                                )
+                              }
+                            >
+                              <ArrowUp aria-hidden="true" />
+                            </button>
+                            <button
+                              title="Move down"
+                              disabled={isLast}
+                              onClick={() =>
+                                moveItemInPlan(
+                                  activePlan.id,
+                                  { kind: "spot", id: spot.id },
+                                  1,
+                                )
+                              }
+                            >
+                              <ArrowDown aria-hidden="true" />
+                            </button>
+                            <button
+                              title="Remove from plan"
+                              onClick={() =>
+                                removeStopFromPlan(activePlan.id, spot.id)
                               }
                             >
                               <X aria-hidden="true" />
@@ -4209,80 +4447,87 @@ function App() {
                           </div>
                         </li>
                       );
-                    })}
-                  </ul>
-                </div>
-              )}
-
-              {activePlanStops.length === 0 && activePlanEvents.length === 0 ? (
-                <p className="empty-state">
-                  Add stops or events from your saved list to build the day.
-                </p>
-              ) : activePlanStops.length === 0 ? null : (
-                <ol className="plan-stops">
-                  {activePlanStops.map((spot, index) => {
-                    const aiReason = activePlan.picks?.find(
-                      (pick) => pick.id === spot.id,
-                    )?.reason;
+                    }
+                    const event = item.event;
+                    const date = event.startDateTime
+                      ? new Date(event.startDateTime)
+                      : null;
                     return (
-                    <li className="plan-stop" key={spot.id}>
-                      <span className="plan-stop-index">{index + 1}</span>
-                      <div className="plan-stop-info">
-                        <strong>{spot.name}</strong>
-                        <span>
-                          {spot.neighborhood} · {spot.category} · {spot.cost} ·{" "}
-                          {spot.transitMinutes} min
-                          {typeof spot.googleRating === "number" && (
-                            <>
-                              {" "}· ★ {spot.googleRating.toFixed(1)}
-                              {spot.googleRatingCount
-                                ? ` (${formatRatingCount(spot.googleRatingCount)})`
-                                : ""}
-                            </>
-                          )}
+                      <li
+                        className="plan-stop plan-stop-event"
+                        key={`event:${event.id}`}
+                      >
+                        <span className="plan-stop-index plan-stop-index-event">
+                          {index + 1}
                         </span>
-                        {aiReason && <em className="plan-stop-reason">{aiReason}</em>}
-                      </div>
-                      <div className="plan-stop-actions">
-                        {activePlan.source === "ai" && (
+                        <div className="plan-stop-info">
+                          <strong>
+                            <span className="plan-event-tag">EVENT</span>{" "}
+                            {event.title}
+                          </strong>
+                          <span>
+                            {date
+                              ? date.toLocaleDateString(undefined, {
+                                  weekday: "short",
+                                  month: "short",
+                                  day: "numeric",
+                                })
+                              : dayWindowLabel(event.daysOfWeek)}
+                            {date
+                              ? ` · ${date.toLocaleTimeString(undefined, {
+                                  hour: "numeric",
+                                  minute: "2-digit",
+                                })}`
+                              : ` · ${event.timeWindow}`}{" "}
+                            · {event.venue}
+                            {event.cost ? ` · ${event.cost}` : ""}
+                          </span>
+                        </div>
+                        <div className="plan-stop-actions">
+                          <a
+                            href={event.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            title="Open event page"
+                          >
+                            <ExternalLink aria-hidden="true" />
+                          </a>
                           <button
-                            title="Swap with AI choice"
-                            disabled={
-                              !session ||
-                              !API_CONFIGURED ||
-                              swapBusyStopId !== null
-                            }
+                            title="Move up"
+                            disabled={index === 0}
                             onClick={() =>
-                              swapStopWithAi(activePlan.id, spot.id)
+                              moveItemInPlan(
+                                activePlan.id,
+                                { kind: "event", id: event.id },
+                                -1,
+                              )
                             }
                           >
-                            <Sparkles aria-hidden="true" />
+                            <ArrowUp aria-hidden="true" />
                           </button>
-                        )}
-                        <button
-                          title="Move up"
-                          disabled={index === 0}
-                          onClick={() => moveStop(activePlan.id, spot.id, -1)}
-                        >
-                          <ArrowUp aria-hidden="true" />
-                        </button>
-                        <button
-                          title="Move down"
-                          disabled={index === activePlanStops.length - 1}
-                          onClick={() => moveStop(activePlan.id, spot.id, 1)}
-                        >
-                          <ArrowDown aria-hidden="true" />
-                        </button>
-                        <button
-                          title="Remove from plan"
-                          onClick={() =>
-                            removeStopFromPlan(activePlan.id, spot.id)
-                          }
-                        >
-                          <X aria-hidden="true" />
-                        </button>
-                      </div>
-                    </li>
+                          <button
+                            title="Move down"
+                            disabled={isLast}
+                            onClick={() =>
+                              moveItemInPlan(
+                                activePlan.id,
+                                { kind: "event", id: event.id },
+                                1,
+                              )
+                            }
+                          >
+                            <ArrowDown aria-hidden="true" />
+                          </button>
+                          <button
+                            title="Remove event from plan"
+                            onClick={() =>
+                              removeEventFromPlan(activePlan.id, event.id)
+                            }
+                          >
+                            <X aria-hidden="true" />
+                          </button>
+                        </div>
+                      </li>
                     );
                   })}
                 </ol>
@@ -4353,15 +4598,17 @@ function App() {
                   className="primary-button"
                   disabled={
                     !API_CONFIGURED ||
-                    activePlanStops.length === 0 ||
+                    (activePlanStops.length === 0 &&
+                      activePlanEvents.length === 0) ||
                     shareState.status === "sharing"
                   }
                   title={
                     !API_CONFIGURED
                       ? "Backend not deployed in this preview"
-                      : activePlanStops.length === 0
-                        ? "Add at least one place — events aren't included in shared polls yet"
-                        : "Share this plan for voting (places only — events stay local)"
+                      : activePlanStops.length === 0 &&
+                          activePlanEvents.length === 0
+                        ? "Add at least one place or event"
+                        : "Share this plan for voting"
                   }
                   onClick={sharePlan}
                 >

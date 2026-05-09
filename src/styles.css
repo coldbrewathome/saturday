@@ -1928,8 +1928,41 @@ h3 {
 
 .plan-nearby-card .event-cat-chip {
   justify-self: start;
-  font-size: 0.68rem;
-  letter-spacing: 0.04em;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  border: 0;
+  padding: 4px 10px;
+  background: var(--surface-strong);
+  color: var(--muted);
+  border-radius: 6px;
+}
+
+.plan-nearby-card.cat-park .event-cat-chip,
+.plan-nearby-card.cat-zoo .event-cat-chip {
+  background: #e4f0e7;
+  color: var(--accent-strong);
+}
+
+.plan-nearby-card.cat-library .event-cat-chip {
+  background: #eef3f7;
+  color: var(--blue);
+}
+
+.plan-nearby-card.cat-museum .event-cat-chip {
+  background: #f3e9d7;
+  color: #8a5a1d;
+}
+
+.plan-nearby-card.cat-farm .event-cat-chip,
+.plan-nearby-card.cat-festival .event-cat-chip {
+  background: #fdecea;
+  color: var(--coral);
+}
+
+.plan-nearby-card.cat-music .event-cat-chip {
+  background: #efe4f6;
+  color: #604a85;
 }
 
 .plan-nearby-card strong {
@@ -2394,6 +2427,74 @@ h3 {
 .poll-header .text-button {
   justify-self: start;
   margin-bottom: 6px;
+}
+
+.vote-yes-all {
+  align-items: center;
+  background: var(--accent);
+  border: 0;
+  border-radius: 999px;
+  color: #ffffff;
+  display: inline-flex;
+  font-size: 0.86rem;
+  font-weight: 800;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 10px 18px;
+  width: fit-content;
+}
+
+.vote-yes-all:hover { background: var(--accent-strong); }
+.vote-yes-all.is-active { background: var(--accent-strong); }
+.vote-yes-all svg { width: 16px; height: 16px; }
+.vote-yes-all:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.poll-stop-event {
+  border-left: 4px solid var(--coral);
+}
+
+.plan-stop-event { border-left: 4px solid var(--coral); padding-left: 8px; }
+
+.plan-stop-index-event {
+  background: var(--coral) !important;
+}
+
+.plan-event-tag {
+  background: var(--coral);
+  color: #ffffff;
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.poll-event-link {
+  align-items: center;
+  color: var(--blue);
+  display: inline-flex;
+  font-size: 0.78rem;
+  font-weight: 800;
+  gap: 4px;
+  margin-top: 4px;
+  text-decoration: none;
+}
+.poll-event-link svg { width: 12px; height: 12px; }
+
+.plan-warning {
+  background: #fff5d4;
+  border: 1px solid #e5cf8a;
+  border-radius: 8px;
+  color: #6a4b00;
+  font-size: 0.86rem;
+  font-weight: 800;
+  margin: 12px 0;
+  padding: 10px 14px;
 }
 
 .poll-meta {

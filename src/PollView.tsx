@@ -1,7 +1,9 @@
-import { ArrowLeft, Frown, Meh, Smile } from "lucide-react";
+import { ArrowLeft, ExternalLink, Frown, Meh, Smile, ThumbsUp } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import {
+  EventSummary,
   PollSnapshot,
+  StopSummary,
   Vote,
   getOrCreateVoterId,
   getPoll,
@@ -24,6 +26,10 @@ const VOTE_ICON: Record<Vote, typeof Smile> = {
 
 const VOTES: Vote[] = ["up", "meh", "down"];
 
+type DisplayItem =
+  | { kind: "spot"; id: string; stop: StopSummary }
+  | { kind: "event"; id: string; event: EventSummary };
+
 function readMyVotes(pollId: string): Record<string, Vote> {
   try {
     const raw = window.localStorage.getItem(`saturday.votes.${pollId}`);
@@ -40,6 +46,25 @@ function storeMyVotes(pollId: string, votes: Record<string, Vote>) {
   );
 }
 
+function formatEventWhen(event: EventSummary): string {
+  if (event.startDateTime) {
+    const d = new Date(event.startDateTime);
+    if (Number.isFinite(d.getTime())) {
+      const date = d.toLocaleDateString(undefined, {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+      });
+      const time = d.toLocaleTimeString(undefined, {
+        hour: "numeric",
+        minute: "2-digit",
+      });
+      return `${date} · ${time}`;
+    }
+  }
+  return event.timeWindow ?? "";
+}
+
 export default function PollView({ pollId }: { pollId: string }) {
   const [status, setStatus] = useState<Status>("loading");
   const [error, setError] = useState<string | null>(null);
@@ -49,6 +74,51 @@ export default function PollView({ pollId }: { pollId: string }) {
   );
   const [submitting, setSubmitting] = useState(false);
   const voterId = useMemo(() => getOrCreateVoterId(), []);
+
+  // Build a single ordered visit list mixing places + events. Honors the
+  // poll's itemOrder when present; otherwise falls back to "places, then
+  // events" so legacy polls (no events) keep working.
+  const displayItems = useMemo<DisplayItem[]>(() => {
+    if (!poll) return [];
+    const stopMap = new Map(poll.stops.map((s) => [s.id, s] as const));
+    const eventMap = new Map(
+      (poll.events ?? []).map((e) => [e.id, e] as const),
+    );
+    const out: DisplayItem[] = [];
+    const seen = new Set<string>();
+    if (poll.itemOrder && poll.itemOrder.length > 0) {
+      for (const ref of poll.itemOrder) {
+        const key = `${ref.kind}:${ref.id}`;
+        if (seen.has(key)) continue;
+        if (ref.kind === "spot") {
+          const stop = stopMap.get(ref.id);
+          if (stop) {
+            seen.add(key);
+            out.push({ kind: "spot", id: ref.id, stop });
+          }
+        } else {
+          const event = eventMap.get(ref.id);
+          if (event) {
+            seen.add(key);
+            out.push({ kind: "event", id: ref.id, event });
+          }
+        }
+      }
+    }
+    for (const stop of poll.stops) {
+      const key = `spot:${stop.id}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push({ kind: "spot", id: stop.id, stop });
+    }
+    for (const event of poll.events ?? []) {
+      const key = `event:${event.id}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push({ kind: "event", id: event.id, event });
+    }
+    return out;
+  }, [poll]);
 
   useEffect(() => {
     let active = true;
@@ -69,9 +139,7 @@ export default function PollView({ pollId }: { pollId: string }) {
     };
   }, [pollId]);
 
-  async function vote(stopId: string, choice: Vote) {
-    if (!poll) return;
-    const next = { ...myVotes, [stopId]: choice };
+  async function submitVotes(next: Record<string, Vote>) {
     setMyVotes(next);
     storeMyVotes(pollId, next);
     setSubmitting(true);
@@ -87,6 +155,20 @@ export default function PollView({ pollId }: { pollId: string }) {
     } finally {
       setSubmitting(false);
     }
+  }
+
+  async function vote(itemId: string, choice: Vote) {
+    if (!poll) return;
+    await submitVotes({ ...myVotes, [itemId]: choice });
+  }
+
+  async function voteYesToAll() {
+    if (!poll || displayItems.length === 0) return;
+    const next = { ...myVotes };
+    for (const item of displayItems) {
+      next[item.id] = "up";
+    }
+    await submitVotes(next);
   }
 
   function backToApp() {
@@ -113,6 +195,12 @@ export default function PollView({ pollId }: { pollId: string }) {
     );
   }
 
+  const stopCount = poll.stops.length;
+  const eventCount = (poll.events ?? []).length;
+  const allYes =
+    displayItems.length > 0 &&
+    displayItems.every((item) => myVotes[item.id] === "up");
+
   return (
     <div className="poll-shell">
       <header className="poll-header">
@@ -123,28 +211,91 @@ export default function PollView({ pollId }: { pollId: string }) {
         <p className="eyebrow">Vote on the plan</p>
         <h1>{poll.title}</h1>
         <p className="poll-meta">
-          {poll.stops.length} stop{poll.stops.length === 1 ? "" : "s"} ·{" "}
-          {poll.voterCount} voter{poll.voterCount === 1 ? "" : "s"}
+          {stopCount} place{stopCount === 1 ? "" : "s"}
+          {eventCount > 0
+            ? ` · ${eventCount} event${eventCount === 1 ? "" : "s"}`
+            : ""}{" "}
+          · {poll.voterCount} voter{poll.voterCount === 1 ? "" : "s"}
         </p>
+        <button
+          className={`vote-yes-all ${allYes ? "is-active" : ""}`}
+          onClick={voteYesToAll}
+          disabled={submitting || displayItems.length === 0}
+          title="Set Yes for every item in this plan"
+        >
+          <ThumbsUp aria-hidden="true" />
+          {allYes ? "Voted Yes to all" : "Yes to all"}
+        </button>
       </header>
 
       <ol className="poll-stops">
-        {poll.stops.map((stop, index) => {
-          const tally = poll.tallies[stop.id] ?? { up: 0, down: 0, meh: 0 };
-          const myChoice = myVotes[stop.id];
+        {displayItems.map((item, index) => {
+          const tally = poll.tallies[item.id] ?? { up: 0, down: 0, meh: 0 };
+          const myChoice = myVotes[item.id];
+          if (item.kind === "spot") {
+            const stop = item.stop;
+            return (
+              <li className="poll-stop" key={`spot:${stop.id}`}>
+                <div className="poll-stop-head">
+                  <span className="plan-stop-index">{index + 1}</span>
+                  <div>
+                    <strong>{stop.name}</strong>
+                    <span>
+                      {stop.neighborhood} · {stop.category}
+                      {stop.cost ? ` · ${stop.cost}` : ""}
+                    </span>
+                  </div>
+                </div>
+                <div className="poll-vote-row">
+                  {VOTES.map((value) => {
+                    const Icon = VOTE_ICON[value];
+                    const active = myChoice === value;
+                    return (
+                      <button
+                        key={value}
+                        className={active ? "vote-button active" : "vote-button"}
+                        disabled={submitting}
+                        onClick={() => vote(stop.id, value)}
+                      >
+                        <Icon aria-hidden="true" />
+                        <span>{VOTE_LABEL[value]}</span>
+                        <em>{tally[value]}</em>
+                      </button>
+                    );
+                  })}
+                </div>
+              </li>
+            );
+          }
+          const event = item.event;
           return (
-            <li className="poll-stop" key={stop.id}>
+            <li className="poll-stop poll-stop-event" key={`event:${event.id}`}>
               <div className="poll-stop-head">
-                <span className="plan-stop-index">{index + 1}</span>
+                <span className="plan-stop-index plan-stop-index-event">
+                  {index + 1}
+                </span>
                 <div>
-                  <strong>{stop.name}</strong>
+                  <strong>
+                    <span className="plan-event-tag">EVENT</span> {event.title}
+                  </strong>
                   <span>
-                    {stop.neighborhood} · {stop.category}
-                    {stop.cost ? ` · ${stop.cost}` : ""}
+                    {formatEventWhen(event)}
+                    {event.venue ? ` · ${event.venue}` : ""}
+                    {event.cost ? ` · ${event.cost}` : ""}
                   </span>
+                  {event.url && (
+                    <a
+                      className="poll-event-link"
+                      href={event.url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <ExternalLink aria-hidden="true" />
+                      Event page
+                    </a>
+                  )}
                 </div>
               </div>
-
               <div className="poll-vote-row">
                 {VOTES.map((value) => {
                   const Icon = VOTE_ICON[value];
@@ -154,7 +305,7 @@ export default function PollView({ pollId }: { pollId: string }) {
                       key={value}
                       className={active ? "vote-button active" : "vote-button"}
                       disabled={submitting}
-                      onClick={() => vote(stop.id, value)}
+                      onClick={() => vote(event.id, value)}
                     >
                       <Icon aria-hidden="true" />
                       <span>{VOTE_LABEL[value]}</span>

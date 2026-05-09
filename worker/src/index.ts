@@ -17,10 +17,26 @@ type StopSummary = {
   friendScore?: number;
 };
 
+type EventSummary = {
+  id: string;
+  title: string;
+  venue: string;
+  city: string;
+  startDateTime?: string;
+  timeWindow?: string;
+  url?: string;
+  category?: string;
+  cost?: string;
+};
+
+type ItemOrderRef = { kind: "spot" | "event"; id: string };
+
 type PollRecord = {
   pollId: string;
   title: string;
   stops: StopSummary[];
+  events?: EventSummary[];
+  itemOrder?: ItemOrderRef[];
   ownerToken: string;
   createdAt: string;
 };
@@ -134,6 +150,77 @@ function cleanStops(value: unknown): StopSummary[] {
           ? Math.round(stop.friendScore)
           : undefined,
     }));
+}
+
+function isEventSummary(value: unknown): value is EventSummary {
+  if (!value || typeof value !== "object") return false;
+  const v = value as Record<string, unknown>;
+  return (
+    typeof v.id === "string" &&
+    typeof v.title === "string" &&
+    typeof v.venue === "string" &&
+    typeof v.city === "string"
+  );
+}
+
+function cleanEvents(value: unknown): EventSummary[] {
+  const events = Array.isArray(value) ? value : [];
+  return events
+    .filter(isEventSummary)
+    .slice(0, 12)
+    .map((event) => ({
+      id: cleanText(event.id, 200),
+      title: cleanText(event.title, 200),
+      venue: cleanText(event.venue, 200),
+      city: cleanText(event.city, 100),
+      startDateTime: cleanText(event.startDateTime, 40) || undefined,
+      timeWindow: cleanText(event.timeWindow, 40) || undefined,
+      url: cleanText(event.url, 500) || undefined,
+      category: cleanText(event.category, 80) || undefined,
+      cost: cleanText(event.cost, 80) || undefined,
+    }));
+}
+
+function cleanItemOrder(
+  value: unknown,
+  validIds: { spots: Set<string>; events: Set<string> },
+): ItemOrderRef[] {
+  const arr = Array.isArray(value) ? value : [];
+  const out: ItemOrderRef[] = [];
+  const seen = new Set<string>();
+  for (const raw of arr) {
+    if (!raw || typeof raw !== "object") continue;
+    const ref = raw as Record<string, unknown>;
+    const kind = ref.kind === "spot" || ref.kind === "event" ? ref.kind : null;
+    const id = typeof ref.id === "string" ? ref.id.slice(0, 200) : null;
+    if (!kind || !id) continue;
+    const key = `${kind}:${id}`;
+    if (seen.has(key)) continue;
+    if (kind === "spot" && !validIds.spots.has(id)) continue;
+    if (kind === "event" && !validIds.events.has(id)) continue;
+    seen.add(key);
+    out.push({ kind, id });
+    if (out.length >= 25) break;
+  }
+  return out;
+}
+
+function cleanPlannerProfile(value: unknown): Record<string, string> | undefined {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return undefined;
+  const input = value as Record<string, unknown>;
+  const allowed = [
+    "transportMode",
+    "budget",
+    "planLength",
+    "crowdTolerance",
+    "setting",
+  ];
+  const result: Record<string, string> = {};
+  for (const key of allowed) {
+    const cleaned = cleanText(input[key], 40);
+    if (cleaned) result[key] = cleaned;
+  }
+  return Object.keys(result).length > 0 ? result : undefined;
 }
 
 function outputText(response: any): string {
@@ -503,6 +590,7 @@ async function aiBrief(
     dayOfWeek?: unknown;
     weather?: unknown;
     preferences?: unknown;
+    profile?: unknown;
   };
   const vibe = cleanText(data.vibe, 40) || "balanced";
   const ageBand = cleanText(data.ageBand, 40) || "";
@@ -517,6 +605,7 @@ async function aiBrief(
         .filter(Boolean)
         .slice(0, 8)
     : [];
+  const profile = cleanPlannerProfile(data.profile);
   const spots = cleanStops(data.spots);
   if (spots.length === 0) {
     return json({ error: "spots required" }, { status: 400 }, cors);
@@ -545,8 +634,9 @@ async function aiBrief(
         dayOfWeek,
         weather,
         preferences,
+        familyProfile: profile,
         task:
-          "Build a kid-friendly weekend plan for the date above: choose 2-4 stops in order, give a brief title and summary aimed at the parent, explain the tradeoffs in rationale (mention age-fit explicitly, AND mention the weather + family preferences when relevant), list source-data cautions, and return picks with the ordered stop ids. If weather has high precipChance or label is Rainy/Showers/Stormy, lean indoor (Museum, Library, Wellness). Honor each item in 'preferences' as a hard constraint. Make the picks feel different from a generic suggestion — use the day-of-week and shuffled candidate ordering to vary your choice. Output JSON only.",
+          "Build a kid-friendly weekend plan for the date above: choose 2-4 stops in order, give a brief title and summary aimed at the parent, explain the tradeoffs in rationale (mention age-fit explicitly, AND mention the weather, family preferences, and familyProfile when relevant), list source-data cautions, and return picks with the ordered stop ids. If weather has high precipChance or label is Rainy/Showers/Stormy, lean indoor (Museum, Library, Wellness). Honor each item in 'preferences' and familyProfile as constraints. Make each pick reason specific enough to read as: matched because X, Y, and Z. Make the picks feel different from a generic suggestion — use the day-of-week and shuffled candidate ordering to vary your choice. Output JSON only.",
         spots,
       }),
       max_output_tokens: 700,
@@ -755,6 +845,7 @@ async function aiSwap(
     candidates?: unknown;
     weather?: unknown;
     preferences?: unknown;
+    profile?: unknown;
   };
   const vibe = cleanText(data.vibe, 40) || "balanced";
   const ageBand = cleanText(data.ageBand, 40) || "";
@@ -770,6 +861,7 @@ async function aiSwap(
         .filter(Boolean)
         .slice(0, 8)
     : [];
+  const profile = cleanPlannerProfile(data.profile);
   if (!replaceStopId) {
     return json({ error: "replaceStopId required" }, { status: 400 }, cors);
   }
@@ -802,11 +894,12 @@ async function aiSwap(
         dayOfWeek,
         weather,
         preferences,
+        familyProfile: profile,
         currentPicks,
         replaceStopId,
         candidates,
         task:
-          "Pick one candidate to replace the stop with id=replaceStopId in currentPicks. Reject any candidate whose id appears in currentPicks. Honor 'preferences' as constraints. If weather is rainy/stormy, lean indoor. Output JSON {pick: {id, reason}} only.",
+          "Pick one candidate to replace the stop with id=replaceStopId in currentPicks. Reject any candidate whose id appears in currentPicks. Honor 'preferences' and familyProfile as constraints. If weather is rainy/stormy, lean indoor. Make the reason specific enough to read as: matched because X, Y, and Z. Output JSON {pick: {id, reason}} only.",
       }),
       max_output_tokens: 300,
     }),
@@ -869,19 +962,35 @@ async function createPoll(
   } catch {
     return json({ error: "invalid json" }, { status: 400 }, cors);
   }
-  const data = payload as { title?: unknown; stops?: unknown };
+  const data = payload as {
+    title?: unknown;
+    stops?: unknown;
+    events?: unknown;
+    itemOrder?: unknown;
+  };
   const title = typeof data.title === "string" ? data.title.slice(0, 200) : "Untitled plan";
   const stopsInput = Array.isArray(data.stops) ? data.stops : [];
   const stops = stopsInput.filter(isStopSummary).slice(0, 25);
-  if (stops.length === 0) {
-    return json({ error: "plan needs at least one stop" }, { status: 400 }, cors);
+  const events = cleanEvents(data.events);
+  if (stops.length === 0 && events.length === 0) {
+    return json(
+      { error: "plan needs at least one place or event" },
+      { status: 400 },
+      cors,
+    );
   }
+  const itemOrder = cleanItemOrder(data.itemOrder, {
+    spots: new Set(stops.map((s) => s.id)),
+    events: new Set(events.map((e) => e.id)),
+  });
   const pollId = crypto.randomUUID().slice(0, 8);
   const ownerToken = crypto.randomUUID();
   const record: PollRecord = {
     pollId,
     title,
     stops,
+    events: events.length > 0 ? events : undefined,
+    itemOrder: itemOrder.length > 0 ? itemOrder : undefined,
     ownerToken,
     createdAt: new Date().toISOString(),
   };
@@ -911,6 +1020,7 @@ async function getPoll(
       pollId: record.pollId,
       title: record.title,
       stops: record.stops,
+      events: record.events ?? [],
       tallies: tally(record.stops, votes),
       voterCount: Object.keys(votes).length,
       createdAt: record.createdAt,
