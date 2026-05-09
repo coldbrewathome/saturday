@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-09T07:37:28.449Z",
+  "generatedAt": "2026-05-09T16:47:40.652Z",
   "registryPath": "data/event-sources.json",
   "outputPath": "public/data/events.json",
   "eventCount": 597,
@@ -669,18 +669,21 @@
       "sourceType": "html",
       "city": "Berkeley",
       "category": "Museum",
-      "status": "fetch-error",
+      "status": "ok-template-fallback",
       "liveEvents": 0,
       "fallbackEvents": 4,
       "eventCount": 4,
       "fetches": [
         {
           "url": "https://www.habitot.org/visit",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "reason": "This operation was aborted"
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
     },
     {
       "id": "curiodyssey",

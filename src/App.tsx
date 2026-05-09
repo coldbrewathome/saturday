@@ -3566,6 +3566,9 @@ function App() {
                 <span className="legend-dot dot-event" /> Event
               </span>
               <span>
+                <span className="legend-dot dot-library" /> Library
+              </span>
+              <span>
                 <span className="legend-dot dot-park" /> Park / outdoors
               </span>
               <span>

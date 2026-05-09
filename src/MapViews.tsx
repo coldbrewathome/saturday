@@ -221,11 +221,19 @@ export function SpotMap({
       const highlighted = highlightedEventIds?.has(event.id) ?? false;
       const isSelected =
         selected?.kind === "event" && selected.id === event.id;
+      const isLibrary = event.category === "Library";
+      const fillColor = isLibrary
+        ? highlighted
+          ? "#1d4ed8"
+          : "#60a5fa"
+        : highlighted
+          ? "#b85c38"
+          : "#d68f6e";
       L.circleMarker([event.lat, event.lon], {
         radius: isSelected ? 12 : highlighted ? 10 : 7,
         color: "#ffffff",
         weight: 2,
-        fillColor: highlighted ? "#b85c38" : "#d68f6e",
+        fillColor,
         fillOpacity: 0.95,
       })
         .on("click", () =>
