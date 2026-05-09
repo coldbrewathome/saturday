@@ -500,10 +500,16 @@ function normalizeClock(token: string): string {
 }
 
 function normalizeHourSpan(span: string): string {
-  // Google emits an en-dash; some sources use hyphen or "to".
-  const parts = span.split(/\s*[–-]\s*| to /);
-  if (parts.length !== 2) return span.trim();
-  return `${normalizeClock(parts[0])}–${normalizeClock(parts[1])}`;
+  // Some venues post split sessions ("11:30 AM – 2:30 PM, 4:30 – 8:00 PM").
+  // Normalize each range independently, then rejoin.
+  return span
+    .split(/\s*,\s*/)
+    .map((segment) => {
+      const parts = segment.split(/\s*[–-]\s*| to /);
+      if (parts.length !== 2) return segment.trim();
+      return `${normalizeClock(parts[0])}–${normalizeClock(parts[1])}`;
+    })
+    .join(", ");
 }
 
 // "Monday: 9:30 AM – 6:00 PM; Tuesday: ... ; Sunday: ..." → "Daily 9:30am–6pm"
