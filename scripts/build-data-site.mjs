@@ -41,19 +41,21 @@ for (const file of fs.readdirSync(SRC)) {
 const headers = `# Cloudflare Pages headers — shared data feed (famhop-data)
 #
 # CORS is open because every consumer is a public frontend and the data is
-# already public. Cache for 5 minutes at the edge so a refresh propagates
-# quickly while still cheaply absorbing traffic spikes.
+# already public. Short browser TTL so a data refresh propagates quickly to
+# devices that already have the page open; longer CDN TTL with revalidation
+# absorbs traffic spikes while still picking up new ingest output within
+# a couple of minutes.
 /data/*
   Access-Control-Allow-Origin: *
   Access-Control-Allow-Methods: GET, OPTIONS
-  Cache-Control: public, max-age=300, s-maxage=900
+  Cache-Control: public, max-age=30, s-maxage=120, stale-while-revalidate=60
 
 /llms.txt
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=3600
 
 /
-  Cache-Control: public, max-age=300
+  Cache-Control: public, max-age=120
 `;
 fs.writeFileSync(path.join(OUT, "_headers"), headers);
 

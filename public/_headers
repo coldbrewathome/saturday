@@ -7,7 +7,7 @@
 # adjustment, not a security change.
 /data/*
   Access-Control-Allow-Origin: *
-  Cache-Control: public, max-age=300, s-maxage=900
+  Cache-Control: public, max-age=30, s-maxage=120, stale-while-revalidate=60
 
 /llms.txt
   Access-Control-Allow-Origin: *
