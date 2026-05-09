@@ -2074,12 +2074,24 @@ function App() {
     const useAgeBand = ageBand;
     const NEAR_RADIUS = 4;
     const alreadyInPlan = new Set(activePlan.eventIds ?? []);
+    const now = Date.now();
+    const sevenDays = now + 7 * 24 * 60 * 60 * 1000;
     const seen = new Set<string>();
     const matches: Array<{ event: FamilyEvent; dist: number }> = [];
     for (const event of events) {
       if (seen.has(event.id)) continue;
       if (alreadyInPlan.has(event.id)) continue;
-      if (!event.daysOfWeek.includes(targetDayOfWeek)) continue;
+      // Restrict to events happening within the next 7 days. For events with a
+      // specific startDateTime, check the timestamp; for recurring events,
+      // require that they hit Sat or Sun (the upcoming weekend).
+      if (event.startDateTime) {
+        const t = new Date(event.startDateTime).getTime();
+        if (!Number.isFinite(t) || t < now - 12 * 60 * 60 * 1000 || t > sevenDays) {
+          continue;
+        }
+      } else if (!event.daysOfWeek.some((d) => d === 0 || d === 6)) {
+        continue;
+      }
       if (
         useAgeBand !== "any" &&
         !event.ageBands.includes(useAgeBand)
@@ -4396,45 +4408,38 @@ function App() {
                   <p className="plan-events-sub">
                     {planNearbyEvents.length} family program
                     {planNearbyEvents.length === 1 ? "" : "s"} within 4 mi of a
-                    plan stop. Times vary — tap through to confirm.
+                    plan stop, in the next 7 days. Scroll for more →
                   </p>
-                  <ul
-                    className={`plan-events-list ${planNearbyEvents.length > 4 ? "is-scrollable" : ""}`}
-                  >
+                  <ul className="plan-nearby-rail">
                     {planNearbyEvents.map((event) => (
                       <li
                         key={event.id}
-                        className={`home-event-card cat-${event.category.toLowerCase()}`}
+                        className={`plan-nearby-card cat-${event.category.toLowerCase()}`}
                       >
-                        <div className="home-event-body">
-                          <span className="event-cat-chip">{event.category}</span>
-                          <strong>{event.title}</strong>
-                          <span className="home-event-meta">
-                            {eventWhenLabel(event)}
-                            {" · "}
-                            {event.ageBands
-                              .map((b) => ageBandLabels[b].split(" ")[0])
-                              .join(", ")}
-                          </span>
-                          <span className="home-event-venue">
-                            {event.venue} · {event.city}
-                          </span>
-                        </div>
-                        <div className="home-event-actions">
+                        <span className="event-cat-chip">{event.category}</span>
+                        <strong>{event.title}</strong>
+                        <span className="plan-nearby-when">
+                          {eventWhenLabel(event)}
+                        </span>
+                        <span className="plan-nearby-venue">
+                          {event.venue} · {event.city}
+                        </span>
+                        <div className="plan-nearby-actions">
                           <button
-                            className="home-event-add"
+                            className="plan-nearby-add"
                             title={`Add to "${activePlan.name || "active plan"}"`}
                             onClick={() => addEventToPlan(activePlan.id, event.id)}
                           >
                             <Plus aria-hidden="true" />
-                            Add
+                            Add to plan
                           </button>
                           <a
-                            className="home-event-open"
+                            className="plan-nearby-open"
                             href={event.url}
                             target="_blank"
                             rel="noreferrer"
                             title="Open event page"
+                            aria-label="Open event page"
                           >
                             <ExternalLink aria-hidden="true" />
                           </a>
