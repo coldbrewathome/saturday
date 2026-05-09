@@ -318,6 +318,22 @@ export default function PollView({ pollId }: { pollId: string }) {
           );
         })}
       </ol>
+
+      <section className="poll-cta" aria-label="Make your own plan">
+        <h2>Like this kind of plan?</h2>
+        <p>
+          Pick a vibe, get a 3-stop family Saturday in seconds, then share a vote
+          link of your own — no 11am "what are we doing today" debate.
+        </p>
+        <button
+          type="button"
+          className="primary-button wide"
+          onClick={backToApp}
+        >
+          Make your own plan with FamHop
+        </button>
+        <p className="poll-cta-sub">Free · no signup needed</p>
+      </section>
     </div>
   );
 }
