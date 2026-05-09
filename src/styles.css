@@ -214,6 +214,8 @@ h3 {
   padding: 16px;
   position: sticky;
   top: 18px;
+  max-height: calc(100vh - 36px);
+  overflow-y: auto;
 }
 
 .panel-heading {
@@ -539,10 +541,17 @@ h3 {
 }
 
 /* Map-first browse */
+.spots-area {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+}
+
 .map-shell {
   position: relative;
-  height: calc(100vh - 180px);
+  height: calc(100vh - 36px);
   min-height: 480px;
+  flex: 1 1 auto;
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid var(--line);
@@ -1102,7 +1111,6 @@ h3 {
   border: 1px solid var(--line);
   border-radius: 8px;
   grid-column: 1 / -1;
-  height: 240px;
   overflow: hidden;
 }
 
@@ -2286,7 +2294,7 @@ h3 {
     justify-content: flex-start;
   }
 
-  .map-canvas {
+  .map-canvas:not(.map-canvas-fill) {
     height: 200px;
   }
 

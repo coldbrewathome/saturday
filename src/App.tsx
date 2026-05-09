@@ -843,10 +843,10 @@ function SpotMap({
       center: bayAreaMapCenter,
       zoom: 10,
       scrollWheelZoom: true,
+      attributionControl: false,
     });
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "&copy; OpenStreetMap contributors",
       maxZoom: 18,
     }).addTo(map);
 
@@ -854,7 +854,16 @@ function SpotMap({
     mapRef.current = map;
     layerRef.current = layer;
 
+    // Leaflet captures container size at init. If the .map-shell parent finishes
+    // laying out (flex stretch) after the map mounts, the canvas stays at the
+    // initial small size unless we tell Leaflet to recompute. Invalidate once
+    // on next frame and observe further resizes.
+    requestAnimationFrame(() => map.invalidateSize());
+    const resizeObserver = new ResizeObserver(() => map.invalidateSize());
+    resizeObserver.observe(containerRef.current);
+
     return () => {
+      resizeObserver.disconnect();
       map.remove();
       mapRef.current = null;
       layerRef.current = null;
