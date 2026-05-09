@@ -1107,6 +1107,9 @@ function App() {
   const [savedIds, setSavedIds] = useState<string[]>(() =>
     readStoredArray("saturday.savedSpots", []),
   );
+  const [savedEventIds, setSavedEventIds] = useState<string[]>(() =>
+    readStoredArray("saturday.savedEvents", []),
+  );
   const [visitedIds, setVisitedIds] = useState<string[]>(() =>
     readStoredArray("saturday.visitedSpots", []),
   );
@@ -1356,6 +1359,13 @@ function App() {
   useEffect(() => {
     window.localStorage.setItem("saturday.savedSpots", JSON.stringify(savedIds));
   }, [savedIds]);
+
+  useEffect(() => {
+    window.localStorage.setItem(
+      "saturday.savedEvents",
+      JSON.stringify(savedEventIds),
+    );
+  }, [savedEventIds]);
 
   useEffect(() => {
     window.localStorage.setItem(
@@ -1666,6 +1676,21 @@ function App() {
       .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
       .map(([name, count]) => ({ name, count }));
   }, [allSpots]);
+
+  const savedEvents = useMemo(() => {
+    if (savedEventIds.length === 0) return [] as FamilyEvent[];
+    const lookup = new Map(events.map((e) => [e.id, e]));
+    const matched = savedEventIds
+      .map((id) => lookup.get(id))
+      .filter((e): e is FamilyEvent => Boolean(e));
+    // Sort by event start date (earliest first); recurring events without a
+    // dated instance fall to the end so the soonest commitments stay on top.
+    return matched.sort((a, b) => {
+      const aT = a.startDateTime ? new Date(a.startDateTime).getTime() : Infinity;
+      const bT = b.startDateTime ? new Date(b.startDateTime).getTime() : Infinity;
+      return aT - bT;
+    });
+  }, [events, savedEventIds]);
 
   const savedSpots = useMemo(
     () => allSpots.filter((spot) => savedIds.includes(spot.id)),
@@ -2621,6 +2646,14 @@ function App() {
     );
   }
 
+  function toggleSavedEvent(id: string) {
+    setSavedEventIds((current) =>
+      current.includes(id)
+        ? current.filter((savedId) => savedId !== id)
+        : [...current, id],
+    );
+  }
+
   function toggleVisited(id: string) {
     setVisitedIds((current) =>
       current.includes(id)
@@ -3403,6 +3436,7 @@ function App() {
             const eventDate = event.startDateTime
               ? new Date(event.startDateTime)
               : null;
+            const eventSaved = savedEventIds.includes(event.id);
             return (
               <div className="bottom-sheet" role="dialog" aria-label={event.title}>
                 <button
@@ -3433,6 +3467,13 @@ function App() {
                     {event.cost && <span>{event.cost}</span>}
                   </div>
                   <div className="sheet-actions">
+                    <button
+                      className={`sheet-action ${eventSaved ? "is-active" : ""}`}
+                      onClick={() => toggleSavedEvent(event.id)}
+                    >
+                      <Bookmark aria-hidden="true" />
+                      {eventSaved ? "Saved" : "Save event"}
+                    </button>
                     <a
                       className="sheet-action"
                       href={event.url}
@@ -3692,40 +3733,82 @@ function App() {
           )}
         </section>
 
-        <aside className="plan-panel" aria-label="Saved spots">
+        <aside className="plan-panel" aria-label="Saved spots and events">
           <div className="panel-heading">
             <Bookmark aria-hidden="true" />
             <span>Saved</span>
           </div>
-          {savedSpots.length === 0 ? (
+          {savedSpots.length === 0 && savedEvents.length === 0 ? (
             <p className="empty-state">Save a few group spots to compare your day.</p>
           ) : (
             <>
-              <button
-                className="primary-button wide"
-                onClick={() => createPlanFromSaved()}
-                title="Create a plan with all saved spots in order"
-              >
-                <List aria-hidden="true" />
-                Plan from saved ({savedSpots.length})
-              </button>
-              <div className="saved-list">
-                {savedSpots.map((spot) => (
-                  <div className="saved-item" key={spot.id}>
-                    <div>
-                      <strong>{spot.name}</strong>
-                      <span>{spot.neighborhood}</span>
+              {savedSpots.length > 0 && (
+                <button
+                  className="primary-button wide"
+                  onClick={() => createPlanFromSaved()}
+                  title="Create a plan with all saved spots in order"
+                >
+                  <List aria-hidden="true" />
+                  Plan from saved ({savedSpots.length})
+                </button>
+              )}
+              {savedSpots.length > 0 && (
+                <div className="saved-list">
+                  {savedSpots.map((spot) => (
+                    <div className="saved-item" key={spot.id}>
+                      <div>
+                        <strong>{spot.name}</strong>
+                        <span>{spot.neighborhood}</span>
+                      </div>
+                      <button
+                        className="icon-button"
+                        title="Remove saved spot"
+                        onClick={() => toggleSaved(spot.id)}
+                      >
+                        <Trash2 aria-hidden="true" />
+                      </button>
                     </div>
-                    <button
-                      className="icon-button"
-                      title="Remove saved spot"
-                      onClick={() => toggleSaved(spot.id)}
-                    >
-                      <Trash2 aria-hidden="true" />
-                    </button>
+                  ))}
+                </div>
+              )}
+              {savedEvents.length > 0 && (
+                <>
+                  <p className="saved-subhead">
+                    Events ({savedEvents.length}) · soonest first
+                  </p>
+                  <div className="saved-list">
+                    {savedEvents.map((event) => {
+                      const date = event.startDateTime
+                        ? new Date(event.startDateTime)
+                        : null;
+                      return (
+                        <div className="saved-item" key={event.id}>
+                          <div>
+                            <strong>{event.title}</strong>
+                            <span>
+                              {date
+                                ? date.toLocaleDateString(undefined, {
+                                    weekday: "short",
+                                    month: "short",
+                                    day: "numeric",
+                                  })
+                                : dayWindowLabel(event.daysOfWeek)}{" "}
+                              · {event.venue}
+                            </span>
+                          </div>
+                          <button
+                            className="icon-button"
+                            title="Remove saved event"
+                            onClick={() => toggleSavedEvent(event.id)}
+                          >
+                            <Trash2 aria-hidden="true" />
+                          </button>
+                        </div>
+                      );
+                    })}
                   </div>
-                ))}
-              </div>
+                </>
+              )}
             </>
           )}
         </aside>
