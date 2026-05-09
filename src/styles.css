@@ -1302,6 +1302,84 @@ h3 {
   padding: 0;
 }
 
+.plan-events {
+  margin: 14px 0;
+  padding: 12px;
+  border: 1px solid #d7e3ed;
+  border-radius: 10px;
+  background: #f7fbfd;
+}
+
+.plan-events-head {
+  margin: 0 0 10px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+.plan-event-list {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.plan-event {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.plan-event-info strong {
+  display: block;
+  font-size: 0.94rem;
+}
+
+.plan-event-info span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 800;
+  margin-top: 4px;
+}
+
+.plan-event-actions {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.plan-event-actions a,
+.plan-event-actions button {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: #ffffff;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plan-event-actions a:hover,
+.plan-event-actions button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.plan-event-actions svg {
+  width: 14px;
+  height: 14px;
+}
+
 .plan-stop {
   align-items: center;
   background: var(--surface-strong);

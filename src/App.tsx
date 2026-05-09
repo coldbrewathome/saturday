@@ -196,6 +196,7 @@ export type Plan = {
   id: string;
   name: string;
   stopIds: string[];
+  eventIds?: string[];
   createdAt: string;
   pollId?: string;
   ownerToken?: string;
@@ -788,6 +789,26 @@ type MapSelection =
   | { kind: "spot"; id: string }
   | { kind: "event"; id: string };
 
+const MAP_VIEW_STORAGE_KEY = "saturday.mapView";
+
+function loadStoredMapView(): { lat: number; lon: number; zoom: number } | null {
+  try {
+    const raw = window.localStorage.getItem(MAP_VIEW_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (
+      typeof parsed?.lat === "number" &&
+      typeof parsed?.lon === "number" &&
+      typeof parsed?.zoom === "number"
+    ) {
+      return parsed;
+    }
+  } catch {
+    // ignore
+  }
+  return null;
+}
+
 function SpotMap({
   spots,
   events,
@@ -810,6 +831,10 @@ function SpotMap({
   useEffect(() => {
     onSelectRef.current = onSelect;
   }, [onSelect]);
+  // Once the user has a stored view (or pans/zooms), the auto-fit step stops
+  // overriding it. Without this, every data-set change would yank them back
+  // to the all-points framing.
+  const hasUserViewRef = useRef<boolean>(loadStoredMapView() !== null);
 
   const plottedSpots = useMemo(
     () =>
@@ -839,9 +864,10 @@ function SpotMap({
       return;
     }
 
+    const stored = loadStoredMapView();
     const map = L.map(containerRef.current, {
-      center: bayAreaMapCenter,
-      zoom: 10,
+      center: stored ? [stored.lat, stored.lon] : bayAreaMapCenter,
+      zoom: stored ? stored.zoom : 10,
       scrollWheelZoom: true,
       attributionControl: false,
     });
@@ -854,6 +880,20 @@ function SpotMap({
     mapRef.current = map;
     layerRef.current = layer;
 
+    const handleMoveEnd = () => {
+      const c = map.getCenter();
+      try {
+        window.localStorage.setItem(
+          MAP_VIEW_STORAGE_KEY,
+          JSON.stringify({ lat: c.lat, lon: c.lng, zoom: map.getZoom() }),
+        );
+      } catch {
+        // ignore quota / privacy errors
+      }
+      hasUserViewRef.current = true;
+    };
+    map.on("moveend", handleMoveEnd);
+
     // Leaflet captures container size at init. If the .map-shell parent finishes
     // laying out (flex stretch) after the map mounts, the canvas stays at the
     // initial small size unless we tell Leaflet to recompute. Invalidate once
@@ -864,6 +904,7 @@ function SpotMap({
 
     return () => {
       resizeObserver.disconnect();
+      map.off("moveend", handleMoveEnd);
       map.remove();
       mapRef.current = null;
       layerRef.current = null;
@@ -916,10 +957,11 @@ function SpotMap({
   }, [plottedSpots, plottedEvents, highlightedEventIds, selected]);
 
   // Frame the map once when the underlying point set changes — but never on
-  // selection alone, so clicking a pin doesn't snap the view.
+  // selection alone, and never if the user already has a saved/manual view.
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
+    if (hasUserViewRef.current) return;
 
     const points: Array<[number, number]> = [];
     for (const spot of plottedSpots) {
@@ -1936,6 +1978,22 @@ function App() {
       .filter((spot): spot is Spot => Boolean(spot));
   }, [activePlan, planningSpots]);
 
+  const activePlanEvents = useMemo(() => {
+    const ids = activePlan?.eventIds;
+    if (!ids || ids.length === 0 || events.length === 0) {
+      return [] as FamilyEvent[];
+    }
+    const lookup = new Map(events.map((e) => [e.id, e]));
+    return ids
+      .map((id) => lookup.get(id))
+      .filter((e): e is FamilyEvent => Boolean(e))
+      .sort((a, b) => {
+        const aT = a.startDateTime ? new Date(a.startDateTime).getTime() : Infinity;
+        const bT = b.startDateTime ? new Date(b.startDateTime).getTime() : Infinity;
+        return aT - bT;
+      });
+  }, [activePlan, events]);
+
   const planNearbyEvents = useMemo(() => {
     if (!activePlan || activePlanStops.length === 0 || events.length === 0) {
       return [] as FamilyEvent[];
@@ -2018,20 +2076,43 @@ function App() {
   }
 
   function createPlanFromSaved() {
-    if (savedSpots.length === 0) {
+    if (savedSpots.length === 0 && savedEvents.length === 0) {
       return;
     }
     const id = `plan-${Date.now()}`;
+    const totalCount = savedSpots.length + savedEvents.length;
     const next: Plan = {
       id,
-      name: `Saved plan (${savedSpots.length})`,
+      name: `Saved plan (${totalCount})`,
       stopIds: savedSpots.map((spot) => spot.id),
+      eventIds: savedEvents.map((event) => event.id),
       createdAt: new Date().toISOString(),
       source: "manual",
     };
     setPlans((current) => [...current, next]);
     setActivePlanId(id);
     setView("plans");
+  }
+
+  function addEventToPlan(planId: string, eventId: string) {
+    setPlans((current) =>
+      current.map((plan) => {
+        if (plan.id !== planId) return plan;
+        const existing = plan.eventIds ?? [];
+        if (existing.includes(eventId)) return plan;
+        return { ...plan, eventIds: [...existing, eventId] };
+      }),
+    );
+  }
+
+  function removeEventFromPlan(planId: string, eventId: string) {
+    setPlans((current) =>
+      current.map((plan) =>
+        plan.id === planId
+          ? { ...plan, eventIds: (plan.eventIds ?? []).filter((id) => id !== eventId) }
+          : plan,
+      ),
+    );
   }
 
   function updatePlan(id: string, patch: Partial<Plan>) {
@@ -3193,21 +3274,6 @@ function App() {
             </div>
           </div>
 
-          <div className="filter-group">
-            <span className="filter-label">Vibe</span>
-            <div className="segmented compact">
-              {vibeOptions.map(([value, label]) => (
-                <button
-                  key={value}
-                  className={vibe === value ? "active" : ""}
-                  onClick={() => setVibe(value)}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-
           <label className="select-field">
             <span>Category</span>
             <select
@@ -3486,6 +3552,27 @@ function App() {
                       <Bookmark aria-hidden="true" />
                       {eventSaved ? "Saved" : "Save event"}
                     </button>
+                    {activePlan && (() => {
+                      const inPlan = (activePlan.eventIds ?? []).includes(event.id);
+                      return (
+                        <button
+                          className={`sheet-action ${inPlan ? "is-active" : ""}`}
+                          onClick={() =>
+                            inPlan
+                              ? removeEventFromPlan(activePlan.id, event.id)
+                              : addEventToPlan(activePlan.id, event.id)
+                          }
+                          title={
+                            inPlan
+                              ? `Remove from "${activePlan.name || "active plan"}"`
+                              : `Add to "${activePlan.name || "active plan"}"`
+                          }
+                        >
+                          <List aria-hidden="true" />
+                          {inPlan ? "In plan" : "Add to plan"}
+                        </button>
+                      );
+                    })()}
                     <a
                       className="sheet-action"
                       href={event.url}
@@ -3961,6 +4048,12 @@ function App() {
                   {activePlanStops.length} stop
                   {activePlanStops.length === 1 ? "" : "s"}
                 </span>
+                {activePlanEvents.length > 0 && (
+                  <span>
+                    {activePlanEvents.length} event
+                    {activePlanEvents.length === 1 ? "" : "s"}
+                  </span>
+                )}
                 <span>~{planTotalTransit} min total transit</span>
                 {activePlanStops.length > 0 && (
                   <span>
@@ -3994,11 +4087,62 @@ function App() {
                 <PlanMap stops={activePlanStops} />
               )}
 
-              {activePlanStops.length === 0 ? (
+              {activePlanEvents.length > 0 && (
+                <div className="plan-events">
+                  <p className="plan-events-head">
+                    Scheduled events ({activePlanEvents.length})
+                  </p>
+                  <ul className="plan-event-list">
+                    {activePlanEvents.map((event) => {
+                      const date = event.startDateTime
+                        ? new Date(event.startDateTime)
+                        : null;
+                      return (
+                        <li className="plan-event" key={event.id}>
+                          <div className="plan-event-info">
+                            <strong>{event.title}</strong>
+                            <span>
+                              {date
+                                ? date.toLocaleDateString(undefined, {
+                                    weekday: "short",
+                                    month: "short",
+                                    day: "numeric",
+                                  })
+                                : dayWindowLabel(event.daysOfWeek)}{" "}
+                              · {event.timeWindow} · {event.venue}
+                              {event.cost ? ` · ${event.cost}` : ""}
+                            </span>
+                          </div>
+                          <div className="plan-event-actions">
+                            <a
+                              href={event.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              title="Open event page"
+                            >
+                              <ExternalLink aria-hidden="true" />
+                            </a>
+                            <button
+                              title="Remove event from plan"
+                              onClick={() =>
+                                removeEventFromPlan(activePlan.id, event.id)
+                              }
+                            >
+                              <X aria-hidden="true" />
+                            </button>
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+
+              {activePlanStops.length === 0 && activePlanEvents.length === 0 ? (
                 <p className="empty-state">
-                  Add stops from your saved spots to build the day.
+                  Add stops or events from your saved list to build the day.
                 </p>
-              ) : (
+              ) : activePlanStops.length === 0 ? null : (
                 <ol className="plan-stops">
                   {activePlanStops.map((spot, index) => {
                     const aiReason = activePlan.picks?.find(
