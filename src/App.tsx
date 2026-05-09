@@ -46,10 +46,13 @@ import {
 } from "./auth";
 import {
   ageBandLabels,
+  plannerPreferenceOptions,
   rankForVibe,
   scoreSpotForVibe,
   vibeLabels,
   type AgeBand,
+  type PlannerPreferenceId,
+  type PlannerScoringOptions,
   type PlannerVibe,
 } from "./planner";
 
@@ -205,15 +208,6 @@ const categories: Category[] = [
 ];
 
 const ageBandOptions = Object.entries(ageBandLabels) as Array<[AgeBand, string]>;
-
-const PREFERENCE_OPTIONS: Array<{ id: string; label: string; hint: string }> = [
-  { id: "stroller-friendly", label: "Stroller-friendly", hint: "Smooth paths, no stairs-only" },
-  { id: "no-crowds", label: "No big crowds", hint: "Avoid busy weekend museums" },
-  { id: "loves-animals", label: "Loves animals", hint: "Bias toward zoos / farms / wildlife" },
-  { id: "indoor-when-rainy", label: "Indoor if rainy", hint: "Hard rule when forecast is wet" },
-  { id: "near-only", label: "Within 30 min", hint: "Skip far stops" },
-  { id: "free-only", label: "Free / cheap only", hint: "Avoid $$$ admission" },
-];
 
 const costs: Cost[] = ["Free", "$", "$$", "$$$", "Unknown"];
 const vibeOptions = Object.entries(vibeLabels) as Array<[PlannerVibe, string]>;
@@ -996,10 +990,14 @@ function App() {
   const [events, setEvents] = useState<FamilyEvent[]>([]);
   const [boaMuseums, setBoaMuseums] = useState<BoaMuseum[]>([]);
   const [weather, setWeather] = useState<WeatherForecast | null>(null);
-  const [preferences, setPreferences] = useState<string[]>(() => {
+  const [preferences, setPreferences] = useState<PlannerPreferenceId[]>(() => {
     try {
       const raw = window.localStorage.getItem("saturday.preferences");
-      return raw ? (JSON.parse(raw) as string[]) : [];
+      const parsed = raw ? (JSON.parse(raw) as string[]) : [];
+      const valid = new Set(plannerPreferenceOptions.map((option) => option.id));
+      return parsed.filter((id): id is PlannerPreferenceId =>
+        valid.has(id as PlannerPreferenceId),
+      );
     } catch {
       return [];
     }
@@ -1348,7 +1346,7 @@ function App() {
 
   useEffect(() => {
     setAiState({ status: "idle" });
-  }, [category, city, ageBand, cost, onlyOpen, query, savedIds, vibe]);
+  }, [category, city, ageBand, cost, onlyOpen, preferences, query, savedIds, targetDate, vibe]);
 
   useEffect(() => {
     setPage(1);
@@ -1357,6 +1355,26 @@ function App() {
   const allSpots = useMemo(
     () => [...remoteSpots, ...curatedSpots, ...customSpots],
     [customSpots, curatedSpots, remoteSpots],
+  );
+
+  const targetDateObj = useMemo(() => parseIsoDate(targetDate), [targetDate]);
+  const targetDayOfWeek = targetDateObj.getDay();
+  const plannerWeather = useMemo(() => {
+    const forecast =
+      targetDayOfWeek === 6
+        ? weather?.saturday
+        : targetDayOfWeek === 0
+          ? weather?.sunday
+          : null;
+    return forecast ? weatherTone(forecast.label) : undefined;
+  }, [targetDayOfWeek, weather]);
+  const scoringOptions = useMemo<PlannerScoringOptions>(
+    () => ({
+      ageBand: ageBand === "any" ? undefined : ageBand,
+      preferences,
+      weather: plannerWeather,
+    }),
+    [ageBand, plannerWeather, preferences],
   );
 
   const boaWeekend = useMemo(() => nextBoaWeekend(new Date()), []);
@@ -1471,8 +1489,8 @@ function App() {
     });
 
     const byScore = (left: Spot, right: Spot) => {
-      const leftScore = scoreSpotForVibe(left, vibe, ageBand === "any" ? undefined : ageBand);
-      const rightScore = scoreSpotForVibe(right, vibe, ageBand === "any" ? undefined : ageBand);
+      const leftScore = scoreSpotForVibe(left, vibe, scoringOptions);
+      const rightScore = scoreSpotForVibe(right, vibe, scoringOptions);
       if (rightScore !== leftScore) {
         return rightScore - leftScore;
       }
@@ -1501,7 +1519,7 @@ function App() {
 
       return left.transitMinutes - right.transitMinutes;
     });
-  }, [allSpots, category, city, ageBand, cost, onlyOpen, query, sortBy, vibe, userLocation]);
+  }, [allSpots, category, city, ageBand, cost, onlyOpen, query, scoringOptions, sortBy, vibe, userLocation]);
 
   const pageCount = Math.max(1, Math.ceil(filteredSpots.length / pageSize));
   const safePage = Math.min(page, pageCount);
@@ -1522,9 +1540,6 @@ function App() {
     ageBand === "any"
       ? "Family-friendly spots"
       : `For ${ageBandLabels[ageBand].toLowerCase()}`;
-
-  const targetDateObj = useMemo(() => parseIsoDate(targetDate), [targetDate]);
-  const targetDayOfWeek = targetDateObj.getDay();
 
   const daysThroughSunday = useMemo(() => {
     // Days-of-week from today through the coming Sunday (inclusive).
@@ -1852,7 +1867,7 @@ function App() {
     const sortedAll = rankForVibe(
       localPool,
       plan.vibe,
-      ageBand === "any" ? undefined : ageBand,
+      scoringOptions,
     ) as unknown as Spot[];
     const candidatesPool = sampleCandidates(sortedAll, 12);
     const candidates: StopSummary[] = candidatesPool.map((spot) => ({
@@ -1865,7 +1880,7 @@ function App() {
       friendScore: scoreSpotForVibe(
         spot,
         plan.vibe!,
-        ageBand === "any" ? undefined : ageBand,
+        scoringOptions,
       ),
     }));
     if (candidates.length === 0) {
@@ -1917,7 +1932,7 @@ function App() {
   function applyLocalBias(
     spots: Spot[],
     forecast: WeatherForecast | null,
-    prefs: string[],
+    prefs: PlannerPreferenceId[],
   ): Spot[] {
     let working = spots;
     if (prefs.includes("free-only")) {
@@ -1933,6 +1948,24 @@ function App() {
           if (/zoo|aquarium|farm|wildlife|animal/.test(t)) return 1;
           return 0;
         };
+        return score(b) - score(a);
+      });
+    }
+    if (prefs.includes("parks-nature")) {
+      working = [...working].sort((a, b) => {
+        const score = (s: Spot) =>
+          s.category === "Outdoors" || /park|garden|trail|beach|nature/i.test(`${s.name} ${s.tags.join(" ")}`)
+            ? 1
+            : 0;
+        return score(b) - score(a);
+      });
+    }
+    if (prefs.includes("libraries-museums")) {
+      working = [...working].sort((a, b) => {
+        const score = (s: Spot) =>
+          s.category === "Culture" || /library|museum|science|story/i.test(`${s.name} ${s.tags.join(" ")}`)
+            ? 1
+            : 0;
         return score(b) - score(a);
       });
     }
@@ -2008,7 +2041,7 @@ function App() {
         rankForVibe(
           candidatePool,
           nextVibe,
-          ageBand === "any" ? undefined : ageBand,
+          scoringOptions,
         ) as unknown as Spot[],
         weather,
         preferences,
@@ -2030,7 +2063,7 @@ function App() {
         friendScore: scoreSpotForVibe(
           spot,
           nextVibe,
-          ageBand === "any" ? undefined : ageBand,
+          scoringOptions,
         ),
       }));
       try {
@@ -2083,7 +2116,7 @@ function App() {
       rankForVibe(
         candidatePool,
         nextVibe,
-        ageBand === "any" ? undefined : ageBand,
+        scoringOptions,
       ) as unknown as Spot[],
       weather,
       preferences,
@@ -2140,7 +2173,7 @@ function App() {
       rankForVibe(
         source,
         vibe,
-        ageBand === "any" ? undefined : ageBand,
+        scoringOptions,
       ) as unknown as Spot[],
       weather,
       preferences,
@@ -2162,7 +2195,7 @@ function App() {
       friendScore: scoreSpotForVibe(
         spot,
         vibe,
-        ageBand === "any" ? undefined : ageBand,
+        scoringOptions,
       ),
     }));
 
@@ -2495,8 +2528,8 @@ function App() {
           <p className="eyebrow">Weekend with the kids</p>
           <h1>Plan the weekend — together.</h1>
           <p className="home-sub">
-            Pick the kids' age, then a vibe. Get 3 family stops. Share with
-            co-parents to vote.
+            Pick the kids' age, interests, constraints, then a vibe. Get 3
+            family stops. Share with co-parents to vote.
             {inferredGeo?.city ? ` Tuned for ${inferredGeo.city}.` : ""}
           </p>
         </div>
@@ -2585,7 +2618,7 @@ function App() {
         <div className="home-prefs" role="group" aria-label="Family preferences">
           <span className="filter-label">Your family fit (optional)</span>
           <div className="pref-chips">
-            {PREFERENCE_OPTIONS.map((option) => {
+            {plannerPreferenceOptions.map((option) => {
               const active = preferences.includes(option.id);
               return (
                 <button

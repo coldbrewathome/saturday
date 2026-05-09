@@ -223,6 +223,41 @@ test("extractHtmlEvents finds dated event cards and skips undated links", () => 
   assert.equal(events[0].url, "https://sfpl.org/event/craft");
 });
 
+test("extractHtmlEvents skips calendar chrome titles", () => {
+  const html = `
+    <article class="event-card">
+      <h3><a href="/calendar/2026-05-09">1 event, 9</a></h3>
+      <time datetime="2026-05-09T00:00:00-07:00">May 9</time>
+      <p>Calendar navigation for family events.</p>
+    </article>
+    <article class="event-card">
+      <h3><a href="/event/family-night">2026-05-09 Family Science Night</a></h3>
+      <time datetime="2026-05-09T18:00:00-07:00">May 9</time>
+      <p>Hands-on science for kids and families.</p>
+    </article>
+    <article class="event-card">
+      <h3><a href="/event/family-camp">Family Camp Family Camp May 10 @ 5:00 pm</a></h3>
+      <time datetime="2026-05-10T17:00:00-07:00">May 10</time>
+      <p>Overnight science camp for school-age kids and families.</p>
+    </article>
+    <article class="event-card">
+      <h3><a href="/event/open-daily">OPEN DAILY FROM 10 AM TO 5 PM.</a></h3>
+      <time datetime="2026-05-10T10:00:00-07:00">May 10</time>
+      <p>General admission hours for family visitors.</p>
+    </article>
+    <article class="event-card">
+      <h3><a href="/event/postponed">Astronaut Visit – Postponed</a></h3>
+      <time datetime="2026-05-10T11:00:00-07:00">May 10</time>
+      <p>Family science talk.</p>
+    </article>
+  `;
+
+  const events = extractHtmlEvents(html, source);
+  assert.equal(events.length, 2);
+  assert.equal(events[0].title, "Family Science Night");
+  assert.equal(events[1].title, "Family Camp");
+});
+
 test("extractEventListEvents reads official festival list pages", () => {
   const html = `
     <section>

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildPlannerBrief,
+  rankForVibe,
   scoreSpotForVibe,
   type PlannerSpot,
 } from "../src/planner";
@@ -130,6 +131,54 @@ describe("planner scoring", () => {
     expect(scoreSpotForVibe(close, "low-effort")).toBeGreaterThan(
       scoreSpotForVibe(far, "low-effort"),
     );
+  });
+
+  it("uses explicit interests to personalize ranking", () => {
+    const park = {
+      ...baseSpot,
+      id: "park",
+      category: "Outdoors",
+      mood: "Nature trail and garden",
+      tags: ["nature", "trail"],
+    };
+    const cafe = {
+      ...baseSpot,
+      id: "cafe",
+      category: "Food",
+      friendScore: 86,
+    };
+
+    expect(
+      scoreSpotForVibe(park, "balanced", {
+        preferences: ["parks-nature"],
+      }),
+    ).toBeGreaterThan(
+      scoreSpotForVibe(cafe, "balanced", {
+        preferences: ["parks-nature"],
+      }),
+    );
+  });
+
+  it("filters hard planner constraints before ranking", () => {
+    const freeClose = {
+      ...baseSpot,
+      id: "free-close",
+      cost: "Free",
+      transitMinutes: 18,
+    };
+    const expensiveFar = {
+      ...baseSpot,
+      id: "expensive-far",
+      cost: "$$$",
+      transitMinutes: 45,
+      friendScore: 120,
+    };
+
+    const ranked = rankForVibe([expensiveFar, freeClose], "balanced", {
+      preferences: ["free-only", "near-only"],
+    });
+
+    expect(ranked.map((spot) => spot.id)).toEqual(["free-close"]);
   });
 });
 

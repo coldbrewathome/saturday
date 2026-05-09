@@ -88,6 +88,10 @@ const GENERIC_PAGE_TITLES = [
   /^visit\b/i,
   /^events?$/i,
   /^explore activities\b/i,
+  /^\d+\s+events?(?:,\s*)?\s+\d+$/i,
+  /^(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+\d{1,2}\s+@\s+\d/i,
+  /^open daily from\b/i,
+  /^registration for .+ is now closed\b/i,
   /\bmission & history\b/i,
   /\bhours of operation\b/i,
   /\bin progress\b/i,
@@ -1097,6 +1101,7 @@ export function normalizeRawEvent(raw, source = {}) {
   const description = stripUnsafeText(raw.description, 360);
   const combined = `${title} ${description}`;
   if (!title || hasAdultOnlySignal(combined)) return null;
+  if (/\b(cancel(?:ed|led)|postponed)\b/i.test(combined)) return null;
   if ((raw.extractionMethod === "html" || raw.extractionMethod === "rss") && isGenericPageTitle(title)) {
     return null;
   }
@@ -1140,12 +1145,20 @@ export function normalizeRawEvent(raw, source = {}) {
 }
 
 function cleanEventTitle(value) {
-  const title = stripUnsafeText(value, 140);
+  const title = stripUnsafeText(value, 140).replace(/^\d{4}-\d{2}-\d{2}\s+/, "");
   const featured = title.match(/^(.+?)\s+Featured Event\.\s+(.+)$/i);
   if (featured && featured[2].toLowerCase().startsWith(featured[1].toLowerCase())) {
     return stripUnsafeText(featured[1], 140);
   }
-  return stripUnsafeText(title.replace(/\s+Featured Event\.\s*/i, " "), 140);
+  const repeated = title.match(/^(.{8,70}?)\s+\1\b/i);
+  if (repeated) {
+    return stripUnsafeText(repeated[1], 140);
+  }
+  return stripUnsafeText(
+    title
+      .replace(/\s+Featured Event\.\s*/i, " "),
+    140,
+  );
 }
 
 function isGenericPageTitle(title) {

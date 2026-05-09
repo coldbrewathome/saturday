@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Saturday Event System Diagram</title>
+    <link rel="icon" href="data:," />
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #17201b;
+        --muted: #5b665f;
+        --paper: #fbfaf5;
+        --surface: #ffffff;
+        --line: #d8dfd8;
+        --green: #2f6b4f;
+        --green-soft: #e3f1e8;
+        --blue: #315f8c;
+        --blue-soft: #e7f0f8;
+        --gold: #94651d;
+        --gold-soft: #f5ead2;
+        --rose: #9e3b35;
+        --rose-soft: #f4e1dc;
+        --shadow: 0 16px 42px rgba(23, 32, 27, 0.1);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+      }
+
+      main {
+        margin: 0 auto;
+        max-width: 1240px;
+        padding: 40px clamp(18px, 4vw, 54px) 56px;
+      }
+
+      header {
+        align-items: end;
+        display: grid;
+        gap: 18px;
+        grid-template-columns: minmax(0, 1fr) auto;
+        margin-bottom: 28px;
+      }
+
+      h1 {
+        font-size: clamp(2.1rem, 5vw, 4.1rem);
+        letter-spacing: 0;
+        line-height: 1;
+        margin: 0 0 12px;
+      }
+
+      h2 {
+        font-size: 1.12rem;
+        letter-spacing: 0;
+        margin: 0 0 14px;
+      }
+
+      p {
+        color: var(--muted);
+        line-height: 1.55;
+        margin: 0;
+      }
+
+      code {
+        background: rgba(23, 32, 27, 0.06);
+        border-radius: 6px;
+        color: var(--ink);
+        padding: 2px 5px;
+      }
+
+      .eyebrow {
+        color: var(--green);
+        font-size: 0.78rem;
+        font-weight: 900;
+        letter-spacing: 0.11em;
+        margin: 0 0 10px;
+        text-transform: uppercase;
+      }
+
+      .metrics {
+        display: grid;
+        gap: 8px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        min-width: min(430px, 100%);
+      }
+
+      .metric {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 12px 14px;
+      }
+
+      .metric strong {
+        display: block;
+        font-size: 1.35rem;
+      }
+
+      .metric span {
+        color: var(--muted);
+        display: block;
+        font-size: 0.78rem;
+        font-weight: 800;
+        margin-top: 2px;
+      }
+
+      .panel {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        padding: clamp(18px, 3vw, 28px);
+      }
+
+      .flow {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: 1fr 32px 1.25fr 32px 1fr;
+        margin-top: 18px;
+      }
+
+      .lane {
+        display: grid;
+        gap: 12px;
+      }
+
+      .lane-title {
+        color: var(--muted);
+        font-size: 0.76rem;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .box {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        display: grid;
+        gap: 7px;
+        min-height: 96px;
+        padding: 14px;
+      }
+
+      .box strong {
+        font-size: 1rem;
+      }
+
+      .box span,
+      .box li {
+        color: var(--muted);
+        font-size: 0.86rem;
+        line-height: 1.35;
+      }
+
+      .box ul {
+        margin: 0;
+        padding-left: 18px;
+      }
+
+      .source {
+        background: var(--blue-soft);
+        border-color: #bfd4e8;
+      }
+
+      .process {
+        background: var(--green-soft);
+        border-color: #bfd9ca;
+      }
+
+      .artifact {
+        background: var(--gold-soft);
+        border-color: #e1cfaa;
+      }
+
+      .guard {
+        background: var(--rose-soft);
+        border-color: #e2c2bc;
+      }
+
+      .arrow {
+        align-items: center;
+        color: var(--muted);
+        display: flex;
+        font-size: 0.78rem;
+        font-weight: 900;
+        justify-content: center;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .arrow::before {
+        background: var(--line);
+        content: "";
+        height: 2px;
+        position: absolute;
+        width: 28px;
+      }
+
+      .arrow span {
+        background: var(--paper);
+        padding: 0 4px;
+        position: relative;
+      }
+
+      .schema-grid,
+      .retention-grid {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin-top: 18px;
+      }
+
+      .field-list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .field {
+        align-items: start;
+        border-bottom: 1px solid var(--line);
+        display: grid;
+        gap: 8px;
+        grid-template-columns: 0.95fr 1.4fr;
+        padding: 8px 0;
+      }
+
+      .field:last-child {
+        border-bottom: 0;
+      }
+
+      .field strong {
+        font-size: 0.83rem;
+      }
+
+      .field span {
+        color: var(--muted);
+        font-size: 0.83rem;
+        line-height: 1.35;
+      }
+
+      .section {
+        margin-top: 22px;
+      }
+
+      .policy {
+        border-left: 4px solid var(--green);
+        padding-left: 14px;
+      }
+
+      .small {
+        color: var(--muted);
+        font-size: 0.82rem;
+        margin-top: 10px;
+      }
+
+      @media (max-width: 940px) {
+        header,
+        .flow,
+        .schema-grid,
+        .retention-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .arrow {
+          min-height: 26px;
+        }
+
+        .arrow::before {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <p class="eyebrow">Saturday event system</p>
+          <h1>How events move from source calendars to personalized plans</h1>
+          <p>
+            Current state after the latest ingest: a rolling public feed is built
+            from official event calendars, validated, then loaded by the app for
+            browsing, weekend rails, and planner recommendations.
+          </p>
+        </div>
+        <div class="metrics" aria-label="Current event feed metrics">
+          <div class="metric">
+            <strong>62</strong>
+            <span>registered sources</span>
+          </div>
+          <div class="metric">
+            <strong>547</strong>
+            <span>events in feed</span>
+          </div>
+          <div class="metric">
+            <strong>423</strong>
+            <span>live parsed events</span>
+          </div>
+          <div class="metric">
+            <strong>124</strong>
+            <span>template fallback events</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="panel" aria-labelledby="flow-title">
+        <h2 id="flow-title">End-to-End Flow</h2>
+        <p>
+          The important boundary: <code>public/data/events.json</code> should be
+          a future-facing planning feed, not a historical database.
+        </p>
+
+        <div class="flow">
+          <div class="lane">
+            <div class="lane-title">Inputs</div>
+            <div class="box source">
+              <strong>Source Registry</strong>
+              <span><code>data/event-sources.json</code></span>
+              <ul>
+                <li>Official libraries, parks, museums, festivals</li>
+                <li>Parser type and source metadata</li>
+                <li>Disabled sources with reasons</li>
+              </ul>
+            </div>
+            <div class="box source">
+              <strong>Fallback Templates</strong>
+              <span><code>data/event-templates.json</code></span>
+              <ul>
+                <li>Recurring family-friendly programs</li>
+                <li>Used only when live source extraction returns nothing</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="arrow"><span>to</span></div>
+
+          <div class="lane">
+            <div class="lane-title">Build Pipeline</div>
+            <div class="box process">
+              <strong>Fetch Sources</strong>
+              <span><code>scripts/ingest-events.mjs</code></span>
+              <ul>
+                <li>Loops through configured sources</li>
+                <li>Fetches HTML, JSON, RSS, ICS, LibCal, BiblioCommons</li>
+                <li>Records per-source status in the build report</li>
+              </ul>
+            </div>
+            <div class="box process">
+              <strong>Normalize Events</strong>
+              <span><code>scripts/eventPipeline.mjs</code></span>
+              <ul>
+                <li>Extracts dates, title, venue, city, category</li>
+                <li>Infers age bands, cost, and time window</li>
+                <li>Dedupes and filters adult-only/calendar-chrome rows</li>
+              </ul>
+            </div>
+            <div class="box guard">
+              <strong>Planning Window Guard</strong>
+              <span>generated date through +45 days</span>
+              <ul>
+                <li>Past dated rows are not kept in the live feed</li>
+                <li>Future suggestions stay focused on upcoming events</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="arrow"><span>to</span></div>
+
+          <div class="lane">
+            <div class="lane-title">Outputs and App Use</div>
+            <div class="box artifact">
+              <strong>Public Event Feed</strong>
+              <span><code>public/data/events.json</code></span>
+              <ul>
+                <li>Top-level dataset object</li>
+                <li><code>events[]</code> contains normalized event rows</li>
+                <li>Current span: 2026-05-09 to 2026-06-23</li>
+              </ul>
+            </div>
+            <div class="box artifact">
+              <strong>Operator Report</strong>
+              <span><code>public/data/event-build-report.json</code></span>
+              <ul>
+                <li>Source status, counts, HTTP errors</li>
+                <li>Useful for deciding which sources need new parsers</li>
+              </ul>
+            </div>
+            <div class="box process">
+              <strong>Planner and UI</strong>
+              <span><code>src/App.tsx</code> and <code>src/planner.ts</code></span>
+              <ul>
+                <li>Verified events become planner candidates</li>
+                <li>Past, unverified, and template events are blocked from plans</li>
+                <li>Preference chips alter ranking and AI candidate payloads</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel section" aria-labelledby="schema-title">
+        <h2 id="schema-title">Event Row Shape</h2>
+        <p>
+          Each item in <code>events[]</code> is intentionally compact so it can be
+          served statically, shown in cards, and converted into a planner spot.
+        </p>
+        <div class="schema-grid">
+          <div class="box artifact">
+            <strong>Identity and Source</strong>
+            <div class="field-list">
+              <div class="field"><strong>id</strong><span>Stable generated event id</span></div>
+              <div class="field"><strong>title</strong><span>Display title after cleanup</span></div>
+              <div class="field"><strong>url</strong><span>Direct event or source URL</span></div>
+              <div class="field"><strong>sourceId</strong><span>Registry source id</span></div>
+              <div class="field"><strong>sourceMode</strong><span>Parser or template mode</span></div>
+              <div class="field"><strong>verified</strong><span>True for live parsed source events</span></div>
+            </div>
+          </div>
+          <div class="box artifact">
+            <strong>When and Where</strong>
+            <div class="field-list">
+              <div class="field"><strong>startDateTime</strong><span>ISO timestamp in UTC</span></div>
+              <div class="field"><strong>endDateTime</strong><span>Optional ISO timestamp</span></div>
+              <div class="field"><strong>daysOfWeek</strong><span>0-6 weekday numbers</span></div>
+              <div class="field"><strong>venue</strong><span>Branch, park, or venue name</span></div>
+              <div class="field"><strong>city</strong><span>Coverage city/community</span></div>
+              <div class="field"><strong>lat/lon</strong><span>Coordinates for distance ranking</span></div>
+            </div>
+          </div>
+          <div class="box artifact">
+            <strong>Planning Signals</strong>
+            <div class="field-list">
+              <div class="field"><strong>category</strong><span>Library, Park, Museum, Festival, etc.</span></div>
+              <div class="field"><strong>ageBands</strong><span>toddler, preschool, school-age, tween</span></div>
+              <div class="field"><strong>timeWindow</strong><span>Morning, Afternoon, Evening</span></div>
+              <div class="field"><strong>cost</strong><span>Free, $, $$, $$$, Unknown</span></div>
+              <div class="field"><strong>description</strong><span>Short source-derived context</span></div>
+              <div class="field"><strong>fetchedAt</strong><span>Build timestamp for freshness</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel section" aria-labelledby="retention-title">
+        <h2 id="retention-title">Past Event Policy</h2>
+        <div class="retention-grid">
+          <div class="box process">
+            <strong>Current Live Feed</strong>
+            <span>
+              On each ingest, events are filtered to the generated date through
+              the configured 45-day planning window. A past event naturally drops
+              out on the next successful ingest.
+            </span>
+          </div>
+          <div class="box guard">
+            <strong>Recommendation</strong>
+            <span>
+              Do not keep past events in <code>public/data/events.json</code>.
+              That file should stay small, current, and safe for suggestions.
+            </span>
+          </div>
+          <div class="box artifact">
+            <strong>Optional Archive</strong>
+            <span>
+              If we want analytics later, write past/expired rows to a separate
+              file such as <code>public/data/event-history.json</code> or
+              <code>data/event-archive/YYYY-MM.json</code>. The planner should
+              never read that archive.
+            </span>
+          </div>
+        </div>
+        <p class="policy small">
+          App-side safety still matters: <code>isActualPlanningEvent()</code>
+          rejects events that are unverified, templates, outside the 45-day
+          horizon, not on a weekend, or already before today. A separate archive
+          would be for reporting only.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>

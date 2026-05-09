@@ -29,6 +29,7 @@
       "Burlingame",
       "Calistoga",
       "Campbell",
+      "Castro Valley",
       "Clayton",
       "Cloverdale",
       "Colma",
@@ -198,6 +199,18 @@
       "fallbackEventIds": ["san-mateo-main-storytime"]
     },
     {
+      "id": "san-mateo-county-libraries",
+      "name": "San Mateo County Libraries",
+      "url": "https://smcl.bibliocommons.com/v2/events",
+      "city": "San Mateo",
+      "category": "Library",
+      "sourceType": "biblioevents",
+      "trust": "official",
+      "lat": 37.5446,
+      "lon": -122.3047,
+      "defaultAudienceText": "family children preschool school-age tween teen all ages maker storytime"
+    },
+    {
       "id": "redwood-city-library",
       "name": "Redwood City Public Library",
       "url": "https://www.redwoodcity.org/departments/library/events",
@@ -345,6 +358,18 @@
       "fallbackEventIds": ["san-rafael-main-storytime"]
     },
     {
+      "id": "sonoma-county-library",
+      "name": "Sonoma County Library",
+      "url": "https://sonomalibrary.org/index.php/events",
+      "city": "Santa Rosa",
+      "category": "Library",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 38.4404,
+      "lon": -122.7141,
+      "defaultAudienceText": "baby preschool children grades k-6 teen storytime maker art music"
+    },
+    {
       "id": "ac-library",
       "name": "Alameda County Library",
       "url": "https://aclibrary.bibliocommons.com/v2/events",
@@ -469,6 +494,42 @@
       "sourceType": "html",
       "trust": "official",
       "fallbackEventIds": ["lawrence-hall-saturdays"]
+    },
+    {
+      "id": "chabot-space",
+      "name": "Chabot Space & Science Center",
+      "url": "https://chabotspace.org/programs/calendar-view/",
+      "city": "Oakland",
+      "category": "Museum",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 37.8187,
+      "lon": -122.1808,
+      "defaultAudienceText": "family kids school-age tween science astronomy planetarium"
+    },
+    {
+      "id": "hiller-aviation",
+      "name": "Hiller Aviation Museum",
+      "url": "https://www.hiller.org/calendar/",
+      "city": "San Carlos",
+      "category": "Museum",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 37.5129,
+      "lon": -122.2506,
+      "defaultAudienceText": "family kids school-age aviation science hands-on"
+    },
+    {
+      "id": "randall-museum",
+      "name": "Randall Museum",
+      "url": "https://randallmuseum.org/events-calendar/",
+      "city": "San Francisco",
+      "category": "Museum",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 37.7648,
+      "lon": -122.4385,
+      "defaultAudienceText": "family kids animals science art drop-in workshop"
     },
     {
       "id": "aquarium-of-the-bay",
@@ -622,6 +683,18 @@
       "defaultAudienceText": "family kids school-age tween nature guided hike",
       "defaultDurationMinutes": 120,
       "maxFamilyMiles": 4.5
+    },
+    {
+      "id": "san-mateo-county-parks",
+      "name": "San Mateo County Parks",
+      "url": "https://www.smcgov.org/parks/parks-events",
+      "city": "San Mateo",
+      "category": "Park",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 37.4337,
+      "lon": -122.4014,
+      "defaultAudienceText": "family kids nature hikes storytime parks trails bicycle"
     },
     {
       "id": "sf-cherry-blossom",
@@ -1140,6 +1213,17 @@
           "requiredText": ["September 12-13, 2026", "11 a.m. to 7 p.m.", "10 a.m. to 6 p.m."]
         }
       ]
+    },
+    {
+      "id": "solano-county-library",
+      "name": "Solano County Library",
+      "url": "https://solanolibrary.com/",
+      "city": "Fairfield",
+      "category": "Library",
+      "sourceType": "html",
+      "trust": "official",
+      "enabled": false,
+      "disabledReason": "Official Solano County Library events are served through Communico/LibNet detail pages; add a Communico listing API parser before enabling automated ingest."
     },
     {
       "id": "sunnyvale-library-calendar",
