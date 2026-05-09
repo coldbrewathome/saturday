@@ -35,3 +35,19 @@ jobs:
           git add public/data/bay-area-spots.json public/data/events.json public/data/event-build-report.json
           git commit -m "Refresh Bay Area data"
           git push
+
+      # Push the freshly scanned JSON to the standalone famhop-data Pages
+      # project so the kids and (future) adults frontends always read the
+      # latest tagged dataset without redeploying themselves. Skipped silently
+      # if Cloudflare credentials aren't configured on the repo.
+      - name: Deploy shared data feed to Cloudflare Pages
+        if: ${{ env.CLOUDFLARE_API_TOKEN != '' }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npm run build:data-site
+          npx wrangler pages deploy data-site/dist \
+            --project-name=famhop-data \
+            --branch=main \
+            --commit-dirty=true

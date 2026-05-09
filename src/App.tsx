@@ -433,23 +433,34 @@ function eventToPlanningSpot(event: FamilyEvent, transitMinutes: number): Spot {
   };
 }
 
-const DATA_URL = `${import.meta.env.BASE_URL}data/bay-area-spots.json`;
-const ENRICHMENT_URL = `${import.meta.env.BASE_URL}data/bay-area-enrichment.json`;
-const FEATURED_PLANS_URL = `${import.meta.env.BASE_URL}data/featured-plans.json`;
-const EVENTS_URL = `${import.meta.env.BASE_URL}data/events.json`;
-const BOA_MUSEUMS_URL = `${import.meta.env.BASE_URL}data/boa-museums.json`;
-const CURATED_SPOTS_URL = `${import.meta.env.BASE_URL}data/curated-spots.json`;
+// Shared cross-app data origin. When VITE_DATA_ORIGIN is set (production),
+// fetch from the standalone famhop-data Pages project so the data feed and
+// the kids app deploy independently. When unset (local dev), fall back to
+// same-origin so `npm run dev` works without an external dependency.
+const DATA_ORIGIN = (import.meta.env.VITE_DATA_ORIGIN ?? "").replace(/\/$/, "");
+const dataUrl = (file: string) =>
+  DATA_ORIGIN
+    ? `${DATA_ORIGIN}/data/${file}`
+    : `${import.meta.env.BASE_URL}data/${file}`;
+const DATA_URL = dataUrl("bay-area-spots.json");
+const ENRICHMENT_URL = dataUrl("bay-area-enrichment.json");
+const FEATURED_PLANS_URL = dataUrl("featured-plans.json");
+const EVENTS_URL = dataUrl("events.json");
+const BOA_MUSEUMS_URL = dataUrl("boa-museums.json");
+const CURATED_SPOTS_URL = dataUrl("curated-spots.json");
 
-// FamHop is the kid-facing app. The shared dataset also contains adult-tagged
-// entries (breweries, 21+ events) so a sibling adults-audience frontend can
-// fetch the same JSON. Filter on read so adult-only items never leak in here.
-const APP_AUDIENCE: Audience = "kids";
-function audienceVisible(item: { audiences?: Audience[] } | null | undefined): boolean {
-  if (!item) return false;
-  const tags = Array.isArray(item.audiences) ? item.audiences : null;
-  if (!tags || tags.length === 0) return true; // legacy / un-tagged data is allowed
-  return tags.includes(APP_AUDIENCE) || tags.includes("all");
-}
+import {
+  APP_AUDIENCE,
+  APP_BRAND,
+  APP_HERO_SUB,
+  APP_HERO_TITLE,
+  APP_PARTNERS_LABEL,
+  APP_TAGLINE,
+  SHOW_AGE_BAND_UI,
+  audienceVisible,
+} from "./appConfig";
+
+void APP_AUDIENCE; // surface APP_AUDIENCE for downstream debugging if needed
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID ?? "";
 const GOOGLE_CONFIGURED = GOOGLE_CLIENT_ID.length > 0;
 
@@ -2956,8 +2967,8 @@ function App() {
     <div className="app-shell">
       <header className="topbar">
         <div className="topbar-title">
-          <p className="eyebrow">Plan · Hop · Repeat.</p>
-          <h1>FamHop</h1>
+          <p className="eyebrow">{APP_TAGLINE}</p>
+          <h1>{APP_BRAND}</h1>
         </div>
         <div className="topbar-auth">
           {GOOGLE_CONFIGURED ? (
@@ -3062,13 +3073,12 @@ function App() {
       </div>
 
       {view === "home" ? (
-      <main className="home-screen" aria-label="Plan the weekend with the kids">
+      <main className="home-screen" aria-label={APP_HERO_TITLE}>
         <div className="home-hero">
-          <p className="eyebrow">Weekend with the kids</p>
-          <h1>Plan the weekend — together.</h1>
+          <p className="eyebrow">{APP_TAGLINE}</p>
+          <h1>{APP_HERO_TITLE}</h1>
           <p className="home-sub">
-            Pick the kids' age, interests, constraints, then a vibe. Get 3
-            family stops. Share with co-parents to vote.
+            {APP_HERO_SUB}
             {inferredGeo?.city ? ` Tuned for ${inferredGeo.city}.` : ""}
           </p>
         </div>
@@ -3112,26 +3122,28 @@ function App() {
           </div>
         </div>
 
-        <div className="home-age" role="group" aria-label="Kids' age">
-          <span className="filter-label">Kids' age</span>
-          <div className="segmented compact">
-            <button
-              className={ageBand === "any" ? "active" : ""}
-              onClick={() => setAgeBand("any")}
-            >
-              Mixed / any
-            </button>
-            {ageBandOptions.map(([value, label]) => (
+        {SHOW_AGE_BAND_UI && (
+          <div className="home-age" role="group" aria-label="Kids' age">
+            <span className="filter-label">Kids' age</span>
+            <div className="segmented compact">
               <button
-                key={value}
-                className={ageBand === value ? "active" : ""}
-                onClick={() => setAgeBand(value)}
+                className={ageBand === "any" ? "active" : ""}
+                onClick={() => setAgeBand("any")}
               >
-                {label}
+                Mixed / any
               </button>
-            ))}
+              {ageBandOptions.map(([value, label]) => (
+                <button
+                  key={value}
+                  className={ageBand === value ? "active" : ""}
+                  onClick={() => setAgeBand(value)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="home-base" role="group" aria-label="Home base">
           <span className="filter-label">Home base</span>
@@ -3415,26 +3427,28 @@ function App() {
             />
           </label>
 
-          <div className="filter-group">
-            <span className="filter-label">Age band</span>
-            <div className="segmented compact">
-              <button
-                className={ageBand === "any" ? "active" : ""}
-                onClick={() => setAgeBand("any")}
-              >
-                Any
-              </button>
-              {ageBandOptions.map(([value, label]) => (
+          {SHOW_AGE_BAND_UI && (
+            <div className="filter-group">
+              <span className="filter-label">Age band</span>
+              <div className="segmented compact">
                 <button
-                  key={value}
-                  className={ageBand === value ? "active" : ""}
-                  onClick={() => setAgeBand(value)}
+                  className={ageBand === "any" ? "active" : ""}
+                  onClick={() => setAgeBand("any")}
                 >
-                  {label}
+                  Any
                 </button>
-              ))}
+                {ageBandOptions.map(([value, label]) => (
+                  <button
+                    key={value}
+                    className={ageBand === value ? "active" : ""}
+                    onClick={() => setAgeBand(value)}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           <label className="select-field">
             <span>Category</span>
@@ -4864,11 +4878,11 @@ function App() {
       <footer className="app-footer">
         <div className="app-footer-inner">
           <div className="app-footer-brand">
-            <strong>FamHop</strong>
-            <span>Plan a great day with the kids.</span>
+            <strong>{APP_BRAND}</strong>
+            <span>{APP_TAGLINE}</span>
           </div>
           <div className="app-footer-meta">
-            <span>© {new Date().getFullYear()} FamHop</span>
+            <span>© {new Date().getFullYear()} {APP_BRAND}</span>
             <span aria-hidden="true">·</span>
             <span>
               Map &amp; place data ©{" "}

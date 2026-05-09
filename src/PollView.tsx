@@ -1,5 +1,6 @@
 import { ArrowLeft, ExternalLink, Frown, Meh, Smile, ThumbsUp } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { APP_BRAND } from "./appConfig";
 import {
   EventSummary,
   PollSnapshot,
@@ -330,7 +331,7 @@ export default function PollView({ pollId }: { pollId: string }) {
           className="primary-button wide"
           onClick={backToApp}
         >
-          Make your own plan with FamHop
+          Make your own plan with {APP_BRAND}
         </button>
         <p className="poll-cta-sub">Free · no signup needed</p>
       </section>
