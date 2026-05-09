@@ -1307,6 +1307,17 @@ h3 {
   margin: 16px 0 8px;
 }
 
+/* Visually separate the Places block from the Events block in the saved
+   plan composer. The trailing list and the next subhead used to butt up
+   against each other; add breathing room and a hairline divider so the
+   two groups read as distinct sections. */
+.saved-list + .saved-subhead,
+.saved-list + .saved-subhead-row {
+  border-top: 1px solid var(--line);
+  margin-top: 28px;
+  padding-top: 20px;
+}
+
 .saved-subhead-row {
   align-items: baseline;
   display: flex;
