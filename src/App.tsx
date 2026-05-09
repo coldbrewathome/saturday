@@ -1158,6 +1158,40 @@ function PlanMap({
   );
 }
 
+type AppRoute = {
+  view: "home" | "browse" | "plans";
+  planId: string | null;
+};
+
+function readAppRoute(): AppRoute {
+  if (typeof window === "undefined") {
+    return { view: "browse", planId: null };
+  }
+  const hash = window.location.hash;
+  if (hash.startsWith("#/p/")) {
+    // Poll route — main.tsx handles rendering. App still mounts when the user
+    // navigates back, so default to browse.
+    return { view: "browse", planId: null };
+  }
+  const planMatch = hash.match(/^#\/plans\/(.+)$/);
+  if (planMatch) {
+    return { view: "plans", planId: decodeURIComponent(planMatch[1]) };
+  }
+  if (hash === "#/plans") return { view: "plans", planId: null };
+  if (hash === "#/browse" || hash === "" || hash === "#/" || hash === "#") {
+    return { view: "browse", planId: null };
+  }
+  return { view: "browse", planId: null };
+}
+
+function buildAppHash(view: AppRoute["view"], planId: string | null): string {
+  if (view === "plans") {
+    return planId ? `#/plans/${encodeURIComponent(planId)}` : "#/plans";
+  }
+  if (view === "browse") return "#/browse";
+  return "#/";
+}
+
 function readStoredArray<T>(key: string, fallback: T[]): T[] {
   try {
     const raw = window.localStorage.getItem(key);
@@ -1235,11 +1269,16 @@ function App() {
   const [plans, setPlans] = useState<Plan[]>(() =>
     readStoredArray("saturday.plans", []),
   );
-  const [view, setView] = useState<"home" | "browse" | "plans">("browse");
+  const initialRoute = readAppRoute();
+  const [view, setView] = useState<"home" | "browse" | "plans">(
+    initialRoute.view,
+  );
   const [inferredGeo, setInferredGeo] = useState<{ city: string | null; lat: number | null; lon: number | null } | null>(null);
   const [homeBusy, setHomeBusy] = useState(false);
   const [homeError, setHomeError] = useState<string | null>(null);
-  const [activePlanId, setActivePlanId] = useState<string | null>(null);
+  const [activePlanId, setActivePlanId] = useState<string | null>(
+    initialRoute.planId,
+  );
   const [addStopChoice, setAddStopChoice] = useState<string>("");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(() => {
@@ -1475,6 +1514,32 @@ function App() {
   useEffect(() => {
     window.localStorage.setItem("saturday.savedSpots", JSON.stringify(savedIds));
   }, [savedIds]);
+
+  // URL routing: keep window.location.hash in sync with view + activePlanId.
+  // pushState (no hashchange fired) when state changes; popstate listener
+  // handles back/forward navigation.
+  useEffect(() => {
+    if (window.location.hash.startsWith("#/p/")) return; // poll page
+    const target = buildAppHash(view, activePlanId);
+    if (window.location.hash !== target) {
+      window.history.pushState(null, "", target);
+    }
+  }, [view, activePlanId]);
+
+  useEffect(() => {
+    function onPop() {
+      if (window.location.hash.startsWith("#/p/")) return;
+      const route = readAppRoute();
+      setView(route.view);
+      setActivePlanId(route.planId);
+    }
+    window.addEventListener("popstate", onPop);
+    window.addEventListener("hashchange", onPop);
+    return () => {
+      window.removeEventListener("popstate", onPop);
+      window.removeEventListener("hashchange", onPop);
+    };
+  }, []);
 
   useEffect(() => {
     window.localStorage.setItem(
