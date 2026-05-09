@@ -808,6 +808,22 @@ h3 {
 }
 .famhop-cluster-lg .famhop-cluster-inner span { font-size: 1.02rem; }
 
+/* On touch screens, even the smallest cluster needs a 44 px tap target. */
+@media (pointer: coarse) {
+  .famhop-cluster-inner {
+    height: 44px;
+    width: 44px;
+  }
+  .famhop-cluster-md .famhop-cluster-inner {
+    height: 50px;
+    width: 50px;
+  }
+  .famhop-cluster-lg .famhop-cluster-inner {
+    height: 58px;
+    width: 58px;
+  }
+}
+
 .famhop-cluster-spot .famhop-cluster-inner { background: #6b7a72; }
 .famhop-cluster-event .famhop-cluster-inner { background: #d68f6e; }
 .famhop-cluster-event-hot .famhop-cluster-inner { background: #b85c38; }

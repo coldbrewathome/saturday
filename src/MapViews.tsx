@@ -15,6 +15,21 @@ export type PlanMapItem =
 const bayAreaMapCenter: [number, number] = [37.7749, -122.4194];
 const MAP_VIEW_STORAGE_KEY = "saturday.mapView";
 
+// Touch screens need bigger tap targets — Apple HIG calls for 44 px and a
+// 5-radius circle (10 px diameter) is unreachable. Bump radii on coarse
+// pointer devices so phones get fingerable dots without making the desktop
+// view feel cartoonish.
+const isCoarsePointer =
+  typeof window !== "undefined" &&
+  typeof window.matchMedia === "function" &&
+  window.matchMedia("(pointer: coarse)").matches;
+const SPOT_RADIUS = isCoarsePointer
+  ? { default: 8, outdoor: 9, selected: 11 }
+  : { default: 5, outdoor: 6, selected: 8 };
+const EVENT_RADIUS = isCoarsePointer
+  ? { default: 11, highlighted: 13, selected: 15 }
+  : { default: 7, highlighted: 10, selected: 12 };
+
 function loadStoredMapView(): { lat: number; lon: number; zoom: number } | null {
   try {
     const raw = window.localStorage.getItem(MAP_VIEW_STORAGE_KEY);
@@ -208,7 +223,11 @@ export function SpotMap({
       const isSelected =
         selected?.kind === "spot" && selected.id === spot.id;
       L.circleMarker([lat, lon], {
-        radius: isSelected ? 8 : isOutdoor ? 6 : 5,
+        radius: isSelected
+          ? SPOT_RADIUS.selected
+          : isOutdoor
+            ? SPOT_RADIUS.outdoor
+            : SPOT_RADIUS.default,
         color: isOutdoor ? "#276749" : "#65746b",
         weight: isSelected ? 2 : 1,
         fillColor: isOutdoor ? "#276749" : "#a3b1a8",
@@ -249,7 +268,11 @@ export function SpotMap({
             ? "#b85c38"
             : "#d68f6e";
         L.circleMarker([lat, lon], {
-          radius: isSelected ? 12 : highlighted ? 10 : 7,
+          radius: isSelected
+            ? EVENT_RADIUS.selected
+            : highlighted
+              ? EVENT_RADIUS.highlighted
+              : EVENT_RADIUS.default,
           color: "#ffffff",
           weight: 2,
           fillColor,
