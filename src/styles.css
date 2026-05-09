@@ -795,8 +795,14 @@ h3 {
 .famhop-cluster-lg .famhop-cluster-inner span { font-size: 1.02rem; }
 
 .famhop-cluster-spot .famhop-cluster-inner { background: #6b7a72; }
-.famhop-cluster-event .famhop-cluster-inner { background: #b85c38; }
+.famhop-cluster-event .famhop-cluster-inner { background: #d68f6e; }
+.famhop-cluster-event-hot .famhop-cluster-inner { background: #b85c38; }
 .famhop-cluster-library .famhop-cluster-inner { background: #2563eb; }
+
+.famhop-cluster.is-selected .famhop-cluster-inner {
+  outline: 3px solid rgba(245, 158, 11, 0.6);
+  outline-offset: 2px;
+}
 
 /* Bottom sheet (pin tap) */
 .bottom-sheet {
@@ -873,6 +879,64 @@ h3 {
   background: transparent;
   padding: 0;
   border: 0;
+}
+
+.bottom-sheet-carousel {
+  padding: 14px 0 16px;
+}
+
+.bottom-sheet-carousel .carousel-head {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  justify-content: space-between;
+  padding: 0 56px 8px 16px;
+}
+
+.bottom-sheet-carousel .carousel-head strong {
+  font-size: 0.96rem;
+}
+
+.bottom-sheet-carousel .carousel-hint {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding: 4px 16px 4px;
+  scroll-padding-left: 16px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.carousel-track::-webkit-scrollbar {
+  height: 6px;
+}
+.carousel-track::-webkit-scrollbar-thumb {
+  background: rgba(31, 48, 39, 0.14);
+  border-radius: 999px;
+}
+
+.carousel-card {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  flex: 0 0 86%;
+  max-width: 360px;
+  padding: 14px 14px 16px;
+  scroll-snap-align: start;
+}
+
+@media (min-width: 720px) {
+  .carousel-card {
+    flex-basis: 320px;
+  }
 }
 
 .sheet-note {

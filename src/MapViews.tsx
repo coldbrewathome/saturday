@@ -1,15 +1,12 @@
-/// <reference types="leaflet.markercluster" />
 import { useEffect, useMemo, useRef } from "react";
 import L, { type LayerGroup, type Map as LeafletMap } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import "leaflet.markercluster/dist/leaflet.markercluster.js";
-import "leaflet.markercluster/dist/MarkerCluster.css";
-import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import type { Spot, FamilyEvent } from "./App";
 
 export type MapSelection =
   | { kind: "spot"; id: string }
-  | { kind: "event"; id: string };
+  | { kind: "event"; id: string }
+  | { kind: "event-group"; ids: string[]; lat: number; lon: number };
 
 export type PlanMapItem =
   | { kind: "spot"; lat: number; lon: number; label: string; sublabel: string }
@@ -57,7 +54,7 @@ export function SpotMap({
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<LeafletMap | null>(null);
-  const layerRef = useRef<L.MarkerClusterGroup | null>(null);
+  const layerRef = useRef<LayerGroup | null>(null);
   const userLayerRef = useRef<LayerGroup | null>(null);
   // `undefined` until the first userLocation effect runs. After that, holds
   // either null or the coords seen at mount, so subsequent updates know they
@@ -116,42 +113,7 @@ export function SpotMap({
       maxZoom: 18,
     }).addTo(map);
 
-    const layer = L.markerClusterGroup({
-      // Cluster only when markers are visually overlapping. Smaller radius
-      // means fewer false clusters; larger means tighter groups.
-      maxClusterRadius: 48,
-      // Keep clusters around at the deepest zoom too, so events that share
-      // the exact same coords still collapse to a single tappable bubble.
-      disableClusteringAtZoom: 17,
-      spiderfyOnMaxZoom: true,
-      showCoverageOnHover: false,
-      chunkedLoading: true,
-      iconCreateFunction: (cluster: L.MarkerCluster) => {
-        const children = cluster.getAllChildMarkers() as Array<
-          L.Marker & { __kind?: string; __category?: string }
-        >;
-        const count = children.length;
-        const eventCount = children.filter((m) => m.__kind === "event").length;
-        const libraryCount = children.filter(
-          (m) => m.__kind === "event" && m.__category === "Library",
-        ).length;
-        // Pick a tone: library if cluster is dominantly library events,
-        // event if mostly events, otherwise spot/neutral.
-        let tone = "spot";
-        if (libraryCount > 0 && libraryCount >= eventCount / 2) {
-          tone = "library";
-        } else if (eventCount > count / 2) {
-          tone = "event";
-        }
-        const size = count >= 100 ? "lg" : count >= 25 ? "md" : "sm";
-        return L.divIcon({
-          html: `<div class="famhop-cluster-inner"><span>${count}</span></div>`,
-          className: `famhop-cluster famhop-cluster-${tone} famhop-cluster-${size}`,
-          iconSize: L.point(40, 40),
-        });
-      },
-    });
-    layer.addTo(map);
+    const layer = L.layerGroup().addTo(map);
     const userLayer = L.layerGroup().addTo(map);
     mapRef.current = map;
     layerRef.current = layer;
@@ -238,8 +200,6 @@ export function SpotMap({
 
     layer.clearLayers();
 
-    const markers: L.CircleMarker[] = [];
-
     for (const spot of plottedSpots) {
       const lat = spot.lat as number;
       const lon = spot.lon as number;
@@ -247,50 +207,92 @@ export function SpotMap({
         spot.category === "Outdoors" || spot.category === "Wellness";
       const isSelected =
         selected?.kind === "spot" && selected.id === spot.id;
-      const m = L.circleMarker([lat, lon], {
+      L.circleMarker([lat, lon], {
         radius: isSelected ? 8 : isOutdoor ? 6 : 5,
         color: isOutdoor ? "#276749" : "#65746b",
         weight: isSelected ? 2 : 1,
         fillColor: isOutdoor ? "#276749" : "#a3b1a8",
         fillOpacity: 0.75,
-      }).on("click", () =>
-        onSelectRef.current?.({ kind: "spot", id: spot.id }),
-      );
-      (m as L.CircleMarker & { __kind?: string }).__kind = "spot";
-      markers.push(m);
+      })
+        .on("click", () =>
+          onSelectRef.current?.({ kind: "spot", id: spot.id }),
+        )
+        .addTo(layer);
     }
 
+    // Group events by exact lat/lon (5-decimal precision ≈ 1 m). Locations
+    // with multiple events render as one count-badge marker; tapping opens
+    // a swipeable carousel of all events at that point ordered by time.
+    const eventGroups = new Map<string, FamilyEvent[]>();
     for (const event of plottedEvents) {
-      const highlighted = highlightedEventIds?.has(event.id) ?? false;
-      const isSelected =
-        selected?.kind === "event" && selected.id === event.id;
-      const isLibrary = event.category === "Library";
-      const fillColor = isLibrary
-        ? highlighted
-          ? "#1d4ed8"
-          : "#60a5fa"
-        : highlighted
-          ? "#b85c38"
-          : "#d68f6e";
-      const m = L.circleMarker([event.lat, event.lon], {
-        radius: isSelected ? 12 : highlighted ? 10 : 7,
-        color: "#ffffff",
-        weight: 2,
-        fillColor,
-        fillOpacity: 0.95,
-      }).on("click", () =>
-        onSelectRef.current?.({ kind: "event", id: event.id }),
-      );
-      const tagged = m as L.CircleMarker & {
-        __kind?: string;
-        __category?: string;
-      };
-      tagged.__kind = "event";
-      tagged.__category = event.category;
-      markers.push(m);
+      const key = `${event.lat.toFixed(5)},${event.lon.toFixed(5)}`;
+      const bucket = eventGroups.get(key);
+      if (bucket) bucket.push(event);
+      else eventGroups.set(key, [event]);
     }
 
-    layer.addLayers(markers);
+    for (const bucket of eventGroups.values()) {
+      const lat = bucket[0].lat;
+      const lon = bucket[0].lon;
+
+      if (bucket.length === 1) {
+        const event = bucket[0];
+        const highlighted = highlightedEventIds?.has(event.id) ?? false;
+        const isSelected =
+          selected?.kind === "event" && selected.id === event.id;
+        const isLibrary = event.category === "Library";
+        const fillColor = isLibrary
+          ? highlighted
+            ? "#1d4ed8"
+            : "#60a5fa"
+          : highlighted
+            ? "#b85c38"
+            : "#d68f6e";
+        L.circleMarker([lat, lon], {
+          radius: isSelected ? 12 : highlighted ? 10 : 7,
+          color: "#ffffff",
+          weight: 2,
+          fillColor,
+          fillOpacity: 0.95,
+        })
+          .on("click", () =>
+            onSelectRef.current?.({ kind: "event", id: event.id }),
+          )
+          .addTo(layer);
+        continue;
+      }
+
+      // Multi-event location → count-badge marker.
+      const ids = bucket.map((e) => e.id);
+      const count = bucket.length;
+      const libraryCount = bucket.filter(
+        (e) => e.category === "Library",
+      ).length;
+      const highlightedCount = bucket.filter(
+        (e) => highlightedEventIds?.has(e.id) ?? false,
+      ).length;
+      const tone =
+        libraryCount >= count / 2
+          ? "library"
+          : highlightedCount >= count / 2
+            ? "event-hot"
+            : "event";
+      const size = count >= 100 ? "lg" : count >= 25 ? "md" : "sm";
+      const isSelected =
+        selected?.kind === "event-group" &&
+        selected.ids.length === ids.length &&
+        selected.ids.every((id, i) => ids[i] === id);
+      const icon = L.divIcon({
+        html: `<div class="famhop-cluster-inner"><span>${count}</span></div>`,
+        className: `famhop-cluster famhop-cluster-${tone} famhop-cluster-${size}${isSelected ? " is-selected" : ""}`,
+        iconSize: L.point(40, 40),
+      });
+      L.marker([lat, lon], { icon })
+        .on("click", () =>
+          onSelectRef.current?.({ kind: "event-group", ids, lat, lon }),
+        )
+        .addTo(layer);
+    }
   }, [plottedSpots, plottedEvents, highlightedEventIds, selected]);
 
   // Frame the map once when the underlying point set changes — but never on

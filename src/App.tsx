@@ -3673,29 +3673,24 @@ function App() {
                 </div>
               );
             }
-            const event = events.find((e) => e.id === mapSelection.id);
-            if (!event) return null;
-            const eventDate = event.startDateTime
-              ? new Date(event.startDateTime)
-              : null;
-            const eventSaved = savedEventIds.includes(event.id);
-            return (
-              <div className="bottom-sheet" role="dialog" aria-label={event.title}>
-                <button
-                  className="bottom-sheet-close"
-                  onClick={() => setMapSelection(null)}
-                  aria-label="Close"
-                >
-                  <X aria-hidden="true" />
-                </button>
-                <div className="sheet-event">
-                  <p className={`event-cat-chip cat-${event.category.toLowerCase()}`}>
+            const renderEventBody = (event: FamilyEvent) => {
+              const eventDate = event.startDateTime
+                ? new Date(event.startDateTime)
+                : null;
+              const eventSaved = savedEventIds.includes(event.id);
+              return (
+                <div className="sheet-event" key={event.id}>
+                  <p
+                    className={`event-cat-chip cat-${event.category.toLowerCase()}`}
+                  >
                     Event · {event.category}
                   </p>
                   <h3>{event.title}</h3>
                   <p className="sheet-note">{event.description}</p>
                   <div className="sheet-meta">
-                    <span>{event.venue} · {event.city}</span>
+                    <span>
+                      {event.venue} · {event.city}
+                    </span>
                     <span>
                       {eventDate
                         ? eventDate.toLocaleDateString(undefined, {
@@ -3716,27 +3711,30 @@ function App() {
                       <Bookmark aria-hidden="true" />
                       {eventSaved ? "Saved" : "Save event"}
                     </button>
-                    {activePlan && (() => {
-                      const inPlan = (activePlan.eventIds ?? []).includes(event.id);
-                      return (
-                        <button
-                          className={`sheet-action ${inPlan ? "is-active" : ""}`}
-                          onClick={() =>
-                            inPlan
-                              ? removeEventFromPlan(activePlan.id, event.id)
-                              : addEventToPlan(activePlan.id, event.id)
-                          }
-                          title={
-                            inPlan
-                              ? `Remove from "${activePlan.name || "active plan"}"`
-                              : `Add to "${activePlan.name || "active plan"}"`
-                          }
-                        >
-                          <List aria-hidden="true" />
-                          {inPlan ? "In plan" : "Add to plan"}
-                        </button>
-                      );
-                    })()}
+                    {activePlan &&
+                      (() => {
+                        const inPlan = (activePlan.eventIds ?? []).includes(
+                          event.id,
+                        );
+                        return (
+                          <button
+                            className={`sheet-action ${inPlan ? "is-active" : ""}`}
+                            onClick={() =>
+                              inPlan
+                                ? removeEventFromPlan(activePlan.id, event.id)
+                                : addEventToPlan(activePlan.id, event.id)
+                            }
+                            title={
+                              inPlan
+                                ? `Remove from "${activePlan.name || "active plan"}"`
+                                : `Add to "${activePlan.name || "active plan"}"`
+                            }
+                          >
+                            <List aria-hidden="true" />
+                            {inPlan ? "In plan" : "Add to plan"}
+                          </button>
+                        );
+                      })()}
                     <a
                       className="sheet-action"
                       href={event.url}
@@ -3748,6 +3746,77 @@ function App() {
                     </a>
                   </div>
                 </div>
+              );
+            };
+
+            if (mapSelection.kind === "event-group") {
+              const groupEvents = mapSelection.ids
+                .map((id) => events.find((e) => e.id === id))
+                .filter((e): e is FamilyEvent => Boolean(e))
+                .sort((a, b) => {
+                  const aT = a.startDateTime
+                    ? new Date(a.startDateTime).getTime()
+                    : Infinity;
+                  const bT = b.startDateTime
+                    ? new Date(b.startDateTime).getTime()
+                    : Infinity;
+                  return aT - bT;
+                });
+              if (groupEvents.length === 0) return null;
+              const cityLabel =
+                groupEvents[0].city || groupEvents[0].venue || "this location";
+              return (
+                <div
+                  className="bottom-sheet bottom-sheet-carousel"
+                  role="dialog"
+                  aria-label={`${groupEvents.length} events at ${cityLabel}`}
+                >
+                  <button
+                    className="bottom-sheet-close"
+                    onClick={() => setMapSelection(null)}
+                    aria-label="Close"
+                  >
+                    <X aria-hidden="true" />
+                  </button>
+                  <div className="carousel-head">
+                    <strong>
+                      {groupEvents.length} events at {cityLabel}
+                    </strong>
+                    <span className="carousel-hint">
+                      Swipe to browse · ordered by time
+                    </span>
+                  </div>
+                  <div className="carousel-track" role="list">
+                    {groupEvents.map((event) => (
+                      <div
+                        className="carousel-card"
+                        role="listitem"
+                        key={event.id}
+                      >
+                        {renderEventBody(event)}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+
+            const event = events.find((e) => e.id === mapSelection.id);
+            if (!event) return null;
+            return (
+              <div
+                className="bottom-sheet"
+                role="dialog"
+                aria-label={event.title}
+              >
+                <button
+                  className="bottom-sheet-close"
+                  onClick={() => setMapSelection(null)}
+                  aria-label="Close"
+                >
+                  <X aria-hidden="true" />
+                </button>
+                {renderEventBody(event)}
               </div>
             );
           })()}
