@@ -263,6 +263,7 @@ export async function googleSignIn(
 
 export type SyncedState = {
   savedIds: string[];
+  savedEventIds?: string[];
   visitedIds: string[];
   customSpots: unknown[];
   plans: unknown[];

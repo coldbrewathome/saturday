@@ -1080,6 +1080,49 @@ h3 {
   margin: 16px 0 8px;
 }
 
+.saved-subhead-row {
+  align-items: baseline;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.saved-clear-past {
+  color: var(--coral);
+  font-size: 0.74rem;
+  font-weight: 800;
+  margin: 16px 0 8px;
+  padding: 0;
+}
+
+.saved-clear-past:hover {
+  color: var(--accent-strong);
+}
+
+.saved-item.is-past strong,
+.saved-item.is-past span {
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-color: rgba(107, 114, 128, 0.5);
+}
+
+.saved-item.is-past .past-pill {
+  text-decoration: none;
+}
+
+.past-pill {
+  background: var(--surface-strong);
+  color: var(--muted);
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  margin-right: 6px;
+  padding: 2px 7px;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
 .saved-item {
   align-items: center;
   border-bottom: 1px solid var(--line);

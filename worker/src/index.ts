@@ -489,6 +489,7 @@ async function putUserState(
   }
   const data = payload as {
     savedIds?: unknown;
+    savedEventIds?: unknown;
     visitedIds?: unknown;
     customSpots?: unknown;
     plans?: unknown;
@@ -503,6 +504,7 @@ async function putUserState(
       : [];
   const state = {
     savedIds: stringArr(data.savedIds, 500),
+    savedEventIds: stringArr(data.savedEventIds, 500),
     visitedIds: stringArr(data.visitedIds, 1000),
     customSpots: objectArr(data.customSpots, 100),
     plans: objectArr(data.plans, 50),
