@@ -11,6 +11,9 @@ import {
 } from "./eventPipeline.mjs";
 
 const registryPath = process.env.EVENT_SOURCES || path.join("data", "event-sources.json");
+const adultRegistryPath =
+  process.env.EVENT_SOURCES_ADULTS ||
+  path.join("data", "event-sources-adults.json");
 const templatePath = process.env.EVENT_TEMPLATE_INPUT || path.join("data", "event-templates.json");
 const manualEventsPath =
   process.env.EVENT_MANUAL_INPUT || path.join("data", "manual-events.json");
@@ -312,14 +315,37 @@ async function readJsonOrEmpty(filePath) {
   }
 }
 
+// If a registry sets defaults.audiences, copy that down to every source that
+// didn't already declare its own. resolveAudiences() in eventPipeline.mjs then
+// reads source.audiences and tags each emitted event accordingly.
+function applyDefaultAudiences(reg) {
+  const def = reg?.defaults?.audiences;
+  if (!Array.isArray(def) || def.length === 0 || !Array.isArray(reg?.sources)) {
+    return;
+  }
+  for (const s of reg.sources) {
+    if (!Array.isArray(s.audiences) || s.audiences.length === 0) {
+      s.audiences = def.slice();
+    }
+  }
+}
+
 async function main() {
   const registry = await readJson(registryPath);
+  const adultRegistry = await readJsonOrEmpty(adultRegistryPath);
+  applyDefaultAudiences(registry);
+  applyDefaultAudiences(adultRegistry);
   const templateDataset = await readJson(templatePath);
   const templates = templateMap(templateDataset);
   const manualDataset = await readJsonOrEmpty(manualEventsPath);
   const generatedAt = new Date().toISOString();
   const allEvents = [];
   const sourceReports = [];
+
+  const registriesToProcess = [registry];
+  if (Array.isArray(adultRegistry?.sources) && adultRegistry.sources.length > 0) {
+    registriesToProcess.push(adultRegistry);
+  }
 
   // Hand-entered one-off events (manual-events.json). Filtered to the
   // planning window so a stale entry doesn't stick around forever.
@@ -358,7 +384,8 @@ async function main() {
     });
   }
 
-  for (const source of registry.sources || []) {
+  for (const reg of registriesToProcess) {
+  for (const source of reg.sources || []) {
     if (source.enabled === false && source.sourceType !== "ticketmaster") {
       sourceReports.push({
         id: source.id,
@@ -395,7 +422,7 @@ async function main() {
     let liveEvents = [];
 
     if (!offline && source.enabled !== false) {
-      const payloads = await fetchSourcePayloads(source, registry);
+      const payloads = await fetchSourcePayloads(source, reg);
       report.fetches = payloads.map((payload) => ({
         url: payload.url,
         status: payload.status,
@@ -417,13 +444,13 @@ async function main() {
             payload.source || source,
             {
               now: new Date(generatedAt),
-              windowDays: registry.defaults?.windowDays || 45,
+              windowDays: reg.defaults?.windowDays || 45,
             },
           ));
         liveEvents = dedupeEvents(filterToPlanningWindow(
           extracted,
           generatedAt,
-          registry.defaults?.windowDays || 45,
+          reg.defaults?.windowDays || 45,
         ));
         report.rejectedLiveEvents = extracted.length - liveEvents.length;
       }
@@ -432,7 +459,7 @@ async function main() {
     }
 
     const fallbackEvents =
-      liveEvents.length > 0 ? [] : fallbackTemplates(source, templates, registry, generatedAt);
+      liveEvents.length > 0 ? [] : fallbackTemplates(source, templates, reg, generatedAt);
     for (const event of [...liveEvents, ...fallbackEvents]) {
       allEvents.push({
         ...event,
@@ -451,16 +478,23 @@ async function main() {
     sourceReports.push(report);
     await new Promise((resolve) => setTimeout(resolve, Number(process.env.EVENT_FETCH_DELAY_MS || 100)));
   }
+  }
+
+  // Union the city allowlists across registries — adults coverage may extend
+  // beyond the kid registry (e.g., late-night neighborhoods or breweries).
+  const unionCities = new Set(registry.coverage?.cities || []);
+  for (const c of adultRegistry?.coverage?.cities || []) unionCities.add(c);
 
   const dataset = buildEventsDataset(allEvents, {
     generatedAt,
     registryPath,
-    coverage: registry.coverage,
-    sourceCount: (registry.sources || []).length,
+    coverage: { ...registry.coverage, cities: Array.from(unionCities) },
+    sourceCount:
+      (registry.sources || []).length + (adultRegistry?.sources || []).length,
   });
   const errors = validateEventsDataset(dataset, {
     minEvents,
-    cities: registry.coverage?.cities || [],
+    cities: Array.from(unionCities),
     communities: ["Muir Beach", "Bay Area"],
   });
 

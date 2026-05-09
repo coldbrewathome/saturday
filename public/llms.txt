@@ -32,6 +32,13 @@ Place data is sourced from OpenStreetMap (ODbL), with imagery and attribution fr
 - Family events: https://famhop.com/data/events.json
 - Per-source build report: https://famhop.com/data/event-build-report.json
 
+The JSON files at `/data/*.json` are served with `Access-Control-Allow-Origin: *`
+so they can be read cross-origin. Every place and event carries an `audiences`
+array — values are `"kids"`, `"adults"`, or `"all"`. FamHop is the kids app
+and filters in this dataset to `audiences ∋ "kids"` or `"all"`. A separate
+adults-audience FamHop sibling app reads the same files and filters the other
+way; the scanning pipeline runs once and serves both.
+
 ## SEO surfaces
 
 - Home: https://famhop.com/

@@ -1182,7 +1182,15 @@ export function normalizeRawEvent(raw, source = {}) {
   const title = cleanEventTitle(raw.title);
   const description = stripUnsafeText(raw.description, 360);
   const combined = `${title} ${description}`;
-  if (!title || hasAdultOnlySignal(combined)) return null;
+  if (!title) return null;
+  // Adult-only signal in the text is only a rejection if the source/event
+  // didn't opt in to the adults audience. With the dual-app pipeline, an
+  // adults-tagged feed (event-sources-adults.json) expects exactly this
+  // language and should be allowed through.
+  const audiences = resolveAudiences(raw, source, combined);
+  const adultIntent =
+    audiences.includes("adults") && !audiences.includes("kids");
+  if (!adultIntent && hasAdultOnlySignal(combined)) return null;
   if (/\b(cancel(?:ed|led)|postponed)\b/i.test(combined)) return null;
   if ((raw.extractionMethod === "html" || raw.extractionMethod === "rss") && isGenericPageTitle(title)) {
     return null;
@@ -1214,6 +1222,7 @@ export function normalizeRawEvent(raw, source = {}) {
     startDateTime,
     endDateTime,
     ageBands: ageBands.length > 0 ? ageBands : ["preschool", "school-age"],
+    audiences,
     cost: stripUnsafeText(raw.cost || inferCost(combined), 30),
     url: sanitizeUrl(raw.url || raw.sourceUrl || source.url, source.url) || source.url,
     sourceUrl: sanitizeUrl(raw.sourceUrl || source.url, source.url) || source.url,
@@ -1224,6 +1233,37 @@ export function normalizeRawEvent(raw, source = {}) {
     verified: raw.verified === true,
     fetchedAt: raw.fetchedAt || null,
   };
+}
+
+const VALID_AUDIENCES = new Set(["kids", "adults", "all"]);
+
+// Decide which audience(s) a spot or event serves. Order of precedence:
+//   1. Explicit raw.audiences array (the most specific signal — manual entry).
+//   2. source.audiences array (whole feed serves one audience).
+//   3. Heuristics on the title+description text (e.g., "21+", "kids only").
+//   4. Default: ["all"] — usable by both apps.
+//
+// Exporting so the spot ingest script can reuse the same rules.
+export function resolveAudiences(raw = {}, source = {}, combinedText = "") {
+  function clean(arr) {
+    if (!Array.isArray(arr)) return null;
+    const filtered = arr
+      .map((v) => String(v || "").toLowerCase().trim())
+      .filter((v) => VALID_AUDIENCES.has(v));
+    return filtered.length > 0 ? Array.from(new Set(filtered)) : null;
+  }
+  const fromRaw = clean(raw.audiences);
+  if (fromRaw) return fromRaw;
+  const fromSource = clean(source.audiences);
+  if (fromSource) return fromSource;
+  const text = String(combinedText || "");
+  if (/\b21\s*\+|\bover 21\b|\bages? 21\b|\badults? only\b|\bbrewery\b|\bwhiskey\b|\bcocktail\b/i.test(text)) {
+    return ["adults"];
+  }
+  if (/\bkids? only\b|\bchildren only\b|\bunder 18\b|\bages? 0\s*[-–]\s*\d+\b|\bstorytime\b|\btoddler\b|\bpreschool\b/i.test(text)) {
+    return ["kids"];
+  }
+  return ["all"];
 }
 
 function cleanEventTitle(value) {
@@ -1648,6 +1688,16 @@ export function validateEventsDataset(dataset, options = {}) {
     if (!Array.isArray(event.ageBands) || event.ageBands.some((band) => !AGE_BANDS.includes(band))) {
       errors.push(`${prefix}.ageBands has invalid values.`);
     }
+    if (
+      event.audiences !== undefined &&
+      (!Array.isArray(event.audiences) ||
+        event.audiences.length === 0 ||
+        event.audiences.some((a) => !VALID_AUDIENCES.has(a)))
+    ) {
+      errors.push(
+        `${prefix}.audiences must be a non-empty subset of ["kids","adults","all"].`,
+      );
+    }
     if (!Number.isFinite(event.lat) || !Number.isFinite(event.lon)) {
       errors.push(`${prefix} must have numeric coordinates.`);
     }
@@ -1661,8 +1711,13 @@ export function validateEventsDataset(dataset, options = {}) {
     if (cities.size > 0 && event.city && !cities.has(event.city)) {
       errors.push(`${prefix}.city '${event.city}' is outside configured coverage.`);
     }
-    if (hasAdultOnlySignal(`${event.title} ${event.description || ""}`)) {
-      errors.push(`${prefix} appears adult-only.`);
+    // Adult-only signal is only a rejection reason when the event isn't tagged
+    // for the adults audience. An adults-tagged event from event-sources-adults.json
+    // is *expected* to mention 21+, breweries, etc.
+    const audiences = Array.isArray(event.audiences) ? event.audiences : ["all"];
+    const adultIntent = audiences.includes("adults") && !audiences.includes("kids");
+    if (!adultIntent && hasAdultOnlySignal(`${event.title} ${event.description || ""}`)) {
+      errors.push(`${prefix} appears adult-only but is tagged for kids/all.`);
     }
   }
   return errors;

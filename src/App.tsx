@@ -135,7 +135,10 @@ export type Spot = {
   wikipedia?: string | null;
   googleRating?: number;
   googleRatingCount?: number;
+  audiences?: Audience[];
 };
+
+export type Audience = "kids" | "adults" | "all";
 
 export type FamilyEvent = {
   id: string;
@@ -152,6 +155,7 @@ export type FamilyEvent = {
   startDateTime?: string | null;
   endDateTime?: string | null;
   ageBands: AgeBand[];
+  audiences?: Audience[];
   cost: string;
   url: string;
   sourceName?: string;
@@ -435,6 +439,17 @@ const FEATURED_PLANS_URL = `${import.meta.env.BASE_URL}data/featured-plans.json`
 const EVENTS_URL = `${import.meta.env.BASE_URL}data/events.json`;
 const BOA_MUSEUMS_URL = `${import.meta.env.BASE_URL}data/boa-museums.json`;
 const CURATED_SPOTS_URL = `${import.meta.env.BASE_URL}data/curated-spots.json`;
+
+// FamHop is the kid-facing app. The shared dataset also contains adult-tagged
+// entries (breweries, 21+ events) so a sibling adults-audience frontend can
+// fetch the same JSON. Filter on read so adult-only items never leak in here.
+const APP_AUDIENCE: Audience = "kids";
+function audienceVisible(item: { audiences?: Audience[] } | null | undefined): boolean {
+  if (!item) return false;
+  const tags = Array.isArray(item.audiences) ? item.audiences : null;
+  if (!tags || tags.length === 0) return true; // legacy / un-tagged data is allowed
+  return tags.includes(APP_AUDIENCE) || tags.includes("all");
+}
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID ?? "";
 const GOOGLE_CONFIGURED = GOOGLE_CLIENT_ID.length > 0;
 
@@ -1084,10 +1099,12 @@ function App() {
         }
 
         const enrichmentEntries = enrichment?.entries ?? {};
-        const merged = dataset.spots.map((spot) => {
-          const extra = enrichmentEntries[spot.id];
-          return extra ? { ...spot, ...extra } : spot;
-        });
+        const merged = dataset.spots
+          .filter(audienceVisible)
+          .map((spot) => {
+            const extra = enrichmentEntries[spot.id];
+            return extra ? { ...spot, ...extra } : spot;
+          });
         setRemoteSpots(merged);
         setDataMeta({
           generatedAt: dataset.generatedAt,
@@ -1121,7 +1138,9 @@ function App() {
       const adminPayload = await fetchAdminEvents();
       if (!active) return;
       if (adminPayload && adminPayload.events.length > 0) {
-        setEvents(adminPayload.events as FamilyEvent[]);
+        setEvents(
+          (adminPayload.events as FamilyEvent[]).filter(audienceVisible),
+        );
         return;
       }
       try {
@@ -1129,7 +1148,9 @@ function App() {
         if (!response.ok) return;
         const dataset = (await response.json()) as EventsDataset;
         if (!active) return;
-        if (Array.isArray(dataset.events)) setEvents(dataset.events);
+        if (Array.isArray(dataset.events)) {
+          setEvents(dataset.events.filter(audienceVisible));
+        }
       } catch {
         // Events are optional; failure is non-fatal.
       }

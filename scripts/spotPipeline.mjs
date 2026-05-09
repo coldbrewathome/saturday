@@ -731,10 +731,28 @@ export function normalizeElement(element, generatedAt = new Date().toISOString()
     dogsAllowed: features.dogsAllowed,
     kidsFriendly: features.kidsFriendly,
     parkingNearby: features.parkingNearby,
+    audiences: deriveSpotAudiences(category, tags),
     dataSource: "OpenStreetMap",
     updatedAt: generatedAt,
     friendScore: score,
   };
+}
+
+// Decide which audience(s) a spot serves. The current FamHop OSM ingest
+// already excludes nightlife — so default everything to ["all"]. The hooks
+// below let the future adults-only ingest tag bars/breweries/late-night
+// venues with ["adults"] without round-tripping through ML.
+export function deriveSpotAudiences(category, tags = {}) {
+  if (
+    tags.amenity === "bar" ||
+    tags.amenity === "pub" ||
+    tags.amenity === "nightclub" ||
+    tags.craft === "brewery" ||
+    tags.shop === "alcohol"
+  ) {
+    return ["adults"];
+  }
+  return ["all"];
 }
 
 export function buildNote(category, tags = {}, _openingHours = "", coords) {

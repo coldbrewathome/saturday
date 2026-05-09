@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "note": "Adult-audience event sources (breweries, comedy clubs, music venues, 21+ festivals, brewery calendars, etc). Every event from a source listed here is automatically tagged audiences: ['adults']. Keep kid-facing libraries / museums / family farms in event-sources.json. Source schema is identical to event-sources.json — see scripts/eventPipeline.mjs.",
+  "defaults": {
+    "windowDays": 30,
+    "audiences": ["adults"]
+  },
+  "coverage": {
+    "cities": [
+      "San Francisco",
+      "Oakland",
+      "Berkeley",
+      "Alameda",
+      "Emeryville",
+      "Richmond",
+      "Walnut Creek",
+      "Concord",
+      "Pleasanton",
+      "Livermore",
+      "San Jose",
+      "Santa Clara",
+      "Sunnyvale",
+      "Mountain View",
+      "Palo Alto",
+      "Redwood City",
+      "San Mateo",
+      "Burlingame",
+      "Half Moon Bay",
+      "Marin",
+      "San Rafael",
+      "Petaluma",
+      "Santa Rosa"
+    ]
+  },
+  "sources": []
+}
