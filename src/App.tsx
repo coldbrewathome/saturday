@@ -1753,6 +1753,29 @@ function App() {
     }
     clearSession();
     setSession(null);
+    // Wipe per-user data so the browser becomes a fresh guest after sign-out.
+    // The next sign-in will rehydrate from the server.
+    setSavedIds([]);
+    setSavedEventIds([]);
+    setVisitedIds([]);
+    setCustomSpots([]);
+    setPlans([]);
+    setActivePlanId(null);
+    setPreferences([]);
+    for (const key of [
+      "saturday.savedSpots",
+      "saturday.savedEvents",
+      "saturday.visitedSpots",
+      "saturday.customSpots",
+      "saturday.plans",
+      "saturday.preferences",
+    ]) {
+      try {
+        window.localStorage.removeItem(key);
+      } catch {
+        // ignore quota / privacy errors
+      }
+    }
   }
 
   useEffect(() => {
@@ -2417,27 +2440,23 @@ function App() {
 
   function moveItemInPlan(
     planId: string,
+    visibleOrder: PlanItemRef[],
     item: PlanItemRef,
     delta: number,
   ) {
+    // Operate on the order the user actually sees on screen, not on plan
+    // fields. Legacy plans without itemOrder still render via activePlanItems,
+    // which date-sorts events; if we recomputed the order here from plan.eventIds
+    // (insertion order), the swap targeted the wrong slot and looked broken.
     setPlans((current) =>
       current.map((plan) => {
         if (plan.id !== planId) return plan;
-        const order =
-          plan.itemOrder ??
-          [
-            ...plan.stopIds.map((sid) => ({ kind: "spot" as const, id: sid })),
-            ...(plan.eventIds ?? []).map((eid) => ({
-              kind: "event" as const,
-              id: eid,
-            })),
-          ];
-        const idx = order.findIndex(
+        const idx = visibleOrder.findIndex(
           (it) => it.kind === item.kind && it.id === item.id,
         );
         const swap = idx + delta;
-        if (idx < 0 || swap < 0 || swap >= order.length) return plan;
-        const next = [...order];
+        if (idx < 0 || swap < 0 || swap >= visibleOrder.length) return plan;
+        const next = [...visibleOrder];
         [next[idx], next[swap]] = [next[swap], next[idx]];
         return { ...plan, itemOrder: next };
       }),
@@ -4522,8 +4541,15 @@ function App() {
                 </p>
               ) : (
                 <ol className="plan-stops">
-                  {activePlanItems.map((item, index) => {
-                    const isLast = index === activePlanItems.length - 1;
+                  {activePlanItems.map((item, index, arr) => {
+                    const isLast = index === arr.length - 1;
+                    // Move-up/down buttons swap within the order the user
+                    // actually sees, not within plan.stopIds/eventIds — so
+                    // legacy plans without itemOrder behave correctly too.
+                    const visibleOrder: PlanItemRef[] = arr.map((it) => ({
+                      kind: it.kind,
+                      id: it.id,
+                    }));
                     if (item.kind === "spot") {
                       const spot = item.spot;
                       const aiReason = activePlan.picks?.find(
@@ -4557,6 +4583,7 @@ function App() {
                               onClick={() =>
                                 moveItemInPlan(
                                   activePlan.id,
+                                  visibleOrder,
                                   { kind: "spot", id: spot.id },
                                   -1,
                                 )
@@ -4570,6 +4597,7 @@ function App() {
                               onClick={() =>
                                 moveItemInPlan(
                                   activePlan.id,
+                                  visibleOrder,
                                   { kind: "spot", id: spot.id },
                                   1,
                                 )
@@ -4639,6 +4667,7 @@ function App() {
                             onClick={() =>
                               moveItemInPlan(
                                 activePlan.id,
+                                visibleOrder,
                                 { kind: "event", id: event.id },
                                 -1,
                               )
@@ -4652,6 +4681,7 @@ function App() {
                             onClick={() =>
                               moveItemInPlan(
                                 activePlan.id,
+                                visibleOrder,
                                 { kind: "event", id: event.id },
                                 1,
                               )
@@ -4676,14 +4706,24 @@ function App() {
 
               <div className="plan-add-row">
                 <select
-                  value={addStopChoice}
-                  onChange={(event) => setAddStopChoice(event.target.value)}
+                  value=""
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (!value) return;
+                    if (value.startsWith("event:")) {
+                      addEventToPlan(activePlan.id, value.slice(6));
+                    } else if (value.startsWith("spot:")) {
+                      addStopToPlan(activePlan.id, value.slice(5));
+                    }
+                    setAddStopChoice("");
+                    e.target.value = "";
+                  }}
                 >
                   <option value="">
                     {addableSavedSpots.length === 0 &&
                     addableSavedEvents.length === 0
                       ? "No saved items left to add"
-                      : "Add place or event from saved…"}
+                      : "Pick a saved place or event to add…"}
                   </option>
                   {addableSavedSpots.length > 0 && (
                     <optgroup label="Places">
@@ -4713,25 +4753,6 @@ function App() {
                     </optgroup>
                   )}
                 </select>
-                <button
-                  className="primary-button"
-                  disabled={!addStopChoice}
-                  onClick={() => {
-                    if (!addStopChoice) return;
-                    if (addStopChoice.startsWith("event:")) {
-                      addEventToPlan(activePlan.id, addStopChoice.slice(6));
-                    } else if (addStopChoice.startsWith("spot:")) {
-                      addStopToPlan(activePlan.id, addStopChoice.slice(5));
-                    } else {
-                      // Backwards compat: legacy values were bare spot ids.
-                      addStopToPlan(activePlan.id, addStopChoice);
-                    }
-                    setAddStopChoice("");
-                  }}
-                >
-                  <Plus aria-hidden="true" />
-                  Add
-                </button>
               </div>
 
               <div className="plan-actions">
