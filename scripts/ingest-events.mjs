@@ -12,6 +12,8 @@ import {
 
 const registryPath = process.env.EVENT_SOURCES || path.join("data", "event-sources.json");
 const templatePath = process.env.EVENT_TEMPLATE_INPUT || path.join("data", "event-templates.json");
+const manualEventsPath =
+  process.env.EVENT_MANUAL_INPUT || path.join("data", "manual-events.json");
 const outputPath = process.env.EVENT_OUTPUT || path.join("public", "data", "events.json");
 const reportPath =
   process.env.EVENT_REPORT_OUTPUT || path.join("public", "data", "event-build-report.json");
@@ -301,13 +303,60 @@ function filterToPlanningWindow(events, generatedAt, windowDays) {
   });
 }
 
+async function readJsonOrEmpty(filePath) {
+  try {
+    return await readJson(filePath);
+  } catch (err) {
+    if (err && err.code === "ENOENT") return null;
+    throw err;
+  }
+}
+
 async function main() {
   const registry = await readJson(registryPath);
   const templateDataset = await readJson(templatePath);
   const templates = templateMap(templateDataset);
+  const manualDataset = await readJsonOrEmpty(manualEventsPath);
   const generatedAt = new Date().toISOString();
   const allEvents = [];
   const sourceReports = [];
+
+  // Hand-entered one-off events (manual-events.json). Filtered to the
+  // planning window so a stale entry doesn't stick around forever.
+  if (manualDataset?.events?.length) {
+    const windowDays = registry.defaults?.windowDays || 45;
+    const inWindow = filterToPlanningWindow(
+      manualDataset.events,
+      generatedAt,
+      windowDays,
+    );
+    let manualCount = 0;
+    for (const event of inWindow) {
+      allEvents.push({
+        ...event,
+        sourceId: event.sourceId || "manual",
+        sourceName: event.sourceName || "Manual entry",
+        sourceUrl: event.sourceUrl || event.url,
+        sourceMode: event.sourceMode || "manual",
+        extractionMethod: event.extractionMethod || "manual",
+        fetchedAt: generatedAt,
+      });
+      manualCount += 1;
+    }
+    sourceReports.push({
+      id: "manual",
+      name: "Manual entries",
+      url: manualEventsPath,
+      sourceType: "manual",
+      city: null,
+      category: null,
+      status: "ok",
+      liveEvents: manualCount,
+      fallbackEvents: 0,
+      eventCount: manualCount,
+      fetches: [],
+    });
+  }
 
   for (const source of registry.sources || []) {
     if (source.enabled === false && source.sourceType !== "ticketmaster") {

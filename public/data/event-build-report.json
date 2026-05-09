@@ -1,14 +1,27 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-09T16:47:40.652Z",
+  "generatedAt": "2026-05-09T17:28:36.625Z",
   "registryPath": "data/event-sources.json",
   "outputPath": "public/data/events.json",
-  "eventCount": 597,
-  "sourceCount": 78,
-  "liveEventCount": 473,
+  "eventCount": 598,
+  "sourceCount": 79,
+  "liveEventCount": 474,
   "fallbackEventCount": 124,
   "errors": [],
   "sources": [
+    {
+      "id": "manual",
+      "name": "Manual entries",
+      "url": "data/manual-events.json",
+      "sourceType": "manual",
+      "city": null,
+      "category": null,
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": []
+    },
     {
       "id": "sfpl",
       "name": "San Francisco Public Library",
