@@ -1407,6 +1407,19 @@ function App() {
               setSignInError((error as Error).message);
             }
           },
+          // Keep the user on the page during sign-in. Without this, GIS can
+          // fall back to a full-page redirect on small/mobile screens (iOS
+          // Chrome in particular) and the redirect-back is unreliable.
+          ux_mode: "popup",
+          // Use FedCM where the browser supports it — it's the modern,
+          // first-party flow that works without third-party cookies.
+          use_fedcm_for_button: true,
+          use_fedcm_for_prompt: true,
+          // ITP / cross-site tracking protection compatibility for Safari
+          // and iOS browsers.
+          itp_support: true,
+          auto_select: false,
+          cancel_on_tap_outside: false,
         });
         if (signInButtonRef.current) {
           signInButtonRef.current.innerHTML = "";

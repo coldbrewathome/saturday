@@ -7,6 +7,13 @@ declare global {
             client_id: string;
             callback: (response: { credential: string }) => void;
             auto_select?: boolean;
+            ux_mode?: "popup" | "redirect";
+            login_uri?: string;
+            use_fedcm_for_button?: boolean;
+            use_fedcm_for_prompt?: boolean;
+            itp_support?: boolean;
+            cancel_on_tap_outside?: boolean;
+            context?: "signin" | "signup" | "use";
           }) => void;
           renderButton: (
             element: HTMLElement,
