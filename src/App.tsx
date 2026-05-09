@@ -2062,8 +2062,23 @@ function App() {
     const now = Date.now();
     const horizon = now + 14 * 24 * 60 * 60 * 1000;
     const weekendHorizon = now + 7 * 24 * 60 * 60 * 1000;
+    const normalizedQuery = query.trim().toLowerCase();
     return events.filter((event) => {
       if (ageBand !== "any" && !event.ageBands.includes(ageBand)) return false;
+      if (normalizedQuery) {
+        const haystack = [
+          event.title,
+          event.venue,
+          event.city,
+          event.neighborhood,
+          event.category,
+          event.description,
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+        if (!haystack.includes(normalizedQuery)) return false;
+      }
       if (event.startDateTime) {
         const t = new Date(event.startDateTime).getTime();
         if (Number.isFinite(t)) {
@@ -2080,7 +2095,7 @@ function App() {
       }
       return true;
     });
-  }, [events, ageBand, weekendOnly]);
+  }, [events, ageBand, weekendOnly, query]);
 
   const highlightedEventIds = useMemo(() => {
     const ids = new Set<string>();
@@ -4998,6 +5013,38 @@ function App() {
           </form>
         </div>
       )}
+
+      <footer className="app-footer">
+        <div className="app-footer-inner">
+          <div className="app-footer-brand">
+            <strong>FamHop</strong>
+            <span>Plan a great day with the kids.</span>
+          </div>
+          <div className="app-footer-meta">
+            <span>© {new Date().getFullYear()} FamHop</span>
+            <span aria-hidden="true">·</span>
+            <span>
+              Map &amp; place data ©{" "}
+              <a
+                href="https://www.openstreetmap.org/copyright"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                OpenStreetMap
+              </a>{" "}
+              contributors, licensed under{" "}
+              <a
+                href="https://opendatacommons.org/licenses/odbl/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                ODbL
+              </a>
+              .
+            </span>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
