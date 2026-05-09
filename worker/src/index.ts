@@ -92,15 +92,22 @@ function json(
   });
 }
 
-function tally(stops: StopSummary[], votes: VotesRecord): Tallies {
+function tally(
+  stops: StopSummary[],
+  events: EventSummary[],
+  votes: VotesRecord,
+): Tallies {
   const result: Tallies = {};
   for (const stop of stops) {
     result[stop.id] = { up: 0, down: 0, meh: 0 };
   }
+  for (const event of events) {
+    result[event.id] = { up: 0, down: 0, meh: 0 };
+  }
   for (const voter of Object.values(votes)) {
-    for (const [stopId, choice] of Object.entries(voter)) {
-      if (result[stopId]) {
-        result[stopId][choice] += 1;
+    for (const [itemId, choice] of Object.entries(voter)) {
+      if (result[itemId]) {
+        result[itemId][choice] += 1;
       }
     }
   }
@@ -1021,7 +1028,7 @@ async function getPoll(
       title: record.title,
       stops: record.stops,
       events: record.events ?? [],
-      tallies: tally(record.stops, votes),
+      tallies: tally(record.stops, record.events ?? [], votes),
       voterCount: Object.keys(votes).length,
       createdAt: record.createdAt,
     },
@@ -1054,11 +1061,14 @@ async function recordVote(
   if (!data.votes || typeof data.votes !== "object") {
     return json({ error: "votes required" }, { status: 400 }, cors);
   }
-  const validStopIds = new Set(record.stops.map((s) => s.id));
+  const validIds = new Set([
+    ...record.stops.map((s) => s.id),
+    ...(record.events ?? []).map((e) => e.id),
+  ]);
   const cleaned: Record<string, Vote> = {};
-  for (const [stopId, choice] of Object.entries(data.votes as Record<string, unknown>)) {
-    if (validStopIds.has(stopId) && isVote(choice)) {
-      cleaned[stopId] = choice;
+  for (const [itemId, choice] of Object.entries(data.votes as Record<string, unknown>)) {
+    if (validIds.has(itemId) && isVote(choice)) {
+      cleaned[itemId] = choice;
     }
   }
   const votesRaw = (await env.POLLS.get(`votes:${pollId}`)) ?? "{}";
@@ -1068,7 +1078,10 @@ async function recordVote(
     expirationTtl: 60 * 60 * 24 * 30,
   });
   return json(
-    { tallies: tally(record.stops, votes), voterCount: Object.keys(votes).length },
+    {
+      tallies: tally(record.stops, record.events ?? [], votes),
+      voterCount: Object.keys(votes).length,
+    },
     { status: 200 },
     cors,
   );
