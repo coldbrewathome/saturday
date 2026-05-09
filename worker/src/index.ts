@@ -746,7 +746,7 @@ async function getWeather(
     `&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max` +
     `&timezone=auto&forecast_days=10&temperature_unit=fahrenheit`;
   const response = await fetch(apiUrl, {
-    headers: { "User-Agent": "weekend-with-kids/0.1" },
+    headers: { "User-Agent": "famhop/0.1" },
   });
   if (!response.ok) {
     return json({ error: "weather lookup failed" }, { status: 502 }, cors);
