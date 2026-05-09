@@ -1199,15 +1199,51 @@ h3 {
   border: 1px solid var(--line);
   border-radius: 8px;
   display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
   font-weight: 800;
-  gap: 4px;
-  padding: 12px;
-  text-align: left;
+  padding: 4px 6px 4px 12px;
 }
 
 .plan-list-item.active {
   background: #e4f0e7;
   border-color: var(--accent);
+}
+
+.plan-list-item-open {
+  background: transparent;
+  border: 0;
+  display: grid;
+  gap: 4px;
+  padding: 8px 0;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  font-weight: 800;
+  min-width: 0;
+}
+
+.plan-list-item-delete {
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.plan-list-item-delete:hover {
+  background: rgba(184, 92, 56, 0.12);
+  color: var(--coral);
+}
+
+.plan-list-item-delete svg {
+  width: 16px;
+  height: 16px;
 }
 
 .plan-list-item span {

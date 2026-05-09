@@ -3868,20 +3868,43 @@ function App() {
             </p>
           ) : (
             <div className="plan-list">
-              {plans.map((plan) => (
-                <button
-                  key={plan.id}
-                  className={
-                    plan.id === activePlanId ? "plan-list-item active" : "plan-list-item"
-                  }
-                  onClick={() => setActivePlanId(plan.id)}
-                >
-                  <strong>{plan.name || "Untitled plan"}</strong>
-                  <span>
-                    {plan.stopIds.length} stop{plan.stopIds.length === 1 ? "" : "s"}
-                  </span>
-                </button>
-              ))}
+              {plans.map((plan) => {
+                const isActive = plan.id === activePlanId;
+                return (
+                  <div
+                    key={plan.id}
+                    className={`plan-list-item ${isActive ? "active" : ""}`}
+                  >
+                    <button
+                      className="plan-list-item-open"
+                      onClick={() => setActivePlanId(plan.id)}
+                    >
+                      <strong>{plan.name || "Untitled plan"}</strong>
+                      <span>
+                        {plan.stopIds.length} stop
+                        {plan.stopIds.length === 1 ? "" : "s"}
+                      </span>
+                    </button>
+                    <button
+                      className="plan-list-item-delete"
+                      title="Delete plan"
+                      aria-label={`Delete ${plan.name || "untitled plan"}`}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        if (
+                          window.confirm(
+                            `Delete "${plan.name || "Untitled plan"}"? This can't be undone.`,
+                          )
+                        ) {
+                          deletePlan(plan.id);
+                        }
+                      }}
+                    >
+                      <Trash2 aria-hidden="true" />
+                    </button>
+                  </div>
+                );
+              })}
             </div>
           )}
         </aside>
