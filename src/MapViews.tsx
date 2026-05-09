@@ -55,7 +55,12 @@ export function SpotMap({
   const mapRef = useRef<LeafletMap | null>(null);
   const layerRef = useRef<LayerGroup | null>(null);
   const userLayerRef = useRef<LayerGroup | null>(null);
-  const recenteredKeyRef = useRef<string | null>(null);
+  // `undefined` until the first userLocation effect runs. After that, holds
+  // either null or the coords seen at mount, so subsequent updates know they
+  // are user-initiated and should recenter.
+  const seenInitialLocationRef = useRef<
+    { lat: number; lon: number } | null | undefined
+  >(undefined);
   // Stable reference to the latest onSelect — re-binding avoids stale closures
   // without forcing the marker layer to rebuild every time the parent re-renders.
   const onSelectRef = useRef(onSelect);
@@ -150,7 +155,14 @@ export function SpotMap({
     const layer = userLayerRef.current;
     if (!map || !layer) return;
     layer.clearLayers();
-    if (!userLocation) return;
+
+    const isFirstRun = seenInitialLocationRef.current === undefined;
+
+    if (!userLocation) {
+      if (isFirstRun) seenInitialLocationRef.current = null;
+      return;
+    }
+
     L.circleMarker([userLocation.lat, userLocation.lon], {
       radius: 8,
       color: "#ffffff",
@@ -166,15 +178,16 @@ export function SpotMap({
       fillOpacity: 0.12,
     }).addTo(layer);
 
-    // Recenter only when the user explicitly requests it (i.e. when the
-    // location coordinates change), not when the map happens to mount with a
-    // pre-existing saved location — otherwise we'd yank a returning visitor's
-    // saved view.
-    const key = `${userLocation.lat.toFixed(5)},${userLocation.lon.toFixed(5)}`;
-    if (recenteredKeyRef.current !== null && recenteredKeyRef.current !== key) {
-      map.setView([userLocation.lat, userLocation.lon], 13, { animate: true });
+    if (isFirstRun) {
+      // Returning visitor with a stored location: draw the marker but don't
+      // yank their saved view.
+      seenInitialLocationRef.current = userLocation;
+      return;
     }
-    recenteredKeyRef.current = key;
+
+    // Any subsequent userLocation update is user-initiated (locate button),
+    // so recenter and zoom in.
+    map.setView([userLocation.lat, userLocation.lon], 13, { animate: true });
   }, [userLocation]);
 
   // Render markers. Re-runs on selection so the active pin gets restyled, but
@@ -250,11 +263,6 @@ export function SpotMap({
 
   function handleLocateClick() {
     if (!onRequestLocation) return;
-    if (userLocation && mapRef.current) {
-      mapRef.current.setView([userLocation.lat, userLocation.lon], 13, {
-        animate: true,
-      });
-    }
     onRequestLocation();
   }
 
