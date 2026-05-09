@@ -411,6 +411,7 @@ function eventToPlanningSpot(event: FamilyEvent, transitMinutes: number): Spot {
 
 const DATA_URL = `${import.meta.env.BASE_URL}data/bay-area-spots.json`;
 const ENRICHMENT_URL = `${import.meta.env.BASE_URL}data/bay-area-enrichment.json`;
+const FEATURED_PLANS_URL = `${import.meta.env.BASE_URL}data/featured-plans.json`;
 const EVENTS_URL = `${import.meta.env.BASE_URL}data/events.json`;
 const BOA_MUSEUMS_URL = `${import.meta.env.BASE_URL}data/boa-museums.json`;
 const CURATED_SPOTS_URL = `${import.meta.env.BASE_URL}data/curated-spots.json`;
@@ -1170,6 +1171,15 @@ function PlanMap({
   );
 }
 
+type FeaturedPlan = {
+  id: string;
+  name: string;
+  summary: string;
+  accent?: string;
+  stopIds: string[];
+  eventIds?: string[];
+};
+
 type AppRoute = {
   view: "home" | "browse" | "plans";
   planId: string | null;
@@ -1322,6 +1332,7 @@ function App() {
   const [curatedSpots, setCuratedSpots] = useState<Spot[]>([]);
   const [events, setEvents] = useState<FamilyEvent[]>([]);
   const [mapSelection, setMapSelection] = useState<MapSelection | null>(null);
+  const [featuredPlans, setFeaturedPlans] = useState<FeaturedPlan[]>([]);
   const [boaMuseums, setBoaMuseums] = useState<BoaMuseum[]>([]);
   const [weather, setWeather] = useState<WeatherForecast | null>(null);
   const [preferences, setPreferences] = useState<PlannerPreferenceId[]>(() => {
@@ -1501,6 +1512,22 @@ function App() {
       })
       .catch(() => {
         // Curated list is optional.
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    fetch(FEATURED_PLANS_URL)
+      .then((response) => (response.ok ? response.json() : Promise.reject()))
+      .then((dataset: { plans?: FeaturedPlan[] }) => {
+        if (!active) return;
+        if (Array.isArray(dataset.plans)) setFeaturedPlans(dataset.plans);
+      })
+      .catch(() => {
+        // Featured plans are optional.
       });
     return () => {
       active = false;
@@ -2288,6 +2315,42 @@ function App() {
     const next: Plan = {
       id,
       name: `Saved plan (${totalCount})`,
+      stopIds,
+      eventIds,
+      itemOrder: [
+        ...stopIds.map((sid) => ({ kind: "spot" as const, id: sid })),
+        ...eventIds.map((eid) => ({ kind: "event" as const, id: eid })),
+      ],
+      createdAt: new Date().toISOString(),
+      source: "manual",
+    };
+    setPlans((current) => [...current, next]);
+    setActivePlanId(id);
+    setView("plans");
+  }
+
+  function forkFeaturedPlan(featured: FeaturedPlan) {
+    // Resolve refs against current data; silently skip missing items rather
+    // than block the fork — featured-plans.json may reference ids that aren't
+    // in this build of the dataset.
+    const validStops = new Set(allSpots.map((s) => s.id));
+    const validEvents = new Set(events.map((e) => e.id));
+    const stopIds = featured.stopIds.filter((id) => validStops.has(id));
+    const eventIds = (featured.eventIds ?? []).filter((id) =>
+      validEvents.has(id),
+    );
+    if (stopIds.length === 0 && eventIds.length === 0) {
+      // Nothing to fork — let the user know via console; the rail UI also
+      // disables the button when this is the case.
+      console.warn(
+        `Featured plan ${featured.id} references no items present in the current dataset.`,
+      );
+      return;
+    }
+    const id = `plan-${Date.now()}`;
+    const next: Plan = {
+      id,
+      name: featured.name,
       stopIds,
       eventIds,
       itemOrder: [
@@ -3686,6 +3749,51 @@ function App() {
               <em className="filter-count">{activeFilterCount}</em>
             )}
           </button>
+          {featuredPlans.length > 0 && (
+            <section
+              className="featured-rail"
+              aria-label="Editor's picks — starter plans"
+            >
+              <div className="featured-rail-head">
+                <span className="featured-rail-eyebrow">Editor's picks</span>
+                <span className="featured-rail-sub">
+                  Tap a starter plan to fork it into your own.
+                </span>
+              </div>
+              <ul className="featured-rail-list">
+                {featuredPlans.map((featured) => {
+                  const accent = featured.accent || "park";
+                  return (
+                    <li
+                      key={featured.id}
+                      className={`featured-card accent-${accent}`}
+                    >
+                      <div className="featured-card-body">
+                        <strong>{featured.name}</strong>
+                        <span className="featured-card-summary">
+                          {featured.summary}
+                        </span>
+                        <span className="featured-card-meta">
+                          {featured.stopIds.length} place
+                          {featured.stopIds.length === 1 ? "" : "s"}
+                          {(featured.eventIds?.length ?? 0) > 0
+                            ? ` · ${featured.eventIds!.length} event${featured.eventIds!.length === 1 ? "" : "s"}`
+                            : ""}
+                        </span>
+                      </div>
+                      <button
+                        className="featured-card-use"
+                        onClick={() => forkFeaturedPlan(featured)}
+                      >
+                        <Plus aria-hidden="true" />
+                        Use plan
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          )}
           <div className="map-shell">
             <SpotMap
               spots={filteredSpots}
