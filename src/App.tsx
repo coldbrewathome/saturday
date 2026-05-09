@@ -1117,6 +1117,10 @@ function PlanMap({
     const layer = layerRef.current;
     if (!map || !layer) return;
     layer.clearLayers();
+    // Re-running for new data is also a good time to nudge Leaflet — covers
+    // the case where the parent container was 0×0 at mount (e.g. when the
+    // plan detail re-renders after coming back from /p/<pollId>).
+    requestAnimationFrame(() => map.invalidateSize());
     if (sequence.length === 0) {
       map.setView(bayAreaMapCenter, 10);
       return;
