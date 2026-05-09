@@ -2072,17 +2072,13 @@ function App() {
     };
     const matchAge = activePlan.vibe ? activePlan.vibe : null;
     const useAgeBand = ageBand;
-    const NEAR_RADIUS = 2.5;
-    const selectedEventIds = new Set(
-      activePlan.stopIds
-        .filter((id) => id.startsWith("event-"))
-        .map((id) => id.slice("event-".length)),
-    );
+    const NEAR_RADIUS = 4;
+    const alreadyInPlan = new Set(activePlan.eventIds ?? []);
     const seen = new Set<string>();
     const matches: Array<{ event: FamilyEvent; dist: number }> = [];
     for (const event of events) {
       if (seen.has(event.id)) continue;
-      if (selectedEventIds.has(event.id)) continue;
+      if (alreadyInPlan.has(event.id)) continue;
       if (!event.daysOfWeek.includes(targetDayOfWeek)) continue;
       if (
         useAgeBand !== "any" &&
@@ -2102,7 +2098,7 @@ function App() {
     }
     matches.sort((a, b) => a.dist - b.dist);
     void matchAge;
-    return matches.slice(0, 4).map((m) => m.event);
+    return matches.slice(0, 16).map((m) => m.event);
   }, [activePlan, activePlanStops, events, ageBand, targetDayOfWeek]);
 
   const planTotalTransit = useMemo(
@@ -2117,6 +2113,12 @@ function App() {
     const inPlan = new Set(activePlan.stopIds);
     return savedSpots.filter((spot) => !inPlan.has(spot.id));
   }, [activePlan, savedSpots]);
+
+  const addableSavedEvents = useMemo(() => {
+    if (!activePlan) return [] as FamilyEvent[];
+    const inPlan = new Set(activePlan.eventIds ?? []);
+    return savedEvents.filter((event) => !inPlan.has(event.id));
+  }, [activePlan, savedEvents]);
 
   function createPlan() {
     const id = `plan-${Date.now()}`;
@@ -4164,8 +4166,14 @@ function App() {
                                     month: "short",
                                     day: "numeric",
                                   })
-                                : dayWindowLabel(event.daysOfWeek)}{" "}
-                              · {event.timeWindow} · {event.venue}
+                                : dayWindowLabel(event.daysOfWeek)}
+                              {date
+                                ? ` · ${date.toLocaleTimeString(undefined, {
+                                    hour: "numeric",
+                                    minute: "2-digit",
+                                  })}`
+                                : ` · ${event.timeWindow}`}{" "}
+                              · {event.venue}
                               {event.cost ? ` · ${event.cost}` : ""}
                             </span>
                           </div>
@@ -4274,22 +4282,54 @@ function App() {
                   onChange={(event) => setAddStopChoice(event.target.value)}
                 >
                   <option value="">
-                    {addableSavedSpots.length === 0
-                      ? "No saved spots left to add"
-                      : "Add stop from saved…"}
+                    {addableSavedSpots.length === 0 &&
+                    addableSavedEvents.length === 0
+                      ? "No saved items left to add"
+                      : "Add place or event from saved…"}
                   </option>
-                  {addableSavedSpots.map((spot) => (
-                    <option key={spot.id} value={spot.id}>
-                      {spot.name} — {spot.neighborhood}
-                    </option>
-                  ))}
+                  {addableSavedSpots.length > 0 && (
+                    <optgroup label="Places">
+                      {addableSavedSpots.map((spot) => (
+                        <option key={spot.id} value={`spot:${spot.id}`}>
+                          {spot.name} — {spot.neighborhood}
+                        </option>
+                      ))}
+                    </optgroup>
+                  )}
+                  {addableSavedEvents.length > 0 && (
+                    <optgroup label="Events">
+                      {addableSavedEvents.map((event) => {
+                        const date = event.startDateTime
+                          ? new Date(event.startDateTime).toLocaleDateString(
+                              undefined,
+                              { month: "short", day: "numeric" },
+                            )
+                          : null;
+                        return (
+                          <option key={event.id} value={`event:${event.id}`}>
+                            {event.title}
+                            {date ? ` — ${date}` : ""}
+                          </option>
+                        );
+                      })}
+                    </optgroup>
+                  )}
                 </select>
                 <button
                   className="primary-button"
                   disabled={!addStopChoice}
-                  onClick={() =>
-                    addStopChoice && addStopToPlan(activePlan.id, addStopChoice)
-                  }
+                  onClick={() => {
+                    if (!addStopChoice) return;
+                    if (addStopChoice.startsWith("event:")) {
+                      addEventToPlan(activePlan.id, addStopChoice.slice(6));
+                    } else if (addStopChoice.startsWith("spot:")) {
+                      addStopToPlan(activePlan.id, addStopChoice.slice(5));
+                    } else {
+                      // Backwards compat: legacy values were bare spot ids.
+                      addStopToPlan(activePlan.id, addStopChoice);
+                    }
+                    setAddStopChoice("");
+                  }}
                 >
                   <Plus aria-hidden="true" />
                   Add
@@ -4305,9 +4345,11 @@ function App() {
                     shareState.status === "sharing"
                   }
                   title={
-                    API_CONFIGURED
-                      ? "Share this plan for voting"
-                      : "Backend not deployed in this preview"
+                    !API_CONFIGURED
+                      ? "Backend not deployed in this preview"
+                      : activePlanStops.length === 0
+                        ? "Add at least one place — events aren't included in shared polls yet"
+                        : "Share this plan for voting (places only — events stay local)"
                   }
                   onClick={sharePlan}
                 >
@@ -4349,20 +4391,22 @@ function App() {
               )}
 
               {planNearbyEvents.length > 0 && (
-                <section className="plan-events" aria-label="Events near this plan">
+                <section className="plan-nearby" aria-label="Events near this plan">
                   <h3>While you're nearby this weekend</h3>
                   <p className="plan-events-sub">
                     {planNearbyEvents.length} family program
-                    {planNearbyEvents.length === 1 ? "" : "s"} within 2.5 mi of a
+                    {planNearbyEvents.length === 1 ? "" : "s"} within 4 mi of a
                     plan stop. Times vary — tap through to confirm.
                   </p>
-                  <ul className="plan-events-list">
+                  <ul
+                    className={`plan-events-list ${planNearbyEvents.length > 4 ? "is-scrollable" : ""}`}
+                  >
                     {planNearbyEvents.map((event) => (
                       <li
                         key={event.id}
                         className={`home-event-card cat-${event.category.toLowerCase()}`}
                       >
-                        <a href={event.url} target="_blank" rel="noreferrer">
+                        <div className="home-event-body">
                           <span className="event-cat-chip">{event.category}</span>
                           <strong>{event.title}</strong>
                           <span className="home-event-meta">
@@ -4375,7 +4419,26 @@ function App() {
                           <span className="home-event-venue">
                             {event.venue} · {event.city}
                           </span>
-                        </a>
+                        </div>
+                        <div className="home-event-actions">
+                          <button
+                            className="home-event-add"
+                            title={`Add to "${activePlan.name || "active plan"}"`}
+                            onClick={() => addEventToPlan(activePlan.id, event.id)}
+                          >
+                            <Plus aria-hidden="true" />
+                            Add
+                          </button>
+                          <a
+                            className="home-event-open"
+                            href={event.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            title="Open event page"
+                          >
+                            <ExternalLink aria-hidden="true" />
+                          </a>
+                        </div>
                       </li>
                     ))}
                   </ul>
