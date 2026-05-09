@@ -3166,8 +3166,8 @@ function App() {
     <div className="app-shell">
       <header className="topbar">
         <div>
-          <p className="eyebrow">Family weekend</p>
-          <h1>Weekend With Kids</h1>
+          <p className="eyebrow">Plan · Hop · Repeat.</p>
+          <h1>FamHop</h1>
         </div>
         <div className="data-banner" title={dataMeta.sourceName}>
           <Database aria-hidden="true" />

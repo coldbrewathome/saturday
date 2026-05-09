@@ -1,6 +1,6 @@
 :root {
-  color: #17211d;
-  background: #f6f7f4;
+  color: #1f2937;
+  background: #faf9f7;
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
@@ -8,15 +8,15 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   --surface: #ffffff;
-  --surface-strong: #f0f4ee;
-  --line: #dce4db;
-  --muted: #65746b;
-  --ink: #17211d;
-  --accent: #276749;
-  --accent-strong: #185337;
+  --surface-strong: #fff6ee;
+  --line: #ede2d6;
+  --muted: #6b7280;
+  --ink: #1f2937;
+  --accent: #ff6b5b;
+  --accent-strong: #e04e3c;
   --blue: #335c81;
   --coral: #b85c38;
-  --shadow: 0 18px 45px rgba(31, 48, 39, 0.12);
+  --shadow: 0 18px 45px rgba(31, 27, 23, 0.10);
 }
 
 * {
@@ -295,7 +295,7 @@ h3 {
 }
 
 .segmented button.active {
-  background: #e4f0e7;
+  background: #fdece7;
   border-color: var(--accent);
   color: var(--accent-strong);
 }
@@ -481,7 +481,7 @@ h3 {
 }
 
 .spot-note {
-  color: #405047;
+  color: #4b5563;
   display: -webkit-box;
   line-height: 1.35;
   margin: 8px 0;
@@ -501,7 +501,7 @@ h3 {
   align-items: center;
   background: var(--surface-strong);
   border-radius: 8px;
-  color: #334238;
+  color: #374151;
   display: flex;
   font-size: 0.78rem;
   font-weight: 800;
@@ -528,7 +528,7 @@ h3 {
 .tag-row span {
   border: 1px solid var(--line);
   border-radius: 999px;
-  color: #45544b;
+  color: #4b5563;
   font-size: 0.72rem;
   font-weight: 800;
   padding: 4px 8px;
@@ -621,7 +621,7 @@ h3 {
 }
 
 .featured-card-summary {
-  color: #45544b;
+  color: #4b5563;
   display: -webkit-box;
   font-size: 0.82rem;
   -webkit-line-clamp: 2;
@@ -718,7 +718,7 @@ h3 {
   gap: 12px;
   font-size: 0.74rem;
   font-weight: 800;
-  color: #45544b;
+  color: #4b5563;
   box-shadow: 0 4px 12px rgba(31, 48, 39, 0.12);
 }
 
@@ -820,7 +820,7 @@ h3 {
 }
 
 .sheet-note {
-  color: #405047;
+  color: #4b5563;
   font-size: 0.88rem;
   line-height: 1.35;
   margin: 0 0 8px;
@@ -839,7 +839,7 @@ h3 {
 
 .sheet-meta span {
   background: var(--surface-strong);
-  color: #334238;
+  color: #374151;
   border-radius: 8px;
   padding: 3px 8px;
   font-size: 0.76rem;
@@ -878,7 +878,7 @@ h3 {
 
 .sheet-action.is-active {
   border-color: var(--accent);
-  background: #e4f0e7;
+  background: #fdece7;
   color: var(--accent-strong);
 }
 
@@ -1008,7 +1008,7 @@ h3 {
 }
 
 .planner-brief p {
-  color: #405047;
+  color: #4b5563;
   line-height: 1.45;
   margin-bottom: 0;
 }
@@ -1028,7 +1028,7 @@ h3 {
 }
 
 .planner-list li {
-  color: #405047;
+  color: #4b5563;
   font-size: 0.86rem;
   line-height: 1.45;
 }
@@ -1179,7 +1179,7 @@ h3 {
 }
 
 .view-tabs button.active {
-  background: #e4f0e7;
+  background: #fdece7;
   border-color: var(--accent);
   color: var(--accent-strong);
 }
@@ -1321,7 +1321,7 @@ h3 {
 }
 
 .plan-list-item.active {
-  background: #e4f0e7;
+  background: #fdece7;
   border-color: var(--accent);
 }
 
@@ -1681,7 +1681,7 @@ h3 {
 }
 
 .geo-button.active {
-  background: #e4f0e7;
+  background: #fdece7;
   border-color: var(--accent);
   color: var(--accent-strong);
 }
@@ -1940,7 +1940,7 @@ h3 {
 }
 
 .pref-chip.active {
-  background: #e4f0e7;
+  background: #fdece7;
   border-color: var(--accent);
   color: var(--accent-strong);
 }
@@ -2005,7 +2005,7 @@ h3 {
 }
 
 .home-event-card a:hover {
-  background: #e4f0e7;
+  background: #fdece7;
 }
 
 /* Plan-detail "While you're nearby" — horizontally scrolling rail of cards */
@@ -2055,7 +2055,7 @@ h3 {
 
 .plan-nearby-card.cat-park .event-cat-chip,
 .plan-nearby-card.cat-zoo .event-cat-chip {
-  background: #e4f0e7;
+  background: #fdece7;
   color: var(--accent-strong);
 }
 
@@ -2199,7 +2199,7 @@ h3 {
 
 .home-event-card.cat-zoo .event-cat-chip,
 .home-event-card.cat-park .event-cat-chip {
-  background: #e4f0e7;
+  background: #fdece7;
   border-color: var(--accent);
   color: var(--accent-strong);
 }
@@ -2320,7 +2320,7 @@ h3 {
 }
 
 .secondary-button:hover:not(:disabled) {
-  background: #e4f0e7;
+  background: #fdece7;
 }
 
 .secondary-button.wide {
@@ -2354,7 +2354,7 @@ h3 {
 
 .badge-ai {
   align-items: center;
-  background: #e4f0e7 !important;
+  background: #fdece7 !important;
   border-color: var(--accent) !important;
   color: var(--accent-strong) !important;
   display: inline-flex;
@@ -2370,7 +2370,7 @@ h3 {
   background: var(--surface-strong);
   border-left: 3px solid var(--accent);
   border-radius: 4px;
-  color: #334238;
+  color: #374151;
   font-size: 0.92rem;
   line-height: 1.5;
   margin: 0 0 12px;
@@ -2378,7 +2378,7 @@ h3 {
 }
 
 .plan-rationale {
-  color: #45544b;
+  color: #4b5563;
   display: grid;
   font-size: 0.86rem;
   gap: 6px;
@@ -2444,7 +2444,7 @@ h3 {
 }
 
 .sync-pill.sync-synced {
-  background: #e4f0e7;
+  background: #fdece7;
   color: var(--accent-strong);
 }
 
@@ -2706,7 +2706,7 @@ h3 {
 }
 
 .vote-button.active {
-  background: #e4f0e7;
+  background: #fdece7;
   border-color: var(--accent);
   color: var(--accent-strong);
 }
