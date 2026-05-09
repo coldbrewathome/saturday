@@ -1097,7 +1097,15 @@ function PlanMap({
     const layer = L.layerGroup().addTo(map);
     mapRef.current = map;
     layerRef.current = layer;
+    // When the user navigates back from PollView, the plan-detail layout may
+    // not be measured yet at mount time, so Leaflet caches a 0×0 canvas and
+    // the map renders blank. Invalidate on next frame and observe further
+    // resizes so the canvas stays in sync with the container.
+    requestAnimationFrame(() => map.invalidateSize());
+    const resizeObserver = new ResizeObserver(() => map.invalidateSize());
+    resizeObserver.observe(containerRef.current);
     return () => {
+      resizeObserver.disconnect();
       map.remove();
       mapRef.current = null;
       layerRef.current = null;
