@@ -38,6 +38,12 @@ function templateMap(dataset) {
 }
 
 async function fetchSource(source, registry) {
+  if (source.sourceType === "sfplEvents") {
+    return fetchSfplEvents(source, registry);
+  }
+  if (source.sourceType === "communicoEvents") {
+    return fetchCommunicoEvents(source, registry);
+  }
   if (source.sourceType === "drupalViewsAjax") {
     return fetchDrupalViewsAjax(source, registry);
   }
@@ -65,6 +71,120 @@ async function fetchSource(source, registry) {
   return fetchUrl(source.url, registry.defaults?.userAgent, {
     browserHeaders: source.requiresBrowserHeaders === true,
   });
+}
+
+function dateParam(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+async function fetchSfplEvents(source, registry) {
+  const audienceIds = Array.isArray(source.audienceIds) && source.audienceIds.length > 0
+    ? source.audienceIds
+    : [1082, 26, 27, 28, 29, 30];
+  const itemsPerPage = Number(source.itemsPerPage || 50);
+  const maxPages = Number(source.maxPages || 12);
+  const now = new Date();
+  const end = new Date(now.getTime() + Number(registry.defaults?.windowDays || 45) * 86400000);
+  const chunks = [];
+  let fetchedPages = 0;
+
+  for (const audienceId of audienceIds) {
+    for (let page = 0; page < maxPages; page += 1) {
+      const url = new URL(source.url);
+      url.searchParams.set("items_per_page", String(itemsPerPage));
+      url.searchParams.set("field_event_audience_target_id", String(audienceId));
+      url.searchParams.set("date-from", dateParam(now));
+      url.searchParams.set("date-to", dateParam(end));
+      url.searchParams.set("page", String(page));
+      const payload = await fetchUrl(url.toString(), registry.defaults?.userAgent);
+      if (payload.status !== "ok") return payload;
+      const text = payload.text || "";
+      if (!/\bevent--teaser\b/i.test(text)) break;
+      chunks.push(`\n<!-- sfpl audience:${audienceId} page:${page} url:${url.toString()} -->\n${text}`);
+      fetchedPages += 1;
+
+      const resultMatch = text.match(/\b\d+\s+-\s+\d+\s+of\s+(\d+)\s+results\b/i);
+      const totalResults = Number(resultMatch?.[1] || 0);
+      if (!totalResults || (page + 1) * itemsPerPage >= totalResults) break;
+    }
+  }
+
+  return {
+    status: "ok",
+    httpStatus: 200,
+    contentType: `text/html; source=sfpl-events; pages=${fetchedPages}`,
+    text: chunks.join("\n"),
+  };
+}
+
+async function fetchCommunicoEvents(source, registry) {
+  let client = source.communicoClient;
+  if (!client) {
+    try {
+      client = new URL(source.url).hostname.split(".")[0];
+    } catch {
+      client = "";
+    }
+  }
+  if (!client) {
+    return { status: "fetch-error", reason: "missing Communico client" };
+  }
+
+  const now = new Date();
+  const days = Number(source.communicoDays ?? Number(registry.defaults?.windowDays || 45) + 1);
+  const request = {
+    private: false,
+    date: dateParam(now),
+    days,
+  };
+  if (Array.isArray(source.communicoAges) && source.communicoAges.length > 0) {
+    request.ages = source.communicoAges;
+  }
+  if (Array.isArray(source.communicoLocations) && source.communicoLocations.length > 0) {
+    request.locations = source.communicoLocations;
+  }
+
+  const eventsUrl = new URL("/eeventcaldata", source.url);
+  eventsUrl.searchParams.set("event_type", String(source.communicoEventType ?? 0));
+  eventsUrl.searchParams.set("req", JSON.stringify(request));
+  const eventsPayload = await fetchUrl(eventsUrl.toString(), registry.defaults?.userAgent);
+  if (eventsPayload.status !== "ok") return eventsPayload;
+
+  let events;
+  try {
+    events = Array.isArray(eventsPayload.json)
+      ? eventsPayload.json
+      : JSON.parse(eventsPayload.text || "[]");
+  } catch (error) {
+    return {
+      status: "fetch-error",
+      reason: `invalid Communico events response: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+    };
+  }
+
+  let locations = [];
+  const apiServer = source.communicoApiServer || "https://api.communico.co";
+  const locationsUrl = new URL(`/v1/${client}/locations`, apiServer);
+  const locationsPayload = await fetchUrl(locationsUrl.toString(), registry.defaults?.userAgent);
+  if (locationsPayload.status === "ok") {
+    try {
+      locations = Array.isArray(locationsPayload.json)
+        ? locationsPayload.json
+        : JSON.parse(locationsPayload.text || "[]");
+    } catch {
+      locations = [];
+    }
+  }
+
+  return {
+    status: "ok",
+    httpStatus: 200,
+    contentType: `application/json; source=communico-events; events=${events.length}; locations=${locations.length}`,
+    json: { events, locations },
+    text: JSON.stringify({ events, locations }),
+  };
 }
 
 async function fetchSourcePayloads(source, registry) {

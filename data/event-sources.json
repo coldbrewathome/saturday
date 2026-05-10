@@ -132,8 +132,18 @@
       "url": "https://sfpl.org/events",
       "city": "San Francisco",
       "category": "Library",
-      "sourceType": "html",
+      "sourceType": "sfplEvents",
       "trust": "official",
+      "audienceIds": [
+        1082,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "itemsPerPage": 50,
+      "maxPages": 12,
       "fallbackEventIds": [
         "sfpl-main-storytime",
         "sfpl-mission-storytime",
@@ -168,11 +178,13 @@
     {
       "id": "berkeley-library",
       "name": "Berkeley Public Library",
-      "url": "https://www.berkeleypubliclibrary.org/events",
+      "url": "https://berkeleypubliclibrary.libnet.info/events",
       "city": "Berkeley",
       "category": "Library",
-      "sourceType": "html",
+      "sourceType": "communicoEvents",
       "trust": "official",
+      "communicoClient": "berkeleypubliclibrary",
+      "communicoApiServer": "https://api.communico.co",
       "fallbackEventIds": [
         "berkeley-central-storytime",
         "berkeley-north-baby",
@@ -1524,15 +1536,14 @@
     {
       "id": "solano-county-library",
       "name": "Solano County Library",
-      "url": "https://solanolibrary.com/",
+      "url": "https://solanolibrary.communico.co/",
       "city": "Fairfield",
       "category": "Library",
-      "sourceType": "html",
+      "sourceType": "communicoEvents",
       "trust": "official",
-      "enabled": false,
-      "disabledReason": "Official Solano County Library events are served through Communico/LibNet detail pages; add a Communico listing API parser before enabling automated ingest.",
       "lat": 38.2493,
-      "lon": -122.04
+      "lon": -122.04,
+      "notes": "Communico tenant: solanolibrary. The fetcher auto-builds /eeventcaldata?req=… with today's date + windowDays and merges /v1/{tenant}/locations for branch geo."
     },
     {
       "id": "sunnyvale-library-calendar",

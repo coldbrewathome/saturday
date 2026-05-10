@@ -1526,6 +1526,12 @@ export function extractEventsFromPayload(payload, source = {}, options = {}) {
   if (source.sourceType === "librarycalendar") {
     return extractLibraryCalendarEvents(text, source, options);
   }
+  if (source.sourceType === "sfplEvents") {
+    return extractSfplEvents(text, source, options);
+  }
+  if (source.sourceType === "communicoEvents") {
+    return extractCommunicoEvents(payload.json, source);
+  }
   if (source.sourceType === "drupalViewsAjax") {
     return extractDrupalCardEvents(text, source, options);
   }
@@ -1642,6 +1648,255 @@ export function extractLibraryCalendarEvents(html, source = {}, options = {}) {
 
   if (events.length > 0) return dedupeEvents(events);
   return extractStructuredHtmlEvents(html, source, { ...options, method: "librarycalendar" });
+}
+
+function parseSfplDateTimeRange(text) {
+  const clean = cleanDateText(text);
+  const match = clean.match(/\b(?:Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday),?\s*(\d{1,2})\/(\d{1,2})\/(20\d{2}),?\s*(\d{1,2})(?::(\d{2}))?\s*-\s*(\d{1,2})(?::(\d{2}))?/i);
+  if (!match) return null;
+
+  const date = parseNumericDate(match[1], match[2], match[3]);
+  if (!date) return null;
+  const startHourRaw = Number(match[4]);
+  const startMinute = Number(match[5] || 0);
+  const endHourRaw = Number(match[6]);
+  const endMinute = Number(match[7] || 0);
+  if (
+    startHourRaw < 1 ||
+    startHourRaw > 12 ||
+    endHourRaw < 1 ||
+    endHourRaw > 12 ||
+    startMinute > 59 ||
+    endMinute > 59
+  ) {
+    return null;
+  }
+
+  const inferStartHour = (hour) => {
+    if (hour === 12) return 12;
+    return hour < 8 ? hour + 12 : hour;
+  };
+  const startClock = { hour: inferStartHour(startHourRaw), minute: startMinute };
+  let endHour = endHourRaw === 12 ? 12 : endHourRaw;
+  if (startClock.hour >= 12 && endHourRaw < 12) {
+    endHour = endHourRaw + 12;
+  } else if (endHour < startClock.hour || (endHour === startClock.hour && endMinute < startMinute)) {
+    endHour += 12;
+  }
+
+  return {
+    startDateTime: localDateTime(date, startClock),
+    endDateTime: localDateTime(date, { hour: endHour, minute: endMinute }),
+  };
+}
+
+function fieldItemsText(block, className) {
+  const section = block.match(new RegExp(`<div[^>]+class=["'][^"']*${className}[^"']*["'][^>]*>([\\s\\S]*?)(?:<\\/div>\\s*<\\/div>|<\\/div>\\s*<div class=["']event__)`, "i"))?.[1] || "";
+  return Array.from(section.matchAll(/<a[^>]*>([\s\S]*?)<\/a>|<div[^>]+class=["'][^"']*field__item[^"']*["'][^>]*>([\s\S]*?)<\/div>/gi))
+    .map((match) => stripUnsafeText(match[1] || match[2] || "", 120))
+    .filter(Boolean);
+}
+
+function sfplVenueFromBlock(block, source) {
+  return stripUnsafeText(
+    block.match(/class=["']location--short-label["'][\s\S]*?field--name-field-short-name[^>]*>([\s\S]*?)<\/div>/i)?.[1] ||
+      block.match(/field--name-field-event-location[\s\S]*?<a[^>]*>([\s\S]*?)<\/a>/i)?.[1] ||
+      source.venue ||
+      source.name,
+    100,
+  );
+}
+
+export function extractSfplEvents(html, source = {}, options = {}) {
+  const rows = html.match(/<div class="views-row"><div class="views-field views-field-rendered-entity">[\s\S]*?(?=<div class="views-row"><div class="views-field views-field-rendered-entity">|<nav class="pager"|$)/gi) || [];
+  const events = [];
+
+  for (const row of rows) {
+    if (!/\bevent--teaser\b/i.test(row)) continue;
+    const title = stripUnsafeText(
+      row.match(/<h2[^>]+class=["'][^"']*event__title[^"']*["'][^>]*>[\s\S]*?<a[^>]+href=["']([^"']+)["'][^>]*>[\s\S]*?<span>([\s\S]*?)<\/span>/i)?.[2],
+      140,
+    );
+    const eventPath =
+      row.match(/<h2[^>]+class=["'][^"']*event__title[^"']*["'][^>]*>[\s\S]*?<a[^>]+href=["']([^"']+)["']/i)?.[1] ||
+      row.match(/<article[^>]+about=["']([^"']+)["']/i)?.[1];
+    const dateText = stripUnsafeText(
+      row.match(/class=["']date-display-range["'][^>]*>([\s\S]*?)<\/span>/i)?.[1],
+      160,
+    );
+    const range = parseSfplDateTimeRange(dateText);
+    if (!title || !range) continue;
+
+    const audience = fieldItemsText(row, "field--name-field-event-audience");
+    const topics = fieldItemsText(row, "field--name-field-event-topic");
+    const venue = sfplVenueFromBlock(row, source);
+    const text = stripUnsafeText(row, 1300);
+    const signalText = `${title} ${dateText} ${venue} ${audience.join(" ")} ${topics.join(" ")} ${sourceAudienceText(source)}`;
+    const ageBands = inferAgeBands(signalText);
+    if (ageBands.length === 0) continue;
+
+    const event = normalizeRawEvent({
+      title,
+      description: [dateText, venue, ...audience, ...topics].filter(Boolean).join(" | ") || text,
+      venue,
+      city: source.city,
+      category: source.category || "Library",
+      startDateTime: range.startDateTime,
+      endDateTime: range.endDateTime,
+      ageBands,
+      url: sanitizeUrl(eventPath, source.url) || source.url,
+      cost: "Free",
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.url,
+      sourceMode: "sfpl-events",
+      extractionMethod: "sfpl-events",
+      verified: true,
+    }, source);
+    if (event) events.push(event);
+  }
+
+  return dedupeEvents(events);
+}
+
+function communicoList(item, arrayKey, stringKey) {
+  if (Array.isArray(item?.[arrayKey])) {
+    return item[arrayKey]
+      .map((value) => stripUnsafeText(value, 100))
+      .filter(Boolean);
+  }
+  const raw = typeof item?.[stringKey] === "string" ? item[stringKey] : "";
+  return raw
+    .split(/\s*,\s*/)
+    .map((value) => stripUnsafeText(value, 100))
+    .filter(Boolean);
+}
+
+function communicoDateTime(value) {
+  const raw = stripUnsafeText(value, 100);
+  const match = raw.match(/^(\d{4}-\d{2}-\d{2})[ T](\d{2}):(\d{2})(?::(\d{2}))?$/);
+  if (match) return `${match[1]}T${match[2]}:${match[3]}:${match[4] || "00"}-07:00`;
+  return raw;
+}
+
+function communicoLocationMap(json) {
+  const map = new Map();
+  const locations = Array.isArray(json?.locations) ? json.locations : [];
+  for (const location of locations) {
+    if (location?.id) map.set(String(location.id), location);
+  }
+  return map;
+}
+
+function communicoAgeBands(ages, text) {
+  const bands = new Set();
+  for (const age of ages) {
+    const lower = age.toLowerCase();
+    if (/\b(early childhood|baby|babies|toddler|toddlers|preschool)\b/.test(lower)) {
+      bands.add("toddler");
+      bands.add("preschool");
+    }
+    if (/\b(elementary|children|kids|school age|school-age)\b/.test(lower)) {
+      bands.add("school-age");
+    }
+    if (/\b(preteens?|teens?|tweens?|middle school)\b/.test(lower)) {
+      bands.add("tween");
+    }
+    if (/\b(families|family|all ages)\b/.test(lower)) {
+      bands.add("preschool");
+      bands.add("school-age");
+    }
+  }
+  if (ages.length === 0) {
+    for (const band of inferAgeBands(text)) {
+      bands.add(band);
+    }
+  }
+  return AGE_BANDS.filter((band) => bands.has(band));
+}
+
+function communicoAudiences(ages, ageBands) {
+  const hasAdults = ages.some((age) => /\badults?\b/i.test(age));
+  if (ageBands.length === 0 && hasAdults) return ["adults"];
+  if (ageBands.length > 0 && hasAdults) return ["all"];
+  if (ageBands.length > 0) return ["kids"];
+  return ["all"];
+}
+
+function communicoCost(item, text) {
+  const registrationCost = Number(item?.registration_cost || 0);
+  if (Number.isFinite(registrationCost) && registrationCost > 0) {
+    return `$${registrationCost}`;
+  }
+  return inferCost(`${text} free library`);
+}
+
+function communicoEventUrl(item, source) {
+  if (item?.id) {
+    try {
+      return new URL(`/event/${item.id}`, source.url).toString();
+    } catch {
+      return source.url;
+    }
+  }
+  return sanitizeUrl(item?.url, source.url) || source.url;
+}
+
+export function extractCommunicoEvents(json, source = {}) {
+  const rawEvents = Array.isArray(json) ? json : Array.isArray(json?.events) ? json.events : [];
+  const locations = communicoLocationMap(json);
+  const events = [];
+
+  for (const item of rawEvents) {
+    if (!item || Number(item.changed || 0) === 1) continue;
+    const title = stripUnsafeText(item.title, 140);
+    const subtitle = stripUnsafeText(item.sub_title, 180);
+    const description = stripUnsafeText(
+      [subtitle, item.description, item.long_description].filter(Boolean).join(" "),
+      800,
+    );
+    const ages = communicoList(item, "agesArray", "ages");
+    const tags = communicoList(item, "tagsArray", "tags");
+    const searchTags = communicoList(item, "search_tagsArray", "search_tags");
+    const signalText = `${title} ${description} ${ages.join(" ")} ${tags.join(" ")} ${searchTags.join(" ")}`;
+    const ageBands = communicoAgeBands(ages, signalText);
+    if (!title || ageBands.length === 0) continue;
+
+    const location = locations.get(String(item.location_id || ""));
+    const lat = Number(location?.lat);
+    const lon = Number(location?.lon);
+    const hasGeo = Number.isFinite(lat) && Number.isFinite(lon) && lat !== 0 && lon !== 0;
+    const branch = stripUnsafeText(item.location || item.library || location?.name || source.name, 100);
+    const room = stripUnsafeText(item.venues || item.venue_name || item.venue_room || "", 100);
+    const venue = [branch, room].filter(Boolean).join(" - ");
+
+    const event = normalizeRawEvent({
+      id: item.id ? `${source.id}-${item.id}` : null,
+      title,
+      description,
+      venue,
+      city: stripUnsafeText(location?.locality || source.city, 80),
+      neighborhood: branch || source.city,
+      lat: hasGeo ? lat : source.lat,
+      lon: hasGeo ? lon : source.lon,
+      category: source.category || "Library",
+      startDateTime: communicoDateTime(item.raw_start_time || item.event_start),
+      endDateTime: communicoDateTime(item.raw_end_time || item.event_end),
+      ageBands,
+      audiences: communicoAudiences(ages, ageBands),
+      cost: communicoCost(item, signalText),
+      url: communicoEventUrl(item, source),
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.url,
+      sourceMode: "communico-events",
+      extractionMethod: "communico-events",
+      verified: true,
+    }, source);
+    if (event) events.push(event);
+  }
+
+  return dedupeEvents(events);
 }
 
 export function extractDrupalCardEvents(html, source = {}, options = {}) {
@@ -1823,6 +2078,7 @@ function scoreEvent(event) {
   if (event.extractionMethod === "json-ld") score += 8;
   if (event.extractionMethod === "ics") score += 7;
   if (event.extractionMethod === "librarycalendar") score += 7;
+  if (event.extractionMethod === "sfpl-events") score += 7;
   if (event.extractionMethod === "drupal-views-ajax") score += 7;
   if (event.extractionMethod === "event-list") score += 7;
   if (event.extractionMethod === "official-text-event") score += 7;

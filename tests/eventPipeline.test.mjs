@@ -4,6 +4,7 @@ import {
   buildEventsDataset,
   expandRecurringTemplates,
   extractBiblioEvents,
+  extractCommunicoEvents,
   extractDrupalCardEvents,
   extractEventListEvents,
   extractHtmlEvents,
@@ -14,6 +15,7 @@ import {
   extractJsonLdEvents,
   extractOpenCitiesEventEvents,
   extractOfficialTextEvents,
+  extractSfplEvents,
   inferAgeBands,
   parseDateTimeRange,
   parseLooseDate,
@@ -181,6 +183,151 @@ test("extractOpenCitiesEventEvents expands multi-date event pages", () => {
   assert.equal(events[0].cost, "$17");
   assert.equal(events[0].sourceMode, "open-cities-event");
   assert.deepEqual(events[0].ageBands, ["toddler", "preschool", "school-age"]);
+});
+
+test("extractSfplEvents parses SFPL Drupal event teasers", () => {
+  const html = `
+    <div class="views-row"><div class="views-field views-field-rendered-entity"><span class="field-content">
+      <article about="/events/2026/05/09/workshop-family-zine-making" class="event event--teaser event--family teaser">
+        <div class="event__details">
+          <div class="event__main">
+            <header class="event__header">
+              <div class="event__date">
+                <div class="field field--name-field-event-date-and-time field__item">
+                  <span class="date-display-range">Saturday, 5/9/2026, 10:30 - 2:00</span>
+                </div>
+              </div>
+              <div class="event__name">
+                <h2 class="event__title">
+                  <a href="/events/2026/05/09/workshop-family-zine-making" rel="bookmark"><span>Workshop: Family Zine Making</span></a>
+                </h2>
+              </div>
+            </header>
+            <div class="event__audience">
+              <div class="field field--name-field-event-audience field__items">
+                <div class="field__item"><a href="/events?field_event_audience_target_id=28">Family</a></div>
+                <div class="field__item"><a href="/events?field_event_audience_target_id=27">Elementary School Age</a></div>
+              </div>
+            </div>
+            <div class="event__topics">
+              <div class="field field--name-field-event-topic field__items">
+                <div class="field__item"><a href="/events?field_event_topic_target_id=400">Creative Arts</a></div>
+              </div>
+            </div>
+          </div>
+          <div class="event__location">
+            <div class="field field--name-field-event-location field__items">
+              <div class="field__item"><div about="/locations/main-library">
+                <a class="location--short-label" href="/locations/main-library">
+                  <div class="field field--name-field-short-name field__item">Main</div>
+                </a>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </span></div></div>
+    <div class="views-row"><div class="views-field views-field-rendered-entity"><span class="field-content">
+      <article about="/events/2026/05/12/storytime-babies" class="event event--teaser event--early-childhood teaser">
+        <div class="field field--name-field-event-date-and-time field__item">
+          <span class="date-display-range">Tuesday, 5/12/2026, 1:15 - 1:45</span>
+        </div>
+        <h2 class="event__title">
+          <a href="/events/2026/05/12/storytime-babies" rel="bookmark"><span>Storytime: For Babies</span></a>
+        </h2>
+        <div class="field field--name-field-event-audience field__items">
+          <div class="field__item"><a href="/events?field_event_audience_target_id=26">Early Childhood</a></div>
+        </div>
+        <a class="location--short-label" href="/locations/ingleside">
+          <div class="field field--name-field-short-name field__item">Ingleside</div>
+        </a>
+      </article>
+    </span></div></div>
+  `;
+
+  const events = extractSfplEvents(html, {
+    ...source,
+    sourceType: "sfplEvents",
+  });
+
+  assert.equal(events.length, 2);
+  assert.equal(events[0].title, "Workshop: Family Zine Making");
+  assert.equal(events[0].venue, "Main");
+  assert.equal(events[0].startDateTime, "2026-05-09T17:30:00.000Z");
+  assert.equal(events[0].endDateTime, "2026-05-09T21:00:00.000Z");
+  assert.equal(events[0].url, "https://sfpl.org/events/2026/05/09/workshop-family-zine-making");
+  assert.equal(events[0].extractionMethod, "sfpl-events");
+  assert.deepEqual(events[0].ageBands, ["school-age"]);
+  assert.equal(events[1].startDateTime, "2026-05-12T20:15:00.000Z");
+  assert.deepEqual(events[1].ageBands, ["toddler"]);
+});
+
+test("extractCommunicoEvents parses Berkeley libnet events and branch locations", () => {
+  const events = extractCommunicoEvents(
+    {
+      locations: [
+        {
+          id: "4046",
+          name: "North Branch",
+          locality: "Berkeley",
+          lat: "37.8854536",
+          lon: "-122.2753925",
+        },
+      ],
+      events: [
+        {
+          id: "15292079",
+          title: "Storytime @North",
+          sub_title: "",
+          description: "Stories, songs, rhymes, and fun!",
+          long_description: "<p>This story time is geared towards children ages 2-5.</p>",
+          raw_start_time: "2026-06-24 10:30:00",
+          raw_end_time: "2026-06-24 11:00:00",
+          location: "North Branch",
+          location_id: "4046",
+          venues: "North Branch Meeting Room",
+          agesArray: ["Early Childhood"],
+          tagsArray: ["Storytime"],
+          search_tagsArray: ["kids"],
+          registration_cost: "0",
+        },
+        {
+          id: "15549539",
+          title: "Technology Help @Central",
+          description: "Drop in tech help for adults.",
+          raw_start_time: "2026-06-24 14:00:00",
+          raw_end_time: "2026-06-24 15:00:00",
+          location: "Central Library",
+          location_id: "4044",
+          agesArray: ["Adults"],
+          tagsArray: ["Computer & Tech Help"],
+          registration_cost: "0",
+        },
+      ],
+    },
+    {
+      id: "berkeley-library",
+      name: "Berkeley Public Library",
+      url: "https://berkeleypubliclibrary.libnet.info/events",
+      city: "Berkeley",
+      category: "Library",
+      sourceType: "communicoEvents",
+      lat: 37.8715,
+      lon: -122.273,
+    },
+  );
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].id, "berkeley-library-15292079");
+  assert.equal(events[0].title, "Storytime @North");
+  assert.equal(events[0].venue, "North Branch - North Branch Meeting Room");
+  assert.equal(events[0].startDateTime, "2026-06-24T17:30:00.000Z");
+  assert.equal(events[0].endDateTime, "2026-06-24T18:00:00.000Z");
+  assert.deepEqual(events[0].ageBands, ["toddler", "preschool"]);
+  assert.equal(events[0].lat, 37.8854536);
+  assert.equal(events[0].lon, -122.2753925);
+  assert.equal(events[0].url, "https://berkeleypubliclibrary.libnet.info/event/15292079");
+  assert.equal(events[0].extractionMethod, "communico-events");
 });
 
 test("extractLibraryCalendarEvents parses LibraryCalendar cards", () => {

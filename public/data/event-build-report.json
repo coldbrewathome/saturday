@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-10T00:36:43.141Z",
+  "generatedAt": "2026-05-10T02:43:46.975Z",
   "registryPath": "data/event-sources.json",
   "outputPath": "public/data/events.json",
-  "eventCount": 829,
+  "eventCount": 2312,
   "sourceCount": 85,
-  "liveEventCount": 705,
-  "fallbackEventCount": 124,
+  "liveEventCount": 2236,
+  "fallbackEventCount": 76,
   "errors": [],
   "sources": [
     {
@@ -26,23 +26,23 @@
       "id": "sfpl",
       "name": "San Francisco Public Library",
       "url": "https://sfpl.org/events",
-      "sourceType": "html",
+      "sourceType": "sfplEvents",
       "city": "San Francisco",
       "category": "Library",
-      "status": "ok-template-fallback",
-      "liveEvents": 0,
-      "fallbackEvents": 32,
-      "eventCount": 32,
+      "status": "ok",
+      "liveEvents": 872,
+      "fallbackEvents": 0,
+      "eventCount": 872,
       "fetches": [
         {
           "url": "https://sfpl.org/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "text/html; source=sfpl-events; pages=25"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
+      "contentType": "text/html; source=sfpl-events; pages=25",
       "rejectedLiveEvents": 0
     },
     {
@@ -53,9 +53,9 @@
       "city": "Oakland",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 17,
+      "liveEvents": 18,
       "fallbackEvents": 0,
-      "eventCount": 17,
+      "eventCount": 18,
       "fetches": [
         {
           "url": "https://oaklandlibrary.bibliocommons.com/v2/events?audiences=60af9e2d8509742400e6e8ed",
@@ -66,30 +66,30 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1
+      "rejectedLiveEvents": 0
     },
     {
       "id": "berkeley-library",
       "name": "Berkeley Public Library",
-      "url": "https://www.berkeleypubliclibrary.org/events",
-      "sourceType": "html",
+      "url": "https://berkeleypubliclibrary.libnet.info/events",
+      "sourceType": "communicoEvents",
       "city": "Berkeley",
       "category": "Library",
-      "status": "ok-template-fallback",
-      "liveEvents": 0,
-      "fallbackEvents": 16,
-      "eventCount": 16,
+      "status": "ok",
+      "liveEvents": 203,
+      "fallbackEvents": 0,
+      "eventCount": 203,
       "fetches": [
         {
-          "url": "https://www.berkeleypubliclibrary.org/events",
+          "url": "https://berkeleypubliclibrary.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "application/json; source=communico-events; events=298; locations=8"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "contentType": "application/json; source=communico-events; events=298; locations=8",
+      "rejectedLiveEvents": 5
     },
     {
       "id": "alameda-library",
@@ -307,7 +307,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1
+      "rejectedLiveEvents": 0
     },
     {
       "id": "sccl-cupertino",
@@ -583,7 +583,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 2
+      "rejectedLiveEvents": 0
     },
     {
       "id": "richmond-library",
@@ -980,9 +980,9 @@
       "city": "Oakland",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 83,
+      "liveEvents": 92,
       "fallbackEvents": 0,
-      "eventCount": 83,
+      "eventCount": 92,
       "fetches": [
         {
           "url": "https://www.ebparks.org/calendar",
@@ -993,7 +993,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; source=drupal-views-ajax",
-      "rejectedLiveEvents": 65
+      "rejectedLiveEvents": 56
     },
     {
       "id": "don-edwards-nwr",
@@ -1414,16 +1414,26 @@
     {
       "id": "solano-county-library",
       "name": "Solano County Library",
-      "url": "https://solanolibrary.com/",
-      "sourceType": "html",
+      "url": "https://solanolibrary.communico.co/",
+      "sourceType": "communicoEvents",
       "city": "Fairfield",
       "category": "Library",
-      "status": "disabled",
-      "reason": "Official Solano County Library events are served through Communico/LibNet detail pages; add a Communico listing API parser before enabling automated ingest.",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 446,
       "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": []
+      "eventCount": 446,
+      "fetches": [
+        {
+          "url": "https://solanolibrary.communico.co/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=communico-events; events=619; locations=14"
+        }
+      ],
+      "reason": "Communico tenant: solanolibrary. The fetcher auto-builds /eeventcaldata?req=… with today's date + windowDays and merges /v1/{tenant}/locations for branch geo.",
+      "httpStatus": 200,
+      "contentType": "application/json; source=communico-events; events=619; locations=14",
+      "rejectedLiveEvents": 21
     },
     {
       "id": "sunnyvale-library-calendar",
