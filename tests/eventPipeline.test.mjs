@@ -13,6 +13,7 @@ import {
   extractLibraryCalendarEvents,
   extractMidpenTableEvents,
   extractJsonLdEvents,
+  extractLocalistEvents,
   extractOpenCitiesEventEvents,
   extractOfficialTextEvents,
   extractSfplEvents,
@@ -328,6 +329,124 @@ test("extractCommunicoEvents parses Berkeley libnet events and branch locations"
   assert.equal(events[0].lon, -122.2753925);
   assert.equal(events[0].url, "https://berkeleypubliclibrary.libnet.info/event/15292079");
   assert.equal(events[0].extractionMethod, "communico-events");
+});
+
+test("extractLocalistEvents parses public Stanford Localist events and skips internal campus items", () => {
+  const events = extractLocalistEvents(
+    {
+      events: [
+        {
+          event: {
+            id: 5061,
+            title: "Public Tour | Cantor Highlights",
+            status: "live",
+            private: false,
+            localist_url: "https://events.stanford.edu/event/cantor-highlights-tour",
+            location_name: "Cantor Arts Center",
+            room_number: "Lobby",
+            geo: {
+              latitude: "37.432981",
+              longitude: "-122.170494",
+              city: "Stanford",
+            },
+            free: true,
+            description_text: "A public museum tour for families and visitors.",
+            event_instances: [
+              {
+                event_instance: {
+                  id: 7001,
+                  start: "2026-05-11T13:00:00-07:00",
+                  end: "2026-05-11T14:00:00-07:00",
+                  all_day: false,
+                },
+              },
+            ],
+            filters: {
+              event_audience: [{ name: "General Public" }],
+              event_subject: [{ name: "Arts/Media" }],
+              event_types: [{ name: "Tour" }],
+            },
+          },
+        },
+        {
+          event: {
+            id: 5062,
+            title: "Archive Room: Ruth Asawa",
+            status: "live",
+            private: false,
+            localist_url: "https://events.stanford.edu/event/archive-room-ruth-asawa",
+            location_name: "Cantor Arts Center",
+            geo: {
+              latitude: "37.432981",
+              longitude: "-122.170494",
+              city: "Stanford",
+            },
+            free: false,
+            description_text: "Museum hours. We're always free! Come visit us.",
+            event_instances: [
+              {
+                event_instance: {
+                  id: 7002,
+                  start: "2026-05-11T00:00:00-07:00",
+                  end: null,
+                  all_day: true,
+                },
+              },
+            ],
+            filters: {
+              event_audience: [{ name: "Everyone" }],
+              event_subject: [{ name: "Arts/Media" }],
+              event_types: [{ name: "Exhibition" }],
+            },
+          },
+        },
+        {
+          event: {
+            id: 5063,
+            title: "Teaching with AI Community Share-outs",
+            status: "live",
+            private: false,
+            localist_url: "https://events.stanford.edu/event/teaching-with-ai",
+            location_name: "408 Panama Mall",
+            description_text: "Workshop for faculty and staff.",
+            event_instances: [
+              {
+                event_instance: {
+                  id: 7003,
+                  start: "2026-05-11T15:00:00-07:00",
+                  end: "2026-05-11T16:00:00-07:00",
+                },
+              },
+            ],
+            filters: {
+              event_audience: [{ name: "General Public" }],
+              event_subject: [{ name: "Education" }],
+              event_types: [{ name: "Workshop" }],
+            },
+          },
+        },
+      ],
+    },
+    {
+      id: "stanford-events",
+      name: "Stanford Events",
+      url: "https://events.stanford.edu/",
+      city: "Stanford",
+      sourceType: "localistEvents",
+      localistAllowedTypeNames: ["Exhibition", "Tour", "Performance", "Film/Screening", "Social Event/Reception", "Workshop"],
+    },
+  );
+
+  assert.equal(events.length, 2);
+  const tour = events.find((event) => event.title === "Public Tour | Cantor Highlights");
+  assert.equal(tour.venue, "Cantor Arts Center - Lobby");
+  assert.equal(tour.startDateTime, "2026-05-11T20:00:00.000Z");
+  assert.equal(tour.extractionMethod, "localist-events");
+  assert.equal(tour.cost, "Free");
+  assert.deepEqual(tour.ageBands, ["preschool", "school-age"]);
+  const exhibition = events.find((event) => event.title === "Archive Room: Ruth Asawa");
+  assert.equal(exhibition.startDateTime, "2026-05-11T17:00:00.000Z");
+  assert.equal(exhibition.cost, "Free");
 });
 
 test("extractLibraryCalendarEvents parses LibraryCalendar cards", () => {

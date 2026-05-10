@@ -1367,6 +1367,42 @@ h3 {
   color: var(--accent-strong);
 }
 
+.saved-event-groups {
+  display: grid;
+  gap: 16px;
+}
+
+.saved-event-group {
+  display: grid;
+  gap: 8px;
+}
+
+.saved-event-group + .saved-event-group {
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+
+.saved-event-date-row {
+  align-items: baseline;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.saved-event-date {
+  color: var(--text);
+  font-size: 0.83rem;
+  font-weight: 900;
+  margin: 0;
+}
+
+.saved-event-count {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
 .saved-item.is-past strong,
 .saved-item.is-past span {
   color: var(--muted);

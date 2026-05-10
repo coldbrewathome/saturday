@@ -57,6 +57,7 @@ export function SpotMap({
   userLocation,
   geoState,
   onRequestLocation,
+  onViewChange,
 }: {
   spots: Spot[];
   events?: FamilyEvent[];
@@ -66,6 +67,7 @@ export function SpotMap({
   userLocation?: { lat: number; lon: number } | null;
   geoState?: "idle" | "requesting" | "denied";
   onRequestLocation?: () => void;
+  onViewChange?: (center: { lat: number; lon: number }) => void;
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<LeafletMap | null>(null);
@@ -77,6 +79,13 @@ export function SpotMap({
   const seenInitialLocationRef = useRef<
     { lat: number; lon: number } | null | undefined
   >(undefined);
+  // Stable ref so the map's moveend handler always calls the latest
+  // onViewChange — without rebuilding the entire map effect when the parent
+  // re-renders.
+  const onViewChangeRef = useRef(onViewChange);
+  useEffect(() => {
+    onViewChangeRef.current = onViewChange;
+  }, [onViewChange]);
   // Stable reference to the latest onSelect — re-binding avoids stale closures
   // without forcing the marker layer to rebuild every time the parent re-renders.
   const onSelectRef = useRef(onSelect);
@@ -145,8 +154,15 @@ export function SpotMap({
         // ignore quota / privacy errors
       }
       hasUserViewRef.current = true;
+      onViewChangeRef.current?.({ lat: c.lat, lon: c.lng });
     };
     map.on("moveend", handleMoveEnd);
+    // Fire once on mount so the consumer can re-rank from the initial view
+    // without waiting for the user to pan.
+    requestAnimationFrame(() => {
+      const c = map.getCenter();
+      onViewChangeRef.current?.({ lat: c.lat, lon: c.lng });
+    });
 
     // Leaflet captures container size at init. If the .map-shell parent finishes
     // laying out (flex stretch) after the map mounts, the canvas stays at the

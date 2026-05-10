@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 1,
-  "note": "Editor-curated starter plans surfaced on the Browse landing page. Each entry references existing spot ids (curated-spots.json or bay-area-spots.json) and event ids (events.json). Items missing from the user's data are skipped at fork time. Edit this file to add or rotate picks.",
+  "schemaVersion": 2,
+  "note": "Editor-curated starter plans + auto-generated per-city plans. Hand-written plans (no generated:true) are kept across runs; generated entries are rebuilt by scripts/generate-featured-plans.mjs each ingest. Each entry carries lat/lon + city so the frontend can show plans near the user's map view.",
   "plans": [
     {
       "id": "featured-sf-toddler-saturday",
@@ -80,6 +80,1393 @@
       "audiences": [
         "adults"
       ]
+    },
+    {
+      "id": "gen-day-alameda",
+      "name": "Family day in Alameda",
+      "summary": "Three family-friendly stops in Alameda — Estuary Park, Alameda Naval Air Museum, USS Hornet (CV 12).",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-763447138",
+        "osm-way-202009369",
+        "osm-way-108194377"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Alameda",
+      "lat": 37.78091,
+      "lon": -122.29632,
+      "generated": true
+    },
+    {
+      "id": "gen-events-alameda",
+      "name": "Alameda family events",
+      "summary": "Two upcoming family events in Alameda plus a nearby stop — Coffee, then Birds · Low Tide Exploration.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-763447138"
+      ],
+      "eventIds": [
+        "east-bay-parks-coffee-then-birds-2c9da925ff",
+        "east-bay-parks-low-tide-exploration-5ce7565b69"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Alameda",
+      "lat": 37.77298,
+      "lon": -122.25669,
+      "generated": true
+    },
+    {
+      "id": "gen-day-belmont",
+      "name": "Family day in Belmont",
+      "summary": "Three family-friendly stops in Belmont — Patricia Wharton Park, Movement - Belmont, Get Air — Belmont.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-559958505",
+        "osm-way-99824892",
+        "curated-belmont-get-air"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Belmont",
+      "lat": 37.52339,
+      "lon": -122.28216,
+      "generated": true
+    },
+    {
+      "id": "gen-day-berkeley",
+      "name": "Family day in Berkeley",
+      "summary": "Three family-friendly stops in Berkeley — San Pablo Park, Charlie Dorr Mini Park, George Florence Park.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-255316897",
+        "osm-way-31650923",
+        "osm-way-189656674"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Berkeley",
+      "lat": 37.86304,
+      "lon": -122.28686,
+      "generated": true
+    },
+    {
+      "id": "gen-events-berkeley",
+      "name": "Berkeley family events",
+      "summary": "Two upcoming family events in Berkeley plus a nearby stop — Mother's Day Birding · Habitot Children's Museum.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-255316897"
+      ],
+      "eventIds": [
+        "east-bay-parks-mother-s-day-birding-6bb5baac46",
+        "habitot-toddler-2026-05-10"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Berkeley",
+      "lat": 37.86589,
+      "lon": -122.27647,
+      "generated": true
+    },
+    {
+      "id": "gen-day-burlingame",
+      "name": "Family day in Burlingame",
+      "summary": "Three family-friendly stops in Burlingame — Bay Club Broadway Tennis, Stella Alpina Osteria, Color Me Mine — Burlingame.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-849066275",
+        "curated-burlingame-stella-alpina",
+        "curated-burlingame-color-me-mine"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Burlingame",
+      "lat": 37.58333,
+      "lon": -122.35395,
+      "generated": true
+    },
+    {
+      "id": "gen-day-campbell",
+      "name": "Family day in Campbell",
+      "summary": "Three family-friendly stops in Campbell — Los Gatos Creek County Park, Pruneyard Cinema, Vim + Vigor Fitness.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-38521488",
+        "osm-node-373606486",
+        "osm-node-10956617742"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Campbell",
+      "lat": 37.27911,
+      "lon": -121.95664,
+      "generated": true
+    },
+    {
+      "id": "gen-day-concord",
+      "name": "Family day in Concord",
+      "summary": "Three family-friendly stops in Concord — Concord Community Park, Veranda LUXE Cinema & IMAX, Hurricane Harbor.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-43951289",
+        "osm-way-575358668",
+        "osm-way-31198945"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Concord",
+      "lat": 37.97009,
+      "lon": -122.04104,
+      "generated": true
+    },
+    {
+      "id": "gen-day-corte-madera",
+      "name": "Family day in Corte Madera",
+      "summary": "Family-friendly spots in Corte Madera — REI, Marin Joe's.",
+      "accent": "park",
+      "stopIds": [
+        "osm-node-4608698142",
+        "curated-sanrafael-marin-joes"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Corte Madera",
+      "lat": 37.92535,
+      "lon": -122.51528,
+      "generated": true
+    },
+    {
+      "id": "gen-day-cupertino",
+      "name": "Family day in Cupertino",
+      "summary": "Three family-friendly stops in Cupertino — Blacksmith Shop, Quinlan Community Center, Cupertino Sports Center.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-377473685",
+        "osm-way-122088977",
+        "osm-way-516494416"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Cupertino",
+      "lat": 37.32086,
+      "lon": -122.04949,
+      "generated": true
+    },
+    {
+      "id": "gen-events-cupertino",
+      "name": "Cupertino family events",
+      "summary": "Two upcoming family events in Cupertino plus a nearby stop — Baby Wearing Dance · Reading Buddies at Cupertino Library.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-377473685"
+      ],
+      "eventIds": [
+        "sccl-cupertino-baby-wearing-dance-86a336cece",
+        "sccl-cupertino-reading-buddies-at-cupertino-library-507c6b5e39"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Cupertino",
+      "lat": 37.31642,
+      "lon": -122.04008,
+      "generated": true
+    },
+    {
+      "id": "gen-day-daly-city",
+      "name": "Family day in Daly City",
+      "summary": "Three family-friendly stops in Daly City — Colma Historical Park, Sterling Park, Watertower View.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-396607276",
+        "osm-way-396594502",
+        "osm-node-4265327050"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Daly City",
+      "lat": 37.69606,
+      "lon": -122.44765,
+      "generated": true
+    },
+    {
+      "id": "gen-day-danville",
+      "name": "Family day in Danville",
+      "summary": "Three family-friendly stops in Danville — Museum of the San Ramon Valley, Danville Bowl, Rakestraw Books.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-220260119",
+        "osm-way-687874715",
+        "osm-node-6429722933"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Danville",
+      "lat": 37.81971,
+      "lon": -121.99957,
+      "generated": true
+    },
+    {
+      "id": "gen-day-dublin",
+      "name": "Family day in Dublin",
+      "summary": "Three family-friendly stops in Dublin — USA Ninja Challenge - Dublin, REI, Dick's Sporting Goods.",
+      "accent": "park",
+      "stopIds": [
+        "osm-node-13462638816",
+        "osm-node-5198626596",
+        "osm-node-2588103800"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Dublin",
+      "lat": 37.70633,
+      "lon": -121.89812,
+      "generated": true
+    },
+    {
+      "id": "gen-day-el-cerrito",
+      "name": "Family day in El Cerrito",
+      "summary": "Family-friendly spots in El Cerrito — Bridges Rock Gym, Barnes & Noble.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-109504819",
+        "osm-node-1529100850"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "El Cerrito",
+      "lat": 37.9001,
+      "lon": -122.30423,
+      "generated": true
+    },
+    {
+      "id": "gen-day-emeryville",
+      "name": "Family day in Emeryville",
+      "summary": "Family-friendly spots in Emeryville — Head over heels, Public Market.",
+      "accent": "park",
+      "stopIds": [
+        "osm-node-687186706",
+        "osm-way-135838648"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Emeryville",
+      "lat": 37.83804,
+      "lon": -122.28986,
+      "generated": true
+    },
+    {
+      "id": "gen-day-foster-city",
+      "name": "Family day in Foster City",
+      "summary": "Family-friendly spots in Foster City — Iza Ramen, Pasta Pomodoro — Foster City.",
+      "accent": "park",
+      "stopIds": [
+        "curated-belmont-fish-and-tofu",
+        "curated-fostercity-pasta-pomodoro"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Foster City",
+      "lat": 37.55927,
+      "lon": -122.26033,
+      "generated": true
+    },
+    {
+      "id": "gen-day-fremont",
+      "name": "Family day in Fremont",
+      "summary": "Three family-friendly stops in Fremont — observation deck, Quarry Lakes Regional Park, Niles Community Park.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-58458807",
+        "osm-way-43985465",
+        "osm-way-156498253"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Fremont",
+      "lat": 37.55353,
+      "lon": -122.01238,
+      "generated": true
+    },
+    {
+      "id": "gen-events-fremont",
+      "name": "Fremont family events",
+      "summary": "Two upcoming family events in Fremont plus a nearby stop — Don Edwards SF Bay NWR — family programs · Flower Walk.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-58458807"
+      ],
+      "eventIds": [
+        "don-edwards-saturdays-2026-05-10",
+        "east-bay-parks-flower-walk-3d9cd1b4dc"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Fremont",
+      "lat": 37.5308,
+      "lon": -122.03187,
+      "generated": true
+    },
+    {
+      "id": "gen-day-hayward",
+      "name": "Family day in Hayward",
+      "summary": "Three family-friendly stops in Hayward — Japanese Gardens, Alligators viewpoint, Otters viewpoint.",
+      "accent": "park",
+      "stopIds": [
+        "osm-node-12605094352",
+        "osm-node-2007278628",
+        "osm-node-2007261302"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Hayward",
+      "lat": 37.72633,
+      "lon": -122.12514,
+      "generated": true
+    },
+    {
+      "id": "gen-events-hayward",
+      "name": "Hayward family events",
+      "summary": "Two upcoming family events in Hayward plus a nearby stop — How to Robot-Proof Your Kids (and Yourself): An Online Conve · Teen Time: Make Your Own Magnetic Bookmark.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-node-12605094352"
+      ],
+      "eventIds": [
+        "hayward-library-how-to-robot-proof-your-kids-and-yourself-an-online-conversation-with-dr-vivienne-ming-79a73c9913",
+        "hayward-library-teen-time-make-your-own-magnetic-bookmark-94599ec9ea"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Hayward",
+      "lat": 37.67225,
+      "lon": -122.08051,
+      "generated": true
+    },
+    {
+      "id": "gen-day-livermore",
+      "name": "Family day in Livermore",
+      "summary": "Three family-friendly stops in Livermore — Old Tree Overlook, Mount Dad, Roger Epperson Ridge Overlook.",
+      "accent": "park",
+      "stopIds": [
+        "osm-node-7304422548",
+        "osm-node-2367351266",
+        "osm-node-2367351251"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Livermore",
+      "lat": 37.81257,
+      "lon": -121.8387,
+      "generated": true
+    },
+    {
+      "id": "gen-events-livermore",
+      "name": "Livermore family events",
+      "summary": "Two upcoming family events in Livermore plus a nearby stop — Mother's Day Family Hike · National Love A Tree Day.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-node-7304422548"
+      ],
+      "eventIds": [
+        "east-bay-parks-mother-s-day-family-hike-07fcac0343",
+        "east-bay-parks-national-love-a-tree-day-f2ce382403"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Livermore",
+      "lat": 37.71481,
+      "lon": -121.80772,
+      "generated": true
+    },
+    {
+      "id": "gen-events-los-altos",
+      "name": "Los Altos family events",
+      "summary": "Two upcoming family events in Los Altos plus a nearby stop — Board Game Sunday! · Mindful Movement.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-28738495"
+      ],
+      "eventIds": [
+        "sccl-los-altos-board-game-sunday-d150b55f30",
+        "midpen-open-space-mindful-movement-a1b0cce788"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Los Altos",
+      "lat": 37.3645,
+      "lon": -122.10674,
+      "generated": true
+    },
+    {
+      "id": "gen-day-los-gatos",
+      "name": "Family day in Los Gatos",
+      "summary": "Three family-friendly stops in Los Gatos — Vasona Lake County Park, New Museum of Los Gatos, Bay Club Courtside.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-31975037",
+        "osm-node-4066353807",
+        "osm-way-1382101104"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Los Gatos",
+      "lat": 37.23906,
+      "lon": -121.97162,
+      "generated": true
+    },
+    {
+      "id": "gen-day-martinez",
+      "name": "Family day in Martinez",
+      "summary": "Three family-friendly stops in Martinez — Contra Costa Stadium Cinema, CalFit Martinez, Martinez Athletic Club.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-318888741",
+        "osm-node-5777624952",
+        "osm-node-5767126734"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Martinez",
+      "lat": 38.0091,
+      "lon": -122.13132,
+      "generated": true
+    },
+    {
+      "id": "gen-day-menlo-park",
+      "name": "Family day in Menlo Park",
+      "summary": "Three family-friendly stops in Menlo Park — Guild, Feldman's Books, Fleet Feet Sports.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-111762120",
+        "osm-node-9482266632",
+        "osm-node-2628201854"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Menlo Park",
+      "lat": 37.45158,
+      "lon": -122.18349,
+      "generated": true
+    },
+    {
+      "id": "gen-day-mill-valley",
+      "name": "Family day in Mill Valley",
+      "summary": "Family-friendly spots in Mill Valley — Joe's Taco Lounge, Avatar's Punjabi Burritos.",
+      "accent": "park",
+      "stopIds": [
+        "curated-millvalley-joes-taco",
+        "curated-millvalley-avatars"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Mill Valley",
+      "lat": 37.90153,
+      "lon": -122.54333,
+      "generated": true
+    },
+    {
+      "id": "gen-day-milpitas",
+      "name": "Family day in Milpitas",
+      "summary": "Three family-friendly stops in Milpitas — Mook Art Gallery, ICC Table Tennis Center, Jenson School For The Performance Arts.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-node-9731779702",
+        "osm-node-10666074853",
+        "osm-node-10666019955"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Milpitas",
+      "lat": 37.4396,
+      "lon": -121.90599,
+      "generated": true
+    },
+    {
+      "id": "gen-events-milpitas",
+      "name": "Milpitas family events",
+      "summary": "Two upcoming family events in Milpitas plus a nearby stop — Homework Help for Grades K-6 · Knitting Club for Kids.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-node-9731779702"
+      ],
+      "eventIds": [
+        "sccl-milpitas-homework-help-for-grades-k-6-76d12b8f41",
+        "sccl-milpitas-knitting-club-for-kids-98be5f419c"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Milpitas",
+      "lat": 37.42641,
+      "lon": -121.90395,
+      "generated": true
+    },
+    {
+      "id": "gen-day-mountain-view",
+      "name": "Family day in Mountain View",
+      "summary": "Three family-friendly stops in Mountain View — Stevenson Park, Wyandotte Park, Arbolejo Overlook.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-421572527",
+        "osm-way-461615868",
+        "osm-node-310730409"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Mountain View",
+      "lat": 37.39496,
+      "lon": -122.1208,
+      "generated": true
+    },
+    {
+      "id": "gen-events-mountain-view",
+      "name": "Mountain View family events",
+      "summary": "Two upcoming family events in Mountain View plus a nearby stop — Make Your Own Felt Portrait · Storytime Around the World.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-421572527"
+      ],
+      "eventIds": [
+        "mountain-view-library-16151163",
+        "mountain-view-library-16350009"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Mountain View",
+      "lat": 37.39438,
+      "lon": -122.08272,
+      "generated": true
+    },
+    {
+      "id": "gen-day-napa",
+      "name": "Family day in Napa",
+      "summary": "Three family-friendly stops in Napa — Viewpoint & Information Boards, Viewpoint & Information Boards, Baylands Vista Point.",
+      "accent": "park",
+      "stopIds": [
+        "osm-node-1983812352",
+        "osm-node-1983812361",
+        "osm-node-11920152011"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Napa",
+      "lat": 38.10269,
+      "lon": -122.28963,
+      "generated": true
+    },
+    {
+      "id": "gen-day-novato",
+      "name": "Family day in Novato",
+      "summary": "Three family-friendly stops in Novato — Marin Museum of Contemporary Art, Marin Museum of the American Indian, Stafford Lake Bike Park.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-356321278",
+        "osm-node-368174117",
+        "curated-novato-stafford-lake"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Novato",
+      "lat": 38.09538,
+      "lon": -122.59184,
+      "generated": true
+    },
+    {
+      "id": "gen-day-oakland",
+      "name": "Family day in Oakland",
+      "summary": "Three family-friendly stops in Oakland — Prescott Market Hall, Acta Non Verba - West Oakland Farm Park, Golden State Bonsai Garden.",
+      "accent": "park",
+      "stopIds": [
+        "osm-node-12765478901",
+        "osm-way-293256780",
+        "osm-way-36979120"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Oakland",
+      "lat": 37.81429,
+      "lon": -122.27868,
+      "generated": true
+    },
+    {
+      "id": "gen-events-oakland",
+      "name": "Oakland family events",
+      "summary": "Two upcoming family events in Oakland plus a nearby stop — Children's Fairyland · Oakland Zoo — train + family trail.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-node-12765478901"
+      ],
+      "eventIds": [
+        "fairyland-saturdays-2026-05-10",
+        "oakland-zoo-2026-05-10"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Oakland",
+      "lat": 37.79103,
+      "lon": -122.2327,
+      "generated": true
+    },
+    {
+      "id": "gen-day-pacifica",
+      "name": "Family day in Pacifica",
+      "summary": "Three family-friendly stops in Pacifica — Pacifica Coastside Museum, Taco Bell Cantina — Pacifica, Pacifica Pier.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-node-10058829178",
+        "curated-pacifica-taco-bell",
+        "curated-pacifica-pier"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Pacifica",
+      "lat": 37.62179,
+      "lon": -122.49634,
+      "generated": true
+    },
+    {
+      "id": "gen-day-palo-alto",
+      "name": "Family day in Palo Alto",
+      "summary": "Three family-friendly stops in Palo Alto — Cooley Landing Park, Hoover Park, El Camino Park.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-466550409",
+        "osm-way-29971801",
+        "osm-way-30767596"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Palo Alto",
+      "lat": 37.45066,
+      "lon": -122.14005,
+      "generated": true
+    },
+    {
+      "id": "gen-events-palo-alto",
+      "name": "Palo Alto family events",
+      "summary": "Two upcoming family events in Palo Alto plus a nearby stop — Tai Chi with Nelson Ng · ArtSEE Expression: Crystallized Color - Watercolor Magic.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-466550409"
+      ],
+      "eventIds": [
+        "palo-alto-library-tai-chi-with-nelson-ng-22c234c2ee",
+        "palo-alto-library-artsee-expression-crystallized-color-watercolor-magic-bdceda8304"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Palo Alto",
+      "lat": 37.45339,
+      "lon": -122.13616,
+      "generated": true
+    },
+    {
+      "id": "gen-day-petaluma",
+      "name": "Family day in Petaluma",
+      "summary": "Three family-friendly stops in Petaluma — Petaluma Adobe State Historic Park, Bay View Vista, Petaluma Marsh Vista.",
+      "accent": "park",
+      "stopIds": [
+        "osm-relation-9727371",
+        "osm-node-10152102764",
+        "osm-node-10152081094"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Petaluma",
+      "lat": 38.20517,
+      "lon": -122.52621,
+      "generated": true
+    },
+    {
+      "id": "gen-day-pleasant-hill",
+      "name": "Family day in Pleasant Hill",
+      "summary": "Three family-friendly stops in Pleasant Hill — Century 16 Downtown Pleasant Hill, Dick's Sporting Goods, Diablo Lanes.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-203193401",
+        "osm-node-4226181003",
+        "curated-pleasanthill-bowling"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Pleasant Hill",
+      "lat": 37.94497,
+      "lon": -122.06018,
+      "generated": true
+    },
+    {
+      "id": "gen-day-pleasanton",
+      "name": "Family day in Pleasanton",
+      "summary": "Three family-friendly stops in Pleasanton — Centennial Park, Museum on Main, Stoneridge Shopping Center.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-964820553",
+        "osm-node-368174057",
+        "curated-pleasanton-stoneridge-mall"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Pleasanton",
+      "lat": 37.67,
+      "lon": -121.8952,
+      "generated": true
+    },
+    {
+      "id": "gen-events-pleasanton",
+      "name": "Pleasanton family events",
+      "summary": "Two upcoming family events in Pleasanton plus a nearby stop — Bird Exploration · Lakeside Littles.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-964820553"
+      ],
+      "eventIds": [
+        "east-bay-parks-bird-exploration-5ffb9990f9",
+        "east-bay-parks-lakeside-littles-4acdfbf899"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Pleasanton",
+      "lat": 37.65926,
+      "lon": -121.87684,
+      "generated": true
+    },
+    {
+      "id": "gen-day-redwood-city",
+      "name": "Family day in Redwood City",
+      "summary": "Three family-friendly stops in Redwood City — Pulgas Water Temple grounds, Red Morton Community Park, Marlin Park.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-106137712",
+        "osm-way-217377487",
+        "osm-way-563124559"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Redwood City",
+      "lat": 37.49502,
+      "lon": -122.26782,
+      "generated": true
+    },
+    {
+      "id": "gen-events-redwood-city",
+      "name": "Redwood City family events",
+      "summary": "Two upcoming family events in Redwood City plus a nearby stop — Family Storytime · Family Storytime.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-106137712"
+      ],
+      "eventIds": [
+        "redwood-city-main-storytime-2026-05-16",
+        "redwood-city-main-storytime-2026-05-23"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Redwood City",
+      "lat": 37.48383,
+      "lon": -122.25824,
+      "generated": true
+    },
+    {
+      "id": "gen-day-richmond",
+      "name": "Family day in Richmond",
+      "summary": "Three family-friendly stops in Richmond — Golden State Model Railroad Museum, Rosie the Riveter Visitor Center, Point Richmond Community Center.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-node-368174007",
+        "osm-way-122273741",
+        "osm-node-12175802490"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Richmond",
+      "lat": 37.91715,
+      "lon": -122.37541,
+      "generated": true
+    },
+    {
+      "id": "gen-events-richmond",
+      "name": "Richmond family events",
+      "summary": "Two upcoming family events in Richmond plus a nearby stop — Family Storytime @ Bayview · Family Storytime @ West Side.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-node-368174007"
+      ],
+      "eventIds": [
+        "richmond-library-family-storytime-bayview-5a4316df34",
+        "richmond-library-family-storytime-west-side-d521d24c24"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Richmond",
+      "lat": 37.92895,
+      "lon": -122.35965,
+      "generated": true
+    },
+    {
+      "id": "gen-events-rio-vista",
+      "name": "Rio Vista family events",
+      "summary": "Two upcoming family events in Rio Vista plus a nearby stop — Sewing Club · Writer's Group of Rio Vista.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-1071153043"
+      ],
+      "eventIds": [
+        "solano-county-library-15390026",
+        "solano-county-library-15428878"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Rio Vista",
+      "lat": 38.13108,
+      "lon": -121.70569,
+      "generated": true
+    },
+    {
+      "id": "gen-day-san-carlos",
+      "name": "Family day in San Carlos",
+      "summary": "Three family-friendly stops in San Carlos — Arguello Park, Frank D. Harrington Park, Hiller Aviation Museum.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-295026452",
+        "osm-way-331155452",
+        "osm-way-131057214"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "San Carlos",
+      "lat": 37.50798,
+      "lon": -122.2627,
+      "generated": true
+    },
+    {
+      "id": "gen-day-san-francisco",
+      "name": "Family day in San Francisco",
+      "summary": "Three family-friendly stops in San Francisco — Coit Tower, The Market, La Cocina Municipal Marketplace.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-28824850",
+        "osm-node-5595082426",
+        "osm-way-260146990"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "San Francisco",
+      "lat": 37.7869,
+      "lon": -122.41289,
+      "generated": true
+    },
+    {
+      "id": "gen-events-san-francisco",
+      "name": "San Francisco family events",
+      "summary": "Two upcoming family events in San Francisco plus a nearby stop — Aquarium of the Bay — animal encounters · Penguin Feeding Talk.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-28824850"
+      ],
+      "eventIds": [
+        "aquarium-of-bay-2026-05-10",
+        "cal-academy-penguin-talk-2026-05-10"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "San Francisco",
+      "lat": 37.79369,
+      "lon": -122.42751,
+      "generated": true
+    },
+    {
+      "id": "gen-day-san-jose",
+      "name": "Family day in San Jose",
+      "summary": "Three family-friendly stops in San Jose — Moitozo Park, Riverview Park, Backesto Park.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-26297418",
+        "osm-way-413942804",
+        "osm-way-25966765"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "San Jose",
+      "lat": 37.38681,
+      "lon": -121.92271,
+      "generated": true
+    },
+    {
+      "id": "gen-events-san-jose",
+      "name": "San Jose family events",
+      "summary": "Two upcoming family events in San Jose plus a nearby stop — Children's Discovery Museum of San Jose · Happy Hollow Park & Zoo.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-26297418"
+      ],
+      "eventIds": [
+        "cdm-sj-daily-2026-05-10",
+        "happy-hollow-2026-05-10"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "San Jose",
+      "lat": 37.35745,
+      "lon": -121.90071,
+      "generated": true
+    },
+    {
+      "id": "gen-day-san-mateo",
+      "name": "Family day in San Mateo",
+      "summary": "Three family-friendly stops in San Mateo — SkyTerrace, Outdoor Terrace, Planespotting location SFO.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-1167439501",
+        "osm-node-9507140059",
+        "osm-node-4242298590"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "San Mateo",
+      "lat": 37.60951,
+      "lon": -122.37928,
+      "generated": true
+    },
+    {
+      "id": "gen-events-san-mateo",
+      "name": "San Mateo family events",
+      "summary": "Two upcoming family events in San Mateo plus a nearby stop — CuriOdyssey · Baby Bounce Storytime.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-1167439501"
+      ],
+      "eventIds": [
+        "curiodyssey-animals-2026-05-10",
+        "san-mateo-county-libraries-baby-bounce-storytime-86bb78bd93"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "San Mateo",
+      "lat": 37.58334,
+      "lon": -122.33597,
+      "generated": true
+    },
+    {
+      "id": "gen-day-san-rafael",
+      "name": "Family day in San Rafael",
+      "summary": "Three family-friendly stops in San Rafael — Greenbrae Redwoods, Indian Valley Organic Farm and Garden, Mayor's Lookout.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-1135311993",
+        "osm-way-655543184",
+        "osm-node-1331537822"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "San Rafael",
+      "lat": 37.98135,
+      "lon": -122.55408,
+      "generated": true
+    },
+    {
+      "id": "gen-events-san-rafael",
+      "name": "San Rafael family events",
+      "summary": "Two upcoming family events in San Rafael plus a nearby stop — Canta Conmigo! · Family Storytime.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-1135311993"
+      ],
+      "eventIds": [
+        "marin-library-canta-conmigo-8ec35fbd47",
+        "marin-library-family-storytime-9b0465d9fe"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "San Rafael",
+      "lat": 37.96685,
+      "lon": -122.53218,
+      "generated": true
+    },
+    {
+      "id": "gen-day-santa-clara",
+      "name": "Family day in Santa Clara",
+      "summary": "Three family-friendly stops in Santa Clara — Delano Manongs Park, San Tomas Park, River view Stormwater Garden.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-1217466746",
+        "osm-way-38327902",
+        "osm-way-1060202053"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Santa Clara",
+      "lat": 37.36295,
+      "lon": -121.93989,
+      "generated": true
+    },
+    {
+      "id": "gen-events-santa-clara",
+      "name": "Santa Clara family events",
+      "summary": "Two upcoming family events in Santa Clara plus a nearby stop — MISSION: Foundation and Friends Book Sale · CENTRAL: Adult Enrichment Storytime.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-1217466746"
+      ],
+      "eventIds": [
+        "santa-clara-city-library-mission-foundation-and-friends-book-sale-a2ea58fd34",
+        "santa-clara-city-library-central-adult-enrichment-storytime-7ba2c33df0"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Santa Clara",
+      "lat": 37.37183,
+      "lon": -121.93628,
+      "generated": true
+    },
+    {
+      "id": "gen-day-santa-rosa",
+      "name": "Family day in Santa Rosa",
+      "summary": "Three family-friendly stops in Santa Rosa — Julliard Park, East Knoll, Bald Mountain.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-115917245",
+        "osm-node-12407903302",
+        "osm-node-3493692893"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Santa Rosa",
+      "lat": 38.43338,
+      "lon": -122.63209,
+      "generated": true
+    },
+    {
+      "id": "gen-events-saratoga",
+      "name": "Saratoga family events",
+      "summary": "Two upcoming family events in Saratoga plus a nearby stop — Homework Help K-6 grade · Family Storytime.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-node-10650066737"
+      ],
+      "eventIds": [
+        "sccl-saratoga-homework-help-k-6-grade-075da66390",
+        "sccl-saratoga-family-storytime-cbc70358c8"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Saratoga",
+      "lat": 37.26453,
+      "lon": -122.03276,
+      "generated": true
+    },
+    {
+      "id": "gen-day-sausalito",
+      "name": "Family day in Sausalito",
+      "summary": "Three family-friendly stops in Sausalito — Battery East, Fort Point Viewpoint, Point Stuart.",
+      "accent": "park",
+      "stopIds": [
+        "osm-node-11991078747",
+        "osm-node-12641812702",
+        "osm-node-2572347267"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Sausalito",
+      "lat": 37.82569,
+      "lon": -122.46371,
+      "generated": true
+    },
+    {
+      "id": "gen-events-sausalito",
+      "name": "Sausalito family events",
+      "summary": "Two upcoming family events in Sausalito plus a nearby stop — Bay Area Discovery Museum · Bay Area Discovery Museum.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-node-11991078747"
+      ],
+      "eventIds": [
+        "bay-area-discovery-toddler-2026-05-10",
+        "bay-area-discovery-toddler-2026-05-12"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Sausalito",
+      "lat": 37.82413,
+      "lon": -122.47533,
+      "generated": true
+    },
+    {
+      "id": "gen-day-sonoma",
+      "name": "Family day in Sonoma",
+      "summary": "Family-friendly spots in Sonoma — Sonoma Community Center, Anytime Fitness.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-284578059",
+        "osm-node-2834991774"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Sonoma",
+      "lat": 38.29289,
+      "lon": -122.46066,
+      "generated": true
+    },
+    {
+      "id": "gen-day-stanford",
+      "name": "Family day in Stanford",
+      "summary": "Family-friendly spots in Stanford — Stanford Art Gallery, Cantor Arts Center.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-232805678",
+        "curated-paloalto-cantor"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Stanford",
+      "lat": 37.43048,
+      "lon": -122.16911,
+      "generated": true
+    },
+    {
+      "id": "gen-events-stanford",
+      "name": "Stanford family events",
+      "summary": "Two upcoming family events in Stanford plus a nearby stop — Art of Science 2026 · Finely Printed Books: Albert Bender and the Birth of Stanfor.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-232805678"
+      ],
+      "eventIds": [
+        "stanford-events-52446998038102-52615108168244",
+        "stanford-events-52014910816446-52014910882056"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Stanford",
+      "lat": 37.42759,
+      "lon": -122.17001,
+      "generated": true
+    },
+    {
+      "id": "gen-day-sunnyvale",
+      "name": "Family day in Sunnyvale",
+      "summary": "Three family-friendly stops in Sunnyvale — Kurated Kitchens, Hinson Campus Center Food Court, Braly Park.",
+      "accent": "park",
+      "stopIds": [
+        "osm-node-4331632103",
+        "osm-node-2309429646",
+        "osm-way-432963412"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Sunnyvale",
+      "lat": 37.35763,
+      "lon": -122.03006,
+      "generated": true
+    },
+    {
+      "id": "gen-events-sunnyvale",
+      "name": "Sunnyvale family events",
+      "summary": "Two upcoming family events in Sunnyvale plus a nearby stop — Bilingual Storytime (Mandarin/English) · ASL for Babies.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-node-4331632103"
+      ],
+      "eventIds": [
+        "sunnyvale-library-calendar-bilingual-storytime-mandarin-english-e917b6224d",
+        "sunnyvale-library-calendar-asl-for-babies-cf3c3006e9"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Sunnyvale",
+      "lat": 37.37524,
+      "lon": -122.0326,
+      "generated": true
+    },
+    {
+      "id": "gen-day-vallejo",
+      "name": "Family day in Vallejo",
+      "summary": "Three family-friendly stops in Vallejo — Mare Island Art Glass, Vallejo Naval and Historical Museum, Century 14 Vallejo.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-node-13701124884",
+        "osm-node-368174136",
+        "osm-way-59441204"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Vallejo",
+      "lat": 38.11268,
+      "lon": -122.24922,
+      "generated": true
+    },
+    {
+      "id": "gen-events-vallejo",
+      "name": "Vallejo family events",
+      "summary": "Two upcoming family events in Vallejo plus a nearby stop — DIY Paper Plate Flowers · Baby Bounce.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-node-13701124884"
+      ],
+      "eventIds": [
+        "solano-county-library-16338533",
+        "solano-county-library-15447329"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Vallejo",
+      "lat": 38.1033,
+      "lon": -122.25051,
+      "generated": true
+    },
+    {
+      "id": "gen-day-walnut-creek",
+      "name": "Family day in Walnut Creek",
+      "summary": "Three family-friendly stops in Walnut Creek — Old Oak Park, Diablo Escapes, Quantum Escapes.",
+      "accent": "park",
+      "stopIds": [
+        "osm-way-1163250813",
+        "osm-node-13184822305",
+        "osm-node-12401410573"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Walnut Creek",
+      "lat": 37.86653,
+      "lon": -122.04345,
+      "generated": true
+    },
+    {
+      "id": "gen-events-walnut-creek",
+      "name": "Walnut Creek family events",
+      "summary": "Two upcoming family events in Walnut Creek plus a nearby stop — Monday Birding · EHSD Our Families Navigators.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-1163250813"
+      ],
+      "eventIds": [
+        "east-bay-parks-monday-birding-32a9a03f6d",
+        "ccclib-ehsd-our-families-navigators-ad436ae0bb"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "city": "Walnut Creek",
+      "lat": 37.89979,
+      "lon": -122.06619,
+      "generated": true
     }
   ]
 }

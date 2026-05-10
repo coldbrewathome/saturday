@@ -44,6 +44,9 @@ async function fetchSource(source, registry) {
   if (source.sourceType === "communicoEvents") {
     return fetchCommunicoEvents(source, registry);
   }
+  if (source.sourceType === "localistEvents") {
+    return fetchLocalistEvents(source, registry);
+  }
   if (source.sourceType === "drupalViewsAjax") {
     return fetchDrupalViewsAjax(source, registry);
   }
@@ -184,6 +187,60 @@ async function fetchCommunicoEvents(source, registry) {
     contentType: `application/json; source=communico-events; events=${events.length}; locations=${locations.length}`,
     json: { events, locations },
     text: JSON.stringify({ events, locations }),
+  };
+}
+
+async function fetchLocalistEvents(source, registry) {
+  const days = Number(source.localistDays ?? registry.defaults?.windowDays ?? 45);
+  const perPage = Number(source.localistPerPage || source.perPage || 100);
+  const maxPages = Number(source.localistMaxPages || source.maxPages || 8);
+  const eventTypeIds = Array.isArray(source.localistEventTypeIds)
+    ? source.localistEventTypeIds
+    : [];
+  const events = [];
+  let pageInfo = null;
+  let fetchedPages = 0;
+
+  for (let page = 1; page <= maxPages; page += 1) {
+    const url = new URL(source.localistApiUrl || "/api/2/events", source.url);
+    url.searchParams.set("days", String(days));
+    url.searchParams.set("pp", String(perPage));
+    url.searchParams.set("page", String(page));
+    if (eventTypeIds.length > 1) {
+      url.searchParams.set("match", source.localistMatch || "any");
+    }
+    eventTypeIds.forEach((id, index) => {
+      url.searchParams.set(`type[${index}]`, String(id));
+    });
+
+    const payload = await fetchUrl(url.toString(), registry.defaults?.userAgent);
+    if (payload.status !== "ok") return payload;
+    let json = payload.json;
+    if (!json) {
+      try {
+        json = JSON.parse(payload.text || "{}");
+      } catch {
+        return { status: "fetch-error", reason: "invalid Localist JSON response" };
+      }
+    }
+
+    const pageEvents = Array.isArray(json.events) ? json.events : [];
+    events.push(...pageEvents);
+    pageInfo = json.page || pageInfo;
+    fetchedPages += 1;
+
+    const totalPages = Number(json.page?.total);
+    if (pageEvents.length === 0 || (Number.isFinite(totalPages) && page >= totalPages)) {
+      break;
+    }
+  }
+
+  return {
+    status: "ok",
+    httpStatus: 200,
+    contentType: `application/json; source=localist-events; events=${events.length}; pages=${fetchedPages}`,
+    json: { events, page: pageInfo, fetchedPages },
+    text: JSON.stringify({ events, page: pageInfo, fetchedPages }),
   };
 }
 

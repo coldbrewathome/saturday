@@ -147,6 +147,7 @@ const CITY_CENTROIDS = {
   sunnyvale: [37.3688, -122.0363],
   "mountain view": [37.3894, -122.0819],
   "palo alto": [37.4419, -122.143],
+  stanford: [37.4275, -122.1697],
   "los altos": [37.3852, -122.1141],
   saratoga: [37.2675, -122.0326],
   cupertino: [37.3181, -122.0286],
@@ -1532,6 +1533,9 @@ export function extractEventsFromPayload(payload, source = {}, options = {}) {
   if (source.sourceType === "communicoEvents") {
     return extractCommunicoEvents(payload.json, source);
   }
+  if (source.sourceType === "localistEvents") {
+    return extractLocalistEvents(payload.json, source);
+  }
   if (source.sourceType === "drupalViewsAjax") {
     return extractDrupalCardEvents(text, source, options);
   }
@@ -1899,6 +1903,206 @@ export function extractCommunicoEvents(json, source = {}) {
   return dedupeEvents(events);
 }
 
+const DEFAULT_LOCALIST_ALLOWED_TYPES = [
+  "Exhibition",
+  "Film/Screening",
+  "Performance",
+  "Social Event/Reception",
+  "Tour",
+  "Workshop",
+];
+
+const LOCALIST_EXCLUDED_PATTERNS = [
+  /\balcoholics anonymous\b/i,
+  /\bal-anon\b/i,
+  /\bcolloquium\b/i,
+  /\bconference\b/i,
+  /\bdoctoral\b/i,
+  /\bfaculty meet\b/i,
+  /\bgrand rounds\b/i,
+  /\binformation session\b/i,
+  /\boffice hours\b/i,
+  /\bph\.?d\.?\b/i,
+  /\bpostdoctoral fellowship\b/i,
+  /\bseminar\b/i,
+  /\bsymposium\b/i,
+  /\bthesis\b/i,
+  /\bvolunteer(?:ing)?\b/i,
+];
+
+function localistNames(value) {
+  return maybeArray(value)
+    .map((item) => stripUnsafeText(item?.name || item, 100))
+    .filter(Boolean);
+}
+
+function localistFilterNames(item, key) {
+  return localistNames(item?.filters?.[key]);
+}
+
+function localistIsPublic(audiences, source = {}) {
+  if (source.localistRequirePublicAudience === false) return true;
+  return audiences.some((audience) => /^(everyone|general public)$/i.test(audience));
+}
+
+function localistHasAllowedType(types, source = {}) {
+  const allowed = new Set(
+    (Array.isArray(source.localistAllowedTypeNames) && source.localistAllowedTypeNames.length > 0
+      ? source.localistAllowedTypeNames
+      : DEFAULT_LOCALIST_ALLOWED_TYPES
+    ).map((type) => type.toLowerCase()),
+  );
+  return types.some((type) => allowed.has(type.toLowerCase()));
+}
+
+function localistHasExcludedSignal(signalText) {
+  return LOCALIST_EXCLUDED_PATTERNS.some((pattern) => pattern.test(signalText));
+}
+
+function localistNeedsFamilySignal(types) {
+  const typeText = types.join(" ");
+  const broadCampusType = /\b(workshop|social event\/reception)\b/i.test(typeText);
+  const outingType = /\b(exhibition|film\/screening|performance|tour)\b/i.test(typeText);
+  return broadCampusType && !outingType;
+}
+
+function localistHasFamilySignal(signalText) {
+  return inferAgeBands(signalText).length > 0 || /\b(all ages|family friendly|for families|museum minis)\b/i.test(signalText);
+}
+
+function localistDateTime(instance, source = {}, role = "start") {
+  const raw = stripUnsafeText(role === "end" ? instance?.end : instance?.start, 120);
+  if (!raw) return null;
+  if (instance?.all_day) {
+    const date = raw.slice(0, 10);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      const fallbackTime = role === "end"
+        ? source.localistAllDayEndTime || "17:00"
+        : source.localistAllDayStartTime || "10:00";
+      return `${date}T${fallbackTime}:00-07:00`;
+    }
+  }
+  return raw;
+}
+
+function localistAgeBands(signalText) {
+  const inferred = inferAgeBands(signalText);
+  if (inferred.length > 0) return inferred;
+  return ["school-age", "tween"];
+}
+
+function localistCategory(types, subjects, signalText, source = {}) {
+  const typeText = types.join(" ");
+  const subjectText = subjects.join(" ");
+  if (/\b(performance)\b/i.test(typeText) || /\bmusic\b/i.test(subjectText) || /\b(concert|recital|carillon|orchestra|choir|piano|harp)\b/i.test(signalText)) {
+    return "Music";
+  }
+  if (/\b(workshop|social event\/reception)\b/i.test(typeText)) {
+    return "Community";
+  }
+  if (/\b(exhibition|tour|film\/screening)\b/i.test(typeText)) {
+    return "Museum";
+  }
+  return inferCategory(signalText, source.category || "Museum");
+}
+
+function localistCost(item, signalText) {
+  const ticketCost = stripUnsafeText(item?.ticket_cost, 40);
+  if (item?.free === true) return "Free";
+  if (ticketCost) return ticketCost;
+  return inferCost(signalText);
+}
+
+function localistVenue(item, source = {}) {
+  const primary = stripUnsafeText(item?.location_name || item?.location || source.name, 100);
+  const room = stripUnsafeText(item?.room_number, 80);
+  if (room && primary && !primary.toLowerCase().includes(room.toLowerCase())) {
+    return `${primary} - ${room}`;
+  }
+  return primary || source.name;
+}
+
+function localistEventUrl(item, source = {}) {
+  return (
+    sanitizeUrl(item?.localist_url, source.url) ||
+    sanitizeUrl(item?.url, source.url) ||
+    sanitizeUrl(item?.ticket_url, source.url) ||
+    source.url
+  );
+}
+
+export function extractLocalistEvents(json, source = {}) {
+  const rawEvents = Array.isArray(json) ? json : Array.isArray(json?.events) ? json.events : [];
+  const events = [];
+
+  for (const wrapper of rawEvents) {
+    const item = wrapper?.event || wrapper;
+    if (!item || item.private === true || item.status !== "live") continue;
+    const title = stripUnsafeText(item.title, 140);
+    const description = stripUnsafeText(item.description_text || item.description || "", 700);
+    const types = localistFilterNames(item, "event_types");
+    const audiences = localistFilterNames(item, "event_audience");
+    const subjects = localistFilterNames(item, "event_subject");
+    const departments = localistNames(item.departments);
+    const groups = localistNames(item.groups);
+    const signalText = [
+      title,
+      description,
+      types.join(" "),
+      audiences.join(" "),
+      subjects.join(" "),
+      departments.join(" "),
+      groups.join(" "),
+      item.location_name,
+    ].filter(Boolean).join(" ");
+
+    if (!title || !localistIsPublic(audiences, source)) continue;
+    if (!localistHasAllowedType(types, source)) continue;
+    if (localistNeedsFamilySignal(types) && !localistHasFamilySignal(signalText)) continue;
+    if (localistHasExcludedSignal(signalText)) continue;
+    if (hasAdultOnlySignal(signalText)) continue;
+
+    const instances = Array.isArray(item.event_instances) && item.event_instances.length > 0
+      ? item.event_instances
+      : [{ event_instance: { id: item.id, start: item.first_date, end: item.last_date, all_day: true } }];
+
+    for (const instanceWrapper of instances) {
+      const instance = instanceWrapper?.event_instance || instanceWrapper || {};
+      const startDateTime = localistDateTime(instance, source, "start");
+      if (!startDateTime) continue;
+      const endDateTime = localistDateTime(instance, source, "end");
+      const lat = Number(item.geo?.latitude);
+      const lon = Number(item.geo?.longitude);
+      const event = normalizeRawEvent({
+        id: `${source.id}-${item.id || slugify(title)}-${instance.id || hash(startDateTime)}`,
+        title,
+        description,
+        venue: localistVenue(item, source),
+        city: stripUnsafeText(item.geo?.city || source.city, 80),
+        neighborhood: stripUnsafeText(item.location_name || source.neighborhood || source.city, 80),
+        lat: Number.isFinite(lat) ? lat : source.lat,
+        lon: Number.isFinite(lon) ? lon : source.lon,
+        category: localistCategory(types, subjects, signalText, source),
+        startDateTime,
+        endDateTime,
+        ageBands: localistAgeBands(signalText),
+        audiences: ["all"],
+        cost: localistCost(item, signalText),
+        url: localistEventUrl(item, source),
+        sourceId: source.id,
+        sourceName: source.name,
+        sourceUrl: source.url,
+        sourceMode: "localist-events",
+        extractionMethod: "localist-events",
+        verified: true,
+      }, source);
+      if (event) events.push(event);
+    }
+  }
+
+  return dedupeEvents(events);
+}
+
 export function extractDrupalCardEvents(html, source = {}, options = {}) {
   const blocks = html.match(/<div class="col--6">[\s\S]*?(?=<div class="col--6">|<nav class="pager"|$)/gi) || [];
   const audienceText = source.defaultAudienceText || source.drupalViews?.defaultAudienceText || "all ages kids pre-school teens";
@@ -2080,6 +2284,7 @@ function scoreEvent(event) {
   if (event.extractionMethod === "librarycalendar") score += 7;
   if (event.extractionMethod === "sfpl-events") score += 7;
   if (event.extractionMethod === "drupal-views-ajax") score += 7;
+  if (event.extractionMethod === "localist-events") score += 7;
   if (event.extractionMethod === "event-list") score += 7;
   if (event.extractionMethod === "official-text-event") score += 7;
   if (event.extractionMethod === "official-recurring-event") score += 7;

@@ -162,6 +162,13 @@ export type FamilyEvent = {
   verified: boolean;
 };
 
+type SavedEventDateGroup = {
+  key: string;
+  label: string;
+  sortTime: number;
+  events: FamilyEvent[];
+};
+
 type BoaMuseum = {
   id: string;
   name: string;
@@ -233,6 +240,8 @@ export type Plan = {
   profile?: PlannerProfile;
 };
 
+type EventDateFilter = "all" | "today" | "tomorrow" | "weekend";
+
 const categories: Category[] = [
   "Outdoors",
   "Food",
@@ -244,6 +253,12 @@ const categories: Category[] = [
 const ageBandOptions = Object.entries(ageBandLabels) as Array<[AgeBand, string]>;
 
 const costs: Cost[] = ["Free", "$", "$$", "$$$", "Unknown"];
+const eventDateFilters: Array<{ id: EventDateFilter; label: string }> = [
+  { id: "all", label: "All" },
+  { id: "today", label: "Today" },
+  { id: "tomorrow", label: "Tomorrow" },
+  { id: "weekend", label: "Weekend" },
+];
 const vibeOptions = Object.entries(APP_VIBE_LABELS) as Array<
   [PlannerVibe, string]
 >;
@@ -276,6 +291,77 @@ function dayWindowLabel(days: number[]): string {
   return sorted.map((d) => SHORT_DAY[d] ?? "?").join(" / ");
 }
 
+function validEventDate(value?: string | null): Date | null {
+  if (!value) return null;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function sameLocalDate(left: Date, right: Date): boolean {
+  return (
+    left.getFullYear() === right.getFullYear() &&
+    left.getMonth() === right.getMonth() &&
+    left.getDate() === right.getDate()
+  );
+}
+
+function eventDateGroupLabel(event: FamilyEvent): string {
+  const date = validEventDate(event.startDateTime);
+  if (!date) {
+    return `${dayWindowLabel(event.daysOfWeek)} events`;
+  }
+  return date.toLocaleDateString(undefined, {
+    weekday: "long",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+function eventTimeLabel(event: FamilyEvent): string | null {
+  const start = validEventDate(event.startDateTime);
+  if (!start) return null;
+  const end = validEventDate(event.endDateTime);
+  const formatter = new Intl.DateTimeFormat(undefined, {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+  if (
+    end &&
+    sameLocalDate(start, end) &&
+    start.getHours() === 0 &&
+    start.getMinutes() === 0 &&
+    end.getTime() - start.getTime() >= 23 * 60 * 60 * 1000
+  ) {
+    return "All day";
+  }
+  if (end && sameLocalDate(start, end) && end.getTime() > start.getTime()) {
+    return `${formatter.format(start)} - ${formatter.format(end)}`;
+  }
+  return formatter.format(start);
+}
+
+function groupSavedEventsByDate(events: FamilyEvent[]): SavedEventDateGroup[] {
+  const groups = new Map<string, SavedEventDateGroup>();
+  for (const event of events) {
+    const date = validEventDate(event.startDateTime);
+    const key = date ? isoDate(date) : `recurring-${dayWindowLabel(event.daysOfWeek)}`;
+    const sortTime = date
+      ? new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
+      : Infinity;
+    const group = groups.get(key) ?? {
+      key,
+      label: eventDateGroupLabel(event),
+      sortTime,
+      events: [],
+    };
+    group.events.push(event);
+    groups.set(key, group);
+  }
+  return Array.from(groups.values()).sort(
+    (left, right) => left.sortTime - right.sortTime || left.label.localeCompare(right.label),
+  );
+}
+
 function weatherTone(label: string): "wet" | "dry" | "mixed" {
   const wet = ["Rainy", "Drizzly", "Stormy", "Showers", "Snowy"];
   const dry = ["Clear", "Mostly sunny"];
@@ -301,6 +387,10 @@ function nextDayOfWeek(target: number, from: Date = new Date()): Date {
 function thisOrNextDayOfWeek(target: number, from: Date = new Date()): Date {
   const offset = (target - from.getDay() + 7) % 7;
   return new Date(from.getFullYear(), from.getMonth(), from.getDate() + offset);
+}
+
+function addLocalDays(date: Date, days: number): Date {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
 }
 
 function nextBoaWeekend(now: Date = new Date()): { saturday: Date; sunday: Date } {
@@ -874,6 +964,10 @@ type FeaturedPlan = {
   stopIds: string[];
   eventIds?: string[];
   audiences?: Audience[];
+  city?: string;
+  lat?: number | null;
+  lon?: number | null;
+  generated?: boolean;
 };
 
 type AppRoute = {
@@ -966,7 +1060,7 @@ function App() {
   const [city, setCity] = useState("All");
   const [cost, setCost] = useState<Cost | "All">("All");
   const [onlyOpen, setOnlyOpen] = useState(false);
-  const [weekendOnly, setWeekendOnly] = useState(false);
+  const [eventDateFilter, setEventDateFilter] = useState<EventDateFilter>("all");
   const [sortBy, setSortBy] = useState<"best" | "nearest" | "price" | "name">(
     "best",
   );
@@ -1031,6 +1125,13 @@ function App() {
   const [curatedSpots, setCuratedSpots] = useState<Spot[]>([]);
   const [events, setEvents] = useState<FamilyEvent[]>([]);
   const [mapSelection, setMapSelection] = useState<MapSelection | null>(null);
+  // Track the map's current center so the featured-plans rail can re-rank
+  // city plans by distance from whatever the user is browsing. Default to
+  // null until the map fires its first moveend / fit-to-bounds callback.
+  const [mapCenter, setMapCenter] = useState<{ lat: number; lon: number } | null>(
+    null,
+  );
+
   const [featuredPlans, setFeaturedPlans] = useState<FeaturedPlan[]>([]);
   const [boaMuseums, setBoaMuseums] = useState<BoaMuseum[]>([]);
   const [weather, setWeather] = useState<WeatherForecast | null>(null);
@@ -1668,6 +1769,11 @@ function App() {
     });
   }, [events, savedEventIds]);
 
+  const savedEventGroups = useMemo(
+    () => groupSavedEventsByDate(savedEvents),
+    [savedEvents],
+  );
+
   const savedSpots = useMemo(
     () => allSpots.filter((spot) => savedIds.includes(spot.id)),
     [allSpots, savedIds],
@@ -1811,11 +1917,52 @@ function App() {
   }, []);
 
   // Events shown as pins on the map: anything in the next ~14 days that matches
-  // the active age band. Highlight set narrows to the current weekend.
-  // The "This weekend events" toggle hard-restricts to Sat/Sun within 7 days.
+  // the active age band. The event date filter can hard-restrict pins to
+  // today, tomorrow, or the upcoming weekend.
+  // Editor's-pick rail re-ranks by proximity to whatever the user is browsing
+  // on the map: hand-curated plans always lead, then auto-generated city
+  // plans sorted by distance to the map center (falling back to user
+  // location, then inferred geo, then a Bay Area centroid).
+  const nearbyFeaturedPlans = useMemo(() => {
+    if (featuredPlans.length === 0) return featuredPlans;
+    const anchor =
+      mapCenter ||
+      userLocation ||
+      (inferredGeo?.lat && inferredGeo?.lon
+        ? { lat: inferredGeo.lat, lon: inferredGeo.lon }
+        : { lat: 37.7749, lon: -122.4194 });
+    const handCurated = featuredPlans.filter((p) => !p.generated);
+    const generated = featuredPlans.filter((p) => p.generated);
+    const scored = generated
+      .map((p) => {
+        if (!Number.isFinite(p.lat) || !Number.isFinite(p.lon)) {
+          return { plan: p, distance: Number.POSITIVE_INFINITY };
+        }
+        return {
+          plan: p,
+          distance: haversineMiles(
+            { lat: anchor.lat, lon: anchor.lon },
+            { lat: Number(p.lat), lon: Number(p.lon) },
+          ),
+        };
+      })
+      .sort((a, b) => a.distance - b.distance);
+    // Cap the rail so it doesn't get unwieldy. Generated plans are
+    // re-ranked every map move, so the top of the rail follows the user.
+    const generatedCap = 8;
+    return [...handCurated, ...scored.slice(0, generatedCap).map((s) => s.plan)];
+  }, [featuredPlans, mapCenter, userLocation, inferredGeo]);
+
   const mapEvents = useMemo(() => {
     if (events.length === 0) return [] as FamilyEvent[];
-    const now = Date.now();
+    const nowDate = new Date();
+    const now = nowDate.getTime();
+    const today = new Date(
+      nowDate.getFullYear(),
+      nowDate.getMonth(),
+      nowDate.getDate(),
+    );
+    const tomorrow = addLocalDays(today, 1);
     const horizon = now + 14 * 24 * 60 * 60 * 1000;
     const weekendHorizon = now + 7 * 24 * 60 * 60 * 1000;
     const normalizedQuery = query.trim().toLowerCase();
@@ -1836,22 +1983,31 @@ function App() {
         if (!haystack.includes(normalizedQuery)) return false;
       }
       if (event.startDateTime) {
-        const t = new Date(event.startDateTime).getTime();
-        if (Number.isFinite(t)) {
-          if (t < now - 12 * 60 * 60 * 1000 || t > horizon) return false;
-          if (weekendOnly) {
-            const dow = new Date(event.startDateTime).getDay();
-            if (dow !== 0 && dow !== 6) return false;
-            if (t > weekendHorizon) return false;
-          }
+        const date = validEventDate(event.startDateTime);
+        if (!date) return false;
+        const t = date.getTime();
+        if (!Number.isFinite(t)) return false;
+        if (t < now - 12 * 60 * 60 * 1000 || t > horizon) return false;
+        if (eventDateFilter === "today" && !sameLocalDate(date, today)) return false;
+        if (eventDateFilter === "tomorrow" && !sameLocalDate(date, tomorrow)) return false;
+        if (eventDateFilter === "weekend") {
+          const dow = date.getDay();
+          if (dow !== 0 && dow !== 6) return false;
+          if (t > weekendHorizon) return false;
         }
-      } else {
-        // Recurring without a specific date — keep weekend recurrences.
-        if (!event.daysOfWeek.some((d) => d === 0 || d === 6)) return false;
+        return true;
       }
-      return true;
+
+      if (eventDateFilter === "today") {
+        return event.daysOfWeek.includes(today.getDay());
+      }
+      if (eventDateFilter === "tomorrow") {
+        return event.daysOfWeek.includes(tomorrow.getDay());
+      }
+      // Recurring without a specific date — keep weekend recurrences.
+      return event.daysOfWeek.some((d) => d === 0 || d === 6);
     });
-  }, [events, ageBand, weekendOnly, query]);
+  }, [events, ageBand, eventDateFilter, query]);
 
   const highlightedEventIds = useMemo(() => {
     const ids = new Set<string>();
@@ -1907,9 +2063,9 @@ function App() {
     if (city !== "All") n += 1;
     if (cost !== "All") n += 1;
     if (onlyOpen) n += 1;
-    if (weekendOnly) n += 1;
+    if (eventDateFilter !== "all") n += 1;
     return n;
-  }, [query, ageBand, category, city, cost, onlyOpen, weekendOnly]);
+  }, [query, ageBand, category, city, cost, onlyOpen, eventDateFilter]);
 
   const activePlan = useMemo(
     () => plans.find((plan) => plan.id === activePlanId) ?? null,
@@ -2913,6 +3069,7 @@ function App() {
     setCity("All");
     setCost("All");
     setOnlyOpen(false);
+    setEventDateFilter("all");
     setSortBy("best");
     setPreferences([]);
     setPlannerProfile(defaultPlannerProfile);
@@ -3500,14 +3657,21 @@ function App() {
             <span>Open now</span>
           </label>
 
-          <label className="switch-row">
-            <input
-              type="checkbox"
-              checked={weekendOnly}
-              onChange={(event) => setWeekendOnly(event.target.checked)}
-            />
-            <span>This weekend events</span>
-          </label>
+          <div className="filter-group">
+            <span className="filter-label">Events</span>
+            <div className="segmented compact">
+              {eventDateFilters.map((item) => (
+                <button
+                  key={item.id}
+                  className={eventDateFilter === item.id ? "active" : ""}
+                  type="button"
+                  onClick={() => setEventDateFilter(item.id)}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
 
           <label className="select-field">
             <span>Sort</span>
@@ -3557,19 +3721,21 @@ function App() {
         </aside>
 
         <section className="spots-area" aria-label="Visit spots">
-          {featuredPlans.length > 0 && (
+          {nearbyFeaturedPlans.length > 0 && (
             <section
               className="featured-rail"
               aria-label="Editor's picks — starter plans"
             >
               <div className="featured-rail-head">
-                <span className="featured-rail-eyebrow">Editor's picks</span>
+                <span className="featured-rail-eyebrow">
+                  Editor's picks{mapCenter ? " near this view" : ""}
+                </span>
                 <span className="featured-rail-sub">
                   Tap a starter plan to fork it into your own.
                 </span>
               </div>
               <ul className="featured-rail-list">
-                {featuredPlans.map((featured) => {
+                {nearbyFeaturedPlans.map((featured) => {
                   const accent = featured.accent || "park";
                   return (
                     <li
@@ -3612,6 +3778,7 @@ function App() {
               userLocation={userLocation}
               geoState={geoState}
               onRequestLocation={requestUserLocation}
+              onViewChange={setMapCenter}
             />
             <div className="map-overlay" aria-label="Map summary">
               <div>
@@ -4175,7 +4342,7 @@ function App() {
                   <>
                     <div className="saved-subhead-row">
                       <p className="saved-subhead">
-                        Events ({savedEvents.length}) · soonest first
+                        Events ({savedEvents.length})
                       </p>
                       {expiredIds.length > 0 && (
                         <button
@@ -4191,45 +4358,49 @@ function App() {
                         </button>
                       )}
                     </div>
-                    <div className="saved-list">
-                      {savedEvents.map((event) => {
-                        const date = event.startDateTime
-                          ? new Date(event.startDateTime)
-                          : null;
-                        const expired = isEventExpired(event);
-                        return (
-                          <div
-                            className={`saved-item ${expired ? "is-past" : ""}`}
-                            key={event.id}
-                          >
-                            <div>
-                              <strong>
-                                {expired && (
-                                  <span className="past-pill">Past</span>
-                                )}
-                                {event.title}
-                              </strong>
-                              <span>
-                                {date
-                                  ? date.toLocaleDateString(undefined, {
-                                      weekday: "short",
-                                      month: "short",
-                                      day: "numeric",
-                                    })
-                                  : dayWindowLabel(event.daysOfWeek)}{" "}
-                                · {event.venue}
-                              </span>
-                            </div>
-                            <button
-                              className="icon-button"
-                              title="Remove saved event"
-                              onClick={() => toggleSavedEvent(event.id)}
-                            >
-                              <Trash2 aria-hidden="true" />
-                            </button>
+                    <div className="saved-event-groups">
+                      {savedEventGroups.map((group) => (
+                        <div className="saved-event-group" key={group.key}>
+                          <div className="saved-event-date-row">
+                            <h3 className="saved-event-date">{group.label}</h3>
+                            <span className="saved-event-count">
+                              {group.events.length} event{group.events.length === 1 ? "" : "s"}
+                            </span>
                           </div>
-                        );
-                      })}
+                          <div className="saved-list">
+                            {group.events.map((event) => {
+                              const expired = isEventExpired(event);
+                              const timeLabel = eventTimeLabel(event);
+                              const detail = [timeLabel, event.venue]
+                                .filter(Boolean)
+                                .join(" · ");
+                              return (
+                                <div
+                                  className={`saved-item ${expired ? "is-past" : ""}`}
+                                  key={event.id}
+                                >
+                                  <div>
+                                    <strong>
+                                      {expired && (
+                                        <span className="past-pill">Past</span>
+                                      )}
+                                      {event.title}
+                                    </strong>
+                                    {detail && <span>{detail}</span>}
+                                  </div>
+                                  <button
+                                    className="icon-button"
+                                    title="Remove saved event"
+                                    onClick={() => toggleSavedEvent(event.id)}
+                                  >
+                                    <Trash2 aria-hidden="true" />
+                                  </button>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </>
                 );

@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-10T15:12:57.245Z",
+  "generatedAt": "2026-05-10T17:06:20.939Z",
   "registryPath": "data/event-sources.json",
   "outputPath": "public/data/events.json",
-  "eventCount": 2312,
-  "sourceCount": 85,
-  "liveEventCount": 2236,
+  "eventCount": 2700,
+  "sourceCount": 86,
+  "liveEventCount": 2624,
   "fallbackEventCount": 76,
   "errors": [],
   "sources": [
@@ -1228,18 +1228,21 @@
       "sourceType": "eventList",
       "city": "San Francisco",
       "category": "Festival",
-      "status": "fetch-error",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 11,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 11,
       "fetches": [
         {
           "url": "https://ybgfestival.org/venue/greatlawn/",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "reason": "This operation was aborted"
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 33
     },
     {
       "id": "stern-grove",
@@ -1519,6 +1522,30 @@
       "eventCount": 0,
       "fetches": [],
       "reason": "Enable after adding an API key. Query params are built by ingest-events.mjs."
+    },
+    {
+      "id": "stanford-events",
+      "name": "Stanford Events",
+      "url": "https://events.stanford.edu/",
+      "sourceType": "localistEvents",
+      "city": "Stanford",
+      "category": "Museum",
+      "status": "ok",
+      "liveEvents": 377,
+      "fallbackEvents": 0,
+      "eventCount": 377,
+      "fetches": [
+        {
+          "url": "https://events.stanford.edu/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=localist-events; events=498; pages=5"
+        }
+      ],
+      "reason": "Official Stanford Localist calendar, narrowed to public arts, museum, tour, workshop, film, performance, and reception event types. The parser requires Everyone or General Public audience and filters out internal academic meetings.",
+      "httpStatus": 200,
+      "contentType": "application/json; source=localist-events; events=498; pages=5",
+      "rejectedLiveEvents": 0
     },
     {
       "id": "stanford-powwow",

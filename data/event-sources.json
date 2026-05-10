@@ -1595,6 +1595,36 @@
       "notes": "Enable after adding an API key. Query params are built by ingest-events.mjs."
     },
     {
+      "id": "stanford-events",
+      "name": "Stanford Events",
+      "url": "https://events.stanford.edu/",
+      "city": "Stanford",
+      "category": "Museum",
+      "sourceType": "localistEvents",
+      "trust": "official",
+      "lat": 37.4275,
+      "lon": -122.1697,
+      "localistEventTypeIds": [
+        37952570030426,
+        37952570032475,
+        37952570040671,
+        37952570042720,
+        37952570044769,
+        37952570047842
+      ],
+      "localistAllowedTypeNames": [
+        "Exhibition",
+        "Film/Screening",
+        "Performance",
+        "Social Event/Reception",
+        "Tour",
+        "Workshop"
+      ],
+      "localistMaxPages": 5,
+      "localistPerPage": 100,
+      "notes": "Official Stanford Localist calendar, narrowed to public arts, museum, tour, workshop, film, performance, and reception event types. The parser requires Everyone or General Public audience and filters out internal academic meetings."
+    },
+    {
       "id": "stanford-powwow",
       "name": "Stanford Powwow",
       "url": "https://www.stanfordpowwow.com/",
