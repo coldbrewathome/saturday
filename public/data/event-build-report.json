@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-10T02:43:46.975Z",
+  "generatedAt": "2026-05-10T15:12:57.245Z",
   "registryPath": "data/event-sources.json",
   "outputPath": "public/data/events.json",
   "eventCount": 2312,
@@ -30,9 +30,9 @@
       "city": "San Francisco",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 872,
+      "liveEvents": 871,
       "fallbackEvents": 0,
-      "eventCount": 872,
+      "eventCount": 871,
       "fetches": [
         {
           "url": "https://sfpl.org/events",
@@ -261,7 +261,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 63
+      "rejectedLiveEvents": 65
     },
     {
       "id": "sjpl",
@@ -524,9 +524,9 @@
       "city": "Fremont",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 12,
+      "liveEvents": 13,
       "fallbackEvents": 0,
-      "eventCount": 12,
+      "eventCount": 13,
       "fetches": [
         {
           "url": "https://aclibrary.bibliocommons.com/v2/events",
@@ -570,9 +570,9 @@
       "city": "Walnut Creek",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://ccclib.bibliocommons.com/v2/events",
@@ -980,9 +980,9 @@
       "city": "Oakland",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 92,
+      "liveEvents": 101,
       "fallbackEvents": 0,
-      "eventCount": 92,
+      "eventCount": 101,
       "fetches": [
         {
           "url": "https://www.ebparks.org/calendar",
@@ -993,7 +993,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; source=drupal-views-ajax",
-      "rejectedLiveEvents": 56
+      "rejectedLiveEvents": 47
     },
     {
       "id": "don-edwards-nwr",
@@ -1072,9 +1072,9 @@
       "city": "Los Altos",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 26,
+      "liveEvents": 25,
       "fallbackEvents": 0,
-      "eventCount": 26,
+      "eventCount": 25,
       "fetches": [
         {
           "url": "https://www.openspace.org/get-involved/events-activities",
@@ -1121,7 +1121,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 19
+      "rejectedLiveEvents": 21
     },
     {
       "id": "san-mateo-county-parks",
@@ -1228,21 +1228,18 @@
       "sourceType": "eventList",
       "city": "San Francisco",
       "category": "Festival",
-      "status": "ok",
-      "liveEvents": 11,
+      "status": "fetch-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 11,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://ybgfestival.org/venue/greatlawn/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 33
+      "reason": "This operation was aborted"
     },
     {
       "id": "stern-grove",
@@ -1531,9 +1528,9 @@
       "city": "Stanford",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://www.stanfordpowwow.com/",
@@ -1544,7 +1541,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1
+      "rejectedLiveEvents": 2
     },
     {
       "id": "hmb-wine-jazz-festival",
