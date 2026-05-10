@@ -1409,6 +1409,111 @@ export function expandRecurringTemplates(templates, source = {}, options = {}) {
   return expanded;
 }
 
+// CivicPlus (the CMS Sunnyvale and many .ca.gov library/parks sites use)
+// renders its public calendar as an HTML <table> with one <td> per day. Each
+// day cell contains:
+//   <td class="calendar_day calendar_day_with_items">
+//     5
+//     <div class="calendar_items">
+//       <div class="calendar_item">
+//         <span class="calendar_eventtime">11:00 AM</span>
+//         <a class="calendar_eventlink" href="/Home/Components/Calendar/Event/{id}/74"
+//            title="Toddler Storytime">Toddler Storytime</a>
+//       </div>
+//       …
+//     </div>
+//   </td>
+//
+// Month + year come from the prev/next month nav links (`-curm-{N}/-cury-{Y}`).
+// This is enough to materialize concrete dated events without follow-up
+// requests to per-event detail pages.
+export function extractCivicPlusCalendarEvents(html, source = {}, options = {}) {
+  if (typeof html !== "string" || html.length === 0) return [];
+  const monthYear = inferCivicPlusMonthYear(html);
+  if (!monthYear) return [];
+  const { month, year } = monthYear;
+
+  const events = [];
+  const dayCellRegex = /<td[^>]*class="[^"]*calendar_day[^"]*"[^>]*>([\s\S]*?)<\/td>/gi;
+  for (const cellMatch of html.matchAll(dayCellRegex)) {
+    const cell = cellMatch[1];
+    if (!/calendar_day_with_items/i.test(cellMatch[0])) continue;
+    const dayMatch = cell.match(/^\s*(\d{1,2})/);
+    if (!dayMatch) continue;
+    const day = Number(dayMatch[1]);
+    if (!day || day < 1 || day > 31) continue;
+    const itemRegex =
+      /<div class="calendar_item">\s*(?:<span[^>]*class="calendar_eventtime"[^>]*>([^<]+)<\/span>)?\s*<a[^>]*class="calendar_eventlink"[^>]*href="([^"]+)"[^>]*title="([^"]*)"[^>]*>([^<]*)<\/a>/gi;
+    for (const item of cell.matchAll(itemRegex)) {
+      const timeText = (item[1] || "").trim();
+      const href = item[2];
+      const title = decodeHtmlEntities((item[3] || item[4] || "").trim());
+      if (!title) continue;
+      const startClock = parseCivicPlusClock(timeText);
+      if (!startClock) continue;
+      const startDateTime = localDateTime(
+        new Date(Date.UTC(year, month - 1, day)),
+        startClock,
+      );
+      if (!startDateTime) continue;
+      const endDateTime = addMinutesToLocalIso(startDateTime, 60);
+      const url = href.startsWith("http")
+        ? href
+        : new URL(href, source.url).toString();
+      const event = normalizeRawEvent(
+        {
+          title,
+          startDateTime,
+          endDateTime,
+          url,
+          sourceUrl: source.url,
+          sourceMode: "civicpluscal",
+          extractionMethod: "civicpluscal",
+        },
+        source,
+      );
+      if (event) events.push(event);
+    }
+  }
+  return events;
+}
+
+function inferCivicPlusMonthYear(html) {
+  // The page renders prev/next month nav links containing -curm-{N}/-cury-{Y}.
+  // Parse next-month and step back a month to get the displayed month.
+  const re = /-curm-(\d{1,2})\/-cury-(\d{4})/g;
+  const matches = [...html.matchAll(re)];
+  if (matches.length === 0) return null;
+  // Sort numeric: prev < next. Use the higher one as next-month.
+  const tuples = matches.map((m) => ({
+    month: Number(m[1]),
+    year: Number(m[2]),
+  }));
+  tuples.sort((a, b) => a.year - b.year || a.month - b.month);
+  const next = tuples[tuples.length - 1];
+  let month = next.month - 1;
+  let year = next.year;
+  if (month < 1) {
+    month = 12;
+    year -= 1;
+  }
+  return { month, year };
+}
+
+function parseCivicPlusClock(text) {
+  if (typeof text !== "string") return null;
+  const match = text
+    .trim()
+    .match(/^(\d{1,2})(?::(\d{2}))?\s*(AM|PM)$/i);
+  if (!match) return null;
+  let hour = Number(match[1]);
+  const minute = Number(match[2] || "0");
+  const meridiem = match[3].toUpperCase();
+  if (hour === 12) hour = 0;
+  if (meridiem === "PM") hour += 12;
+  return { hour, minute };
+}
+
 export function extractEventsFromPayload(payload, source = {}, options = {}) {
   const contentType = payload.contentType || "";
   const text = payload.text || "";
@@ -1432,6 +1537,9 @@ export function extractEventsFromPayload(payload, source = {}, options = {}) {
   }
   if (source.sourceType === "openCitiesEvent") {
     return extractOpenCitiesEventEvents(text, source, options);
+  }
+  if (source.sourceType === "civicpluscal") {
+    return extractCivicPlusCalendarEvents(text, source, options);
   }
   if (source.sourceType === "midpenTable") {
     return extractMidpenTableEvents(text, source, options);

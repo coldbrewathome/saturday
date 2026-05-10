@@ -1536,16 +1536,16 @@
     },
     {
       "id": "sunnyvale-library-calendar",
-      "name": "Sunnyvale Public Library / City Events",
-      "url": "https://www.library.sunnyvale.ca.gov/events/kids-events",
+      "name": "Sunnyvale Public Library",
+      "url": "https://www.library.sunnyvale.ca.gov/events/calendar-month-view",
       "city": "Sunnyvale",
       "category": "Library",
-      "sourceType": "html",
+      "sourceType": "civicpluscal",
       "trust": "official",
-      "enabled": false,
-      "disabledReason": "Official Sunnyvale library/city calendar pages and event detail/ICS endpoints return Akamai 403 Access Denied to automated fetches in this environment.",
+      "requiresBrowserHeaders": true,
       "lat": 37.3688,
-      "lon": -122.0363
+      "lon": -122.0363,
+      "notes": "CivicPlus calendar (HTML table). Akamai blocks default fetcher headers — requiresBrowserHeaders sends a full Chrome header set (Sec-Fetch-* etc.) which is enough to clear the bot challenge."
     },
     {
       "id": "santa-clara-city-library",

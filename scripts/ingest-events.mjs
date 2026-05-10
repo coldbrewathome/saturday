@@ -62,7 +62,9 @@ async function fetchSource(source, registry) {
     url.searchParams.set("size", "100");
     return fetchUrl(url.toString(), registry.defaults?.userAgent);
   }
-  return fetchUrl(source.url, registry.defaults?.userAgent);
+  return fetchUrl(source.url, registry.defaults?.userAgent, {
+    browserHeaders: source.requiresBrowserHeaders === true,
+  });
 }
 
 async function fetchSourcePayloads(source, registry) {
@@ -88,7 +90,23 @@ async function fetchSourcePayloads(source, registry) {
     return payloads;
   }
 
-  const urls = Array.isArray(source.urls) && source.urls.length > 0 ? source.urls : [source.url];
+  let urls = Array.isArray(source.urls) && source.urls.length > 0
+    ? source.urls
+    : [source.url];
+  // CivicPlus' calendar-month-view always renders the current month at the
+  // unparameterized URL. Append the next month so we cover the full ~14-day
+  // planning window even when "today" is near month-end.
+  if (
+    source.sourceType === "civicpluscal" &&
+    /\/events\/calendar-month-view\/?$/.test(source.url)
+  ) {
+    const next = new Date();
+    next.setUTCMonth(next.getUTCMonth() + 1);
+    const nm = next.getUTCMonth() + 1;
+    const ny = next.getUTCFullYear();
+    const nextUrl = `${source.url.replace(/\/$/, "")}/-curm-${nm}/-cury-${ny}`;
+    if (!urls.includes(nextUrl)) urls = [...urls, nextUrl];
+  }
   const payloads = [];
   for (const url of urls) {
     const sourceForUrl = { ...source, url };
@@ -240,17 +258,46 @@ function extractQueryParam(url, key) {
   }
 }
 
+// Sites behind Akamai / Imperva (e.g. Sunnyvale Library) reject the default
+// fetcher's headers with 403. When the source asks for it, send the full
+// Chrome header set including Sec-Fetch-* — that is enough to clear most
+// "definitely not a real browser" heuristics without resorting to TLS
+// fingerprint spoofing.
+const BROWSER_HEADERS = {
+  "user-agent":
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
+  accept:
+    "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+  "accept-language": "en-US,en;q=0.9",
+  "sec-ch-ua": '"Chromium";v="130", "Google Chrome";v="130"',
+  "sec-ch-ua-mobile": "?0",
+  "sec-ch-ua-platform": '"macOS"',
+  "sec-fetch-dest": "document",
+  "sec-fetch-mode": "navigate",
+  "sec-fetch-site": "none",
+  "sec-fetch-user": "?1",
+  "upgrade-insecure-requests": "1",
+};
+
 async function fetchUrl(url, userAgent, init = {}) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
+    const useBrowserHeaders = Boolean(init.browserHeaders);
+    const baseHeaders = useBrowserHeaders
+      ? { ...BROWSER_HEADERS }
+      : {
+          accept:
+            "text/html,application/xhtml+xml,application/json,application/rss+xml,application/xml,text/calendar;q=0.9,*/*;q=0.8",
+          "user-agent": userAgent || "saturday-with-friends/0.1 event-ingest",
+        };
+    const { browserHeaders: _omit, ...passthroughInit } = init;
     const response = await fetch(url, {
-      ...init,
+      ...passthroughInit,
       signal: controller.signal,
       headers: {
-        accept: "text/html,application/xhtml+xml,application/json,application/rss+xml,application/xml,text/calendar;q=0.9,*/*;q=0.8",
-        "user-agent": userAgent || "saturday-with-friends/0.1 event-ingest",
-        ...(init.headers || {}),
+        ...baseHeaders,
+        ...(passthroughInit.headers || {}),
       },
     });
     const contentType = response.headers.get("content-type") || "";
