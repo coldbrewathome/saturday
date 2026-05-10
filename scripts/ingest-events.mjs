@@ -93,13 +93,12 @@ async function fetchSourcePayloads(source, registry) {
   let urls = Array.isArray(source.urls) && source.urls.length > 0
     ? source.urls
     : [source.url];
-  // CivicPlus' calendar-month-view always renders the current month at the
-  // unparameterized URL. Append the next month so we cover the full ~14-day
-  // planning window even when "today" is near month-end.
-  if (
-    source.sourceType === "civicpluscal" &&
-    /\/events\/calendar-month-view\/?$/.test(source.url)
-  ) {
+  // CivicPlus calendars render the current month at the unparameterized
+  // base URL and accept `-curm-N/-cury-YYYY` suffixes. Append the next-month
+  // URL so we cover the full planning window even at month-end. Generalized:
+  // works for both /events/calendar-month-view (Sunnyvale) and /calendar/events
+  // (Santa Clara City) and any other CivicPlus instance.
+  if (source.sourceType === "civicpluscal" && !/-curm-\d/.test(source.url)) {
     const next = new Date();
     next.setUTCMonth(next.getUTCMonth() + 1);
     const nm = next.getUTCMonth() + 1;

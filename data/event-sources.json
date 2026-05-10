@@ -1553,12 +1553,12 @@
       "url": "https://www.sclibrary.org/calendar/events",
       "city": "Santa Clara",
       "category": "Library",
-      "sourceType": "html",
+      "sourceType": "civicpluscal",
       "trust": "official",
-      "enabled": false,
-      "disabledReason": "Official Santa Clara City Library calendar returns Akamai/CivicPlus 403 Access Denied to automated fetches in this environment.",
+      "requiresBrowserHeaders": true,
       "lat": 37.3541,
-      "lon": -121.9552
+      "lon": -121.9552,
+      "notes": "Same CivicPlus calendar markup as Sunnyvale; the requiresBrowserHeaders flag bypasses the Akamai 403."
     },
     {
       "id": "santa-clara-county-parks",

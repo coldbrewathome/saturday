@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-10T00:27:13.825Z",
+  "generatedAt": "2026-05-10T00:36:43.141Z",
   "registryPath": "data/event-sources.json",
   "outputPath": "public/data/events.json",
-  "eventCount": 678,
+  "eventCount": 829,
   "sourceCount": 85,
-  "liveEventCount": 554,
+  "liveEventCount": 705,
   "fallbackEventCount": 124,
   "errors": [],
   "sources": [
@@ -284,7 +284,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1
+      "rejectedLiveEvents": 0
     },
     {
       "id": "sccl-campbell",
@@ -409,9 +409,9 @@
       "city": "Morgan Hill",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 13,
+      "liveEvents": 14,
       "fallbackEvents": 0,
-      "eventCount": 13,
+      "eventCount": 14,
       "fetches": [
         {
           "url": "https://sccl.bibliocommons.com/v2/events?locations=MH",
@@ -422,7 +422,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1
+      "rejectedLiveEvents": 0
     },
     {
       "id": "sccl-saratoga",
@@ -980,9 +980,9 @@
       "city": "Oakland",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 82,
+      "liveEvents": 83,
       "fallbackEvents": 0,
-      "eventCount": 82,
+      "eventCount": 83,
       "fetches": [
         {
           "url": "https://www.ebparks.org/calendar",
@@ -993,7 +993,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; source=drupal-views-ajax",
-      "rejectedLiveEvents": 66
+      "rejectedLiveEvents": 65
     },
     {
       "id": "don-edwards-nwr",
@@ -1459,15 +1459,31 @@
       "id": "santa-clara-city-library",
       "name": "Santa Clara City Library",
       "url": "https://www.sclibrary.org/calendar/events",
-      "sourceType": "html",
+      "sourceType": "civicpluscal",
       "city": "Santa Clara",
       "category": "Library",
-      "status": "disabled",
-      "reason": "Official Santa Clara City Library calendar returns Akamai/CivicPlus 403 Access Denied to automated fetches in this environment.",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 149,
       "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": []
+      "eventCount": 149,
+      "fetches": [
+        {
+          "url": "https://www.sclibrary.org/calendar/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        },
+        {
+          "url": "https://www.sclibrary.org/calendar/events/-curm-6/-cury-2026",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "reason": "Same CivicPlus calendar markup as Sunnyvale; the requiresBrowserHeaders flag bypasses the Akamai 403.",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 63
     },
     {
       "id": "santa-clara-county-parks",
