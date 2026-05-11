@@ -30,14 +30,25 @@ jobs:
       - run: npm run test
       - run: npm run validate:data
       - run: npm run validate:events
-      - run: npm run build
+
+      - name: Build kids (FamHop)
+        run: npm run build
         env:
           VITE_POLLS_API: "https://saturday-polls.santaclararental2016.workers.dev"
           VITE_GOOGLE_CLIENT_ID: "673443526391-r7oj4up03jd13ti57a6fpq6bcdas91p6.apps.googleusercontent.com"
           VITE_DATA_ORIGIN: "https://famhop-data.pages.dev"
-      - name: Deploy to Cloudflare Pages
+      - name: Deploy FamHop to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=saturday-spots --branch=main --commit-dirty=true
+
+      - name: Build adults (NightHop)
+        run: npm run build:adults
+      - name: Deploy NightHop to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=nighthop --branch=main --commit-dirty=true
