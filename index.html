@@ -17,10 +17,18 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
 
-    <link rel="preconnect" href="https://commons.wikimedia.org" crossorigin />
-    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
-    <link rel="preconnect" href="https://a.tile.openstreetmap.org" crossorigin />
+    <!--
+      Preconnect only to hosts hit on the critical path. The polls/state
+      worker is fetched eagerly on app boot for sign-in + user state, so
+      paying the TLS handshake up front is worth it. Tiles, image CDNs, and
+      Google Identity are touched later (after JS runs, after the map opens,
+      or only when the user clicks sign-in), so a cheap DNS resolution is
+      enough — full preconnect just burns a TLS slot during LCP.
+    -->
     <link rel="preconnect" href="https://saturday-polls.santaclararental2016.workers.dev" crossorigin />
+    <link rel="dns-prefetch" href="https://a.tile.openstreetmap.org" />
+    <link rel="dns-prefetch" href="https://commons.wikimedia.org" />
+    <link rel="dns-prefetch" href="https://images.unsplash.com" />
     <link rel="dns-prefetch" href="https://accounts.google.com" />
 
     <meta property="og:type" content="website" />

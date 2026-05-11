@@ -12,3 +12,11 @@
 /llms.txt
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=3600
+
+# Vite emits content-hashed filenames in /assets/, so the bytes for a given
+# URL never change — safe to cache forever. The default Pages cache is 4h
+# with must-revalidate, which forces a 304 round-trip for repeat visitors
+# on every entry. Marking these immutable lets the browser skip the network
+# entirely until a new build ships (with a new hash, and therefore a new URL).
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
