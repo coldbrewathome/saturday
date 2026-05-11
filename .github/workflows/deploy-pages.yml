@@ -7,15 +7,13 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: cloudflare-pages
   cancel-in-progress: false
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     env:
       # The event pipeline uses local-time math (parseIcsDate hard-codes -07:00,
@@ -34,21 +32,12 @@ jobs:
       - run: npm run validate:events
       - run: npm run build
         env:
-          GITHUB_PAGES: "true"
           VITE_POLLS_API: "https://saturday-polls.santaclararental2016.workers.dev"
           VITE_GOOGLE_CLIENT_ID: "673443526391-r7oj4up03jd13ti57a6fpq6bcdas91p6.apps.googleusercontent.com"
           VITE_DATA_ORIGIN: "https://famhop-data.pages.dev"
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
         with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=saturday-spots --branch=main --commit-dirty=true
