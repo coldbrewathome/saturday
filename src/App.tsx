@@ -1026,6 +1026,20 @@ function formatGeneratedAt(value?: string) {
   }).format(new Date(value));
 }
 
+function latestGeneratedAt(...values: Array<string | undefined>) {
+  let best: string | undefined;
+  let bestMs = -Infinity;
+  for (const value of values) {
+    if (!value) continue;
+    const ms = Date.parse(value);
+    if (Number.isFinite(ms) && ms > bestMs) {
+      bestMs = ms;
+      best = value;
+    }
+  }
+  return best;
+}
+
 function interleaveByCategory(spots: Spot[]) {
   const buckets = new Map<Category, Spot[]>();
   for (const item of categories) {
@@ -1080,6 +1094,9 @@ function App() {
   );
   const [plans, setPlans] = useState<Plan[]>(() =>
     readStoredArray("saturday.plans", []),
+  );
+  const [deletedPlanIds, setDeletedPlanIds] = useState<string[]>(() =>
+    readStoredArray("saturday.deletedPlanIds", []),
   );
   const initialRoute = readAppRoute();
   const [view, setView] = useState<"home" | "browse" | "plans">(
@@ -1168,6 +1185,8 @@ function App() {
     loading: boolean;
     error?: string;
     imageStats?: SpotDataset["imageStats"];
+    eventsCount?: number;
+    eventsGeneratedAt?: string;
   }>({
     sourceName: "Curated fallback",
     count: starterSpots.length,
@@ -1246,9 +1265,17 @@ function App() {
       const adminPayload = await fetchAdminEvents();
       if (!active) return;
       if (adminPayload && adminPayload.events.length > 0) {
-        setEvents(
-          (adminPayload.events as FamilyEvent[]).filter(audienceVisible),
+        const visible = (adminPayload.events as FamilyEvent[]).filter(
+          audienceVisible,
         );
+        setEvents(visible);
+        setDataMeta((prev) => ({
+          ...prev,
+          eventsCount: visible.length,
+          eventsGeneratedAt:
+            (adminPayload as { generatedAt?: string }).generatedAt ??
+            prev.eventsGeneratedAt,
+        }));
         return;
       }
       try {
@@ -1257,7 +1284,13 @@ function App() {
         const dataset = (await response.json()) as EventsDataset;
         if (!active) return;
         if (Array.isArray(dataset.events)) {
-          setEvents(dataset.events.filter(audienceVisible));
+          const visible = dataset.events.filter(audienceVisible);
+          setEvents(visible);
+          setDataMeta((prev) => ({
+            ...prev,
+            eventsCount: visible.length,
+            eventsGeneratedAt: dataset.generatedAt ?? prev.eventsGeneratedAt,
+          }));
         }
       } catch {
         // Events are optional; failure is non-fatal.
@@ -1414,6 +1447,13 @@ function App() {
   }, [plans]);
 
   useEffect(() => {
+    window.localStorage.setItem(
+      "saturday.deletedPlanIds",
+      JSON.stringify(deletedPlanIds),
+    );
+  }, [deletedPlanIds]);
+
+  useEffect(() => {
     setShareState({ status: "idle" });
   }, [activePlanId]);
 
@@ -1457,6 +1497,14 @@ function App() {
           const incomingPlans = (Array.isArray(serverState.plans)
             ? serverState.plans
             : []) as Plan[];
+          const incomingDeletedPlanIds: string[] = Array.isArray(
+            (serverState as { deletedPlanIds?: unknown }).deletedPlanIds,
+          )
+            ? ((serverState as { deletedPlanIds: unknown[] })
+                .deletedPlanIds as string[]).filter(
+                (v) => typeof v === "string",
+              )
+            : [];
           setSavedIds((local) =>
             Array.from(new Set<string>([...incomingSaved, ...local])),
           );
@@ -1472,11 +1520,20 @@ function App() {
             for (const item of incomingCustom) map.set(item.id, item);
             return Array.from(map.values());
           });
+          setDeletedPlanIds((local) =>
+            Array.from(new Set<string>([...local, ...incomingDeletedPlanIds])),
+          );
           setPlans((local) => {
+            const tombstones = new Set<string>([
+              ...deletedPlanIds,
+              ...incomingDeletedPlanIds,
+            ]);
             const map = new Map<string, Plan>();
             for (const item of local) map.set(item.id, item);
             for (const item of incomingPlans) map.set(item.id, item);
-            return Array.from(map.values());
+            return Array.from(map.values()).filter(
+              (plan) => !tombstones.has(plan.id),
+            );
           });
         }
         setSyncReady(true);
@@ -1502,6 +1559,7 @@ function App() {
         visitedIds,
         customSpots,
         plans,
+        deletedPlanIds,
       })
         .then(() => setSyncStatus("synced"))
         .catch(() => setSyncStatus("error"));
@@ -1515,6 +1573,7 @@ function App() {
     visitedIds,
     customSpots,
     plans,
+    deletedPlanIds,
   ]);
 
   useEffect(() => {
@@ -1594,6 +1653,7 @@ function App() {
     setVisitedIds([]);
     setCustomSpots([]);
     setPlans([]);
+    setDeletedPlanIds([]);
     setActivePlanId(null);
     setPreferences([]);
     for (const key of [
@@ -1602,6 +1662,7 @@ function App() {
       "saturday.visitedSpots",
       "saturday.customSpots",
       "saturday.plans",
+      "saturday.deletedPlanIds",
       "saturday.preferences",
     ]) {
       try {
@@ -2360,6 +2421,9 @@ function App() {
 
   function deletePlan(id: string) {
     setPlans((current) => current.filter((plan) => plan.id !== id));
+    setDeletedPlanIds((current) =>
+      current.includes(id) ? current : [...current, id],
+    );
     if (activePlanId === id) {
       setActivePlanId(null);
     }
@@ -3173,12 +3237,21 @@ function App() {
           <Database aria-hidden="true" />
           <div>
             <strong>
-              {dataMeta.loading ? "Loading Bay Area data" : `${dataMeta.count} Bay Area spots`}
+              {dataMeta.loading
+                ? "Loading Bay Area data"
+                : dataMeta.eventsCount != null
+                  ? `${dataMeta.count} spots · ${dataMeta.eventsCount} events`
+                  : `${dataMeta.count} Bay Area spots`}
             </strong>
             <span>
               {dataMeta.error
                 ? "Using fallback data"
-                : `Refreshed ${formatGeneratedAt(dataMeta.generatedAt)}`}
+                : `Refreshed ${formatGeneratedAt(
+                    latestGeneratedAt(
+                      dataMeta.generatedAt,
+                      dataMeta.eventsGeneratedAt,
+                    ),
+                  )}`}
             </span>
           </div>
         </div>

@@ -267,6 +267,7 @@ export type SyncedState = {
   visitedIds: string[];
   customSpots: unknown[];
   plans: unknown[];
+  deletedPlanIds?: string[];
   updatedAt?: string;
 };
 
