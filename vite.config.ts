@@ -71,6 +71,29 @@ function audienceJsonLdPlugin(env: Record<string, string>): Plugin {
         },
       ];
 
+  const alternateName = isAdults
+    ? [`${brand} night-out planner`, "Bay Area nightlife", "nighthop.pages.dev"]
+    : [`${brand} weekend planner`, "Bay Area family events", "Bay Area family activities", "famhop.com"];
+  const featureList = isAdults
+    ? [
+        "Pick-a-vibe 3-stop night-out plan in one tap",
+        "Bay Area bars, breweries, music and comedy venues",
+        "Live nightlife events by city and category",
+        "Share a vote link with friends",
+        "Find me on the map and sort venues by distance",
+      ]
+    : [
+        "Pick-a-vibe 3-stop family plan in one tap",
+        "Bay Area parks, libraries, museums and family venues",
+        "Live weekend family events by city and category",
+        "Share a vote link with co-parents and friends",
+        "Filter by age band: toddler, preschool, school-age, tween",
+        "Find me on the map and sort spots by distance",
+      ];
+  const audienceLd = isAdults
+    ? { "@type": "PeopleAudience", suggestedMinAge: 21 }
+    : { "@type": "PeopleAudience", suggestedMinAge: 0, suggestedMaxAge: 14 };
+
   const block = {
     "@context": "https://schema.org",
     "@graph": [
@@ -79,6 +102,7 @@ function audienceJsonLdPlugin(env: Record<string, string>): Plugin {
         "@id": `${siteUrl}#website`,
         url: siteUrl,
         name: brand,
+        alternateName,
         description,
         inLanguage: "en-US",
         publisher: { "@id": `${siteUrl}#org` },
@@ -100,7 +124,9 @@ function audienceJsonLdPlugin(env: Record<string, string>): Plugin {
         operatingSystem: "Web",
         browserRequirements: "Requires JavaScript",
         description,
+        featureList,
         areaServed: { "@type": "Place", name: "San Francisco Bay Area" },
+        audience: audienceLd,
         offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
       },
       {
