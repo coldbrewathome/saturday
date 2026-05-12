@@ -34,6 +34,12 @@ const SITE = process.env.VITE_APP_SITE_URL?.replace(/\/$/, "") ||
 const BRAND = process.env.VITE_APP_BRAND || (IS_ADULTS ? "NightHop" : "FamHop");
 const BRAND_TAG = IS_ADULTS ? "night-out planner" : "family weekend planner";
 const OG_IMAGE = process.env.VITE_APP_OG_IMAGE || `${SITE}/og-image.png`;
+const FREE_CATEGORIES = new Set(["Library", "Park"]);
+function eventLikelyFree(event) {
+  if (typeof event.cost === "string" && /free/i.test(event.cost)) return true;
+  if (typeof event.cost === "string" && event.cost !== "Unknown" && !/free/i.test(event.cost)) return false;
+  return FREE_CATEGORIES.has(event.category);
+}
 let activeMetro = metroConfig.defaultMetro;
 let sitemapEntries = [
   { loc: `${SITE}/`, lastmod: today(), changefreq: "daily", priority: 1.0 },
@@ -263,9 +269,48 @@ function generateMetroAppShellPage(metro) {
       0,
       300,
     );
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${SITE}/#website`,
+        url: `${SITE}/`,
+        name: BRAND,
+        inLanguage: "en-US",
+        publisher: { "@id": `${SITE}/#org` },
+      },
+      {
+        "@type": "Organization",
+        "@id": `${SITE}/#org`,
+        name: BRAND,
+        url: `${SITE}/`,
+        logo: `${SITE}/icon-512.png`,
+        slogan: "Plan · Hop · Repeat.",
+      },
+      {
+        "@type": "CollectionPage",
+        "@id": `${canonical}#webpage`,
+        url: canonical,
+        name: title,
+        description,
+        isPartOf: { "@id": `${SITE}/#website` },
+        about: { "@type": "Place", name: metroLabel() },
+        audience: {
+          "@type": "PeopleAudience",
+          suggestedMinAge: 0,
+          suggestedMaxAge: 14,
+        },
+      },
+    ],
+  };
   let html = fs.readFileSync(shellPath, "utf8");
   html = metro.id === metroConfig.defaultMetro.id ? html : metroText(html);
   html = replaceMetroShellCopy(html, title, description);
+  html = html.replace(
+    /<script type="application\/ld\+json">[\s\S]*?<\/script>/,
+    `<script type="application/ld+json">${safeJsonScript(jsonLd)}</script>`,
+  );
   html = upsertHeadTag(html, "title", esc(title));
   html = upsertMeta(html, "name", "description", description);
   html = upsertLink(html, "canonical", canonical);
@@ -296,7 +341,7 @@ function generateRootAppShellPage() {
   if (!fs.existsSync(shellPath)) return;
   const title = `${BRAND} family weekend planner by metro`;
   const description =
-    `${BRAND} helps families find kid-friendly spots, family events, and ready-made weekend plans in the Bay Area, Los Angeles, New York City, and Seattle.`;
+    `${BRAND} helps families find kid-friendly spots, family events, and ready-made weekend plans across major U.S. metros.`;
   const canonical = `${SITE}/`;
   const metroCards = metroConfig.metros
     .map((metro) => {
@@ -666,6 +711,9 @@ function buildEventDetailRows(event, dateStr) {
 }
 
 function buildEventJsonLd(event, canonical) {
+  if (!event.startDateTime) return null;
+
+  const free = eventLikelyFree(event);
   const node = {
     "@context": "https://schema.org",
     "@type": "Event",
@@ -675,10 +723,9 @@ function buildEventJsonLd(event, canonical) {
     description: buildEventDescription(event, formatEventDate(event)),
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     eventStatus: "https://schema.org/EventScheduled",
-    isAccessibleForFree:
-      typeof event.cost === "string" && /free/i.test(event.cost),
+    startDate: event.startDateTime,
   };
-  if (event.startDateTime) node.startDate = event.startDateTime;
+  if (free) node.isAccessibleForFree = true;
   if (event.endDateTime) node.endDate = event.endDateTime;
   if (event.imageUrl) {
     node.image = event.imageUrl;
@@ -713,13 +760,15 @@ function buildEventJsonLd(event, canonical) {
     };
   }
   if (event.url) {
-    node.offers = {
+    const offers = {
       "@type": "Offer",
       url: event.url,
-      availability: "https://schema.org/InStock",
-      price: event.cost && /free/i.test(event.cost) ? "0" : undefined,
       priceCurrency: "USD",
     };
+    if (free) {
+      offers.price = "0";
+    }
+    node.offers = offers;
   }
   if (Array.isArray(event.ageBands) && event.ageBands.length) {
     node.audience = {
@@ -1169,7 +1218,7 @@ function renderShell({ title, description, canonical, ogImage, jsonLd, breadcrum
         })),
       }
     : null;
-  const allLd = breadcrumbLd ? [jsonLd, breadcrumbLd] : [jsonLd];
+  const allLd = [jsonLd, breadcrumbLd].filter(Boolean);
   const breadcrumbHtml = breadcrumb && breadcrumb.length
     ? `<nav class="breadcrumb" aria-label="Breadcrumb"><ol>${breadcrumb
         .map((b, i, arr) =>
