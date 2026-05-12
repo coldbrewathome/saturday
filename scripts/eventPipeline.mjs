@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 
 export const DEFAULT_TIMEZONE = "America/Los_Angeles";
+export const DEFAULT_TIMEZONE_OFFSET = "-07:00";
 export const DEFAULT_WINDOW_DAYS = 45;
 
 const TIME_WINDOW_START = {
@@ -257,9 +258,9 @@ function dateOnly(date) {
   return date.toISOString().slice(0, 10);
 }
 
-function localIso(date, time = "10:00") {
+function localIso(date, time = "10:00", timezoneOffset = DEFAULT_TIMEZONE_OFFSET) {
   const [hour = "10", minute = "00"] = time.split(":");
-  return `${dateOnly(date)}T${hour.padStart(2, "0")}:${minute.padStart(2, "0")}:00-07:00`;
+  return `${dateOnly(date)}T${hour.padStart(2, "0")}:${minute.padStart(2, "0")}:00${timezoneOffset}`;
 }
 
 function addMinutesToLocalIso(value, minutes) {
@@ -390,16 +391,17 @@ function fieldFromIcs(block, key) {
   return stripUnsafeText(block.match(re)?.[1] || "", 1000);
 }
 
-function parseIcsDate(value) {
+function parseIcsDate(value, timezoneOffset = DEFAULT_TIMEZONE_OFFSET) {
   const raw = stripUnsafeText(value, 80);
   if (!raw) return null;
   const compact = raw.match(/^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2})?Z?)?$/);
   if (!compact) return null;
   const [, y, m, d, hh = "10", mm = "00", ss = "00"] = compact;
-  return `${y}-${m}-${d}T${hh}:${mm}:${ss}${raw.endsWith("Z") ? "Z" : "-07:00"}`;
+  return `${y}-${m}-${d}T${hh}:${mm}:${ss}${raw.endsWith("Z") ? "Z" : timezoneOffset}`;
 }
 
 export function extractIcsEvents(text, source = {}) {
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
   const unfolded = text.replace(/\r?\n[ \t]/g, "");
   const blocks = unfolded.match(/BEGIN:VEVENT[\s\S]*?END:VEVENT/g) || [];
   return blocks
@@ -409,8 +411,8 @@ export function extractIcsEvents(text, source = {}) {
       venue: fieldFromIcs(block, "LOCATION") || source.name,
       city: source.city,
       category: source.category,
-      startDateTime: parseIcsDate(fieldFromIcs(block, "DTSTART")),
-      endDateTime: parseIcsDate(fieldFromIcs(block, "DTEND")),
+      startDateTime: parseIcsDate(fieldFromIcs(block, "DTSTART"), timezoneOffset),
+      endDateTime: parseIcsDate(fieldFromIcs(block, "DTEND"), timezoneOffset),
       url: fieldFromIcs(block, "URL") || source.url,
       sourceId: source.id,
       sourceName: source.name,
@@ -421,6 +423,7 @@ export function extractIcsEvents(text, source = {}) {
 }
 
 export function extractRssEvents(text, source = {}) {
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
   const blocks = text.match(/<item[\s\S]*?<\/item>|<entry[\s\S]*?<\/entry>/gi) || [];
   return blocks
     .map((block) => {
@@ -434,7 +437,7 @@ export function extractRssEvents(text, source = {}) {
         venue: source.name,
         city: source.city,
         category: source.category,
-        startDateTime: parseLooseDate(textForDate, new Date()),
+        startDateTime: parseLooseDate(textForDate, new Date(), timezoneOffset),
         url: link,
         sourceId: source.id,
         sourceName: source.name,
@@ -472,6 +475,7 @@ function hrefsFromBlock(block, baseUrl) {
 }
 
 export function extractHtmlEvents(html, source = {}, options = {}) {
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
   const jsonLd = extractJsonLdEvents(html, source);
   const blocks = [
     ...(html.match(/<article[\s\S]*?<\/article>/gi) || []),
@@ -486,7 +490,7 @@ export function extractHtmlEvents(html, source = {}, options = {}) {
     const signalText = `${text} ${audienceText}`;
     if (!isEventish(signalText) || hasAdultOnlySignal(signalText)) continue;
     if (!hasFamilySignal(signalText)) continue;
-    const startDateTime = datetimeFromBlock(block) || parseLooseDate(text, options.now || new Date());
+    const startDateTime = datetimeFromBlock(block, timezoneOffset) || parseLooseDate(text, options.now || new Date(), timezoneOffset);
     if (!startDateTime) continue;
     const links = hrefsFromBlock(block, source.url);
     const title = bestTitleFromBlock(block, links, text);
@@ -542,17 +546,17 @@ function bestTitleFromBlock(block, links, fallbackText) {
   return stripUnsafeText(heading, 120);
 }
 
-function datetimeFromBlock(block) {
+function datetimeFromBlock(block, timezoneOffset = DEFAULT_TIMEZONE_OFFSET) {
   const timeMatch = block.match(/<time[^>]+datetime=["']([^"']+)["'][^>]*>/i);
-  return timeMatch ? normalizeDateTime(timeMatch[1]) : null;
+  return timeMatch ? normalizeDateTime(timeMatch[1], timezoneOffset) : null;
 }
 
-export function parseLooseDate(text, now = new Date()) {
+export function parseLooseDate(text, now = new Date(), timezoneOffset = DEFAULT_TIMEZONE_OFFSET) {
   const clean = stripUnsafeText(text, 1200);
   const iso = clean.match(/\b(20\d{2})-(\d{2})-(\d{2})(?:[T ](\d{1,2}):(\d{2})(?::(\d{2}))?)?\b/);
   if (iso) {
     const [, y, m, d, hh = "10", mm = "00", ss = "00"] = iso;
-    return `${y}-${m}-${d}T${hh.padStart(2, "0")}:${mm}:${ss}-07:00`;
+    return `${y}-${m}-${d}T${hh.padStart(2, "0")}:${mm}:${ss}${timezoneOffset}`;
   }
 
   const month = clean.match(/\b(January|February|March|April|May|June|July|August|September|October|November|December|Jan\.?|Feb\.?|Mar\.?|Apr\.?|Jun\.?|Jul\.?|Aug\.?|Sep\.?|Sept\.?|Oct\.?|Nov\.?|Dec\.?)\s+(\d{1,2})(?:,\s*(20\d{2}))?(?:[^0-9]{0,24}(\d{1,2})(?::(\d{2}))?\s*(am|pm))?/i);
@@ -598,7 +602,7 @@ export function parseLooseDate(text, now = new Date()) {
     year += 1;
     date = new Date(Date.UTC(year, m, day));
   }
-  return `${dateOnly(date)}T${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00-07:00`;
+  return `${dateOnly(date)}T${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00${timezoneOffset}`;
 }
 
 const MONTH_INDEX = {
@@ -687,12 +691,12 @@ function inferStartMeridiem(startRaw, endRaw) {
   return end[2];
 }
 
-function localDateTime(date, clock) {
+function localDateTime(date, clock, timezoneOffset = DEFAULT_TIMEZONE_OFFSET) {
   if (!date || !clock) return null;
-  return `${dateOnly(date)}T${String(clock.hour).padStart(2, "0")}:${String(clock.minute).padStart(2, "0")}:00-07:00`;
+  return `${dateOnly(date)}T${String(clock.hour).padStart(2, "0")}:${String(clock.minute).padStart(2, "0")}:00${timezoneOffset}`;
 }
 
-export function parseDateTimeRange(text, now = new Date()) {
+export function parseDateTimeRange(text, now = new Date(), timezoneOffset = DEFAULT_TIMEZONE_OFFSET) {
   const clean = cleanDateText(text);
   const numeric = clean.match(new RegExp(`\\b(\\d{1,2})/(\\d{1,2})/(20\\d{2})\\s+(${CLOCK_PATTERN})\\s*(?:-|to)\\s*(${CLOCK_PATTERN})`, "i"));
   const monthNamed = clean.match(new RegExp(`(?:\\bon\\s+)?((${MONTH_PATTERN})\\s+\\d{1,2}(?:,\\s*20\\d{2})?)\\s*(?:,|at)?\\s*(${CLOCK_PATTERN})\\s*(?:-|to)\\s*(${CLOCK_PATTERN})`, "i"));
@@ -708,8 +712,8 @@ export function parseDateTimeRange(text, now = new Date()) {
   const endClock = parseClock(endRaw, endMeridiem || startMeridiem);
   if (!date || !startClock || !endClock) return null;
   return {
-    startDateTime: localDateTime(date, startClock),
-    endDateTime: localDateTime(date, endClock),
+    startDateTime: localDateTime(date, startClock, timezoneOffset),
+    endDateTime: localDateTime(date, endClock, timezoneOffset),
   };
 }
 
@@ -779,9 +783,10 @@ function descriptionFromLines(lines, title, dateLine) {
 }
 
 function normalizeLineEvent({ title, dateLine, lines, html, source, options, method, fallbackCategory }) {
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
   const joined = lines.join(" ");
   if (/cancel(?:ed|led)/i.test(joined)) return null;
-  const range = parseDateTimeRange(dateLine || joined, options.now || new Date());
+  const range = parseDateTimeRange(dateLine || joined, options.now || new Date(), timezoneOffset);
   if (!range) return null;
   const description = descriptionFromLines(lines, title, dateLine);
   const signalText = `${title} ${description} ${joined} ${sourceAudienceText(source)}`;
@@ -812,6 +817,7 @@ function hasBiblioYouthAudience(lines) {
 }
 
 export function extractStructuredHtmlEvents(html, source = {}, options = {}) {
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
   const lines = htmlToLines(html);
   const events = [];
   for (let index = 0; index < lines.length; index += 1) {
@@ -826,8 +832,8 @@ export function extractStructuredHtmlEvents(html, source = {}, options = {}) {
       }
     }
     const blockLines = lines.slice(index + 1, Math.min(end, index + 28));
-    const dateLine = blockLines.find((line) => parseDateTimeRange(line, options.now || new Date()));
-    if (!dateLine && !parseDateTimeRange(blockLines.join(" "), options.now || new Date())) continue;
+    const dateLine = blockLines.find((line) => parseDateTimeRange(line, options.now || new Date(), timezoneOffset));
+    if (!dateLine && !parseDateTimeRange(blockLines.join(" "), options.now || new Date(), timezoneOffset)) continue;
     const event = normalizeLineEvent({
       title,
       dateLine,
@@ -847,7 +853,8 @@ function eventListOptions(source = {}) {
 }
 
 function parseDateLineRange(line, source = {}, now = new Date()) {
-  const range = parseDateTimeRange(line, now);
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
+  const range = parseDateTimeRange(line, now, timezoneOffset);
   if (range) return range;
 
   const config = eventListOptions(source);
@@ -856,13 +863,13 @@ function parseDateLineRange(line, source = {}, now = new Date()) {
   const date = parseMonthDay(line, now);
   const startClock = parseClock(startTime);
   if (!date || !startClock) return null;
-  const startDateTime = localDateTime(date, startClock);
+  const startDateTime = localDateTime(date, startClock, timezoneOffset);
   const endTime = config.defaultEndTime || source.defaultEndTime;
   const endClock = endTime ? parseClock(endTime) : null;
   return {
     startDateTime,
     endDateTime: endClock
-      ? localDateTime(date, endClock)
+      ? localDateTime(date, endClock, timezoneOffset)
       : addMinutesToLocalIso(startDateTime, Number(config.defaultDurationMinutes || source.defaultDurationMinutes || 60)),
   };
 }
@@ -942,6 +949,229 @@ export function extractEventListEvents(html, source = {}, options = {}) {
   return dedupeEvents(events);
 }
 
+function blocksByClass(html, classNamePattern) {
+  const starts = [];
+  const re = new RegExp(`<div[^>]+class=["'][^"']*${classNamePattern}[^"']*["'][^>]*>`, "gi");
+  for (const match of html.matchAll(re)) {
+    starts.push(match.index);
+  }
+  return starts.map((start, index) => {
+    const end = starts[index + 1] ?? html.length;
+    return html.slice(start, end);
+  });
+}
+
+function firstClassText(block, classNamePattern, maxLength = 180) {
+  const match = block.match(
+    new RegExp(`<[^>]+class=["'][^"']*${classNamePattern}[^"']*["'][^>]*>([\\s\\S]*?)<\\/[^>]+>`, "i"),
+  );
+  return stripUnsafeText(match?.[1] || "", maxLength);
+}
+
+function firstClassLink(block, classNamePattern, baseUrl) {
+  const classBlock = block.match(
+    new RegExp(`<[^>]+class=["'][^"']*${classNamePattern}[^"']*["'][^>]*>[\\s\\S]*?<a[^>]+href=["']([^"']+)["'][^>]*>([\\s\\S]*?)<\\/a>`, "i"),
+  );
+  if (!classBlock) return null;
+  return {
+    url: sanitizeUrl(classBlock[1], baseUrl),
+    text: stripUnsafeText(classBlock[2], 180),
+  };
+}
+
+export function extractLincolnCenterFamilyEvents(html, source = {}, options = {}) {
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
+  const now = options.now || new Date();
+  const blocks = blocksByClass(html, "event-with-image-and-description");
+  const events = [];
+
+  for (const block of blocks) {
+    const titleLink = firstClassLink(block, "event-title", source.url);
+    const title = titleLink?.text;
+    if (!title || isGenericPageTitle(title)) continue;
+    const dateText =
+      firstClassText(block, "event-date-in-details", 100) ||
+      firstClassText(block, "event-date", 100);
+    const startDateTime = parseLooseDate(dateText, now, timezoneOffset);
+    if (!startDateTime) continue;
+    const venueLink = firstClassLink(block, "venue-info", source.url);
+    const iconText = Array.from(block.matchAll(/show-icons-item-text["'][^>]*>([\s\S]*?)<\/div>/gi))
+      .map((match) => stripUnsafeText(match[1], 80))
+      .filter(Boolean)
+      .join(" ");
+    const description = firstClassText(block, "vs-show-short-description", 320);
+    const signalText = `${title} ${description} ${iconText} ${sourceAudienceText(source)}`;
+    if (!isEventish(signalText) || !hasFamilySignal(signalText) || hasAdultOnlySignal(signalText)) continue;
+    const ageBands = inferAgeBands(signalText);
+    events.push(normalizeRawEvent({
+      title,
+      description: description || signalText,
+      venue: venueLink?.text || source.name,
+      city: source.city,
+      neighborhood: source.neighborhood || source.city,
+      lat: source.lat,
+      lon: source.lon,
+      category: source.category || "Theater",
+      startDateTime,
+      endDateTime: addMinutesToLocalIso(startDateTime, source.defaultDurationMinutes || 90),
+      ageBands,
+      cost: source.cost || inferCost(signalText),
+      url: titleLink?.url || source.url,
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.url,
+      extractionMethod: "lincoln-center-family",
+      verified: true,
+    }, source));
+  }
+
+  return dedupeEvents(events.filter(Boolean));
+}
+
+function eventDetailsText(details) {
+  if (!Array.isArray(details)) return "";
+  return details
+    .map((detail) => `${stripUnsafeText(detail?.title || "", 80)} ${stripUnsafeText(detail?.description_html || "", 220)}`)
+    .filter((line) => line.trim())
+    .join(" ");
+}
+
+function cleanNewVictoryTitle(value) {
+  return stripUnsafeText(value, 160)
+    .replace(/\s*\|\s*School Performance\s*/i, " ")
+    .replace(/\s*\|\s*2025-26 Season\s*/i, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+export function extractNewVictoryEvents(json, source = {}) {
+  const docs = Array.isArray(json?.docs) ? json.docs : [];
+  const events = [];
+
+  for (const item of docs) {
+    const event = item?.event || {};
+    const custom = item?.attributes?.custom || {};
+    const eventCustom = event?.attributes?.custom || {};
+    if (eventCustom.hide_from_calendar === true || custom.hide_from_calendar === true) continue;
+    if (/school performance/i.test(custom.performance_type || event.title || "")) continue;
+    if (/grown[- ]?up nights?/i.test(event.title || "")) continue;
+    const title = cleanNewVictoryTitle(event.title || "");
+    if (!title) continue;
+    const detailsText = eventDetailsText(eventCustom.event_details);
+    const keywords = [
+      ...(Array.isArray(event?.tessitura?.keywords) ? event.tessitura.keywords : []),
+      ...(Array.isArray(item?.tessitura?.keywords) ? item.tessitura.keywords : []),
+    ]
+      .map((keyword) => stripUnsafeText(keyword?.Description || "", 80))
+      .filter(Boolean)
+      .join(" ");
+    const signalText = `${title} ${detailsText} ${keywords} ${sourceAudienceText(source)}`;
+    if (hasAdultOnlySignal(signalText)) continue;
+    const venue = stripUnsafeText(event?.venue?.title || source.name, 100);
+    events.push(normalizeRawEvent({
+      title,
+      description: detailsText || keywords || `${title} at ${venue}.`,
+      venue,
+      city: source.city,
+      neighborhood: source.neighborhood || source.city,
+      lat: source.lat,
+      lon: source.lon,
+      category: source.category || "Theater",
+      startDateTime: item.startDate,
+      endDateTime: item.endDate || addMinutesToLocalIso(item.startDate, source.defaultDurationMinutes || 90),
+      ageBands: inferAgeBands(signalText),
+      cost: inferCost(signalText),
+      url: sanitizeUrl(item.url || event.url || event.slug, source.pageUrl || source.url) || source.pageUrl || source.url,
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.pageUrl || source.url,
+      extractionMethod: "new-victory-json",
+      verified: true,
+    }, source));
+  }
+
+  return dedupeEvents(events.filter(Boolean));
+}
+
+function localIsoFromEpochMillis(value, timezoneOffset = DEFAULT_TIMEZONE_OFFSET) {
+  const millis = Number(value);
+  if (!Number.isFinite(millis)) return null;
+  const offsetMatch = String(timezoneOffset).match(/^([+-])(\d{2}):?(\d{2})$/);
+  if (!offsetMatch) return new Date(millis).toISOString();
+  const sign = offsetMatch[1] === "-" ? -1 : 1;
+  const offsetMinutes = sign * (Number(offsetMatch[2]) * 60 + Number(offsetMatch[3]));
+  const local = new Date(millis + offsetMinutes * 60_000);
+  return `${dateOnly(local)}T${String(local.getUTCHours()).padStart(2, "0")}:${String(local.getUTCMinutes()).padStart(2, "0")}:00${timezoneOffset}`;
+}
+
+function extractNycParksLocationJson(html) {
+  const match = html.match(/var\s+eventsByLocationJSON\s*=\s*(\[[\s\S]*?\]);\s*\/\/\s*take a list of events/i);
+  if (!match) return [];
+  try {
+    const parsed = JSON.parse(match[1]);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+export function extractNycParksEvents(html, source = {}, options = {}) {
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
+  const locations = extractNycParksLocationJson(html);
+  if (locations.length === 0) {
+    return extractEventListEvents(html, source, options);
+  }
+
+  const events = [];
+  for (const park of locations) {
+    const city = stripUnsafeText(park?.borough || source.city || "New York", 80);
+    const parkName = stripUnsafeText(park?.name || source.name || "NYC Parks", 100);
+    const lat = Number(park?.lat);
+    const lon = Number(park?.lng);
+    const locationGroups = Array.isArray(park?.locations) ? park.locations : [];
+    for (const location of locationGroups) {
+      const locationName = stripUnsafeText(location?.name || "", 100);
+      const venue = locationName && locationName !== parkName
+        ? `${locationName} at ${parkName}`
+        : parkName;
+      const eventItems = Array.isArray(location?.events) ? location.events : [];
+      for (const item of eventItems) {
+        const title = stripUnsafeText(item?.title || "", 140);
+        if (!title) continue;
+        const startDateTime = localIsoFromEpochMillis(item?.startDate, timezoneOffset);
+        if (!startDateTime) continue;
+        const endDateTime = localIsoFromEpochMillis(item?.endDate, timezoneOffset);
+        const description = stripUnsafeText(
+          item?.repetitionString ||
+            `${title} at ${venue}${park?.address ? `, ${park.address}` : ""}.`,
+          360,
+        );
+        events.push(normalizeRawEvent({
+          title,
+          description,
+          venue,
+          city,
+          neighborhood: city,
+          lat,
+          lon,
+          category: source.category || "Park",
+          startDateTime,
+          endDateTime,
+          ageBands: inferAgeBands(`${title} ${description} ${sourceAudienceText(source)}`),
+          cost: source.cost || "Free",
+          url: item?.link,
+          sourceId: source.id,
+          sourceName: source.name,
+          sourceUrl: source.url,
+          extractionMethod: "nyc-parks-json",
+          verified: true,
+        }, source));
+      }
+    }
+  }
+  return dedupeEvents(events.filter(Boolean));
+}
+
 function normalizeMeridiemText(value) {
   return stripUnsafeText(value, 80)
     .replace(/\ba\.m\./gi, "am")
@@ -991,7 +1221,7 @@ export function extractMidpenTableEvents(html, source = {}, options = {}) {
     const timeText = normalizeMeridiemText(
       row.match(/class=["']activity-search-time["'][^>]*>([\s\S]*?)<\/div>/i)?.[1] || "",
     );
-    const startDateTime = parseLooseDate(`${dateText} at ${timeText}`, now);
+    const startDateTime = parseLooseDate(`${dateText} at ${timeText}`, now, source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET);
     if (!startDateTime) continue;
 
     const preserve = cellTextByClass(row, "views-field-field-preserve-term-1", 120) || source.name;
@@ -1109,14 +1339,14 @@ function expandOfficialRecurringEvents(source = {}, pageText = "", options = {})
       if (!date || date < start || date > end) continue;
       const startClock = parseClock(config.startTime || "10:00");
       if (!startClock) continue;
-      const startDateTime = localDateTime(date, startClock);
+      const startDateTime = localDateTime(date, startClock, source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET);
       const endClock = config.endTime ? parseClock(config.endTime) : null;
       events.push(normalizeRawEvent({
         ...config,
         id: `${config.id || source.id}-${dateOnly(date)}`,
         startDateTime,
         endDateTime: endClock
-          ? localDateTime(date, endClock)
+          ? localDateTime(date, endClock, source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET)
           : addMinutesToLocalIso(startDateTime, Number(config.durationMinutes || 120)),
         city: config.city || source.city,
         neighborhood: config.neighborhood || source.neighborhood || source.city,
@@ -1245,15 +1475,16 @@ export function extractOpenCitiesEventEvents(html, source = {}) {
   return dedupeEvents(events);
 }
 
-export function normalizeDateTime(value) {
+export function normalizeDateTime(value, timezoneOffset = DEFAULT_TIMEZONE_OFFSET) {
   const raw = stripUnsafeText(value, 120);
   if (!raw) return null;
   const parsed = new Date(raw);
   if (Number.isFinite(parsed.getTime())) return parsed.toISOString();
-  return parseLooseDate(raw, new Date());
+  return parseLooseDate(raw, new Date(), timezoneOffset);
 }
 
 export function normalizeRawEvent(raw, source = {}) {
+  const timezoneOffset = raw.timezoneOffset || source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
   const title = cleanEventTitle(raw.title);
   const description = stripUnsafeText(raw.description, 360);
   const combined = `${title} ${description}`;
@@ -1267,12 +1498,13 @@ export function normalizeRawEvent(raw, source = {}) {
     audiences.includes("adults") && !audiences.includes("kids");
   if (!adultIntent && hasAdultOnlySignal(combined)) return null;
   if (/\b(cancel(?:ed|led)|postponed)\b/i.test(combined)) return null;
+  if (/^(closed|closure)$/i.test(title) || /\b(?:will be|is|are)\s+closed\b/i.test(description)) return null;
   if ((raw.extractionMethod === "html" || raw.extractionMethod === "rss") && isGenericPageTitle(title)) {
     return null;
   }
 
-  const startDateTime = normalizeDateTime(raw.startDateTime);
-  const endDateTime = normalizeDateTime(raw.endDateTime) || (startDateTime ? addMinutesToLocalIso(startDateTime, 60) : null);
+  const startDateTime = normalizeDateTime(raw.startDateTime, timezoneOffset);
+  const endDateTime = normalizeDateTime(raw.endDateTime, timezoneOffset) || (startDateTime ? addMinutesToLocalIso(startDateTime, 60) : null);
   const days = startDateTime ? [dayOfWeek(startDateTime)].filter((d) => d !== null) : [];
   const category = stripUnsafeText(raw.category || inferCategory(combined, source.category || "Museum"), 40);
   const ageBands = Array.isArray(raw.ageBands) && raw.ageBands.length > 0
@@ -1385,7 +1617,7 @@ export function expandRecurringTemplates(templates, source = {}, options = {}) {
     let emitted = 0;
     for (let cursor = new Date(start); cursor <= end; cursor = addDays(cursor, 1)) {
       if (!days.includes(cursor.getUTCDay())) continue;
-      const startDateTime = localIso(cursor, TIME_WINDOW_START[template.timeWindow] || TIME_WINDOW_START.Afternoon);
+      const startDateTime = localIso(cursor, TIME_WINDOW_START[template.timeWindow] || TIME_WINDOW_START.Afternoon, source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET);
       const event = normalizeRawEvent({
         ...template,
         id: `${template.id}-${dateOnly(cursor)}`,
@@ -1433,6 +1665,7 @@ export function extractCivicPlusCalendarEvents(html, source = {}, options = {}) 
   const monthYear = inferCivicPlusMonthYear(html);
   if (!monthYear) return [];
   const { month, year } = monthYear;
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
 
   const events = [];
   const dayCellRegex = /<td[^>]*class="[^"]*calendar_day[^"]*"[^>]*>([\s\S]*?)<\/td>/gi;
@@ -1455,6 +1688,7 @@ export function extractCivicPlusCalendarEvents(html, source = {}, options = {}) 
       const startDateTime = localDateTime(
         new Date(Date.UTC(year, month - 1, day)),
         startClock,
+        timezoneOffset,
       );
       if (!startDateTime) continue;
       const endDateTime = addMinutesToLocalIso(startDateTime, 60);
@@ -1542,6 +1776,15 @@ export function extractEventsFromPayload(payload, source = {}, options = {}) {
   if (source.sourceType === "eventList") {
     return extractEventListEvents(text, source, options);
   }
+  if (source.sourceType === "lincolnCenterFamily") {
+    return extractLincolnCenterFamilyEvents(text, source, options);
+  }
+  if (source.sourceType === "newVictoryEvents") {
+    return extractNewVictoryEvents(payload.json, source);
+  }
+  if (source.sourceType === "nycParksEvents") {
+    return extractNycParksEvents(text, source, options);
+  }
   if (source.sourceType === "officialTextEvents") {
     return extractOfficialTextEvents(text, source, options);
   }
@@ -1570,6 +1813,7 @@ export function extractEventsFromPayload(payload, source = {}, options = {}) {
 }
 
 export function extractBiblioEvents(html, source = {}, options = {}) {
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
   const lines = htmlToLines(html);
   const start = Math.max(0, lines.findIndex((line) => /^#{1,3}\s*event items$/i.test(line) || /^event items$/i.test(line)));
   const scoped = lines.slice(start >= 0 ? start : 0);
@@ -1588,8 +1832,8 @@ export function extractBiblioEvents(html, source = {}, options = {}) {
     }
     const blockLines = scoped.slice(index + 1, Math.min(end, index + 34));
     if (!hasBiblioYouthAudience(blockLines)) continue;
-    const dateLine = blockLines.find((line) => parseDateTimeRange(line, options.now || new Date()));
-    if (!dateLine && !parseDateTimeRange(blockLines.join(" "), options.now || new Date())) continue;
+    const dateLine = blockLines.find((line) => parseDateTimeRange(line, options.now || new Date(), timezoneOffset));
+    if (!dateLine && !parseDateTimeRange(blockLines.join(" "), options.now || new Date(), timezoneOffset)) continue;
     const event = normalizeLineEvent({
       title,
       dateLine,
@@ -1607,6 +1851,7 @@ export function extractBiblioEvents(html, source = {}, options = {}) {
 }
 
 export function extractLibraryCalendarEvents(html, source = {}, options = {}) {
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
   const blocks = html.match(/<div class="lc-event event-card lc-featured-event[\s\S]*?(?=<div class="lc-event event-card lc-featured-event|<div class="calendar-wrap|$)/gi) || [];
   const events = [];
   for (const block of blocks) {
@@ -1618,7 +1863,7 @@ export function extractLibraryCalendarEvents(html, source = {}, options = {}) {
     const dateText =
       stripUnsafeText(block.match(/lc-featured-event-info-item--date[^>]*>([\s\S]*?)<\/div>/i)?.[1], 180) ||
       stripUnsafeText(block.match(/aria-label=["'][^"']* on ([^"']+)["']/i)?.[1], 180);
-    const range = parseDateTimeRange(dateText, options.now || new Date());
+    const range = parseDateTimeRange(dateText, options.now || new Date(), timezoneOffset);
     if (!range) continue;
 
     const text = stripUnsafeText(block, 1800);
@@ -2115,7 +2360,7 @@ export function extractDrupalCardEvents(html, source = {}, options = {}) {
       140,
     );
     if (!title || isGenericPageTitle(title)) continue;
-    const startDateTime = datetimeFromBlock(block);
+    const startDateTime = datetimeFromBlock(block, source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET);
     if (!startDateTime) continue;
 
     const text = stripUnsafeText(block, 1200);
@@ -2149,6 +2394,7 @@ export function extractDrupalCardEvents(html, source = {}, options = {}) {
 }
 
 export function extractLibCalEvents(json, source = {}) {
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
   const events = Array.isArray(json?.results) ? json.results : [];
   return events
     .map((item) => {
@@ -2176,8 +2422,8 @@ export function extractLibCalEvents(json, source = {}) {
         lat: source.lat,
         lon: source.lon,
         category: source.category || "Library",
-        startDateTime: libCalDateTime(item.startdt),
-        endDateTime: libCalDateTime(item.enddt),
+        startDateTime: libCalDateTime(item.startdt, timezoneOffset),
+        endDateTime: libCalDateTime(item.enddt, timezoneOffset),
         ageBands,
         cost: item.registration_cost || inferCost(`${description} ${item.registration_cost || ""}`),
         url: item.url,
@@ -2191,10 +2437,10 @@ export function extractLibCalEvents(json, source = {}) {
     .filter(Boolean);
 }
 
-function libCalDateTime(value) {
+function libCalDateTime(value, timezoneOffset = DEFAULT_TIMEZONE_OFFSET) {
   const raw = stripUnsafeText(value, 80);
   const match = raw.match(/^(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})$/);
-  if (match) return `${match[1]}T${match[2]}-07:00`;
+  if (match) return `${match[1]}T${match[2]}${timezoneOffset}`;
   return raw;
 }
 
@@ -2209,14 +2455,14 @@ export function extractJsonEvents(json, source = {}) {
     .map((item) => normalizeRawEvent({
       title: item.title || item.name,
       description: item.description || item.summary,
-      venue: item.venue?.name || item.location?.name || source.name,
+      venue: item.venue?.name || item.location?.name || item.location || source.name,
       city: item.city || item.venue?.city || item.location?.address?.addressLocality || source.city,
       lat: item.lat || item.latitude || item.venue?.location?.latitude,
       lon: item.lon || item.longitude || item.venue?.location?.longitude,
       category: item.category || source.category,
       startDateTime: item.startDateTime || item.start || item.dates?.start?.dateTime,
       endDateTime: item.endDateTime || item.end || item.dates?.end?.dateTime,
-      url: item.url || item.link,
+      url: item.url || item.link || item.permaLinkUrl,
       sourceId: source.id,
       sourceName: source.name,
       sourceUrl: source.url,
@@ -2303,9 +2549,10 @@ export function buildEventsDataset(events, options = {}) {
   }));
   return {
     schemaVersion: 2,
+    metroId: options.metroId || null,
     generatedAt,
     source: {
-      name: "Bay Area event source registry",
+      name: options.sourceName || "Event source registry",
       registryPath: options.registryPath || "data/event-sources.json",
       sourceCount: options.sourceCount || 0,
       attribution: "Official source pages and configured public event feeds",

@@ -14,11 +14,17 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  legacyMetroDataFile,
+  loadMetroConfig,
+  metroDataFile,
+} from "./metroConfig.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const SRC = path.join(ROOT, "public", "data");
 const OUT = path.join(ROOT, "data-site", "dist");
+const metroConfig = loadMetroConfig();
 
 if (!fs.existsSync(SRC)) {
   console.error(`[data-site] no source data at ${SRC}`);
@@ -30,13 +36,23 @@ fs.mkdirSync(path.join(OUT, "data"), { recursive: true });
 
 let count = 0;
 let bytes = 0;
-for (const file of fs.readdirSync(SRC)) {
-  if (!file.endsWith(".json")) continue;
-  const dest = path.join(OUT, "data", file);
-  fs.copyFileSync(path.join(SRC, file), dest);
-  bytes += fs.statSync(dest).size;
-  count += 1;
+function copyJsonTree(srcDir, destDir) {
+  for (const entry of fs.readdirSync(srcDir, { withFileTypes: true })) {
+    const src = path.join(srcDir, entry.name);
+    const dest = path.join(destDir, entry.name);
+    if (entry.isDirectory()) {
+      fs.mkdirSync(dest, { recursive: true });
+      copyJsonTree(src, dest);
+      continue;
+    }
+    if (!entry.isFile() || !entry.name.endsWith(".json")) continue;
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    fs.copyFileSync(src, dest);
+    bytes += fs.statSync(dest).size;
+    count += 1;
+  }
 }
+copyJsonTree(SRC, path.join(OUT, "data"));
 
 const headers = `# Cloudflare Pages headers — shared data feed (famhop-data)
 #
@@ -60,25 +76,61 @@ const headers = `# Cloudflare Pages headers — shared data feed (famhop-data)
 fs.writeFileSync(path.join(OUT, "_headers"), headers);
 
 const generatedAt = new Date().toISOString();
+const metroFileLines = metroConfig.metros
+  .flatMap((metro) => [
+    `- ${metro.label}: /data/${path.relative(
+      path.join("public", "data"),
+      metroDataFile(metro, "spots"),
+    )} - scanned places.`,
+    `- ${metro.label}: /data/${path.relative(
+      path.join("public", "data"),
+      metroDataFile(metro, "events"),
+    )} - time-bounded events.`,
+    `- ${metro.label}: /data/${path.relative(
+      path.join("public", "data"),
+      metroDataFile(metro, "eventReport"),
+    )} - event ingest diagnostics.`,
+    `- ${metro.label}: /data/${path.relative(
+      path.join("public", "data"),
+      metroDataFile(metro, "featuredPlans"),
+    )} - editor starter plans.`,
+  ])
+  .join("\n");
+const legacyLines = metroConfig.metros
+  .flatMap((metro) =>
+    ["spots", "events", "eventReport", "featuredPlans", "curatedSpots", "enrichment"]
+      .map((key) => legacyMetroDataFile(metro, key))
+      .filter(Boolean)
+      .map((file) => `- /data/${path.basename(file)} - legacy ${metro.label} feed.`),
+  )
+  .join("\n");
+const endpointLinks = [
+  ...metroConfig.metros.flatMap((metro) => [
+    path.relative(path.join("public", "data"), metroDataFile(metro, "spots")),
+    path.relative(path.join("public", "data"), metroDataFile(metro, "events")),
+    path.relative(path.join("public", "data"), metroDataFile(metro, "featuredPlans")),
+  ]),
+  "boa-museums.json",
+  "llms.txt",
+];
 
 const llms = `# FamHop shared data feed
 
 > The scanned, normalized, audience-tagged data that powers the FamHop
 > family of apps (kids: famhop.com; adults sibling: TBD). Read here once,
-> filter by audience client-side. The scanning pipeline runs in the
+> filter by audience and metro client-side. The scanning pipeline runs in the
 > upstream repo (https://github.com/coldbrewathome/saturday).
 
 Generated: ${generatedAt}
 
-## Available files
+## Metro feeds
 
-- /data/bay-area-spots.json — 1500+ Bay Area places (parks, libraries, museums, family venues). Each entry carries an \`audiences\` array (\`"kids"\`, \`"adults"\`, or \`"all"\`).
-- /data/events.json — Time-bounded events (storytimes, festivals, free days, etc.) tagged by audience.
-- /data/event-build-report.json — Per-source diagnostics from the most recent event ingest (live vs. fallback counts, fetch errors).
-- /data/curated-spots.json — Hand-picked entries that augment the OSM dataset.
-- /data/featured-plans.json — Editor's-pick starter plans.
+${metroFileLines}
+
+## Legacy and shared files
+
+${legacyLines}
 - /data/boa-museums.json — Bank of America Museums on Us free-day metadata.
-- /data/bay-area-enrichment.json — Per-spot Google rating overlay.
 
 All files are served with \`Access-Control-Allow-Origin: *\` so any frontend can fetch them directly.
 
@@ -109,17 +161,15 @@ a{color:var(--brand);}
 <body>
 <main class="wrap">
 <h1>FamHop shared data feed</h1>
-<p>This origin serves the scanned and normalized Bay Area places &amp; events used by the FamHop family of apps. The data is public; CORS is open. The user-facing apps live elsewhere — start at <a href="https://famhop.com/">famhop.com</a>.</p>
+<p>This origin serves scanned and normalized places &amp; events for FamHop metros. The data is public; CORS is open. The user-facing apps live elsewhere — start at <a href="https://famhop.com/">famhop.com</a>.</p>
 <h2>Endpoints</h2>
 <ul>
-<li><code><a href="/data/bay-area-spots.json">/data/bay-area-spots.json</a></code></li>
-<li><code><a href="/data/events.json">/data/events.json</a></code></li>
-<li><code><a href="/data/event-build-report.json">/data/event-build-report.json</a></code></li>
-<li><code><a href="/data/curated-spots.json">/data/curated-spots.json</a></code></li>
-<li><code><a href="/data/featured-plans.json">/data/featured-plans.json</a></code></li>
-<li><code><a href="/data/boa-museums.json">/data/boa-museums.json</a></code></li>
-<li><code><a href="/data/bay-area-enrichment.json">/data/bay-area-enrichment.json</a></code></li>
-<li><code><a href="/llms.txt">/llms.txt</a></code> — feed manifest for AI crawlers</li>
+${endpointLinks
+  .map((file) => {
+    const href = file === "llms.txt" ? "/llms.txt" : `/data/${file}`;
+    return `<li><code><a href="${href}">${href}</a></code></li>`;
+  })
+  .join("\n")}
 </ul>
 <p style="margin-top:32px;font-size:13px;">Generated ${generatedAt}.</p>
 </main>

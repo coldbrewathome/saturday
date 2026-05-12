@@ -9,7 +9,7 @@
  * Then run:
  *   SATURDAY_SESSION_TOKEN=<token> \
  *   SATURDAY_API=https://saturday-polls.santaclararental2016.workers.dev \
- *   node scripts/publish-events.mjs [path/to/events.json]
+ *   node scripts/publish-events.mjs --metro=los-angeles [path/to/events.json]
  *
  * The default file is public/data/events.json. Replace with --reset to
  * clear the KV override and revert to the static file:
@@ -32,12 +32,17 @@ if (!api) {
 
 const args = process.argv.slice(2);
 const reset = args.includes("--reset");
+const metroArg = args.find((arg) => arg.startsWith("--metro="));
+const metro = metroArg ? metroArg.slice("--metro=".length) : "bay-area";
 const filePath =
   args.find((arg) => !arg.startsWith("--")) ??
-  path.join("public", "data", "events.json");
+  (metro === "bay-area"
+    ? path.join("public", "data", "events.json")
+    : path.join("public", "data", metro, "events.json"));
+const endpoint = `${api}/admin/events?metro=${encodeURIComponent(metro)}`;
 
 if (reset) {
-  const response = await fetch(`${api}/admin/events`, {
+  const response = await fetch(endpoint, {
     method: "DELETE",
     headers: { authorization: `Bearer ${token}` },
   });
@@ -53,7 +58,7 @@ if (!Array.isArray(parsed.events)) {
   process.exit(1);
 }
 
-const response = await fetch(`${api}/admin/events`, {
+const response = await fetch(endpoint, {
   method: "PUT",
   headers: {
     "content-type": "application/json",
@@ -63,6 +68,6 @@ const response = await fetch(`${api}/admin/events`, {
 });
 
 const detail = await response.text();
-console.log(`PUT ${api}/admin/events → HTTP ${response.status}`);
+console.log(`PUT ${endpoint} -> HTTP ${response.status}`);
 console.log(detail);
 process.exit(response.ok ? 0 : 1);

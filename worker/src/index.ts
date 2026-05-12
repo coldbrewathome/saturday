@@ -33,6 +33,7 @@ type ItemOrderRef = { kind: "spot" | "event"; id: string };
 
 type PollRecord = {
   pollId: string;
+  metroId?: string;
   title: string;
   stops: StopSummary[];
   events?: EventSummary[];
@@ -373,6 +374,23 @@ const USER_STATE_TTL_SECONDS = 60 * 60 * 24 * 365;
 const USER_STATE_MAX_BYTES = 200_000;
 const EVENTS_MAX_BYTES = 1_000_000;
 const EVENTS_KV_KEY = "admin:events";
+const METRO_IDS = new Set(["bay-area", "los-angeles", "new-york-city", "seattle"]);
+
+function metroFromRequest(request: Request): string | null {
+  const url = new URL(request.url);
+  const raw = url.searchParams.get("metro") || "bay-area";
+  const normalized = raw.toLowerCase().trim();
+  if (normalized === "bayarea") return "bay-area";
+  if (normalized === "losangeles") return "los-angeles";
+  if (normalized === "nyc" || normalized === "newyorkcity" || normalized === "new-york") {
+    return "new-york-city";
+  }
+  return METRO_IDS.has(normalized) ? normalized : null;
+}
+
+function eventsKvKey(metroId: string): string {
+  return metroId === "bay-area" ? EVENTS_KV_KEY : `${EVENTS_KV_KEY}:${metroId}`;
+}
 
 function isAdmin(env: Env, email: string | undefined): boolean {
   if (!email || !env.ADMIN_EMAILS) return false;
@@ -381,10 +399,13 @@ function isAdmin(env: Env, email: string | undefined): boolean {
 }
 
 async function getEvents(
+  request: Request,
   env: Env,
   cors: Record<string, string>,
 ): Promise<Response> {
-  const raw = await env.POLLS.get(EVENTS_KV_KEY);
+  const metroId = metroFromRequest(request);
+  if (!metroId) return json({ error: "invalid metro" }, { status: 400 }, cors);
+  const raw = await env.POLLS.get(eventsKvKey(metroId));
   if (!raw) {
     return json({ source: "fallback", events: null }, { status: 200 }, cors);
   }
@@ -402,6 +423,8 @@ async function putAdminEvents(
   env: Env,
   cors: Record<string, string>,
 ): Promise<Response> {
+  const metroId = metroFromRequest(request);
+  if (!metroId) return json({ error: "invalid metro" }, { status: 400 }, cors);
   const session = await getSession(env, request);
   if (!session) {
     return json({ error: "sign in required" }, { status: 401 }, cors);
@@ -424,6 +447,7 @@ async function putAdminEvents(
   }
   const body = JSON.stringify({
     schemaVersion: 1,
+    metroId,
     generatedAt: new Date().toISOString(),
     events: data.events,
     source: "admin",
@@ -431,7 +455,7 @@ async function putAdminEvents(
   if (body.length > EVENTS_MAX_BYTES) {
     return json({ error: "events payload too large" }, { status: 413 }, cors);
   }
-  await env.POLLS.put(EVENTS_KV_KEY, body);
+  await env.POLLS.put(eventsKvKey(metroId), body);
   return json(
     { ok: true, count: data.events.length, bytes: body.length },
     { status: 200 },
@@ -444,6 +468,8 @@ async function deleteAdminEvents(
   env: Env,
   cors: Record<string, string>,
 ): Promise<Response> {
+  const metroId = metroFromRequest(request);
+  if (!metroId) return json({ error: "invalid metro" }, { status: 400 }, cors);
   const session = await getSession(env, request);
   if (!session) {
     return json({ error: "sign in required" }, { status: 401 }, cors);
@@ -451,7 +477,7 @@ async function deleteAdminEvents(
   if (!isAdmin(env, session.data.email)) {
     return json({ error: "admin access required" }, { status: 403 }, cors);
   }
-  await env.POLLS.delete(EVENTS_KV_KEY);
+  await env.POLLS.delete(eventsKvKey(metroId));
   return json({ ok: true }, { status: 200 }, cors);
 }
 
@@ -975,11 +1001,14 @@ async function createPoll(
   }
   const data = payload as {
     title?: unknown;
+    metroId?: unknown;
     stops?: unknown;
     events?: unknown;
     itemOrder?: unknown;
   };
   const title = typeof data.title === "string" ? data.title.slice(0, 200) : "Untitled plan";
+  const rawMetroId = typeof data.metroId === "string" ? data.metroId : "bay-area";
+  const metroId = METRO_IDS.has(rawMetroId) ? rawMetroId : "bay-area";
   const stopsInput = Array.isArray(data.stops) ? data.stops : [];
   const stops = stopsInput.filter(isStopSummary).slice(0, 25);
   const events = cleanEvents(data.events);
@@ -998,6 +1027,7 @@ async function createPoll(
   const ownerToken = crypto.randomUUID();
   const record: PollRecord = {
     pollId,
+    metroId,
     title,
     stops,
     events: events.length > 0 ? events : undefined,
@@ -1029,6 +1059,7 @@ async function getPoll(
   return json(
     {
       pollId: record.pollId,
+      metroId: record.metroId || "bay-area",
       title: record.title,
       stops: record.stops,
       events: record.events ?? [],
@@ -1134,7 +1165,7 @@ export default {
     }
 
     if (path === "/events" && request.method === "GET") {
-      return getEvents(env, cors);
+      return getEvents(request, env, cors);
     }
 
     if (path === "/admin/events" && request.method === "PUT") {

@@ -47,6 +47,7 @@ export type Tallies = Record<string, { up: number; down: number; meh: number }>;
 
 export type PollSnapshot = {
   pollId: string;
+  metroId?: string;
   title: string;
   stops: StopSummary[];
   events?: EventSummary[];
@@ -69,6 +70,7 @@ function requireApi(): string {
 
 export async function createPoll(body: {
   title: string;
+  metroId?: string;
   stops: StopSummary[];
   events?: EventSummary[];
   itemOrder?: ItemOrderRef[];
@@ -181,13 +183,15 @@ export type GeoInfo = {
   lon: number | null;
 };
 
-export async function fetchAdminEvents(): Promise<{
+export async function fetchAdminEvents(metroId = "bay-area"): Promise<{
   events: unknown[];
   source: string;
 } | null> {
   if (!API_BASE) return null;
   try {
-    const response = await fetch(`${API_BASE}/events`);
+    const response = await fetch(
+      `${API_BASE}/events?metro=${encodeURIComponent(metroId)}`,
+    );
     if (!response.ok) return null;
     const body = (await response.json()) as {
       source?: string;

@@ -12,8 +12,8 @@ export type PlanMapItem =
   | { kind: "spot"; lat: number; lon: number; label: string; sublabel: string }
   | { kind: "event"; lat: number; lon: number; label: string; sublabel: string };
 
-const bayAreaMapCenter: [number, number] = [37.7749, -122.4194];
-const MAP_VIEW_STORAGE_KEY = "saturday.mapView";
+const DEFAULT_MAP_CENTER: [number, number] = [37.7749, -122.4194];
+const DEFAULT_MAP_VIEW_STORAGE_KEY = "saturday.mapView";
 
 // Touch screens need bigger tap targets — Apple HIG calls for 44 px and a
 // 5-radius circle (10 px diameter) is unreachable. Bump radii on coarse
@@ -30,9 +30,11 @@ const EVENT_RADIUS = isCoarsePointer
   ? { default: 11, highlighted: 13, selected: 15 }
   : { default: 7, highlighted: 10, selected: 12 };
 
-function loadStoredMapView(): { lat: number; lon: number; zoom: number } | null {
+function loadStoredMapView(
+  storageKey = DEFAULT_MAP_VIEW_STORAGE_KEY,
+): { lat: number; lon: number; zoom: number } | null {
   try {
-    const raw = window.localStorage.getItem(MAP_VIEW_STORAGE_KEY);
+    const raw = window.localStorage.getItem(storageKey);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     if (
@@ -58,6 +60,9 @@ export function SpotMap({
   geoState,
   onRequestLocation,
   onViewChange,
+  defaultCenter = DEFAULT_MAP_CENTER,
+  mapViewStorageKey = DEFAULT_MAP_VIEW_STORAGE_KEY,
+  ariaLabel = "Map of spots and events",
 }: {
   spots: Spot[];
   events?: FamilyEvent[];
@@ -68,6 +73,9 @@ export function SpotMap({
   geoState?: "idle" | "requesting" | "denied";
   onRequestLocation?: () => void;
   onViewChange?: (center: { lat: number; lon: number }) => void;
+  defaultCenter?: [number, number];
+  mapViewStorageKey?: string;
+  ariaLabel?: string;
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<LeafletMap | null>(null);
@@ -95,7 +103,9 @@ export function SpotMap({
   // Once the user has a stored view (or pans/zooms), the auto-fit step stops
   // overriding it. Without this, every data-set change would yank them back
   // to the all-points framing.
-  const hasUserViewRef = useRef<boolean>(loadStoredMapView() !== null);
+  const hasUserViewRef = useRef<boolean>(
+    loadStoredMapView(mapViewStorageKey) !== null,
+  );
 
   const plottedSpots = useMemo(
     () =>
@@ -124,10 +134,11 @@ export function SpotMap({
     if (!containerRef.current || mapRef.current) {
       return;
     }
+    let disposed = false;
 
-    const stored = loadStoredMapView();
+    const stored = loadStoredMapView(mapViewStorageKey);
     const map = L.map(containerRef.current, {
-      center: stored ? [stored.lat, stored.lon] : bayAreaMapCenter,
+      center: stored ? [stored.lat, stored.lon] : defaultCenter,
       zoom: stored ? stored.zoom : 10,
       scrollWheelZoom: true,
       attributionControl: false,
@@ -147,7 +158,7 @@ export function SpotMap({
       const c = map.getCenter();
       try {
         window.localStorage.setItem(
-          MAP_VIEW_STORAGE_KEY,
+          mapViewStorageKey,
           JSON.stringify({ lat: c.lat, lon: c.lng, zoom: map.getZoom() }),
         );
       } catch {
@@ -159,7 +170,8 @@ export function SpotMap({
     map.on("moveend", handleMoveEnd);
     // Fire once on mount so the consumer can re-rank from the initial view
     // without waiting for the user to pan.
-    requestAnimationFrame(() => {
+    const initialFrame = requestAnimationFrame(() => {
+      if (disposed || mapRef.current !== map) return;
       const c = map.getCenter();
       onViewChangeRef.current?.({ lat: c.lat, lon: c.lng });
     });
@@ -168,11 +180,16 @@ export function SpotMap({
     // laying out (flex stretch) after the map mounts, the canvas stays at the
     // initial small size unless we tell Leaflet to recompute. Invalidate once
     // on next frame and observe further resizes.
-    requestAnimationFrame(() => map.invalidateSize());
+    const resizeFrame = requestAnimationFrame(() => {
+      if (!disposed && mapRef.current === map) map.invalidateSize();
+    });
     const resizeObserver = new ResizeObserver(() => map.invalidateSize());
     resizeObserver.observe(containerRef.current);
 
     return () => {
+      disposed = true;
+      cancelAnimationFrame(initialFrame);
+      cancelAnimationFrame(resizeFrame);
       resizeObserver.disconnect();
       map.off("moveend", handleMoveEnd);
       map.remove();
@@ -180,7 +197,7 @@ export function SpotMap({
       layerRef.current = null;
       userLayerRef.current = null;
     };
-  }, []);
+  }, [defaultCenter, mapViewStorageKey]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -350,15 +367,19 @@ export function SpotMap({
     }
 
     if (points.length === 0) {
-      map.setView(bayAreaMapCenter, 9);
+      map.setView(defaultCenter, 9, { animate: false });
       return;
     }
     if (points.length === 1) {
-      map.setView(points[0], 13);
+      map.setView(points[0], 13, { animate: false });
       return;
     }
-    map.fitBounds(L.latLngBounds(points), { maxZoom: 13, padding: [28, 28] });
-  }, [plottedSpots, plottedEvents]);
+    map.fitBounds(L.latLngBounds(points), {
+      maxZoom: 13,
+      padding: [28, 28],
+      animate: false,
+    });
+  }, [defaultCenter, plottedSpots, plottedEvents]);
 
   function handleLocateClick() {
     if (!onRequestLocation) return;
@@ -370,7 +391,7 @@ export function SpotMap({
       <div
         className="map-canvas map-canvas-fill"
         ref={containerRef}
-        aria-label="Map of Bay Area spots and events"
+        aria-label={ariaLabel}
       />
       {onRequestLocation && (
         <button
@@ -419,10 +440,12 @@ export function PlanMap({
   stops,
   events,
   items,
+  defaultCenter = DEFAULT_MAP_CENTER,
 }: {
   stops: Spot[];
   events?: FamilyEvent[];
   items?: PlanMapItem[];
+  defaultCenter?: [number, number];
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<LeafletMap | null>(null);
@@ -497,8 +520,9 @@ export function PlanMap({
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
+    let disposed = false;
     const map = L.map(containerRef.current, {
-      center: bayAreaMapCenter,
+      center: defaultCenter,
       zoom: 11,
       scrollWheelZoom: false,
       attributionControl: false,
@@ -513,16 +537,20 @@ export function PlanMap({
     // not be measured yet at mount time, so Leaflet caches a 0×0 canvas and
     // the map renders blank. Invalidate on next frame and observe further
     // resizes so the canvas stays in sync with the container.
-    requestAnimationFrame(() => map.invalidateSize());
+    const resizeFrame = requestAnimationFrame(() => {
+      if (!disposed && mapRef.current === map) map.invalidateSize();
+    });
     const resizeObserver = new ResizeObserver(() => map.invalidateSize());
     resizeObserver.observe(containerRef.current);
     return () => {
+      disposed = true;
+      cancelAnimationFrame(resizeFrame);
       resizeObserver.disconnect();
       map.remove();
       mapRef.current = null;
       layerRef.current = null;
     };
-  }, []);
+  }, [defaultCenter]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -532,9 +560,11 @@ export function PlanMap({
     // Re-running for new data is also a good time to nudge Leaflet — covers
     // the case where the parent container was 0×0 at mount (e.g. when the
     // plan detail re-renders after coming back from /p/<pollId>).
-    requestAnimationFrame(() => map.invalidateSize());
+    requestAnimationFrame(() => {
+      if (mapRef.current === map) map.invalidateSize();
+    });
     if (sequence.length === 0) {
-      map.setView(bayAreaMapCenter, 10);
+      map.setView(defaultCenter, 10, { animate: false });
       return;
     }
     const points: Array<[number, number]> = [];
@@ -561,14 +591,15 @@ export function PlanMap({
       }).addTo(layer);
     }
     if (points.length === 1) {
-      map.setView(points[0], 14);
+      map.setView(points[0], 14, { animate: false });
     } else {
       map.fitBounds(L.latLngBounds(points), {
         maxZoom: 14,
         padding: [40, 40],
+        animate: false,
       });
     }
-  }, [sequence]);
+  }, [defaultCenter, sequence]);
 
   if (sequence.length === 0) return null;
 

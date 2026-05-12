@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "coverage": {
+    "name": "New York City",
+    "timezone": "America/New_York",
+    "cities": [
+      "New York",
+      "Manhattan",
+      "Brooklyn",
+      "Queens",
+      "Bronx",
+      "Staten Island"
+    ]
+  },
+  "defaults": {
+    "windowDays": 45,
+    "timezoneOffset": "-04:00",
+    "userAgent": "saturday-with-friends/0.1 event-ingest"
+  },
+  "sources": [
+    {
+      "id": "queens-library",
+      "name": "Queens Public Library",
+      "url": "https://queens.libnet.info/events",
+      "city": "Queens",
+      "category": "Library",
+      "sourceType": "communicoEvents",
+      "trust": "official",
+      "communicoClient": "queens",
+      "communicoApiServer": "https://api.communico.co",
+      "lat": 40.7282,
+      "lon": -73.7949,
+      "fallbackEventIds": ["qpl-family-storytime", "qpl-lego-club"]
+    },
+    {
+      "id": "nypl-children",
+      "name": "The New York Public Library Events",
+      "url": "https://www.nypl.org/events/calendar",
+      "city": "New York",
+      "category": "Library",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 40.7532,
+      "lon": -73.9822,
+      "defaultAudienceText": "children family kids storytime",
+      "eventList": {
+        "venue": "The New York Public Library",
+        "city": "New York",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 60
+      },
+      "fallbackEventIds": ["nypl-family-storytime", "nypl-kids-steam"]
+    },
+    {
+      "id": "brooklyn-library-youth-family",
+      "name": "Brooklyn Public Library - Youth and Family",
+      "url": "https://www.bklynlibrary.org/event-series/events-for-youth-and-family",
+      "city": "Brooklyn",
+      "category": "Library",
+      "sourceType": "eventList",
+      "trust": "official",
+      "lat": 40.6725,
+      "lon": -73.9682,
+      "defaultAudienceText": "children family kids",
+      "eventList": {
+        "venue": "Brooklyn Public Library",
+        "city": "Brooklyn",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": ["bpl-youth-family-storytime", "bpl-kids-create"]
+    },
+    {
+      "id": "nyc-parks-kids",
+      "name": "NYC Parks Events",
+      "url": "https://www.nycgovparks.org/events",
+      "city": "New York",
+      "category": "Park",
+      "sourceType": "nycParksEvents",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "urls": ["https://www.nycgovparks.org/events/kids"],
+      "lat": 40.7128,
+      "lon": -74.006,
+      "defaultAudienceText": "kids family parks outdoors",
+      "cost": "Free",
+      "fallbackEventIds": ["nyc-parks-family-nature", "nyc-parks-family-fitness"]
+    },
+    {
+      "id": "brooklyn-childrens-museum",
+      "name": "Brooklyn Children's Museum",
+      "url": "https://www.brooklynkids.org/events/",
+      "city": "Brooklyn",
+      "category": "Museum",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 40.6747,
+      "lon": -73.9442,
+      "defaultAudienceText": "children family kids museum"
+    },
+    {
+      "id": "new-victory-theater",
+      "name": "New Victory Theater",
+      "url": "https://www.newvictory.org/api/event-instances.json",
+      "pageUrl": "https://www.newvictory.org/calendar/",
+      "city": "Manhattan",
+      "neighborhood": "Times Square",
+      "category": "Theater",
+      "sourceType": "newVictoryEvents",
+      "trust": "official",
+      "lat": 40.756,
+      "lon": -73.987,
+      "defaultAudienceText": "children family kids theater puppetry performance show",
+      "defaultDurationMinutes": 90
+    },
+    {
+      "id": "lincoln-center-family",
+      "name": "Lincoln Center Kids & Family Programs",
+      "url": "https://www.lincolncenter.org/series/family",
+      "city": "Manhattan",
+      "neighborhood": "Lincoln Square",
+      "category": "Theater",
+      "sourceType": "lincolnCenterFamily",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 40.7725,
+      "lon": -73.9835,
+      "defaultAudienceText": "children family kids teens performance show",
+      "defaultDurationMinutes": 90
+    },
+    {
+      "id": "amnh-calendar",
+      "name": "American Museum of Natural History",
+      "url": "https://www.amnh.org/calendar",
+      "city": "Manhattan",
+      "category": "Museum",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 40.7813,
+      "lon": -73.9739,
+      "defaultAudienceText": "children family kids museum",
+      "fallbackEventIds": ["amnh-family-program"]
+    },
+    {
+      "id": "bronx-zoo-events",
+      "name": "Bronx Zoo Events",
+      "url": "https://bronxzoo.com/things-to-do/events",
+      "city": "Bronx",
+      "category": "Zoo",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 40.8506,
+      "lon": -73.8769,
+      "defaultAudienceText": "children family kids zoo"
+    },
+    {
+      "id": "ticketmaster-nyc-family",
+      "name": "Ticketmaster NYC Family Events",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "city": "New York",
+      "category": "Ticketed",
+      "sourceType": "ticketmaster",
+      "trust": "commercial",
+      "enabled": false,
+      "requiresEnv": "TICKETMASTER_API_KEY"
+    }
+  ]
+}

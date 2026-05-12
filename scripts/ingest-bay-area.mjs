@@ -8,10 +8,15 @@ import {
   commonsFileUrl,
   validateDataset,
 } from "./spotPipeline.mjs";
+import {
+  legacyMetroDataFile,
+  loadMetroConfig,
+  metroDataFile,
+  selectedMetroFromArgs,
+} from "./metroConfig.mjs";
 
-const outputPath =
-  process.env.SPOT_OUTPUT || path.join("public", "data", "bay-area-spots.json");
-const minSpots = Number(process.env.MIN_SPOTS || 150);
+const metroConfig = loadMetroConfig();
+const selection = selectedMetroFromArgs(process.argv.slice(2), metroConfig);
 
 async function fetchOverpass(query) {
   const response = await fetch(OVERPASS_ENDPOINT, {
@@ -110,22 +115,59 @@ async function enrichImages(dataset) {
   );
 }
 
-async function main() {
-  const query = buildOverpassQuery();
-  console.log("Fetching Bay Area spots from Overpass...");
+async function writeJson(filePath, data) {
+  await fs.mkdir(path.dirname(filePath), { recursive: true });
+  await fs.writeFile(filePath, `${JSON.stringify(data, null, 2)}\n`);
+}
+
+async function ingestMetro(metro) {
+  const coverage = metro.spotCoverage || {};
+  const boxes = coverage.boxes;
+  const cityCenters = coverage.cityCenters;
+  const center = metro.center;
+  const outputPath =
+    process.env.SPOT_OUTPUT || metroDataFile(metro, "spots");
+  const minSpots = Number(process.env.MIN_SPOTS || metro.minSpots || 150);
+  const query = buildOverpassQuery(boxes);
+  console.log(`Fetching ${metro.label} spots from Overpass...`);
   const raw = await fetchOverpass(query);
-  const dataset = buildDataset(raw.elements || [], { query });
+  const dataset = buildDataset(raw.elements || [], {
+    query,
+    metroId: metro.id,
+    coverage,
+    boxes,
+    center,
+    cityCenters,
+    coverageName: coverage.name || metro.seoName || metro.label,
+  });
   await enrichImages(dataset);
-  const errors = validateDataset(dataset, { minSpots });
+  const errors = validateDataset(dataset, {
+    minSpots,
+    boxes,
+    coverageName: coverage.name || metro.label,
+  });
 
   if (errors.length > 0) {
     throw new Error(`Generated dataset failed validation:\n${errors.join("\n")}`);
   }
 
-  await fs.mkdir(path.dirname(outputPath), { recursive: true });
-  await fs.writeFile(outputPath, `${JSON.stringify(dataset, null, 2)}\n`);
+  await writeJson(outputPath, dataset);
+  const legacyPath = legacyMetroDataFile(metro, "spots");
+  if (legacyPath && legacyPath !== outputPath) {
+    await writeJson(legacyPath, dataset);
+  }
   console.log(`Wrote ${dataset.count} sanitized spots to ${outputPath}`);
+  if (legacyPath && legacyPath !== outputPath) {
+    console.log(`Wrote legacy copy to ${legacyPath}`);
+  }
   console.log(`Generated at ${dataset.generatedAt}`);
+}
+
+async function main() {
+  const metros = selection.all ? metroConfig.metros : [selection.metro];
+  for (const metro of metros) {
+    await ingestMetro(metro);
+  }
 }
 
 main().catch((error) => {

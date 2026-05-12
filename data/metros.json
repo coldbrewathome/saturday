@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "defaultMetro": "bay-area",
+  "metros": [
+    {
+      "id": "bay-area",
+      "label": "Bay Area",
+      "seoName": "San Francisco Bay Area",
+      "state": "CA",
+      "timezone": "America/Los_Angeles",
+      "canonicalPath": "/bay-area",
+      "aliases": ["bayarea"],
+      "dataDir": "bay-area",
+      "legacyData": {
+        "spots": "bay-area-spots.json",
+        "enrichment": "bay-area-enrichment.json",
+        "events": "events.json",
+        "eventReport": "event-build-report.json",
+        "featuredPlans": "featured-plans.json",
+        "curatedSpots": "curated-spots.json"
+      },
+      "eventSources": "data/event-sources.json",
+      "adultEventSources": "data/event-sources-adults.json",
+      "manualEvents": "data/manual-events.json",
+      "eventTemplates": "data/event-templates.json",
+      "eventCommunities": ["Muir Beach", "Bay Area"],
+      "minSpots": 150,
+      "minEvents": 25,
+      "center": { "lat": 37.7749, "lon": -122.4194 },
+      "spotCoverage": {
+        "name": "San Francisco Bay Area",
+        "bbox": { "south": 36.85, "west": -123.05, "north": 38.95, "east": -121.15 },
+        "boxes": [
+          { "name": "San Francisco and Peninsula", "south": 37.2, "west": -122.55, "north": 37.82, "east": -122.05 },
+          { "name": "South Bay", "south": 37.15, "west": -122.15, "north": 37.55, "east": -121.75 },
+          { "name": "East Bay", "south": 37.45, "west": -122.35, "north": 38.15, "east": -121.65 },
+          { "name": "Marin and North Bay", "south": 37.85, "west": -122.75, "north": 38.55, "east": -122.25 }
+        ],
+        "cityCenters": [
+          ["San Francisco", 37.7749, -122.4194],
+          ["Oakland", 37.8044, -122.2712],
+          ["Berkeley", 37.8715, -122.273],
+          ["San Jose", 37.3382, -121.8863],
+          ["Palo Alto", 37.4419, -122.143],
+          ["Mountain View", 37.3861, -122.0839],
+          ["Sunnyvale", 37.3688, -122.0363],
+          ["Santa Clara", 37.3541, -121.9552],
+          ["Fremont", 37.5485, -121.9886],
+          ["Hayward", 37.6688, -122.0808],
+          ["San Mateo", 37.563, -122.3255],
+          ["Redwood City", 37.4852, -122.2364],
+          ["Daly City", 37.6879, -122.4702],
+          ["Walnut Creek", 37.9101, -122.0652],
+          ["Livermore", 37.6819, -121.768],
+          ["Sausalito", 37.8591, -122.4853],
+          ["San Rafael", 37.9735, -122.5311],
+          ["Napa", 38.2975, -122.2869],
+          ["Petaluma", 38.2324, -122.6367],
+          ["Santa Rosa", 38.4404, -122.7141]
+        ]
+      }
+    },
+    {
+      "id": "los-angeles",
+      "label": "Los Angeles",
+      "seoName": "Los Angeles",
+      "state": "CA",
+      "timezone": "America/Los_Angeles",
+      "canonicalPath": "/los-angeles",
+      "aliases": ["losangeles", "la"],
+      "dataDir": "los-angeles",
+      "eventSources": "data/event-sources-los-angeles.json",
+      "minSpots": 150,
+      "minEvents": 15,
+      "center": { "lat": 34.0522, "lon": -118.2437 },
+      "spotCoverage": {
+        "name": "Los Angeles",
+        "bbox": { "south": 33.65, "west": -118.75, "north": 34.35, "east": -117.65 },
+        "boxes": [
+          { "name": "Los Angeles Basin", "south": 33.84, "west": -118.55, "north": 34.18, "east": -118.05 },
+          { "name": "San Fernando Valley and Pasadena", "south": 34.05, "west": -118.68, "north": 34.35, "east": -117.85 },
+          { "name": "South Bay and Long Beach", "south": 33.65, "west": -118.48, "north": 33.93, "east": -117.92 },
+          { "name": "San Gabriel Valley", "south": 33.9, "west": -118.15, "north": 34.23, "east": -117.65 }
+        ],
+        "cityCenters": [
+          ["Los Angeles", 34.0522, -118.2437],
+          ["Pasadena", 34.1478, -118.1445],
+          ["Long Beach", 33.7701, -118.1937],
+          ["Santa Monica", 34.0195, -118.4912],
+          ["Glendale", 34.1425, -118.2551],
+          ["Burbank", 34.1808, -118.309],
+          ["Culver City", 34.0211, -118.3965],
+          ["Inglewood", 33.9617, -118.3531],
+          ["Torrance", 33.8358, -118.3406],
+          ["El Segundo", 33.9192, -118.4165],
+          ["Alhambra", 34.0953, -118.127],
+          ["Whittier", 33.9792, -118.0328],
+          ["Pomona", 34.0551, -117.7499]
+        ]
+      }
+    },
+    {
+      "id": "new-york-city",
+      "label": "New York City",
+      "seoName": "New York City",
+      "state": "NY",
+      "timezone": "America/New_York",
+      "canonicalPath": "/new-york-city",
+      "aliases": ["newyorkcity", "new-york", "newyork", "nyc"],
+      "dataDir": "new-york-city",
+      "eventSources": "data/event-sources-new-york-city.json",
+      "eventTemplates": "data/event-templates-new-york-city.json",
+      "minSpots": 150,
+      "minEvents": 15,
+      "center": { "lat": 40.7128, "lon": -74.006 },
+      "spotCoverage": {
+        "name": "New York City",
+        "bbox": { "south": 40.47, "west": -74.28, "north": 40.93, "east": -73.65 },
+        "boxes": [
+          { "name": "Manhattan and western Queens", "south": 40.68, "west": -74.03, "north": 40.9, "east": -73.9 },
+          { "name": "Brooklyn and Staten Island", "south": 40.47, "west": -74.28, "north": 40.74, "east": -73.84 },
+          { "name": "Queens", "south": 40.53, "west": -73.98, "north": 40.81, "east": -73.7 },
+          { "name": "Bronx", "south": 40.78, "west": -73.94, "north": 40.93, "east": -73.75 }
+        ],
+        "cityCenters": [
+          ["Manhattan", 40.7831, -73.9712],
+          ["Brooklyn", 40.6782, -73.9442],
+          ["Queens", 40.7282, -73.7949],
+          ["Bronx", 40.8448, -73.8648],
+          ["Staten Island", 40.5795, -74.1502],
+          ["Long Island City", 40.7447, -73.9485],
+          ["Flushing", 40.7675, -73.8331],
+          ["Coney Island", 40.5749, -73.985],
+          ["Williamsburg", 40.7081, -73.9571],
+          ["Downtown Brooklyn", 40.6955, -73.9874]
+        ]
+      }
+    },
+    {
+      "id": "seattle",
+      "label": "Seattle",
+      "seoName": "Seattle",
+      "state": "WA",
+      "timezone": "America/Los_Angeles",
+      "canonicalPath": "/seattle",
+      "aliases": [],
+      "dataDir": "seattle",
+      "eventSources": "data/event-sources-seattle.json",
+      "minSpots": 120,
+      "minEvents": 15,
+      "center": { "lat": 47.6062, "lon": -122.3321 },
+      "spotCoverage": {
+        "name": "Seattle",
+        "bbox": { "south": 47.35, "west": -122.55, "north": 47.86, "east": -121.95 },
+        "boxes": [
+          { "name": "Seattle", "south": 47.48, "west": -122.45, "north": 47.75, "east": -122.22 },
+          { "name": "Eastside", "south": 47.5, "west": -122.25, "north": 47.76, "east": -121.95 },
+          { "name": "South King County", "south": 47.35, "west": -122.4, "north": 47.55, "east": -122.05 },
+          { "name": "North King County", "south": 47.68, "west": -122.42, "north": 47.86, "east": -122.1 }
+        ],
+        "cityCenters": [
+          ["Seattle", 47.6062, -122.3321],
+          ["Bellevue", 47.6101, -122.2015],
+          ["Redmond", 47.674, -122.1215],
+          ["Kirkland", 47.6769, -122.206],
+          ["Bothell", 47.7601, -122.2054],
+          ["Shoreline", 47.7557, -122.3415],
+          ["Renton", 47.4829, -122.2171],
+          ["Tukwila", 47.474, -122.2609],
+          ["Mercer Island", 47.5707, -122.2221],
+          ["Issaquah", 47.5301, -122.0326],
+          ["Burien", 47.4704, -122.3468]
+        ]
+      }
+    }
+  ]
+}

@@ -1,21 +1,27 @@
 #!/usr/bin/env node
-// Generates static SEO landing pages and a dynamic sitemap from the Bay Area
-// spot + event datasets. Runs after `vite build` so output lands in dist/.
+// Generates static SEO pages and a dynamic sitemap from the metro spot + event
+// datasets. Runs after `vite build` so output lands in dist/.
 //
 // Output layout:
-//   dist/spot/<slug>/index.html     — one per spot (Place JSON-LD)
-//   dist/event/<slug>/index.html    — one per event (Event JSON-LD)
-//   dist/city/<slug>/index.html     — one per Bay Area city with content
+//   dist/<metro>/spot/<slug>/index.html     — one per spot (Place JSON-LD)
+//   dist/<metro>/event/<slug>/index.html    — one per event (Event JSON-LD)
+//   dist/<metro>/city/<slug>/index.html     — one per city with content
 //   dist/sitemap.xml                — overwrites the static sitemap with full URL list
 
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  legacyMetroDataFile,
+  loadMetroConfig,
+  metroDataFile,
+} from "./metroConfig.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const DIST = path.join(ROOT, "dist");
 const DATA = path.join(ROOT, "public", "data");
+const metroConfig = loadMetroConfig();
 
 // SEO output adapts to the same VITE_APP_AUDIENCE the SPA reads. Defaults
 // to the kids brand. Override with VITE_APP_AUDIENCE=adults at build time
@@ -26,10 +32,12 @@ const IS_ADULTS = APP_AUDIENCE === "adults";
 const SITE = process.env.VITE_APP_SITE_URL?.replace(/\/$/, "") ||
   (IS_ADULTS ? "https://nighthop.pages.dev" : "https://famhop.com");
 const BRAND = process.env.VITE_APP_BRAND || (IS_ADULTS ? "NightHop" : "FamHop");
-const BRAND_TAG = IS_ADULTS
-  ? "Bay Area night-out planner"
-  : "Bay Area family weekend planner";
+const BRAND_TAG = IS_ADULTS ? "night-out planner" : "family weekend planner";
 const OG_IMAGE = process.env.VITE_APP_OG_IMAGE || `${SITE}/og-image.png`;
+let activeMetro = metroConfig.defaultMetro;
+let sitemapEntries = [
+  { loc: `${SITE}/`, lastmod: today(), changefreq: "daily", priority: 1.0 },
+];
 // Filter the data feed to the app's audience the same way the SPA does at
 // runtime, so static SEO pages never expose entries the app would hide.
 function audienceVisible(item) {
@@ -152,31 +160,163 @@ if (!fs.existsSync(DIST)) {
   process.exit(1);
 }
 
-const spotsDoc = readJson(path.join(DATA, "bay-area-spots.json"));
-const eventsDoc = readJson(path.join(DATA, "events.json"));
+let totalSpotPages = 0;
+let totalEventPages = 0;
+let totalCityPages = 0;
+let totalCategoryPages = 0;
+let totalWeekendPages = 0;
 
-const spots = (Array.isArray(spotsDoc?.spots) ? spotsDoc.spots : []).filter(
-  audienceVisible,
-);
-const events = (Array.isArray(eventsDoc?.events) ? eventsDoc.events : []).filter(
-  audienceVisible,
-);
+for (const metro of metroConfig.metros) {
+  activeMetro = metro;
+  generateMetroAppShellPage(metro);
 
-const sitemapEntries = [
-  { loc: `${SITE}/`, lastmod: today(), changefreq: "daily", priority: 1.0 },
-];
+  const spotsDoc = readJson(metroDataPath(metro, "spots"));
+  const eventsDoc = readJson(metroDataPath(metro, "events"));
 
-const spotSlugs = generateSpotPages(spots);
-const eventSlugs = generateEventPages(events);
-const citySlugs = generateCityPages(spots, events, spotSlugs, eventSlugs);
-const categorySlugs = generateCategoryPages(spots, events);
-const wroteThisWeekend = generateThisWeekendPage(events);
+  const spots = (Array.isArray(spotsDoc?.spots) ? spotsDoc.spots : []).filter(
+    audienceVisible,
+  );
+  const events = (Array.isArray(eventsDoc?.events) ? eventsDoc.events : []).filter(
+    audienceVisible,
+  );
+
+  const spotSlugs = generateSpotPages(spots);
+  const eventSlugs = generateEventPages(events);
+  const citySlugs = generateCityPages(spots, events, spotSlugs, eventSlugs);
+  const categorySlugs = generateCategoryPages(spots, events);
+  const wroteThisWeekend = generateThisWeekendPage(events);
+
+  totalSpotPages += spotSlugs.size;
+  totalEventPages += eventSlugs.size;
+  totalCityPages += citySlugs.size;
+  totalCategoryPages += categorySlugs.size;
+  totalWeekendPages += wroteThisWeekend ? 1 : 0;
+}
 
 writeSitemap(sitemapEntries);
 
 console.log(
-  `[seo] wrote ${spotSlugs.size} spot pages, ${eventSlugs.size} event pages, ${citySlugs.size} city pages, ${categorySlugs.size} category pages${wroteThisWeekend ? ", a this-weekend page" : ""}, sitemap with ${sitemapEntries.length} URLs.`,
+  `[seo] wrote ${totalSpotPages} spot pages, ${totalEventPages} event pages, ${totalCityPages} city pages, ${totalCategoryPages} category pages, ${totalWeekendPages} this-weekend pages, sitemap with ${sitemapEntries.length} URLs.`,
 );
+
+function metroDataPath(metro, key) {
+  const primary = path.join(ROOT, metroDataFile(metro, key));
+  if (fs.existsSync(primary)) return primary;
+  const legacy = legacyMetroDataFile(metro, key);
+  return legacy ? path.join(ROOT, legacy) : primary;
+}
+
+function metroPath(rel = "") {
+  const prefix = String(activeMetro.canonicalPath || "").replace(/\/+$/, "");
+  const suffix = String(rel || "").replace(/^\/+/, "");
+  if (!suffix) return `${prefix || ""}/`;
+  return `${prefix}/${suffix}`.replace(/\/{2,}/g, "/");
+}
+
+function metroUrl(rel = "") {
+  return `${SITE}${metroPath(rel)}`;
+}
+
+function writeMetroPage(rel, html) {
+  const prefix = String(activeMetro.canonicalPath || "").replace(/^\/+|\/+$/g, "");
+  writePage(path.posix.join(prefix, rel), html);
+}
+
+function metroLabel() {
+  return activeMetro.seoName || activeMetro.label || "your city";
+}
+
+function metroTag() {
+  return `${metroLabel()} ${BRAND_TAG}`;
+}
+
+function metroText(text) {
+  return String(text || "")
+    .replace(/San Francisco Bay Area/g, metroLabel())
+    .replace(/the Bay Area/g, metroLabel())
+    .replace(/Bay Area/g, metroLabel())
+    .replace(/Peninsula, South Bay, and East Bay/g, `${metroLabel()} neighborhoods`);
+}
+
+function generateMetroAppShellPage(metro) {
+  const shellPath = path.join(DIST, "index.html");
+  if (!fs.existsSync(shellPath)) return;
+  const canonical = metroUrl("");
+  const title = `${metroLabel()} family weekend planner | ${BRAND}`;
+  const description =
+    `Find family-friendly parks, libraries, museums, events, and ready-made weekend plans in ${metroLabel()} with ${BRAND}.`.slice(
+      0,
+      300,
+    );
+  let html = fs.readFileSync(shellPath, "utf8");
+  html = metro.id === metroConfig.defaultMetro.id ? html : metroText(html);
+  html = replaceMetroShellCopy(html, title, description);
+  html = upsertHeadTag(html, "title", esc(title));
+  html = upsertMeta(html, "name", "description", description);
+  html = upsertLink(html, "canonical", canonical);
+  html = upsertMeta(html, "property", "og:title", title);
+  html = upsertMeta(html, "property", "og:description", description);
+  html = upsertMeta(html, "property", "og:image:alt", title);
+  html = upsertMeta(html, "property", "og:url", canonical);
+  html = upsertMeta(html, "name", "twitter:title", title);
+  html = upsertMeta(html, "name", "twitter:description", description);
+  html = upsertMeta(html, "name", "twitter:image:alt", title);
+  writeMetroPage("index.html", html);
+  for (const alias of metro.aliases || []) {
+    const previousMetro = activeMetro;
+    activeMetro = { ...metro, canonicalPath: `/${alias}` };
+    writeMetroPage("index.html", html);
+    activeMetro = previousMetro;
+  }
+  sitemapEntries.push({
+    loc: canonical,
+    lastmod: today(),
+    changefreq: "daily",
+    priority: metro.id === metroConfig.defaultMetro.id ? 0.95 : 0.9,
+  });
+}
+
+function replaceMetroShellCopy(html, title, description) {
+  const area = metroLabel();
+  const noscript = `
+      <noscript>
+        <header>
+          <h1>${esc(title)}</h1>
+          <p>${esc(description)} Search 1,500+ kid-friendly spots and upcoming family events, then build a shareable weekend plan.</p>
+        </header>
+        <section>
+          <h2>What you can do on ${esc(BRAND)}</h2>
+          <ul>
+            <li>Browse family-friendly ${esc(area)} spots: parks, libraries, museums, playgrounds, zoos and family farms.</li>
+            <li>See upcoming family events from official calendars.</li>
+            <li>Filter by age band: toddler, preschool, school-age and tween.</li>
+            <li>Build a 3-stop plan and share a link so co-parents and friends can vote.</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Browse ${esc(area)}</h2>
+          <p>
+            <a href="${metroPath("this-weekend/")}">Things to do this weekend</a>,
+            <a href="${metroPath("category/library/")}">library events</a>,
+            <a href="${metroPath("category/museum/")}">museums</a>,
+            <a href="${metroPath("category/park/")}">parks and outdoors</a>, and
+            <a href="${metroPath("category/festival/")}">family festivals</a>.
+          </p>
+        </section>
+        <p><strong>Heads-up:</strong> ${esc(BRAND)} is an interactive planner. Please enable JavaScript to plan, share and vote.</p>
+      </noscript>`;
+
+  return html
+    .replace(/<noscript>[\s\S]*?<\/noscript>/, noscript)
+    .replace(
+      /Events are pulled directly from public source pages \(libraries like SFPL, SJPL, Oakland; parks; museums; family festivals\) using their official event calendars in JSON-LD, iCal, RSS, LibCal, and dated HTML formats\./g,
+      `Events are pulled directly from public source pages for ${area} libraries, parks, museums, and family venues.`,
+    )
+    .replace(
+      /FamHop covers (?:the )?[^.:]+: San Francisco, the Peninsula, the East Bay, the South Bay, and the North Bay\./g,
+      `FamHop covers ${area} and nearby family-friendly places and events.`,
+    );
+}
 
 // ---------------------------------------------------------------------------
 // Spots
@@ -195,8 +335,8 @@ function generateSpotPages(items) {
   }
 
   for (const [slug, spot] of seen) {
-    const canonical = `${SITE}/spot/${slug}/`;
-    const cityName = (spot.neighborhood || "the Bay Area").trim();
+    const canonical = metroUrl(`spot/${slug}/`);
+    const cityName = (spot.neighborhood || metroLabel()).trim();
     const title = `${spot.name} — ${cityName} family-friendly spot | ${BRAND}`;
     const description = buildSpotDescription(spot);
 
@@ -210,10 +350,10 @@ function generateSpotPages(items) {
       ${detailRows.length ? `<dl class="meta-grid">${detailRows.map((r) => `<div><dt>${esc(r.label)}</dt><dd>${r.html}</dd></div>`).join("")}</dl>` : ""}
       ${tags.length ? `<p class="tags">${tags.map((t) => `<span class="chip">${esc(t)}</span>`).join("")}</p>` : ""}
       <p class="cta-row">
-        <a class="cta" href="/">Plan a day with ${BRAND}</a>
+        <a class="cta" href="${metroPath("")}">Plan a day with ${BRAND}</a>
         ${spot.website ? `<a class="cta-secondary" rel="noopener nofollow" href="${esc(spot.website)}">Visit official website</a>` : ""}
       </p>
-      ${cityName ? `<p class="see-also">See more <a href="/city/${esc(slugify(cityName))}/">family activities in ${esc(cityName)}</a>.</p>` : ""}
+      ${cityName ? `<p class="see-also">See more <a href="${metroPath(`city/${slugify(cityName)}/`)}">family activities in ${esc(cityName)}</a>.</p>` : ""}
     `;
 
     const jsonLd = buildSpotJsonLd(spot, canonical);
@@ -224,8 +364,8 @@ function generateSpotPages(items) {
       ogImage: heroImage || OG_IMAGE,
       jsonLd,
       breadcrumb: [
-        { name: BRAND, url: `${SITE}/` },
-        cityName ? { name: cityName, url: `${SITE}/city/${slugify(cityName)}/` } : null,
+        { name: BRAND, url: metroUrl("") },
+        cityName ? { name: cityName, url: metroUrl(`city/${slugify(cityName)}/`) } : null,
         { name: spot.name, url: canonical },
       ].filter(Boolean),
       h1: spot.name,
@@ -233,7 +373,7 @@ function generateSpotPages(items) {
       body,
     });
 
-    writePage(`spot/${slug}/index.html`, html);
+    writeMetroPage(`spot/${slug}/index.html`, html);
 
     sitemapEntries.push({
       loc: canonical,
@@ -246,14 +386,14 @@ function generateSpotPages(items) {
 }
 
 function buildSpotDescription(spot) {
-  const city = spot.neighborhood || "the Bay Area";
+  const city = spot.neighborhood || metroLabel();
   const tier = spot.category ? spot.category.toLowerCase() : "family";
   const tagsBit = Array.isArray(spot.tags) && spot.tags.length
     ? ` Tagged: ${spot.tags.slice(0, 4).join(", ")}.`
     : "";
   const opening = spot.openingHours ? ` Hours: ${spot.openingHours}.` : "";
   const cost = spot.cost ? ` Cost: ${spot.cost}.` : "";
-  return `${spot.name} is a ${tier} stop in ${city} for a Bay Area weekend with the kids.${cost}${opening}${tagsBit}`.trim().slice(0, 280);
+  return `${spot.name} is a ${tier} stop in ${city} for a ${metroLabel()} weekend with the kids.${cost}${opening}${tagsBit}`.trim().slice(0, 280);
 }
 
 function buildSpotDetailRows(spot) {
@@ -293,7 +433,7 @@ function buildSpotJsonLd(spot, canonical) {
     node.address = {
       "@type": "PostalAddress",
       addressLocality: spot.neighborhood,
-      addressRegion: "CA",
+      addressRegion: activeMetro.state || "US",
       addressCountry: "US",
     };
   }
@@ -346,8 +486,8 @@ function generateEventPages(items) {
     while (used.has(candidate)) candidate = `${slug}-${n++}`;
     used.add(candidate);
 
-    const canonical = `${SITE}/event/${candidate}/`;
-    const cityName = event.city || event.neighborhood || "the Bay Area";
+    const canonical = metroUrl(`event/${candidate}/`);
+    const cityName = event.city || event.neighborhood || metroLabel();
     const dateStr = formatEventDate(event);
     const title = `${event.title} — ${cityName}${dateStr ? `, ${dateStr}` : ""} | ${BRAND}`;
     const description = buildEventDescription(event, dateStr);
@@ -358,10 +498,10 @@ function generateEventPages(items) {
       <p class="lede">${esc(description)}</p>
       ${detailRows.length ? `<dl class="meta-grid">${detailRows.map((r) => `<div><dt>${esc(r.label)}</dt><dd>${r.html}</dd></div>`).join("")}</dl>` : ""}
       <p class="cta-row">
-        <a class="cta" href="/">Plan a day with ${BRAND}</a>
+        <a class="cta" href="${metroPath("")}">Plan a day with ${BRAND}</a>
         ${event.url ? `<a class="cta-secondary" rel="noopener nofollow" href="${esc(event.url)}">Event details</a>` : ""}
       </p>
-      ${cityName ? `<p class="see-also">More <a href="/city/${esc(slugify(cityName))}/">kid-friendly things to do in ${esc(cityName)}</a>.</p>` : ""}
+      ${cityName ? `<p class="see-also">More <a href="${metroPath(`city/${slugify(cityName)}/`)}">kid-friendly things to do in ${esc(cityName)}</a>.</p>` : ""}
     `;
 
     const jsonLd = buildEventJsonLd(event, canonical);
@@ -372,8 +512,8 @@ function generateEventPages(items) {
       ogImage: OG_IMAGE,
       jsonLd,
       breadcrumb: [
-        { name: BRAND, url: `${SITE}/` },
-        { name: cityName, url: `${SITE}/city/${slugify(cityName)}/` },
+        { name: BRAND, url: metroUrl("") },
+        { name: cityName, url: metroUrl(`city/${slugify(cityName)}/`) },
         { name: event.title, url: canonical },
       ],
       h1: event.title,
@@ -381,7 +521,7 @@ function generateEventPages(items) {
       body,
     });
 
-    writePage(`event/${candidate}/index.html`, html);
+    writeMetroPage(`event/${candidate}/index.html`, html);
     slugs.add(candidate);
 
     sitemapEntries.push({
@@ -395,7 +535,7 @@ function generateEventPages(items) {
 }
 
 function buildEventDescription(event, dateStr) {
-  const where = event.venue || event.city || "the Bay Area";
+  const where = event.venue || event.city || metroLabel();
   const when = dateStr ? ` on ${dateStr}` : "";
   const cat = event.category ? ` (${event.category})` : "";
   const cost = event.cost && event.cost !== "Unknown" ? ` Cost: ${event.cost}.` : "";
@@ -453,8 +593,8 @@ function buildEventJsonLd(event, canonical) {
       name: venue,
       address: {
         "@type": "PostalAddress",
-        addressLocality: event.city || "Bay Area",
-        addressRegion: "CA",
+        addressLocality: event.city || metroLabel(),
+        addressRegion: activeMetro.state || "US",
         addressCountry: "US",
       },
     };
@@ -500,7 +640,7 @@ function formatEventDate(event) {
     month: "long",
     day: "numeric",
     year: "numeric",
-    timeZone: "America/Los_Angeles",
+    timeZone: activeMetro.timezone || "America/Los_Angeles",
   });
 }
 
@@ -571,7 +711,7 @@ function generateCityPages(spotItems, eventItems, spotSlugMap, eventSlugMap) {
   for (const city of cities) {
     const slug = slugify(city.name);
     if (!slug) continue;
-    const canonical = `${SITE}/city/${slug}/`;
+    const canonical = metroUrl(`city/${slug}/`);
     const title = `Things to do with kids in ${city.name} — ${BRAND}`;
     const description = `Family-friendly things to do in ${city.name}: ${city.spots.length} parks, museums and venues plus ${city.events.length} weekend events for kids. Plan a day in seconds with ${BRAND}.`;
 
@@ -585,7 +725,7 @@ function generateCityPages(spotItems, eventItems, spotSlugMap, eventSlugMap) {
       ? `<section><h2>Family-friendly spots in ${esc(city.name)}</h2><ul class="card-list">${topSpots.map((s) => {
           const sslug = spotToSlug.get(s);
           if (!sslug) return "";
-          return `<li><a href="/spot/${esc(sslug)}/"><strong>${esc(s.name)}</strong>${s.category ? `<span> · ${esc(s.category)}</span>` : ""}</a>${s.note ? `<p>${esc(s.note)}</p>` : ""}</li>`;
+          return `<li><a href="${metroPath(`spot/${sslug}/`)}"><strong>${esc(s.name)}</strong>${s.category ? `<span> · ${esc(s.category)}</span>` : ""}</a>${s.note ? `<p>${esc(s.note)}</p>` : ""}</li>`;
         }).join("")}</ul></section>`
       : "";
 
@@ -594,13 +734,13 @@ function generateCityPages(spotItems, eventItems, spotSlugMap, eventSlugMap) {
           const eslug = eventToSlug.get(e);
           if (!eslug) return "";
           const dateStr = formatEventDate(e);
-          return `<li><a href="/event/${esc(eslug)}/"><strong>${esc(e.title)}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}</a>${e.venue ? `<p>${esc(e.venue)}${e.cost && e.cost !== "Unknown" ? ` · ${esc(e.cost)}` : ""}</p>` : ""}</li>`;
+          return `<li><a href="${metroPath(`event/${eslug}/`)}"><strong>${esc(e.title)}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}</a>${e.venue ? `<p>${esc(e.venue)}${e.cost && e.cost !== "Unknown" ? ` · ${esc(e.cost)}` : ""}</p>` : ""}</li>`;
         }).join("")}</ul></section>`
       : "";
 
     const body = `
       <p class="lede">${esc(description)}</p>
-      <p class="cta-row"><a class="cta" href="/">Plan a day with ${BRAND}</a></p>
+      <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a day with ${BRAND}</a></p>
       ${spotsList}
       ${eventsList}
     `;
@@ -618,7 +758,7 @@ function generateCityPages(spotItems, eventItems, spotSlugMap, eventSlugMap) {
         address: {
           "@type": "PostalAddress",
           addressLocality: city.name,
-          addressRegion: "CA",
+          addressRegion: activeMetro.state || "US",
           addressCountry: "US",
         },
       },
@@ -631,15 +771,15 @@ function generateCityPages(spotItems, eventItems, spotSlugMap, eventSlugMap) {
       ogImage: OG_IMAGE,
       jsonLd,
       breadcrumb: [
-        { name: BRAND, url: `${SITE}/` },
+        { name: BRAND, url: metroUrl("") },
         { name: city.name, url: canonical },
       ],
       h1: `Things to do with kids in ${city.name}`,
-      eyebrow: BRAND_TAG,
+      eyebrow: metroTag(),
       body,
     });
 
-    writePage(`city/${slug}/index.html`, html);
+    writeMetroPage(`city/${slug}/index.html`, html);
     slugs.add(slug);
 
     sitemapEntries.push({
@@ -673,9 +813,9 @@ function generateCategoryPages(spotItems, eventItems) {
 
     if (matchingSpots.length + matchingEvents.length === 0) continue;
 
-    const canonical = `${SITE}/category/${cat.slug}/`;
+    const canonical = metroUrl(`category/${cat.slug}/`);
     const description =
-      `${cat.blurb} Browse ${matchingSpots.length} family-friendly spots and ${matchingEvents.length} upcoming events on ${BRAND}.`.slice(
+      `${metroText(cat.blurb)} Browse ${matchingSpots.length} family-friendly spots and ${matchingEvents.length} upcoming events on ${BRAND}.`.slice(
         0,
         300,
       );
@@ -685,7 +825,7 @@ function generateCategoryPages(spotItems, eventItems) {
           .map((s) => {
             const sslug = spotSlugLookup.get(s);
             if (!sslug) return "";
-            return `<li><a href="/spot/${esc(sslug)}/"><strong>${esc(s.name)}</strong>${s.neighborhood ? `<span> · ${esc(s.neighborhood)}</span>` : ""}</a>${s.note ? `<p>${esc(s.note)}</p>` : ""}</li>`;
+            return `<li><a href="${metroPath(`spot/${sslug}/`)}"><strong>${esc(s.name)}</strong>${s.neighborhood ? `<span> · ${esc(s.neighborhood)}</span>` : ""}</a>${s.note ? `<p>${esc(s.note)}</p>` : ""}</li>`;
           })
           .join("")}</ul></section>`
       : "";
@@ -696,14 +836,14 @@ function generateCategoryPages(spotItems, eventItems) {
             const eslug = eventSlugLookup.get(e);
             if (!eslug) return "";
             const dateStr = formatEventDate(e);
-            return `<li><a href="/event/${esc(eslug)}/"><strong>${esc(e.title)}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}</a>${e.venue ? `<p>${esc(e.venue)}${e.city ? `, ${esc(e.city)}` : ""}${e.cost && e.cost !== "Unknown" ? ` · ${esc(e.cost)}` : ""}</p>` : ""}</li>`;
+            return `<li><a href="${metroPath(`event/${eslug}/`)}"><strong>${esc(e.title)}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}</a>${e.venue ? `<p>${esc(e.venue)}${e.city ? `, ${esc(e.city)}` : ""}${e.cost && e.cost !== "Unknown" ? ` · ${esc(e.cost)}` : ""}</p>` : ""}</li>`;
           })
           .join("")}</ul></section>`
       : "";
 
     const body = `
       <p class="lede">${esc(description)}</p>
-      <p class="cta-row"><a class="cta" href="/">Plan a day with ${BRAND}</a> <a class="cta-secondary" href="/this-weekend/">This weekend's events</a></p>
+      <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a day with ${BRAND}</a> <a class="cta-secondary" href="${metroPath("this-weekend/")}">This weekend's events</a></p>
       ${eventsList}
       ${spotsList}
     `;
@@ -713,31 +853,31 @@ function generateCategoryPages(spotItems, eventItems) {
       "@type": "CollectionPage",
       "@id": `${canonical}#page`,
       url: canonical,
-      name: cat.title,
+      name: metroText(cat.title),
       description,
-      isPartOf: { "@id": `${SITE}/#website` },
+      isPartOf: { "@id": `${metroUrl("")}#website` },
       about: {
         "@type": "Place",
-        name: "San Francisco Bay Area",
+        name: metroLabel(),
       },
     };
 
     const html = renderShell({
-      title: `${cat.title} — ${BRAND}`,
+      title: `${metroText(cat.title)} — ${BRAND}`,
       description,
       canonical,
       ogImage: OG_IMAGE,
       jsonLd,
       breadcrumb: [
-        { name: BRAND, url: `${SITE}/` },
+        { name: BRAND, url: metroUrl("") },
         { name: cat.label, url: canonical },
       ],
-      h1: cat.title,
-      eyebrow: BRAND_TAG,
+      h1: metroText(cat.title),
+      eyebrow: metroTag(),
       body,
     });
 
-    writePage(`category/${cat.slug}/index.html`, html);
+    writeMetroPage(`category/${cat.slug}/index.html`, html);
     slugs.add(cat.slug);
 
     sitemapEntries.push({
@@ -757,7 +897,7 @@ function generateCategoryPages(spotItems, eventItems) {
 function generateThisWeekendPage(eventItems) {
   const eventSlugLookup = buildEventSlugLookup(eventItems);
   const now = new Date();
-  // Snap to the upcoming Saturday/Sunday in Pacific time. If today is Sat or
+  // Snap to the upcoming Saturday/Sunday in the metro timezone. If today is Sat or
   // Sun, "this weekend" means today + tomorrow; otherwise it means the next
   // weekend (Sat 00:00 → Sun 23:59 Pacific).
   const dow = now.getDay();
@@ -780,15 +920,15 @@ function generateThisWeekendPage(eventItems) {
 
   if (upcoming.length === 0) return false;
 
-  const canonical = `${SITE}/this-weekend/`;
+  const canonical = metroUrl("this-weekend/");
   const weekendLabel = sat.toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",
     day: "numeric",
-    timeZone: "America/Los_Angeles",
+    timeZone: activeMetro.timezone || "America/Los_Angeles",
   });
-  const title = `Things to do with kids this weekend in the Bay Area — ${BRAND}`;
-  const description = `Family-friendly things to do in the Bay Area this weekend (starting ${weekendLabel}): ${upcoming.length} events including library storytimes, museum free days, festivals, and family farm activities. Build a 3-stop plan in seconds with ${BRAND}.`.slice(
+  const title = `Things to do with kids this weekend in ${metroLabel()} — ${BRAND}`;
+  const description = `Family-friendly things to do in ${metroLabel()} this weekend (starting ${weekendLabel}): ${upcoming.length} events including library storytimes, museum free days, festivals, and family activities. Build a 3-stop plan in seconds with ${BRAND}.`.slice(
     0,
     300,
   );
@@ -806,7 +946,7 @@ function generateThisWeekendPage(eventItems) {
         const eslug = eventSlugLookup.get(e);
         if (!eslug) return "";
         const dateStr = formatEventDate(e);
-        return `<li><a href="/event/${esc(eslug)}/"><strong>${esc(e.title)}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}</a>${e.venue ? `<p>${esc(e.venue)}${e.city ? `, ${esc(e.city)}` : ""}${e.cost && e.cost !== "Unknown" ? ` · ${esc(e.cost)}` : ""}</p>` : ""}</li>`;
+        return `<li><a href="${metroPath(`event/${eslug}/`)}"><strong>${esc(e.title)}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}</a>${e.venue ? `<p>${esc(e.venue)}${e.city ? `, ${esc(e.city)}` : ""}${e.cost && e.cost !== "Unknown" ? ` · ${esc(e.cost)}` : ""}</p>` : ""}</li>`;
       })
       .join("");
     return `<section><h2>${esc(cat)}</h2><ul class="card-list">${items}</ul></section>`;
@@ -814,7 +954,7 @@ function generateThisWeekendPage(eventItems) {
 
   const body = `
     <p class="lede">${esc(description)}</p>
-    <p class="cta-row"><a class="cta" href="/">Plan a 3-stop day with ${BRAND}</a></p>
+    <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a 3-stop day with ${BRAND}</a></p>
     ${sections.join("")}
   `;
 
@@ -823,12 +963,12 @@ function generateThisWeekendPage(eventItems) {
     "@type": "CollectionPage",
     "@id": `${canonical}#page`,
     url: canonical,
-    name: "Things to do with kids this weekend in the Bay Area",
+    name: `Things to do with kids this weekend in ${metroLabel()}`,
     description,
-    isPartOf: { "@id": `${SITE}/#website` },
+    isPartOf: { "@id": `${metroUrl("")}#website` },
     about: {
       "@type": "Place",
-      name: "San Francisco Bay Area",
+      name: metroLabel(),
     },
   };
 
@@ -839,15 +979,15 @@ function generateThisWeekendPage(eventItems) {
     ogImage: OG_IMAGE,
     jsonLd,
     breadcrumb: [
-      { name: BRAND, url: `${SITE}/` },
+      { name: BRAND, url: metroUrl("") },
       { name: "This weekend", url: canonical },
     ],
-    h1: "Things to do with kids this weekend in the Bay Area",
-    eyebrow: BRAND_TAG,
+    h1: `Things to do with kids this weekend in ${metroLabel()}`,
+    eyebrow: metroTag(),
     body,
   });
 
-  writePage("this-weekend/index.html", html);
+  writeMetroPage("this-weekend/index.html", html);
 
   sitemapEntries.push({
     loc: canonical,
@@ -969,8 +1109,8 @@ ${allLd.map((node) => `<script type="application/ld+json">${safeJsonScript(node)
 </head>
 <body>
 <header class="famhop-topbar">
-  <a class="famhop-brand" href="/">${BRAND}</a>
-  <nav><a href="/">Plan a day</a></nav>
+  <a class="famhop-brand" href="${metroPath("")}">${BRAND}</a>
+  <nav><a href="${metroPath("")}">Plan a day</a></nav>
 </header>
 <main class="famhop-page">
   ${breadcrumbHtml}
@@ -979,7 +1119,7 @@ ${allLd.map((node) => `<script type="application/ld+json">${safeJsonScript(node)
   ${body}
 </main>
 <footer class="famhop-footer">
-  <p>© ${BRAND} · ${BRAND_TAG}.</p>
+  <p>© ${BRAND} · ${metroTag()}.</p>
   <p>Spot data © OpenStreetMap contributors (ODbL). Event listings from configured public sources.</p>
 </footer>
 </body>
@@ -997,6 +1137,37 @@ function readJson(p) {
     console.warn(`[seo] could not read ${p}: ${err.message}`);
     return null;
   }
+}
+
+function upsertHeadTag(html, tag, content) {
+  const re = new RegExp(`<${tag}[^>]*>.*?</${tag}>`, "is");
+  const next = `<${tag}>${content}</${tag}>`;
+  if (re.test(html)) return html.replace(re, next);
+  return html.replace("</head>", `${next}\n</head>`);
+}
+
+function upsertMeta(html, attrName, attrValue, content) {
+  const re = new RegExp(
+    `<meta\\s+[^>]*${escapeRegExp(attrName)}=["']${escapeRegExp(attrValue)}["'][^>]*>`,
+    "i",
+  );
+  const next = `<meta ${attrName}="${esc(attrValue)}" content="${esc(content)}">`;
+  if (re.test(html)) return html.replace(re, next);
+  return html.replace("</head>", `${next}\n</head>`);
+}
+
+function upsertLink(html, rel, href) {
+  const re = new RegExp(
+    `<link\\s+[^>]*rel=["']${escapeRegExp(rel)}["'][^>]*>`,
+    "i",
+  );
+  const next = `<link rel="${esc(rel)}" href="${esc(href)}">`;
+  if (re.test(html)) return html.replace(re, next);
+  return html.replace("</head>", `${next}\n</head>`);
+}
+
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function writePage(rel, html) {

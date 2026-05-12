@@ -293,6 +293,10 @@ export function imageFromTags(tags = {}, category, key) {
 }
 
 export function isInBayArea(lat, lon, boxes = BAY_AREA_BOXES) {
+  return isInCoverage(lat, lon, boxes);
+}
+
+export function isInCoverage(lat, lon, boxes = BAY_AREA_BOXES) {
   return boxes.some(
     (bbox) =>
       lat >= bbox.south &&
@@ -484,13 +488,13 @@ export function haversineMiles(a, b = SF_CENTER) {
   return radiusMiles * 2 * Math.asin(Math.sqrt(h));
 }
 
-export function nearestCity(coords) {
+export function nearestCity(coords, cityCenters = CITY_CENTERS, fallback = "Bay Area") {
   if (!coords) {
-    return "Bay Area";
+    return fallback;
   }
 
-  let best = ["Bay Area", Number.POSITIVE_INFINITY];
-  for (const [name, lat, lon] of CITY_CENTERS) {
+  let best = [fallback, Number.POSITIVE_INFINITY];
+  for (const [name, lat, lon] of cityCenters) {
     const miles = haversineMiles({ lat: coords.lat, lon: coords.lon }, { lat, lon });
     if (miles < best[1]) {
       best = [name, miles];
@@ -532,12 +536,14 @@ export function normalizeCity(value) {
   return stripped;
 }
 
-export function extractCity(tags = {}, coords) {
+export function extractCity(tags = {}, coords, options = {}) {
+  const cityCenters = options.cityCenters || CITY_CENTERS;
+  const fallback = options.coverageName || "Bay Area";
   const raw =
     stripUnsafeText(tags["addr:city"], 60) ||
     stripUnsafeText(tags["is_in:city"], 60) ||
     stripUnsafeText(tags["addr:suburb"], 60) ||
-    nearestCity(coords);
+    nearestCity(coords, cityCenters, fallback);
   return normalizeCity(raw);
 }
 
@@ -671,12 +677,16 @@ export function extractFriendlyTags(category, tags = {}) {
   ).slice(0, 6);
 }
 
-export function normalizeElement(element, generatedAt = new Date().toISOString()) {
+export function normalizeElement(element, generatedAt = new Date().toISOString(), options = {}) {
   const tags = element.tags ?? {};
   const name = stripUnsafeText(tags.name, 90);
   const coords = elementCoordinates(element);
+  const boxes = options.boxes || BAY_AREA_BOXES;
+  const center = options.center || SF_CENTER;
+  const cityCenters = options.cityCenters || CITY_CENTERS;
+  const coverageName = options.coverageName || "Bay Area";
 
-  if (!name || !coords || !isInBayArea(coords.lat, coords.lon)) {
+  if (!name || !coords || !isInCoverage(coords.lat, coords.lon, boxes)) {
     return null;
   }
 
@@ -690,7 +700,7 @@ export function normalizeElement(element, generatedAt = new Date().toISOString()
   }
   const sourceUrl = `https://www.openstreetmap.org/${element.type}/${element.id}`;
   const website = sanitizeUrl(tags.website || tags["contact:website"]);
-  const distanceMiles = haversineMiles({ lat: coords.lat, lon: coords.lon });
+  const distanceMiles = haversineMiles({ lat: coords.lat, lon: coords.lon }, center);
   const transitMinutes = Math.max(8, Math.round(distanceMiles * 2.3 + 8));
   const openingHours = stripUnsafeText(tags.opening_hours, 120);
   const score = friendScore(category, tags);
@@ -703,7 +713,7 @@ export function normalizeElement(element, generatedAt = new Date().toISOString()
   return {
     id,
     name,
-    neighborhood: extractCity(tags, coords),
+    neighborhood: extractCity(tags, coords, { cityCenters, coverageName }),
     category,
     imageUrl: image.url,
     imageSource: image.source,
@@ -717,7 +727,7 @@ export function normalizeElement(element, generatedAt = new Date().toISOString()
     groupSize: deriveGroupSize(category, tags),
     planning: derivePlanning(category, tags),
     openNow: Boolean(openingHours),
-    note: buildNote(category, tags, openingHours, coords),
+    note: buildNote(category, tags, openingHours, coords, { cityCenters, coverageName }),
     tags: extractFriendlyTags(category, tags),
     lat: Number(coords.lat.toFixed(6)),
     lon: Number(coords.lon.toFixed(6)),
@@ -755,9 +765,9 @@ export function deriveSpotAudiences(category, tags = {}) {
   return ["all"];
 }
 
-export function buildNote(category, tags = {}, _openingHours = "", coords) {
+export function buildNote(category, tags = {}, _openingHours = "", coords, options = {}) {
   const descriptor = deriveMood(category, tags);
-  const city = extractCity(tags, coords);
+  const city = extractCity(tags, coords, options);
   return stripUnsafeText(`${descriptor} in ${city}.`, 180);
 }
 
@@ -840,9 +850,21 @@ export function dedupeAndRank(spots, limit = 500) {
 export function buildDataset(elements, options = {}) {
   const generatedAt = options.generatedAt || new Date().toISOString();
   const limit = Number(options.limit || process.env.SPOT_LIMIT || 1500);
-  const query = options.query || buildOverpassQuery();
+  const coverage = options.coverage || {};
+  const boxes = options.boxes || coverage.boxes || BAY_AREA_BOXES;
+  const center = options.center || coverage.center || SF_CENTER;
+  const cityCenters = options.cityCenters || coverage.cityCenters || CITY_CENTERS;
+  const coverageName = options.coverageName || coverage.name || "San Francisco Bay Area";
+  const query = options.query || buildOverpassQuery(boxes);
   const spots = dedupeAndRank(
-    elements.map((element) => normalizeElement(element, generatedAt)).filter(Boolean),
+    elements
+      .map((element) => normalizeElement(element, generatedAt, {
+        boxes,
+        center,
+        cityCenters,
+        coverageName,
+      }))
+      .filter(Boolean),
     limit,
   );
 
@@ -857,9 +879,10 @@ export function buildDataset(elements, options = {}) {
       license: "ODbL",
     },
     coverage: {
-      name: "San Francisco Bay Area",
-      bbox: BAY_AREA_BBOX,
-      boxes: BAY_AREA_BOXES,
+      id: options.metroId || "bay-area",
+      name: coverageName,
+      bbox: coverage.bbox || BAY_AREA_BBOX,
+      boxes,
     },
     count: spots.length,
     spots,
@@ -868,6 +891,8 @@ export function buildDataset(elements, options = {}) {
 
 export function validateDataset(dataset, options = {}) {
   const minSpots = Number(options.minSpots ?? 1);
+  const boxes = options.boxes || dataset?.coverage?.boxes || BAY_AREA_BOXES;
+  const coverageName = options.coverageName || dataset?.coverage?.name || "Bay Area";
   const errors = [];
 
   if (!dataset || typeof dataset !== "object") {
@@ -904,8 +929,8 @@ export function validateDataset(dataset, options = {}) {
 
     if (!Number.isFinite(spot.lat) || !Number.isFinite(spot.lon)) {
       errors.push(`${prefix} must have numeric coordinates.`);
-    } else if (!isInBayArea(spot.lat, spot.lon)) {
-      errors.push(`${prefix} coordinates are outside Bay Area coverage.`);
+    } else if (!isInCoverage(spot.lat, spot.lon, boxes)) {
+      errors.push(`${prefix} coordinates are outside ${coverageName} coverage.`);
     }
 
     const serialized = JSON.stringify(spot);

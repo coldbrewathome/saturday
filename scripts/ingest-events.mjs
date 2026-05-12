@@ -9,18 +9,38 @@ import {
   extractEventsFromPayload,
   validateEventsDataset,
 } from "./eventPipeline.mjs";
+import {
+  adultSourceRegistryPath,
+  legacyMetroDataFile,
+  loadMetroConfig,
+  metroDataFile,
+  selectedMetroFromArgs,
+  sourceRegistryPath,
+} from "./metroConfig.mjs";
 
-const registryPath = process.env.EVENT_SOURCES || path.join("data", "event-sources.json");
+const metroConfig = loadMetroConfig();
+const selection = selectedMetroFromArgs(process.argv.slice(2), metroConfig);
+if (selection.all) {
+  console.error("scripts/ingest-events.mjs expects one metro. Use npm run ingest:events:all.");
+  process.exit(1);
+}
+const activeMetro = selection.metro;
+const registryPath = process.env.EVENT_SOURCES || sourceRegistryPath(activeMetro);
 const adultRegistryPath =
   process.env.EVENT_SOURCES_ADULTS ||
-  path.join("data", "event-sources-adults.json");
-const templatePath = process.env.EVENT_TEMPLATE_INPUT || path.join("data", "event-templates.json");
+  adultSourceRegistryPath(activeMetro);
+const templatePath =
+  process.env.EVENT_TEMPLATE_INPUT ||
+  activeMetro.eventTemplates ||
+  null;
 const manualEventsPath =
-  process.env.EVENT_MANUAL_INPUT || path.join("data", "manual-events.json");
-const outputPath = process.env.EVENT_OUTPUT || path.join("public", "data", "events.json");
+  process.env.EVENT_MANUAL_INPUT ||
+  activeMetro.manualEvents ||
+  null;
+const outputPath = process.env.EVENT_OUTPUT || metroDataFile(activeMetro, "events");
 const reportPath =
-  process.env.EVENT_REPORT_OUTPUT || path.join("public", "data", "event-build-report.json");
-const minEvents = Number(process.env.MIN_EVENTS || 25);
+  process.env.EVENT_REPORT_OUTPUT || metroDataFile(activeMetro, "eventReport");
+const minEvents = Number(process.env.MIN_EVENTS || activeMetro.minEvents || 25);
 const timeoutMs = Number(process.env.EVENT_FETCH_TIMEOUT_MS || 12000);
 const offline = process.env.EVENT_INGEST_OFFLINE === "1";
 
@@ -445,6 +465,9 @@ const BROWSER_HEADERS = {
   accept:
     "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
   "accept-language": "en-US,en;q=0.9",
+  "cache-control": "no-cache",
+  pragma: "no-cache",
+  referer: "https://www.google.com/",
   "sec-ch-ua": '"Chromium";v="130", "Google Chrome";v="130"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"macOS"',
@@ -478,6 +501,16 @@ async function fetchUrl(url, userAgent, init = {}) {
     });
     const contentType = response.headers.get("content-type") || "";
     const text = await response.text();
+    if (response.ok && /incapsula|imperva|hcaptcha|additional security check|captcha challenge/i.test(text)) {
+      return {
+        status: "blocked",
+        reason: "challenge page returned instead of event content",
+        httpStatus: response.status,
+        contentType,
+        text,
+        json: null,
+      };
+    }
     let json = null;
     if (/json/i.test(contentType)) {
       try {
@@ -530,6 +563,7 @@ function filterToPlanningWindow(events, generatedAt, windowDays) {
 }
 
 async function readJsonOrEmpty(filePath) {
+  if (!filePath) return null;
   try {
     return await readJson(filePath);
   } catch (err) {
@@ -553,12 +587,26 @@ function applyDefaultAudiences(reg) {
   }
 }
 
+function applyRegistryDefaults(reg, metro = activeMetro) {
+  applyDefaultAudiences(reg);
+  if (!reg || !Array.isArray(reg.sources)) return;
+  const timezoneOffset = reg.defaults?.timezoneOffset || metro.timezoneOffset;
+  if (timezoneOffset) {
+    for (const source of reg.sources) {
+      if (!source.timezoneOffset) source.timezoneOffset = timezoneOffset;
+    }
+  }
+  for (const source of reg.sources) {
+    if (!source.metroId) source.metroId = metro.id;
+  }
+}
+
 async function main() {
   const registry = await readJson(registryPath);
   const adultRegistry = await readJsonOrEmpty(adultRegistryPath);
-  applyDefaultAudiences(registry);
-  applyDefaultAudiences(adultRegistry);
-  const templateDataset = await readJson(templatePath);
+  applyRegistryDefaults(registry);
+  applyRegistryDefaults(adultRegistry);
+  const templateDataset = templatePath ? await readJson(templatePath) : { events: [] };
   const templates = templateMap(templateDataset);
   const manualDataset = await readJsonOrEmpty(manualEventsPath);
   const generatedAt = new Date().toISOString();
@@ -583,6 +631,7 @@ async function main() {
     for (const event of inWindow) {
       allEvents.push({
         ...event,
+        metroId: event.metroId || activeMetro.id,
         sourceId: event.sourceId || "manual",
         sourceName: event.sourceName || "Manual entry",
         sourceUrl: event.sourceUrl || event.url,
@@ -598,6 +647,7 @@ async function main() {
       url: manualEventsPath,
       sourceType: "manual",
       city: null,
+      metroId: activeMetro.id,
       category: null,
       status: "ok",
       liveEvents: manualCount,
@@ -616,6 +666,7 @@ async function main() {
         url: source.url,
         sourceType: source.sourceType || "html",
         city: source.city,
+        metroId: activeMetro.id,
         category: source.category,
         status: "disabled",
         reason: source.disabledReason || source.notes,
@@ -632,6 +683,7 @@ async function main() {
       url: source.url,
       sourceType: source.sourceType || "html",
       city: source.city,
+      metroId: activeMetro.id,
       category: source.category,
       status: "pending",
       liveEvents: 0,
@@ -686,6 +738,7 @@ async function main() {
     for (const event of [...liveEvents, ...fallbackEvents]) {
       allEvents.push({
         ...event,
+        metroId: event.metroId || activeMetro.id,
         sourceId: event.sourceId || source.id,
         sourceName: event.sourceName || source.name,
         sourceUrl: event.sourceUrl || source.url,
@@ -709,8 +762,10 @@ async function main() {
   for (const c of adultRegistry?.coverage?.cities || []) unionCities.add(c);
 
   const dataset = buildEventsDataset(allEvents, {
+    metroId: activeMetro.id,
     generatedAt,
     registryPath,
+    sourceName: `${activeMetro.label} event source registry`,
     coverage: { ...registry.coverage, cities: Array.from(unionCities) },
     sourceCount:
       (registry.sources || []).length + (adultRegistry?.sources || []).length,
@@ -718,11 +773,17 @@ async function main() {
   const errors = validateEventsDataset(dataset, {
     minEvents,
     cities: Array.from(unionCities),
-    communities: ["Muir Beach", "Bay Area"],
+    communities: [
+      registry.coverage?.name,
+      activeMetro.label,
+      activeMetro.seoName,
+      ...(activeMetro.eventCommunities || []),
+    ].filter(Boolean),
   });
 
   const report = {
     schemaVersion: 1,
+    metroId: activeMetro.id,
     generatedAt,
     registryPath,
     outputPath,
@@ -742,8 +803,18 @@ async function main() {
 
   await fs.mkdir(path.dirname(outputPath), { recursive: true });
   await fs.writeFile(outputPath, `${JSON.stringify(dataset, null, 2)}\n`);
+  const legacyOutput = legacyMetroDataFile(activeMetro, "events");
+  if (legacyOutput) {
+    await fs.mkdir(path.dirname(legacyOutput), { recursive: true });
+    await fs.writeFile(legacyOutput, `${JSON.stringify(dataset, null, 2)}\n`);
+  }
   await fs.mkdir(path.dirname(reportPath), { recursive: true });
   await fs.writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`);
+  const legacyReport = legacyMetroDataFile(activeMetro, "eventReport");
+  if (legacyReport) {
+    await fs.mkdir(path.dirname(legacyReport), { recursive: true });
+    await fs.writeFile(legacyReport, `${JSON.stringify(report, null, 2)}\n`);
+  }
   console.log(
     `Wrote ${dataset.events.length} events to ${outputPath} (${report.liveEventCount} live, ${report.fallbackEventCount} template).`,
   );

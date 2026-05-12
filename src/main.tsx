@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { APP_AUDIENCE } from "./appConfig";
+import { metroFromPath } from "./metros";
 import PollView from "./PollView";
 import "./styles.css";
 
@@ -16,6 +17,18 @@ function readPollIdFromHash(): string | null {
 
 function Root() {
   const [pollId, setPollId] = useState<string | null>(() => readPollIdFromHash());
+  const [{ metro, isAlias, canonicalPath }] = useState(() =>
+    metroFromPath(window.location.pathname),
+  );
+
+  useEffect(() => {
+    if (!isAlias) return;
+    window.history.replaceState(
+      null,
+      "",
+      `${canonicalPath}${window.location.search}${window.location.hash}`,
+    );
+  }, [canonicalPath, isAlias]);
 
   useEffect(() => {
     function handler() {
@@ -25,7 +38,7 @@ function Root() {
     return () => window.removeEventListener("hashchange", handler);
   }, []);
 
-  return pollId ? <PollView pollId={pollId} /> : <App />;
+  return pollId ? <PollView pollId={pollId} /> : <App metro={metro} />;
 }
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

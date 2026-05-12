@@ -77,6 +77,14 @@ import {
   type PlannerScoringOptions,
   type PlannerVibe,
 } from "./planner";
+import {
+  METROS,
+  legacyMetroDataPath,
+  metroDataPath,
+  metroShareBase,
+  metroStorageKey,
+  type MetroConfig,
+} from "./metros";
 
 type Category =
   | "Outdoors"
@@ -525,12 +533,8 @@ const dataUrl = (file: string) =>
   DATA_ORIGIN
     ? `${DATA_ORIGIN}/data/${file}`
     : `${import.meta.env.BASE_URL}data/${file}`;
-const DATA_URL = dataUrl("bay-area-spots.json");
-const ENRICHMENT_URL = dataUrl("bay-area-enrichment.json");
-const FEATURED_PLANS_URL = dataUrl("featured-plans.json");
-const EVENTS_URL = dataUrl("events.json");
 const BOA_MUSEUMS_URL = dataUrl("boa-museums.json");
-const CURATED_SPOTS_URL = dataUrl("curated-spots.json");
+const rootDataUrl = (file: string) => dataUrl(file);
 
 import {
   APP_AUDIENCE,
@@ -1066,7 +1070,82 @@ function interleaveByCategory(spots: Spot[]) {
   return result;
 }
 
-function App() {
+type AppProps = {
+  metro: MetroConfig;
+};
+
+function App({ metro }: AppProps) {
+  const dataUrls = useMemo(() => ({
+    spots: dataUrl(metroDataPath(metro, "spots")),
+    enrichment: dataUrl(
+      legacyMetroDataPath(metro, "enrichment") ||
+        metroDataPath(metro, "enrichment"),
+    ),
+    events: dataUrl(metroDataPath(metro, "events")),
+    featuredPlans: dataUrl(metroDataPath(metro, "featuredPlans")),
+    curatedSpots: rootDataUrl(
+      legacyMetroDataPath(metro, "curatedSpots") ||
+        metroDataPath(metro, "curatedSpots"),
+    ),
+  }), [metro]);
+  const defaultMapCenter = useMemo(
+    () => [metro.center.lat, metro.center.lon] as [number, number],
+    [metro],
+  );
+  const storageKeys = useMemo(() => ({
+    savedSpots: metroStorageKey(metro, "savedSpots"),
+    savedEvents: metroStorageKey(metro, "savedEvents"),
+    visitedSpots: metroStorageKey(metro, "visitedSpots"),
+    customSpots: metroStorageKey(metro, "customSpots"),
+    plans: metroStorageKey(metro, "plans"),
+    deletedPlanIds: metroStorageKey(metro, "deletedPlanIds"),
+    userLocation: metroStorageKey(metro, "userLocation"),
+    preferences: metroStorageKey(metro, "preferences"),
+    plannerProfile: metroStorageKey(metro, "plannerProfile"),
+    mapView: metroStorageKey(metro, "mapView"),
+  }), [metro]);
+  const shareBaseUrl = useMemo(() => metroShareBase(metro), [metro]);
+  useEffect(() => {
+    const title = `${APP_BRAND} — ${metro.label} Family Events & Kid-Friendly Spots`;
+    const description = `${APP_BRAND} helps families find ${metro.label} kid-friendly spots, family events, parks, libraries, museums, and weekend plans.`;
+    const canonicalUrl = new URL(metro.canonicalPath, window.location.origin)
+      .toString();
+
+    document.title = title;
+    document
+      .querySelector('meta[name="description"]')
+      ?.setAttribute("content", description);
+    document
+      .querySelector('meta[property="og:title"]')
+      ?.setAttribute("content", title);
+    document
+      .querySelector('meta[property="og:description"]')
+      ?.setAttribute("content", description);
+    document
+      .querySelector('meta[property="og:url"]')
+      ?.setAttribute("content", canonicalUrl);
+    document
+      .querySelector('meta[name="twitter:title"]')
+      ?.setAttribute("content", title);
+    document
+      .querySelector('meta[name="twitter:description"]')
+      ?.setAttribute("content", description);
+    document
+      .querySelector('link[rel="canonical"]')
+      ?.setAttribute("href", canonicalUrl);
+  }, [metro]);
+
+  function switchMetro(nextId: string) {
+    const nextMetro = METROS.find((item) => item.id === nextId);
+    if (!nextMetro || nextMetro.id === metro.id) {
+      return;
+    }
+    const hash = window.location.hash || "#/browse";
+    window.location.assign(
+      `${nextMetro.canonicalPath}${window.location.search}${hash}`,
+    );
+  }
+
   const [query, setQuery] = useState("");
   const [ageBand, setAgeBand] = useState<AgeBand | "any">("any");
   const [vibe, setVibe] = useState<PlannerVibe>("balanced");
@@ -1081,22 +1160,22 @@ function App() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(24);
   const [savedIds, setSavedIds] = useState<string[]>(() =>
-    readStoredArray("saturday.savedSpots", []),
+    readStoredArray(storageKeys.savedSpots, []),
   );
   const [savedEventIds, setSavedEventIds] = useState<string[]>(() =>
-    readStoredArray("saturday.savedEvents", []),
+    readStoredArray(storageKeys.savedEvents, []),
   );
   const [visitedIds, setVisitedIds] = useState<string[]>(() =>
-    readStoredArray("saturday.visitedSpots", []),
+    readStoredArray(storageKeys.visitedSpots, []),
   );
   const [customSpots, setCustomSpots] = useState<Spot[]>(() =>
-    readStoredArray("saturday.customSpots", []),
+    readStoredArray(storageKeys.customSpots, []),
   );
   const [plans, setPlans] = useState<Plan[]>(() =>
-    readStoredArray("saturday.plans", []),
+    readStoredArray(storageKeys.plans, []),
   );
   const [deletedPlanIds, setDeletedPlanIds] = useState<string[]>(() =>
-    readStoredArray("saturday.deletedPlanIds", []),
+    readStoredArray(storageKeys.deletedPlanIds, []),
   );
   const initialRoute = readAppRoute();
   const [view, setView] = useState<"home" | "browse" | "plans">(
@@ -1112,7 +1191,7 @@ function App() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(() => {
     try {
-      const raw = window.localStorage.getItem("saturday.userLocation");
+      const raw = window.localStorage.getItem(storageKeys.userLocation);
       return raw ? (JSON.parse(raw) as { lat: number; lon: number }) : null;
     } catch {
       return null;
@@ -1154,7 +1233,7 @@ function App() {
   const [weather, setWeather] = useState<WeatherForecast | null>(null);
   const [preferences, setPreferences] = useState<PlannerPreferenceId[]>(() => {
     try {
-      const raw = window.localStorage.getItem("saturday.preferences");
+      const raw = window.localStorage.getItem(storageKeys.preferences);
       const parsed = raw ? (JSON.parse(raw) as string[]) : [];
       const valid = new Set(plannerPreferenceOptions.map((option) => option.id));
       return parsed.filter((id): id is PlannerPreferenceId =>
@@ -1166,7 +1245,7 @@ function App() {
   });
   const [plannerProfile, setPlannerProfile] = useState<PlannerProfile>(() => {
     try {
-      const raw = window.localStorage.getItem("saturday.plannerProfile");
+      const raw = window.localStorage.getItem(storageKeys.plannerProfile);
       return normalizePlannerProfile(raw ? JSON.parse(raw) : null);
     } catch {
       return defaultPlannerProfile;
@@ -1198,14 +1277,14 @@ function App() {
   useEffect(() => {
     let active = true;
 
-    const datasetPromise = fetch(DATA_URL).then((response) => {
+    const datasetPromise = fetch(dataUrls.spots).then((response) => {
       if (!response.ok) {
         throw new Error(`Data request failed: ${response.status}`);
       }
       return response.json() as Promise<SpotDataset>;
     });
     // Sidecar is optional; produced by `npm run match:places:osm`.
-    const enrichmentPromise = fetch(ENRICHMENT_URL)
+    const enrichmentPromise = fetch(dataUrls.enrichment)
       .then((response) =>
         response.ok
           ? (response.json() as Promise<{
@@ -1235,7 +1314,7 @@ function App() {
         setRemoteSpots(merged);
         setDataMeta({
           generatedAt: dataset.generatedAt,
-          sourceName: dataset.source?.name || "Generated Bay Area data",
+          sourceName: dataset.source?.name || `Generated ${metro.label} data`,
           count: dataset.count || dataset.spots.length,
           loading: false,
           imageStats: dataset.imageStats,
@@ -1257,12 +1336,12 @@ function App() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [dataUrls.enrichment, dataUrls.spots, metro.label]);
 
   useEffect(() => {
     let active = true;
     (async () => {
-      const adminPayload = await fetchAdminEvents();
+      const adminPayload = await fetchAdminEvents(metro.id);
       if (!active) return;
       if (adminPayload && adminPayload.events.length > 0) {
         const visible = (adminPayload.events as FamilyEvent[]).filter(
@@ -1279,7 +1358,7 @@ function App() {
         return;
       }
       try {
-        const response = await fetch(EVENTS_URL);
+        const response = await fetch(dataUrls.events);
         if (!response.ok) return;
         const dataset = (await response.json()) as EventsDataset;
         if (!active) return;
@@ -1299,21 +1378,21 @@ function App() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [dataUrls.events, metro.id]);
 
   useEffect(() => {
     window.localStorage.setItem(
-      "saturday.preferences",
+      storageKeys.preferences,
       JSON.stringify(preferences),
     );
-  }, [preferences]);
+  }, [preferences, storageKeys.preferences]);
 
   useEffect(() => {
     window.localStorage.setItem(
-      "saturday.plannerProfile",
+      storageKeys.plannerProfile,
       JSON.stringify(plannerProfile),
     );
-  }, [plannerProfile]);
+  }, [plannerProfile, storageKeys.plannerProfile]);
 
   useEffect(() => {
     const lat = userLocation?.lat ?? inferredGeo?.lat;
@@ -1331,7 +1410,7 @@ function App() {
 
   useEffect(() => {
     let active = true;
-    fetch(CURATED_SPOTS_URL)
+    fetch(dataUrls.curatedSpots)
       .then((response) => (response.ok ? response.json() : Promise.reject()))
       .then((dataset: { spots?: Spot[] }) => {
         if (!active) return;
@@ -1355,11 +1434,11 @@ function App() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [dataUrls.curatedSpots]);
 
   useEffect(() => {
     let active = true;
-    fetch(FEATURED_PLANS_URL)
+    fetch(dataUrls.featuredPlans)
       .then((response) => (response.ok ? response.json() : Promise.reject()))
       .then((dataset: { plans?: FeaturedPlan[] }) => {
         if (!active) return;
@@ -1373,9 +1452,13 @@ function App() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [dataUrls.featuredPlans]);
 
   useEffect(() => {
+    if (metro.id !== "bay-area") {
+      setBoaMuseums([]);
+      return;
+    }
     let active = true;
     fetch(BOA_MUSEUMS_URL)
       .then((response) => (response.ok ? response.json() : Promise.reject()))
@@ -1389,11 +1472,11 @@ function App() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [metro.id]);
 
   useEffect(() => {
-    window.localStorage.setItem("saturday.savedSpots", JSON.stringify(savedIds));
-  }, [savedIds]);
+    window.localStorage.setItem(storageKeys.savedSpots, JSON.stringify(savedIds));
+  }, [savedIds, storageKeys.savedSpots]);
 
   // URL routing: keep window.location.hash in sync with view + activePlanId.
   // pushState (no hashchange fired) when state changes; popstate listener
@@ -1423,35 +1506,35 @@ function App() {
 
   useEffect(() => {
     window.localStorage.setItem(
-      "saturday.savedEvents",
+      storageKeys.savedEvents,
       JSON.stringify(savedEventIds),
     );
-  }, [savedEventIds]);
+  }, [savedEventIds, storageKeys.savedEvents]);
 
   useEffect(() => {
     window.localStorage.setItem(
-      "saturday.visitedSpots",
+      storageKeys.visitedSpots,
       JSON.stringify(visitedIds),
     );
-  }, [visitedIds]);
+  }, [visitedIds, storageKeys.visitedSpots]);
 
   useEffect(() => {
     window.localStorage.setItem(
-      "saturday.customSpots",
+      storageKeys.customSpots,
       JSON.stringify(customSpots),
     );
-  }, [customSpots]);
+  }, [customSpots, storageKeys.customSpots]);
 
   useEffect(() => {
-    window.localStorage.setItem("saturday.plans", JSON.stringify(plans));
-  }, [plans]);
+    window.localStorage.setItem(storageKeys.plans, JSON.stringify(plans));
+  }, [plans, storageKeys.plans]);
 
   useEffect(() => {
     window.localStorage.setItem(
-      "saturday.deletedPlanIds",
+      storageKeys.deletedPlanIds,
       JSON.stringify(deletedPlanIds),
     );
-  }, [deletedPlanIds]);
+  }, [deletedPlanIds, storageKeys.deletedPlanIds]);
 
   useEffect(() => {
     setShareState({ status: "idle" });
@@ -1657,13 +1740,14 @@ function App() {
     setActivePlanId(null);
     setPreferences([]);
     for (const key of [
-      "saturday.savedSpots",
-      "saturday.savedEvents",
-      "saturday.visitedSpots",
-      "saturday.customSpots",
-      "saturday.plans",
-      "saturday.deletedPlanIds",
-      "saturday.preferences",
+      storageKeys.savedSpots,
+      storageKeys.savedEvents,
+      storageKeys.visitedSpots,
+      storageKeys.customSpots,
+      storageKeys.plans,
+      storageKeys.deletedPlanIds,
+      storageKeys.preferences,
+      storageKeys.plannerProfile,
     ]) {
       try {
         window.localStorage.removeItem(key);
@@ -2504,11 +2588,12 @@ function App() {
     try {
       const result = await createPoll({
         title: planTitle,
+        metroId: metro.id,
         stops: stopPayload,
         events: eventPayload,
         itemOrder: itemOrderPayload,
       });
-      const url = `${window.location.origin}/#/p/${result.pollId}`;
+      const url = `${shareBaseUrl}/#/p/${result.pollId}`;
       updatePlan(activePlan.id, {
         pollId: result.pollId,
         ownerToken: result.ownerToken,
@@ -3074,7 +3159,7 @@ function App() {
           lon: Number(pos.coords.longitude.toFixed(5)),
         };
         setUserLocation(next);
-        window.localStorage.setItem("saturday.userLocation", JSON.stringify(next));
+        window.localStorage.setItem(storageKeys.userLocation, JSON.stringify(next));
         setGeoState("idle");
         setGeoErrorReason(null);
         setSortBy("nearest");
@@ -3097,7 +3182,7 @@ function App() {
 
   function clearUserLocation() {
     setUserLocation(null);
-    window.localStorage.removeItem("saturday.userLocation");
+    window.localStorage.removeItem(storageKeys.userLocation);
     setGeoState("idle");
   }
 
@@ -3233,15 +3318,29 @@ function App() {
             )
           ) : null}
         </div>
+        <label className="metro-picker">
+          <span>Area</span>
+          <select
+            aria-label="Choose metro area"
+            value={metro.id}
+            onChange={(event) => switchMetro(event.target.value)}
+          >
+            {METROS.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.label}
+              </option>
+            ))}
+          </select>
+        </label>
         <div className="data-banner" title={dataMeta.sourceName}>
           <Database aria-hidden="true" />
           <div>
             <strong>
               {dataMeta.loading
-                ? "Loading Bay Area data"
+                ? `Loading ${metro.label} data`
                 : dataMeta.eventsCount != null
                   ? `${dataMeta.count} spots · ${dataMeta.eventsCount} events`
-                  : `${dataMeta.count} Bay Area spots`}
+                  : `${dataMeta.count} ${metro.label} spots`}
             </strong>
             <span>
               {dataMeta.error
@@ -3756,7 +3855,7 @@ function App() {
             >
               <option value="best">Best fit</option>
               <option value="nearest">
-                {userLocation ? "Nearest to me" : "Nearest to SF"}
+                {userLocation ? "Nearest to me" : `Nearest to ${metro.label}`}
               </option>
               <option value="price">Lowest cost</option>
               <option value="name">Name</option>
@@ -3852,6 +3951,8 @@ function App() {
               geoState={geoState}
               onRequestLocation={requestUserLocation}
               onViewChange={setMapCenter}
+              defaultCenter={defaultMapCenter}
+              mapViewStorageKey={storageKeys.mapView}
             />
             <div className="map-overlay" aria-label="Map summary">
               <div>
@@ -4610,6 +4711,7 @@ function App() {
                 <PlanMap
                   stops={activePlanStops}
                   events={activePlanEvents}
+                  defaultCenter={defaultMapCenter}
                   items={activePlanItems
                     .map((it) => {
                       if (it.kind === "spot") {
@@ -4944,11 +5046,11 @@ function App() {
               {activePlan.pollId && shareState.status === "idle" && (
                 <div className="share-banner">
                   <strong>Already shared.</strong>
-                  <a href={`${window.location.origin}/#/p/${activePlan.pollId}`}>
-                    {`${window.location.origin}/#/p/${activePlan.pollId}`}
+                  <a href={`${shareBaseUrl}/#/p/${activePlan.pollId}`}>
+                    {`${shareBaseUrl}/#/p/${activePlan.pollId}`}
                   </a>
                   <ShareQuickLinks
-                    url={`${window.location.origin}/#/p/${activePlan.pollId}`}
+                    url={`${shareBaseUrl}/#/p/${activePlan.pollId}`}
                     title={activePlan.name || "Untitled plan"}
                   />
                 </div>

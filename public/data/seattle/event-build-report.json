@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "metroId": "seattle",
+  "generatedAt": "2026-05-12T03:52:14.825Z",
+  "registryPath": "data/event-sources-seattle.json",
+  "outputPath": "public/data/seattle/events.json",
+  "eventCount": 264,
+  "sourceCount": 8,
+  "liveEventCount": 264,
+  "fallbackEventCount": 0,
+  "errors": [],
+  "sources": [
+    {
+      "id": "kcls-family-storytimes",
+      "name": "King County Library System Family Storytimes",
+      "url": "https://kcls.bibliocommons.com/v2/events?programs=6092fc2d8910133a0055a335",
+      "sourceType": "biblioevents",
+      "city": "Bellevue",
+      "metroId": "seattle",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 20,
+      "fallbackEvents": 0,
+      "eventCount": 20,
+      "fetches": [
+        {
+          "url": "https://kcls.bibliocommons.com/v2/events?programs=6092fc2d8910133a0055a335",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "spl-story-time",
+      "name": "The Seattle Public Library Story Time Calendar",
+      "url": "https://www.trumba.com/calendars/kalendaro.json?filterview=SeriesStoryTime",
+      "sourceType": "json",
+      "city": "Seattle",
+      "metroId": "seattle",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 162,
+      "fallbackEvents": 0,
+      "eventCount": 162,
+      "fetches": [
+        {
+          "url": "https://www.trumba.com/calendars/kalendaro.json?filterview=SeriesStoryTime",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json;charset=UTF-8",
+      "rejectedLiveEvents": 26
+    },
+    {
+      "id": "seattle-childrens-museum-calendar",
+      "name": "Seattle Children's Museum Calendar",
+      "url": "https://seattlechildrensmuseum.org/calendar/",
+      "sourceType": "eventList",
+      "city": "Seattle",
+      "metroId": "seattle",
+      "category": "Museum",
+      "status": "ok",
+      "liveEvents": 66,
+      "fallbackEvents": 0,
+      "eventCount": 66,
+      "fetches": [
+        {
+          "url": "https://seattlechildrensmuseum.org/calendar/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 43
+    },
+    {
+      "id": "woodland-park-zoo-family",
+      "name": "Woodland Park Zoo Family/Public Events",
+      "url": "https://www.zoo.org/events?cgid=1",
+      "sourceType": "eventList",
+      "city": "Seattle",
+      "metroId": "seattle",
+      "category": "Zoo",
+      "status": "ok",
+      "liveEvents": 12,
+      "fallbackEvents": 0,
+      "eventCount": 12,
+      "fetches": [
+        {
+          "url": "https://www.zoo.org/events?cgid=1",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "burke-museum-events",
+      "name": "Burke Museum Events",
+      "url": "https://www.burkemuseum.org/events",
+      "sourceType": "eventList",
+      "city": "Seattle",
+      "metroId": "seattle",
+      "category": "Museum",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.burkemuseum.org/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html;charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "pacific-science-center-events",
+      "name": "Pacific Science Center Events",
+      "url": "https://pacificsciencecenter.org/events/",
+      "sourceType": "eventList",
+      "city": "Seattle",
+      "metroId": "seattle",
+      "category": "Museum",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://pacificsciencecenter.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "seattle-aquarium-toddler-time",
+      "name": "Seattle Aquarium Toddler Time",
+      "url": "https://www.seattleaquarium.org/explore-the-aquarium/programs/toddler-time/",
+      "sourceType": "eventList",
+      "city": "Seattle",
+      "metroId": "seattle",
+      "category": "Museum",
+      "status": "ok",
+      "liveEvents": 4,
+      "fallbackEvents": 0,
+      "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://www.seattleaquarium.org/explore-the-aquarium/programs/toddler-time/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 1
+    },
+    {
+      "id": "ticketmaster-seattle-family",
+      "name": "Ticketmaster Seattle Family Events",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "sourceType": "ticketmaster",
+      "city": "Seattle",
+      "metroId": "seattle",
+      "category": "Ticketed",
+      "status": "disabled",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": []
+    }
+  ]
+}

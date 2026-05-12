@@ -1,0 +1,244 @@
+{
+  "schemaVersion": 1,
+  "metroId": "new-york-city",
+  "generatedAt": "2026-05-12T04:50:58.090Z",
+  "registryPath": "data/event-sources-new-york-city.json",
+  "outputPath": "public/data/new-york-city/events.json",
+  "eventCount": 705,
+  "sourceCount": 10,
+  "liveEventCount": 677,
+  "fallbackEventCount": 28,
+  "errors": [],
+  "sources": [
+    {
+      "id": "queens-library",
+      "name": "Queens Public Library",
+      "url": "https://queens.libnet.info/events",
+      "sourceType": "communicoEvents",
+      "city": "Queens",
+      "metroId": "new-york-city",
+      "category": "Library",
+      "status": "ok-template-fallback",
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "eventCount": 8,
+      "fetches": [
+        {
+          "url": "https://queens.libnet.info/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=communico-events; events=0; locations=69"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=communico-events; events=0; locations=69",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "nypl-children",
+      "name": "The New York Public Library Events",
+      "url": "https://www.nypl.org/events/calendar",
+      "sourceType": "eventList",
+      "city": "New York",
+      "metroId": "new-york-city",
+      "category": "Library",
+      "status": "blocked",
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "eventCount": 8,
+      "fetches": [
+        {
+          "url": "https://www.nypl.org/events/calendar",
+          "status": "blocked",
+          "reason": "challenge page returned instead of event content",
+          "httpStatus": 200,
+          "contentType": "text/html"
+        }
+      ],
+      "reason": "challenge page returned instead of event content",
+      "httpStatus": 200,
+      "contentType": "text/html"
+    },
+    {
+      "id": "brooklyn-library-youth-family",
+      "name": "Brooklyn Public Library - Youth and Family",
+      "url": "https://www.bklynlibrary.org/event-series/events-for-youth-and-family",
+      "sourceType": "eventList",
+      "city": "Brooklyn",
+      "metroId": "new-york-city",
+      "category": "Library",
+      "status": "ok-template-fallback",
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "eventCount": 8,
+      "fetches": [
+        {
+          "url": "https://www.bklynlibrary.org/event-series/events-for-youth-and-family",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "nyc-parks-kids",
+      "name": "NYC Parks Events",
+      "url": "https://www.nycgovparks.org/events",
+      "sourceType": "nycParksEvents",
+      "city": "New York",
+      "metroId": "new-york-city",
+      "category": "Park",
+      "status": "ok",
+      "liveEvents": 636,
+      "fallbackEvents": 0,
+      "eventCount": 636,
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/kids",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 2110
+    },
+    {
+      "id": "brooklyn-childrens-museum",
+      "name": "Brooklyn Children's Museum",
+      "url": "https://www.brooklynkids.org/events/",
+      "sourceType": "html",
+      "city": "Brooklyn",
+      "metroId": "new-york-city",
+      "category": "Museum",
+      "status": "ok",
+      "liveEvents": 6,
+      "fallbackEvents": 0,
+      "eventCount": 6,
+      "fetches": [
+        {
+          "url": "https://www.brooklynkids.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "new-victory-theater",
+      "name": "New Victory Theater",
+      "url": "https://www.newvictory.org/api/event-instances.json",
+      "sourceType": "newVictoryEvents",
+      "city": "Manhattan",
+      "metroId": "new-york-city",
+      "category": "Theater",
+      "status": "ok",
+      "liveEvents": 29,
+      "fallbackEvents": 0,
+      "eventCount": 29,
+      "fetches": [
+        {
+          "url": "https://www.newvictory.org/api/event-instances.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json",
+      "rejectedLiveEvents": 1
+    },
+    {
+      "id": "lincoln-center-family",
+      "name": "Lincoln Center Kids & Family Programs",
+      "url": "https://www.lincolncenter.org/series/family",
+      "sourceType": "lincolnCenterFamily",
+      "city": "Manhattan",
+      "metroId": "new-york-city",
+      "category": "Theater",
+      "status": "ok",
+      "liveEvents": 4,
+      "fallbackEvents": 0,
+      "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://www.lincolncenter.org/series/family",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "amnh-calendar",
+      "name": "American Museum of Natural History",
+      "url": "https://www.amnh.org/calendar",
+      "sourceType": "html",
+      "city": "Manhattan",
+      "metroId": "new-york-city",
+      "category": "Museum",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 4,
+      "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://www.amnh.org/calendar",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 403,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "id": "bronx-zoo-events",
+      "name": "Bronx Zoo Events",
+      "url": "https://bronxzoo.com/things-to-do/events",
+      "sourceType": "html",
+      "city": "Bronx",
+      "metroId": "new-york-city",
+      "category": "Zoo",
+      "status": "ok",
+      "liveEvents": 2,
+      "fallbackEvents": 0,
+      "eventCount": 2,
+      "fetches": [
+        {
+          "url": "https://bronxzoo.com/things-to-do/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 1
+    },
+    {
+      "id": "ticketmaster-nyc-family",
+      "name": "Ticketmaster NYC Family Events",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "sourceType": "ticketmaster",
+      "city": "New York",
+      "metroId": "new-york-city",
+      "category": "Ticketed",
+      "status": "disabled",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": []
+    }
+  ]
+}

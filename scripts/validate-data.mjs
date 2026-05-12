@@ -1,23 +1,43 @@
 #!/usr/bin/env node
 import fs from "node:fs/promises";
+import { validateDataset } from "./spotPipeline.mjs";
 import {
-  validateDataset,
-} from "./spotPipeline.mjs";
+  legacyMetroDataFile,
+  loadMetroConfig,
+  metroDataFile,
+  selectedMetroFromArgs,
+} from "./metroConfig.mjs";
 
-const dataPath = process.env.SPOT_OUTPUT || "public/data/bay-area-spots.json";
-const minSpots = Number(process.env.MIN_SPOTS || 150);
+const metroConfig = loadMetroConfig();
+const selection = selectedMetroFromArgs(process.argv.slice(2), metroConfig);
 
-async function main() {
+async function validateMetro(metro) {
+  const dataPath =
+    process.env.SPOT_OUTPUT ||
+    legacyMetroDataFile(metro, "spots") ||
+    metroDataFile(metro, "spots");
+  const minSpots = Number(process.env.MIN_SPOTS || metro.minSpots || 150);
   const raw = await fs.readFile(dataPath, "utf8");
   const dataset = JSON.parse(raw);
-  const errors = validateDataset(dataset, { minSpots });
+  const errors = validateDataset(dataset, {
+    minSpots,
+    boxes: metro.spotCoverage?.boxes,
+    coverageName: metro.spotCoverage?.name || metro.label,
+  });
 
   if (errors.length > 0) {
-    console.error(errors.join("\n"));
+    console.error(`[${metro.id}] ${errors.join(`\n[${metro.id}] `)}`);
     process.exit(1);
   }
 
-  console.log(`Validated ${dataset.count} sanitized Bay Area spots.`);
+  console.log(`Validated ${dataset.count} sanitized ${metro.label} spots.`);
+}
+
+async function main() {
+  const metros = selection.all ? metroConfig.metros : [selection.metro];
+  for (const metro of metros) {
+    await validateMetro(metro);
+  }
 }
 
 main().catch((error) => {

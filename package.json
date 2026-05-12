@@ -9,8 +9,12 @@
     "preview": "vite preview --host 0.0.0.0",
     "ingest:bay-area": "node scripts/ingest-bay-area.mjs",
     "ingest:events": "node scripts/ingest-events.mjs && node scripts/generate-featured-plans.mjs",
+    "ingest:spots:all": "node scripts/ingest-bay-area.mjs --all",
+    "ingest:events:all": "node scripts/ingest-events.mjs --metro=bay-area && node scripts/generate-featured-plans.mjs --metro=bay-area && node scripts/ingest-events.mjs --metro=los-angeles && node scripts/generate-featured-plans.mjs --metro=los-angeles && node scripts/ingest-events.mjs --metro=new-york-city && node scripts/generate-featured-plans.mjs --metro=new-york-city && node scripts/ingest-events.mjs --metro=seattle && node scripts/generate-featured-plans.mjs --metro=seattle",
+    "ingest:metros": "npm run ingest:spots:all && npm run ingest:events:all",
     "ingest:plans": "node scripts/generate-featured-plans.mjs",
     "publish:events": "node scripts/publish-events.mjs",
+    "publish:events:all": "node scripts/publish-events.mjs --metro=bay-area && node scripts/publish-events.mjs --metro=los-angeles && node scripts/publish-events.mjs --metro=new-york-city && node scripts/publish-events.mjs --metro=seattle",
     "build:data-site": "node scripts/build-data-site.mjs",
     "deploy:data": "npm run build:data-site && npx wrangler pages deploy data-site/dist --project-name=famhop-data --branch=main --commit-dirty=true",
     "build:adults": "vite build --mode adults && VITE_APP_AUDIENCE=adults VITE_APP_BRAND=NightHop VITE_APP_SITE_URL=https://nighthop.pages.dev/ node scripts/generate-seo-pages.mjs",
@@ -18,12 +22,14 @@
     "match:places": "node scripts/match-google-places.mjs",
     "match:places:osm": "node scripts/match-google-places-osm.mjs",
     "validate:data": "node scripts/validate-data.mjs",
+    "validate:data:all": "node scripts/validate-data.mjs --all",
     "validate:events": "node scripts/validate-events.mjs",
+    "validate:events:all": "node scripts/validate-events.mjs --all",
     "test": "npm run test:unit && npm run test:planner",
     "test:unit": "node --test tests/*.test.mjs",
     "test:planner": "vitest run tests/*.test.ts",
     "ci:worker": "npm --prefix worker run typecheck",
-    "ci": "npm run test && npm run validate:data && npm run validate:events && npm run build && npm run ci:worker"
+    "ci": "npm run test && npm run validate:data:all && npm run validate:events:all && npm run build && npm run ci:worker"
   },
   "dependencies": {
     "@types/leaflet": "^1.9.21",

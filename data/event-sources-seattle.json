@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "coverage": {
+    "name": "Seattle",
+    "timezone": "America/Los_Angeles",
+    "cities": [
+      "Seattle",
+      "Bellevue",
+      "Redmond",
+      "Kirkland",
+      "Shoreline",
+      "Bothell",
+      "Renton",
+      "Tukwila",
+      "Burien"
+    ]
+  },
+  "defaults": {
+    "windowDays": 45,
+    "timezoneOffset": "-07:00",
+    "userAgent": "saturday-with-friends/0.1 event-ingest"
+  },
+  "sources": [
+    {
+      "id": "kcls-family-storytimes",
+      "name": "King County Library System Family Storytimes",
+      "url": "https://kcls.bibliocommons.com/v2/events?programs=6092fc2d8910133a0055a335",
+      "city": "Bellevue",
+      "category": "Library",
+      "sourceType": "biblioevents",
+      "trust": "official",
+      "lat": 47.6101,
+      "lon": -122.2015
+    },
+    {
+      "id": "spl-story-time",
+      "name": "The Seattle Public Library Story Time Calendar",
+      "url": "https://www.trumba.com/calendars/kalendaro.json?filterview=SeriesStoryTime",
+      "city": "Seattle",
+      "category": "Library",
+      "sourceType": "json",
+      "trust": "official",
+      "lat": 47.6062,
+      "lon": -122.3321,
+      "defaultAudienceText": "children family kids baby toddler preschool story time library",
+      "cost": "Free"
+    },
+    {
+      "id": "seattle-childrens-museum-calendar",
+      "name": "Seattle Children's Museum Calendar",
+      "url": "https://seattlechildrensmuseum.org/calendar/",
+      "city": "Seattle",
+      "category": "Museum",
+      "sourceType": "eventList",
+      "trust": "official",
+      "lat": 47.6229,
+      "lon": -122.3502,
+      "defaultAudienceText": "children kids toddler preschool school-age family hands-on play museum",
+      "eventList": {
+        "venue": "Seattle Children's Museum",
+        "neighborhood": "Seattle Center",
+        "cost": "$"
+      }
+    },
+    {
+      "id": "woodland-park-zoo-family",
+      "name": "Woodland Park Zoo Family/Public Events",
+      "url": "https://www.zoo.org/events?cgid=1",
+      "city": "Seattle",
+      "category": "Zoo",
+      "sourceType": "eventList",
+      "trust": "official",
+      "lat": 47.6685,
+      "lon": -122.3509,
+      "defaultAudienceText": "families public events kids animals zoo all ages",
+      "eventList": {
+        "venue": "Woodland Park Zoo",
+        "neighborhood": "Phinney Ridge"
+      }
+    },
+    {
+      "id": "burke-museum-events",
+      "name": "Burke Museum Events",
+      "url": "https://www.burkemuseum.org/events",
+      "city": "Seattle",
+      "category": "Museum",
+      "sourceType": "eventList",
+      "trust": "official",
+      "lat": 47.6603,
+      "lon": -122.3116,
+      "eventList": {
+        "venue": "Burke Museum",
+        "neighborhood": "University District"
+      }
+    },
+    {
+      "id": "pacific-science-center-events",
+      "name": "Pacific Science Center Events",
+      "url": "https://pacificsciencecenter.org/events/",
+      "city": "Seattle",
+      "category": "Museum",
+      "sourceType": "eventList",
+      "trust": "official",
+      "lat": 47.6198,
+      "lon": -122.3511,
+      "eventList": {
+        "venue": "Pacific Science Center",
+        "neighborhood": "Seattle Center"
+      }
+    },
+    {
+      "id": "seattle-aquarium-toddler-time",
+      "name": "Seattle Aquarium Toddler Time",
+      "url": "https://www.seattleaquarium.org/explore-the-aquarium/programs/toddler-time/",
+      "city": "Seattle",
+      "category": "Museum",
+      "sourceType": "eventList",
+      "trust": "official",
+      "lat": 47.6074,
+      "lon": -122.3429,
+      "defaultAudienceText": "toddler young children family caregiver crafts songs story time aquarium",
+      "eventList": {
+        "venue": "Seattle Aquarium",
+        "neighborhood": "Waterfront",
+        "cost": "$",
+        "defaultStartTime": "09:30",
+        "defaultEndTime": "12:00"
+      }
+    },
+    {
+      "id": "ticketmaster-seattle-family",
+      "name": "Ticketmaster Seattle Family Events",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "city": "Seattle",
+      "category": "Ticketed",
+      "sourceType": "ticketmaster",
+      "trust": "commercial",
+      "enabled": false,
+      "requiresEnv": "TICKETMASTER_API_KEY"
+    }
+  ]
+}
