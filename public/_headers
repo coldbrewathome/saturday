@@ -1,6 +1,6 @@
 # Cloudflare Pages headers (https://developers.cloudflare.com/pages/configuration/headers/)
 #
-# /data/*  is the shared cross-app data feed (Bay Area places + tagged events).
+# /data/* is the shared cross-app data feed (multi-metro places + tagged events).
 # CORS=* lets sibling apps (e.g. an upcoming adults-audience frontend on a
 # different domain) fetch the JSON directly. The data is already public via
 # Cloudflare Pages, so opening it for cross-origin reads is purely a header
@@ -8,6 +8,7 @@
 /data/*
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=30, s-maxage=120, stale-while-revalidate=60
+  X-Robots-Tag: noindex
 
 /llms.txt
   Access-Control-Allow-Origin: *

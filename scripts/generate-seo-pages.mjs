@@ -123,7 +123,9 @@ a{color:var(--brand);text-decoration:none}
 a:hover{text-decoration:underline}
 .famhop-topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;border-bottom:1px solid var(--line);background:#fff;}
 .famhop-brand{font-weight:800;font-size:20px;color:var(--ink);}
-.famhop-topbar nav a{font-weight:600;color:var(--ink);}
+.metro-links{display:flex;align-items:center;justify-content:flex-end;gap:14px;flex-wrap:wrap;}
+.metro-links a{font-weight:600;color:var(--ink);font-size:14px;}
+.metro-links a[aria-current="page"]{color:var(--brand-strong);}
 .famhop-page{max-width:780px;margin:0 auto;padding:32px 24px 56px;}
 .famhop-page h1{font-size:34px;line-height:1.18;margin:8px 0 18px;letter-spacing:-.01em;}
 .eyebrow{color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-size:12px;font-weight:600;margin:0 0 4px;}
@@ -152,13 +154,15 @@ a:hover{text-decoration:underline}
 .card-list li p{margin:6px 0 0;color:var(--muted);font-size:14px;}
 .famhop-footer{border-top:1px solid var(--line);padding:24px 28px;color:var(--muted);font-size:13px;}
 .famhop-footer p{margin:0 0 4px;}
-@media (max-width:640px){.famhop-page{padding:22px 18px 40px;}.famhop-page h1{font-size:28px;}}
+@media (max-width:640px){.famhop-topbar{align-items:flex-start;gap:12px;flex-direction:column;}.metro-links{justify-content:flex-start;gap:10px 12px;}.famhop-page{padding:22px 18px 40px;}.famhop-page h1{font-size:28px;}}
 `;
 
 if (!fs.existsSync(DIST)) {
   console.error(`[seo] dist/ not found at ${DIST} — run \`vite build\` first.`);
   process.exit(1);
 }
+
+generateRootAppShellPage();
 
 let totalSpotPages = 0;
 let totalEventPages = 0;
@@ -181,7 +185,7 @@ for (const metro of metroConfig.metros) {
   );
 
   const spotSlugs = generateSpotPages(spots);
-  const eventSlugs = generateEventPages(events);
+  const eventSlugs = generateEventPages(events, eventsDoc?.generatedAt);
   const citySlugs = generateCityPages(spots, events, spotSlugs, eventSlugs);
   const categorySlugs = generateCategoryPages(spots, events);
   const wroteThisWeekend = generateThisWeekendPage(events);
@@ -230,6 +234,17 @@ function metroTag() {
   return `${metroLabel()} ${BRAND_TAG}`;
 }
 
+function metroLinksHtml() {
+  return metroConfig.metros
+    .map((metro) => {
+      const label = esc(metro.seoName || metro.label || metro.id);
+      const href = `${SITE}${String(metro.canonicalPath || "").replace(/\/+$/, "")}/`;
+      const current = metro.id === activeMetro.id ? ` aria-current="page"` : "";
+      return `<a href="${esc(href)}"${current}>${label}</a>`;
+    })
+    .join("");
+}
+
 function metroText(text) {
   return String(text || "")
     .replace(/San Francisco Bay Area/g, metroLabel())
@@ -274,6 +289,90 @@ function generateMetroAppShellPage(metro) {
     changefreq: "daily",
     priority: metro.id === metroConfig.defaultMetro.id ? 0.95 : 0.9,
   });
+}
+
+function generateRootAppShellPage() {
+  const shellPath = path.join(DIST, "index.html");
+  if (!fs.existsSync(shellPath)) return;
+  const title = `${BRAND} family weekend planner by metro`;
+  const description =
+    `${BRAND} helps families find kid-friendly spots, family events, and ready-made weekend plans in the Bay Area, Los Angeles, New York City, and Seattle.`;
+  const canonical = `${SITE}/`;
+  const metroCards = metroConfig.metros
+    .map((metro) => {
+      const label = metro.seoName || metro.label || metro.id;
+      const href = `${String(metro.canonicalPath || "").replace(/\/+$/, "")}/`;
+      return `<li><a href="${esc(href)}"><strong>${esc(label)}</strong><p>Browse family activities, events, and kid-friendly places in ${esc(label)}.</p></a></li>`;
+    })
+    .join("");
+  const noscript = `
+      <noscript>
+        <header>
+          <h1>${esc(title)}</h1>
+          <p>${esc(description)}</p>
+        </header>
+        <section>
+          <h2>Choose your metro</h2>
+          <ul>${metroCards}</ul>
+        </section>
+        <p><strong>Heads-up:</strong> ${esc(BRAND)} is an interactive planner. Please enable JavaScript to plan, share and vote.</p>
+      </noscript>`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${SITE}/#website`,
+        url: `${SITE}/`,
+        name: BRAND,
+        alternateName: [
+          `${BRAND} weekend planner`,
+          "family events near me",
+          "things to do with kids this weekend",
+        ],
+        description,
+        inLanguage: "en-US",
+        publisher: { "@id": `${SITE}/#org` },
+      },
+      {
+        "@type": "Organization",
+        "@id": `${SITE}/#org`,
+        name: BRAND,
+        url: `${SITE}/`,
+        logo: `${SITE}/icon-512.png`,
+        slogan: "Plan · Hop · Repeat.",
+      },
+      {
+        "@type": "ItemList",
+        "@id": `${SITE}/#metros`,
+        name: `${BRAND} metro areas`,
+        itemListElement: metroConfig.metros.map((metro, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: metro.seoName || metro.label || metro.id,
+          url: `${SITE}${String(metro.canonicalPath || "").replace(/\/+$/, "")}/`,
+        })),
+      },
+    ],
+  };
+  let html = fs.readFileSync(shellPath, "utf8");
+  html = html
+    .replace(/<noscript>[\s\S]*?<\/noscript>/, noscript)
+    .replace(
+      /<script type="application\/ld\+json">[\s\S]*?<\/script>/,
+      `<script type="application/ld+json">${safeJsonScript(jsonLd)}</script>`,
+    );
+  html = upsertHeadTag(html, "title", esc(title));
+  html = upsertMeta(html, "name", "description", description);
+  html = upsertLink(html, "canonical", canonical);
+  html = upsertMeta(html, "property", "og:title", title);
+  html = upsertMeta(html, "property", "og:description", description);
+  html = upsertMeta(html, "property", "og:image:alt", title);
+  html = upsertMeta(html, "property", "og:url", canonical);
+  html = upsertMeta(html, "name", "twitter:title", title);
+  html = upsertMeta(html, "name", "twitter:description", description);
+  html = upsertMeta(html, "name", "twitter:image:alt", title);
+  fs.writeFileSync(shellPath, html);
 }
 
 function replaceMetroShellCopy(html, title, description) {
@@ -473,7 +572,7 @@ function mapPlaceType(category) {
 // Events
 // ---------------------------------------------------------------------------
 
-function generateEventPages(items) {
+function generateEventPages(items, generatedAt) {
   const slugs = new Set();
   const used = new Set();
   for (const event of items) {
@@ -526,7 +625,7 @@ function generateEventPages(items) {
 
     sitemapEntries.push({
       loc: canonical,
-      lastmod: event.fetchedAt || event.startDateTime || today(),
+      lastmod: event.fetchedAt || generatedAt || today(),
       changefreq: "daily",
       priority: 0.7,
     });
@@ -1110,7 +1209,10 @@ ${allLd.map((node) => `<script type="application/ld+json">${safeJsonScript(node)
 <body>
 <header class="famhop-topbar">
   <a class="famhop-brand" href="${metroPath("")}">${BRAND}</a>
-  <nav><a href="${metroPath("")}">Plan a day</a></nav>
+  <nav class="metro-links">
+    ${metroLinksHtml()}
+    <a href="${metroPath("this-weekend/")}">This weekend</a>
+  </nav>
 </header>
 <main class="famhop-page">
   ${breadcrumbHtml}
