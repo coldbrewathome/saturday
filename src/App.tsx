@@ -4419,15 +4419,17 @@ function App() {
                       </p>
                       {expiredIds.length > 0 && (
                         <button
-                          className="text-button saved-clear-past"
-                          title={`Remove ${expiredIds.length} past event${expiredIds.length === 1 ? "" : "s"}`}
+                          className="saved-clear-past"
+                          type="button"
+                          title={`Remove ${expiredIds.length} past event${expiredIds.length === 1 ? "" : "s"} from your saved list`}
                           onClick={() =>
                             setSavedEventIds((current) =>
                               current.filter((id) => !expiredIds.includes(id)),
                             )
                           }
                         >
-                          Clear past ({expiredIds.length})
+                          <Trash2 aria-hidden="true" />
+                          Clear {expiredIds.length} past
                         </button>
                       )}
                     </div>
