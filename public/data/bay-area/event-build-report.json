@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "metroId": "bay-area",
-  "generatedAt": "2026-05-12T04:48:23.382Z",
+  "generatedAt": "2026-05-12T06:11:08.523Z",
   "registryPath": "data/event-sources.json",
   "outputPath": "public/data/bay-area/events.json",
   "eventCount": 2756,
@@ -1492,7 +1492,6 @@
           "contentType": "application/json; source=communico-events; events=663; locations=14"
         }
       ],
-      "reason": "Communico tenant: solanolibrary. The fetcher auto-builds /eeventcaldata?req=… with today's date + windowDays and merges /v1/{tenant}/locations for branch geo.",
       "httpStatus": 200,
       "contentType": "application/json; source=communico-events; events=663; locations=14",
       "rejectedLiveEvents": 16
@@ -1523,7 +1522,6 @@
           "contentType": "text/html; charset=utf-8"
         }
       ],
-      "reason": "CivicPlus calendar (HTML table). Akamai blocks default fetcher headers — requiresBrowserHeaders sends a full Chrome header set (Sec-Fetch-* etc.) which is enough to clear the bot challenge.",
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 45
@@ -1554,7 +1552,6 @@
           "contentType": "text/html; charset=utf-8"
         }
       ],
-      "reason": "Same CivicPlus calendar markup as Sunnyvale; the requiresBrowserHeaders flag bypasses the Akamai 403.",
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 59
@@ -1582,12 +1579,21 @@
       "city": "San Francisco",
       "metroId": "bay-area",
       "category": "Ticketed",
-      "status": "disabled",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
-      "fetches": [],
-      "reason": "Enable after adding an API key. Query params are built by ingest-events.mjs."
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
     },
     {
       "id": "stanford-events",
@@ -1609,7 +1615,6 @@
           "contentType": "application/json; source=localist-events; events=490; pages=5"
         }
       ],
-      "reason": "Official Stanford Localist calendar, narrowed to public arts, museum, tour, workshop, film, performance, and reception event types. The parser requires Everyone or General Public audience and filters out internal academic meetings.",
       "httpStatus": 200,
       "contentType": "application/json; source=localist-events; events=490; pages=5",
       "rejectedLiveEvents": 7
@@ -1855,7 +1860,6 @@
           "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "reason": "Recurring 2nd Sunday April through November on Irving Street between 9th and 11th Avenues. Free admission.",
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
@@ -1886,7 +1890,6 @@
           "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "reason": "Heritage railway running scenic train rides on the second and third weekends Mar–Oct from the Sunol Depot. Departures 10:30am and 1pm. Tickets required.",
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
@@ -1911,7 +1914,6 @@
           "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "reason": "Free for SF residents with proof of residency. Visit page for hours and seasonal programs.",
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
@@ -1936,7 +1938,6 @@
           "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "reason": "Historic Victorian glasshouse in Golden Gate Park. Free for SF residents on the first Tuesday of the month.",
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
@@ -1961,7 +1962,6 @@
           "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "reason": "Free admission for SF residents Mon/Wed/Fri before 10am with proof of residency.",
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
@@ -1986,7 +1986,6 @@
           "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "reason": "1880s working farm operated by East Bay Regional Park District. Tours, hayrides, blacksmith demonstrations.",
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0

@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "metroId": "los-angeles",
-  "generatedAt": "2026-05-12T03:23:00.893Z",
+  "generatedAt": "2026-05-12T06:09:28.648Z",
   "registryPath": "data/event-sources-los-angeles.json",
   "outputPath": "public/data/los-angeles/events.json",
-  "eventCount": 1385,
+  "eventCount": 1383,
   "sourceCount": 8,
-  "liveEventCount": 1385,
+  "liveEventCount": 1383,
   "fallbackEventCount": 0,
   "errors": [],
   "sources": [
@@ -91,9 +91,9 @@
       "metroId": "los-angeles",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 47,
+      "liveEvents": 45,
       "fallbackEvents": 0,
-      "eventCount": 47,
+      "eventCount": 45,
       "fetches": [
         {
           "url": "https://burbank.libnet.info/events",
@@ -192,11 +192,21 @@
       "city": "Los Angeles",
       "metroId": "los-angeles",
       "category": "Ticketed",
-      "status": "disabled",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
-      "fetches": []
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
     }
   ]
 }

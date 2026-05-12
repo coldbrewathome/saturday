@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "metroId": "seattle",
-  "generatedAt": "2026-05-12T03:52:14.825Z",
+  "generatedAt": "2026-05-12T06:09:44.020Z",
   "registryPath": "data/event-sources-seattle.json",
   "outputPath": "public/data/seattle/events.json",
   "eventCount": 264,
@@ -186,11 +186,21 @@
       "city": "Seattle",
       "metroId": "seattle",
       "category": "Ticketed",
-      "status": "disabled",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
-      "fetches": []
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
     }
   ]
 }

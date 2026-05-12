@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "metroId": "new-york-city",
-  "generatedAt": "2026-05-12T04:50:58.090Z",
+  "generatedAt": "2026-05-12T06:09:39.785Z",
   "registryPath": "data/event-sources-new-york-city.json",
   "outputPath": "public/data/new-york-city/events.json",
-  "eventCount": 705,
+  "eventCount": 726,
   "sourceCount": 10,
-  "liveEventCount": 677,
+  "liveEventCount": 698,
   "fallbackEventCount": 28,
   "errors": [],
   "sources": [
@@ -234,11 +234,21 @@
       "city": "New York",
       "metroId": "new-york-city",
       "category": "Ticketed",
-      "status": "disabled",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 21,
       "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": []
+      "eventCount": 21,
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
     }
   ]
 }

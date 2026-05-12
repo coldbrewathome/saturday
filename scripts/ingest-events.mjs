@@ -89,11 +89,21 @@ async function fetchSource(source, registry) {
     url.searchParams.set("startDateTime", now.toISOString().replace(/\.\d{3}Z$/, "Z"));
     url.searchParams.set("endDateTime", end.toISOString().replace(/\.\d{3}Z$/, "Z"));
     url.searchParams.set("size", "100");
-    return fetchUrl(url.toString(), registry.defaults?.userAgent);
+    return fetchUrl(url.toString(), registry.defaults?.userAgent, {
+      browserHeaders: true,
+      headers: { accept: "application/json" },
+    });
   }
   return fetchUrl(source.url, registry.defaults?.userAgent, {
     browserHeaders: source.requiresBrowserHeaders === true,
   });
+}
+
+function shouldFetchSource(source) {
+  if (source.enabled !== false) return true;
+  if (source.sourceType !== "ticketmaster") return false;
+  const keyName = source.requiresEnv || "TICKETMASTER_API_KEY";
+  return Boolean(process.env[keyName]);
 }
 
 function dateParam(date) {
@@ -659,7 +669,8 @@ async function main() {
 
   for (const reg of registriesToProcess) {
   for (const source of reg.sources || []) {
-    if (source.enabled === false && source.sourceType !== "ticketmaster") {
+    const fetchEnabled = shouldFetchSource(source);
+    if (!fetchEnabled) {
       sourceReports.push({
         id: source.id,
         name: source.name,
@@ -691,12 +702,12 @@ async function main() {
       eventCount: 0,
       fetches: [],
     };
-    if (source.disabledReason || source.notes) {
+    if (!fetchEnabled && (source.disabledReason || source.notes)) {
       report.reason = source.disabledReason || source.notes;
     }
     let liveEvents = [];
 
-    if (!offline && source.enabled !== false) {
+    if (!offline && fetchEnabled) {
       const payloads = await fetchSourcePayloads(source, reg);
       report.fetches = payloads.map((payload) => ({
         url: payload.url,
