@@ -34,6 +34,7 @@ const SITE = process.env.VITE_APP_SITE_URL?.replace(/\/$/, "") ||
 const BRAND = process.env.VITE_APP_BRAND || (IS_ADULTS ? "NightHop" : "FamHop");
 const BRAND_TAG = IS_ADULTS ? "night-out planner" : "family weekend planner";
 const OG_IMAGE = process.env.VITE_APP_OG_IMAGE || `${SITE}/og-image.png`;
+const MAX_SPOT_PAGES_PER_METRO = Number(process.env.SEO_MAX_SPOT_PAGES_PER_METRO || 800);
 const FREE_CATEGORIES = new Set(["Library", "Park"]);
 function eventLikelyFree(event) {
   if (typeof event.cost === "string" && /free/i.test(event.cost)) return true;
@@ -468,7 +469,7 @@ function replaceMetroShellCopy(html, title, description) {
 
 function generateSpotPages(items) {
   const seen = new Map();
-  for (const spot of items) {
+  for (const spot of items.slice(0, MAX_SPOT_PAGES_PER_METRO)) {
     if (!spot || typeof spot.name !== "string") continue;
     const baseSlug = slugify(`${spot.name} ${spot.neighborhood ?? ""}`);
     if (!baseSlug) continue;
