@@ -374,18 +374,55 @@ const USER_STATE_TTL_SECONDS = 60 * 60 * 24 * 365;
 const USER_STATE_MAX_BYTES = 200_000;
 const EVENTS_MAX_BYTES = 1_000_000;
 const EVENTS_KV_KEY = "admin:events";
-const METRO_IDS = new Set(["bay-area", "los-angeles", "new-york-city", "seattle"]);
+const METRO_IDS = new Set([
+  "bay-area",
+  "los-angeles",
+  "new-york-city",
+  "seattle",
+  "chicago",
+  "dallas-fort-worth",
+  "houston",
+  "washington-dc",
+  "atlanta",
+  "philadelphia",
+  "miami",
+  "phoenix",
+  "boston",
+  "san-diego",
+]);
+
+const METRO_ALIASES = new Map([
+  ["bayarea", "bay-area"],
+  ["losangeles", "los-angeles"],
+  ["la", "los-angeles"],
+  ["nyc", "new-york-city"],
+  ["newyorkcity", "new-york-city"],
+  ["new-york", "new-york-city"],
+  ["newyork", "new-york-city"],
+  ["dfw", "dallas-fort-worth"],
+  ["dallas", "dallas-fort-worth"],
+  ["fort-worth", "dallas-fort-worth"],
+  ["dc", "washington-dc"],
+  ["dmv", "washington-dc"],
+  ["washington", "washington-dc"],
+  ["philly", "philadelphia"],
+  ["south-florida", "miami"],
+  ["sandiego", "san-diego"],
+]);
+
+function normalizeMetroId(raw: string | null | undefined): string | null {
+  const normalized = String(raw || "bay-area")
+    .toLowerCase()
+    .trim()
+    .replace(/^\/+|\/+$/g, "")
+    .replace(/[\s_]+/g, "-");
+  const canonical = METRO_ALIASES.get(normalized) || normalized;
+  return METRO_IDS.has(canonical) ? canonical : null;
+}
 
 function metroFromRequest(request: Request): string | null {
   const url = new URL(request.url);
-  const raw = url.searchParams.get("metro") || "bay-area";
-  const normalized = raw.toLowerCase().trim();
-  if (normalized === "bayarea") return "bay-area";
-  if (normalized === "losangeles") return "los-angeles";
-  if (normalized === "nyc" || normalized === "newyorkcity" || normalized === "new-york") {
-    return "new-york-city";
-  }
-  return METRO_IDS.has(normalized) ? normalized : null;
+  return normalizeMetroId(url.searchParams.get("metro"));
 }
 
 function eventsKvKey(metroId: string): string {
@@ -1008,7 +1045,7 @@ async function createPoll(
   };
   const title = typeof data.title === "string" ? data.title.slice(0, 200) : "Untitled plan";
   const rawMetroId = typeof data.metroId === "string" ? data.metroId : "bay-area";
-  const metroId = METRO_IDS.has(rawMetroId) ? rawMetroId : "bay-area";
+  const metroId = normalizeMetroId(rawMetroId) || "bay-area";
   const stopsInput = Array.isArray(data.stops) ? data.stops : [];
   const stops = stopsInput.filter(isStopSummary).slice(0, 25);
   const events = cleanEvents(data.events);

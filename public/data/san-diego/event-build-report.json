@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "metroId": "san-diego",
+  "generatedAt": "2026-05-12T20:27:03.332Z",
+  "registryPath": "data/event-sources-san-diego.json",
+  "outputPath": "public/data/san-diego/events.json",
+  "eventCount": 21,
+  "sourceCount": 5,
+  "liveEventCount": 9,
+  "fallbackEventCount": 12,
+  "errors": [],
+  "sources": [
+    {
+      "id": "san-diego-library-family",
+      "name": "San Diego County Library Events",
+      "url": "https://sdcl.bibliocommons.com/v2/events",
+      "sourceType": "biblioevents",
+      "city": "San Diego",
+      "metroId": "san-diego",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 5,
+      "fallbackEvents": 0,
+      "eventCount": 5,
+      "fetches": [
+        {
+          "url": "https://sdcl.bibliocommons.com/v2/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "san-diego-parks-family",
+      "name": "City of San Diego Parks & Recreation Event Calendar",
+      "url": "https://www.sandiego.gov/park-and-recreation/event-calendar",
+      "sourceType": "eventList",
+      "city": "San Diego",
+      "metroId": "san-diego",
+      "category": "Park",
+      "status": "ok-template-fallback",
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "eventCount": 8,
+      "fetches": [
+        {
+          "url": "https://www.sandiego.gov/park-and-recreation/event-calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "san-diego-museum-family",
+      "name": "The New Children's Museum Calendar",
+      "url": "https://thinkplaycreate.org/visit/",
+      "sourceType": "eventList",
+      "city": "San Diego",
+      "metroId": "san-diego",
+      "category": "Museum",
+      "status": "ok",
+      "liveEvents": 4,
+      "fallbackEvents": 0,
+      "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://thinkplaycreate.org/visit/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "san-diego-zoo-family",
+      "name": "San Diego Zoo Wildlife Presentations",
+      "url": "https://zoo.sandiegozoo.org/activities/wildlife-presentations",
+      "sourceType": "officialTextEvents",
+      "city": "San Diego",
+      "metroId": "san-diego",
+      "category": "Zoo",
+      "status": "ok-template-fallback",
+      "liveEvents": 0,
+      "fallbackEvents": 4,
+      "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://zoo.sandiegozoo.org/activities/wildlife-presentations",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "ticketmaster-san-diego-family",
+      "name": "Ticketmaster San Diego Family Events",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "sourceType": "ticketmaster",
+      "city": "San Diego",
+      "metroId": "san-diego",
+      "category": "Ticketed",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
+    }
+  ]
+}

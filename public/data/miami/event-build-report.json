@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "metroId": "miami",
+  "generatedAt": "2026-05-12T20:26:47.473Z",
+  "registryPath": "data/event-sources-miami.json",
+  "outputPath": "public/data/miami/events.json",
+  "eventCount": 1767,
+  "sourceCount": 5,
+  "liveEventCount": 1755,
+  "fallbackEventCount": 12,
+  "errors": [],
+  "sources": [
+    {
+      "id": "miami-library-family",
+      "name": "Miami-Dade Public Library Events",
+      "url": "https://mdpls.libnet.info/events",
+      "sourceType": "communicoEvents",
+      "city": "Miami",
+      "metroId": "miami",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 1751,
+      "fallbackEvents": 0,
+      "eventCount": 1751,
+      "fetches": [
+        {
+          "url": "https://mdpls.libnet.info/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=communico-events; events=3695; locations=54"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=communico-events; events=3695; locations=54",
+      "rejectedLiveEvents": 40
+    },
+    {
+      "id": "miami-parks-family",
+      "name": "Miami-Dade Parks Events",
+      "url": "https://www.miamidade.gov/global/calendar/global.page?calendarName=Parks",
+      "sourceType": "eventList",
+      "city": "Miami",
+      "metroId": "miami",
+      "category": "Park",
+      "status": "ok-template-fallback",
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "eventCount": 8,
+      "fetches": [
+        {
+          "url": "https://www.miamidade.gov/global/calendar/global.page?calendarName=Parks",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html;charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "miami-museum-family",
+      "name": "Frost Science Calendar",
+      "url": "https://www.frostscience.org/calendar-events/",
+      "sourceType": "eventList",
+      "city": "Miami",
+      "metroId": "miami",
+      "category": "Museum",
+      "status": "ok-template-fallback",
+      "liveEvents": 0,
+      "fallbackEvents": 4,
+      "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://www.frostscience.org/calendar-events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "miami-zoo-family",
+      "name": "Zoo Miami Events",
+      "url": "https://www.zoomiami.org/",
+      "sourceType": "html",
+      "city": "Miami",
+      "metroId": "miami",
+      "category": "Zoo",
+      "status": "ok",
+      "liveEvents": 2,
+      "fallbackEvents": 0,
+      "eventCount": 2,
+      "fetches": [
+        {
+          "url": "https://www.zoomiami.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 3
+    },
+    {
+      "id": "ticketmaster-miami-family",
+      "name": "Ticketmaster Miami Family Events",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "sourceType": "ticketmaster",
+      "city": "Miami",
+      "metroId": "miami",
+      "category": "Ticketed",
+      "status": "ok",
+      "liveEvents": 2,
+      "fallbackEvents": 0,
+      "eventCount": 2,
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
+    }
+  ]
+}

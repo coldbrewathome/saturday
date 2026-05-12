@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "metroId": "atlanta",
+  "generatedAt": "2026-05-12T20:25:32.821Z",
+  "registryPath": "data/event-sources-atlanta.json",
+  "outputPath": "public/data/atlanta/events.json",
+  "eventCount": 21,
+  "sourceCount": 5,
+  "liveEventCount": 5,
+  "fallbackEventCount": 16,
+  "errors": [],
+  "sources": [
+    {
+      "id": "atlanta-library-family",
+      "name": "Fulton County Library Family Events",
+      "url": "https://fulcolibrary.bibliocommons.com/v2/events",
+      "sourceType": "biblioevents",
+      "city": "Atlanta",
+      "metroId": "atlanta",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 5,
+      "fallbackEvents": 0,
+      "eventCount": 5,
+      "fetches": [
+        {
+          "url": "https://fulcolibrary.bibliocommons.com/v2/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "atlanta-parks-family",
+      "name": "Atlanta Parks and Recreation Events",
+      "url": "https://www.atlantaga.gov/government/departments/parks-recreation/events",
+      "sourceType": "eventList",
+      "city": "Atlanta",
+      "metroId": "atlanta",
+      "category": "Park",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "eventCount": 8,
+      "fetches": [
+        {
+          "url": "https://www.atlantaga.gov/government/departments/parks-recreation/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 404,
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "id": "atlanta-museum-family",
+      "name": "Children's Museum of Atlanta Program Calendar",
+      "url": "https://childrensmuseumatlanta.org/program-calendar/",
+      "sourceType": "html",
+      "city": "Atlanta",
+      "metroId": "atlanta",
+      "category": "Museum",
+      "status": "ok-template-fallback",
+      "liveEvents": 0,
+      "fallbackEvents": 4,
+      "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://childrensmuseumatlanta.org/program-calendar/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "atlanta-zoo-family",
+      "name": "Zoo Atlanta Events",
+      "url": "https://zooatlanta.org/events/",
+      "sourceType": "eventList",
+      "city": "Atlanta",
+      "metroId": "atlanta",
+      "category": "Zoo",
+      "status": "ok-template-fallback",
+      "liveEvents": 0,
+      "fallbackEvents": 4,
+      "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://zooatlanta.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "ticketmaster-atlanta-family",
+      "name": "Ticketmaster Atlanta Family Events",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "sourceType": "ticketmaster",
+      "city": "Atlanta",
+      "metroId": "atlanta",
+      "category": "Ticketed",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
+    }
+  ]
+}

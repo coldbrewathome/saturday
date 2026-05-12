@@ -5,6 +5,23 @@ const repositoryName = process.env.GITHUB_REPOSITORY?.split("/")[1];
 const base =
   process.env.GITHUB_PAGES === "true" && repositoryName ? `/${repositoryName}/` : "/";
 
+const kidsMetroNames = [
+  "San Francisco Bay Area",
+  "Los Angeles",
+  "New York City",
+  "Seattle",
+  "Chicago",
+  "Dallas-Fort Worth",
+  "Houston",
+  "Washington DC",
+  "Atlanta",
+  "Philadelphia",
+  "Miami",
+  "Phoenix",
+  "Boston",
+  "San Diego",
+];
+
 // Swap the home-page JSON-LD block based on the audience the build is for.
 // Kids gets the FamHop FAQ + WebApp graph; adults gets a NightHop-flavored
 // version so structured data and FAQ rich results match the visible brand.
@@ -47,7 +64,7 @@ function audienceJsonLdPlugin(env: Record<string, string>): Plugin {
     : [
         {
           q: `What is ${brand}?`,
-          a: `${brand} is a free San Francisco Bay Area weekend planner for families. Pick a vibe (chill, adventure, museum day…) and ${brand} builds a 3-stop plan combining family-friendly parks, libraries, museums, and weekend events, then lets you share a link so co-parents and friends can vote on each stop.`,
+          a: `${brand} is a free family weekend planner for major U.S. metro areas. Pick a vibe (chill, adventure, museum day…) and ${brand} builds a 3-stop plan combining family-friendly parks, libraries, museums, and weekend events, then lets you share a link so co-parents and friends can vote on each stop.`,
         },
         {
           q: `Is ${brand} free to use?`,
@@ -59,7 +76,7 @@ function audienceJsonLdPlugin(env: Record<string, string>): Plugin {
         },
         {
           q: `Where do ${brand}'s events come from?`,
-          a: `Events are pulled directly from public source pages (libraries like SFPL, SJPL, Oakland; parks; museums; family festivals) using their official event calendars in JSON-LD, iCal, RSS, LibCal, and dated HTML formats.`,
+          a: `Events are pulled directly from public source pages such as libraries, parks, museums, zoos, theaters, family festivals, and selected ticketed sources using official JSON-LD, iCal, RSS, LibCal, BiblioEvents, Communico, and dated HTML formats.`,
         },
         {
           q: `What ages does ${brand} cover?`,
@@ -67,13 +84,13 @@ function audienceJsonLdPlugin(env: Record<string, string>): Plugin {
         },
         {
           q: `Where does ${brand} work?`,
-          a: `${brand} covers the San Francisco Bay Area: San Francisco, the Peninsula, the East Bay, the South Bay, and the North Bay.`,
+          a: `${brand} covers ${kidsMetroNames.join(", ")}.`,
         },
       ];
 
   const alternateName = isAdults
     ? [`${brand} night-out planner`, "Bay Area nightlife", "nighthop.pages.dev"]
-    : [`${brand} weekend planner`, "Bay Area family events", "Bay Area family activities", "famhop.com"];
+    : [`${brand} weekend planner`, "family events", "family activities", "major metro family planner", "famhop.com"];
   const featureList = isAdults
     ? [
         "Pick-a-vibe 3-stop night-out plan in one tap",
@@ -84,7 +101,7 @@ function audienceJsonLdPlugin(env: Record<string, string>): Plugin {
       ]
     : [
         "Pick-a-vibe 3-stop family plan in one tap",
-        "Bay Area parks, libraries, museums and family venues",
+        "Major metro parks, libraries, museums and family venues",
         "Live weekend family events by city and category",
         "Share a vote link with co-parents and friends",
         "Filter by age band: toddler, preschool, school-age, tween",
@@ -125,7 +142,9 @@ function audienceJsonLdPlugin(env: Record<string, string>): Plugin {
         browserRequirements: "Requires JavaScript",
         description,
         featureList,
-        areaServed: { "@type": "Place", name: "San Francisco Bay Area" },
+        areaServed: isAdults
+          ? { "@type": "Place", name: "San Francisco Bay Area" }
+          : kidsMetroNames.map((name) => ({ "@type": "Place", name })),
         audience: audienceLd,
         offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
       },

@@ -9,7 +9,9 @@
       "state": "CA",
       "timezone": "America/Los_Angeles",
       "canonicalPath": "/bay-area",
-      "aliases": ["bayarea"],
+      "aliases": [
+        "bayarea"
+      ],
       "dataDir": "bay-area",
       "legacyData": {
         "spots": "bay-area-spots.json",
@@ -23,40 +25,155 @@
       "adultEventSources": "data/event-sources-adults.json",
       "manualEvents": "data/manual-events.json",
       "eventTemplates": "data/event-templates.json",
-      "eventCommunities": ["Muir Beach", "Bay Area"],
+      "eventCommunities": [
+        "Muir Beach",
+        "Bay Area"
+      ],
       "minSpots": 150,
       "minEvents": 25,
-      "center": { "lat": 37.7749, "lon": -122.4194 },
+      "center": {
+        "lat": 37.7749,
+        "lon": -122.4194
+      },
       "spotCoverage": {
         "name": "San Francisco Bay Area",
-        "bbox": { "south": 36.85, "west": -123.05, "north": 38.95, "east": -121.15 },
+        "bbox": {
+          "south": 36.85,
+          "west": -123.05,
+          "north": 38.95,
+          "east": -121.15
+        },
         "boxes": [
-          { "name": "San Francisco and Peninsula", "south": 37.2, "west": -122.55, "north": 37.82, "east": -122.05 },
-          { "name": "South Bay", "south": 37.15, "west": -122.15, "north": 37.55, "east": -121.75 },
-          { "name": "East Bay", "south": 37.45, "west": -122.35, "north": 38.15, "east": -121.65 },
-          { "name": "Marin and North Bay", "south": 37.85, "west": -122.75, "north": 38.55, "east": -122.25 }
+          {
+            "name": "San Francisco and Peninsula",
+            "south": 37.2,
+            "west": -122.55,
+            "north": 37.82,
+            "east": -122.05
+          },
+          {
+            "name": "South Bay",
+            "south": 37.15,
+            "west": -122.15,
+            "north": 37.55,
+            "east": -121.75
+          },
+          {
+            "name": "East Bay",
+            "south": 37.45,
+            "west": -122.35,
+            "north": 38.15,
+            "east": -121.65
+          },
+          {
+            "name": "Marin and North Bay",
+            "south": 37.85,
+            "west": -122.75,
+            "north": 38.55,
+            "east": -122.25
+          }
         ],
         "cityCenters": [
-          ["San Francisco", 37.7749, -122.4194],
-          ["Oakland", 37.8044, -122.2712],
-          ["Berkeley", 37.8715, -122.273],
-          ["San Jose", 37.3382, -121.8863],
-          ["Palo Alto", 37.4419, -122.143],
-          ["Mountain View", 37.3861, -122.0839],
-          ["Sunnyvale", 37.3688, -122.0363],
-          ["Santa Clara", 37.3541, -121.9552],
-          ["Fremont", 37.5485, -121.9886],
-          ["Hayward", 37.6688, -122.0808],
-          ["San Mateo", 37.563, -122.3255],
-          ["Redwood City", 37.4852, -122.2364],
-          ["Daly City", 37.6879, -122.4702],
-          ["Walnut Creek", 37.9101, -122.0652],
-          ["Livermore", 37.6819, -121.768],
-          ["Sausalito", 37.8591, -122.4853],
-          ["San Rafael", 37.9735, -122.5311],
-          ["Napa", 38.2975, -122.2869],
-          ["Petaluma", 38.2324, -122.6367],
-          ["Santa Rosa", 38.4404, -122.7141]
+          [
+            "San Francisco",
+            37.7749,
+            -122.4194
+          ],
+          [
+            "Oakland",
+            37.8044,
+            -122.2712
+          ],
+          [
+            "Berkeley",
+            37.8715,
+            -122.273
+          ],
+          [
+            "San Jose",
+            37.3382,
+            -121.8863
+          ],
+          [
+            "Palo Alto",
+            37.4419,
+            -122.143
+          ],
+          [
+            "Mountain View",
+            37.3861,
+            -122.0839
+          ],
+          [
+            "Sunnyvale",
+            37.3688,
+            -122.0363
+          ],
+          [
+            "Santa Clara",
+            37.3541,
+            -121.9552
+          ],
+          [
+            "Fremont",
+            37.5485,
+            -121.9886
+          ],
+          [
+            "Hayward",
+            37.6688,
+            -122.0808
+          ],
+          [
+            "San Mateo",
+            37.563,
+            -122.3255
+          ],
+          [
+            "Redwood City",
+            37.4852,
+            -122.2364
+          ],
+          [
+            "Daly City",
+            37.6879,
+            -122.4702
+          ],
+          [
+            "Walnut Creek",
+            37.9101,
+            -122.0652
+          ],
+          [
+            "Livermore",
+            37.6819,
+            -121.768
+          ],
+          [
+            "Sausalito",
+            37.8591,
+            -122.4853
+          ],
+          [
+            "San Rafael",
+            37.9735,
+            -122.5311
+          ],
+          [
+            "Napa",
+            38.2975,
+            -122.2869
+          ],
+          [
+            "Petaluma",
+            38.2324,
+            -122.6367
+          ],
+          [
+            "Santa Rosa",
+            38.4404,
+            -122.7141
+          ]
         ]
       }
     },
@@ -67,35 +184,122 @@
       "state": "CA",
       "timezone": "America/Los_Angeles",
       "canonicalPath": "/los-angeles",
-      "aliases": ["losangeles", "la"],
+      "aliases": [
+        "losangeles",
+        "la"
+      ],
       "dataDir": "los-angeles",
       "eventSources": "data/event-sources-los-angeles.json",
       "minSpots": 150,
       "minEvents": 15,
-      "center": { "lat": 34.0522, "lon": -118.2437 },
+      "center": {
+        "lat": 34.0522,
+        "lon": -118.2437
+      },
       "spotCoverage": {
         "name": "Los Angeles",
-        "bbox": { "south": 33.65, "west": -118.75, "north": 34.35, "east": -117.65 },
+        "bbox": {
+          "south": 33.65,
+          "west": -118.75,
+          "north": 34.35,
+          "east": -117.65
+        },
         "boxes": [
-          { "name": "Los Angeles Basin", "south": 33.84, "west": -118.55, "north": 34.18, "east": -118.05 },
-          { "name": "San Fernando Valley and Pasadena", "south": 34.05, "west": -118.68, "north": 34.35, "east": -117.85 },
-          { "name": "South Bay and Long Beach", "south": 33.65, "west": -118.48, "north": 33.93, "east": -117.92 },
-          { "name": "San Gabriel Valley", "south": 33.9, "west": -118.15, "north": 34.23, "east": -117.65 }
+          {
+            "name": "Los Angeles Basin",
+            "south": 33.84,
+            "west": -118.55,
+            "north": 34.18,
+            "east": -118.05
+          },
+          {
+            "name": "San Fernando Valley and Pasadena",
+            "south": 34.05,
+            "west": -118.68,
+            "north": 34.35,
+            "east": -117.85
+          },
+          {
+            "name": "South Bay and Long Beach",
+            "south": 33.65,
+            "west": -118.48,
+            "north": 33.93,
+            "east": -117.92
+          },
+          {
+            "name": "San Gabriel Valley",
+            "south": 33.9,
+            "west": -118.15,
+            "north": 34.23,
+            "east": -117.65
+          }
         ],
         "cityCenters": [
-          ["Los Angeles", 34.0522, -118.2437],
-          ["Pasadena", 34.1478, -118.1445],
-          ["Long Beach", 33.7701, -118.1937],
-          ["Santa Monica", 34.0195, -118.4912],
-          ["Glendale", 34.1425, -118.2551],
-          ["Burbank", 34.1808, -118.309],
-          ["Culver City", 34.0211, -118.3965],
-          ["Inglewood", 33.9617, -118.3531],
-          ["Torrance", 33.8358, -118.3406],
-          ["El Segundo", 33.9192, -118.4165],
-          ["Alhambra", 34.0953, -118.127],
-          ["Whittier", 33.9792, -118.0328],
-          ["Pomona", 34.0551, -117.7499]
+          [
+            "Los Angeles",
+            34.0522,
+            -118.2437
+          ],
+          [
+            "Pasadena",
+            34.1478,
+            -118.1445
+          ],
+          [
+            "Long Beach",
+            33.7701,
+            -118.1937
+          ],
+          [
+            "Santa Monica",
+            34.0195,
+            -118.4912
+          ],
+          [
+            "Glendale",
+            34.1425,
+            -118.2551
+          ],
+          [
+            "Burbank",
+            34.1808,
+            -118.309
+          ],
+          [
+            "Culver City",
+            34.0211,
+            -118.3965
+          ],
+          [
+            "Inglewood",
+            33.9617,
+            -118.3531
+          ],
+          [
+            "Torrance",
+            33.8358,
+            -118.3406
+          ],
+          [
+            "El Segundo",
+            33.9192,
+            -118.4165
+          ],
+          [
+            "Alhambra",
+            34.0953,
+            -118.127
+          ],
+          [
+            "Whittier",
+            33.9792,
+            -118.0328
+          ],
+          [
+            "Pomona",
+            34.0551,
+            -117.7499
+          ]
         ]
       }
     },
@@ -106,33 +310,110 @@
       "state": "NY",
       "timezone": "America/New_York",
       "canonicalPath": "/new-york-city",
-      "aliases": ["newyorkcity", "new-york", "newyork", "nyc"],
+      "aliases": [
+        "newyorkcity",
+        "new-york",
+        "newyork",
+        "nyc"
+      ],
       "dataDir": "new-york-city",
       "eventSources": "data/event-sources-new-york-city.json",
       "eventTemplates": "data/event-templates-new-york-city.json",
       "minSpots": 150,
       "minEvents": 15,
-      "center": { "lat": 40.7128, "lon": -74.006 },
+      "center": {
+        "lat": 40.7128,
+        "lon": -74.006
+      },
       "spotCoverage": {
         "name": "New York City",
-        "bbox": { "south": 40.47, "west": -74.28, "north": 40.93, "east": -73.65 },
+        "bbox": {
+          "south": 40.47,
+          "west": -74.28,
+          "north": 40.93,
+          "east": -73.65
+        },
         "boxes": [
-          { "name": "Manhattan and western Queens", "south": 40.68, "west": -74.03, "north": 40.9, "east": -73.9 },
-          { "name": "Brooklyn and Staten Island", "south": 40.47, "west": -74.28, "north": 40.74, "east": -73.84 },
-          { "name": "Queens", "south": 40.53, "west": -73.98, "north": 40.81, "east": -73.7 },
-          { "name": "Bronx", "south": 40.78, "west": -73.94, "north": 40.93, "east": -73.75 }
+          {
+            "name": "Manhattan and western Queens",
+            "south": 40.68,
+            "west": -74.03,
+            "north": 40.9,
+            "east": -73.9
+          },
+          {
+            "name": "Brooklyn and Staten Island",
+            "south": 40.47,
+            "west": -74.28,
+            "north": 40.74,
+            "east": -73.84
+          },
+          {
+            "name": "Queens",
+            "south": 40.53,
+            "west": -73.98,
+            "north": 40.81,
+            "east": -73.7
+          },
+          {
+            "name": "Bronx",
+            "south": 40.78,
+            "west": -73.94,
+            "north": 40.93,
+            "east": -73.75
+          }
         ],
         "cityCenters": [
-          ["Manhattan", 40.7831, -73.9712],
-          ["Brooklyn", 40.6782, -73.9442],
-          ["Queens", 40.7282, -73.7949],
-          ["Bronx", 40.8448, -73.8648],
-          ["Staten Island", 40.5795, -74.1502],
-          ["Long Island City", 40.7447, -73.9485],
-          ["Flushing", 40.7675, -73.8331],
-          ["Coney Island", 40.5749, -73.985],
-          ["Williamsburg", 40.7081, -73.9571],
-          ["Downtown Brooklyn", 40.6955, -73.9874]
+          [
+            "Manhattan",
+            40.7831,
+            -73.9712
+          ],
+          [
+            "Brooklyn",
+            40.6782,
+            -73.9442
+          ],
+          [
+            "Queens",
+            40.7282,
+            -73.7949
+          ],
+          [
+            "Bronx",
+            40.8448,
+            -73.8648
+          ],
+          [
+            "Staten Island",
+            40.5795,
+            -74.1502
+          ],
+          [
+            "Long Island City",
+            40.7447,
+            -73.9485
+          ],
+          [
+            "Flushing",
+            40.7675,
+            -73.8331
+          ],
+          [
+            "Coney Island",
+            40.5749,
+            -73.985
+          ],
+          [
+            "Williamsburg",
+            40.7081,
+            -73.9571
+          ],
+          [
+            "Downtown Brooklyn",
+            40.6955,
+            -73.9874
+          ]
         ]
       }
     },
@@ -148,30 +429,1210 @@
       "eventSources": "data/event-sources-seattle.json",
       "minSpots": 120,
       "minEvents": 15,
-      "center": { "lat": 47.6062, "lon": -122.3321 },
+      "center": {
+        "lat": 47.6062,
+        "lon": -122.3321
+      },
       "spotCoverage": {
         "name": "Seattle",
-        "bbox": { "south": 47.35, "west": -122.55, "north": 47.86, "east": -121.95 },
+        "bbox": {
+          "south": 47.35,
+          "west": -122.55,
+          "north": 47.86,
+          "east": -121.95
+        },
         "boxes": [
-          { "name": "Seattle", "south": 47.48, "west": -122.45, "north": 47.75, "east": -122.22 },
-          { "name": "Eastside", "south": 47.5, "west": -122.25, "north": 47.76, "east": -121.95 },
-          { "name": "South King County", "south": 47.35, "west": -122.4, "north": 47.55, "east": -122.05 },
-          { "name": "North King County", "south": 47.68, "west": -122.42, "north": 47.86, "east": -122.1 }
+          {
+            "name": "Seattle",
+            "south": 47.48,
+            "west": -122.45,
+            "north": 47.75,
+            "east": -122.22
+          },
+          {
+            "name": "Eastside",
+            "south": 47.5,
+            "west": -122.25,
+            "north": 47.76,
+            "east": -121.95
+          },
+          {
+            "name": "South King County",
+            "south": 47.35,
+            "west": -122.4,
+            "north": 47.55,
+            "east": -122.05
+          },
+          {
+            "name": "North King County",
+            "south": 47.68,
+            "west": -122.42,
+            "north": 47.86,
+            "east": -122.1
+          }
         ],
         "cityCenters": [
-          ["Seattle", 47.6062, -122.3321],
-          ["Bellevue", 47.6101, -122.2015],
-          ["Redmond", 47.674, -122.1215],
-          ["Kirkland", 47.6769, -122.206],
-          ["Bothell", 47.7601, -122.2054],
-          ["Shoreline", 47.7557, -122.3415],
-          ["Renton", 47.4829, -122.2171],
-          ["Tukwila", 47.474, -122.2609],
-          ["Mercer Island", 47.5707, -122.2221],
-          ["Issaquah", 47.5301, -122.0326],
-          ["Burien", 47.4704, -122.3468]
+          [
+            "Seattle",
+            47.6062,
+            -122.3321
+          ],
+          [
+            "Bellevue",
+            47.6101,
+            -122.2015
+          ],
+          [
+            "Redmond",
+            47.674,
+            -122.1215
+          ],
+          [
+            "Kirkland",
+            47.6769,
+            -122.206
+          ],
+          [
+            "Bothell",
+            47.7601,
+            -122.2054
+          ],
+          [
+            "Shoreline",
+            47.7557,
+            -122.3415
+          ],
+          [
+            "Renton",
+            47.4829,
+            -122.2171
+          ],
+          [
+            "Tukwila",
+            47.474,
+            -122.2609
+          ],
+          [
+            "Mercer Island",
+            47.5707,
+            -122.2221
+          ],
+          [
+            "Issaquah",
+            47.5301,
+            -122.0326
+          ],
+          [
+            "Burien",
+            47.4704,
+            -122.3468
+          ]
         ]
       }
+    },
+    {
+      "id": "chicago",
+      "label": "Chicago",
+      "seoName": "Chicago",
+      "state": "IL",
+      "timezone": "America/Chicago",
+      "canonicalPath": "/chicago",
+      "aliases": [],
+      "dataDir": "chicago",
+      "minSpots": 150,
+      "minEvents": 15,
+      "center": {
+        "lat": 41.8781,
+        "lon": -87.6298
+      },
+      "spotCoverage": {
+        "name": "Chicago",
+        "bbox": {
+          "south": 41.55,
+          "west": -88.05,
+          "north": 42.08,
+          "east": -87.45
+        },
+        "boxes": [
+          {
+            "name": "Chicago North Side and Evanston",
+            "south": 41.9,
+            "west": -87.82,
+            "north": 42.08,
+            "east": -87.55
+          },
+          {
+            "name": "Chicago Loop and Near West",
+            "south": 41.78,
+            "west": -87.78,
+            "north": 41.93,
+            "east": -87.55
+          },
+          {
+            "name": "Chicago South Side",
+            "south": 41.62,
+            "west": -87.78,
+            "north": 41.82,
+            "east": -87.52
+          },
+          {
+            "name": "Near Chicago suburbs",
+            "south": 41.55,
+            "west": -88.05,
+            "north": 42.02,
+            "east": -87.65
+          }
+        ],
+        "cityCenters": [
+          [
+            "Chicago",
+            41.8781,
+            -87.6298
+          ],
+          [
+            "Evanston",
+            42.0451,
+            -87.6877
+          ],
+          [
+            "Oak Park",
+            41.885,
+            -87.7845
+          ],
+          [
+            "Skokie",
+            42.0334,
+            -87.7334
+          ],
+          [
+            "Cicero",
+            41.8456,
+            -87.7539
+          ],
+          [
+            "Berwyn",
+            41.8506,
+            -87.7937
+          ],
+          [
+            "Naperville",
+            41.7508,
+            -88.1535
+          ],
+          [
+            "Schaumburg",
+            42.0334,
+            -88.0834
+          ],
+          [
+            "Oak Brook",
+            41.8398,
+            -87.9536
+          ],
+          [
+            "Orland Park",
+            41.6303,
+            -87.8539
+          ]
+        ]
+      },
+      "eventSources": "data/event-sources-chicago.json",
+      "eventTemplates": "data/event-templates-major-metros.json"
+    },
+    {
+      "id": "dallas-fort-worth",
+      "label": "Dallas-Fort Worth",
+      "seoName": "Dallas-Fort Worth",
+      "state": "TX",
+      "timezone": "America/Chicago",
+      "canonicalPath": "/dallas-fort-worth",
+      "aliases": [
+        "dfw",
+        "dallas",
+        "fort-worth"
+      ],
+      "dataDir": "dallas-fort-worth",
+      "minSpots": 150,
+      "minEvents": 15,
+      "center": {
+        "lat": 32.7767,
+        "lon": -96.797
+      },
+      "spotCoverage": {
+        "name": "Dallas-Fort Worth",
+        "bbox": {
+          "south": 32.45,
+          "west": -97.55,
+          "north": 33.15,
+          "east": -96.45
+        },
+        "boxes": [
+          {
+            "name": "Dallas and inner suburbs",
+            "south": 32.62,
+            "west": -97.05,
+            "north": 33.02,
+            "east": -96.55
+          },
+          {
+            "name": "Fort Worth and Arlington",
+            "south": 32.55,
+            "west": -97.55,
+            "north": 33,
+            "east": -97
+          },
+          {
+            "name": "North Dallas suburbs",
+            "south": 32.85,
+            "west": -97.25,
+            "north": 33.15,
+            "east": -96.6
+          },
+          {
+            "name": "South DFW suburbs",
+            "south": 32.45,
+            "west": -97.35,
+            "north": 32.75,
+            "east": -96.65
+          }
+        ],
+        "cityCenters": [
+          [
+            "Dallas",
+            32.7767,
+            -96.797
+          ],
+          [
+            "Fort Worth",
+            32.7555,
+            -97.3308
+          ],
+          [
+            "Arlington",
+            32.7357,
+            -97.1081
+          ],
+          [
+            "Plano",
+            33.0198,
+            -96.6989
+          ],
+          [
+            "Irving",
+            32.814,
+            -96.9489
+          ],
+          [
+            "Frisco",
+            33.1507,
+            -96.8236
+          ],
+          [
+            "Garland",
+            32.9126,
+            -96.6389
+          ],
+          [
+            "Grand Prairie",
+            32.746,
+            -96.9978
+          ],
+          [
+            "McKinney",
+            33.1972,
+            -96.6398
+          ],
+          [
+            "Denton",
+            33.2148,
+            -97.1331
+          ]
+        ]
+      },
+      "eventSources": "data/event-sources-dallas-fort-worth.json",
+      "eventTemplates": "data/event-templates-major-metros.json"
+    },
+    {
+      "id": "houston",
+      "label": "Houston",
+      "seoName": "Houston",
+      "state": "TX",
+      "timezone": "America/Chicago",
+      "canonicalPath": "/houston",
+      "aliases": [],
+      "dataDir": "houston",
+      "minSpots": 150,
+      "minEvents": 15,
+      "center": {
+        "lat": 29.7604,
+        "lon": -95.3698
+      },
+      "spotCoverage": {
+        "name": "Houston",
+        "bbox": {
+          "south": 29.35,
+          "west": -96.05,
+          "north": 30.15,
+          "east": -94.95
+        },
+        "boxes": [
+          {
+            "name": "Houston core",
+            "south": 29.6,
+            "west": -95.65,
+            "north": 29.95,
+            "east": -95.15
+          },
+          {
+            "name": "West Houston and Katy",
+            "south": 29.6,
+            "west": -96.05,
+            "north": 30.05,
+            "east": -95.55
+          },
+          {
+            "name": "North Houston and The Woodlands",
+            "south": 29.85,
+            "west": -95.7,
+            "north": 30.15,
+            "east": -95.25
+          },
+          {
+            "name": "South and East Houston",
+            "south": 29.35,
+            "west": -95.45,
+            "north": 29.75,
+            "east": -94.95
+          }
+        ],
+        "cityCenters": [
+          [
+            "Houston",
+            29.7604,
+            -95.3698
+          ],
+          [
+            "The Woodlands",
+            30.1658,
+            -95.4613
+          ],
+          [
+            "Sugar Land",
+            29.6197,
+            -95.6349
+          ],
+          [
+            "Katy",
+            29.7858,
+            -95.8244
+          ],
+          [
+            "Pasadena",
+            29.6911,
+            -95.2091
+          ],
+          [
+            "Pearland",
+            29.5636,
+            -95.286
+          ],
+          [
+            "League City",
+            29.5075,
+            -95.0949
+          ],
+          [
+            "Baytown",
+            29.7355,
+            -94.9774
+          ],
+          [
+            "Missouri City",
+            29.6186,
+            -95.5377
+          ],
+          [
+            "Humble",
+            29.9988,
+            -95.2622
+          ]
+        ]
+      },
+      "eventSources": "data/event-sources-houston.json",
+      "eventTemplates": "data/event-templates-major-metros.json"
+    },
+    {
+      "id": "washington-dc",
+      "label": "Washington DC",
+      "seoName": "Washington DC",
+      "state": "DC",
+      "timezone": "America/New_York",
+      "canonicalPath": "/washington-dc",
+      "aliases": [
+        "dc",
+        "dmv",
+        "washington"
+      ],
+      "dataDir": "washington-dc",
+      "minSpots": 150,
+      "minEvents": 15,
+      "center": {
+        "lat": 38.9072,
+        "lon": -77.0369
+      },
+      "spotCoverage": {
+        "name": "Washington DC",
+        "bbox": {
+          "south": 38.65,
+          "west": -77.45,
+          "north": 39.15,
+          "east": -76.75
+        },
+        "boxes": [
+          {
+            "name": "District of Columbia",
+            "south": 38.79,
+            "west": -77.12,
+            "north": 38.995,
+            "east": -76.91
+          },
+          {
+            "name": "Northern Virginia inner suburbs",
+            "south": 38.75,
+            "west": -77.35,
+            "north": 39,
+            "east": -77.02
+          },
+          {
+            "name": "Maryland inner suburbs",
+            "south": 38.85,
+            "west": -77.25,
+            "north": 39.15,
+            "east": -76.85
+          },
+          {
+            "name": "Alexandria and Prince Georges",
+            "south": 38.65,
+            "west": -77.2,
+            "north": 38.9,
+            "east": -76.75
+          }
+        ],
+        "cityCenters": [
+          [
+            "Washington",
+            38.9072,
+            -77.0369
+          ],
+          [
+            "Arlington",
+            38.8816,
+            -77.091
+          ],
+          [
+            "Alexandria",
+            38.8048,
+            -77.0469
+          ],
+          [
+            "Silver Spring",
+            38.9907,
+            -77.0261
+          ],
+          [
+            "Bethesda",
+            38.9847,
+            -77.0947
+          ],
+          [
+            "Rockville",
+            39.084,
+            -77.1528
+          ],
+          [
+            "Falls Church",
+            38.8823,
+            -77.1711
+          ],
+          [
+            "Tysons",
+            38.9187,
+            -77.2311
+          ],
+          [
+            "College Park",
+            38.9897,
+            -76.9378
+          ],
+          [
+            "Hyattsville",
+            38.9559,
+            -76.9455
+          ]
+        ]
+      },
+      "eventSources": "data/event-sources-washington-dc.json",
+      "eventTemplates": "data/event-templates-major-metros.json"
+    },
+    {
+      "id": "atlanta",
+      "label": "Atlanta",
+      "seoName": "Atlanta",
+      "state": "GA",
+      "timezone": "America/New_York",
+      "canonicalPath": "/atlanta",
+      "aliases": [],
+      "dataDir": "atlanta",
+      "minSpots": 150,
+      "minEvents": 15,
+      "center": {
+        "lat": 33.749,
+        "lon": -84.388
+      },
+      "spotCoverage": {
+        "name": "Atlanta",
+        "bbox": {
+          "south": 33.45,
+          "west": -84.8,
+          "north": 34.15,
+          "east": -83.85
+        },
+        "boxes": [
+          {
+            "name": "Atlanta core",
+            "south": 33.62,
+            "west": -84.55,
+            "north": 33.9,
+            "east": -84.25
+          },
+          {
+            "name": "North Atlanta suburbs",
+            "south": 33.85,
+            "west": -84.65,
+            "north": 34.15,
+            "east": -84.05
+          },
+          {
+            "name": "East Atlanta suburbs",
+            "south": 33.55,
+            "west": -84.35,
+            "north": 34,
+            "east": -83.85
+          },
+          {
+            "name": "South and West Atlanta suburbs",
+            "south": 33.45,
+            "west": -84.8,
+            "north": 33.75,
+            "east": -84.25
+          }
+        ],
+        "cityCenters": [
+          [
+            "Atlanta",
+            33.749,
+            -84.388
+          ],
+          [
+            "Decatur",
+            33.7748,
+            -84.2963
+          ],
+          [
+            "Sandy Springs",
+            33.9304,
+            -84.3733
+          ],
+          [
+            "Marietta",
+            33.9526,
+            -84.5499
+          ],
+          [
+            "Roswell",
+            34.0232,
+            -84.3616
+          ],
+          [
+            "Alpharetta",
+            34.0754,
+            -84.2941
+          ],
+          [
+            "Smyrna",
+            33.8839,
+            -84.5144
+          ],
+          [
+            "Dunwoody",
+            33.9462,
+            -84.3346
+          ],
+          [
+            "Stone Mountain",
+            33.8082,
+            -84.1702
+          ],
+          [
+            "College Park",
+            33.6534,
+            -84.4494
+          ]
+        ]
+      },
+      "eventSources": "data/event-sources-atlanta.json",
+      "eventTemplates": "data/event-templates-major-metros.json"
+    },
+    {
+      "id": "philadelphia",
+      "label": "Philadelphia",
+      "seoName": "Philadelphia",
+      "state": "PA",
+      "timezone": "America/New_York",
+      "canonicalPath": "/philadelphia",
+      "aliases": [
+        "philly"
+      ],
+      "dataDir": "philadelphia",
+      "minSpots": 150,
+      "minEvents": 15,
+      "center": {
+        "lat": 39.9526,
+        "lon": -75.1652
+      },
+      "spotCoverage": {
+        "name": "Philadelphia",
+        "bbox": {
+          "south": 39.7,
+          "west": -75.55,
+          "north": 40.25,
+          "east": -74.75
+        },
+        "boxes": [
+          {
+            "name": "Philadelphia city",
+            "south": 39.85,
+            "west": -75.3,
+            "north": 40.15,
+            "east": -74.95
+          },
+          {
+            "name": "Main Line and western suburbs",
+            "south": 39.85,
+            "west": -75.55,
+            "north": 40.15,
+            "east": -75.25
+          },
+          {
+            "name": "South Jersey inner suburbs",
+            "south": 39.7,
+            "west": -75.15,
+            "north": 40.05,
+            "east": -74.75
+          },
+          {
+            "name": "Bucks and Montgomery suburbs",
+            "south": 40,
+            "west": -75.45,
+            "north": 40.25,
+            "east": -74.9
+          }
+        ],
+        "cityCenters": [
+          [
+            "Philadelphia",
+            39.9526,
+            -75.1652
+          ],
+          [
+            "Camden",
+            39.9259,
+            -75.1196
+          ],
+          [
+            "Cherry Hill",
+            39.9348,
+            -75.0307
+          ],
+          [
+            "Upper Darby",
+            39.9607,
+            -75.2621
+          ],
+          [
+            "Ardmore",
+            40.0068,
+            -75.2855
+          ],
+          [
+            "King of Prussia",
+            40.1013,
+            -75.3836
+          ],
+          [
+            "Norristown",
+            40.1215,
+            -75.3399
+          ],
+          [
+            "Bensalem",
+            40.1046,
+            -74.9513
+          ],
+          [
+            "Media",
+            39.9168,
+            -75.3877
+          ],
+          [
+            "Collingswood",
+            39.9182,
+            -75.0713
+          ]
+        ]
+      },
+      "eventSources": "data/event-sources-philadelphia.json",
+      "eventTemplates": "data/event-templates-major-metros.json"
+    },
+    {
+      "id": "miami",
+      "label": "Miami",
+      "seoName": "Miami",
+      "state": "FL",
+      "timezone": "America/New_York",
+      "canonicalPath": "/miami",
+      "aliases": [
+        "south-florida"
+      ],
+      "dataDir": "miami",
+      "minSpots": 150,
+      "minEvents": 15,
+      "center": {
+        "lat": 25.7617,
+        "lon": -80.1918
+      },
+      "spotCoverage": {
+        "name": "Miami",
+        "bbox": {
+          "south": 25.45,
+          "west": -80.55,
+          "north": 26.25,
+          "east": -80
+        },
+        "boxes": [
+          {
+            "name": "Miami and Miami Beach",
+            "south": 25.65,
+            "west": -80.35,
+            "north": 25.95,
+            "east": -80
+          },
+          {
+            "name": "North Miami and Broward",
+            "south": 25.9,
+            "west": -80.35,
+            "north": 26.25,
+            "east": -80.05
+          },
+          {
+            "name": "South Miami-Dade",
+            "south": 25.45,
+            "west": -80.55,
+            "north": 25.75,
+            "east": -80.15
+          },
+          {
+            "name": "West Miami-Dade",
+            "south": 25.65,
+            "west": -80.55,
+            "north": 26.05,
+            "east": -80.25
+          }
+        ],
+        "cityCenters": [
+          [
+            "Miami",
+            25.7617,
+            -80.1918
+          ],
+          [
+            "Miami Beach",
+            25.7907,
+            -80.13
+          ],
+          [
+            "Coral Gables",
+            25.7215,
+            -80.2684
+          ],
+          [
+            "Doral",
+            25.8195,
+            -80.3553
+          ],
+          [
+            "Aventura",
+            25.9565,
+            -80.1392
+          ],
+          [
+            "Hollywood",
+            26.0112,
+            -80.1495
+          ],
+          [
+            "Fort Lauderdale",
+            26.1224,
+            -80.1373
+          ],
+          [
+            "Hialeah",
+            25.8576,
+            -80.2781
+          ],
+          [
+            "Kendall",
+            25.666,
+            -80.3578
+          ],
+          [
+            "Homestead",
+            25.4687,
+            -80.4776
+          ]
+        ]
+      },
+      "eventSources": "data/event-sources-miami.json",
+      "eventTemplates": "data/event-templates-major-metros.json"
+    },
+    {
+      "id": "phoenix",
+      "label": "Phoenix",
+      "seoName": "Phoenix",
+      "state": "AZ",
+      "timezone": "America/Phoenix",
+      "canonicalPath": "/phoenix",
+      "aliases": [],
+      "dataDir": "phoenix",
+      "minSpots": 150,
+      "minEvents": 15,
+      "center": {
+        "lat": 33.4484,
+        "lon": -112.074
+      },
+      "spotCoverage": {
+        "name": "Phoenix",
+        "bbox": {
+          "south": 33.2,
+          "west": -112.45,
+          "north": 33.85,
+          "east": -111.55
+        },
+        "boxes": [
+          {
+            "name": "Phoenix core",
+            "south": 33.3,
+            "west": -112.25,
+            "north": 33.7,
+            "east": -111.9
+          },
+          {
+            "name": "Scottsdale and Tempe",
+            "south": 33.3,
+            "west": -111.95,
+            "north": 33.8,
+            "east": -111.75
+          },
+          {
+            "name": "Mesa and Chandler",
+            "south": 33.2,
+            "west": -111.95,
+            "north": 33.55,
+            "east": -111.55
+          },
+          {
+            "name": "West Valley",
+            "south": 33.3,
+            "west": -112.45,
+            "north": 33.75,
+            "east": -112.15
+          }
+        ],
+        "cityCenters": [
+          [
+            "Phoenix",
+            33.4484,
+            -112.074
+          ],
+          [
+            "Scottsdale",
+            33.4942,
+            -111.9261
+          ],
+          [
+            "Tempe",
+            33.4255,
+            -111.94
+          ],
+          [
+            "Mesa",
+            33.4152,
+            -111.8315
+          ],
+          [
+            "Chandler",
+            33.3062,
+            -111.8413
+          ],
+          [
+            "Glendale",
+            33.5387,
+            -112.186
+          ],
+          [
+            "Peoria",
+            33.5806,
+            -112.2374
+          ],
+          [
+            "Gilbert",
+            33.3528,
+            -111.789
+          ],
+          [
+            "Avondale",
+            33.4356,
+            -112.3496
+          ],
+          [
+            "Surprise",
+            33.6292,
+            -112.3679
+          ]
+        ]
+      },
+      "eventSources": "data/event-sources-phoenix.json",
+      "eventTemplates": "data/event-templates-major-metros.json"
+    },
+    {
+      "id": "boston",
+      "label": "Boston",
+      "seoName": "Boston",
+      "state": "MA",
+      "timezone": "America/New_York",
+      "canonicalPath": "/boston",
+      "aliases": [],
+      "dataDir": "boston",
+      "minSpots": 150,
+      "minEvents": 15,
+      "center": {
+        "lat": 42.3601,
+        "lon": -71.0589
+      },
+      "spotCoverage": {
+        "name": "Boston",
+        "bbox": {
+          "south": 42.1,
+          "west": -71.35,
+          "north": 42.65,
+          "east": -70.75
+        },
+        "boxes": [
+          {
+            "name": "Boston and Cambridge",
+            "south": 42.25,
+            "west": -71.2,
+            "north": 42.45,
+            "east": -70.95
+          },
+          {
+            "name": "North Shore inner suburbs",
+            "south": 42.35,
+            "west": -71.2,
+            "north": 42.65,
+            "east": -70.75
+          },
+          {
+            "name": "MetroWest inner suburbs",
+            "south": 42.2,
+            "west": -71.35,
+            "north": 42.45,
+            "east": -71.1
+          },
+          {
+            "name": "South Shore inner suburbs",
+            "south": 42.1,
+            "west": -71.2,
+            "north": 42.35,
+            "east": -70.8
+          }
+        ],
+        "cityCenters": [
+          [
+            "Boston",
+            42.3601,
+            -71.0589
+          ],
+          [
+            "Cambridge",
+            42.3736,
+            -71.1097
+          ],
+          [
+            "Somerville",
+            42.3876,
+            -71.0995
+          ],
+          [
+            "Brookline",
+            42.3318,
+            -71.1212
+          ],
+          [
+            "Newton",
+            42.337,
+            -71.2092
+          ],
+          [
+            "Quincy",
+            42.2529,
+            -71.0023
+          ],
+          [
+            "Medford",
+            42.4184,
+            -71.1062
+          ],
+          [
+            "Waltham",
+            42.3765,
+            -71.2356
+          ],
+          [
+            "Malden",
+            42.4251,
+            -71.0662
+          ],
+          [
+            "Salem",
+            42.5195,
+            -70.8967
+          ]
+        ]
+      },
+      "eventSources": "data/event-sources-boston.json",
+      "eventTemplates": "data/event-templates-major-metros.json"
+    },
+    {
+      "id": "san-diego",
+      "label": "San Diego",
+      "seoName": "San Diego",
+      "state": "CA",
+      "timezone": "America/Los_Angeles",
+      "canonicalPath": "/san-diego",
+      "aliases": [
+        "sandiego"
+      ],
+      "dataDir": "san-diego",
+      "minSpots": 150,
+      "minEvents": 15,
+      "center": {
+        "lat": 32.7157,
+        "lon": -117.1611
+      },
+      "spotCoverage": {
+        "name": "San Diego",
+        "bbox": {
+          "south": 32.5,
+          "west": -117.35,
+          "north": 33.25,
+          "east": -116.85
+        },
+        "boxes": [
+          {
+            "name": "San Diego city and coast",
+            "south": 32.6,
+            "west": -117.3,
+            "north": 32.95,
+            "east": -117
+          },
+          {
+            "name": "North County coast",
+            "south": 32.9,
+            "west": -117.35,
+            "north": 33.25,
+            "east": -117.05
+          },
+          {
+            "name": "East County",
+            "south": 32.6,
+            "west": -117.05,
+            "north": 33,
+            "east": -116.85
+          },
+          {
+            "name": "South Bay",
+            "south": 32.5,
+            "west": -117.2,
+            "north": 32.72,
+            "east": -116.9
+          }
+        ],
+        "cityCenters": [
+          [
+            "San Diego",
+            32.7157,
+            -117.1611
+          ],
+          [
+            "Chula Vista",
+            32.6401,
+            -117.0842
+          ],
+          [
+            "La Mesa",
+            32.7678,
+            -117.0231
+          ],
+          [
+            "El Cajon",
+            32.7948,
+            -116.9625
+          ],
+          [
+            "National City",
+            32.6781,
+            -117.0992
+          ],
+          [
+            "Coronado",
+            32.6859,
+            -117.1831
+          ],
+          [
+            "Encinitas",
+            33.03699,
+            -117.29198
+          ],
+          [
+            "Carlsbad",
+            33.1581,
+            -117.3506
+          ],
+          [
+            "Escondido",
+            33.1192,
+            -117.0864
+          ],
+          [
+            "Oceanside",
+            33.1959,
+            -117.3795
+          ]
+        ]
+      },
+      "eventSources": "data/event-sources-san-diego.json",
+      "eventTemplates": "data/event-templates-major-metros.json"
     }
   ]
 }

@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "coverage": {
+    "name": "Chicago",
+    "timezone": "America/Chicago",
+    "cities": [
+      "Chicago",
+      "Evanston",
+      "Oak Park",
+      "Skokie",
+      "Cicero",
+      "Berwyn",
+      "Naperville",
+      "Schaumburg"
+    ]
+  },
+  "defaults": {
+    "windowDays": 45,
+    "userAgent": "saturday-with-friends/0.1 event-ingest",
+    "timezoneOffset": "-05:00"
+  },
+  "sources": [
+    {
+      "id": "chicago-library-family",
+      "name": "Chicago Public Library Family Programs",
+      "url": "https://chipublib.bibliocommons.com/v2/events?audiences=53f250153860d10000000010",
+      "city": "Chicago",
+      "category": "Library",
+      "sourceType": "biblioevents",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 41.8781,
+      "lon": -87.6298,
+      "defaultAudienceText": "children family kids storytime library free",
+      "eventList": {
+        "venue": "Chicago Public Library Events",
+        "city": "Chicago",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 60
+      },
+      "fallbackEventIds": [
+        "chicago-family-storytime",
+        "chicago-kids-steam"
+      ]
+    },
+    {
+      "id": "chicago-parks-family",
+      "name": "Chicago Park District Events",
+      "url": "https://www.chicagoparkdistrict.com/events",
+      "city": "Chicago",
+      "category": "Park",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 41.8781,
+      "lon": -87.6298,
+      "defaultAudienceText": "children family kids parks outdoors nature recreation",
+      "cost": "Free",
+      "eventList": {
+        "venue": "Chicago Park District Events",
+        "city": "Chicago",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "chicago-family-nature",
+        "chicago-family-play"
+      ]
+    },
+    {
+      "id": "chicago-museum-family",
+      "name": "Field Museum Events",
+      "url": "https://www.fieldmuseum.org/our-events",
+      "city": "Chicago",
+      "category": "Museum",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 41.8781,
+      "lon": -87.6298,
+      "defaultAudienceText": "children family kids museum science art workshop",
+      "eventList": {
+        "venue": "Field Museum Events",
+        "city": "Chicago",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "chicago-museum-family-day"
+      ]
+    },
+    {
+      "id": "chicago-zoo-family",
+      "name": "Lincoln Park Zoo Calendar",
+      "url": "https://www.lpzoo.org/calendar-events/",
+      "city": "Chicago",
+      "category": "Zoo",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 41.8781,
+      "lon": -87.6298,
+      "defaultAudienceText": "children family kids zoo animals aquarium nature",
+      "eventList": {
+        "venue": "Lincoln Park Zoo Events",
+        "city": "Chicago",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "chicago-zoo-family-program"
+      ]
+    },
+    {
+      "id": "ticketmaster-chicago-family",
+      "name": "Ticketmaster Chicago Family Events",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "city": "Chicago",
+      "category": "Ticketed",
+      "sourceType": "ticketmaster",
+      "trust": "commercial",
+      "enabled": false,
+      "requiresEnv": "TICKETMASTER_API_KEY",
+      "lat": 41.8781,
+      "lon": -87.6298,
+      "radiusMiles": 45
+    }
+  ]
+}

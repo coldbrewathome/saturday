@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "metroId": "dallas-fort-worth",
+  "generatedAt": "2026-05-12T20:25:20.217Z",
+  "registryPath": "data/event-sources-dallas-fort-worth.json",
+  "outputPath": "public/data/dallas-fort-worth/events.json",
+  "eventCount": 24,
+  "sourceCount": 5,
+  "liveEventCount": 0,
+  "fallbackEventCount": 24,
+  "errors": [],
+  "sources": [
+    {
+      "id": "dallas-fort-worth-library-family",
+      "name": "Dallas Public Library Family Events",
+      "url": "https://dallaslibrary.librarymarket.com/events/list",
+      "sourceType": "librarycalendar",
+      "city": "Dallas",
+      "metroId": "dallas-fort-worth",
+      "category": "Library",
+      "status": "ok-template-fallback",
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "eventCount": 8,
+      "fetches": [
+        {
+          "url": "https://dallaslibrary.librarymarket.com/events/list",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "dallas-fort-worth-parks-family",
+      "name": "Dallas Parks Calendar",
+      "url": "https://www.dallasparks.org/calendar.aspx?CID=14",
+      "sourceType": "civicpluscal",
+      "city": "Dallas",
+      "metroId": "dallas-fort-worth",
+      "category": "Park",
+      "status": "ok-template-fallback",
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "eventCount": 8,
+      "fetches": [
+        {
+          "url": "https://www.dallasparks.org/calendar.aspx?CID=14",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        },
+        {
+          "url": "https://www.dallasparks.org/calendar.aspx?CID=14/-curm-6/-cury-2026",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "dallas-fort-worth-museum-family",
+      "name": "Perot Museum Events",
+      "url": "https://www.perotmuseum.org/events/",
+      "sourceType": "eventList",
+      "city": "Dallas",
+      "metroId": "dallas-fort-worth",
+      "category": "Museum",
+      "status": "ok-template-fallback",
+      "liveEvents": 0,
+      "fallbackEvents": 4,
+      "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://www.perotmuseum.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "dallas-fort-worth-zoo-family",
+      "name": "Dallas Zoo Events",
+      "url": "https://www.dallaszoo.com/events/",
+      "sourceType": "eventList",
+      "city": "Dallas",
+      "metroId": "dallas-fort-worth",
+      "category": "Zoo",
+      "status": "ok-template-fallback",
+      "liveEvents": 0,
+      "fallbackEvents": 4,
+      "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://www.dallaszoo.com/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "ticketmaster-dallas-fort-worth-family",
+      "name": "Ticketmaster Dallas-Fort Worth Family Events",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "sourceType": "ticketmaster",
+      "city": "Dallas",
+      "metroId": "dallas-fort-worth",
+      "category": "Ticketed",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
+    }
+  ]
+}

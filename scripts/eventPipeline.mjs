@@ -2567,6 +2567,15 @@ export function validateEventsDataset(dataset, options = {}) {
   const errors = [];
   const minEvents = Number(options.minEvents ?? 1);
   const cities = new Set([...(options.cities || []), ...(options.communities || [])]);
+  const bbox = options.bbox || null;
+  const isInsideBbox = (event) =>
+    bbox &&
+    Number.isFinite(event.lat) &&
+    Number.isFinite(event.lon) &&
+    event.lat >= bbox.south &&
+    event.lat <= bbox.north &&
+    event.lon >= bbox.west &&
+    event.lon <= bbox.east;
   if (!dataset || typeof dataset !== "object") return ["Events dataset must be an object."];
   if (!Array.isArray(dataset.events)) return ["Events dataset events must be an array."];
   if (dataset.events.length < minEvents) {
@@ -2608,7 +2617,7 @@ export function validateEventsDataset(dataset, options = {}) {
         errors.push(`${prefix}.startDateTime is required for generated events.`);
       }
     }
-    if (cities.size > 0 && event.city && !cities.has(event.city)) {
+    if (cities.size > 0 && event.city && !cities.has(event.city) && !isInsideBbox(event)) {
       errors.push(`${prefix}.city '${event.city}' is outside configured coverage.`);
     }
     // Adult-only signal is only a rejection reason when the event isn't tagged

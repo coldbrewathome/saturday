@@ -12,8 +12,18 @@ FamHop currently covers:
 - Los Angeles: https://famhop.com/los-angeles/
 - New York City: https://famhop.com/new-york-city/
 - Seattle: https://famhop.com/seattle/
+- Chicago: https://famhop.com/chicago/
+- Dallas-Fort Worth: https://famhop.com/dallas-fort-worth/
+- Houston: https://famhop.com/houston/
+- Washington DC: https://famhop.com/washington-dc/
+- Atlanta: https://famhop.com/atlanta/
+- Philadelphia: https://famhop.com/philadelphia/
+- Miami: https://famhop.com/miami/
+- Phoenix: https://famhop.com/phoenix/
+- Boston: https://famhop.com/boston/
+- San Diego: https://famhop.com/san-diego/
 
-The root page, https://famhop.com/, links to all supported metro areas. Legacy aliases such as `/bayarea`, `/losangeles`, `/la`, and `/nyc` are served with canonical tags pointing at the hyphenated metro URLs.
+The root page, https://famhop.com/, links to all supported metro areas. Legacy aliases such as `/bayarea`, `/losangeles`, `/la`, `/nyc`, `/dfw`, `/dc`, `/philly`, and `/sandiego` are served with canonical tags pointing at the hyphenated metro URLs.
 
 ## URL Schema
 
@@ -26,20 +36,19 @@ All SEO pages are metro-prefixed:
 - City pages: `https://famhop.com/{metro}/city/{slug}/`
 - Category pages: `https://famhop.com/{metro}/category/{library|museum|park|festival|zoo|farm|community}/`
 
-Supported metro slugs are `bay-area`, `los-angeles`, `new-york-city`, and `seattle`.
+Supported metro slugs are `bay-area`, `los-angeles`, `new-york-city`, `seattle`, `chicago`, `dallas-fort-worth`, `houston`, `washington-dc`, `atlanta`, `philadelphia`, `miami`, `phoenix`, `boston`, and `san-diego`.
 
 ## Key Data Files
 
 The shared JSON data feed is public and CORS-enabled. Search engines should use the HTML SEO pages as indexable URLs; JSON files carry `X-Robots-Tag: noindex` to avoid duplicate indexing.
 
-- Bay Area places: https://famhop.com/data/bay-area/spots.json
-- Bay Area events: https://famhop.com/data/bay-area/events.json
-- Los Angeles places: https://famhop.com/data/los-angeles/spots.json
-- Los Angeles events: https://famhop.com/data/los-angeles/events.json
-- New York City places: https://famhop.com/data/new-york-city/spots.json
-- New York City events: https://famhop.com/data/new-york-city/events.json
-- Seattle places: https://famhop.com/data/seattle/spots.json
-- Seattle events: https://famhop.com/data/seattle/events.json
+Per-metro data files are served under:
+
+- Places: `https://famhop.com/data/{metro}/spots.json`
+- Events: `https://famhop.com/data/{metro}/events.json`
+- Featured plans: `https://famhop.com/data/{metro}/featured-plans.json`
+
+Replace `{metro}` with any supported slug listed above.
 
 Legacy Bay Area files remain available for compatibility:
 

@@ -1,4 +1,6 @@
-export type MetroId = "bay-area" | "los-angeles" | "new-york-city" | "seattle";
+import metrosDoc from "../data/metros.json";
+
+export type MetroId = string;
 
 export type MetroConfig = {
   id: MetroId;
@@ -19,52 +21,7 @@ export type DataKey =
   | "featuredPlans"
   | "curatedSpots";
 
-export const METROS: MetroConfig[] = [
-  {
-    id: "bay-area",
-    label: "Bay Area",
-    seoName: "San Francisco Bay Area",
-    canonicalPath: "/bay-area",
-    aliases: ["bayarea"],
-    dataDir: "bay-area",
-    center: { lat: 37.7749, lon: -122.4194 },
-    legacyData: {
-      spots: "bay-area-spots.json",
-      enrichment: "bay-area-enrichment.json",
-      events: "events.json",
-      eventReport: "event-build-report.json",
-      featuredPlans: "featured-plans.json",
-      curatedSpots: "curated-spots.json",
-    },
-  },
-  {
-    id: "los-angeles",
-    label: "Los Angeles",
-    seoName: "Los Angeles",
-    canonicalPath: "/los-angeles",
-    aliases: ["losangeles", "la"],
-    dataDir: "los-angeles",
-    center: { lat: 34.0522, lon: -118.2437 },
-  },
-  {
-    id: "new-york-city",
-    label: "New York City",
-    seoName: "New York City",
-    canonicalPath: "/new-york-city",
-    aliases: ["newyorkcity", "new-york", "newyork", "nyc"],
-    dataDir: "new-york-city",
-    center: { lat: 40.7128, lon: -74.006 },
-  },
-  {
-    id: "seattle",
-    label: "Seattle",
-    seoName: "Seattle",
-    canonicalPath: "/seattle",
-    aliases: [],
-    dataDir: "seattle",
-    center: { lat: 47.6062, lon: -122.3321 },
-  },
-];
+export const METROS: MetroConfig[] = metrosDoc.metros as MetroConfig[];
 
 export const DEFAULT_METRO = METROS[0];
 

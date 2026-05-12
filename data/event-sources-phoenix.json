@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "coverage": {
+    "name": "Phoenix",
+    "timezone": "America/Phoenix",
+    "cities": [
+      "Phoenix",
+      "Scottsdale",
+      "Tempe",
+      "Mesa",
+      "Chandler",
+      "Glendale",
+      "Peoria",
+      "Gilbert"
+    ]
+  },
+  "defaults": {
+    "windowDays": 45,
+    "userAgent": "saturday-with-friends/0.1 event-ingest",
+    "timezoneOffset": "-07:00"
+  },
+  "sources": [
+    {
+      "id": "phoenix-library-family",
+      "name": "Phoenix Public Library Calendar",
+      "url": "https://calendar.phoenixpubliclibrary.org/calendar/",
+      "city": "Phoenix",
+      "category": "Library",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 33.4484,
+      "lon": -112.074,
+      "defaultAudienceText": "children family kids storytime library free",
+      "eventList": {
+        "venue": "Phoenix Public Library Events",
+        "city": "Phoenix",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 60
+      },
+      "fallbackEventIds": [
+        "phoenix-family-storytime",
+        "phoenix-kids-steam"
+      ]
+    },
+    {
+      "id": "phoenix-parks-family",
+      "name": "Phoenix Parks Events",
+      "url": "https://www.phoenix.gov/parks/activities-recreation/events",
+      "city": "Phoenix",
+      "category": "Park",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 33.4484,
+      "lon": -112.074,
+      "defaultAudienceText": "children family kids parks outdoors nature recreation",
+      "cost": "Free",
+      "eventList": {
+        "venue": "Phoenix Parks Events",
+        "city": "Phoenix",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "phoenix-family-nature",
+        "phoenix-family-play"
+      ]
+    },
+    {
+      "id": "phoenix-museum-family",
+      "name": "Children's Museum of Phoenix Events",
+      "url": "https://childrensmuseumofphoenix.org/events/",
+      "city": "Phoenix",
+      "category": "Museum",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 33.4484,
+      "lon": -112.074,
+      "defaultAudienceText": "children family kids museum science art workshop",
+      "eventList": {
+        "venue": "Arizona Science Center Events",
+        "city": "Phoenix",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "phoenix-museum-family-day"
+      ]
+    },
+    {
+      "id": "phoenix-zoo-family",
+      "name": "Phoenix Zoo Events",
+      "url": "https://www.phoenixzoo.org/events/",
+      "city": "Phoenix",
+      "category": "Zoo",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 33.4484,
+      "lon": -112.074,
+      "defaultAudienceText": "children family kids zoo animals aquarium nature",
+      "eventList": {
+        "venue": "Phoenix Zoo Events",
+        "city": "Phoenix",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "phoenix-zoo-family-program"
+      ]
+    },
+    {
+      "id": "ticketmaster-phoenix-family",
+      "name": "Ticketmaster Phoenix Family Events",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "city": "Phoenix",
+      "category": "Ticketed",
+      "sourceType": "ticketmaster",
+      "trust": "commercial",
+      "enabled": false,
+      "requiresEnv": "TICKETMASTER_API_KEY",
+      "lat": 33.4484,
+      "lon": -112.074,
+      "radiusMiles": 55
+    }
+  ]
+}

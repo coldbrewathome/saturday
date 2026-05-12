@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "coverage": {
+    "name": "Boston",
+    "timezone": "America/New_York",
+    "cities": [
+      "Boston",
+      "Cambridge",
+      "Somerville",
+      "Brookline",
+      "Newton",
+      "Quincy",
+      "Medford",
+      "Waltham"
+    ]
+  },
+  "defaults": {
+    "windowDays": 45,
+    "userAgent": "saturday-with-friends/0.1 event-ingest",
+    "timezoneOffset": "-04:00"
+  },
+  "sources": [
+    {
+      "id": "boston-library-family",
+      "name": "Boston Public Library Family Programs",
+      "url": "https://bpl.bibliocommons.com/v2/events?audiences=57f66113863736755f79b0ca",
+      "city": "Boston",
+      "category": "Library",
+      "sourceType": "biblioevents",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 42.3601,
+      "lon": -71.0589,
+      "defaultAudienceText": "children family kids storytime library free",
+      "eventList": {
+        "venue": "Boston Public Library Events",
+        "city": "Boston",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 60
+      },
+      "fallbackEventIds": [
+        "boston-family-storytime",
+        "boston-kids-steam"
+      ]
+    },
+    {
+      "id": "boston-parks-family",
+      "name": "City of Boston Events",
+      "url": "https://www.boston.gov/rss/events",
+      "city": "Boston",
+      "category": "Park",
+      "sourceType": "rss",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 42.3601,
+      "lon": -71.0589,
+      "defaultAudienceText": "children family kids parks outdoors nature recreation",
+      "cost": "Free",
+      "eventList": {
+        "venue": "Boston Parks Events",
+        "city": "Boston",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "boston-family-nature",
+        "boston-family-play"
+      ]
+    },
+    {
+      "id": "boston-museum-family",
+      "name": "Boston Children's Museum Calendar",
+      "url": "https://bostonchildrensmuseum.org/Calendar/",
+      "city": "Boston",
+      "category": "Museum",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 42.3601,
+      "lon": -71.0589,
+      "defaultAudienceText": "children family kids museum science art workshop",
+      "eventList": {
+        "venue": "Boston Children's Museum Events",
+        "city": "Boston",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "boston-museum-family-day"
+      ]
+    },
+    {
+      "id": "boston-zoo-family",
+      "name": "Zoo New England Program Calendar",
+      "url": "https://www.zoonewengland.org/discover/program-calendar/",
+      "city": "Boston",
+      "category": "Zoo",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 42.3601,
+      "lon": -71.0589,
+      "defaultAudienceText": "children family kids zoo animals aquarium nature",
+      "eventList": {
+        "venue": "Franklin Park Zoo Events",
+        "city": "Boston",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "boston-zoo-family-program"
+      ]
+    },
+    {
+      "id": "ticketmaster-boston-family",
+      "name": "Ticketmaster Boston Family Events",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "city": "Boston",
+      "category": "Ticketed",
+      "sourceType": "ticketmaster",
+      "trust": "commercial",
+      "enabled": false,
+      "requiresEnv": "TICKETMASTER_API_KEY",
+      "lat": 42.3601,
+      "lon": -71.0589,
+      "radiusMiles": 45
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "coverage": {
+    "name": "Dallas-Fort Worth",
+    "timezone": "America/Chicago",
+    "cities": [
+      "Dallas",
+      "Fort Worth",
+      "Arlington",
+      "Plano",
+      "Irving",
+      "Frisco",
+      "Garland",
+      "Grand Prairie"
+    ]
+  },
+  "defaults": {
+    "windowDays": 45,
+    "userAgent": "saturday-with-friends/0.1 event-ingest",
+    "timezoneOffset": "-05:00"
+  },
+  "sources": [
+    {
+      "id": "dallas-fort-worth-library-family",
+      "name": "Dallas Public Library Family Events",
+      "url": "https://dallaslibrary.librarymarket.com/events/list",
+      "city": "Dallas",
+      "category": "Library",
+      "sourceType": "librarycalendar",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 32.7767,
+      "lon": -96.797,
+      "defaultAudienceText": "children family kids storytime library free",
+      "eventList": {
+        "venue": "Dallas Public Library Events",
+        "city": "Dallas",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 60
+      },
+      "fallbackEventIds": [
+        "dallas-fort-worth-family-storytime",
+        "dallas-fort-worth-kids-steam"
+      ]
+    },
+    {
+      "id": "dallas-fort-worth-parks-family",
+      "name": "Dallas Parks Calendar",
+      "url": "https://www.dallasparks.org/calendar.aspx?CID=14",
+      "city": "Dallas",
+      "category": "Park",
+      "sourceType": "civicpluscal",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 32.7767,
+      "lon": -96.797,
+      "defaultAudienceText": "children family kids parks outdoors nature recreation",
+      "cost": "Free",
+      "eventList": {
+        "venue": "Dallas Parks Calendar",
+        "city": "Dallas",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "dallas-fort-worth-family-nature",
+        "dallas-fort-worth-family-play"
+      ]
+    },
+    {
+      "id": "dallas-fort-worth-museum-family",
+      "name": "Perot Museum Events",
+      "url": "https://www.perotmuseum.org/events/",
+      "city": "Dallas",
+      "category": "Museum",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 32.7767,
+      "lon": -96.797,
+      "defaultAudienceText": "children family kids museum science art workshop",
+      "eventList": {
+        "venue": "Perot Museum Events",
+        "city": "Dallas",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "dallas-fort-worth-museum-family-day"
+      ]
+    },
+    {
+      "id": "dallas-fort-worth-zoo-family",
+      "name": "Dallas Zoo Events",
+      "url": "https://www.dallaszoo.com/events/",
+      "city": "Dallas",
+      "category": "Zoo",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 32.7767,
+      "lon": -96.797,
+      "defaultAudienceText": "children family kids zoo animals aquarium nature",
+      "eventList": {
+        "venue": "Dallas Zoo Events",
+        "city": "Dallas",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "dallas-fort-worth-zoo-family-program"
+      ]
+    },
+    {
+      "id": "ticketmaster-dallas-fort-worth-family",
+      "name": "Ticketmaster Dallas-Fort Worth Family Events",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "city": "Dallas",
+      "category": "Ticketed",
+      "sourceType": "ticketmaster",
+      "trust": "commercial",
+      "enabled": false,
+      "requiresEnv": "TICKETMASTER_API_KEY",
+      "lat": 32.7767,
+      "lon": -96.797,
+      "radiusMiles": 55
+    }
+  ]
+}

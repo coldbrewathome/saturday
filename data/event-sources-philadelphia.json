@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "coverage": {
+    "name": "Philadelphia",
+    "timezone": "America/New_York",
+    "cities": [
+      "Philadelphia",
+      "Camden",
+      "Cherry Hill",
+      "Upper Darby",
+      "Ardmore",
+      "King of Prussia",
+      "Norristown",
+      "Bensalem"
+    ]
+  },
+  "defaults": {
+    "windowDays": 45,
+    "userAgent": "saturday-with-friends/0.1 event-ingest",
+    "timezoneOffset": "-04:00"
+  },
+  "sources": [
+    {
+      "id": "philadelphia-library-family",
+      "name": "Free Library of Philadelphia Events",
+      "url": "https://libwww.freelibrary.org/calendar/",
+      "city": "Philadelphia",
+      "category": "Library",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 39.9526,
+      "lon": -75.1652,
+      "defaultAudienceText": "children family kids storytime library free",
+      "eventList": {
+        "venue": "Free Library of Philadelphia Events",
+        "city": "Philadelphia",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 60
+      },
+      "fallbackEventIds": [
+        "philadelphia-family-storytime",
+        "philadelphia-kids-steam"
+      ]
+    },
+    {
+      "id": "philadelphia-parks-family",
+      "name": "Philadelphia Parks and Recreation Events",
+      "url": "https://www.phila.gov/departments/philadelphia-parks-recreation/events/",
+      "city": "Philadelphia",
+      "category": "Park",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 39.9526,
+      "lon": -75.1652,
+      "defaultAudienceText": "children family kids parks outdoors nature recreation",
+      "cost": "Free",
+      "eventList": {
+        "venue": "Philadelphia Parks and Recreation Events",
+        "city": "Philadelphia",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "philadelphia-family-nature",
+        "philadelphia-family-play"
+      ]
+    },
+    {
+      "id": "philadelphia-museum-family",
+      "name": "Please Touch Museum Calendar",
+      "url": "https://www.pleasetouchmuseum.org/calendar/month/",
+      "city": "Philadelphia",
+      "category": "Museum",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 39.9526,
+      "lon": -75.1652,
+      "defaultAudienceText": "children family kids museum science art workshop",
+      "eventList": {
+        "venue": "Please Touch Museum Events",
+        "city": "Philadelphia",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "philadelphia-museum-family-day"
+      ]
+    },
+    {
+      "id": "philadelphia-zoo-family",
+      "name": "Philadelphia Zoo Events",
+      "url": "https://www.philadelphiazoo.org/events/",
+      "city": "Philadelphia",
+      "category": "Zoo",
+      "sourceType": "html",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 39.9526,
+      "lon": -75.1652,
+      "defaultAudienceText": "children family kids zoo animals aquarium nature",
+      "eventList": {
+        "venue": "Philadelphia Zoo Events",
+        "city": "Philadelphia",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "philadelphia-zoo-family-program"
+      ]
+    },
+    {
+      "id": "ticketmaster-philadelphia-family",
+      "name": "Ticketmaster Philadelphia Family Events",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "city": "Philadelphia",
+      "category": "Ticketed",
+      "sourceType": "ticketmaster",
+      "trust": "commercial",
+      "enabled": false,
+      "requiresEnv": "TICKETMASTER_API_KEY",
+      "lat": 39.9526,
+      "lon": -75.1652,
+      "radiusMiles": 45
+    }
+  ]
+}

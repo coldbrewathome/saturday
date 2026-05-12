@@ -1,8 +1,8 @@
 # FamHop
 
-A Vite React app (famhop.com) for planning the weekend with the kids in the
-Bay Area — parks, libraries, museums, family-friendly venues, and family
-events.
+A Vite React app (famhop.com) for planning the weekend with the kids across
+major U.S. metros — parks, libraries, museums, family-friendly venues, and
+family events.
 
 ## Run locally
 
@@ -21,25 +21,30 @@ npm run build
 
 ## Data refresh
 
-The Bay Area dataset is generated from OpenStreetMap through the Overpass API.
+Place datasets are generated from OpenStreetMap through the Overpass API.
 
 ```bash
 npm run ingest:bay-area
+npm run ingest:spots:all
 npm run ingest:events
+npm run ingest:events:all
 npm run validate:data
+npm run validate:data:all
 npm run validate:events
+npm run validate:events:all
 ```
 
-The generated file lives at `public/data/bay-area-spots.json`. It is sanitized,
-deduplicated, validated, and balanced across food, outdoors, culture, wellness,
-and shopping (Nightlife is excluded from the kid-focused build). The GitHub
-Actions workflow in `.github/workflows/refresh-data.yml` refreshes the dataset
-daily and runs tests before committing data changes.
+Per-metro generated files live at `public/data/{metro}/spots.json` and
+`public/data/{metro}/events.json`, with Bay Area legacy copies still written
+for compatibility. Each dataset is sanitized, deduplicated, validated, and
+balanced across food, outdoors, culture, wellness, and shopping (Nightlife is
+excluded from the kid-focused build). The GitHub Actions workflow in
+`.github/workflows/refresh-data.yml` refreshes the dataset daily and runs tests
+before committing data changes.
 
-Events are generated from `data/event-sources.json` (kid-facing feeds) plus
-`data/event-sources-adults.json` (adult-audience feeds) and recurring templates
-in `data/event-templates.json` into `public/data/events.json`, with diagnostics
-in `public/data/event-build-report.json`. The event pipeline first attempts
+Events are generated from each metro's source registry in `data/event-sources*.json`
+and recurring templates into `public/data/{metro}/events.json`, with diagnostics
+in `public/data/{metro}/event-build-report.json`. The event pipeline first attempts
 live structured extraction from official source pages (JSON-LD, ICS, RSS/XML,
 JSON, LibCal, BiblioCommons events, LibraryCalendar cards, Drupal Views AJAX
 cards, and dated HTML event cards). If a trusted source is reachable but does

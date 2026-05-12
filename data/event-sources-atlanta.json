@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "coverage": {
+    "name": "Atlanta",
+    "timezone": "America/New_York",
+    "cities": [
+      "Atlanta",
+      "Decatur",
+      "Sandy Springs",
+      "Marietta",
+      "Roswell",
+      "Alpharetta",
+      "Smyrna",
+      "Dunwoody"
+    ]
+  },
+  "defaults": {
+    "windowDays": 45,
+    "userAgent": "saturday-with-friends/0.1 event-ingest",
+    "timezoneOffset": "-04:00"
+  },
+  "sources": [
+    {
+      "id": "atlanta-library-family",
+      "name": "Fulton County Library Family Events",
+      "url": "https://fulcolibrary.bibliocommons.com/v2/events",
+      "city": "Atlanta",
+      "category": "Library",
+      "sourceType": "biblioevents",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 33.749,
+      "lon": -84.388,
+      "defaultAudienceText": "children family kids storytime library free",
+      "eventList": {
+        "venue": "Fulton County Library Events",
+        "city": "Atlanta",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 60
+      },
+      "fallbackEventIds": [
+        "atlanta-family-storytime",
+        "atlanta-kids-steam"
+      ]
+    },
+    {
+      "id": "atlanta-parks-family",
+      "name": "Atlanta Parks and Recreation Events",
+      "url": "https://www.atlantaga.gov/government/departments/parks-recreation/events",
+      "city": "Atlanta",
+      "category": "Park",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 33.749,
+      "lon": -84.388,
+      "defaultAudienceText": "children family kids parks outdoors nature recreation",
+      "cost": "Free",
+      "eventList": {
+        "venue": "Atlanta Parks and Recreation Events",
+        "city": "Atlanta",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "atlanta-family-nature",
+        "atlanta-family-play"
+      ]
+    },
+    {
+      "id": "atlanta-museum-family",
+      "name": "Children's Museum of Atlanta Program Calendar",
+      "url": "https://childrensmuseumatlanta.org/program-calendar/",
+      "city": "Atlanta",
+      "category": "Museum",
+      "sourceType": "html",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 33.749,
+      "lon": -84.388,
+      "defaultAudienceText": "children family kids museum science art workshop",
+      "eventList": {
+        "venue": "Children's Museum of Atlanta Events",
+        "city": "Atlanta",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "atlanta-museum-family-day"
+      ]
+    },
+    {
+      "id": "atlanta-zoo-family",
+      "name": "Zoo Atlanta Events",
+      "url": "https://zooatlanta.org/events/",
+      "city": "Atlanta",
+      "category": "Zoo",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 33.749,
+      "lon": -84.388,
+      "defaultAudienceText": "children family kids zoo animals aquarium nature",
+      "eventList": {
+        "venue": "Zoo Atlanta Events",
+        "city": "Atlanta",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "atlanta-zoo-family-program"
+      ]
+    },
+    {
+      "id": "ticketmaster-atlanta-family",
+      "name": "Ticketmaster Atlanta Family Events",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "city": "Atlanta",
+      "category": "Ticketed",
+      "sourceType": "ticketmaster",
+      "trust": "commercial",
+      "enabled": false,
+      "requiresEnv": "TICKETMASTER_API_KEY",
+      "lat": 33.749,
+      "lon": -84.388,
+      "radiusMiles": 50
+    }
+  ]
+}

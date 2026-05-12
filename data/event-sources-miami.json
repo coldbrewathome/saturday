@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "coverage": {
+    "name": "Miami",
+    "timezone": "America/New_York",
+    "cities": [
+      "Miami",
+      "Miami Beach",
+      "Coral Gables",
+      "Doral",
+      "Aventura",
+      "Hollywood",
+      "Fort Lauderdale",
+      "Hialeah"
+    ]
+  },
+  "defaults": {
+    "windowDays": 45,
+    "userAgent": "saturday-with-friends/0.1 event-ingest",
+    "timezoneOffset": "-04:00"
+  },
+  "sources": [
+    {
+      "id": "miami-library-family",
+      "name": "Miami-Dade Public Library Events",
+      "url": "https://mdpls.libnet.info/events",
+      "city": "Miami",
+      "category": "Library",
+      "sourceType": "communicoEvents",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 25.7617,
+      "lon": -80.1918,
+      "defaultAudienceText": "children family kids storytime library free",
+      "eventList": {
+        "venue": "Miami-Dade Public Library Events",
+        "city": "Miami",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 60
+      },
+      "fallbackEventIds": [
+        "miami-family-storytime",
+        "miami-kids-steam"
+      ],
+      "communicoClient": "mdpls",
+      "communicoApiServer": "https://api.communico.co"
+    },
+    {
+      "id": "miami-parks-family",
+      "name": "Miami-Dade Parks Events",
+      "url": "https://www.miamidade.gov/global/calendar/global.page?calendarName=Parks",
+      "city": "Miami",
+      "category": "Park",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 25.7617,
+      "lon": -80.1918,
+      "defaultAudienceText": "children family kids parks outdoors nature recreation",
+      "cost": "Free",
+      "eventList": {
+        "venue": "Miami-Dade Parks Events",
+        "city": "Miami",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "miami-family-nature",
+        "miami-family-play"
+      ]
+    },
+    {
+      "id": "miami-museum-family",
+      "name": "Frost Science Calendar",
+      "url": "https://www.frostscience.org/calendar-events/",
+      "city": "Miami",
+      "category": "Museum",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 25.7617,
+      "lon": -80.1918,
+      "defaultAudienceText": "children family kids museum science art workshop",
+      "eventList": {
+        "venue": "Frost Science Events",
+        "city": "Miami",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "miami-museum-family-day"
+      ]
+    },
+    {
+      "id": "miami-zoo-family",
+      "name": "Zoo Miami Events",
+      "url": "https://www.zoomiami.org/",
+      "city": "Miami",
+      "category": "Zoo",
+      "sourceType": "html",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 25.7617,
+      "lon": -80.1918,
+      "defaultAudienceText": "children family kids zoo animals aquarium nature",
+      "eventList": {
+        "venue": "Zoo Miami Events",
+        "city": "Miami",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "miami-zoo-family-program"
+      ]
+    },
+    {
+      "id": "ticketmaster-miami-family",
+      "name": "Ticketmaster Miami Family Events",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "city": "Miami",
+      "category": "Ticketed",
+      "sourceType": "ticketmaster",
+      "trust": "commercial",
+      "enabled": false,
+      "requiresEnv": "TICKETMASTER_API_KEY",
+      "lat": 25.7617,
+      "lon": -80.1918,
+      "radiusMiles": 65
+    }
+  ]
+}

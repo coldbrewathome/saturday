@@ -85,7 +85,15 @@ async function fetchSource(source, registry) {
     url.searchParams.set("apikey", apiKey);
     url.searchParams.set("countryCode", "US");
     url.searchParams.set("classificationName", "Family");
-    url.searchParams.set("city", source.city || "San Francisco");
+    const lat = Number(source.lat);
+    const lon = Number(source.lon);
+    if (Number.isFinite(lat) && Number.isFinite(lon)) {
+      url.searchParams.set("latlong", `${lat},${lon}`);
+      url.searchParams.set("radius", String(source.radiusMiles || 50));
+      url.searchParams.set("unit", "miles");
+    } else {
+      url.searchParams.set("city", source.city || "San Francisco");
+    }
     url.searchParams.set("startDateTime", now.toISOString().replace(/\.\d{3}Z$/, "Z"));
     url.searchParams.set("endDateTime", end.toISOString().replace(/\.\d{3}Z$/, "Z"));
     url.searchParams.set("size", "100");
@@ -790,6 +798,7 @@ async function main() {
       activeMetro.seoName,
       ...(activeMetro.eventCommunities || []),
     ].filter(Boolean),
+    bbox: activeMetro.spotCoverage?.bbox,
   });
 
   const report = {

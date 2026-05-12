@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "coverage": {
+    "name": "San Diego",
+    "timezone": "America/Los_Angeles",
+    "cities": [
+      "San Diego",
+      "Chula Vista",
+      "La Mesa",
+      "El Cajon",
+      "National City",
+      "Coronado",
+      "Encinitas",
+      "Carlsbad"
+    ]
+  },
+  "defaults": {
+    "windowDays": 45,
+    "userAgent": "saturday-with-friends/0.1 event-ingest",
+    "timezoneOffset": "-07:00"
+  },
+  "sources": [
+    {
+      "id": "san-diego-library-family",
+      "name": "San Diego County Library Events",
+      "url": "https://sdcl.bibliocommons.com/v2/events",
+      "city": "San Diego",
+      "category": "Library",
+      "sourceType": "biblioevents",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 32.7157,
+      "lon": -117.1611,
+      "defaultAudienceText": "children family kids storytime library free",
+      "eventList": {
+        "venue": "San Diego Public Library Events",
+        "city": "San Diego",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 60
+      },
+      "fallbackEventIds": [
+        "san-diego-family-storytime",
+        "san-diego-kids-steam"
+      ]
+    },
+    {
+      "id": "san-diego-parks-family",
+      "name": "City of San Diego Parks & Recreation Event Calendar",
+      "url": "https://www.sandiego.gov/park-and-recreation/event-calendar",
+      "city": "San Diego",
+      "category": "Park",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 32.7157,
+      "lon": -117.1611,
+      "defaultAudienceText": "children family kids parks outdoors nature recreation",
+      "cost": "Free",
+      "eventList": {
+        "venue": "San Diego Parks and Recreation Events",
+        "city": "San Diego",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "san-diego-family-nature",
+        "san-diego-family-play"
+      ]
+    },
+    {
+      "id": "san-diego-museum-family",
+      "name": "The New Children's Museum Calendar",
+      "url": "https://thinkplaycreate.org/visit/",
+      "city": "San Diego",
+      "category": "Museum",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 32.7157,
+      "lon": -117.1611,
+      "defaultAudienceText": "children family kids museum science art workshop",
+      "eventList": {
+        "venue": "The New Children's Museum Events",
+        "city": "San Diego",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "san-diego-museum-family-day"
+      ]
+    },
+    {
+      "id": "san-diego-zoo-family",
+      "name": "San Diego Zoo Wildlife Presentations",
+      "url": "https://zoo.sandiegozoo.org/activities/wildlife-presentations",
+      "city": "San Diego",
+      "category": "Zoo",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 32.7157,
+      "lon": -117.1611,
+      "defaultAudienceText": "children family kids zoo animals aquarium nature",
+      "eventList": {
+        "venue": "San Diego Zoo Wildlife Alliance Events",
+        "city": "San Diego",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "san-diego-zoo-family-program"
+      ]
+    },
+    {
+      "id": "ticketmaster-san-diego-family",
+      "name": "Ticketmaster San Diego Family Events",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "city": "San Diego",
+      "category": "Ticketed",
+      "sourceType": "ticketmaster",
+      "trust": "commercial",
+      "enabled": false,
+      "requiresEnv": "TICKETMASTER_API_KEY",
+      "lat": 32.7157,
+      "lon": -117.1611,
+      "radiusMiles": 45
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "coverage": {
+    "name": "Washington DC",
+    "timezone": "America/New_York",
+    "cities": [
+      "Washington",
+      "Arlington",
+      "Alexandria",
+      "Silver Spring",
+      "Bethesda",
+      "Rockville",
+      "Falls Church",
+      "Tysons"
+    ]
+  },
+  "defaults": {
+    "windowDays": 45,
+    "userAgent": "saturday-with-friends/0.1 event-ingest",
+    "timezoneOffset": "-04:00"
+  },
+  "sources": [
+    {
+      "id": "washington-dc-library-family",
+      "name": "DC Public Library Family Programs",
+      "url": "https://dclibrary.libnet.info/events",
+      "city": "Washington",
+      "category": "Library",
+      "sourceType": "communicoEvents",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 38.9072,
+      "lon": -77.0369,
+      "defaultAudienceText": "children family kids storytime library free",
+      "eventList": {
+        "venue": "DC Public Library Events",
+        "city": "Washington",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 60
+      },
+      "fallbackEventIds": [
+        "washington-dc-family-storytime",
+        "washington-dc-kids-steam"
+      ],
+      "communicoClient": "dclibrary",
+      "communicoApiServer": "https://api.communico.co"
+    },
+    {
+      "id": "washington-dc-parks-family",
+      "name": "DC Department of Parks and Recreation Events",
+      "url": "https://dpr.dc.gov/events",
+      "city": "Washington",
+      "category": "Park",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 38.9072,
+      "lon": -77.0369,
+      "defaultAudienceText": "children family kids parks outdoors nature recreation",
+      "cost": "Free",
+      "eventList": {
+        "venue": "DC Department of Parks and Recreation Events",
+        "city": "Washington",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "washington-dc-family-nature",
+        "washington-dc-family-play"
+      ]
+    },
+    {
+      "id": "washington-dc-museum-family",
+      "name": "Smithsonian Family Programs",
+      "url": "https://naturalhistory.si.edu/events/family-programs",
+      "city": "Washington",
+      "category": "Museum",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 38.9072,
+      "lon": -77.0369,
+      "defaultAudienceText": "children family kids museum science art workshop",
+      "eventList": {
+        "venue": "Smithsonian Events",
+        "city": "Washington",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "washington-dc-museum-family-day"
+      ]
+    },
+    {
+      "id": "washington-dc-zoo-family",
+      "name": "National Zoo Events",
+      "url": "https://nationalzoo.si.edu/events",
+      "city": "Washington",
+      "category": "Zoo",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 38.9072,
+      "lon": -77.0369,
+      "defaultAudienceText": "children family kids zoo animals aquarium nature",
+      "eventList": {
+        "venue": "National Zoo Events",
+        "city": "Washington",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "washington-dc-zoo-family-program"
+      ]
+    },
+    {
+      "id": "ticketmaster-washington-dc-family",
+      "name": "Ticketmaster Washington DC Family Events",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "city": "Washington",
+      "category": "Ticketed",
+      "sourceType": "ticketmaster",
+      "trust": "commercial",
+      "enabled": false,
+      "requiresEnv": "TICKETMASTER_API_KEY",
+      "lat": 38.9072,
+      "lon": -77.0369,
+      "radiusMiles": 55
+    }
+  ]
+}

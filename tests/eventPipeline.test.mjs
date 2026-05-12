@@ -774,6 +774,25 @@ test("validateEventsDataset rejects adult-only events and accepts generated even
     0,
   );
 
+  dataset.events[0].city = "Daly City";
+  assert.equal(
+    validateEventsDataset(dataset, {
+      minEvents: 1,
+      cities: ["San Francisco"],
+      bbox: { south: 37.7, west: -122.5, north: 37.9, east: -122.3 },
+    }).length,
+    0,
+  );
+  assert.match(
+    validateEventsDataset(dataset, {
+      minEvents: 1,
+      cities: ["San Francisco"],
+      bbox: { south: 38.0, west: -122.5, north: 38.2, east: -122.3 },
+    })[0],
+    /outside configured coverage/,
+  );
+  dataset.events[0].city = "San Francisco";
+
   dataset.events[0].title = "21+ cocktail night";
   assert.match(validateEventsDataset(dataset, { minEvents: 1 })[0], /adult-only/);
 });

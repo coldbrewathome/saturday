@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "coverage": {
+    "name": "Houston",
+    "timezone": "America/Chicago",
+    "cities": [
+      "Houston",
+      "The Woodlands",
+      "Sugar Land",
+      "Katy",
+      "Pasadena",
+      "Pearland",
+      "League City",
+      "Baytown"
+    ]
+  },
+  "defaults": {
+    "windowDays": 45,
+    "userAgent": "saturday-with-friends/0.1 event-ingest",
+    "timezoneOffset": "-05:00"
+  },
+  "sources": [
+    {
+      "id": "houston-library-family",
+      "name": "Houston Public Library Events",
+      "url": "https://calendar.houstonlibrary.org/calendar/events?cal=-1&cid=-1&d=0000-00-00&inc=0",
+      "city": "Houston",
+      "category": "Library",
+      "sourceType": "libcal",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 29.7604,
+      "lon": -95.3698,
+      "defaultAudienceText": "children family kids storytime library free",
+      "eventList": {
+        "venue": "Houston Public Library Events",
+        "city": "Houston",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 60
+      },
+      "fallbackEventIds": [
+        "houston-family-storytime",
+        "houston-kids-steam"
+      ],
+      "libcalCalendarId": "-1"
+    },
+    {
+      "id": "houston-parks-family",
+      "name": "Discovery Green Family Events",
+      "url": "https://www.discoverygreen.com/event-category/parks-play/",
+      "city": "Houston",
+      "category": "Park",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 29.7604,
+      "lon": -95.3698,
+      "defaultAudienceText": "children family kids parks outdoors nature recreation",
+      "cost": "Free",
+      "eventList": {
+        "venue": "Houston Parks Events",
+        "city": "Houston",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "houston-family-nature",
+        "houston-family-play"
+      ]
+    },
+    {
+      "id": "houston-museum-family",
+      "name": "Children's Museum Houston Events",
+      "url": "https://www.cmhouston.org/events",
+      "city": "Houston",
+      "category": "Museum",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 29.7604,
+      "lon": -95.3698,
+      "defaultAudienceText": "children family kids museum science art workshop",
+      "eventList": {
+        "venue": "Children's Museum Houston Events",
+        "city": "Houston",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "houston-museum-family-day"
+      ]
+    },
+    {
+      "id": "houston-zoo-family",
+      "name": "Houston Zoo Calendar",
+      "url": "https://www.houstonzoo.org/plan-your-visit/calendar/",
+      "city": "Houston",
+      "category": "Zoo",
+      "sourceType": "eventList",
+      "trust": "official",
+      "requiresBrowserHeaders": true,
+      "lat": 29.7604,
+      "lon": -95.3698,
+      "defaultAudienceText": "children family kids zoo animals aquarium nature",
+      "eventList": {
+        "venue": "Houston Zoo Events",
+        "city": "Houston",
+        "requireFamilySignal": false,
+        "defaultDurationMinutes": 90
+      },
+      "fallbackEventIds": [
+        "houston-zoo-family-program"
+      ]
+    },
+    {
+      "id": "ticketmaster-houston-family",
+      "name": "Ticketmaster Houston Family Events",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "city": "Houston",
+      "category": "Ticketed",
+      "sourceType": "ticketmaster",
+      "trust": "commercial",
+      "enabled": false,
+      "requiresEnv": "TICKETMASTER_API_KEY",
+      "lat": 29.7604,
+      "lon": -95.3698,
+      "radiusMiles": 55
+    }
+  ]
+}

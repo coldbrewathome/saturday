@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "metroId": "philadelphia",
+  "generatedAt": "2026-05-12T20:25:37.102Z",
+  "registryPath": "data/event-sources-philadelphia.json",
+  "outputPath": "public/data/philadelphia/events.json",
+  "eventCount": 24,
+  "sourceCount": 5,
+  "liveEventCount": 0,
+  "fallbackEventCount": 24,
+  "errors": [],
+  "sources": [
+    {
+      "id": "philadelphia-library-family",
+      "name": "Free Library of Philadelphia Events",
+      "url": "https://libwww.freelibrary.org/calendar/",
+      "sourceType": "eventList",
+      "city": "Philadelphia",
+      "metroId": "philadelphia",
+      "category": "Library",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "eventCount": 8,
+      "fetches": [
+        {
+          "url": "https://libwww.freelibrary.org/calendar/",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 403,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "id": "philadelphia-parks-family",
+      "name": "Philadelphia Parks and Recreation Events",
+      "url": "https://www.phila.gov/departments/philadelphia-parks-recreation/events/",
+      "sourceType": "eventList",
+      "city": "Philadelphia",
+      "metroId": "philadelphia",
+      "category": "Park",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "eventCount": 8,
+      "fetches": [
+        {
+          "url": "https://www.phila.gov/departments/philadelphia-parks-recreation/events/",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 404,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "id": "philadelphia-museum-family",
+      "name": "Please Touch Museum Calendar",
+      "url": "https://www.pleasetouchmuseum.org/calendar/month/",
+      "sourceType": "eventList",
+      "city": "Philadelphia",
+      "metroId": "philadelphia",
+      "category": "Museum",
+      "status": "ok-template-fallback",
+      "liveEvents": 0,
+      "fallbackEvents": 4,
+      "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://www.pleasetouchmuseum.org/calendar/month/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "philadelphia-zoo-family",
+      "name": "Philadelphia Zoo Events",
+      "url": "https://www.philadelphiazoo.org/events/",
+      "sourceType": "html",
+      "city": "Philadelphia",
+      "metroId": "philadelphia",
+      "category": "Zoo",
+      "status": "ok-template-fallback",
+      "liveEvents": 0,
+      "fallbackEvents": 4,
+      "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://www.philadelphiazoo.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "ticketmaster-philadelphia-family",
+      "name": "Ticketmaster Philadelphia Family Events",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "sourceType": "ticketmaster",
+      "city": "Philadelphia",
+      "metroId": "philadelphia",
+      "category": "Ticketed",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
+    }
+  ]
+}

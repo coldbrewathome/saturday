@@ -34,6 +34,7 @@ async function validateMetro(metro) {
       metro.seoName,
       ...(metro.eventCommunities || []),
     ].filter(Boolean),
+    bbox: metro.spotCoverage?.bbox,
   });
 
   if (errors.length > 0) {
