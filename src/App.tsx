@@ -1304,33 +1304,37 @@ function App({ metro }: AppProps) {
           throw new Error("Data file does not contain spots.");
         }
 
+        const datasetSpots = dataset.spots;
         const enrichmentEntries = enrichment?.entries ?? {};
-        const merged = dataset.spots
+        const merged = datasetSpots
           .filter(audienceVisible)
           .map((spot) => {
             const extra = enrichmentEntries[spot.id];
             return extra ? { ...spot, ...extra } : spot;
           });
         setRemoteSpots(merged);
-        setDataMeta({
+        setDataMeta((prev) => ({
+          ...prev,
           generatedAt: dataset.generatedAt,
           sourceName: dataset.source?.name || `Generated ${metro.label} data`,
-          count: dataset.count || dataset.spots.length,
+          count: dataset.count || datasetSpots.length,
           loading: false,
           imageStats: dataset.imageStats,
-        });
+          error: undefined,
+        }));
       })
       .catch((error: Error) => {
         if (!active) {
           return;
         }
 
-        setDataMeta({
+        setDataMeta((prev) => ({
+          ...prev,
           sourceName: "Curated fallback",
           count: starterSpots.length,
           loading: false,
           error: error.message,
-        });
+        }));
       });
 
     return () => {
