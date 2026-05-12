@@ -525,12 +525,29 @@ const dataUrl = (file: string) =>
   DATA_ORIGIN
     ? `${DATA_ORIGIN}/data/${file}`
     : `${import.meta.env.BASE_URL}data/${file}`;
-const DATA_URL = dataUrl("bay-area-spots.json");
-const ENRICHMENT_URL = dataUrl("bay-area-enrichment.json");
-const FEATURED_PLANS_URL = dataUrl("featured-plans.json");
-const EVENTS_URL = dataUrl("events.json");
 const BOA_MUSEUMS_URL = dataUrl("boa-museums.json");
-const CURATED_SPOTS_URL = dataUrl("curated-spots.json");
+
+function metroDataUrl(metro: MetroConfig, key: Parameters<typeof metroDataPath>[1]): string {
+  return dataUrl(metroDataPath(metro, key));
+}
+
+function metroLegacyDataUrl(metro: MetroConfig, key: Parameters<typeof metroDataPath>[1]): string | null {
+  const legacy = legacyMetroDataPath(metro, key);
+  return legacy ? dataUrl(legacy) : null;
+}
+
+async function fetchJsonWithFallback<T>(
+  primary: string,
+  fallback?: string | null,
+): Promise<T> {
+  const response = await fetch(primary);
+  if (response.ok) return response.json() as Promise<T>;
+  if (fallback) {
+    const fallbackResponse = await fetch(fallback);
+    if (fallbackResponse.ok) return fallbackResponse.json() as Promise<T>;
+  }
+  throw new Error(`Data request failed: ${response.status}`);
+}
 
 import {
   APP_AUDIENCE,
@@ -544,6 +561,14 @@ import {
   SHOW_AGE_BAND_UI,
   audienceVisible,
 } from "./appConfig";
+import {
+  DEFAULT_METRO,
+  legacyMetroDataPath,
+  metroDataPath,
+  metroShareBase,
+  metroStorageKey,
+  type MetroConfig,
+} from "./metros";
 
 void APP_AUDIENCE; // surface APP_AUDIENCE for downstream debugging if needed
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID ?? "";
@@ -1066,7 +1091,24 @@ function interleaveByCategory(spots: Spot[]) {
   return result;
 }
 
-function App() {
+function App({ metro = DEFAULT_METRO }: { metro?: MetroConfig }) {
+  const dataUrls = useMemo(
+    () => ({
+      spots: metroDataUrl(metro, "spots"),
+      spotsFallback: metroLegacyDataUrl(metro, "spots"),
+      enrichment: metroDataUrl(metro, "enrichment"),
+      enrichmentFallback: metroLegacyDataUrl(metro, "enrichment"),
+      events: metroDataUrl(metro, "events"),
+      eventsFallback: metroLegacyDataUrl(metro, "events"),
+      curatedSpots: metroDataUrl(metro, "curatedSpots"),
+      curatedSpotsFallback: metroLegacyDataUrl(metro, "curatedSpots"),
+      featuredPlans: metroDataUrl(metro, "featuredPlans"),
+      featuredPlansFallback: metroLegacyDataUrl(metro, "featuredPlans"),
+    }),
+    [metro],
+  );
+  const shareBase = metroShareBase(metro);
+  const storage = (suffix: string) => metroStorageKey(metro, suffix);
   const [query, setQuery] = useState("");
   const [ageBand, setAgeBand] = useState<AgeBand | "any">("any");
   const [vibe, setVibe] = useState<PlannerVibe>("balanced");
@@ -1081,22 +1123,22 @@ function App() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(24);
   const [savedIds, setSavedIds] = useState<string[]>(() =>
-    readStoredArray("saturday.savedSpots", []),
+    readStoredArray(storage("savedSpots"), []),
   );
   const [savedEventIds, setSavedEventIds] = useState<string[]>(() =>
-    readStoredArray("saturday.savedEvents", []),
+    readStoredArray(storage("savedEvents"), []),
   );
   const [visitedIds, setVisitedIds] = useState<string[]>(() =>
-    readStoredArray("saturday.visitedSpots", []),
+    readStoredArray(storage("visitedSpots"), []),
   );
   const [customSpots, setCustomSpots] = useState<Spot[]>(() =>
-    readStoredArray("saturday.customSpots", []),
+    readStoredArray(storage("customSpots"), []),
   );
   const [plans, setPlans] = useState<Plan[]>(() =>
-    readStoredArray("saturday.plans", []),
+    readStoredArray(storage("plans"), []),
   );
   const [deletedPlanIds, setDeletedPlanIds] = useState<string[]>(() =>
-    readStoredArray("saturday.deletedPlanIds", []),
+    readStoredArray(storage("deletedPlanIds"), []),
   );
   const initialRoute = readAppRoute();
   const [view, setView] = useState<"home" | "browse" | "plans">(
@@ -1112,7 +1154,7 @@ function App() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(() => {
     try {
-      const raw = window.localStorage.getItem("saturday.userLocation");
+      const raw = window.localStorage.getItem(storage("userLocation"));
       return raw ? (JSON.parse(raw) as { lat: number; lon: number }) : null;
     } catch {
       return null;
@@ -1154,7 +1196,7 @@ function App() {
   const [weather, setWeather] = useState<WeatherForecast | null>(null);
   const [preferences, setPreferences] = useState<PlannerPreferenceId[]>(() => {
     try {
-      const raw = window.localStorage.getItem("saturday.preferences");
+      const raw = window.localStorage.getItem(storage("preferences"));
       const parsed = raw ? (JSON.parse(raw) as string[]) : [];
       const valid = new Set(plannerPreferenceOptions.map((option) => option.id));
       return parsed.filter((id): id is PlannerPreferenceId =>
@@ -1166,7 +1208,7 @@ function App() {
   });
   const [plannerProfile, setPlannerProfile] = useState<PlannerProfile>(() => {
     try {
-      const raw = window.localStorage.getItem("saturday.plannerProfile");
+      const raw = window.localStorage.getItem(storage("plannerProfile"));
       return normalizePlannerProfile(raw ? JSON.parse(raw) : null);
     } catch {
       return defaultPlannerProfile;
@@ -1198,21 +1240,14 @@ function App() {
   useEffect(() => {
     let active = true;
 
-    const datasetPromise = fetch(DATA_URL).then((response) => {
-      if (!response.ok) {
-        throw new Error(`Data request failed: ${response.status}`);
-      }
-      return response.json() as Promise<SpotDataset>;
-    });
+    const datasetPromise = fetchJsonWithFallback<SpotDataset>(
+      dataUrls.spots,
+      dataUrls.spotsFallback,
+    );
     // Sidecar is optional; produced by `npm run match:places:osm`.
-    const enrichmentPromise = fetch(ENRICHMENT_URL)
-      .then((response) =>
-        response.ok
-          ? (response.json() as Promise<{
-              entries?: Record<string, Partial<Spot>>;
-            }>)
-          : null,
-      )
+    const enrichmentPromise = fetchJsonWithFallback<{
+      entries?: Record<string, Partial<Spot>>;
+    }>(dataUrls.enrichment, dataUrls.enrichmentFallback)
       .catch(() => null);
 
     Promise.all([datasetPromise, enrichmentPromise])
@@ -1235,7 +1270,7 @@ function App() {
         setRemoteSpots(merged);
         setDataMeta({
           generatedAt: dataset.generatedAt,
-          sourceName: dataset.source?.name || "Generated Bay Area data",
+          sourceName: dataset.source?.name || `Generated ${metro.label} data`,
           count: dataset.count || dataset.spots.length,
           loading: false,
           imageStats: dataset.imageStats,
@@ -1257,12 +1292,18 @@ function App() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [
+    dataUrls.enrichment,
+    dataUrls.enrichmentFallback,
+    dataUrls.spots,
+    dataUrls.spotsFallback,
+    metro.label,
+  ]);
 
   useEffect(() => {
     let active = true;
     (async () => {
-      const adminPayload = await fetchAdminEvents();
+      const adminPayload = await fetchAdminEvents(metro.id);
       if (!active) return;
       if (adminPayload && adminPayload.events.length > 0) {
         const visible = (adminPayload.events as FamilyEvent[]).filter(
@@ -1279,9 +1320,10 @@ function App() {
         return;
       }
       try {
-        const response = await fetch(EVENTS_URL);
-        if (!response.ok) return;
-        const dataset = (await response.json()) as EventsDataset;
+        const dataset = await fetchJsonWithFallback<EventsDataset>(
+          dataUrls.events,
+          dataUrls.eventsFallback,
+        );
         if (!active) return;
         if (Array.isArray(dataset.events)) {
           const visible = dataset.events.filter(audienceVisible);
@@ -1299,21 +1341,21 @@ function App() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [dataUrls.events, dataUrls.eventsFallback, metro.id]);
 
   useEffect(() => {
     window.localStorage.setItem(
-      "saturday.preferences",
+      storage("preferences"),
       JSON.stringify(preferences),
     );
-  }, [preferences]);
+  }, [preferences, metro.id]);
 
   useEffect(() => {
     window.localStorage.setItem(
-      "saturday.plannerProfile",
+      storage("plannerProfile"),
       JSON.stringify(plannerProfile),
     );
-  }, [plannerProfile]);
+  }, [plannerProfile, metro.id]);
 
   useEffect(() => {
     const lat = userLocation?.lat ?? inferredGeo?.lat;
@@ -1331,8 +1373,10 @@ function App() {
 
   useEffect(() => {
     let active = true;
-    fetch(CURATED_SPOTS_URL)
-      .then((response) => (response.ok ? response.json() : Promise.reject()))
+    fetchJsonWithFallback<{ spots?: Spot[] }>(
+      dataUrls.curatedSpots,
+      dataUrls.curatedSpotsFallback,
+    )
       .then((dataset: { spots?: Spot[] }) => {
         if (!active) return;
         if (Array.isArray(dataset.spots)) {
@@ -1355,12 +1399,14 @@ function App() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [dataUrls.curatedSpots, dataUrls.curatedSpotsFallback]);
 
   useEffect(() => {
     let active = true;
-    fetch(FEATURED_PLANS_URL)
-      .then((response) => (response.ok ? response.json() : Promise.reject()))
+    fetchJsonWithFallback<{ plans?: FeaturedPlan[] }>(
+      dataUrls.featuredPlans,
+      dataUrls.featuredPlansFallback,
+    )
       .then((dataset: { plans?: FeaturedPlan[] }) => {
         if (!active) return;
         if (Array.isArray(dataset.plans)) {
@@ -1373,9 +1419,13 @@ function App() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [dataUrls.featuredPlans, dataUrls.featuredPlansFallback]);
 
   useEffect(() => {
+    if (metro.id !== "bay-area") {
+      setBoaMuseums([]);
+      return;
+    }
     let active = true;
     fetch(BOA_MUSEUMS_URL)
       .then((response) => (response.ok ? response.json() : Promise.reject()))
@@ -1389,11 +1439,11 @@ function App() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [metro.id]);
 
   useEffect(() => {
-    window.localStorage.setItem("saturday.savedSpots", JSON.stringify(savedIds));
-  }, [savedIds]);
+    window.localStorage.setItem(storage("savedSpots"), JSON.stringify(savedIds));
+  }, [savedIds, metro.id]);
 
   // URL routing: keep window.location.hash in sync with view + activePlanId.
   // pushState (no hashchange fired) when state changes; popstate listener
@@ -1423,35 +1473,35 @@ function App() {
 
   useEffect(() => {
     window.localStorage.setItem(
-      "saturday.savedEvents",
+      storage("savedEvents"),
       JSON.stringify(savedEventIds),
     );
-  }, [savedEventIds]);
+  }, [savedEventIds, metro.id]);
 
   useEffect(() => {
     window.localStorage.setItem(
-      "saturday.visitedSpots",
+      storage("visitedSpots"),
       JSON.stringify(visitedIds),
     );
-  }, [visitedIds]);
+  }, [visitedIds, metro.id]);
 
   useEffect(() => {
     window.localStorage.setItem(
-      "saturday.customSpots",
+      storage("customSpots"),
       JSON.stringify(customSpots),
     );
-  }, [customSpots]);
+  }, [customSpots, metro.id]);
 
   useEffect(() => {
-    window.localStorage.setItem("saturday.plans", JSON.stringify(plans));
-  }, [plans]);
+    window.localStorage.setItem(storage("plans"), JSON.stringify(plans));
+  }, [plans, metro.id]);
 
   useEffect(() => {
     window.localStorage.setItem(
-      "saturday.deletedPlanIds",
+      storage("deletedPlanIds"),
       JSON.stringify(deletedPlanIds),
     );
-  }, [deletedPlanIds]);
+  }, [deletedPlanIds, metro.id]);
 
   useEffect(() => {
     setShareState({ status: "idle" });
@@ -1657,13 +1707,13 @@ function App() {
     setActivePlanId(null);
     setPreferences([]);
     for (const key of [
-      "saturday.savedSpots",
-      "saturday.savedEvents",
-      "saturday.visitedSpots",
-      "saturday.customSpots",
-      "saturday.plans",
-      "saturday.deletedPlanIds",
-      "saturday.preferences",
+      storage("savedSpots"),
+      storage("savedEvents"),
+      storage("visitedSpots"),
+      storage("customSpots"),
+      storage("plans"),
+      storage("deletedPlanIds"),
+      storage("preferences"),
     ]) {
       try {
         window.localStorage.removeItem(key);
@@ -1784,7 +1834,7 @@ function App() {
 
   const eventActivitySpots = useMemo<Spot[]>(() => {
     const now = new Date();
-    const anchor = plannerAnchor ?? { lat: 37.7749, lon: -122.4194 };
+    const anchor = plannerAnchor ?? { lat: metro.center.lat, lon: metro.center.lon };
     return events
       .filter((event) => isActualPlanningEvent(event, now, ageBand))
       .map((event) => {
@@ -1797,7 +1847,7 @@ function App() {
             : 25;
         return eventToPlanningSpot(event, transitMinutes);
       });
-  }, [ageBand, events, plannerAnchor]);
+  }, [ageBand, events, plannerAnchor, metro.center.lat, metro.center.lon]);
 
   const planningSpots = useMemo(
     () => [...allSpots, ...eventActivitySpots, ...boaActivitySpots],
@@ -1983,7 +2033,7 @@ function App() {
   // Editor's-pick rail re-ranks by proximity to whatever the user is browsing
   // on the map: hand-curated plans always lead, then auto-generated city
   // plans sorted by distance to the map center (falling back to user
-  // location, then inferred geo, then a Bay Area centroid).
+  // location, then inferred geo, then the active metro center).
   const nearbyFeaturedPlans = useMemo(() => {
     if (featuredPlans.length === 0) return featuredPlans;
     const anchor =
@@ -1991,7 +2041,7 @@ function App() {
       userLocation ||
       (inferredGeo?.lat && inferredGeo?.lon
         ? { lat: inferredGeo.lat, lon: inferredGeo.lon }
-        : { lat: 37.7749, lon: -122.4194 });
+        : { lat: metro.center.lat, lon: metro.center.lon });
     const handCurated = featuredPlans.filter((p) => !p.generated);
     const generated = featuredPlans.filter((p) => p.generated);
     const scored = generated
@@ -2012,7 +2062,7 @@ function App() {
     // re-ranked every map move, so the top of the rail follows the user.
     const generatedCap = 8;
     return [...handCurated, ...scored.slice(0, generatedCap).map((s) => s.plan)];
-  }, [featuredPlans, mapCenter, userLocation, inferredGeo]);
+  }, [featuredPlans, mapCenter, userLocation, inferredGeo, metro.center.lat, metro.center.lon]);
 
   const mapEvents = useMemo(() => {
     if (events.length === 0) return [] as FamilyEvent[];
@@ -2504,11 +2554,12 @@ function App() {
     try {
       const result = await createPoll({
         title: planTitle,
+        metroId: metro.id,
         stops: stopPayload,
         events: eventPayload,
         itemOrder: itemOrderPayload,
       });
-      const url = `${window.location.origin}/#/p/${result.pollId}`;
+      const url = `${shareBase}/#/p/${result.pollId}`;
       updatePlan(activePlan.id, {
         pollId: result.pollId,
         ownerToken: result.ownerToken,
@@ -2558,7 +2609,7 @@ function App() {
       planCentroid(remainingStops) ??
       planCentroid(currentStops) ??
       plannerAnchor ??
-      { lat: 37.7749, lon: -122.4194 };
+      { lat: metro.center.lat, lon: metro.center.lon };
     const localPool = clusterAround(
       planningSpots.filter((s) => !usedIds.has(s.id)),
       swapAnchor,
@@ -2726,7 +2777,7 @@ function App() {
     setHomeError(null);
     setHomeBusy(true);
 
-    const anchor = plannerAnchor ?? { lat: 37.7749, lon: -122.4194 };
+    const anchor = plannerAnchor ?? { lat: metro.center.lat, lon: metro.center.lon };
     const candidatePool = clusterAround(planningSpots, anchor, 8, 24);
 
     if (candidatePool.length === 0) {
@@ -2871,7 +2922,7 @@ function App() {
     const anchor =
       planCentroid(savedSpots) ??
       plannerAnchor ??
-      { lat: 37.7749, lon: -122.4194 };
+      { lat: metro.center.lat, lon: metro.center.lon };
     const source =
       savedSpots.length > 0 ? baseSource : clusterAround(baseSource, anchor, 8, 24);
     const rankedSource = applyLocalBias(
@@ -3074,7 +3125,7 @@ function App() {
           lon: Number(pos.coords.longitude.toFixed(5)),
         };
         setUserLocation(next);
-        window.localStorage.setItem("saturday.userLocation", JSON.stringify(next));
+        window.localStorage.setItem(storage("userLocation"), JSON.stringify(next));
         setGeoState("idle");
         setGeoErrorReason(null);
         setSortBy("nearest");
@@ -3097,7 +3148,7 @@ function App() {
 
   function clearUserLocation() {
     setUserLocation(null);
-    window.localStorage.removeItem("saturday.userLocation");
+    window.localStorage.removeItem(storage("userLocation"));
     setGeoState("idle");
   }
 
@@ -3238,10 +3289,10 @@ function App() {
           <div>
             <strong>
               {dataMeta.loading
-                ? "Loading Bay Area data"
+                ? `Loading ${metro.label} data`
                 : dataMeta.eventsCount != null
                   ? `${dataMeta.count} spots · ${dataMeta.eventsCount} events`
-                  : `${dataMeta.count} Bay Area spots`}
+                  : `${dataMeta.count} ${metro.label} spots`}
             </strong>
             <span>
               {dataMeta.error
@@ -3402,7 +3453,7 @@ function App() {
                 ? "Distance sorted from you"
                 : inferredGeo?.city
                   ? `Using ${inferredGeo.city}`
-                  : "Using SF baseline"}
+                  : `Using ${metro.label} baseline`}
             </span>
           </div>
           {geoState === "denied" && (
@@ -3756,7 +3807,7 @@ function App() {
             >
               <option value="best">Best fit</option>
               <option value="nearest">
-                {userLocation ? "Nearest to me" : "Nearest to SF"}
+                {userLocation ? "Nearest to me" : `Nearest to ${metro.label}`}
               </option>
               <option value="price">Lowest cost</option>
               <option value="name">Name</option>
@@ -3852,6 +3903,9 @@ function App() {
               geoState={geoState}
               onRequestLocation={requestUserLocation}
               onViewChange={setMapCenter}
+              defaultCenter={[metro.center.lat, metro.center.lon]}
+              mapViewStorageKey={storage("mapView")}
+              ariaLabel={`Map of ${metro.label} spots and events`}
             />
             <div className="map-overlay" aria-label="Map summary">
               <div>
@@ -4419,15 +4473,17 @@ function App() {
                       </p>
                       {expiredIds.length > 0 && (
                         <button
-                          className="text-button saved-clear-past"
-                          title={`Remove ${expiredIds.length} past event${expiredIds.length === 1 ? "" : "s"}`}
+                          className="saved-clear-past"
+                          type="button"
+                          title={`Remove ${expiredIds.length} past event${expiredIds.length === 1 ? "" : "s"} from your saved list`}
                           onClick={() =>
                             setSavedEventIds((current) =>
                               current.filter((id) => !expiredIds.includes(id)),
                             )
                           }
                         >
-                          Clear past ({expiredIds.length})
+                          <Trash2 aria-hidden="true" />
+                          Clear {expiredIds.length} past
                         </button>
                       )}
                     </div>
@@ -4608,6 +4664,7 @@ function App() {
                 <PlanMap
                   stops={activePlanStops}
                   events={activePlanEvents}
+                  defaultCenter={[metro.center.lat, metro.center.lon]}
                   items={activePlanItems
                     .map((it) => {
                       if (it.kind === "spot") {
@@ -4942,11 +4999,11 @@ function App() {
               {activePlan.pollId && shareState.status === "idle" && (
                 <div className="share-banner">
                   <strong>Already shared.</strong>
-                  <a href={`${window.location.origin}/#/p/${activePlan.pollId}`}>
-                    {`${window.location.origin}/#/p/${activePlan.pollId}`}
+                  <a href={`${shareBase}/#/p/${activePlan.pollId}`}>
+                    {`${shareBase}/#/p/${activePlan.pollId}`}
                   </a>
                   <ShareQuickLinks
-                    url={`${window.location.origin}/#/p/${activePlan.pollId}`}
+                    url={`${shareBase}/#/p/${activePlan.pollId}`}
                     title={activePlan.name || "Untitled plan"}
                   />
                 </div>
