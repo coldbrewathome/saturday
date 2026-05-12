@@ -5,6 +5,7 @@ import {
   expandRecurringTemplates,
   extractBiblioEvents,
   extractCommunicoEvents,
+  extractChicagoParkDistrictEvents,
   extractDrupalCardEvents,
   extractEventListEvents,
   extractHtmlEvents,
@@ -513,6 +514,39 @@ test("extractDrupalCardEvents parses Drupal Views AJAX cards", () => {
   assert.equal(events[0].venue, "Crown Beach");
   assert.equal(events[0].city, "Alameda");
   assert.equal(events[0].extractionMethod, "drupal-views-ajax");
+});
+
+test("extractChicagoParkDistrictEvents parses Family Fun cards", () => {
+  const html = `
+    <div class="node--type-event node--view-mode-card">
+      <div class="event--date ">May </br> 17</div>
+      <h3 class="event--title">
+        <a href="/events/building-fairy-houses-npv">Building Fairy Houses at NPV</a>
+      </h3>
+      <div class="field-with-icon event--location">North Park Village Nature Center</div>
+      <div class="field-with-icon event--duration">1:30 PM - 2:30 PM</div>
+    </div>
+  `;
+
+  const events = extractChicagoParkDistrictEvents(html, {
+    id: "chicago-parks-family",
+    name: "Chicago Park District Events",
+    url: "https://www.chicagoparkdistrict.com/events?field_event_category_target_id=766",
+    city: "Chicago",
+    category: "Park",
+    lat: 41.8781,
+    lon: -87.6298,
+    timezoneOffset: "-05:00",
+    defaultAudienceText: "children family kids parks outdoors nature recreation",
+    cost: "Free",
+  }, { now: new Date("2026-05-12T12:00:00Z") });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "Building Fairy Houses at NPV");
+  assert.equal(events[0].venue, "NPV");
+  assert.equal(events[0].startDateTime, "2026-05-17T18:30:00.000Z");
+  assert.equal(events[0].url, "https://www.chicagoparkdistrict.com/events/building-fairy-houses-npv");
+  assert.equal(events[0].extractionMethod, "chicago-park-district");
 });
 
 test("extractHtmlEvents finds dated event cards and skips undated links", () => {

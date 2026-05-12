@@ -46,22 +46,25 @@
     {
       "id": "chicago-parks-family",
       "name": "Chicago Park District Events",
-      "url": "https://www.chicagoparkdistrict.com/events",
+      "url": "https://www.chicagoparkdistrict.com/events?field_event_category_target_id=766&field_location_target_id=All&field_community_area_target_id=All&field_zip_code_target_id=All&title=&field_date_value=&field_age_range_target_id=All",
       "city": "Chicago",
       "category": "Park",
-      "sourceType": "eventList",
+      "sourceType": "chicagoParkDistrictEvents",
       "trust": "official",
       "requiresBrowserHeaders": true,
       "lat": 41.8781,
       "lon": -87.6298,
       "defaultAudienceText": "children family kids parks outdoors nature recreation",
       "cost": "Free",
-      "eventList": {
-        "venue": "Chicago Park District Events",
-        "city": "Chicago",
-        "requireFamilySignal": false,
-        "defaultDurationMinutes": 90
-      },
+      "urls": [
+        "https://www.chicagoparkdistrict.com/events?field_event_category_target_id=766&field_location_target_id=All&field_community_area_target_id=All&field_zip_code_target_id=All&title=&field_date_value=&field_age_range_target_id=All",
+        "https://www.chicagoparkdistrict.com/events?field_event_category_target_id=766&field_location_target_id=All&field_community_area_target_id=All&field_zip_code_target_id=All&title=&field_date_value=&field_age_range_target_id=All&page=1",
+        "https://www.chicagoparkdistrict.com/events?field_event_category_target_id=766&field_location_target_id=All&field_community_area_target_id=All&field_zip_code_target_id=All&title=&field_date_value=&field_age_range_target_id=All&page=2",
+        "https://www.chicagoparkdistrict.com/events?field_event_category_target_id=766&field_location_target_id=All&field_community_area_target_id=All&field_zip_code_target_id=All&title=&field_date_value=&field_age_range_target_id=All&page=3",
+        "https://www.chicagoparkdistrict.com/events?field_event_category_target_id=766&field_location_target_id=All&field_community_area_target_id=All&field_zip_code_target_id=All&title=&field_date_value=&field_age_range_target_id=All&page=4",
+        "https://www.chicagoparkdistrict.com/events?field_event_category_target_id=766&field_location_target_id=All&field_community_area_target_id=All&field_zip_code_target_id=All&title=&field_date_value=&field_age_range_target_id=All&page=5",
+        "https://www.chicagoparkdistrict.com/events?field_event_category_target_id=766&field_location_target_id=All&field_community_area_target_id=All&field_zip_code_target_id=All&title=&field_date_value=&field_age_range_target_id=All&page=6"
+      ],
       "fallbackEventIds": [
         "chicago-family-nature",
         "chicago-family-play"

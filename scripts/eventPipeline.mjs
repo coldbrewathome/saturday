@@ -1773,6 +1773,9 @@ export function extractEventsFromPayload(payload, source = {}, options = {}) {
   if (source.sourceType === "drupalViewsAjax") {
     return extractDrupalCardEvents(text, source, options);
   }
+  if (source.sourceType === "chicagoParkDistrictEvents") {
+    return extractChicagoParkDistrictEvents(text, source, options);
+  }
   if (source.sourceType === "eventList") {
     return extractEventListEvents(text, source, options);
   }
@@ -2391,6 +2394,66 @@ export function extractDrupalCardEvents(html, source = {}, options = {}) {
 
   if (events.length > 0) return dedupeEvents(events);
   return extractStructuredHtmlEvents(html, source, options);
+}
+
+export function extractChicagoParkDistrictEvents(html, source = {}, options = {}) {
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
+  const blocks = html.match(/<div class="node--type-event node--view-mode-card">[\s\S]*?(?=<div class="node--type-event node--view-mode-card">|<nav\b|<\/form>|$)/gi) || [];
+  const events = [];
+
+  for (const block of blocks) {
+    if (/event--date\s+cancelled|cancel(?:ed|led)/i.test(block)) continue;
+    const title = stripUnsafeText(
+      block.match(/<h3[^>]+class=["'][^"']*event--title[^"']*["'][^>]*>[\s\S]*?<a[^>]*>([\s\S]*?)<\/a>/i)?.[1],
+      140,
+    );
+    if (!title || isGenericPageTitle(title)) continue;
+    const href = block.match(/<h3[^>]+class=["'][^"']*event--title[^"']*["'][^>]*>[\s\S]*?<a[^>]+href=["']([^"']+)["']/i)?.[1];
+    const dateText = stripUnsafeText(
+      block.match(/<div[^>]+class=["'][^"']*event--date[^"']*["'][^>]*>([\s\S]*?)<\/div>/i)?.[1],
+      120,
+    );
+    const durationText = stripUnsafeText(
+      block.match(/<div[^>]+class=["'][^"']*event--duration[^"']*["'][^>]*>([\s\S]*?)<\/div>/i)?.[1],
+      120,
+    );
+    const range = parseDateTimeRange(`${dateText} ${durationText}`, options.now || new Date(), timezoneOffset);
+    if (!range) continue;
+
+    const locationText = stripUnsafeText(
+      block.match(/<div[^>]+class=["'][^"']*event--location[^"']*["'][^>]*>([\s\S]*?)<\/div>/i)?.[1],
+      180,
+    );
+    const venue =
+      stripUnsafeText(title.match(/\bat\s+(.+)$/i)?.[1], 100) ||
+      locationText ||
+      source.name;
+    const signalText = `${title} ${locationText} ${sourceAudienceText(source)} Family Fun`;
+    const event = normalizeRawEvent({
+      title,
+      description: `${title} at ${venue}`.slice(0, 500),
+      venue,
+      city: source.city || "Chicago",
+      neighborhood: source.neighborhood || source.city || "Chicago",
+      lat: source.lat,
+      lon: source.lon,
+      category: source.category || "Park",
+      startDateTime: range.startDateTime,
+      endDateTime: range.endDateTime,
+      ageBands: inferAgeBands(signalText),
+      url: sanitizeUrl(href, source.url) || source.url,
+      cost: source.cost || inferCost(signalText),
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.url,
+      sourceMode: "chicago-park-district",
+      extractionMethod: "chicago-park-district",
+      verified: true,
+    }, source);
+    if (event) events.push(event);
+  }
+
+  return dedupeEvents(events);
 }
 
 export function extractLibCalEvents(json, source = {}) {
