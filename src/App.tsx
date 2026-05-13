@@ -3406,9 +3406,8 @@ function App({ metro }: AppProps) {
                 className="user-avatar-fallback"
                 title="Sign in"
                 onClick={() => {
-                  if (window.google?.accounts?.id) {
-                    window.google.accounts.id.prompt();
-                  }
+                  const gid = window.google?.accounts?.id as { prompt?: () => void } | undefined;
+                  gid?.prompt?.();
                 }}
               >
                 <Users aria-hidden="true" />
@@ -4062,15 +4061,13 @@ function App({ metro }: AppProps) {
               className="featured-rail-head"
               onClick={() => setPicksExpanded((v) => !v)}
               onTouchStart={(e) => {
-                const touch = e.touches[0];
-                (e.currentTarget as HTMLElement).dataset.touchY = String(touch.clientY);
+                (e.currentTarget as HTMLElement).dataset.touchY = String(e.touches[0].clientY);
               }}
-              onTouchEnd={(e) => {
+              onTouchMove={(e) => {
                 const startY = Number((e.currentTarget as HTMLElement).dataset.touchY || 0);
-                const endY = e.changedTouches[0].clientY;
-                const dy = startY - endY;
-                if (dy > 30) setPicksExpanded(true);
-                else if (dy < -30) setPicksExpanded(false);
+                const dy = startY - e.touches[0].clientY;
+                if (dy > 15) { setPicksExpanded(true); (e.currentTarget as HTMLElement).dataset.touchY = ""; }
+                else if (dy < -15) { setPicksExpanded(false); (e.currentTarget as HTMLElement).dataset.touchY = ""; }
               }}
               role="button"
               tabIndex={0}
