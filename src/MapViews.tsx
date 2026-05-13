@@ -134,9 +134,8 @@ export const SpotMap = forwardRef<SpotMapHandle, {
   // Once the user has a stored view (or pans/zooms), the auto-fit step stops
   // overriding it. Without this, every data-set change would yank them back
   // to the all-points framing.
-  const hasUserViewRef = useRef<boolean>(
-    loadStoredMapView(mapViewStorageKey) !== null,
-  );
+  const hasUserViewRef = useRef<boolean>(false);
+  const initialFitDoneRef = useRef<boolean>(false);
 
   const plottedSpots = useMemo(
     () =>
@@ -196,7 +195,7 @@ export const SpotMap = forwardRef<SpotMapHandle, {
       } catch {
         // ignore quota / privacy errors
       }
-      hasUserViewRef.current = true;
+      if (initialFitDoneRef.current) hasUserViewRef.current = true;
       onViewChangeRef.current?.({ lat: c.lat, lon: c.lng });
     };
     map.on("moveend", handleMoveEnd);
@@ -394,17 +393,16 @@ export const SpotMap = forwardRef<SpotMapHandle, {
 
     if (points.length === 0) {
       map.setView(defaultCenter, 9, { animate: false });
-      return;
-    }
-    if (points.length === 1) {
+    } else if (points.length === 1) {
       map.setView(points[0], 13, { animate: false });
-      return;
+    } else {
+      map.fitBounds(L.latLngBounds(points), {
+        maxZoom: 13,
+        padding: [28, 28],
+        animate: false,
+      });
     }
-    map.fitBounds(L.latLngBounds(points), {
-      maxZoom: 13,
-      padding: [28, 28],
-      animate: false,
-    });
+    requestAnimationFrame(() => { initialFitDoneRef.current = true; });
   }, [defaultCenter, plottedSpots, plottedEvents]);
 
   function handleLocateClick() {

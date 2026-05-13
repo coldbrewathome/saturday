@@ -562,6 +562,13 @@ h3 {
   .topbar-auth .signin-slot {
     display: flex;
     align-items: center;
+    position: relative;
+    z-index: 10;
+  }
+
+  .topbar-auth .signin-slot iframe {
+    min-width: 32px;
+    min-height: 32px;
   }
 }
 
