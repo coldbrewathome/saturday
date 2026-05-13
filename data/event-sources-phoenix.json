@@ -26,7 +26,7 @@
       "url": "https://calendar.phoenixpubliclibrary.org/calendar/",
       "city": "Phoenix",
       "category": "Library",
-      "sourceType": "eventList",
+      "sourceType": "libcal",
       "trust": "official",
       "requiresBrowserHeaders": true,
       "lat": 33.4484,
@@ -41,15 +41,18 @@
       "fallbackEventIds": [
         "phoenix-family-storytime",
         "phoenix-kids-steam"
-      ]
+      ],
+      "libcalCalendarId": "-1",
+      "perPage": 96,
+      "maxPages": 8
     },
     {
       "id": "phoenix-parks-family",
       "name": "Phoenix Parks Events",
-      "url": "https://www.phoenix.gov/parks/activities-recreation/events",
+      "url": "https://www.phoenix.gov/calendar/parks-events.html",
       "city": "Phoenix",
       "category": "Park",
-      "sourceType": "eventList",
+      "sourceType": "phoenixCityCalendar",
       "trust": "official",
       "requiresBrowserHeaders": true,
       "lat": 33.4484,
@@ -65,7 +68,12 @@
       "fallbackEventIds": [
         "phoenix-family-nature",
         "phoenix-family-play"
-      ]
+      ],
+      "apiUrls": [
+        "https://www.phoenix.gov/calendar/parks-events/_jcr_content/root/container/container/subtopic_event_searc.results.json",
+        "https://www.phoenix.gov/calendar/family-events/_jcr_content/root/container/container/subtopic_event_searc.results.json"
+      ],
+      "limit": 50
     },
     {
       "id": "phoenix-museum-family",
@@ -73,9 +81,10 @@
       "url": "https://childrensmuseumofphoenix.org/events/",
       "city": "Phoenix",
       "category": "Museum",
-      "sourceType": "eventList",
+      "sourceType": "tribeEvents",
       "trust": "official",
       "requiresBrowserHeaders": true,
+      "requiresBrowserContext": true,
       "lat": 33.4484,
       "lon": -112.074,
       "defaultAudienceText": "children family kids museum science art workshop",
@@ -98,6 +107,7 @@
       "sourceType": "eventList",
       "trust": "official",
       "requiresBrowserHeaders": true,
+      "requiresBrowserContext": true,
       "lat": 33.4484,
       "lon": -112.074,
       "defaultAudienceText": "children family kids zoo animals aquarium nature",

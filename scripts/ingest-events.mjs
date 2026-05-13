@@ -43,6 +43,7 @@ const reportPath =
 const minEvents = Number(process.env.MIN_EVENTS || activeMetro.minEvents || 25);
 const timeoutMs = Number(process.env.EVENT_FETCH_TIMEOUT_MS || 12000);
 const offline = process.env.EVENT_INGEST_OFFLINE === "1";
+let browserInstance = null;
 
 async function readJson(filePath) {
   const raw = await fs.readFile(filePath, "utf8");
@@ -58,6 +59,36 @@ function templateMap(dataset) {
 }
 
 async function fetchSource(source, registry) {
+  if (source.sourceType === "nextDataEvents") {
+    return fetchNextDataEvents(source, registry);
+  }
+  if (source.sourceType === "tribeEvents") {
+    return fetchTribeEvents(source, registry);
+  }
+  if (source.sourceType === "libraryMarket") {
+    return fetchLibraryMarket(source, registry);
+  }
+  if (source.sourceType === "dallasZooAjax") {
+    return fetchDallasZooAjax(source, registry);
+  }
+  if (source.sourceType === "miamiDadeCalendar") {
+    return fetchMiamiDadeCalendar(source, registry);
+  }
+  if (source.sourceType === "phoenixCityCalendar") {
+    return fetchPhoenixCityCalendar(source, registry);
+  }
+  if (source.sourceType === "cmaProgramEvents") {
+    return fetchCmaProgramEvents(source, registry);
+  }
+  if (source.sourceType === "nationalZooJsonApi") {
+    return fetchNationalZooJsonApi(source, registry);
+  }
+  if (source.sourceType === "sanDiegoDrupalCalendar") {
+    return fetchSanDiegoDrupalCalendar(source, registry);
+  }
+  if (source.sourceType === "wpRestEvents") {
+    return fetchWpRestEvents(source, registry);
+  }
   if (source.sourceType === "sfplEvents") {
     return fetchSfplEvents(source, registry);
   }
@@ -97,12 +128,12 @@ async function fetchSource(source, registry) {
     url.searchParams.set("startDateTime", now.toISOString().replace(/\.\d{3}Z$/, "Z"));
     url.searchParams.set("endDateTime", end.toISOString().replace(/\.\d{3}Z$/, "Z"));
     url.searchParams.set("size", "100");
-    return fetchUrl(url.toString(), registry.defaults?.userAgent, {
+    return fetchUrlForSource(source, url.toString(), registry.defaults?.userAgent, {
       browserHeaders: true,
       headers: { accept: "application/json" },
     });
   }
-  return fetchUrl(source.url, registry.defaults?.userAgent, {
+  return fetchUrlForSource(source, source.url, registry.defaults?.userAgent, {
     browserHeaders: source.requiresBrowserHeaders === true,
   });
 }
@@ -279,6 +310,345 @@ async function fetchLocalistEvents(source, registry) {
     contentType: `application/json; source=localist-events; events=${events.length}; pages=${fetchedPages}`,
     json: { events, page: pageInfo, fetchedPages },
     text: JSON.stringify({ events, page: pageInfo, fetchedPages }),
+  };
+}
+
+async function fetchNextDataEvents(source, registry) {
+  const pagePayload = await fetchUrlForSource(source, source.url, registry.defaults?.userAgent, {
+    browserHeaders: true,
+  });
+  if (pagePayload.status !== "ok") return pagePayload;
+  const rawJson = pagePayload.text?.match(/<script[^>]+id=["']__NEXT_DATA__["'][^>]*>([\s\S]*?)<\/script>/i)?.[1];
+  if (!rawJson) return { status: "fetch-error", reason: "missing __NEXT_DATA__ payload" };
+
+  let nextData;
+  try {
+    nextData = JSON.parse(decodeHtmlEntities(rawJson));
+  } catch (error) {
+    return {
+      status: "fetch-error",
+      reason: `invalid __NEXT_DATA__ payload: ${error instanceof Error ? error.message : String(error)}`,
+    };
+  }
+
+  const buildId = nextData.buildId || source.buildId;
+  if (!buildId || source.inlineNextData === true) {
+    return {
+      status: "ok",
+      httpStatus: 200,
+      contentType: "application/json; source=next-data-inline",
+      json: nextData,
+      text: JSON.stringify(nextData),
+    };
+  }
+
+  const pageUrl = new URL(source.url);
+  const dataUrl = new URL(
+    `/_next/data/${buildId}${pageUrl.pathname.replace(/\/$/, "") || "/index"}.json`,
+    source.url,
+  );
+  const dataPayload = await fetchUrlForSource(source, dataUrl.toString(), registry.defaults?.userAgent, {
+    headers: { accept: "application/json" },
+  });
+  if (dataPayload.status === "ok" && dataPayload.json) return dataPayload;
+  return {
+    status: "ok",
+    httpStatus: 200,
+    contentType: "application/json; source=next-data-inline",
+    json: nextData,
+    text: JSON.stringify(nextData),
+  };
+}
+
+async function fetchTribeEvents(source, registry) {
+  const perPage = Number(source.perPage || 100);
+  const maxPages = Number(source.maxPages || 12);
+  const now = new Date();
+  const baseUrl = new URL(source.apiUrl || "/wp-json/tribe/events/v1/events", source.url);
+  const events = [];
+  let totalPages = null;
+  let fetchedPages = 0;
+
+  for (let page = 1; page <= maxPages; page += 1) {
+    const url = new URL(baseUrl);
+    url.searchParams.set("per_page", String(perPage));
+    url.searchParams.set("page", String(page));
+    url.searchParams.set("status", "publish");
+    url.searchParams.set("start_date", source.startDate || dateParam(now));
+    if (source.endDate) url.searchParams.set("end_date", source.endDate);
+    if (source.categories) url.searchParams.set("categories", String(source.categories));
+    const payload = await fetchUrlForSource(source, url.toString(), registry.defaults?.userAgent, {
+      headers: { accept: "application/json" },
+    });
+    if (payload.status !== "ok") return payload;
+    const json = payload.json || JSON.parse(payload.text || "{}");
+    const pageEvents = Array.isArray(json.events) ? json.events : [];
+    events.push(...pageEvents);
+    totalPages = Number(json.total_pages || totalPages || 0) || null;
+    fetchedPages += 1;
+    if (pageEvents.length === 0 || (totalPages && page >= totalPages)) break;
+  }
+
+  return {
+    status: "ok",
+    httpStatus: 200,
+    contentType: `application/json; source=tribe-events; events=${events.length}; pages=${fetchedPages}`,
+    json: { events, total_pages: totalPages, fetchedPages },
+    text: JSON.stringify({ events, total_pages: totalPages, fetchedPages }),
+  };
+}
+
+async function fetchLibraryMarket(source, registry) {
+  const maxPages = Number(source.maxPages || 12);
+  const chunks = [];
+  let fetchedPages = 0;
+
+  for (let page = 0; page < maxPages; page += 1) {
+    const url = new URL(source.url);
+    url.searchParams.set("page", String(page));
+    const payload = await fetchUrlForSource(source, url.toString(), registry.defaults?.userAgent, {
+      browserHeaders: source.requiresBrowserHeaders === true,
+    });
+    if (payload.status !== "ok") return payload;
+    const text = payload.text || "";
+    if (!/\blc-event\b/i.test(text)) break;
+    chunks.push(`\n<!-- library-market-page:${page} url:${url.toString()} -->\n${text}`);
+    fetchedPages += 1;
+    if (!/pager__item--next|rel=["']next["']|\?page=\d+/i.test(text) && page > 0) break;
+  }
+
+  return {
+    status: "ok",
+    httpStatus: 200,
+    contentType: `text/html; source=library-market; pages=${fetchedPages}`,
+    text: chunks.join("\n"),
+  };
+}
+
+async function fetchDallasZooAjax(source, registry) {
+  const maxPages = Number(source.maxPages || 8);
+  const start = source.startDate || dateParam(new Date());
+  const end = source.endDate || "2099-12-31";
+  const chunks = [];
+  let totalPages = null;
+
+  for (let page = 1; page <= maxPages; page += 1) {
+    const url = new URL(source.apiUrl || "/wp-admin/admin-ajax.php", source.url);
+    url.searchParams.set("action", "ajax_calendar_populate");
+    url.searchParams.set("page", String(page));
+    url.searchParams.set("start", start);
+    url.searchParams.set("end", end);
+    url.searchParams.set("tags", source.tags || "");
+    const payload = await fetchUrlForSource(source, url.toString(), registry.defaults?.userAgent, {
+      browserHeaders: true,
+      headers: {
+        accept: "application/json,text/html;q=0.9,*/*;q=0.8",
+        "x-requested-with": "XMLHttpRequest",
+      },
+    });
+    if (payload.status !== "ok") return payload;
+    const json = payload.json || JSON.parse(payload.text || "{}");
+    const html = json?.data?.html || "";
+    if (!html) break;
+    chunks.push(`\n<!-- dallas-zoo-page:${page} -->\n${html}`);
+    totalPages = Number(json?.data?.totalPages || totalPages || 0) || null;
+    if (totalPages && page >= totalPages) break;
+  }
+
+  return {
+    status: "ok",
+    httpStatus: 200,
+    contentType: `text/html; source=dallas-zoo-ajax; pages=${chunks.length}`,
+    text: chunks.join("\n"),
+  };
+}
+
+async function fetchMiamiDadeCalendar(source, registry) {
+  const calendarName = source.calendarName || "Parks";
+  const url = source.apiUrl || `https://api2.miamidade.gov/calendar/api/calendars/${encodeURIComponent(calendarName)}/events`;
+  return fetchUrlForSource(source, url, registry.defaults?.userAgent, {
+    headers: { accept: "application/json" },
+  });
+}
+
+async function fetchPhoenixCityCalendar(source, registry) {
+  const limit = Number(source.limit || 50);
+  const maxPages = Number(source.maxPages || 8);
+  const endpoints = Array.isArray(source.apiUrls) && source.apiUrls.length > 0
+    ? source.apiUrls
+    : [source.apiUrl || source.url];
+  const results = [];
+  let resultTotal = 0;
+
+  for (const endpoint of endpoints) {
+    for (let offset = 0; offset < maxPages * limit; offset += limit) {
+      const url = new URL(endpoint);
+      url.searchParams.set("offset", String(offset));
+      url.searchParams.set("limit", String(limit));
+      if (source.searchDateStart) url.searchParams.set("search-date-start", source.searchDateStart);
+      const payload = await fetchUrlForSource(source, url.toString(), registry.defaults?.userAgent, {
+        headers: { accept: "application/json" },
+      });
+      if (payload.status !== "ok") return payload;
+      const json = payload.json || JSON.parse(payload.text || "{}");
+      const pageResults = Array.isArray(json.results) ? json.results : [];
+      results.push(...pageResults);
+      const total = Number(json.resultTotal || json.total || 0);
+      if (offset === 0 && Number.isFinite(total)) resultTotal += total;
+      if (pageResults.length === 0 || (Number.isFinite(total) && offset + pageResults.length >= total)) break;
+    }
+  }
+
+  return {
+    status: "ok",
+    httpStatus: 200,
+    contentType: `application/json; source=phoenix-city-calendar; events=${results.length}`,
+    json: { results, resultTotal },
+    text: JSON.stringify({ results, resultTotal }),
+  };
+}
+
+async function fetchCmaProgramEvents(source, registry) {
+  const url = new URL(source.apiUrl || "/wp-json/CMAProgViewerApi/v1/cma-program-api-list", source.url);
+  return fetchUrlForSource(source, url.toString(), registry.defaults?.userAgent, {
+    method: "POST",
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({ date: source.startDate || dateParam(new Date()) }),
+  });
+}
+
+async function fetchNationalZooJsonApi(source, registry) {
+  const limit = Number(source.pageLimit || 50);
+  const maxPages = Number(source.maxPages || 4);
+  const data = [];
+  let included = [];
+  for (let page = 0; page < maxPages; page += 1) {
+    const url = new URL(source.apiUrl || "/jsonapi/node/event", source.url);
+    url.searchParams.set("page[limit]", String(limit));
+    url.searchParams.set("page[offset]", String(page * limit));
+    url.searchParams.set("sort", source.sort || "field_event_date_time.value");
+    url.searchParams.set("filter[status]", "1");
+    const payload = await fetchUrlForSource(source, url.toString(), registry.defaults?.userAgent, {
+      headers: { accept: "application/vnd.api+json,application/json" },
+    });
+    if (payload.status !== "ok") return payload;
+    const json = payload.json || JSON.parse(payload.text || "{}");
+    const pageData = Array.isArray(json.data) ? json.data : [];
+    data.push(...pageData);
+    if (Array.isArray(json.included)) included = included.concat(json.included);
+    if (pageData.length < limit) break;
+  }
+  return {
+    status: "ok",
+    httpStatus: 200,
+    contentType: `application/vnd.api+json; source=national-zoo-jsonapi; events=${data.length}`,
+    json: { data, included },
+    text: JSON.stringify({ data, included }),
+  };
+}
+
+async function fetchWpRestEvents(source, registry) {
+  const perPage = Number(source.perPage || 100);
+  const maxPages = Number(source.maxPages || 4);
+  const events = [];
+  for (let page = 1; page <= maxPages; page += 1) {
+    const url = new URL(source.apiUrl || "/wp-json/wp/v2/events", source.url);
+    url.searchParams.set("per_page", String(perPage));
+    url.searchParams.set("page", String(page));
+    url.searchParams.set("status", "publish");
+    if (source.embed !== false) url.searchParams.set("_embed", "1");
+    if (source.fields) url.searchParams.set("_fields", String(source.fields));
+    const payload = await fetchUrlForSource(source, url.toString(), registry.defaults?.userAgent, {
+      headers: { accept: "application/json" },
+    });
+    if (payload.status !== "ok") return payload;
+    const json = payload.json || JSON.parse(payload.text || "[]");
+    const pageEvents = Array.isArray(json) ? json : [];
+    events.push(...pageEvents);
+    if (pageEvents.length < perPage) break;
+  }
+  return {
+    status: "ok",
+    httpStatus: 200,
+    contentType: `application/json; source=wp-rest-events; events=${events.length}`,
+    json: events,
+    text: JSON.stringify(events),
+  };
+}
+
+async function fetchSanDiegoDrupalCalendar(source, registry) {
+  const pagePayload = await fetchUrlForSource(source, source.url, registry.defaults?.userAgent, {
+    browserHeaders: source.requiresBrowserHeaders === true,
+  });
+  if (pagePayload.status !== "ok") return pagePayload;
+  const htmlChunks = [`\n<!-- san-diego-page -->\n${pagePayload.text || ""}`];
+  const settings = extractDrupalSettings(pagePayload.text || "");
+  const ajaxViews = settings?.views?.ajaxViews || {};
+  const ajaxView = Object.values(ajaxViews).find((view) =>
+    view?.view_name === "events_calendar" && view?.view_display_id === "block_month"
+  );
+  const libraries = settings?.ajaxPageState?.libraries || "";
+  const theme = settings?.ajaxPageState?.theme || "sand";
+  if (!ajaxView || !libraries) {
+    return {
+      status: "ok",
+      httpStatus: 200,
+      contentType: "text/html; source=san-diego-drupal-page-only",
+      text: htmlChunks.join("\n"),
+    };
+  }
+
+  const ajaxUrl = new URL(settings.views?.ajax_path || "/views/ajax", source.url).toString();
+  const months = Number(source.months || 3);
+  const now = new Date();
+  for (let offset = 0; offset < months; offset += 1) {
+    const params = new URLSearchParams({
+      _wrapper_format: "drupal_ajax",
+      view_name: ajaxView.view_name,
+      view_display_id: ajaxView.view_display_id,
+      view_args: ajaxView.view_args || "",
+      view_path: ajaxView.view_path || new URL(source.url).pathname,
+      view_dom_id: ajaxView.view_dom_id || "",
+      pager_element: String(ajaxView.pager_element ?? 0),
+      calendar_timestamp: String(monthStartSeconds(now, offset)),
+      previous: String(monthStartSeconds(now, offset - 1)),
+      current: String(Math.floor(Date.now() / 1000)),
+      next: String(monthStartSeconds(now, offset + 1)),
+      date_format: "custom",
+      date_pattern: "F",
+      use_previous_next: "0",
+      display_reset: "0",
+      pager_type: "calendar_month",
+      _drupal_ajax: "1",
+      "ajax_page_state[theme]": theme,
+      "ajax_page_state[theme_token]": "",
+      "ajax_page_state[libraries]": libraries,
+    });
+    const payload = await fetchUrlForSource(source, `${ajaxUrl}?${params.toString()}`, registry.defaults?.userAgent, {
+      headers: { accept: "application/json,text/javascript,*/*;q=0.8" },
+    });
+    if (payload.status !== "ok") continue;
+    let commands = [];
+    try {
+      commands = parseDrupalAjaxCommands(payload);
+    } catch {
+      commands = [];
+    }
+    const insertHtml = commands
+      .filter((command) => command.command === "insert" && typeof command.data === "string")
+      .map((command) => command.data)
+      .join("\n");
+    if (insertHtml) htmlChunks.push(`\n<!-- san-diego-ajax-month:${offset} -->\n${insertHtml}`);
+  }
+
+  return {
+    status: "ok",
+    httpStatus: 200,
+    contentType: "text/html; source=san-diego-drupal-calendar",
+    text: htmlChunks.join("\n"),
   };
 }
 
@@ -472,6 +842,23 @@ function extractQueryParam(url, key) {
   }
 }
 
+function extractDrupalSettings(html) {
+  const match = html.match(/(?:window\.)?drupalSettings\s*=\s*({[\s\S]*?});/);
+  if (!match) return null;
+  try {
+    return JSON.parse(match[1]);
+  } catch {
+    return null;
+  }
+}
+
+function monthStartSeconds(now, monthOffset = 0) {
+  const date = new Date(now);
+  return Math.floor(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + monthOffset, 1, 7, 0, 0) / 1000,
+  );
+}
+
 // Sites behind Akamai / Imperva (e.g. Sunnyvale Library) reject the default
 // fetcher's headers with 403. When the source asks for it, send the full
 // Chrome header set including Sec-Fetch-* — that is enough to clear most
@@ -496,6 +883,94 @@ const BROWSER_HEADERS = {
   "upgrade-insecure-requests": "1",
 };
 
+function looksBlocked(payload) {
+  const text = payload?.text || "";
+  return payload?.status === "blocked" ||
+    payload?.httpStatus === 403 ||
+    /incapsula|imperva|hcaptcha|additional security check|captcha challenge|just a moment|cf-chl|checking your browser|verify you are human|wp engine security/i.test(text);
+}
+
+async function fetchUrlForSource(source, url, userAgent, init = {}) {
+  const payload = await fetchUrl(url, userAgent, init);
+  if (!source.requiresBrowserContext || (payload.status === "ok" && !looksBlocked(payload))) {
+    return payload;
+  }
+  return fetchUrlWithBrowserContext(source, url, init);
+}
+
+async function browser() {
+  if (!browserInstance) {
+    const { chromium } = await import("playwright");
+    browserInstance = await chromium.launch({ headless: true });
+  }
+  return browserInstance;
+}
+
+async function closeBrowser() {
+  if (!browserInstance) return;
+  await browserInstance.close();
+  browserInstance = null;
+}
+
+async function fetchUrlWithBrowserContext(source, url, init = {}) {
+  const launched = await browser();
+  const page = await launched.newPage({
+    userAgent: BROWSER_HEADERS["user-agent"],
+    extraHTTPHeaders: {
+      "accept-language": "en-US,en;q=0.9",
+    },
+  });
+  try {
+    const warmupUrl = source.browserPageUrl || source.pageUrl || source.homeUrl || source.url || url;
+    await page.goto(warmupUrl, { waitUntil: "domcontentloaded", timeout: timeoutMs }).catch(() => null);
+    await page.waitForTimeout(Number(source.browserSettleMs || 750));
+    const response = await page.evaluate(async ({ requestUrl, requestInit }) => {
+      const response = await fetch(requestUrl, {
+        method: requestInit.method || "GET",
+        headers: requestInit.headers || {},
+        body: requestInit.body || undefined,
+        credentials: "include",
+      });
+      const text = await response.text();
+      return {
+        ok: response.ok,
+        status: response.status,
+        contentType: response.headers.get("content-type") || "",
+        text,
+      };
+    }, {
+      requestUrl: url,
+      requestInit: {
+        method: init.method || "GET",
+        headers: init.headers || {},
+        body: init.body || null,
+      },
+    });
+    let json = null;
+    if (/json/i.test(response.contentType)) {
+      try {
+        json = JSON.parse(response.text);
+      } catch {
+        json = null;
+      }
+    }
+    return {
+      status: response.ok ? "ok" : "http-error",
+      httpStatus: response.status,
+      contentType: response.contentType,
+      text: response.text,
+      json,
+    };
+  } catch (error) {
+    return {
+      status: "fetch-error",
+      reason: `browser fetch failed: ${error instanceof Error ? error.message : String(error)}`,
+    };
+  } finally {
+    await page.close().catch(() => null);
+  }
+}
+
 async function fetchUrl(url, userAgent, init = {}) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -519,7 +994,7 @@ async function fetchUrl(url, userAgent, init = {}) {
     });
     const contentType = response.headers.get("content-type") || "";
     const text = await response.text();
-    if (response.ok && /incapsula|imperva|hcaptcha|additional security check|captcha challenge/i.test(text)) {
+    if (response.ok && /incapsula|imperva|hcaptcha|additional security check|captcha challenge|just a moment|cf-chl|checking your browser|verify you are human|wp engine security/i.test(text)) {
       return {
         status: "blocked",
         reason: "challenge page returned instead of event content",
@@ -841,7 +1316,10 @@ async function main() {
   console.log(`Wrote event build report to ${reportPath}`);
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+main()
+  .then(() => closeBrowser())
+  .catch(async (error) => {
+    await closeBrowser().catch(() => null);
+    console.error(error);
+    process.exit(1);
+  });

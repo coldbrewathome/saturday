@@ -1327,6 +1327,34 @@ function expandOfficialRecurringEvents(source = {}, pageText = "", options = {})
   for (const config of configs) {
     if (!officialEventMatchesPage(pageText, config)) continue;
     const recurrence = config.recurrence || {};
+    if (recurrence.frequency === "daily") {
+      for (let cursor = new Date(start); cursor <= end; cursor = addDays(cursor, 1)) {
+        const startClock = parseClock(config.startTime || "10:00");
+        if (!startClock) continue;
+        const startDateTime = localDateTime(cursor, startClock, source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET);
+        const endClock = config.endTime ? parseClock(config.endTime, startClock.meridiem) : null;
+        events.push(normalizeRawEvent({
+          ...config,
+          id: `${config.id || source.id}-${dateOnly(cursor)}`,
+          startDateTime,
+          endDateTime: endClock
+            ? localDateTime(cursor, endClock, source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET)
+            : addMinutesToLocalIso(startDateTime, Number(config.durationMinutes || 30)),
+          city: config.city || source.city,
+          neighborhood: config.neighborhood || source.neighborhood || source.city,
+          lat: config.lat ?? source.lat,
+          lon: config.lon ?? source.lon,
+          category: config.category || source.category || "Community",
+          url: config.url || source.url,
+          sourceId: source.id,
+          sourceName: source.name,
+          sourceUrl: source.url,
+          extractionMethod: "official-recurring-event",
+          verified: true,
+        }, source));
+      }
+      continue;
+    }
     if (recurrence.frequency !== "monthly") continue;
     const dayOfWeek = Number(recurrence.dayOfWeek);
     const weekOfMonth = Number(recurrence.weekOfMonth || 1);
@@ -1749,9 +1777,427 @@ function parseCivicPlusClock(text) {
   return { hour, minute };
 }
 
+function htmlText(value, maxLength = 500) {
+  if (typeof value === "object" && value !== null) {
+    return stripUnsafeText(value.rendered || value.title || value.name || "", maxLength);
+  }
+  return stripUnsafeText(value, maxLength);
+}
+
+function localDateTimeFromString(value, timezoneOffset = DEFAULT_TIMEZONE_OFFSET) {
+  const raw = stripUnsafeText(value, 100);
+  const match = raw.match(/^(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2})(?::(\d{2}))?/);
+  if (match) return `${match[1]}T${match[2]}:${match[3] || "00"}${timezoneOffset}`;
+  return normalizeDateTime(raw, timezoneOffset);
+}
+
+function dateFromCompact(value) {
+  const raw = stripUnsafeText(value, 20);
+  const match = raw.match(/^(\d{4})(\d{2})(\d{2})$/);
+  if (!match) return null;
+  return `${match[1]}-${match[2]}-${match[3]}`;
+}
+
+function dateTimeFromCompact(dateValue, timeValue, timezoneOffset = DEFAULT_TIMEZONE_OFFSET) {
+  const date = dateFromCompact(dateValue);
+  if (!date) return null;
+  const time = stripUnsafeText(timeValue || "10:00:00", 20);
+  const match = time.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?/);
+  if (!match) return `${date}T10:00:00${timezoneOffset}`;
+  return `${date}T${match[1].padStart(2, "0")}:${match[2]}:${match[3] || "00"}${timezoneOffset}`;
+}
+
+function firstUrl(value, baseUrl) {
+  if (typeof value === "string") return sanitizeUrl(value, baseUrl);
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const found = firstUrl(item, baseUrl);
+      if (found) return found;
+    }
+  }
+  if (value && typeof value === "object") {
+    return sanitizeUrl(value.url || value.link || value.href, baseUrl);
+  }
+  return null;
+}
+
+export function extractNextDataEvents(json, source = {}) {
+  const pageProps = json?.pageProps || json?.props?.pageProps || {};
+  const rawEvents = pageProps.allEvents || pageProps.upcomingEvents || json?.allEvents || [];
+  if (!Array.isArray(rawEvents)) return [];
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
+  return rawEvents
+    .map((item) => {
+      const title = htmlText(item.title || item.name, 140);
+      const tags = [
+        ...maybeArray(item.audienceTags),
+        ...maybeArray(item.categories),
+        ...maybeArray(item.tags),
+      ].map((tag) => htmlText(tag?.title || tag?.name || tag, 80));
+      const signalText = `${title} ${htmlText(item.description || item.summary, 500)} ${tags.join(" ")} ${sourceAudienceText(source)}`;
+      const slug = stripUnsafeText(item.slug || item.urlSlug || "", 180);
+      return normalizeRawEvent({
+        title,
+        description: htmlText(item.description || item.summary || signalText, 700),
+        venue: htmlText(item.location?.name || item.venue || source.name, 100),
+        city: source.city,
+        category: source.category || inferCategory(signalText),
+        startDateTime: normalizeDateTime(item.start || item.startDate || item.startDateTime, timezoneOffset),
+        endDateTime: normalizeDateTime(item.end || item.endDate || item.endDateTime, timezoneOffset),
+        ageBands: inferAgeBands(signalText),
+        url: sanitizeUrl(item.url || (slug ? `/events/${slug}` : ""), source.url) || source.url,
+        cost: inferCost(signalText),
+        sourceId: source.id,
+        sourceName: source.name,
+        sourceUrl: source.url,
+        extractionMethod: "next-data-events",
+        verified: true,
+      }, source);
+    })
+    .filter(Boolean);
+}
+
+export function extractTribeEvents(json, source = {}) {
+  const rawEvents = Array.isArray(json?.events) ? json.events : [];
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
+  return rawEvents
+    .map((item) => {
+      const title = htmlText(item.title, 140);
+      const description = htmlText(item.description || item.excerpt, 700);
+      const categories = maybeArray(item.categories).map((category) => htmlText(category.name || category, 80));
+      const venue = item.venue && !Array.isArray(item.venue) ? item.venue : {};
+      const signalText = `${title} ${description} ${categories.join(" ")} ${sourceAudienceText(source)}`;
+      if (hasAdultOnlySignal(signalText)) return null;
+      return normalizeRawEvent({
+        id: item.id ? `${source.id}-${item.id}` : null,
+        title,
+        description,
+        venue: htmlText(venue.venue || venue.name || source.name, 100),
+        city: htmlText(source.forceSourceCity === true ? source.city : venue.city || source.city, 80),
+        lat: venue.geo_lat,
+        lon: venue.geo_lng,
+        category: source.category || inferCategory(signalText),
+        startDateTime: localDateTimeFromString(item.start_date || item.start_date_utc, timezoneOffset),
+        endDateTime: localDateTimeFromString(item.end_date || item.end_date_utc, timezoneOffset),
+        ageBands: inferAgeBands(signalText),
+        url: sanitizeUrl(item.url || item.website, source.url) || source.url,
+        cost: item.cost || inferCost(signalText),
+        sourceId: source.id,
+        sourceName: source.name,
+        sourceUrl: source.url,
+        extractionMethod: "tribe-events",
+        verified: true,
+      }, source);
+    })
+    .filter(Boolean);
+}
+
+export function extractDallasZooEvents(html, source = {}) {
+  const events = extractJsonLdEvents(html, source);
+  if (events.length > 0) return dedupeEvents(events);
+  return extractEventListEvents(html, source, { now: new Date() });
+}
+
+export function extractMiamiDadeCalendarEvents(json, source = {}) {
+  const rawEvents = Array.isArray(json?.events) ? json.events : [];
+  const events = [];
+  for (const item of rawEvents) {
+    const title = htmlText(item.title || item.name, 140);
+    const description = htmlText(item.description || item.shortDescription || "", 700);
+    const signalText = `${title} ${description} ${item.type || ""} ${sourceAudienceText(source)}`;
+    if (!title || hasAdultOnlySignal(signalText)) continue;
+    const start = normalizeDateTime(item.startDate || item.start_date, source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET);
+    const end = normalizeDateTime(item.endDate || item.end_date, source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET);
+    const durationMs = start && end
+      ? Math.max(60 * 60_000, new Date(end).getTime() - new Date(start).getTime())
+      : 90 * 60_000;
+    const occurrences = maybeArray(item.recurrence)
+      .map((occurrence) => typeof occurrence === "string" ? occurrence : occurrence?.startDate || occurrence?.date || occurrence?.start)
+      .filter(Boolean);
+    const starts = occurrences.length > 0 ? occurrences : [item.startDate || item.start_date].filter(Boolean);
+    for (const occurrence of starts) {
+      const startDateTime = normalizeDateTime(occurrence, source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET);
+      if (!startDateTime) continue;
+      const endDateTime = new Date(new Date(startDateTime).getTime() + durationMs).toISOString();
+      const event = normalizeRawEvent({
+        id: item.id ? `${source.id}-${item.id}-${hash(startDateTime)}` : null,
+        title,
+        description,
+        venue: htmlText(item.locationName || item.location || item.facility || item.address || source.name, 100),
+        city: source.city,
+        category: source.category || inferCategory(signalText),
+        startDateTime,
+        endDateTime,
+        ageBands: inferAgeBands(signalText),
+        url: sanitizeUrl(item.url || item.link, source.url) || source.url,
+        cost: item.isFree === true ? "Free" : inferCost(signalText),
+        sourceId: source.id,
+        sourceName: source.name,
+        sourceUrl: source.url,
+        extractionMethod: "miami-dade-calendar",
+        verified: true,
+      }, source);
+      if (event) events.push(event);
+    }
+  }
+  return dedupeEvents(events);
+}
+
+function phoenixClock(value, fallback = "10:00:00") {
+  const raw = stripUnsafeText(value, 80);
+  const match = raw.match(/T(\d{2}:\d{2})(?::(\d{2}))?/);
+  return match ? `${match[1]}:${match[2] || "00"}` : fallback;
+}
+
+export function extractPhoenixCityCalendarEvents(json, source = {}) {
+  const rawEvents = Array.isArray(json?.results) ? json.results : [];
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
+  return rawEvents
+    .map((item) => {
+      const props = item.properties || item;
+      const title = htmlText(item.title || props.title, 140);
+      const description = htmlText(props.description || props.eventDescription || item.description || "", 700);
+      const signalText = `${title} ${description} ${maybeArray(props.tags).join(" ")} ${sourceAudienceText(source)}`;
+      const date = stripUnsafeText(props.eventDate || props.date || "", 40).slice(0, 10);
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
+      return normalizeRawEvent({
+        title,
+        description,
+        venue: htmlText(props.location || props.eventLocation || source.name, 100),
+        city: source.city,
+        category: source.category || inferCategory(signalText),
+        startDateTime: `${date}T${phoenixClock(props.startTime)}${timezoneOffset}`,
+        endDateTime: `${date}T${phoenixClock(props.endTime, "11:00:00")}${timezoneOffset}`,
+        ageBands: inferAgeBands(signalText),
+        url: sanitizeUrl(item.url || props.url, source.url) || source.url,
+        cost: inferCost(signalText),
+        sourceId: source.id,
+        sourceName: source.name,
+        sourceUrl: source.url,
+        extractionMethod: "phoenix-city-calendar",
+        verified: true,
+      }, source);
+    })
+    .filter(Boolean);
+}
+
+function flattenCmaGroups(value, out = []) {
+  if (Array.isArray(value)) {
+    for (const item of value) flattenCmaGroups(item, out);
+  } else if (value && typeof value === "object" && value.date && Array.isArray(value.post)) {
+    out.push(value);
+  }
+  return out;
+}
+
+function cmaSessionTime(value) {
+  return stripUnsafeText(value?.time || value?.start_time || value?.startTime || value?.start || "", 40);
+}
+
+function cmaSessionEndTime(value) {
+  return stripUnsafeText(value?.end_time || value?.endTime || value?.end || "", 40);
+}
+
+export function extractCmaProgramEvents(json, source = {}, options = {}) {
+  const events = [];
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
+  const groups = flattenCmaGroups(json?.series || []);
+  for (const group of groups) {
+    const dateText = stripUnsafeText(group.date, 80);
+    const date = parseMonthDay(dateText, options.now || new Date());
+    if (!date) continue;
+    for (const post of group.post || []) {
+      const postTitle = htmlText(post.title, 140);
+      const description = htmlText(post.description || "", 700);
+      const sessions = [
+        ...maybeArray(post.stage),
+        ...maybeArray(post.dropin),
+      ].filter(Boolean);
+      const materialized = sessions.length > 0 ? sessions : [{ title: postTitle, time: source.defaultStartTime || "10:00am" }];
+      for (const session of materialized) {
+        const sessionTitle = htmlText(session.title || session.name || postTitle, 140);
+        const startClock = parseClock(cmaSessionTime(session) || source.defaultStartTime || "10:00am", "am");
+        const endClock = parseClock(cmaSessionEndTime(session) || source.defaultEndTime || "", startClock?.meridiem || "pm");
+        if (!sessionTitle || !startClock) continue;
+        const signalText = `${postTitle} ${sessionTitle} ${description} ${sourceAudienceText(source)}`;
+        const startDateTime = localDateTime(date, startClock, timezoneOffset);
+        const event = normalizeRawEvent({
+          title: sessionTitle === postTitle ? postTitle : `${postTitle}: ${sessionTitle}`,
+          description,
+          venue: source.eventList?.venue || source.name,
+          city: source.city,
+          category: source.category || "Museum",
+          startDateTime,
+          endDateTime: endClock
+            ? localDateTime(date, endClock, timezoneOffset)
+            : addMinutesToLocalIso(startDateTime, Number(source.defaultDurationMinutes || 60)),
+          ageBands: inferAgeBands(signalText),
+          url: sanitizeUrl(post.link, source.url) || source.url,
+          cost: inferCost(signalText),
+          sourceId: source.id,
+          sourceName: source.name,
+          sourceUrl: source.url,
+          extractionMethod: "cma-program-events",
+          verified: true,
+        }, source);
+        if (event) events.push(event);
+      }
+    }
+  }
+  return dedupeEvents(events);
+}
+
+export function extractNationalZooJsonApiEvents(json, source = {}) {
+  const rawEvents = Array.isArray(json?.data) ? json.data : [];
+  const events = [];
+  for (const item of rawEvents) {
+    const attributes = item.attributes || {};
+    const title = htmlText(attributes.title, 140);
+    const description = htmlText(attributes.field_event_summary?.processed || attributes.field_event_date_text?.processed || "", 700);
+    const signalText = `${title} ${description} ${sourceAudienceText(source)}`;
+    for (const dateItem of maybeArray(attributes.field_event_date_time)) {
+      const startDateTime = normalizeDateTime(dateItem?.value || dateItem, source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET);
+      if (!startDateTime) continue;
+      const event = normalizeRawEvent({
+        id: item.id ? `${source.id}-${item.id}-${hash(startDateTime)}` : null,
+        title,
+        description,
+        venue: source.eventList?.venue || source.name,
+        city: source.city,
+        category: source.category || "Zoo",
+        startDateTime,
+        endDateTime: normalizeDateTime(dateItem?.end_value, source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET),
+        ageBands: inferAgeBands(signalText),
+        url: sanitizeUrl(attributes.path?.alias, source.url) || source.url,
+        cost: inferCost(signalText),
+        sourceId: source.id,
+        sourceName: source.name,
+        sourceUrl: source.url,
+        extractionMethod: "national-zoo-jsonapi",
+        verified: true,
+      }, source);
+      if (event) events.push(event);
+    }
+  }
+  return dedupeEvents(events);
+}
+
+export function extractWpRestEvents(json, source = {}) {
+  const rawEvents = Array.isArray(json) ? json : [];
+  const events = [];
+  for (const item of rawEvents) {
+    const acf = item.acf || {};
+    const title = htmlText(item.title, 140);
+    const description = htmlText(acf.card_description || acf.event_content || item.excerpt || item.content || "", 700);
+    const signalText = `${title} ${description} ${sourceAudienceText(source)}`;
+    const rangeStart = dateFromCompact(acf.event_range_start || acf.start_date || "");
+    const rangeEnd = dateFromCompact(acf.event_range_end || acf.end_date || "") || rangeStart;
+    if (!rangeStart) continue;
+    const start = new Date(`${rangeStart}T00:00:00Z`);
+    const end = new Date(`${rangeEnd}T00:00:00Z`);
+    if (!Number.isFinite(start.getTime()) || !Number.isFinite(end.getTime())) continue;
+    let emitted = 0;
+    for (let cursor = new Date(start); cursor <= end; cursor = addDays(cursor, 1)) {
+      const dateValue = dateOnly(cursor).replace(/-/g, "");
+      const startDateTime = dateTimeFromCompact(dateValue, acf.start_time || source.defaultStartTime || "10:00:00", source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET);
+      const event = normalizeRawEvent({
+        id: `${source.id}-${item.id || slugify(title)}-${dateOnly(cursor)}`,
+        title,
+        description,
+        venue: source.eventList?.venue || source.name,
+        city: source.city,
+        category: source.category || inferCategory(signalText),
+        startDateTime,
+        endDateTime: dateTimeFromCompact(dateValue, acf.end_time || source.defaultEndTime || "17:00:00", source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET),
+        ageBands: inferAgeBands(signalText),
+        url: sanitizeUrl(item.link, source.url) || source.url,
+        cost: inferCost(signalText),
+        sourceId: source.id,
+        sourceName: source.name,
+        sourceUrl: source.url,
+        extractionMethod: "wp-rest-events",
+        verified: true,
+      }, source);
+      if (event) events.push(event);
+      emitted += 1;
+      if (emitted >= Number(source.maxRangeDays || 14)) break;
+    }
+  }
+  return dedupeEvents(events);
+}
+
+export function extractSanDiegoDrupalCalendarEvents(html, source = {}, options = {}) {
+  const events = [];
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
+  const linkRe = /<a[^>]+href=["']([^"']*event-date=([^"']+))["'][^>]*>([\s\S]*?)<\/a>/gi;
+  for (const match of html.matchAll(linkRe)) {
+    const href = decodeHtmlEntities(match[1]);
+    const title = htmlText(match[3], 140);
+    let dateText = "";
+    try {
+      dateText = decodeURIComponent(decodeHtmlEntities(match[2]).replace(/\+/g, " "));
+    } catch {
+      dateText = decodeHtmlEntities(match[2]).replace(/\+/g, " ");
+    }
+    const range = parseDateTimeRange(dateText, options.now || new Date(), timezoneOffset);
+    if (!title || !range) continue;
+    const signalText = `${title} ${dateText} ${sourceAudienceText(source)}`;
+    const event = normalizeRawEvent({
+      title,
+      description: `${title} | ${dateText}`,
+      venue: source.eventList?.venue || source.name,
+      city: source.city,
+      category: source.category || "Park",
+      startDateTime: range.startDateTime,
+      endDateTime: range.endDateTime,
+      ageBands: inferAgeBands(signalText),
+      url: sanitizeUrl(href, source.url) || source.url,
+      cost: source.cost || inferCost(signalText),
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.url,
+      extractionMethod: "san-diego-drupal-calendar",
+      verified: true,
+    }, source);
+    if (event) events.push(event);
+  }
+  if (events.length > 0) return dedupeEvents(events);
+  return extractEventListEvents(html, source, options);
+}
+
 export function extractEventsFromPayload(payload, source = {}, options = {}) {
   const contentType = payload.contentType || "";
   const text = payload.text || "";
+  if (source.sourceType === "nextDataEvents") {
+    return extractNextDataEvents(payload.json, source);
+  }
+  if (source.sourceType === "tribeEvents") {
+    return extractTribeEvents(payload.json, source);
+  }
+  if (source.sourceType === "libraryMarket") {
+    return extractLibraryCalendarEvents(text, source, options);
+  }
+  if (source.sourceType === "dallasZooAjax") {
+    return extractDallasZooEvents(text, source);
+  }
+  if (source.sourceType === "miamiDadeCalendar") {
+    return extractMiamiDadeCalendarEvents(payload.json, source);
+  }
+  if (source.sourceType === "phoenixCityCalendar") {
+    return extractPhoenixCityCalendarEvents(payload.json, source);
+  }
+  if (source.sourceType === "cmaProgramEvents") {
+    return extractCmaProgramEvents(payload.json, source, options);
+  }
+  if (source.sourceType === "nationalZooJsonApi") {
+    return extractNationalZooJsonApiEvents(payload.json, source);
+  }
+  if (source.sourceType === "wpRestEvents") {
+    return extractWpRestEvents(payload.json, source);
+  }
+  if (source.sourceType === "sanDiegoDrupalCalendar") {
+    return extractSanDiegoDrupalCalendarEvents(text, source, options);
+  }
   if (source.sourceType === "libcal") {
     return extractLibCalEvents(payload.json, source);
   }
@@ -1855,18 +2301,31 @@ export function extractBiblioEvents(html, source = {}, options = {}) {
 
 export function extractLibraryCalendarEvents(html, source = {}, options = {}) {
   const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
-  const blocks = html.match(/<div class="lc-event event-card lc-featured-event[\s\S]*?(?=<div class="lc-event event-card lc-featured-event|<div class="calendar-wrap|$)/gi) || [];
+  let blocks = html.match(/<div[^>]+class=["'][^"']*\blc-event\b[^"']*\bevent-card\b[^"']*["'][^>]*>[\s\S]*?(?=<div[^>]+class=["'][^"']*\blc-event\b[^"']*\bevent-card\b|<div class="calendar-wrap|$)/gi) || [];
+  if (blocks.length === 0) {
+    blocks = html.match(/<article[^>]+class=["'][^"']*\blc-event\b[^"']*["'][^>]*>[\s\S]*?(?=<article[^>]+class=["'][^"']*\blc-event\b|<nav\b|$)/gi) || [];
+  }
   const events = [];
   for (const block of blocks) {
     const title =
       stripUnsafeText(block.match(/<div class="lc-featured-event-content">[\s\S]*?<h2[^>]*>\s*<a[^>]*>([\s\S]*?)<\/a>/i)?.[1], 140) ||
-      stripUnsafeText(block.match(/<h3[^>]+class=["'][^"']*lc-event__title--details[^"']*["'][^>]*>([\s\S]*?)<\/h3>/i)?.[1], 140);
+      stripUnsafeText(block.match(/<h3[^>]+class=["'][^"']*lc-event__title--details[^"']*["'][^>]*>([\s\S]*?)<\/h3>/i)?.[1], 140) ||
+      stripUnsafeText(block.match(/<h[23][^>]*>\s*<a[^>]*>([\s\S]*?)<\/a>\s*<\/h[23]>/i)?.[1], 140) ||
+      stripUnsafeText(block.match(/aria-label=["']([^"']+?)\s+on\s+[^"']+["']/i)?.[1], 140);
     if (!title || isGenericPageTitle(title)) continue;
 
     const dateText =
       stripUnsafeText(block.match(/lc-featured-event-info-item--date[^>]*>([\s\S]*?)<\/div>/i)?.[1], 180) ||
+      stripUnsafeText(block.match(/<time[^>]+datetime=["'][^"']+["'][^>]*>([\s\S]*?)<\/time>/i)?.[1], 180) ||
+      stripUnsafeText(block.match(/class=["'][^"']*date-display-single[^"']*["'][^>]*>([\s\S]*?)<\/[^>]+>/i)?.[1], 180) ||
       stripUnsafeText(block.match(/aria-label=["'][^"']* on ([^"']+)["']/i)?.[1], 180);
-    const range = parseDateTimeRange(dateText, options.now || new Date(), timezoneOffset);
+    const datetime = block.match(/<time[^>]+datetime=["']([^"']+)["']/i)?.[1];
+    const normalizedDateTime = datetime ? normalizeDateTime(datetime, timezoneOffset) : null;
+    const range = parseDateTimeRange(dateText, options.now || new Date(), timezoneOffset) ||
+      (normalizedDateTime ? {
+        startDateTime: normalizedDateTime,
+        endDateTime: addMinutesToLocalIso(normalizedDateTime, 60),
+      } : null);
     if (!range) continue;
 
     const text = stripUnsafeText(block, 1800);
@@ -1899,7 +2358,10 @@ export function extractLibraryCalendarEvents(html, source = {}, options = {}) {
   }
 
   if (events.length > 0) return dedupeEvents(events);
-  return extractStructuredHtmlEvents(html, source, { ...options, method: "librarycalendar" });
+  return dedupeEvents([
+    ...extractEventListEvents(html, source, { ...options, method: "librarycalendar" }),
+    ...extractStructuredHtmlEvents(html, source, { ...options, method: "librarycalendar" }),
+  ]);
 }
 
 function parseSfplDateTimeRange(text) {
@@ -2127,7 +2589,7 @@ export function extractCommunicoEvents(json, source = {}) {
       title,
       description,
       venue,
-      city: stripUnsafeText(location?.locality || source.city, 80),
+      city: stripUnsafeText(source.forceSourceCity === true ? source.city : location?.locality || source.city, 80),
       neighborhood: branch || source.city,
       lat: hasGeo ? lat : source.lat,
       lon: hasGeo ? lon : source.lon,
@@ -2595,6 +3057,14 @@ function scoreEvent(event) {
   if (event.extractionMethod === "drupal-views-ajax") score += 7;
   if (event.extractionMethod === "localist-events") score += 7;
   if (event.extractionMethod === "event-list") score += 7;
+  if (event.extractionMethod === "tribe-events") score += 8;
+  if (event.extractionMethod === "next-data-events") score += 8;
+  if (event.extractionMethod === "miami-dade-calendar") score += 8;
+  if (event.extractionMethod === "phoenix-city-calendar") score += 8;
+  if (event.extractionMethod === "cma-program-events") score += 8;
+  if (event.extractionMethod === "national-zoo-jsonapi") score += 8;
+  if (event.extractionMethod === "wp-rest-events") score += 8;
+  if (event.extractionMethod === "san-diego-drupal-calendar") score += 8;
   if (event.extractionMethod === "official-text-event") score += 7;
   if (event.extractionMethod === "official-recurring-event") score += 7;
   if (event.extractionMethod === "midpen-table") score += 7;
@@ -2681,7 +3151,7 @@ export function validateEventsDataset(dataset, options = {}) {
       }
     }
     if (cities.size > 0 && event.city && !cities.has(event.city) && !isInsideBbox(event)) {
-      errors.push(`${prefix}.city '${event.city}' is outside configured coverage.`);
+      errors.push(`${prefix}.city '${event.city}' is outside configured coverage (${event.sourceId || "unknown source"}: ${event.title || "untitled"}).`);
     }
     // Adult-only signal is only a rejection reason when the event isn't tagged
     // for the adults audience. An adults-tagged event from event-sources-adults.json

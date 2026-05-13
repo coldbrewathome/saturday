@@ -49,7 +49,7 @@
       "url": "https://www.sandiego.gov/park-and-recreation/event-calendar",
       "city": "San Diego",
       "category": "Park",
-      "sourceType": "eventList",
+      "sourceType": "sanDiegoDrupalCalendar",
       "trust": "official",
       "requiresBrowserHeaders": true,
       "lat": 32.7157,
@@ -107,6 +107,44 @@
         "requireFamilySignal": false,
         "defaultDurationMinutes": 90
       },
+      "officialRecurringEvents": [
+        {
+          "id": "san-diego-zoo-africa-rocks-encounter",
+          "title": "Africa Rocks Encounter",
+          "description": "Daily wildlife presentation at Africa Rocks Stage.",
+          "venue": "San Diego Zoo - Africa Rocks Stage",
+          "startTime": "12:00pm",
+          "durationMinutes": 30,
+          "requiredText": "Africa Rocks Encounter",
+          "recurrence": {
+            "frequency": "daily"
+          }
+        },
+        {
+          "id": "san-diego-zoo-rady-ambassador-presentation",
+          "title": "Rady Ambassador Presentation Area",
+          "description": "Daily wildlife presentation at the Rady Ambassador Presentation Area.",
+          "venue": "San Diego Zoo - Rady Ambassador Presentation Area",
+          "startTime": "1:00pm",
+          "durationMinutes": 30,
+          "requiredText": "Rady Ambassador Presentation Area",
+          "recurrence": {
+            "frequency": "daily"
+          }
+        },
+        {
+          "id": "san-diego-zoo-wildlife-wonders",
+          "title": "Wildlife Wonders",
+          "description": "Daily wildlife presentation at Wegeforth Bowl.",
+          "venue": "San Diego Zoo - Wegeforth Bowl",
+          "startTime": "2:00pm",
+          "durationMinutes": 30,
+          "requiredText": "Wildlife Wonders",
+          "recurrence": {
+            "frequency": "daily"
+          }
+        }
+      ],
       "fallbackEventIds": [
         "san-diego-zoo-family-program"
       ]

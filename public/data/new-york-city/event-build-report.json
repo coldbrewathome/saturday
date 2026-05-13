@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "metroId": "new-york-city",
-  "generatedAt": "2026-05-12T06:09:39.785Z",
+  "generatedAt": "2026-05-12T22:11:07.688Z",
   "registryPath": "data/event-sources-new-york-city.json",
   "outputPath": "public/data/new-york-city/events.json",
-  "eventCount": 726,
+  "eventCount": 706,
   "sourceCount": 10,
-  "liveEventCount": 698,
+  "liveEventCount": 678,
   "fallbackEventCount": 28,
   "errors": [],
   "sources": [
@@ -67,21 +67,22 @@
       "city": "Brooklyn",
       "metroId": "new-york-city",
       "category": "Library",
-      "status": "ok-template-fallback",
+      "status": "blocked",
       "liveEvents": 0,
       "fallbackEvents": 8,
       "eventCount": 8,
       "fetches": [
         {
           "url": "https://www.bklynlibrary.org/event-series/events-for-youth-and-family",
-          "status": "ok",
+          "status": "blocked",
+          "reason": "challenge page returned instead of event content",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ],
+      "reason": "challenge page returned instead of event content",
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "contentType": "text/html; charset=UTF-8"
     },
     {
       "id": "nyc-parks-kids",
@@ -92,9 +93,9 @@
       "metroId": "new-york-city",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 636,
+      "liveEvents": 647,
       "fallbackEvents": 0,
-      "eventCount": 636,
+      "eventCount": 647,
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/kids",
@@ -105,7 +106,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 2110
+      "rejectedLiveEvents": 2112
     },
     {
       "id": "brooklyn-childrens-museum",
@@ -115,21 +116,22 @@
       "city": "Brooklyn",
       "metroId": "new-york-city",
       "category": "Museum",
-      "status": "ok",
-      "liveEvents": 6,
+      "status": "blocked",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 6,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.brooklynkids.org/events/",
-          "status": "ok",
+          "status": "blocked",
+          "reason": "challenge page returned instead of event content",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ],
+      "reason": "challenge page returned instead of event content",
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "contentType": "text/html; charset=UTF-8"
     },
     {
       "id": "new-victory-theater",
@@ -153,7 +155,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 1
+      "rejectedLiveEvents": 0
     },
     {
       "id": "lincoln-center-family",
@@ -163,21 +165,22 @@
       "city": "Manhattan",
       "metroId": "new-york-city",
       "category": "Theater",
-      "status": "ok",
-      "liveEvents": 4,
+      "status": "blocked",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.lincolncenter.org/series/family",
-          "status": "ok",
+          "status": "blocked",
+          "reason": "challenge page returned instead of event content",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
         }
       ],
+      "reason": "challenge page returned instead of event content",
       "httpStatus": 200,
-      "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0
+      "contentType": "text/html; charset=utf-8"
     },
     {
       "id": "amnh-calendar",
@@ -234,21 +237,11 @@
       "city": "New York",
       "metroId": "new-york-city",
       "category": "Ticketed",
-      "status": "ok",
-      "liveEvents": 21,
+      "status": "disabled",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 21,
-      "fetches": [
-        {
-          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json;charset=utf-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "application/json;charset=utf-8",
-      "rejectedLiveEvents": 0
+      "eventCount": 0,
+      "fetches": []
     }
   ]
 }

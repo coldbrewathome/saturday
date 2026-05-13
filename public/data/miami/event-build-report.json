@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "miami",
-  "generatedAt": "2026-05-12T20:26:47.473Z",
+  "generatedAt": "2026-05-12T22:16:28.623Z",
   "registryPath": "data/event-sources-miami.json",
   "outputPath": "public/data/miami/events.json",
-  "eventCount": 1767,
+  "eventCount": 1774,
   "sourceCount": 5,
-  "liveEventCount": 1755,
-  "fallbackEventCount": 12,
+  "liveEventCount": 1774,
+  "fallbackEventCount": 0,
   "errors": [],
   "sources": [
     {
@@ -38,49 +38,49 @@
       "id": "miami-parks-family",
       "name": "Miami-Dade Parks Events",
       "url": "https://www.miamidade.gov/global/calendar/global.page?calendarName=Parks",
-      "sourceType": "eventList",
+      "sourceType": "miamiDadeCalendar",
       "city": "Miami",
       "metroId": "miami",
       "category": "Park",
-      "status": "ok-template-fallback",
-      "liveEvents": 0,
-      "fallbackEvents": 8,
-      "eventCount": 8,
+      "status": "ok",
+      "liveEvents": 6,
+      "fallbackEvents": 0,
+      "eventCount": 6,
       "fetches": [
         {
           "url": "https://www.miamidade.gov/global/calendar/global.page?calendarName=Parks",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html;charset=UTF-8"
+          "contentType": "application/json"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html;charset=UTF-8",
+      "contentType": "application/json",
       "rejectedLiveEvents": 0
     },
     {
       "id": "miami-museum-family",
       "name": "Frost Science Calendar",
       "url": "https://www.frostscience.org/calendar-events/",
-      "sourceType": "eventList",
+      "sourceType": "tribeEvents",
       "city": "Miami",
       "metroId": "miami",
       "category": "Museum",
-      "status": "ok-template-fallback",
-      "liveEvents": 0,
-      "fallbackEvents": 4,
-      "eventCount": 4,
+      "status": "ok",
+      "liveEvents": 15,
+      "fallbackEvents": 0,
+      "eventCount": 15,
       "fetches": [
         {
           "url": "https://www.frostscience.org/calendar-events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "application/json; source=tribe-events; events=34; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "contentType": "application/json; source=tribe-events; events=34; pages=1",
+      "rejectedLiveEvents": 19
     },
     {
       "id": "miami-zoo-family",
@@ -114,21 +114,11 @@
       "city": "Miami",
       "metroId": "miami",
       "category": "Ticketed",
-      "status": "ok",
-      "liveEvents": 2,
+      "status": "disabled",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 2,
-      "fetches": [
-        {
-          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json;charset=utf-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "application/json;charset=utf-8",
-      "rejectedLiveEvents": 0
+      "eventCount": 0,
+      "fetches": []
     }
   ]
 }

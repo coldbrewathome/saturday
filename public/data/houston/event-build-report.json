@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "metroId": "houston",
-  "generatedAt": "2026-05-12T20:25:26.733Z",
+  "generatedAt": "2026-05-12T22:18:02.545Z",
   "registryPath": "data/event-sources-houston.json",
   "outputPath": "public/data/houston/events.json",
-  "eventCount": 205,
+  "eventCount": 196,
   "sourceCount": 5,
-  "liveEventCount": 193,
+  "liveEventCount": 184,
   "fallbackEventCount": 12,
   "errors": [],
   "sources": [
@@ -19,9 +19,9 @@
       "metroId": "houston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 189,
+      "liveEvents": 180,
       "fallbackEvents": 0,
-      "eventCount": 189,
+      "eventCount": 180,
       "fetches": [
         {
           "url": "https://calendar.houstonlibrary.org/calendar/events?cal=-1&cid=-1&d=0000-00-00&inc=0",
@@ -114,21 +114,11 @@
       "city": "Houston",
       "metroId": "houston",
       "category": "Ticketed",
-      "status": "ok",
+      "status": "disabled",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json;charset=utf-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "application/json;charset=utf-8",
-      "rejectedLiveEvents": 0
+      "fetches": []
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "metroId": "boston",
-  "generatedAt": "2026-05-12T20:26:52.825Z",
+  "generatedAt": "2026-05-12T22:18:02.711Z",
   "registryPath": "data/event-sources-boston.json",
   "outputPath": "public/data/boston/events.json",
   "eventCount": 30,
@@ -114,21 +114,11 @@
       "city": "Boston",
       "metroId": "boston",
       "category": "Ticketed",
-      "status": "ok",
+      "status": "disabled",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json;charset=utf-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "application/json;charset=utf-8",
-      "rejectedLiveEvents": 0
+      "fetches": []
     }
   ]
 }
