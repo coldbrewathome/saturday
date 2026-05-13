@@ -4345,7 +4345,6 @@ h3 {
   }
 
   .topbar-brand { flex: 0 0 auto; }
-  .topbar-mark { display: none; }
   .topbar-wordmark { font-size: 0.9rem; }
   .topbar-metro { flex: 0 1 auto; min-width: 0; order: 2; padding: 5px 6px 5px 8px; }
   .topbar-metro select { max-width: 130px; padding-right: 12px; }
@@ -4633,8 +4632,10 @@ h3 {
   }
 
   .browse-viewport .featured-rail {
+    background: var(--surface);
     border-radius: 22px 22px 0 0;
     bottom: 0;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);
     left: 0;
     max-height: 54px;
     overflow: hidden;
@@ -4642,6 +4643,7 @@ h3 {
     right: 0;
     touch-action: manipulation;
     transition: max-height 0.3s ease;
+    z-index: 500;
   }
 
   .browse-viewport .featured-rail::before {

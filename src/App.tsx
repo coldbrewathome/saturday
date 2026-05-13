@@ -4044,8 +4044,6 @@ function App({ metro }: AppProps) {
           <section
             className={`featured-rail${picksExpanded ? " is-expanded" : ""}`}
             aria-label="Editor's picks — starter plans"
-            onTouchStart={(e) => e.stopPropagation()}
-            onTouchMove={(e) => e.stopPropagation()}
           >
             <div
               className="featured-rail-head"
