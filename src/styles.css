@@ -472,20 +472,27 @@ h3 {
 }
 
 .browse-viewport {
-  height: 100vh;
+  height: 100dvh;
+  height: 100vh; /* fallback for older browsers */
   overflow: hidden;
   position: relative;
   width: 100%;
+}
+
+@supports (height: 100dvh) {
+  .browse-viewport { height: 100dvh; }
 }
 
 .browse-viewport .map-shell {
   border: 0;
   border-radius: 0;
   box-shadow: none;
+  flex: none;
   height: 100%;
+  inset: 0;
   min-height: 0;
   position: absolute;
-  inset: 0;
+  width: 100%;
 }
 
 .browse-viewport .map-locate-button {
@@ -575,7 +582,7 @@ h3 {
   -webkit-backdrop-filter: var(--glass-blur);
   border: var(--glass-border);
   border-radius: var(--glass-radius);
-  bottom: 280px;
+  bottom: calc(var(--overlay-gap) + 240px);
   box-shadow: var(--glass-shadow);
   left: var(--overlay-gap);
   max-width: none;
@@ -585,7 +592,7 @@ h3 {
   top: 84px;
   transform: none;
   transition: opacity 0.2s ease, transform 0.2s ease;
-  width: 252px;
+  width: min(252px, calc(100vw - 32px));
   z-index: 450;
 }
 
@@ -790,9 +797,9 @@ h3 {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--glass-radius);
-  bottom: 262px;
+  bottom: calc(var(--overlay-gap) + 240px);
   box-shadow: 0 10px 32px rgba(0, 0, 0, 0.18);
-  max-height: 420px;
+  max-height: calc(100dvh - 360px);
   overflow-y: auto;
   padding: 14px;
   position: absolute;
@@ -805,7 +812,7 @@ h3 {
   background: var(--ink);
   border-color: var(--ink);
   border-radius: 999px;
-  bottom: 262px;
+  bottom: calc(var(--overlay-gap) + 240px);
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
   color: #ffffff;
   cursor: pointer;
@@ -847,11 +854,11 @@ h3 {
 
 /* ── Custom map controls (bottom-left) ─────────────────────────────── */
 .map-controls {
-  bottom: 280px;
+  bottom: calc(var(--overlay-gap) + 240px);
   display: flex;
   flex-direction: column;
   gap: 8px;
-  left: 280px;
+  left: calc(var(--overlay-gap) + 268px);
   position: absolute;
   z-index: 450;
 }
@@ -921,14 +928,14 @@ h3 {
     border-radius: 18px;
     bottom: auto;
     left: auto;
-    max-height: calc(100vh - 100px);
+    max-height: calc(100dvh - 100px);
     max-width: 420px;
     overflow-y: auto;
     padding: 20px;
     position: absolute;
     right: var(--overlay-gap);
     top: 84px;
-    width: 420px;
+    width: min(420px, calc(100vw - 32px));
     z-index: 500;
   }
 
@@ -2747,7 +2754,11 @@ h3 {
   border: 1px solid var(--line);
   border-radius: 14px;
   box-shadow: 0 10px 30px rgba(31, 48, 39, 0.08);
+  max-height: calc(100dvh - 120px);
+  overflow-y: auto;
   padding: 16px;
+  position: sticky;
+  top: 18px;
 }
 
 .plan-list-panel {
