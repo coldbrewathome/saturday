@@ -4050,6 +4050,17 @@ function App({ metro }: AppProps) {
             <div
               className="featured-rail-head"
               onClick={() => setPicksExpanded((v) => !v)}
+              onTouchStart={(e) => {
+                const touch = e.touches[0];
+                (e.currentTarget as HTMLElement).dataset.touchY = String(touch.clientY);
+              }}
+              onTouchEnd={(e) => {
+                const startY = Number((e.currentTarget as HTMLElement).dataset.touchY || 0);
+                const endY = e.changedTouches[0].clientY;
+                const dy = startY - endY;
+                if (dy > 30) setPicksExpanded(true);
+                else if (dy < -30) setPicksExpanded(false);
+              }}
               role="button"
               tabIndex={0}
             >

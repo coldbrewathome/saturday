@@ -543,8 +543,12 @@ h3 {
     flex: 0 0 auto;
   }
 
-  .is-browse .topbar-wordmark {
+  .is-browse .topbar-mark {
     display: none;
+  }
+
+  .is-browse .topbar-wordmark {
+    font-size: 0.9rem;
   }
 
   .is-browse .topbar-metro {
@@ -612,8 +616,13 @@ h3 {
     width: 28px;
   }
 
+  .is-browse .topbar-auth .signin-wrap {
+    align-items: center;
+    display: flex;
+  }
+
   .is-browse .topbar-auth .signin-slot {
-    transform: scale(0.8);
+    transform: scale(0.75);
     transform-origin: right center;
   }
 }
@@ -4682,7 +4691,7 @@ h3 {
     overflow: hidden;
     padding: 0 18px 14px;
     right: 0;
-    touch-action: none;
+    touch-action: manipulation;
     transition: max-height 0.3s ease;
   }
 
