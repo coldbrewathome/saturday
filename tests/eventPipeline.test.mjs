@@ -404,6 +404,37 @@ test("extractLocalistEvents parses public Stanford Localist events and skips int
         {
           event: {
             id: 5063,
+            title: "Public Tour | Papua New Guinea Sculpture Walk",
+            status: "live",
+            private: false,
+            localist_url: "https://events.stanford.edu/event/public_tour_papua_new_guinea_sculpture_walk_1489",
+            location_name: "Meet at the Papua New Guinea Sculpture Garden, at the corner of Santa Teresa & Lomita Drive.",
+            geo: {
+              latitude: "0",
+              longitude: "0",
+              city: "Stanford",
+            },
+            free: true,
+            description_text: "Created on-site at Stanford by artists from Papua New Guinea. A public museum tour for families and visitors.",
+            event_instances: [
+              {
+                event_instance: {
+                  id: 7003,
+                  start: "2026-05-24T11:30:00-07:00",
+                  end: "2026-05-24T12:30:00-07:00",
+                },
+              },
+            ],
+            filters: {
+              event_audience: [{ name: "Everyone" }],
+              event_subject: [{ name: "Arts/Media" }],
+              event_types: [{ name: "Tour" }],
+            },
+          },
+        },
+        {
+          event: {
+            id: 5064,
             title: "Teaching with AI Community Share-outs",
             status: "live",
             private: false,
@@ -413,7 +444,7 @@ test("extractLocalistEvents parses public Stanford Localist events and skips int
             event_instances: [
               {
                 event_instance: {
-                  id: 7003,
+                  id: 7004,
                   start: "2026-05-11T15:00:00-07:00",
                   end: "2026-05-11T16:00:00-07:00",
                 },
@@ -433,12 +464,14 @@ test("extractLocalistEvents parses public Stanford Localist events and skips int
       name: "Stanford Events",
       url: "https://events.stanford.edu/",
       city: "Stanford",
+      lat: 37.4275,
+      lon: -122.1697,
       sourceType: "localistEvents",
       localistAllowedTypeNames: ["Exhibition", "Tour", "Performance", "Film/Screening", "Social Event/Reception", "Workshop"],
     },
   );
 
-  assert.equal(events.length, 2);
+  assert.equal(events.length, 3);
   const tour = events.find((event) => event.title === "Public Tour | Cantor Highlights");
   assert.equal(tour.venue, "Cantor Arts Center - Lobby");
   assert.equal(tour.startDateTime, "2026-05-11T20:00:00.000Z");
@@ -448,6 +481,10 @@ test("extractLocalistEvents parses public Stanford Localist events and skips int
   const exhibition = events.find((event) => event.title === "Archive Room: Ruth Asawa");
   assert.equal(exhibition.startDateTime, "2026-05-11T17:00:00.000Z");
   assert.equal(exhibition.cost, "Free");
+  const sculptureWalk = events.find((event) => event.title === "Public Tour | Papua New Guinea Sculpture Walk");
+  assert.equal(sculptureWalk.city, "Stanford");
+  assert.equal(sculptureWalk.lat, 37.4275);
+  assert.equal(sculptureWalk.lon, -122.1697);
 });
 
 test("extractLibraryCalendarEvents parses LibraryCalendar cards", () => {
@@ -826,6 +863,12 @@ test("validateEventsDataset rejects adult-only events and accepts generated even
     /outside configured coverage/,
   );
   dataset.events[0].city = "San Francisco";
+
+  dataset.events[0].lat = 0;
+  dataset.events[0].lon = 0;
+  assert.match(validateEventsDataset(dataset, { minEvents: 1 })[0], /null island/);
+  dataset.events[0].lat = 37.8;
+  dataset.events[0].lon = -122.4;
 
   dataset.events[0].title = "21+ cocktail night";
   assert.match(validateEventsDataset(dataset, { minEvents: 1 })[0], /adult-only/);

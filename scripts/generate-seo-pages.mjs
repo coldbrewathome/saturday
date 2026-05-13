@@ -35,6 +35,7 @@ const BRAND = process.env.VITE_APP_BRAND || (IS_ADULTS ? "NightHop" : "FamHop");
 const BRAND_TAG = IS_ADULTS ? "night-out planner" : "family weekend planner";
 const OG_IMAGE = process.env.VITE_APP_OG_IMAGE || `${SITE}/og-image.png`;
 const MAX_SPOT_PAGES_PER_METRO = Number(process.env.SEO_MAX_SPOT_PAGES_PER_METRO || 700);
+const SEO_PINNED_PATHS = readJson(path.join(ROOT, "data", "seo-pinned-paths.json")) || {};
 const FREE_CATEGORIES = new Set(["Library", "Park"]);
 function eventLikelyFree(event) {
   if (typeof event.cost === "string" && /free/i.test(event.cost)) return true;
@@ -468,15 +469,34 @@ function replaceMetroShellCopy(html, title, description) {
 // ---------------------------------------------------------------------------
 
 function generateSpotPages(items) {
-  const seen = new Map();
-  for (const spot of items.slice(0, MAX_SPOT_PAGES_PER_METRO)) {
+  const all = new Map();
+  const pinnedSlugs = pinnedSpotSlugsForMetro(activeMetro.id);
+  const missingPinnedSlugs = new Set(pinnedSlugs);
+
+  for (const spot of items) {
     if (!spot || typeof spot.name !== "string") continue;
     const baseSlug = slugify(`${spot.name} ${spot.neighborhood ?? ""}`);
     if (!baseSlug) continue;
     let slug = baseSlug;
     let n = 2;
-    while (seen.has(slug)) slug = `${baseSlug}-${n++}`;
-    seen.set(slug, spot);
+    while (all.has(slug)) slug = `${baseSlug}-${n++}`;
+    all.set(slug, spot);
+    missingPinnedSlugs.delete(slug);
+  }
+
+  const seen = new Map();
+  let uncappedCount = 0;
+  for (const [slug, spot] of all) {
+    if (uncappedCount < MAX_SPOT_PAGES_PER_METRO || pinnedSlugs.has(slug)) {
+      seen.set(slug, spot);
+    }
+    uncappedCount += 1;
+  }
+
+  if (missingPinnedSlugs.size) {
+    console.warn(
+      `[seo] pinned spot slugs not found for ${activeMetro.id}: ${[...missingPinnedSlugs].sort().join(", ")}`,
+    );
   }
 
   for (const [slug, spot] of seen) {
@@ -528,6 +548,16 @@ function generateSpotPages(items) {
     });
   }
   return new Set(seen.keys());
+}
+
+function pinnedSpotSlugsForMetro(metroId) {
+  const slugs = SEO_PINNED_PATHS?.metros?.[metroId]?.spotSlugs;
+  return new Set(Array.isArray(slugs) ? slugs.filter(Boolean).map(String) : []);
+}
+
+function pinnedCitySlugsForMetro(metroId) {
+  const slugs = SEO_PINNED_PATHS?.metros?.[metroId]?.citySlugs;
+  return new Set(Array.isArray(slugs) ? slugs.filter(Boolean).map(String) : []);
 }
 
 function buildSpotDescription(spot) {
@@ -820,10 +850,28 @@ function generateCityPages(spotItems, eventItems, spotSlugMap, eventSlugMap) {
     b.events.push(event);
   }
 
-  const cities = [...byCity.values()]
-    .filter((c) => c.spots.length + c.events.length >= 3)
-    .sort((a, b) => b.spots.length + b.events.length - (a.spots.length + a.events.length))
-    .slice(0, 40);
+  const pinnedCitySlugs = pinnedCitySlugsForMetro(activeMetro.id);
+  const missingPinnedCitySlugs = new Set(pinnedCitySlugs);
+  const rankedCities = [...byCity.values()]
+    .filter((c) => {
+      const slug = slugify(c.name);
+      missingPinnedCitySlugs.delete(slug);
+      return c.spots.length + c.events.length >= 3 || pinnedCitySlugs.has(slug);
+    })
+    .sort((a, b) => b.spots.length + b.events.length - (a.spots.length + a.events.length));
+  const cities = [];
+  for (const city of rankedCities) {
+    const slug = slugify(city.name);
+    if (cities.length < 40 || pinnedCitySlugs.has(slug)) {
+      cities.push(city);
+    }
+  }
+
+  if (missingPinnedCitySlugs.size) {
+    console.warn(
+      `[seo] pinned city slugs not found for ${activeMetro.id}: ${[...missingPinnedCitySlugs].sort().join(", ")}`,
+    );
+  }
 
   const slugs = new Set();
 

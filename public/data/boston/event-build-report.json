@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "metroId": "boston",
-  "generatedAt": "2026-05-12T22:18:02.711Z",
+  "generatedAt": "2026-05-13T21:04:39.030Z",
   "registryPath": "data/event-sources-boston.json",
   "outputPath": "public/data/boston/events.json",
-  "eventCount": 30,
+  "eventCount": 34,
   "sourceCount": 5,
-  "liveEventCount": 26,
+  "liveEventCount": 30,
   "fallbackEventCount": 4,
   "errors": [],
   "sources": [
@@ -19,9 +19,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 15,
+      "liveEvents": 13,
       "fallbackEvents": 0,
-      "eventCount": 15,
+      "eventCount": 13,
       "fetches": [
         {
           "url": "https://bpl.bibliocommons.com/v2/events?audiences=57f66113863736755f79b0ca",
@@ -43,9 +43,9 @@
       "metroId": "boston",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 9,
+      "liveEvents": 15,
       "fallbackEvents": 0,
-      "eventCount": 9,
+      "eventCount": 15,
       "fetches": [
         {
           "url": "https://www.boston.gov/rss/events",
@@ -56,7 +56,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/rss+xml; charset=utf-8",
-      "rejectedLiveEvents": 16
+      "rejectedLiveEvents": 10
     },
     {
       "id": "boston-museum-family",
@@ -114,11 +114,21 @@
       "city": "Boston",
       "metroId": "boston",
       "category": "Ticketed",
-      "status": "disabled",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
-      "fetches": []
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
     }
   ]
 }

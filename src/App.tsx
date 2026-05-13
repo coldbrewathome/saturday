@@ -28,6 +28,7 @@ import {
   Suspense,
   forwardRef,
   lazy,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -1139,7 +1140,9 @@ function App({ metro }: AppProps) {
 
   function switchMetro(nextId: string) {
     const nextMetro = METROS.find((item) => item.id === nextId);
-    if (!nextMetro || nextMetro.id === metro.id) {
+    if (!nextMetro) return;
+    if (nextMetro.id === metro.id) {
+      mapRef.current?.flyTo(metro.center.lat, metro.center.lon, 10);
       return;
     }
     const hash = window.location.hash || "#/browse";
@@ -1147,6 +1150,63 @@ function App({ metro }: AppProps) {
       `${nextMetro.canonicalPath}${window.location.search}${hash}`,
     );
   }
+
+  const picksCleanupRef = useRef<(() => void) | null>(null);
+  const picksRailRef = useCallback((el: HTMLElement | null) => {
+    picksCleanupRef.current?.();
+    picksCleanupRef.current = null;
+    if (!el) return;
+
+    let startY: number | null = null;
+    let swiped = false;
+
+    function onTouchStart(e: globalThis.TouchEvent) {
+      const target = e.target as HTMLElement | null;
+      if (el!.classList.contains("is-expanded") && target?.closest(".featured-rail-list")) {
+        startY = null;
+        return;
+      }
+      startY = e.touches[0]?.clientY ?? null;
+      swiped = false;
+    }
+
+    function onTouchMove(e: globalThis.TouchEvent) {
+      if (startY === null) return;
+      const currentY = e.touches[0]?.clientY;
+      if (currentY === undefined) return;
+      e.preventDefault();
+      const dy = startY - currentY;
+      if (Math.abs(dy) < 18) return;
+      setPicksExpanded(dy > 0);
+      swiped = true;
+      startY = null;
+    }
+
+    function onTouchEnd() {
+      startY = null;
+    }
+
+    function onClick(e: MouseEvent) {
+      if (swiped) { swiped = false; return; }
+      const head = (e.target as HTMLElement)?.closest(".featured-rail-head");
+      if (!head) return;
+      setPicksExpanded((v) => !v);
+    }
+
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
+    el.addEventListener("touchend", onTouchEnd, { passive: true });
+    el.addEventListener("touchcancel", onTouchEnd, { passive: true });
+    el.addEventListener("click", onClick);
+
+    picksCleanupRef.current = () => {
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", onTouchEnd);
+      el.removeEventListener("touchcancel", onTouchEnd);
+      el.removeEventListener("click", onClick);
+    };
+  }, []);
 
   const [query, setQuery] = useState("");
   const [ageBand, setAgeBand] = useState<AgeBand | "any">("any");
@@ -4072,20 +4132,17 @@ function App({ metro }: AppProps) {
         {/* ── Editor's picks strip (bottom glass panel) ──────────── */}
         {nearbyFeaturedPlans.length > 0 && (
           <section
+            ref={picksRailRef}
             className={`featured-rail${picksExpanded ? " is-expanded" : ""}`}
             aria-label="Editor's picks — starter plans"
           >
             <div
               className="featured-rail-head"
-              onClick={() => setPicksExpanded((v) => !v)}
-              onTouchStart={(e) => {
-                (e.currentTarget as HTMLElement).dataset.touchY = String(e.touches[0].clientY);
-              }}
-              onTouchMove={(e) => {
-                const startY = Number((e.currentTarget as HTMLElement).dataset.touchY || 0);
-                const dy = startY - e.touches[0].clientY;
-                if (dy > 15) { setPicksExpanded(true); (e.currentTarget as HTMLElement).dataset.touchY = ""; }
-                else if (dy < -15) { setPicksExpanded(false); (e.currentTarget as HTMLElement).dataset.touchY = ""; }
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  setPicksExpanded((v) => !v);
+                }
               }}
               role="button"
               tabIndex={0}

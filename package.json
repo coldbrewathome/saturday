@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/generate-seo-pages.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "ingest:bay-area": "node scripts/ingest-bay-area.mjs",
     "ingest:events": "node scripts/ingest-events.mjs && node scripts/generate-featured-plans.mjs",
@@ -17,7 +17,7 @@
     "publish:events:all": "node scripts/publish-events-all.mjs",
     "build:data-site": "node scripts/build-data-site.mjs",
     "deploy:data": "npm run build:data-site && npx wrangler pages deploy data-site/dist --project-name=famhop-data --branch=main --commit-dirty=true",
-    "build:adults": "vite build --mode adults",
+    "build:adults": "vite build --mode adults && node scripts/generate-seo-pages.mjs",
     "deploy:adults": "npm run build:adults && npx wrangler pages deploy dist --project-name=nighthop --branch=main --commit-dirty=true",
     "match:places": "node scripts/match-google-places.mjs",
     "match:places:osm": "node scripts/match-google-places-osm.mjs",

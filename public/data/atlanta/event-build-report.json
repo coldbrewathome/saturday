@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "metroId": "atlanta",
-  "generatedAt": "2026-05-12T22:13:14.968Z",
+  "generatedAt": "2026-05-13T21:03:52.142Z",
   "registryPath": "data/event-sources-atlanta.json",
   "outputPath": "public/data/atlanta/events.json",
-  "eventCount": 234,
+  "eventCount": 233,
   "sourceCount": 5,
-  "liveEventCount": 222,
+  "liveEventCount": 221,
   "fallbackEventCount": 12,
   "errors": [],
   "sources": [
@@ -19,9 +19,9 @@
       "metroId": "atlanta",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://fulcolibrary.bibliocommons.com/v2/events",
@@ -66,9 +66,9 @@
       "metroId": "atlanta",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 221,
+      "liveEvents": 218,
       "fallbackEvents": 0,
-      "eventCount": 221,
+      "eventCount": 218,
       "fetches": [
         {
           "url": "https://childrensmuseumatlanta.org/program-calendar/",
@@ -113,11 +113,21 @@
       "city": "Atlanta",
       "metroId": "atlanta",
       "category": "Ticketed",
-      "status": "disabled",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
-      "fetches": []
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
     }
   ]
 }

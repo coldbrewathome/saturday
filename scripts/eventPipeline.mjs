@@ -185,6 +185,29 @@ function lookupCityCentroid(city) {
   return CITY_CENTROIDS[key] || null;
 }
 
+function hasUsableCoordinatePair(lat, lon) {
+  return Number.isFinite(lat) && Number.isFinite(lon) && !(lat === 0 && lon === 0);
+}
+
+function resolveEventCoordinates(raw = {}, source = {}) {
+  const rawLat = Number(raw.lat);
+  const rawLon = Number(raw.lon);
+  if (hasUsableCoordinatePair(rawLat, rawLon)) {
+    return [rawLat, rawLon];
+  }
+
+  const sourceLat = Number(source.lat);
+  const sourceLon = Number(source.lon);
+  if (hasUsableCoordinatePair(sourceLat, sourceLon)) {
+    return [sourceLat, sourceLon];
+  }
+
+  const centroid = lookupCityCentroid(raw.city || source.city);
+  if (centroid) return centroid;
+
+  return [37.7749, -122.4194];
+}
+
 export function stripUnsafeText(value, maxLength = 260) {
   if (typeof value !== "string") return "";
   return decodeHtmlEntities(value)
@@ -1538,6 +1561,7 @@ export function normalizeRawEvent(raw, source = {}) {
   const ageBands = Array.isArray(raw.ageBands) && raw.ageBands.length > 0
     ? raw.ageBands.filter((band) => AGE_BANDS.includes(band))
     : inferAgeBands(combined);
+  const [lat, lon] = resolveEventCoordinates(raw, source);
 
   return {
     id: raw.id || `${source.id || "source"}-${slugify(title)}-${hash(`${title}|${raw.venue}|${startDateTime || raw.url || source.url}`)}`,
@@ -1547,18 +1571,8 @@ export function normalizeRawEvent(raw, source = {}) {
     venue: stripUnsafeText(raw.venue || source.name || title, 100),
     city: stripUnsafeText(raw.city || source.city || "Bay Area", 80),
     neighborhood: stripUnsafeText(raw.neighborhood || raw.city || source.city || "Bay Area", 80),
-    lat: Number(
-      raw.lat ??
-        source.lat ??
-        lookupCityCentroid(raw.city || source.city)?.[0] ??
-        37.7749,
-    ),
-    lon: Number(
-      raw.lon ??
-        source.lon ??
-        lookupCityCentroid(raw.city || source.city)?.[1] ??
-        -122.4194,
-    ),
+    lat,
+    lon,
     category,
     daysOfWeek: Array.isArray(raw.daysOfWeek) && raw.daysOfWeek.length > 0
       ? raw.daysOfWeek.map(Number).filter((day) => day >= 0 && day <= 6)
@@ -3142,6 +3156,8 @@ export function validateEventsDataset(dataset, options = {}) {
     }
     if (!Number.isFinite(event.lat) || !Number.isFinite(event.lon)) {
       errors.push(`${prefix} must have numeric coordinates.`);
+    } else if (event.lat === 0 && event.lon === 0) {
+      errors.push(`${prefix} coordinates are the null island fallback (0,0).`);
     }
     if (event.url && !sanitizeUrl(event.url)) errors.push(`${prefix}.url must be http or https.`);
     if (options.requireDated !== false) {

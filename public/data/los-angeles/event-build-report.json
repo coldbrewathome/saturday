@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "metroId": "los-angeles",
-  "generatedAt": "2026-05-12T22:10:45.022Z",
+  "generatedAt": "2026-05-13T21:01:37.235Z",
   "registryPath": "data/event-sources-los-angeles.json",
   "outputPath": "public/data/los-angeles/events.json",
-  "eventCount": 1636,
+  "eventCount": 1679,
   "sourceCount": 29,
-  "liveEventCount": 1636,
+  "liveEventCount": 1679,
   "fallbackEventCount": 0,
   "errors": [],
   "sources": [
@@ -19,20 +19,20 @@
       "metroId": "los-angeles",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 1154,
+      "liveEvents": 1148,
       "fallbackEvents": 0,
-      "eventCount": 1154,
+      "eventCount": 1148,
       "fetches": [
         {
           "url": "https://visit.lacountylibrary.org/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=1660; locations=91"
+          "contentType": "application/json; source=communico-events; events=1636; locations=91"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=1660; locations=91",
-      "rejectedLiveEvents": 19
+      "contentType": "application/json; source=communico-events; events=1636; locations=91",
+      "rejectedLiveEvents": 15
     },
     {
       "id": "lapl-kids",
@@ -99,12 +99,12 @@
           "url": "https://burbank.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=145; locations=6"
+          "contentType": "application/json; source=communico-events; events=142; locations=6"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=145; locations=6",
-      "rejectedLiveEvents": 2
+      "contentType": "application/json; source=communico-events; events=142; locations=6",
+      "rejectedLiveEvents": 1
     },
     {
       "id": "glendale-library",
@@ -115,20 +115,20 @@
       "metroId": "los-angeles",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 196,
+      "liveEvents": 238,
       "fallbackEvents": 0,
-      "eventCount": 196,
+      "eventCount": 238,
       "fetches": [
         {
           "url": "https://glendaleca.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=313; locations=15"
+          "contentType": "application/json; source=communico-events; events=348; locations=15"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=313; locations=15",
-      "rejectedLiveEvents": 1
+      "contentType": "application/json; source=communico-events; events=348; locations=15",
+      "rejectedLiveEvents": 3
     },
     {
       "id": "beverly-hills-library-calendar",
@@ -265,9 +265,9 @@
       "metroId": "los-angeles",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://www.skirball.org/programs",
@@ -312,22 +312,21 @@
       "city": "Los Angeles",
       "metroId": "los-angeles",
       "category": "Museum",
-      "status": "blocked",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 12,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 12,
       "fetches": [
         {
           "url": "https://griffithobservatory.lacity.gov/events/",
-          "status": "blocked",
-          "reason": "challenge page returned instead of event content",
+          "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "reason": "challenge page returned instead of event content",
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8"
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 12
     },
     {
       "id": "kidspace-childrens-museum",
@@ -338,9 +337,9 @@
       "metroId": "los-angeles",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 33,
+      "liveEvents": 34,
       "fallbackEvents": 0,
-      "eventCount": 33,
+      "eventCount": 34,
       "fetches": [
         {
           "url": "https://kidspacemuseum.org/calendar/",
@@ -351,7 +350,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 23
+      "rejectedLiveEvents": 22
     },
     {
       "id": "discovery-cube-la",
@@ -386,9 +385,9 @@
       "metroId": "los-angeles",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://cma.recreation.parks.lacity.gov/",
@@ -409,22 +408,21 @@
       "city": "Long Beach",
       "metroId": "los-angeles",
       "category": "Museum",
-      "status": "blocked",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.aquariumofpacific.org/events",
-          "status": "blocked",
-          "reason": "challenge page returned instead of event content",
+          "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "reason": "challenge page returned instead of event content",
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8"
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
     },
     {
       "id": "autry-museum",
@@ -434,22 +432,21 @@
       "city": "Los Angeles",
       "metroId": "los-angeles",
       "category": "Museum",
-      "status": "blocked",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://theautry.org/events",
-          "status": "blocked",
-          "reason": "challenge page returned instead of event content",
+          "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "reason": "challenge page returned instead of event content",
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8"
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 3
     },
     {
       "id": "hammer-museum",
@@ -507,22 +504,21 @@
       "city": "Pasadena",
       "metroId": "los-angeles",
       "category": "Museum",
-      "status": "blocked",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://www.nortonsimon.org/calendar",
-          "status": "blocked",
-          "reason": "challenge page returned instead of event content",
+          "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
         }
       ],
-      "reason": "challenge page returned instead of event content",
       "httpStatus": 200,
-      "contentType": "text/html; charset=utf-8"
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
     },
     {
       "id": "california-science-center",
@@ -580,9 +576,9 @@
       "metroId": "los-angeles",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 153,
+      "liveEvents": 143,
       "fallbackEvents": 0,
-      "eventCount": 153,
+      "eventCount": 143,
       "fetches": [
         {
           "url": "https://www.descansogardens.org/events",
@@ -593,7 +589,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 175
+      "rejectedLiveEvents": 185
     },
     {
       "id": "huntington-library",
@@ -650,22 +646,21 @@
       "city": "Long Beach",
       "metroId": "los-angeles",
       "category": "Library",
-      "status": "blocked",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.longbeach.gov/library/events/",
-          "status": "blocked",
-          "reason": "challenge page returned instead of event content",
+          "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
         }
       ],
-      "reason": "challenge page returned instead of event content",
       "httpStatus": 200,
-      "contentType": "text/html; charset=utf-8"
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
     },
     {
       "id": "grand-park-la",
@@ -675,22 +670,21 @@
       "city": "Los Angeles",
       "metroId": "los-angeles",
       "category": "Park",
-      "status": "blocked",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://grandparkla.org/events/",
-          "status": "blocked",
-          "reason": "challenge page returned instead of event content",
+          "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "reason": "challenge page returned instead of event content",
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8"
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 4
     },
     {
       "id": "ticketmaster-los-angeles-family",
@@ -700,11 +694,21 @@
       "city": "Los Angeles",
       "metroId": "los-angeles",
       "category": "Ticketed",
-      "status": "disabled",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
-      "fetches": []
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
     }
   ]
 }

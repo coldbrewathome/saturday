@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "washington-dc",
-  "generatedAt": "2026-05-12T22:18:02.613Z",
+  "generatedAt": "2026-05-13T21:03:36.677Z",
   "registryPath": "data/event-sources-washington-dc.json",
   "outputPath": "public/data/washington-dc/events.json",
-  "eventCount": 344,
+  "eventCount": 339,
   "sourceCount": 5,
-  "liveEventCount": 332,
-  "fallbackEventCount": 12,
+  "liveEventCount": 323,
+  "fallbackEventCount": 16,
   "errors": [],
   "sources": [
     {
@@ -19,20 +19,20 @@
       "metroId": "washington-dc",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 330,
+      "liveEvents": 323,
       "fallbackEvents": 0,
-      "eventCount": 330,
+      "eventCount": 323,
       "fetches": [
         {
           "url": "https://dclibrary.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=1284; locations=27"
+          "contentType": "application/json; source=communico-events; events=1252; locations=27"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=1284; locations=27",
-      "rejectedLiveEvents": 5
+      "contentType": "application/json; source=communico-events; events=1252; locations=27",
+      "rejectedLiveEvents": 9
     },
     {
       "id": "washington-dc-parks-family",
@@ -89,21 +89,18 @@
       "city": "Washington",
       "metroId": "washington-dc",
       "category": "Zoo",
-      "status": "ok",
-      "liveEvents": 2,
-      "fallbackEvents": 0,
-      "eventCount": 2,
+      "status": "fetch-error",
+      "liveEvents": 0,
+      "fallbackEvents": 4,
+      "eventCount": 4,
       "fetches": [
         {
           "url": "https://nationalzoo.si.edu/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/vnd.api+json; source=national-zoo-jsonapi; events=31"
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "application/vnd.api+json; source=national-zoo-jsonapi; events=31",
-      "rejectedLiveEvents": 287
+      "reason": "This operation was aborted"
     },
     {
       "id": "ticketmaster-washington-dc-family",
@@ -113,11 +110,21 @@
       "city": "Washington",
       "metroId": "washington-dc",
       "category": "Ticketed",
-      "status": "disabled",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
-      "fetches": []
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
     }
   ]
 }

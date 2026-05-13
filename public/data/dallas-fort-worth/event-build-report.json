@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "metroId": "dallas-fort-worth",
-  "generatedAt": "2026-05-12T22:22:03.007Z",
+  "generatedAt": "2026-05-13T21:03:27.129Z",
   "registryPath": "data/event-sources-dallas-fort-worth.json",
   "outputPath": "public/data/dallas-fort-worth/events.json",
   "eventCount": 27,
@@ -114,11 +114,21 @@
       "city": "Dallas",
       "metroId": "dallas-fort-worth",
       "category": "Ticketed",
-      "status": "disabled",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
-      "fetches": []
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
     }
   ]
 }

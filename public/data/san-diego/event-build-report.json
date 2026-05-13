@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "metroId": "san-diego",
-  "generatedAt": "2026-05-12T22:18:59.986Z",
+  "generatedAt": "2026-05-13T21:04:52.942Z",
   "registryPath": "data/event-sources-san-diego.json",
   "outputPath": "public/data/san-diego/events.json",
-  "eventCount": 149,
+  "eventCount": 148,
   "sourceCount": 5,
-  "liveEventCount": 149,
+  "liveEventCount": 148,
   "fallbackEventCount": 0,
   "errors": [],
   "sources": [
@@ -19,9 +19,9 @@
       "metroId": "san-diego",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 7,
+      "liveEvents": 6,
       "fallbackEvents": 0,
-      "eventCount": 7,
+      "eventCount": 6,
       "fetches": [
         {
           "url": "https://sdcl.bibliocommons.com/v2/events",
@@ -114,11 +114,21 @@
       "city": "San Diego",
       "metroId": "san-diego",
       "category": "Ticketed",
-      "status": "disabled",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
-      "fetches": []
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
     }
   ]
 }

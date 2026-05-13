@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "metroId": "philadelphia",
-  "generatedAt": "2026-05-12T22:18:02.699Z",
+  "generatedAt": "2026-05-13T21:03:59.686Z",
   "registryPath": "data/event-sources-philadelphia.json",
   "outputPath": "public/data/philadelphia/events.json",
-  "eventCount": 379,
+  "eventCount": 383,
   "sourceCount": 5,
-  "liveEventCount": 359,
+  "liveEventCount": 363,
   "fallbackEventCount": 20,
   "errors": [],
   "sources": [
@@ -66,9 +66,9 @@
       "metroId": "philadelphia",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 359,
+      "liveEvents": 363,
       "fallbackEvents": 0,
-      "eventCount": 359,
+      "eventCount": 363,
       "fetches": [
         {
           "url": "https://www.pleasetouchmuseum.org/calendar/month/",
@@ -79,7 +79,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=600; pages=12",
-      "rejectedLiveEvents": 241
+      "rejectedLiveEvents": 237
     },
     {
       "id": "philadelphia-zoo-family",
@@ -113,11 +113,21 @@
       "city": "Philadelphia",
       "metroId": "philadelphia",
       "category": "Ticketed",
-      "status": "disabled",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
-      "fetches": []
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
     }
   ]
 }

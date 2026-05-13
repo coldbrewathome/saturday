@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "metroId": "chicago",
-  "generatedAt": "2026-05-12T22:11:21.190Z",
+  "generatedAt": "2026-05-13T21:02:17.260Z",
   "registryPath": "data/event-sources-chicago.json",
   "outputPath": "public/data/chicago/events.json",
   "eventCount": 83,
@@ -150,11 +150,21 @@
       "city": "Chicago",
       "metroId": "chicago",
       "category": "Ticketed",
-      "status": "disabled",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
-      "fetches": []
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
     }
   ]
 }
