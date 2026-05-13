@@ -1547,7 +1547,12 @@ function App({ metro }: AppProps) {
 
   useEffect(() => {
     setShareState({ status: "idle" });
-  }, [activePlanId]);
+    if (activePlanId && view === "plans") {
+      requestAnimationFrame(() => {
+        document.getElementById("plan-detail-area")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+  }, [activePlanId, view]);
 
   useEffect(() => {
     let cancelled = false;
@@ -4608,7 +4613,7 @@ function App({ metro }: AppProps) {
           )}
         </aside>
 
-        <section className="plan-detail-area" aria-label="Plan detail">
+        <section className="plan-detail-area" id="plan-detail-area" aria-label="Plan detail">
           {!activePlan ? (
             <div className="plan-empty">
               <p>Select a plan or create a new one to start chaining stops.</p>
