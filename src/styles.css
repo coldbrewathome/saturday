@@ -4682,7 +4682,7 @@ h3 {
     left: 0;
     max-height: 54px;
     overflow: hidden;
-    padding: 0 18px 14px;
+    padding: 0;
     position: fixed;
     right: 0;
     touch-action: manipulation;
@@ -4696,7 +4696,7 @@ h3 {
     content: "";
     display: block;
     height: 4px;
-    margin: 8px auto 6px;
+    margin: 8px auto 4px;
     width: 36px;
   }
 
@@ -4708,12 +4708,14 @@ h3 {
     z-index: 1000;
   }
 
-  .browse-viewport .featured-rail-sub {
-    font-size: 0.68rem;
+  .browse-viewport .featured-rail-head {
+    cursor: pointer;
+    min-height: 44px;
+    padding: 0 18px 8px;
   }
 
-  .browse-viewport .featured-rail-head {
-    pointer-events: auto;
+  .browse-viewport .featured-rail-sub {
+    font-size: 0.68rem;
   }
 
   .browse-viewport .featured-rail-list {
@@ -4721,7 +4723,7 @@ h3 {
     gap: 12px;
     grid-template-columns: none;
     overflow-x: auto;
-    padding: 8px 0 14px;
+    padding: 8px 18px 14px;
     scroll-snap-type: x mandatory;
   }
 
