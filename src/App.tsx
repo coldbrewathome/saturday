@@ -3413,8 +3413,10 @@ function App({ metro }: AppProps) {
               <button
                 type="button"
                 className="user-avatar-fallback"
-                title="Sign in"
+                title="Sign in with Google"
                 onClick={() => {
+                  const btn = signInButtonRef.current?.querySelector<HTMLElement>('[role="button"], iframe, div[tabindex]');
+                  if (btn) { btn.click(); return; }
                   const gid = window.google?.accounts?.id as { prompt?: () => void } | undefined;
                   gid?.prompt?.();
                 }}

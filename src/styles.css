@@ -128,7 +128,12 @@ button {
   margin: 0 auto 16px;
   max-width: 1500px;
   padding: 8px 12px;
+  left: var(--overlay-gap);
+  position: fixed;
+  right: var(--overlay-gap);
   row-gap: 0;
+  top: var(--overlay-gap);
+  z-index: 500;
 }
 
 .topbar-brand {
@@ -508,15 +513,10 @@ h3 {
   display: none;
 }
 
-/* ── Browse: topbar floats over map ───────────────────────────────── */
+/* ── Browse: topbar needs no margin (map is full-bleed) ──────────── */
 .is-browse .topbar {
-  left: var(--overlay-gap);
   margin: 0;
   max-width: none;
-  position: fixed;
-  right: var(--overlay-gap);
-  top: var(--overlay-gap);
-  z-index: 500;
 }
 
 .is-browse .topbar-metro select {
@@ -556,8 +556,10 @@ h3 {
   }
 
   .topbar-auth .signin-slot {
-    transform: scale(0.75);
-    transform-origin: right center;
+    height: 0;
+    overflow: hidden;
+    position: absolute;
+    width: 0;
   }
 }
 
@@ -2772,6 +2774,7 @@ h3 {
   grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
   margin: 0 auto;
   max-width: 1500px;
+  padding-top: 60px;
 }
 
 .plan-list-panel,
@@ -3067,6 +3070,18 @@ h3 {
   justify-content: flex-end;
   margin-top: 18px;
   padding-top: 18px;
+}
+
+@media (max-width: 820px) {
+  .plan-actions {
+    justify-content: center;
+  }
+
+  .plan-actions > * {
+    flex: 1 1 auto;
+    text-align: center;
+    justify-content: center;
+  }
 }
 
 .primary-button:disabled,
