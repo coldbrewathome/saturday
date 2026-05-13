@@ -4640,6 +4640,7 @@ h3 {
     max-height: 54px;
     overflow: hidden;
     padding: 0 18px 14px;
+    position: fixed;
     right: 0;
     touch-action: manipulation;
     transition: max-height 0.3s ease;
@@ -4658,6 +4659,7 @@ h3 {
 
   .browse-viewport .featured-rail.is-expanded {
     max-height: 65vh;
+    overscroll-behavior: contain;
     overflow-y: auto;
     touch-action: pan-y;
     z-index: 1000;
