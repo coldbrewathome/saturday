@@ -3369,13 +3369,20 @@ function App({ metro }: AppProps) {
         <div className="topbar-auth">
           {session ? (
             <div className="user-chip" title={session.user.email}>
-              {session.user.picture ? (
-                <img src={session.user.picture} alt="" />
-              ) : (
-                <span className="user-avatar-fallback">
-                  <Users aria-hidden="true" />
-                </span>
-              )}
+              <button
+                type="button"
+                className="user-chip-avatar"
+                onClick={signOut}
+                title={`Signed in as ${session.user.name} — tap to sign out`}
+              >
+                {session.user.picture ? (
+                  <img src={session.user.picture} alt="" />
+                ) : (
+                  <span className="user-avatar-fallback">
+                    <Users aria-hidden="true" />
+                  </span>
+                )}
+              </button>
               <span>{session.user.name}</span>
               {syncStatus !== "idle" && (
                 <em
