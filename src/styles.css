@@ -457,7 +457,10 @@ h3 {
 /* ── V2 browse: full-bleed map with floating glass overlays ─────────── */
 
 .app-shell.is-browse {
+  overflow: hidden;
   padding: 0;
+  height: 100dvh;
+  height: 100vh;
 }
 
 .is-browse .view-bar {
@@ -470,9 +473,11 @@ h3 {
 
 .browse-viewport {
   height: 100dvh;
-  height: 100vh; /* fallback for older browsers */
+  height: 100vh;
   overflow: hidden;
-  position: relative;
+  overscroll-behavior: none;
+  position: fixed;
+  inset: 0;
   width: 100%;
 }
 
