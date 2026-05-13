@@ -1192,6 +1192,7 @@ function App({ metro }: AppProps) {
   const [addStopChoice, setAddStopChoice] = useState<string>("");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [cartExpanded, setCartExpanded] = useState(false);
+  const [picksExpanded, setPicksExpanded] = useState(false);
   const mapRef = useRef<SpotMapHandle | null>(null);
   const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(() => {
     try {
@@ -4041,15 +4042,20 @@ function App({ metro }: AppProps) {
         {/* ── Editor's picks strip (bottom glass panel) ──────────── */}
         {nearbyFeaturedPlans.length > 0 && (
           <section
-            className="featured-rail"
+            className={`featured-rail${picksExpanded ? " is-expanded" : ""}`}
             aria-label="Editor's picks — starter plans"
           >
-            <div className="featured-rail-head">
+            <div
+              className="featured-rail-head"
+              onClick={() => setPicksExpanded((v) => !v)}
+              role="button"
+              tabIndex={0}
+            >
               <span className="featured-rail-eyebrow">
-                Editor's picks{mapCenter ? " near this view" : ""}
+                Editor's picks{mapCenter ? " near this view" : ""} · {nearbyFeaturedPlans.length}
               </span>
               <span className="featured-rail-sub">
-                Tap a starter plan to fork it into your own.
+                {picksExpanded ? "Tap to collapse" : "Pull up to browse plans"}
               </span>
             </div>
             <ul className="featured-rail-list">

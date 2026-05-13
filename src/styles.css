@@ -140,9 +140,8 @@ button {
 }
 
 .topbar-wordmark {
-  /* Override the global h1 sizing — this is product chrome, not landing. */
   font-family: var(--font-display);
-  font-size: 1.4rem;
+  font-size: 1.15rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1;
@@ -179,7 +178,7 @@ button {
   cursor: pointer;
   font: inherit;
   font-family: var(--font-display);
-  font-size: 0.96rem;
+  font-size: 0.88rem;
   font-weight: 700;
   letter-spacing: -0.01em;
   outline: 0;
@@ -203,11 +202,9 @@ button {
   border-radius: 999px;
   color: var(--muted);
   display: inline-flex;
-  font: inherit;
-  font-size: 0.84rem;
-  font-weight: 600;
-  gap: 6px;
-  padding: 7px 14px;
+  font: 600 0.78rem/1 var(--font-ui);
+  gap: 5px;
+  padding: 6px 12px;
   transition:
     background 0.15s ease,
     color 0.15s ease;
@@ -519,22 +516,7 @@ h3 {
   z-index: 500;
 }
 
-.is-browse .topbar-tabs button {
-  font-size: 0.76rem;
-  padding: 5px 10px;
-}
-
-.is-browse .topbar-tabs button svg {
-  height: 12px;
-  width: 12px;
-}
-
-.is-browse .topbar-wordmark {
-  font-size: 1.1rem;
-}
-
 .is-browse .topbar-metro select {
-  font-size: 0.84rem;
   max-width: 160px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -551,26 +533,58 @@ h3 {
 
 @media (max-width: 820px) {
   .is-browse .topbar {
-    flex-wrap: wrap;
-    padding: 8px 12px;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 8px 10px;
   }
+
   .is-browse .topbar-brand {
-    flex: 1 1 auto;
+    flex: 0 0 auto;
   }
-  .is-browse .topbar-tabs {
-    order: 10;
-    flex: 1 1 100%;
-    justify-content: center;
-    margin-top: 4px;
+
+  .is-browse .topbar-wordmark {
+    display: none;
   }
-  .is-browse .topbar-tabs button {
-    flex: 1;
-    justify-content: center;
-  }
+
   .is-browse .topbar-metro {
+    flex: 1 1 auto;
+    min-width: 0;
     order: 2;
   }
-  .is-browse .topbar-spacer {
+
+  .is-browse .topbar-metro select {
+    max-width: 100%;
+  }
+
+  .is-browse .topbar-metro-prefix {
+    display: none;
+  }
+
+  .is-browse .topbar-tabs {
+    flex: 0 0 auto;
+    order: 3;
+  }
+
+  .is-browse .topbar-tabs button {
+    font-size: 0;
+    gap: 0;
+    padding: 6px 8px;
+  }
+
+  .is-browse .topbar-tabs button svg {
+    height: 14px;
+    width: 14px;
+  }
+
+  .is-browse .topbar-tabs .tab-count {
+    display: none;
+  }
+
+  .is-browse .topbar-spacer,
+  .is-browse .topbar-refresh,
+  .is-browse .topbar-add,
+  .is-browse .topbar-auth {
     display: none;
   }
 }
@@ -4621,8 +4635,30 @@ h3 {
     border-radius: 22px 22px 0 0;
     bottom: 0;
     left: 0;
+    max-height: 64px;
+    overflow: hidden;
+    padding: 0 18px 18px;
     right: 0;
-    padding: 14px 0 18px;
+    transition: max-height 0.3s ease;
+  }
+
+  .browse-viewport .featured-rail::before {
+    background: var(--line);
+    border-radius: 2px;
+    content: "";
+    display: block;
+    height: 4px;
+    margin: 10px auto 8px;
+    width: 40px;
+  }
+
+  .browse-viewport .featured-rail.is-expanded {
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  .browse-viewport .featured-rail-head {
+    pointer-events: auto;
   }
 
   .browse-viewport .featured-rail-list {
@@ -4630,7 +4666,7 @@ h3 {
     gap: 12px;
     grid-template-columns: none;
     overflow-x: auto;
-    padding: 0 18px 14px;
+    padding: 8px 0 14px;
     scroll-snap-type: x mandatory;
   }
 
