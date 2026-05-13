@@ -3280,15 +3280,6 @@ function App({ metro }: AppProps) {
     <div className={`app-shell${view === "browse" ? " is-browse" : ""}`}>
       <header className="topbar">
         <div className="topbar-brand">
-          <span className="topbar-mark" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24">
-              <path
-                d="M3 19 C 3 9, 9 3, 12 3 C 15 3, 21 9, 21 19 L 17 19 C 17 13, 14 9, 12 9 C 10 9, 7 13, 7 19 Z"
-                fill="var(--accent)"
-              />
-              <circle cx="12" cy="16" r="2.4" fill="var(--surface)" />
-            </svg>
-          </span>
           <h1 className="topbar-wordmark">{APP_BRAND}</h1>
         </div>
 
