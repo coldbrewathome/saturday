@@ -34,7 +34,7 @@ const SITE = process.env.VITE_APP_SITE_URL?.replace(/\/$/, "") ||
 const BRAND = process.env.VITE_APP_BRAND || (IS_ADULTS ? "NightHop" : "FamHop");
 const BRAND_TAG = IS_ADULTS ? "night-out planner" : "family weekend planner";
 const OG_IMAGE = process.env.VITE_APP_OG_IMAGE || `${SITE}/og-image.png`;
-const MAX_SPOT_PAGES_PER_METRO = Number(process.env.SEO_MAX_SPOT_PAGES_PER_METRO || 800);
+const MAX_SPOT_PAGES_PER_METRO = Number(process.env.SEO_MAX_SPOT_PAGES_PER_METRO || 700);
 const FREE_CATEGORIES = new Set(["Library", "Park"]);
 function eventLikelyFree(event) {
   if (typeof event.cost === "string" && /free/i.test(event.cost)) return true;
@@ -623,6 +623,7 @@ function generateEventPages(items, generatedAt) {
   const used = new Set();
   for (const event of items) {
     if (!event || typeof event.title !== "string") continue;
+    if (!event.startDateTime) continue;
     const id = typeof event.id === "string" ? event.id : "";
     let slug = slugify(id) || slugify(`${event.title} ${event.venue ?? ""}`);
     if (!slug) continue;
