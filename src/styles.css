@@ -548,13 +548,15 @@ h3 {
   }
 
   .is-browse .topbar-metro {
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     min-width: 0;
     order: 2;
+    padding: 5px 6px 5px 8px;
   }
 
   .is-browse .topbar-metro select {
-    max-width: 100%;
+    max-width: 140px;
+    padding-right: 12px;
   }
 
   .is-browse .topbar-metro-prefix {
@@ -4693,20 +4695,26 @@ h3 {
 
   .saved-cart,
   .saved-cart-collapsed {
-    bottom: auto;
     left: 14px;
     right: 14px;
     width: auto;
-    position: absolute;
   }
 
   .saved-cart-collapsed {
     border-radius: 14px;
-    bottom: 14px;
+    bottom: 74px;
     gap: 8px;
     justify-content: center;
-    padding: 12px 14px;
+    padding: 10px 14px;
     position: fixed;
+    z-index: 470;
+  }
+
+  .saved-cart {
+    bottom: 74px;
+    max-height: 50vh;
+    position: fixed;
+    z-index: 470;
   }
 
   .map-controls {
