@@ -1192,7 +1192,7 @@ function App({ metro }: AppProps) {
   const [addStopChoice, setAddStopChoice] = useState<string>("");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [cartExpanded, setCartExpanded] = useState(false);
-  const mapRef = useRef<{ zoomIn: () => void; zoomOut: () => void } | null>(null);
+  const mapRef = useRef<SpotMapHandle | null>(null);
   const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(() => {
     try {
       const raw = window.localStorage.getItem(storageKeys.userLocation);
