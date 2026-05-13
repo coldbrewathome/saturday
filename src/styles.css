@@ -585,9 +585,36 @@ h3 {
 
   .is-browse .topbar-spacer,
   .is-browse .topbar-refresh,
-  .is-browse .topbar-add,
-  .is-browse .topbar-auth {
+  .is-browse .topbar-add {
     display: none;
+  }
+
+  .is-browse .topbar-auth {
+    flex: 0 0 auto;
+    margin-left: auto;
+    order: 10;
+  }
+
+  .is-browse .topbar-auth .user-chip span,
+  .is-browse .topbar-auth .user-chip .sync-pill,
+  .is-browse .topbar-auth .user-chip .text-button {
+    display: none;
+  }
+
+  .is-browse .topbar-auth .user-chip {
+    gap: 0;
+    padding: 0;
+  }
+
+  .is-browse .topbar-auth .user-chip img {
+    border-radius: 999px;
+    height: 28px;
+    width: 28px;
+  }
+
+  .is-browse .topbar-auth .signin-slot {
+    transform: scale(0.8);
+    transform-origin: right center;
   }
 }
 
@@ -4655,6 +4682,7 @@ h3 {
     overflow: hidden;
     padding: 0 18px 14px;
     right: 0;
+    touch-action: none;
     transition: max-height 0.3s ease;
   }
 
@@ -4671,6 +4699,7 @@ h3 {
   .browse-viewport .featured-rail.is-expanded {
     max-height: 65vh;
     overflow-y: auto;
+    touch-action: pan-y;
     z-index: 1000;
   }
 
