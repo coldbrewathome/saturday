@@ -1,0 +1,16 @@
+# Legacy Bay Area detail URLs that were previously exposed without the
+# metro prefix. Redirect them before the SPA fallback can serve index.html
+# with the root canonical URL.
+/spot/* /bay-area/spot/:splat 301
+/event/* /bay-area/event/:splat 301
+/city/* /bay-area/city/:splat 301
+/category/* /bay-area/category/:splat 301
+/this-weekend/ /bay-area/this-weekend/ 301
+
+# Legacy Bay Area alias detail URLs should also consolidate to the canonical
+# metro path instead of landing on the interactive app shell.
+/bayarea/spot/* /bay-area/spot/:splat 301
+/bayarea/event/* /bay-area/event/:splat 301
+/bayarea/city/* /bay-area/city/:splat 301
+/bayarea/category/* /bay-area/category/:splat 301
+/bayarea/this-weekend/ /bay-area/this-weekend/ 301

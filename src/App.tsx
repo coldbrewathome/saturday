@@ -2672,9 +2672,7 @@ function App({ metro }: AppProps) {
         pollId: result.pollId,
         ownerToken: result.ownerToken,
       });
-      // Share text uses the plan's own name so when texted/messaged it reads
-      // "Vote on 'Saturday with kids' — …" instead of a generic URL.
-      const shareText = `Vote on "${planTitle}" — ${url}`;
+      const shareText = buildPlanShareMessage(planTitle, url);
       try {
         await navigator.clipboard.writeText(shareText);
       } catch {
@@ -5068,7 +5066,7 @@ function App({ metro }: AppProps) {
 
               {shareState.status === "shared" && shareState.url && (
                 <div className="share-banner">
-                  <strong>Link copied to clipboard.</strong>
+                  <strong>Share message copied.</strong>
                   <a href={shareState.url}>{shareState.url}</a>
                   <ShareQuickLinks
                     url={shareState.url}
@@ -5460,10 +5458,12 @@ function GeoErrorModal({
 }
 
 function ShareQuickLinks({ url, title }: { url: string; title: string }) {
-  const text = `Vote on "${title}" — ${url}`;
+  const text = buildPlanShareMessage(title, url);
+  const nativeText = buildPlanShareMessage(title);
   const enc = encodeURIComponent(text);
-  const subject = encodeURIComponent(`Vote on "${title}"`);
-  const body = encodeURIComponent(`${text}`);
+  const urlEnc = encodeURIComponent(url);
+  const subject = encodeURIComponent(buildPlanShareSubject(title));
+  const body = encodeURIComponent(text);
   const isApple =
     typeof navigator !== "undefined" &&
     /(iPhone|iPad|iPod|Macintosh)/i.test(navigator.userAgent);
@@ -5472,7 +5472,11 @@ function ShareQuickLinks({ url, title }: { url: string; title: string }) {
   async function nativeShare() {
     if (typeof navigator !== "undefined" && (navigator as Navigator).share) {
       try {
-        await (navigator as Navigator).share({ title, text, url });
+        await (navigator as Navigator).share({
+          title: buildPlanShareSubject(title),
+          text: nativeText,
+          url,
+        });
       } catch {
         /* user cancelled */
       }
@@ -5509,6 +5513,15 @@ function ShareQuickLinks({ url, title }: { url: string; title: string }) {
         <MessageCircle aria-hidden="true" /> WhatsApp
       </a>
       <a
+        className="share-quick-link facebook"
+        href={`https://www.facebook.com/sharer/sharer.php?u=${urlEnc}`}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Share via Facebook"
+      >
+        <Share2 aria-hidden="true" /> Facebook
+      </a>
+      <a
         className="share-quick-link email"
         href={`mailto:?subject=${subject}&body=${body}`}
         aria-label="Share via Email"
@@ -5535,6 +5548,23 @@ function ShareQuickLinks({ url, title }: { url: string; title: string }) {
       </button>
     </div>
   );
+}
+
+function cleanShareTitle(title: string) {
+  return title.trim() || "this FamHop plan";
+}
+
+function buildPlanShareSubject(title: string) {
+  return `Vote on ${cleanShareTitle(title)}`;
+}
+
+function buildPlanShareMessage(title: string, url?: string) {
+  const lines = [
+    `I made a FamHop plan: ${cleanShareTitle(title)}.`,
+    "Can you vote on which stops work for you?",
+  ];
+  if (url) lines.push(url);
+  return lines.join("\n");
 }
 
 export default App;
