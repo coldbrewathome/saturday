@@ -1,19 +1,19 @@
 #!/usr/bin/env node
 /**
- * One-time matcher: enrich the OSM Bay Area dataset with Google Places data.
+ * One-time matcher: enrich an OSM spot dataset with Google Places data.
  *
- * The OSM dataset (public/data/bay-area-spots.json) is regenerated daily by
- * the ingest workflow, so we cannot write back to it directly. This script
- * writes a sidecar keyed by spot id at:
- *
- *   public/data/bay-area-enrichment.json
- *
+ * The OSM dataset is regenerated daily by the ingest workflow, so we cannot
+ * write back to it directly. This script writes a sidecar keyed by spot id.
  * App.tsx merges the sidecar into the loaded dataset by id at runtime.
  *
  * Usage:
  *   GOOGLE_PLACES_API_KEY=AIza... node scripts/match-google-places-osm.mjs
+ *   GOOGLE_PLACES_API_KEY=AIza... node scripts/match-google-places-osm.mjs --metro=los-angeles
+ *   GOOGLE_PLACES_API_KEY=AIza... node scripts/match-google-places-osm.mjs --all
  *
  * Optional flags:
+ *   --metro=SLUG       Run for a specific metro (default: bay-area).
+ *   --all              Run for every metro in metros.json.
  *   --top=N            Only process the top N spots by friendScore (default 300).
  *   --include-all      Process every spot, not just ones using the category
  *                      fallback image (still capped by --top).
@@ -33,6 +33,12 @@ import {
   buildQuery,
   createPlacesClient,
 } from "./lib/places-match.mjs";
+import {
+  legacyMetroDataFile,
+  loadMetroConfig,
+  metroDataFile,
+  selectedMetroFromArgs,
+} from "./metroConfig.mjs";
 
 const apiKey = process.env.GOOGLE_PLACES_API_KEY;
 if (!apiKey) {
@@ -48,11 +54,27 @@ const merge = args.includes("--merge");
 const topArg = args.find((a) => a.startsWith("--top="));
 const top = topArg ? Number(topArg.split("=")[1]) : 300;
 
-const inputPath = "public/data/bay-area-spots.json";
-const sidecarPath = "public/data/bay-area-enrichment.json";
-const reportPath = "public/data/bay-area-enrichment-report.json";
+const metroConfig = loadMetroConfig();
+const selection = selectedMetroFromArgs(args, metroConfig);
+const metros = selection.all
+  ? metroConfig.metros
+  : [selection.metro || metroConfig.defaultMetro];
 
-const file = JSON.parse(readFileSync(inputPath, "utf8"));
+for (const metro of metros) {
+  const inputPath = legacyMetroDataFile(metro, "spots") || metroDataFile(metro, "spots");
+  const sidecarPath = legacyMetroDataFile(metro, "enrichment") || metroDataFile(metro, "enrichment");
+  const reportPath = sidecarPath.replace(/\.json$/, "-report.json");
+  console.log(`[${metro.id}] enriching ${inputPath} → ${sidecarPath}`);
+  await runEnrichment(inputPath, sidecarPath, reportPath);
+}
+
+async function runEnrichment(inputPath, sidecarPath, reportPath) {
+
+  if (!existsSync(inputPath)) {
+    console.log(`  Skipped — ${inputPath} not found.`);
+    return;
+  }
+  const file = JSON.parse(readFileSync(inputPath, "utf8"));
 const spots = Array.isArray(file.spots) ? file.spots : [];
 
 const existingSidecar =
@@ -179,8 +201,9 @@ if (!dryRun) {
   console.log("\n(dry run — sidecar not modified)");
 }
 
-writeFileSync(reportPath, JSON.stringify(report, null, 2) + "\n");
-console.log(`Report written to ${reportPath}`);
-console.log(
-  `Summary: ${report.matched} matched, ${report.unmatched} unmatched, ${report.closed} closed, ${report.errors} errors`,
-);
+  writeFileSync(reportPath, JSON.stringify(report, null, 2) + "\n");
+  console.log(`Report written to ${reportPath}`);
+  console.log(
+    `Summary: ${report.matched} matched, ${report.unmatched} unmatched, ${report.closed} closed, ${report.errors} errors`,
+  );
+}

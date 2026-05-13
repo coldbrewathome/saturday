@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from "react";
 import L, { type LayerGroup, type Map as LeafletMap } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import type { Spot, FamilyEvent } from "./App";
@@ -30,6 +30,24 @@ const EVENT_RADIUS = isCoarsePointer
   ? { default: 11, highlighted: 13, selected: 15 }
   : { default: 7, highlighted: 10, selected: 12 };
 
+const SPOT_CAT_COLOR: Record<string, string> = {
+  Outdoors: "#2d5043",
+  Wellness: "#2d5043",
+  Culture: "#5a7896",
+  Food: "#e8b547",
+  Shopping: "#b25368",
+};
+
+const EVENT_CAT_COLOR: Record<string, string> = {
+  Library: "#5a7896",
+  Museum: "#b25368",
+  Park: "#2d5043",
+  Festival: "#dd6a1a",
+  Zoo: "#2d5043",
+  Farm: "#2d5043",
+  Community: "#e8b547",
+};
+
 function loadStoredMapView(
   storageKey = DEFAULT_MAP_VIEW_STORAGE_KEY,
 ): { lat: number; lon: number; zoom: number } | null {
@@ -50,20 +68,13 @@ function loadStoredMapView(
   return null;
 }
 
-export function SpotMap({
-  spots,
-  events,
-  highlightedEventIds,
-  selected,
-  onSelect,
-  userLocation,
-  geoState,
-  onRequestLocation,
-  onViewChange,
-  defaultCenter = DEFAULT_MAP_CENTER,
-  mapViewStorageKey = DEFAULT_MAP_VIEW_STORAGE_KEY,
-  ariaLabel = "Map of spots and events",
-}: {
+export type SpotMapHandle = {
+  zoomIn: () => void;
+  zoomOut: () => void;
+  flyTo: (lat: number, lon: number, zoom?: number) => void;
+};
+
+export const SpotMap = forwardRef<SpotMapHandle, {
   spots: Spot[];
   events?: FamilyEvent[];
   highlightedEventIds?: Set<string>;
@@ -76,7 +87,20 @@ export function SpotMap({
   defaultCenter?: [number, number];
   mapViewStorageKey?: string;
   ariaLabel?: string;
-}) {
+}>(function SpotMap({
+  spots,
+  events,
+  highlightedEventIds,
+  selected,
+  onSelect,
+  userLocation,
+  geoState,
+  onRequestLocation,
+  onViewChange,
+  defaultCenter = DEFAULT_MAP_CENTER,
+  mapViewStorageKey = DEFAULT_MAP_VIEW_STORAGE_KEY,
+  ariaLabel = "Map of spots and events",
+}, ref) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<LeafletMap | null>(null);
   const layerRef = useRef<LayerGroup | null>(null);
@@ -94,6 +118,13 @@ export function SpotMap({
   useEffect(() => {
     onViewChangeRef.current = onViewChange;
   }, [onViewChange]);
+
+  useImperativeHandle(ref, () => ({
+    zoomIn: () => mapRef.current?.zoomIn(),
+    zoomOut: () => mapRef.current?.zoomOut(),
+    flyTo: (lat: number, lon: number, zoom = 12) =>
+      mapRef.current?.flyTo([lat, lon], zoom, { duration: 0.8 }),
+  }));
   // Stable reference to the latest onSelect — re-binding avoids stale closures
   // without forcing the marker layer to rebuild every time the parent re-renders.
   const onSelectRef = useRef(onSelect);
@@ -142,6 +173,7 @@ export function SpotMap({
       zoom: stored ? stored.zoom : 10,
       scrollWheelZoom: true,
       attributionControl: false,
+      zoomControl: false,
     });
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -251,6 +283,7 @@ export function SpotMap({
     for (const spot of plottedSpots) {
       const lat = spot.lat as number;
       const lon = spot.lon as number;
+      const catColor = SPOT_CAT_COLOR[spot.category] ?? "#8a8278";
       const isOutdoor =
         spot.category === "Outdoors" || spot.category === "Wellness";
       const isSelected =
@@ -261,10 +294,10 @@ export function SpotMap({
           : isOutdoor
             ? SPOT_RADIUS.outdoor
             : SPOT_RADIUS.default,
-        color: isOutdoor ? "#276749" : "#65746b",
+        color: isSelected ? "#ffffff" : catColor,
         weight: isSelected ? 2 : 1,
-        fillColor: isOutdoor ? "#276749" : "#a3b1a8",
-        fillOpacity: 0.75,
+        fillColor: catColor,
+        fillOpacity: 0.8,
       })
         .on("click", () =>
           onSelectRef.current?.({ kind: "spot", id: spot.id }),
@@ -292,14 +325,7 @@ export function SpotMap({
         const highlighted = highlightedEventIds?.has(event.id) ?? false;
         const isSelected =
           selected?.kind === "event" && selected.id === event.id;
-        const isLibrary = event.category === "Library";
-        const fillColor = isLibrary
-          ? highlighted
-            ? "#1d4ed8"
-            : "#60a5fa"
-          : highlighted
-            ? "#b85c38"
-            : "#d68f6e";
+        const fillColor = EVENT_CAT_COLOR[event.category] ?? (highlighted ? "#dd6a1a" : "#e8b547");
         L.circleMarker([lat, lon], {
           radius: isSelected
             ? EVENT_RADIUS.selected
@@ -434,7 +460,7 @@ export function SpotMap({
       )}
     </div>
   );
-}
+});
 
 export function PlanMap({
   stops,

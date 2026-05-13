@@ -23,6 +23,12 @@
  * No API keys, no spend.
  */
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  legacyMetroDataFile,
+  loadMetroConfig,
+  metroDataFile,
+  selectedMetroFromArgs,
+} from "./metroConfig.mjs";
 
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
@@ -33,10 +39,25 @@ const top = topArg ? Number(topArg.split("=")[1]) : 500;
 const concurrencyArg = args.find((a) => a.startsWith("--concurrency="));
 const concurrency = concurrencyArg ? Number(concurrencyArg.split("=")[1]) : 8;
 
-const inputPath = "public/data/bay-area-spots.json";
-const sidecarPath = "public/data/bay-area-enrichment.json";
-const reportPath = "public/data/bay-area-enrichment-report.json";
+const metroConfig = loadMetroConfig();
+const selection = selectedMetroFromArgs(args, metroConfig);
+const metros = selection.all
+  ? metroConfig.metros
+  : [selection.metro || metroConfig.defaultMetro];
 
+for (const metro of metros) {
+  const inputPath = legacyMetroDataFile(metro, "spots") || metroDataFile(metro, "spots");
+  const sidecarPath = legacyMetroDataFile(metro, "enrichment") || metroDataFile(metro, "enrichment");
+  const reportPath = sidecarPath.replace(/\.json$/, "-report.json");
+  if (!existsSync(inputPath)) {
+    console.log(`[${metro.id}] Skipped — ${inputPath} not found.`);
+    continue;
+  }
+  console.log(`[${metro.id}] scraping ${inputPath} → ${sidecarPath}`);
+  await runScrape(inputPath, sidecarPath, reportPath);
+}
+
+async function runScrape(inputPath, sidecarPath, reportPath) {
 const file = JSON.parse(readFileSync(inputPath, "utf8"));
 const spots = Array.isArray(file.spots) ? file.spots : [];
 
@@ -264,8 +285,9 @@ if (!dryRun) {
   console.log("\n(dry run — sidecar not modified)");
 }
 
-writeFileSync(reportPath, JSON.stringify(report, null, 2) + "\n");
-console.log(`Report written to ${reportPath}`);
-console.log(
-  `Summary: ${report.found} found, ${report.noImage} no image, ${report.errors} errors`,
-);
+  writeFileSync(reportPath, JSON.stringify(report, null, 2) + "\n");
+  console.log(`Report written to ${reportPath}`);
+  console.log(
+    `Summary: ${report.found} found, ${report.noImage} no image, ${report.errors} errors`,
+  );
+}

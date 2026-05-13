@@ -6,7 +6,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Clock3,
-  Database,
   Copy,
   ExternalLink,
   List,
@@ -27,13 +26,14 @@ import {
   type ComponentProps,
   FormEvent,
   Suspense,
+  forwardRef,
   lazy,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
-import type { MapSelection, PlanMapItem } from "./MapViews";
+import type { MapSelection, PlanMapItem, SpotMapHandle } from "./MapViews";
 import {
   API_CONFIGURED,
   createAiBrief,
@@ -936,21 +936,23 @@ const LazyPlanMap = lazy(() =>
   import("./MapViews").then((m) => ({ default: m.PlanMap })),
 );
 
-function SpotMap(props: ComponentProps<typeof LazySpotMap>) {
-  return (
-    <Suspense
-      fallback={
-        <div
-          className="map-canvas map-canvas-fill"
-          aria-busy="true"
-          aria-label="Loading map"
-        />
-      }
-    >
-      <LazySpotMap {...props} />
-    </Suspense>
-  );
-}
+const SpotMap = forwardRef<SpotMapHandle, ComponentProps<typeof LazySpotMap>>(
+  function SpotMap(props, ref) {
+    return (
+      <Suspense
+        fallback={
+          <div
+            className="map-canvas map-canvas-fill"
+            aria-busy="true"
+            aria-label="Loading map"
+          />
+        }
+      >
+        <LazySpotMap {...props} ref={ref} />
+      </Suspense>
+    );
+  },
+);
 
 function PlanMap(props: ComponentProps<typeof LazyPlanMap>) {
   return (
@@ -1189,6 +1191,8 @@ function App({ metro }: AppProps) {
   );
   const [addStopChoice, setAddStopChoice] = useState<string>("");
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [cartExpanded, setCartExpanded] = useState(false);
+  const mapRef = useRef<{ zoomIn: () => void; zoomOut: () => void } | null>(null);
   const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(() => {
     try {
       const raw = window.localStorage.getItem(storageKeys.userLocation);
@@ -3272,12 +3276,89 @@ function App({ metro }: AppProps) {
   }
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell${view === "browse" ? " is-browse" : ""}`}>
       <header className="topbar">
-        <div className="topbar-title">
-          <p className="eyebrow">{APP_TAGLINE}</p>
-          <h1>{APP_BRAND}</h1>
+        <div className="topbar-brand">
+          <span className="topbar-mark" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24">
+              <path
+                d="M3 19 C 3 9, 9 3, 12 3 C 15 3, 21 9, 21 19 L 17 19 C 17 13, 14 9, 12 9 C 10 9, 7 13, 7 19 Z"
+                fill="var(--accent)"
+              />
+              <circle cx="12" cy="16" r="2.4" fill="var(--surface)" />
+            </svg>
+          </span>
+          <h1 className="topbar-wordmark">{APP_BRAND}</h1>
         </div>
+
+        <label className="topbar-metro" title={`Browsing ${metro.label}`}>
+          <span className="topbar-metro-prefix">in</span>
+          <select
+            aria-label="Choose metro area"
+            value={metro.id}
+            onChange={(event) => switchMetro(event.target.value)}
+          >
+            {METROS.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.label}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <nav className="topbar-tabs" aria-label="View">
+          <button
+            className={view === "browse" ? "active" : ""}
+            onClick={() => setView("browse")}
+          >
+            <MapPin aria-hidden="true" />
+            Explore
+          </button>
+          <button
+            className={view === "plans" ? "active" : ""}
+            onClick={() => setView("plans")}
+          >
+            <List aria-hidden="true" />
+            Plans
+            <em className="tab-count">{plans.length}</em>
+          </button>
+        </nav>
+
+        <div className="topbar-spacer" />
+
+        <button
+          className="icon-button topbar-refresh"
+          type="button"
+          title={
+            dataMeta.loading
+              ? `Loading ${metro.label} data…`
+              : dataMeta.error
+                ? "Data error — using fallback. Click to reset filters."
+                : `${
+                    dataMeta.eventsCount != null
+                      ? `${dataMeta.count} spots · ${dataMeta.eventsCount} events`
+                      : `${dataMeta.count} ${metro.label} spots`
+                  } · Refreshed ${formatGeneratedAt(
+                    latestGeneratedAt(
+                      dataMeta.generatedAt,
+                      dataMeta.eventsGeneratedAt,
+                    ),
+                  )} · Click to reset filters`
+          }
+          onClick={resetFilters}
+          aria-label="Refresh and reset filters"
+        >
+          <RotateCcw aria-hidden="true" />
+        </button>
+
+        <button
+          className="primary-button topbar-add"
+          onClick={() => setIsAdding(true)}
+        >
+          <Plus aria-hidden="true" />
+          Add spot
+        </button>
+
         <div className="topbar-auth">
           {GOOGLE_CONFIGURED ? (
             session ? (
@@ -3317,76 +3398,17 @@ function App({ metro }: AppProps) {
             ) : (
               <div className="signin-wrap">
                 <div ref={signInButtonRef} className="signin-slot" />
-                {signInError && <span className="signin-error">{signInError}</span>}
+                {signInError && (
+                  <span className="signin-error">{signInError}</span>
+                )}
               </div>
             )
           ) : null}
         </div>
-        <label className="metro-picker">
-          <span>Area</span>
-          <select
-            aria-label="Choose metro area"
-            value={metro.id}
-            onChange={(event) => switchMetro(event.target.value)}
-          >
-            {METROS.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <div className="data-banner" title={dataMeta.sourceName}>
-          <Database aria-hidden="true" />
-          <div>
-            <strong>
-              {dataMeta.loading
-                ? `Loading ${metro.label} data`
-                : dataMeta.eventsCount != null
-                  ? `${dataMeta.count} spots · ${dataMeta.eventsCount} events`
-                  : `${dataMeta.count} ${metro.label} spots`}
-            </strong>
-            <span>
-              {dataMeta.error
-                ? "Using fallback data"
-                : `Refreshed ${formatGeneratedAt(
-                    latestGeneratedAt(
-                      dataMeta.generatedAt,
-                      dataMeta.eventsGeneratedAt,
-                    ),
-                  )}`}
-            </span>
-          </div>
-        </div>
-        <div className="topbar-actions">
-          <button className="icon-button" title="Reset filters" onClick={resetFilters}>
-            <RotateCcw aria-hidden="true" />
-          </button>
-          <button className="primary-button" onClick={() => setIsAdding(true)}>
-            <Plus aria-hidden="true" />
-            Add spot
-          </button>
-        </div>
       </header>
 
-      <div className="view-bar">
-        <nav className="view-tabs" aria-label="View">
-          <button
-            className={view === "browse" ? "active" : ""}
-            onClick={() => setView("browse")}
-          >
-            <Search aria-hidden="true" />
-            Browse
-          </button>
-          <button
-            className={view === "plans" ? "active" : ""}
-            onClick={() => setView("plans")}
-          >
-            <List aria-hidden="true" />
-            Plans ({plans.length})
-          </button>
-        </nav>
-        {view === "browse" && (
+      {view === "browse" && (
+        <div className="view-bar">
           <button
             className="filter-trigger view-bar-filter"
             type="button"
@@ -3400,8 +3422,8 @@ function App({ metro }: AppProps) {
               <em className="filter-count">{activeFilterCount}</em>
             )}
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {view === "home" ? (
       <main className="home-screen" aria-label={APP_HERO_TITLE}>
@@ -3724,7 +3746,92 @@ function App({ metro }: AppProps) {
         </div>
       </main>
       ) : view === "browse" ? (
-      <main className="workspace">
+      <main className="browse-viewport">
+        {/* ── Full-bleed map (background layer) ─────────────────────── */}
+        <div className="map-shell">
+          <SpotMap
+            ref={mapRef}
+            spots={filteredSpots}
+            events={mapEvents}
+            highlightedEventIds={highlightedEventIds}
+            selected={mapSelection}
+            onSelect={setMapSelection}
+            userLocation={userLocation}
+            geoState={geoState}
+            onRequestLocation={requestUserLocation}
+            onViewChange={setMapCenter}
+            defaultCenter={defaultMapCenter}
+            mapViewStorageKey={storageKeys.mapView}
+          />
+        </div>
+
+        {/* ── Map controls (bottom-left zoom + locate) ─────────────── */}
+        <div className="map-controls">
+          <div className="map-controls-group">
+            <button type="button" title="Zoom in" onClick={() => mapRef.current?.zoomIn()}>+</button>
+            <div className="map-controls-divider" />
+            <button type="button" title="Zoom out" onClick={() => mapRef.current?.zoomOut()}>−</button>
+          </div>
+          <button
+            className={`map-control-locate${userLocation ? " has-location" : ""}`}
+            type="button"
+            title={userLocation ? "Using your location — tap to clear" : "Use my location"}
+            disabled={geoState === "requesting"}
+            onClick={userLocation ? clearUserLocation : requestUserLocation}
+          >
+            <MapPin aria-hidden="true" />
+          </button>
+        </div>
+
+        {/* ── Summary chip (top-right) ─────────────────────────────── */}
+        <div className="summary-chip" aria-label="Map summary">
+          <div>
+            <strong>{filteredSpots.length}</strong> spots
+          </div>
+          <div>
+            <strong className="summary-events">{mapEvents.length}</strong> events
+            {highlightedEventIds.size > 0 && (
+              <span> · {highlightedEventIds.size} this week</span>
+            )}
+          </div>
+        </div>
+
+        {/* ── Events date strip (when events filter active) ──────── */}
+        {eventDateFilter !== "all" && (
+          <div className="date-strip" aria-label="Event date filter">
+            <span className="date-strip-label">When</span>
+            {eventDateFilters.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                className={`date-strip-chip${eventDateFilter === item.id ? " active" : ""}`}
+                onClick={() => setEventDateFilter(item.id)}
+              >
+                {item.label}
+              </button>
+            ))}
+            <span className="date-strip-count">
+              <strong>{mapEvents.length}</strong> events
+            </span>
+          </div>
+        )}
+
+        {/* ── Mobile filter trigger (visible only ≤820px) ──────────── */}
+        <button
+          className="browse-filter-trigger"
+          type="button"
+          onClick={() => setFiltersOpen(true)}
+          aria-expanded={filtersOpen}
+          aria-controls="spot-filters"
+        >
+          <SlidersHorizontal aria-hidden="true" />
+          Filters
+          {activeFilterCount > 0 && (
+            <em className="filter-count">{activeFilterCount}</em>
+          )}
+        </button>
+
+        {/* ── Filter drawer (floating, left side) ──────────────────── */}
         {filtersOpen && (
           <div
             className="filter-backdrop"
@@ -3740,6 +3847,15 @@ function App({ metro }: AppProps) {
           <div className="panel-heading">
             <SlidersHorizontal aria-hidden="true" />
             <span>Filters</span>
+            {activeFilterCount > 0 && (
+              <button
+                type="button"
+                className="filter-reset"
+                onClick={resetFilters}
+              >
+                Reset
+              </button>
+            )}
             <button
               className="filter-done"
               type="button"
@@ -3760,7 +3876,7 @@ function App({ metro }: AppProps) {
 
           {SHOW_AGE_BAND_UI && (
             <div className="filter-group">
-              <span className="filter-label">Age band</span>
+              <span className="filter-label">Age group</span>
               <div className="segmented compact">
                 <button
                   className={ageBand === "any" ? "active" : ""}
@@ -3768,7 +3884,12 @@ function App({ metro }: AppProps) {
                 >
                   Any
                 </button>
-                {ageBandOptions.map(([value, label]) => (
+                {([
+                  ["toddler", "0–2"],
+                  ["preschool", "3–5"],
+                  ["school-age", "6–10"],
+                  ["tween", "10+"],
+                ] as const).map(([value, label]) => (
                   <button
                     key={value}
                     className={ageBand === value ? "active" : ""}
@@ -3781,26 +3902,63 @@ function App({ metro }: AppProps) {
             </div>
           )}
 
-          <label className="select-field">
-            <span>Category</span>
-            <select
-              value={category}
-              onChange={(event) =>
-                setCategory(event.target.value as Category | "All")
-              }
-            >
-              <option>All</option>
-              {categories.map((item) => (
-                <option key={item}>{item}</option>
-              ))}
-            </select>
-          </label>
+          <div className="filter-group">
+            <span className="filter-label">Category · legend</span>
+            <div className="cat-legend">
+              <button
+                type="button"
+                className={`cat-row${category === "All" ? " active" : ""}`}
+                onClick={() => setCategory("All")}
+              >
+                <span className="cat-swatch" style={{ background: "var(--ink-mute)" }}>
+                  <span className="cat-swatch-dot" />
+                </span>
+                <span className="cat-row-label">All categories</span>
+                <span className="cat-row-count">{allSpots.length}</span>
+              </button>
+              {(
+                [
+                  ["Outdoors", "var(--forest)"],
+                  ["Culture", "var(--blue)"],
+                  ["Food", "var(--sun)"],
+                  ["Wellness", "var(--berry)"],
+                  ["Shopping", "var(--accent)"],
+                ] as const
+              ).map(([cat, color]) => {
+                const count = allSpots.filter((s) => s.category === cat).length;
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    className={`cat-row${category === cat ? " active" : ""}`}
+                    style={category === cat ? { "--cat-active-color": color, "--cat-active-bg": `color-mix(in srgb, ${color} 8%, white)` } as React.CSSProperties : undefined}
+                    onClick={() => setCategory(category === cat ? "All" : cat)}
+                  >
+                    <span className="cat-swatch" style={{ background: color }} />
+                    <span className="cat-row-label">{cat}</span>
+                    <span className="cat-row-count">{count}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
           <label className="select-field">
             <span>Area</span>
             <select
               value={city}
-              onChange={(event) => setCity(event.target.value)}
+              onChange={(event) => {
+                const next = event.target.value;
+                setCity(next);
+                if (next !== "All") {
+                  const inCity = allSpots.filter((s) => s.neighborhood === next);
+                  if (inCity.length > 0) {
+                    const avgLat = inCity.reduce((s, sp) => s + (sp.lat as number), 0) / inCity.length;
+                    const avgLon = inCity.reduce((s, sp) => s + (sp.lon as number), 0) / inCity.length;
+                    mapRef.current?.flyTo(avgLat, avgLon, 13);
+                  }
+                }
+              }}
             >
               <option value="All">All ({allSpots.length})</option>
               {cityOptions.map(({ name, count }) => (
@@ -3811,18 +3969,28 @@ function App({ metro }: AppProps) {
             </select>
           </label>
 
-          <label className="select-field">
-            <span>Cost</span>
-            <select
-              value={cost}
-              onChange={(event) => setCost(event.target.value as Cost | "All")}
-            >
-              <option>All</option>
-              {costs.map((item) => (
-                <option key={item}>{item}</option>
+          <div className="filter-group">
+            <span className="filter-label">Cost</span>
+            <div className="cost-segmented">
+              <button
+                type="button"
+                className={cost === "All" ? "active" : ""}
+                onClick={() => setCost("All")}
+              >
+                Any
+              </button>
+              {(["Free", "$", "$$", "$$$"] as const).map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  className={cost === c ? "active" : ""}
+                  onClick={() => setCost(cost === c ? "All" : c)}
+                >
+                  {c}
+                </button>
               ))}
-            </select>
-          </label>
+            </div>
+          </div>
 
           <label className="switch-row">
             <input
@@ -3830,11 +3998,12 @@ function App({ metro }: AppProps) {
               checked={onlyOpen}
               onChange={(event) => setOnlyOpen(event.target.checked)}
             />
+            <Clock3 aria-hidden="true" style={{ height: 14, width: 14, color: "var(--accent)" }} />
             <span>Open now</span>
           </label>
 
           <div className="filter-group">
-            <span className="filter-label">Events</span>
+            <span className="filter-label">When</span>
             <div className="segmented compact">
               {eventDateFilters.map((item) => (
                 <button
@@ -3866,129 +4035,95 @@ function App({ metro }: AppProps) {
             </select>
           </label>
 
-          <div className="geo-row">
-            {userLocation ? (
-              <button
-                className="geo-button active"
-                type="button"
-                onClick={clearUserLocation}
-                title={`Using your location (${userLocation.lat.toFixed(2)}, ${userLocation.lon.toFixed(2)})`}
-              >
-                <MapPin aria-hidden="true" />
-                Using my location
-              </button>
-            ) : (
-              <button
-                className="geo-button"
-                type="button"
-                disabled={geoState === "requesting"}
-                onClick={requestUserLocation}
-              >
-                <MapPin aria-hidden="true" />
-                {geoState === "requesting" ? "Locating…" : "Use my location"}
-              </button>
-            )}
-          </div>
-          {geoState === "denied" && (
-            <p className="geo-status error">
-              Location permission denied. Enable it in your browser settings to sort by distance from you.
-            </p>
-          )}
+          {/* Geolocation handled by map-controls locate button */}
         </aside>
 
-        <section className="spots-area" aria-label="Visit spots">
-          {nearbyFeaturedPlans.length > 0 && (
-            <section
-              className="featured-rail"
-              aria-label="Editor's picks — starter plans"
-            >
-              <div className="featured-rail-head">
-                <span className="featured-rail-eyebrow">
-                  Editor's picks{mapCenter ? " near this view" : ""}
-                </span>
-                <span className="featured-rail-sub">
-                  Tap a starter plan to fork it into your own.
-                </span>
-              </div>
-              <ul className="featured-rail-list">
-                {nearbyFeaturedPlans.map((featured) => {
-                  const accent = featured.accent || "park";
-                  return (
-                    <li
-                      key={featured.id}
-                      className={`featured-card accent-${accent}`}
+        {/* ── Editor's picks strip (bottom glass panel) ──────────── */}
+        {nearbyFeaturedPlans.length > 0 && (
+          <section
+            className="featured-rail"
+            aria-label="Editor's picks — starter plans"
+          >
+            <div className="featured-rail-head">
+              <span className="featured-rail-eyebrow">
+                Editor's picks{mapCenter ? " near this view" : ""}
+              </span>
+              <span className="featured-rail-sub">
+                Tap a starter plan to fork it into your own.
+              </span>
+            </div>
+            <ul className="featured-rail-list">
+              {nearbyFeaturedPlans.map((featured) => {
+                const accent = featured.accent || "park";
+                const heroStop = featured.stopIds
+                  .map((sid) => allSpots.find((s) => s.id === sid))
+                  .find((s): s is Spot => Boolean(s));
+                const stopCount = featured.stopIds.length;
+                const eventCount = featured.eventIds?.length ?? 0;
+                return (
+                  <li
+                    key={featured.id}
+                    className={`featured-card accent-${accent}`}
+                  >
+                    <button
+                      type="button"
+                      className="featured-card-surface"
+                      onClick={() => forkFeaturedPlan(featured)}
+                      aria-label={`Use plan: ${featured.name}`}
                     >
-                      <div className="featured-card-body">
+                      {heroStop?.imageUrl ? (
+                        <span
+                          className="featured-card-thumb"
+                          style={{ backgroundImage: `url(${heroStop.imageUrl})` }}
+                          aria-hidden="true"
+                        />
+                      ) : (
+                        <span
+                          className="featured-card-thumb featured-card-thumb-empty"
+                          aria-hidden="true"
+                        />
+                      )}
+                      <span className={`featured-card-tag tag-${accent}`}>
+                        {accent === "festival"
+                          ? "Events"
+                          : accent === "library"
+                            ? "Library"
+                            : accent === "park"
+                              ? "Outdoors"
+                              : "Editor's pick"}
+                      </span>
+                      <span className="featured-card-body">
+                        {heroStop?.neighborhood && (
+                          <span className="featured-card-eyebrow">
+                            {heroStop.neighborhood}
+                          </span>
+                        )}
                         <strong>{featured.name}</strong>
                         <span className="featured-card-summary">
                           {featured.summary}
                         </span>
                         <span className="featured-card-meta">
-                          {featured.stopIds.length} place
-                          {featured.stopIds.length === 1 ? "" : "s"}
-                          {(featured.eventIds?.length ?? 0) > 0
-                            ? ` · ${featured.eventIds!.length} event${featured.eventIds!.length === 1 ? "" : "s"}`
-                            : ""}
+                          <em>
+                            {stopCount} place{stopCount === 1 ? "" : "s"}
+                          </em>
+                          {eventCount > 0 && (
+                            <em className="featured-card-meta-event">
+                              {eventCount} event{eventCount === 1 ? "" : "s"}
+                            </em>
+                          )}
+                          <span className="featured-card-fork" aria-hidden="true">
+                            <Plus />
+                            Use plan
+                          </span>
                         </span>
-                      </div>
-                      <button
-                        className="featured-card-use"
-                        onClick={() => forkFeaturedPlan(featured)}
-                      >
-                        <Plus aria-hidden="true" />
-                        Use plan
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
-          )}
-          <div className="map-shell">
-            <SpotMap
-              spots={filteredSpots}
-              events={mapEvents}
-              highlightedEventIds={highlightedEventIds}
-              selected={mapSelection}
-              onSelect={setMapSelection}
-              userLocation={userLocation}
-              geoState={geoState}
-              onRequestLocation={requestUserLocation}
-              onViewChange={setMapCenter}
-              defaultCenter={defaultMapCenter}
-              mapViewStorageKey={storageKeys.mapView}
-            />
-            <div className="map-overlay" aria-label="Map summary">
-              <div>
-                <strong>{filteredSpots.length}</strong> spots
-              </div>
-              <div>
-                <strong>{mapEvents.length}</strong> events
-                {highlightedEventIds.size > 0 && (
-                  <span className="map-overlay-highlight">
-                    · {highlightedEventIds.size} this week
-                  </span>
-                )}
-              </div>
-            </div>
-            <div className="map-legend" aria-label="Map legend">
-              <span>
-                <span className="legend-dot dot-event-hot" /> Time-sensitive
-              </span>
-              <span>
-                <span className="legend-dot dot-event" /> Event
-              </span>
-              <span>
-                <span className="legend-dot dot-library" /> Library
-              </span>
-              <span>
-                <span className="legend-dot dot-park" /> Park / outdoors
-              </span>
-              <span>
-                <span className="legend-dot dot-spot" /> Other
-              </span>
-            </div>
-          </div>
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        )}
 
           {(() => {
             if (!mapSelection) return null;
@@ -4238,255 +4373,46 @@ function App({ metro }: AppProps) {
               }}
             />
           )}
-          {/* legacy card grid removed — map + bottom sheet replaces it */}
-          {false && (
-          <div className="spot-grid">
-            {paginatedSpots.map((spot) => {
-              const saved = savedIds.includes(spot.id);
-              const visited = visitedIds.includes(spot.id);
-
-              return (
-                <article className="spot-card" key={spot.id}>
-                  <div className="spot-image-frame">
-                    <img
-                      src={spot.imageUrl}
-                      alt={spot.name}
-                      loading="lazy"
-                      title={spot.imageAttribution || spot.imageSource || spot.name}
-                    />
-                    {spot.imageSource && spot.imageSource !== "Category fallback" && (
-                      <span className="image-source-chip">{spot.imageSource}</span>
-                    )}
-                  </div>
-                  <div className="spot-body">
-                    <div className="spot-title-row">
-                      <div>
-                        <p className="spot-category">{spot.category}</p>
-                        <h3>{spot.name}</h3>
-                      </div>
-                      <button
-                        className={`icon-button ${saved ? "selected" : ""}`}
-                        title={saved ? "Remove from saved" : "Save spot"}
-                        onClick={() => toggleSaved(spot.id)}
-                      >
-                        <Bookmark aria-hidden="true" />
-                      </button>
-                    </div>
-
-                    <p className="spot-note">{spot.note}</p>
-
-                    {(() => {
-                      const status = describeStatus(spot);
-                      if (status.kind === "unknown") {
-                        if (!spot.openingHours) return null;
-                        const compact = compactHoursLabel(spot.openingHours);
-                        return (
-                          <p
-                            className="hours-line muted"
-                            title={compact ? spot.openingHours : undefined}
-                          >
-                            <Clock3 aria-hidden="true" />
-                            {compact ?? `Hours: ${spot.openingHours}`}
-                          </p>
-                        );
-                      }
-                      const cls =
-                        status.kind === "open" || status.kind === "always"
-                          ? "open"
-                          : "closed";
-                      return (
-                        <p className={`hours-line ${cls}`}>
-                          <Clock3 aria-hidden="true" />
-                          {statusLabel(status)}
-                        </p>
-                      );
-                    })()}
-
-                    <div className="metadata-grid">
-                      <span>
-                        <MapPin aria-hidden="true" />
-                        {spot.neighborhood}
-                      </span>
-                      {(() => {
-                        const d = distanceFromUser(spot);
-                        return d !== null ? (
-                          <span>
-                            <MapPin aria-hidden="true" />
-                            {d < 1
-                              ? `${(d * 5280).toFixed(0)} ft away`
-                              : `${d.toFixed(1)} mi away`}
-                          </span>
-                        ) : (
-                          <span>
-                            <Clock3 aria-hidden="true" />
-                            {spot.transitMinutes} min
-                          </span>
-                        );
-                      })()}
-                      {typeof spot.googleRating === "number" && (
-                        <span
-                          className="rating-chip"
-                          title={
-                            spot.googleRatingCount
-                              ? `Google rating · ${spot.googleRatingCount.toLocaleString()} reviews`
-                              : "Google rating"
-                          }
-                        >
-                          ★ {spot.googleRating.toFixed(1)}
-                          {spot.googleRatingCount
-                            ? ` · ${formatRatingCount(spot.googleRatingCount)}`
-                            : ""}
-                        </span>
-                      )}
-                      <span>{spot.cost}</span>
-                    </div>
-
-                    {(() => {
-                      const visibleTags = spot.tags
-                        .filter((item) => {
-                          const lower = item.toLowerCase();
-                          if (lower === spot.category.toLowerCase()) return false;
-                          if (lower === "friends") return false;
-                          return true;
-                        })
-                        .slice(0, 4);
-                      const hasFeatures =
-                        spot.wheelchair === "yes" ||
-                        spot.wheelchair === "limited" ||
-                        spot.dogsAllowed === true ||
-                        spot.kidsFriendly === true ||
-                        spot.parkingNearby === true;
-                      if (!hasFeatures && visibleTags.length === 0) return null;
-                      return (
-                        <div className="tag-row">
-                          {spot.kidsFriendly === true && (
-                            <span className="chip-feature" title="Kid-friendly">
-                              👶 Kids
-                            </span>
-                          )}
-                          {spot.wheelchair === "yes" && (
-                            <span className="chip-feature" title="Wheelchair accessible">
-                              ♿ Accessible
-                            </span>
-                          )}
-                          {spot.wheelchair === "limited" && (
-                            <span className="chip-feature" title="Wheelchair access limited">
-                              ♿ Limited
-                            </span>
-                          )}
-                          {spot.dogsAllowed === true && (
-                            <span className="chip-feature" title="Dogs allowed">
-                              🐕 Dogs OK
-                            </span>
-                          )}
-                          {spot.parkingNearby === true && (
-                            <span className="chip-feature" title="Parking on site">
-                              🅿 Parking
-                            </span>
-                          )}
-                          {visibleTags.map((item) => (
-                            <span key={item}>{item}</span>
-                          ))}
-                        </div>
-                      );
-                    })()}
-
-                    <div className="card-footer">
-                      {spot.website ? (
-                        <a
-                          className="text-button"
-                          href={spot.website}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          Website
-                          <ExternalLink aria-hidden="true" />
-                        </a>
-                      ) : (
-                        <span />
-                      )}
-                      <button
-                        className={`text-button ${visited ? "is-active" : ""}`}
-                        onClick={() => toggleVisited(spot.id)}
-                      >
-                        {visited ? (
-                          <>
-                            <Check aria-hidden="true" />
-                            Visited
-                          </>
-                        ) : (
-                          "Mark visited"
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-          )}
-
-          {false && filteredSpots.length > 0 && (
-            <div className="pagination-bar" aria-label="Spot pagination">
-              <span>
-                Showing {pageStart + 1}-{pageEnd} of {filteredSpots.length}
-              </span>
-              <label>
-                <span>Per page</span>
-                <select
-                  value={pageSize}
-                  onChange={(event) => setPageSize(Number(event.target.value))}
-                >
-                  {pageSizeOptions.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <div className="pagination-controls">
+        {/* ── Saved cart pill (floating, bottom-right) ────────────── */}
+        {(() => {
+          const totalSaved = savedSpots.length + savedEvents.length;
+          if (totalSaved === 0) return null;
+          if (!cartExpanded) {
+            return (
+              <button
+                type="button"
+                className="saved-cart-collapsed"
+                onClick={() => setCartExpanded(true)}
+              >
+                <Bookmark aria-hidden="true" />
+                <strong>{totalSaved} saved</strong>
+                <span className="cart-divider" />
+                <span className="cart-cta">Plan it &rarr;</span>
+              </button>
+            );
+          }
+          return (
+            <aside className="saved-cart" aria-label="Saved spots and events">
+              <div className="panel-heading">
+                <Bookmark aria-hidden="true" />
+                <span>Saved</span>
                 <button
+                  type="button"
                   className="icon-button"
-                  disabled={safePage === 1}
-                  title="Previous page"
-                  onClick={() => setPage((current) => Math.max(1, current - 1))}
+                  style={{ marginLeft: "auto" }}
+                  onClick={() => setCartExpanded(false)}
+                  aria-label="Collapse"
                 >
-                  <ChevronLeft aria-hidden="true" />
-                </button>
-                <span>
-                  Page {safePage} of {pageCount}
-                </span>
-                <button
-                  className="icon-button"
-                  disabled={safePage === pageCount}
-                  title="Next page"
-                  onClick={() => setPage((current) => Math.min(pageCount, current + 1))}
-                >
-                  <ChevronRight aria-hidden="true" />
+                  <X aria-hidden="true" />
                 </button>
               </div>
-            </div>
-          )}
-        </section>
-
-        <aside className="plan-panel" aria-label="Saved spots and events">
-          <div className="panel-heading">
-            <Bookmark aria-hidden="true" />
-            <span>Saved</span>
-          </div>
-          {savedSpots.length === 0 && savedEvents.length === 0 ? (
-            <p className="empty-state">
-              Save a few places or events from the map to plan your day.
-            </p>
-          ) : (
-            <>
               {savedSpots.length > 0 && (
                 <button
                   className="primary-button wide"
-                  onClick={() => createPlanFromSaved()}
+                  onClick={() => { createPlanFromSaved(); setCartExpanded(false); }}
                   title="Create a plan with all saved places in order"
                 >
-                  <List aria-hidden="true" />
+                  <Sparkles aria-hidden="true" />
                   Plan from places ({savedSpots.length})
                 </button>
               )}
@@ -4585,9 +4511,9 @@ function App({ metro }: AppProps) {
                   </>
                 );
               })()}
-            </>
-          )}
-        </aside>
+            </aside>
+          );
+        })()}
       </main>
       ) : (
       <main className="plans-workspace" aria-label="Plans">
