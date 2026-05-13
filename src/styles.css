@@ -1099,19 +1099,28 @@ h3 {
 }
 
 .cat-row.active {
-  background: var(--cat-active-bg, var(--surface-strong));
-  border: 2px solid var(--cat-active-color, var(--accent));
-  padding: 4px 6px;
+  background: var(--cat-active-color, var(--accent));
+  border: 0;
+  padding: 6px 8px;
+}
+
+.cat-row.active .cat-swatch {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border: 2px solid #ffffff;
+}
+
+.cat-row.active .cat-swatch-dot {
+  background: #ffffff;
 }
 
 .cat-row.active .cat-row-label {
-  color: var(--cat-active-color, var(--accent));
+  color: #ffffff;
   font-weight: 700;
 }
 
 .cat-row.active .cat-row-count {
-  color: var(--cat-active-color, var(--accent));
-  font-weight: 700;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
 }
 
 .cat-swatch {
