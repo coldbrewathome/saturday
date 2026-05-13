@@ -4398,6 +4398,12 @@ function App({ metro }: AppProps) {
             );
           }
           return (
+            <>
+            <div
+              className="cart-backdrop"
+              role="presentation"
+              onClick={() => setCartExpanded(false)}
+            />
             <aside className="saved-cart" aria-label="Saved spots and events">
               <div className="panel-heading">
                 <Bookmark aria-hidden="true" />
@@ -4518,6 +4524,7 @@ function App({ metro }: AppProps) {
                 );
               })()}
             </aside>
+            </>
           );
         })()}
       </main>

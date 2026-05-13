@@ -864,8 +864,22 @@ h3 {
   font: 600 12px/1 var(--font-ui);
 }
 
+.cart-backdrop {
+  display: none;
+}
+
 .saved-cart .panel-heading {
   margin-bottom: 10px;
+}
+
+@media (max-width: 820px) {
+  .cart-backdrop {
+    background: rgba(0, 0, 0, 0.4);
+    display: block;
+    inset: 0;
+    position: fixed;
+    z-index: 1050;
+  }
 }
 
 /* ── Custom map controls (bottom-left) ─────────────────────────────── */
@@ -4637,9 +4651,9 @@ h3 {
     border-radius: 22px 22px 0 0;
     bottom: 0;
     left: 0;
-    max-height: 64px;
+    max-height: 54px;
     overflow: hidden;
-    padding: 0 18px 18px;
+    padding: 0 18px 14px;
     right: 0;
     transition: max-height 0.3s ease;
   }
@@ -4650,13 +4664,18 @@ h3 {
     content: "";
     display: block;
     height: 4px;
-    margin: 10px auto 8px;
-    width: 40px;
+    margin: 8px auto 6px;
+    width: 36px;
   }
 
   .browse-viewport .featured-rail.is-expanded {
-    max-height: 70vh;
+    max-height: 65vh;
     overflow-y: auto;
+    z-index: 1000;
+  }
+
+  .browse-viewport .featured-rail-sub {
+    font-size: 0.68rem;
   }
 
   .browse-viewport .featured-rail-head {
@@ -4701,20 +4720,27 @@ h3 {
   }
 
   .saved-cart-collapsed {
-    border-radius: 14px;
-    bottom: 74px;
+    border-radius: 999px;
+    bottom: 80px;
     gap: 8px;
     justify-content: center;
-    padding: 10px 14px;
+    left: auto;
+    padding: 10px 16px;
     position: fixed;
+    right: 14px;
+    width: auto;
     z-index: 470;
   }
 
   .saved-cart {
-    bottom: 74px;
-    max-height: 50vh;
+    border-radius: 18px 18px 0 0;
+    bottom: 0;
+    left: 0;
+    max-height: 65vh;
     position: fixed;
-    z-index: 470;
+    right: 0;
+    width: auto;
+    z-index: 1100;
   }
 
   .map-controls {
