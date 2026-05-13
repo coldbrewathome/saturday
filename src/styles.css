@@ -116,12 +116,19 @@ button {
 
 .topbar {
   align-items: center;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--glass-radius);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, var(--glass-shadow);
   column-gap: 12px;
-  row-gap: 10px;
   display: flex;
   flex-wrap: wrap;
   margin: 0 auto 16px;
   max-width: 1500px;
+  padding: 10px 14px;
+  row-gap: 10px;
 }
 
 .topbar-brand {
@@ -501,14 +508,8 @@ h3 {
   display: none;
 }
 
-/* ── Floating glass header (over map) ─────────────────────────────── */
+/* ── Browse: topbar floats over map ───────────────────────────────── */
 .is-browse .topbar {
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: var(--glass-border);
-  border-radius: var(--glass-radius);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, var(--glass-shadow);
   flex-wrap: nowrap;
   left: var(--overlay-gap);
   margin: 0;
@@ -837,6 +838,23 @@ h3 {
 .saved-cart-collapsed .cart-cta {
   color: var(--accent);
   font: 600 12px/1 var(--font-ui);
+}
+
+.user-avatar-fallback {
+  align-items: center;
+  background: var(--surface-strong);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink-mute);
+  display: flex;
+  height: 28px;
+  justify-content: center;
+  width: 28px;
+}
+
+.user-avatar-fallback svg {
+  height: 14px;
+  width: 14px;
 }
 
 .cart-backdrop {

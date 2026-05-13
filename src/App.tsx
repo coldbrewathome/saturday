@@ -3280,6 +3280,12 @@ function App({ metro }: AppProps) {
     <div className={`app-shell${view === "browse" ? " is-browse" : ""}`}>
       <header className="topbar">
         <div className="topbar-brand">
+          <span className="topbar-mark" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <rect x="2" y="4" width="20" height="16" rx="4" fill="var(--accent)" />
+              <path d="M8 12 L11 15 L16 9" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
           <h1 className="topbar-wordmark">{APP_BRAND}</h1>
         </div>
 
@@ -3352,50 +3358,66 @@ function App({ metro }: AppProps) {
         </button>
 
         <div className="topbar-auth">
-          {GOOGLE_CONFIGURED ? (
-            session ? (
-              <div className="user-chip" title={session.user.email}>
-                {session.user.picture && (
-                  <img src={session.user.picture} alt="" />
-                )}
-                <span>{session.user.name}</span>
-                {syncStatus !== "idle" && (
-                  <em
-                    className={`sync-pill sync-${syncStatus}`}
-                    title={
-                      syncStatus === "synced"
-                        ? "Saved + plans synced to your account"
-                        : syncStatus === "loading"
-                          ? "Loading your data…"
-                          : syncStatus === "syncing"
-                            ? "Syncing…"
-                            : "Sync error — local-only for now"
-                    }
-                  >
-                    {syncStatus === "loading" || syncStatus === "syncing"
-                      ? "•••"
-                      : syncStatus === "synced"
-                        ? "✓"
-                        : "!"}
-                  </em>
-                )}
-                <button
-                  className="text-button"
-                  onClick={signOut}
-                  title="Sign out"
+          {session ? (
+            <div className="user-chip" title={session.user.email}>
+              {session.user.picture ? (
+                <img src={session.user.picture} alt="" />
+              ) : (
+                <span className="user-avatar-fallback">
+                  <Users aria-hidden="true" />
+                </span>
+              )}
+              <span>{session.user.name}</span>
+              {syncStatus !== "idle" && (
+                <em
+                  className={`sync-pill sync-${syncStatus}`}
+                  title={
+                    syncStatus === "synced"
+                      ? "Saved + plans synced to your account"
+                      : syncStatus === "loading"
+                        ? "Loading your data…"
+                        : syncStatus === "syncing"
+                          ? "Syncing…"
+                          : "Sync error — local-only for now"
+                  }
                 >
-                  Sign out
-                </button>
-              </div>
-            ) : (
-              <div className="signin-wrap">
+                  {syncStatus === "loading" || syncStatus === "syncing"
+                    ? "•••"
+                    : syncStatus === "synced"
+                      ? "✓"
+                      : "!"}
+                </em>
+              )}
+              <button
+                className="text-button"
+                onClick={signOut}
+                title="Sign out"
+              >
+                Sign out
+              </button>
+            </div>
+          ) : (
+            <div className="signin-wrap">
+              {GOOGLE_CONFIGURED && (
                 <div ref={signInButtonRef} className="signin-slot" />
-                {signInError && (
-                  <span className="signin-error">{signInError}</span>
-                )}
-              </div>
-            )
-          ) : null}
+              )}
+              <button
+                type="button"
+                className="user-avatar-fallback"
+                title="Sign in"
+                onClick={() => {
+                  if (window.google?.accounts?.id) {
+                    window.google.accounts.id.prompt();
+                  }
+                }}
+              >
+                <Users aria-hidden="true" />
+              </button>
+              {signInError && (
+                <span className="signin-error">{signInError}</span>
+              )}
+            </div>
+          )}
         </div>
       </header>
 
