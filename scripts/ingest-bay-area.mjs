@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import {
   OVERPASS_ENDPOINT,
-  buildDataset,
+  buildSplitDatasets,
   buildOverpassQuery,
   commonsFileUrl,
   validateDataset,
@@ -125,13 +125,13 @@ async function ingestMetro(metro) {
   const boxes = coverage.boxes;
   const cityCenters = coverage.cityCenters;
   const center = metro.center;
-  const outputPath =
-    process.env.SPOT_OUTPUT || metroDataFile(metro, "spots");
+  const kidsPath = process.env.SPOT_OUTPUT || metroDataFile(metro, "spots");
+  const adultsPath = kidsPath.replace(/spots\.json$/, "spots-adults.json");
   const minSpots = Number(process.env.MIN_SPOTS || metro.minSpots || 150);
   const query = buildOverpassQuery(boxes);
   console.log(`Fetching ${metro.label} spots from Overpass...`);
   const raw = await fetchOverpass(query);
-  const dataset = buildDataset(raw.elements || [], {
+  const { kids, adults } = buildSplitDatasets(raw.elements || [], {
     query,
     metroId: metro.id,
     coverage,
@@ -140,27 +140,29 @@ async function ingestMetro(metro) {
     cityCenters,
     coverageName: coverage.name || metro.seoName || metro.label,
   });
-  await enrichImages(dataset);
-  const errors = validateDataset(dataset, {
+
+  await enrichImages(kids);
+  await enrichImages(adults);
+
+  const kidsErrors = validateDataset(kids, {
     minSpots,
     boxes,
     coverageName: coverage.name || metro.label,
   });
-
-  if (errors.length > 0) {
-    throw new Error(`Generated dataset failed validation:\n${errors.join("\n")}`);
+  if (kidsErrors.length > 0) {
+    throw new Error(`Kids dataset failed validation:\n${kidsErrors.join("\n")}`);
   }
 
-  await writeJson(outputPath, dataset);
+  await writeJson(kidsPath, kids);
+  await writeJson(adultsPath, adults);
+
   const legacyPath = legacyMetroDataFile(metro, "spots");
-  if (legacyPath && legacyPath !== outputPath) {
-    await writeJson(legacyPath, dataset);
+  if (legacyPath && legacyPath !== kidsPath) {
+    await writeJson(legacyPath, kids);
   }
-  console.log(`Wrote ${dataset.count} sanitized spots to ${outputPath}`);
-  if (legacyPath && legacyPath !== outputPath) {
-    console.log(`Wrote legacy copy to ${legacyPath}`);
-  }
-  console.log(`Generated at ${dataset.generatedAt}`);
+  console.log(`Wrote ${kids.count} kids spots to ${kidsPath}`);
+  console.log(`Wrote ${adults.count} adults spots to ${adultsPath}`);
+  console.log(`Generated at ${kids.generatedAt}`);
 }
 
 async function main() {

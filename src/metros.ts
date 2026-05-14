@@ -1,4 +1,5 @@
 import metrosDoc from "../data/metros.json";
+import { APP_AUDIENCE } from "./appConfig";
 
 export type MetroId = string;
 
@@ -34,6 +35,11 @@ const DATA_FILES: Record<DataKey, string> = {
   curatedSpots: "curated-spots.json",
 };
 
+const ADULTS_DATA_FILES: Partial<Record<DataKey, string>> = {
+  spots: "spots-adults.json",
+  events: "events-adults.json",
+};
+
 export function metroBySlug(slug: string | null | undefined): MetroConfig {
   const key = String(slug || "").replace(/^\/+|\/+$/g, "").toLowerCase();
   return (
@@ -63,7 +69,8 @@ export function metroFromPath(pathname: string): {
 }
 
 export function metroDataPath(metro: MetroConfig, key: DataKey): string {
-  return `${metro.dataDir}/${DATA_FILES[key]}`;
+  const audienceFile = APP_AUDIENCE === "adults" ? ADULTS_DATA_FILES[key] : undefined;
+  return `${metro.dataDir}/${audienceFile || DATA_FILES[key]}`;
 }
 
 export function legacyMetroDataPath(metro: MetroConfig, key: DataKey): string | null {

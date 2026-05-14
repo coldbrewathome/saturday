@@ -1255,7 +1255,7 @@ async function main() {
   const unionCities = new Set(registry.coverage?.cities || []);
   for (const c of adultRegistry?.coverage?.cities || []) unionCities.add(c);
 
-  const dataset = buildEventsDataset(allEvents, {
+  const datasetOpts = {
     metroId: activeMetro.id,
     generatedAt,
     registryPath,
@@ -1263,8 +1263,23 @@ async function main() {
     coverage: { ...registry.coverage, cities: Array.from(unionCities) },
     sourceCount:
       (registry.sources || []).length + (adultRegistry?.sources || []).length,
+  };
+
+  const kidsEvents = allEvents.filter((e) => {
+    const a = e.audiences;
+    if (!Array.isArray(a) || a.length === 0) return true;
+    return a.includes("kids") || a.includes("all");
   });
-  const errors = validateEventsDataset(dataset, {
+  const adultsEvents = allEvents.filter((e) => {
+    const a = e.audiences;
+    if (!Array.isArray(a) || a.length === 0) return true;
+    return a.includes("adults") || a.includes("all");
+  });
+
+  const kidsDataset = buildEventsDataset(kidsEvents, datasetOpts);
+  const adultsDataset = buildEventsDataset(adultsEvents, datasetOpts);
+
+  const errors = validateEventsDataset(kidsDataset, {
     minEvents,
     cities: Array.from(unionCities),
     communities: [
@@ -1282,7 +1297,8 @@ async function main() {
     generatedAt,
     registryPath,
     outputPath,
-    eventCount: dataset.events.length,
+    eventCount: kidsDataset.events.length,
+    adultsEventCount: adultsDataset.events.length,
     sourceCount: sourceReports.length,
     liveEventCount: sourceReports.reduce((sum, item) => sum + item.liveEvents, 0),
     fallbackEventCount: sourceReports.reduce((sum, item) => sum + item.fallbackEvents, 0),
@@ -1296,12 +1312,14 @@ async function main() {
     throw new Error(`Generated events failed validation:\n${errors.join("\n")}`);
   }
 
+  const adultsOutputPath = outputPath.replace(/events\.json$/, "events-adults.json");
   await fs.mkdir(path.dirname(outputPath), { recursive: true });
-  await fs.writeFile(outputPath, `${JSON.stringify(dataset, null, 2)}\n`);
+  await fs.writeFile(outputPath, `${JSON.stringify(kidsDataset, null, 2)}\n`);
+  await fs.writeFile(adultsOutputPath, `${JSON.stringify(adultsDataset, null, 2)}\n`);
   const legacyOutput = legacyMetroDataFile(activeMetro, "events");
   if (legacyOutput) {
     await fs.mkdir(path.dirname(legacyOutput), { recursive: true });
-    await fs.writeFile(legacyOutput, `${JSON.stringify(dataset, null, 2)}\n`);
+    await fs.writeFile(legacyOutput, `${JSON.stringify(kidsDataset, null, 2)}\n`);
   }
   await fs.mkdir(path.dirname(reportPath), { recursive: true });
   await fs.writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`);
@@ -1311,7 +1329,10 @@ async function main() {
     await fs.writeFile(legacyReport, `${JSON.stringify(report, null, 2)}\n`);
   }
   console.log(
-    `Wrote ${dataset.events.length} events to ${outputPath} (${report.liveEventCount} live, ${report.fallbackEventCount} template).`,
+    `Wrote ${kidsDataset.events.length} kids events to ${outputPath}`,
+  );
+  console.log(
+    `Wrote ${adultsDataset.events.length} adults events to ${adultsOutputPath}`,
   );
   console.log(`Wrote event build report to ${reportPath}`);
 }

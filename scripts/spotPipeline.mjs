@@ -819,7 +819,7 @@ export function hasMinimumQualitySignal(spot) {
   return signals >= 2;
 }
 
-export function dedupeAndRank(spots, limit = 500) {
+export function dedupeAndRank(spots, limit = 500, categoryList) {
   const seen = new Set();
   const deduped = [];
 
@@ -854,7 +854,7 @@ export function dedupeAndRank(spots, limit = 500) {
   };
 
   const sorted = deduped.sort(rank);
-  const categories = ["Food", "Outdoors", "Culture", "Wellness", "Shopping", "Nightlife"];
+  const categories = categoryList || ["Food", "Outdoors", "Culture", "Wellness", "Shopping", "Nightlife"];
   const perCategoryTarget = Math.max(75, Math.floor(limit / categories.length));
   const selected = [];
   const selectedIds = new Set();
@@ -893,19 +893,18 @@ export function buildDataset(elements, options = {}) {
   const cityCenters = options.cityCenters || coverage.cityCenters || CITY_CENTERS;
   const coverageName = options.coverageName || coverage.name || "San Francisco Bay Area";
   const query = options.query || buildOverpassQuery(boxes);
-  const spots = dedupeAndRank(
-    elements
-      .map((element) => normalizeElement(element, generatedAt, {
-        boxes,
-        center,
-        cityCenters,
-        coverageName,
-      }))
-      .filter(Boolean),
-    limit,
-  );
+  const allNormalized = elements
+    .map((element) => normalizeElement(element, generatedAt, {
+      boxes,
+      center,
+      cityCenters,
+      coverageName,
+    }))
+    .filter(Boolean);
 
-  return {
+  const spots = dedupeAndRank(allNormalized, limit);
+
+  const meta = {
     schemaVersion: 1,
     generatedAt,
     source: {
@@ -921,8 +920,60 @@ export function buildDataset(elements, options = {}) {
       bbox: coverage.bbox || BAY_AREA_BBOX,
       boxes,
     },
-    count: spots.length,
-    spots,
+  };
+
+  return { ...meta, count: spots.length, spots };
+}
+
+const KIDS_CATEGORIES = ["Food", "Outdoors", "Culture", "Wellness", "Shopping"];
+const ADULTS_CATEGORIES = ["Nightlife", "Food", "Culture", "Wellness", "Outdoors"];
+
+export function buildSplitDatasets(elements, options = {}) {
+  const generatedAt = options.generatedAt || new Date().toISOString();
+  const limit = Number(options.limit || process.env.SPOT_LIMIT || 1500);
+  const coverage = options.coverage || {};
+  const boxes = options.boxes || coverage.boxes || BAY_AREA_BOXES;
+  const center = options.center || coverage.center || SF_CENTER;
+  const cityCenters = options.cityCenters || coverage.cityCenters || CITY_CENTERS;
+  const coverageName = options.coverageName || coverage.name || "San Francisco Bay Area";
+  const query = options.query || buildOverpassQuery(boxes);
+  const allNormalized = elements
+    .map((element) => normalizeElement(element, generatedAt, {
+      boxes, center, cityCenters, coverageName,
+    }))
+    .filter(Boolean);
+
+  const kidsSpots = allNormalized.filter(
+    (s) => s.category !== "Nightlife" && (!s.audiences || !s.audiences.includes("adults") || s.audiences.includes("all")),
+  );
+  const adultsSpots = allNormalized.filter(
+    (s) => !s.audiences || !s.audiences.includes("kids"),
+  );
+
+  const meta = {
+    schemaVersion: 1,
+    generatedAt,
+    source: {
+      name: "OpenStreetMap via Overpass API",
+      endpoint: OVERPASS_ENDPOINT,
+      queryHash: hashQuery(query),
+      attribution: "© OpenStreetMap contributors",
+      license: "ODbL",
+    },
+    coverage: {
+      id: options.metroId || "bay-area",
+      name: coverageName,
+      bbox: coverage.bbox || BAY_AREA_BBOX,
+      boxes,
+    },
+  };
+
+  const kidsRanked = dedupeAndRank(kidsSpots, limit, KIDS_CATEGORIES);
+  const adultsRanked = dedupeAndRank(adultsSpots, limit, ADULTS_CATEGORIES);
+
+  return {
+    kids: { ...meta, count: kidsRanked.length, spots: kidsRanked },
+    adults: { ...meta, count: adultsRanked.length, spots: adultsRanked },
   };
 }
 

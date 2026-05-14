@@ -72,130 +72,55 @@
 
 /* ─── NightHop (adults sibling app) ──────────────────────────────────────
    main.tsx stamps data-app-audience="adults" on <html>. NightHop uses a
-   dark-base aesthetic with violet accents and neon-ish highlights — a clear
-   break from FamHop's warm/cream family vibe. */
+   cool violet-tinted palette — light enough for easy reading but clearly
+   distinct from FamHop's warm cream/amber family look. */
 html[data-app-audience="adults"] {
-  --bg: #0f0a1a;
-  --surface: #1a1425;
-  --surface-strong: #241d33;
-  --line: #2e2640;
-  --line-soft: #241d33;
-  --ink: #f0ecf7;
-  --ink-soft: #c4b8d9;
-  --ink-mute: #8a7da1;
-  --muted: #9d92b3;
-  --mute-soft: #7a6f94;
-  --accent: #a855f7;
-  --accent-strong: #c084fc;
-  --accent-soft: #2e1a47;
-  --forest: #34d399;
-  --forest-strong: #6ee7b7;
-  --forest-soft: #0d2e23;
-  --blue: #7dd3fc;
-  --blue-soft: #0c2a3e;
-  --berry: #fb7185;
-  --berry-soft: #3b1422;
+  --bg: #f3f0fa;
+  --surface: #ffffff;
+  --surface-strong: #e8e2f4;
+  --line: #d4cde5;
+  --line-soft: #e4ddf0;
+  --ink: #1e1a2b;
+  --ink-soft: #4a4360;
+  --ink-mute: #7a7490;
+  --muted: #6b6580;
+  --mute-soft: #8a849e;
+  --accent: #7c3aed;
+  --accent-strong: #5b21b6;
+  --accent-soft: #ede5fc;
+  --forest: #2d5043;
+  --forest-strong: #1f3a2f;
+  --forest-soft: #dde7dc;
+  --blue: #3b5998;
+  --blue-soft: #dce5f4;
+  --berry: #b25368;
+  --berry-soft: #f2dde2;
   --coral: var(--berry);
   --coral-soft: var(--berry-soft);
-  --sun: #fbbf24;
-  --sun-soft: #3b2f0a;
-  --shadow: 0 18px 45px rgba(0, 0, 0, 0.4);
-  --glass-bg: rgba(15, 10, 26, 0.85);
-  --glass-blur: blur(24px) saturate(180%);
-  --glass-border: 0.5px solid rgba(168, 85, 247, 0.2);
-  --glass-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+  --sun: #d4a017;
+  --sun-soft: #f5ead0;
+  --shadow: 0 18px 45px rgba(30, 26, 43, 0.1);
+  --glass-bg: rgba(243, 240, 250, 0.85);
+  --glass-border: 0.5px solid rgba(124, 58, 237, 0.15);
   --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
-  color-scheme: dark;
-}
-
-html[data-app-audience="adults"] body {
-  background: var(--bg);
-  color: var(--ink);
-}
-
-html[data-app-audience="adults"] .topbar {
-  background: rgba(15, 10, 26, 0.92);
-  border-bottom-color: var(--line);
-  backdrop-filter: var(--glass-blur);
-}
-
-html[data-app-audience="adults"] .spot-card,
-html[data-app-audience="adults"] .event-card {
-  background: var(--surface);
-  border-color: var(--line);
 }
 
 html[data-app-audience="adults"] .spot-card:hover,
 html[data-app-audience="adults"] .event-card:hover {
   border-color: var(--accent);
-  box-shadow: 0 0 0 1px var(--accent), 0 8px 24px rgba(168, 85, 247, 0.15);
-}
-
-html[data-app-audience="adults"] .hero-section {
-  background: linear-gradient(135deg, #0f0a1a 0%, #1a0a2e 50%, #0f0a1a 100%);
-}
-
-html[data-app-audience="adults"] .vibe-btn {
-  background: var(--surface);
-  border-color: var(--line);
-  color: var(--ink);
-}
-
-html[data-app-audience="adults"] .vibe-btn:hover,
-html[data-app-audience="adults"] .vibe-btn.active {
-  background: var(--accent-soft);
-  border-color: var(--accent);
-  color: var(--accent-strong);
-}
-
-html[data-app-audience="adults"] .filter-chip {
-  background: var(--surface);
-  border-color: var(--line);
-  color: var(--ink-soft);
-}
-
-html[data-app-audience="adults"] .filter-chip.active {
-  background: var(--accent-soft);
-  border-color: var(--accent);
-  color: var(--accent-strong);
-}
-
-html[data-app-audience="adults"] .plan-card {
-  background: var(--surface);
-  border-color: var(--line);
-}
-
-html[data-app-audience="adults"] .plan-card:hover {
-  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), 0 8px 24px rgba(124, 58, 237, 0.1);
 }
 
 html[data-app-audience="adults"] .btn-primary {
-  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  background: linear-gradient(135deg, #7c3aed, #9333ea);
   color: #fff;
   border: none;
-  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.35);
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
 }
 
 html[data-app-audience="adults"] .btn-primary:hover {
-  background: linear-gradient(135deg, #6d28d9, #9333ea);
-  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
-}
-
-html[data-app-audience="adults"] input,
-html[data-app-audience="adults"] select {
-  background: var(--surface);
-  border-color: var(--line);
-  color: var(--ink);
-}
-
-html[data-app-audience="adults"] .pull-up,
-html[data-app-audience="adults"] .bottom-sheet {
-  background: var(--surface);
-  border-color: var(--line);
-}
-
-html[data-app-audience="adults"] .cat-row.active {
-  background: var(--accent-soft);
+  background: linear-gradient(135deg, #6d28d9, #7c3aed);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
 }
 
 * {

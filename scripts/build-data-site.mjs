@@ -107,7 +107,9 @@ const legacyLines = metroConfig.metros
 const endpointLinks = [
   ...metroConfig.metros.flatMap((metro) => [
     path.relative(path.join("public", "data"), metroDataFile(metro, "spots")),
+    `${metro.dataDir}/spots-adults.json`,
     path.relative(path.join("public", "data"), metroDataFile(metro, "events")),
+    `${metro.dataDir}/events-adults.json`,
     path.relative(path.join("public", "data"), metroDataFile(metro, "featuredPlans")),
   ]),
   "boa-museums.json",
