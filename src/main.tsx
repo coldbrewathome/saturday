@@ -10,13 +10,20 @@ import "./styles.css";
 // overrides (e.g. a violet accent for the adults app) can hang off it.
 document.documentElement.setAttribute("data-app-audience", APP_AUDIENCE);
 
-function readPollIdFromHash(): string | null {
-  const match = window.location.hash.match(/^#\/p\/([\w-]+)$/);
-  return match ? match[1] : null;
+type PollRoute = { pollId: string; embed: boolean } | null;
+
+function readPollRouteFromHash(): PollRoute {
+  const match = window.location.hash.match(/^#\/(p|embed)\/([\w-]+)(?:\?(.*))?$/);
+  if (!match) return null;
+  const [, route, pollId, query = ""] = match;
+  const params = new URLSearchParams(query);
+  return { pollId, embed: route === "embed" || params.get("embed") === "1" };
 }
 
 function Root() {
-  const [pollId, setPollId] = useState<string | null>(() => readPollIdFromHash());
+  const [pollRoute, setPollRoute] = useState<PollRoute>(() =>
+    readPollRouteFromHash(),
+  );
   const [{ metro, isAlias, canonicalPath }] = useState(() =>
     metroFromPath(window.location.pathname),
   );
@@ -32,13 +39,17 @@ function Root() {
 
   useEffect(() => {
     function handler() {
-      setPollId(readPollIdFromHash());
+      setPollRoute(readPollRouteFromHash());
     }
     window.addEventListener("hashchange", handler);
     return () => window.removeEventListener("hashchange", handler);
   }, []);
 
-  return pollId ? <PollView pollId={pollId} /> : <App metro={metro} />;
+  return pollRoute ? (
+    <PollView pollId={pollRoute.pollId} embed={pollRoute.embed} />
+  ) : (
+    <App metro={metro} />
+  );
 }
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

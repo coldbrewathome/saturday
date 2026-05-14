@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "metroId": "boston",
-  "generatedAt": "2026-05-13T21:04:39.030Z",
+  "generatedAt": "2026-05-14T02:19:57.276Z",
   "registryPath": "data/event-sources-boston.json",
   "outputPath": "public/data/boston/events.json",
   "eventCount": 34,
-  "sourceCount": 5,
+  "sourceCount": 11,
   "liveEventCount": 30,
   "fallbackEventCount": 4,
   "errors": [],
@@ -43,9 +43,9 @@
       "metroId": "boston",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 15,
+      "liveEvents": 14,
       "fallbackEvents": 0,
-      "eventCount": 15,
+      "eventCount": 14,
       "fetches": [
         {
           "url": "https://www.boston.gov/rss/events",
@@ -56,7 +56,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/rss+xml; charset=utf-8",
-      "rejectedLiveEvents": 10
+      "rejectedLiveEvents": 11
     },
     {
       "id": "boston-museum-family",
@@ -91,9 +91,9 @@
       "metroId": "boston",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://www.zoonewengland.org/discover/program-calendar/",
@@ -104,7 +104,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 12
+      "rejectedLiveEvents": 11
     },
     {
       "id": "ticketmaster-boston-family",
@@ -128,6 +128,147 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "paradise-rock-club",
+      "name": "Paradise Rock Club",
+      "url": "https://www.crossroadspresents.com/paradise-rock-club",
+      "sourceType": "html",
+      "city": "Boston",
+      "metroId": "boston",
+      "category": "Music",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.crossroadspresents.com/paradise-rock-club",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 404,
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "id": "brighton-music-hall",
+      "name": "Brighton Music Hall",
+      "url": "https://www.crossroadspresents.com/brighton-music-hall",
+      "sourceType": "html",
+      "city": "Boston",
+      "metroId": "boston",
+      "category": "Music",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.crossroadspresents.com/brighton-music-hall",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 404,
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "id": "the-sinclair",
+      "name": "The Sinclair",
+      "url": "https://www.sinclaircambridge.com/events",
+      "sourceType": "html",
+      "city": "Cambridge",
+      "metroId": "boston",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.sinclaircambridge.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "crystal-ballroom-somerville",
+      "name": "Crystal Ballroom",
+      "url": "https://www.crystalballroomboston.com/events",
+      "sourceType": "html",
+      "city": "Somerville",
+      "metroId": "boston",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.crystalballroomboston.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "nick-comedy-stop",
+      "name": "Nick's Comedy Stop",
+      "url": "https://www.nickscomedystop.com/calendar",
+      "sourceType": "html",
+      "city": "Boston",
+      "metroId": "boston",
+      "category": "Comedy",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.nickscomedystop.com/calendar",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 404,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "id": "laugh-boston",
+      "name": "Laugh Boston",
+      "url": "https://www.laughboston.com/calendar",
+      "sourceType": "html",
+      "city": "Boston",
+      "metroId": "boston",
+      "category": "Comedy",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.laughboston.com/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
     }
   ]

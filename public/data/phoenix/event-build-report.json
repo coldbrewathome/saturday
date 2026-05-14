@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "metroId": "phoenix",
-  "generatedAt": "2026-05-13T21:04:32.342Z",
+  "generatedAt": "2026-05-14T02:19:47.166Z",
   "registryPath": "data/event-sources-phoenix.json",
   "outputPath": "public/data/phoenix/events.json",
-  "eventCount": 364,
-  "sourceCount": 5,
-  "liveEventCount": 360,
+  "eventCount": 353,
+  "sourceCount": 11,
+  "liveEventCount": 349,
   "fallbackEventCount": 4,
   "errors": [],
   "sources": [
@@ -19,9 +19,9 @@
       "metroId": "phoenix",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 246,
+      "liveEvents": 238,
       "fallbackEvents": 0,
-      "eventCount": 246,
+      "eventCount": 238,
       "fetches": [
         {
           "url": "https://calendar.phoenixpubliclibrary.org/calendar/",
@@ -43,9 +43,9 @@
       "metroId": "phoenix",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 11,
+      "liveEvents": 12,
       "fallbackEvents": 0,
-      "eventCount": 11,
+      "eventCount": 12,
       "fetches": [
         {
           "url": "https://www.phoenix.gov/calendar/parks-events.html",
@@ -56,7 +56,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=phoenix-city-calendar; events=20",
-      "rejectedLiveEvents": 9
+      "rejectedLiveEvents": 8
     },
     {
       "id": "phoenix-museum-family",
@@ -67,19 +67,19 @@
       "metroId": "phoenix",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 103,
+      "liveEvents": 95,
       "fallbackEvents": 0,
-      "eventCount": 103,
+      "eventCount": 95,
       "fetches": [
         {
           "url": "https://childrensmuseumofphoenix.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=121; pages=3"
+          "contentType": "application/json; source=tribe-events; events=113; pages=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=121; pages=3",
+      "contentType": "application/json; source=tribe-events; events=113; pages=3",
       "rejectedLiveEvents": 17
     },
     {
@@ -128,6 +128,150 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "crescent-ballroom",
+      "name": "Crescent Ballroom",
+      "url": "https://www.crescentphx.com/events",
+      "sourceType": "html",
+      "city": "Phoenix",
+      "metroId": "phoenix",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.crescentphx.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "the-van-buren",
+      "name": "The Van Buren",
+      "url": "https://www.thevanburenphx.com/events",
+      "sourceType": "html",
+      "city": "Phoenix",
+      "metroId": "phoenix",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.thevanburenphx.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "rebel-lounge-phx",
+      "name": "The Rebel Lounge",
+      "url": "https://www.therebellounge.com/events",
+      "sourceType": "html",
+      "city": "Phoenix",
+      "metroId": "phoenix",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 4,
+      "fallbackEvents": 0,
+      "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://www.therebellounge.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "marquee-theatre-tempe",
+      "name": "Marquee Theatre",
+      "url": "https://www.luckymanonline.com/marquee-theatre",
+      "sourceType": "html",
+      "city": "Tempe",
+      "metroId": "phoenix",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.luckymanonline.com/marquee-theatre",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "stand-up-live-phx",
+      "name": "Stand Up Live Phoenix",
+      "url": "https://phoenix.standuplive.com/events",
+      "sourceType": "html",
+      "city": "Phoenix",
+      "metroId": "phoenix",
+      "category": "Comedy",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://phoenix.standuplive.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "rick-bronsons-house-of-comedy",
+      "name": "Rick Bronson's House of Comedy",
+      "url": "https://houseofcomedy.net/scottsdale",
+      "sourceType": "html",
+      "city": "Scottsdale",
+      "metroId": "phoenix",
+      "category": "Comedy",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://houseofcomedy.net/scottsdale",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
     }
   ]

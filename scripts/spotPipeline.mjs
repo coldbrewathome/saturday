@@ -72,6 +72,16 @@ export const CATEGORY_IMAGES = {
     "1472851294608-062f824d29cc",
     "1555529771-7888783a18d3",
   ].map(UNSPLASH),
+  Nightlife: [
+    "1514525253161-7a46d19cd819",
+    "1566737236500-c8ac43014a67",
+    "1470225620780-dba8ba36b745",
+    "1516450360452-9258136e8735",
+    "1574391884720-bbc3740c59d1",
+    "1543007631-283050bb3e8c",
+    "1571204829887-3b8d69e4094d",
+    "1508997449629-303059a039c0",
+  ].map(UNSPLASH),
 };
 
 export function pickCategoryImage(category, key) {
@@ -118,6 +128,10 @@ const TAG_RULES = [
       "ice_cream",
       "restaurant",
     ],
+  },
+  {
+    key: "amenity",
+    values: ["bar", "biergarten", "nightclub", "pub"],
   },
   {
     key: "amenity",
@@ -323,9 +337,8 @@ export function inferCategory(tags = {}) {
   const tourism = tags.tourism;
   const shop = tags.shop;
 
-  // Adult-only venues are filtered out of this build.
-  if (["bar", "biergarten", "pub"].includes(amenity)) {
-    return null;
+  if (["bar", "biergarten", "pub", "nightclub"].includes(amenity)) {
+    return "Nightlife";
   }
 
   if (
@@ -381,12 +394,23 @@ export function deriveCost(category, tags = {}) {
     return "Unknown";
   }
 
+  if (category === "Nightlife") {
+    return tags.amenity === "nightclub" ? "$$" : "$";
+  }
+
   return "$";
 }
 
 export function deriveMood(category, tags = {}) {
   if (category === "Food") {
     return tags.amenity === "cafe" ? "Coffee and conversation" : "Shareable food";
+  }
+
+  if (category === "Nightlife") {
+    if (tags.amenity === "nightclub") return "Dance floor";
+    if (tags.amenity === "biergarten") return "Beer garden hangout";
+    if (tags.amenity === "pub") return "Pub night";
+    return "Cocktails and conversation";
   }
 
   if (category === "Outdoors") {
@@ -417,6 +441,10 @@ export function deriveGroupSize(category, tags = {}) {
     return "2-12 people";
   }
 
+  if (category === "Nightlife") {
+    return "2-8 people";
+  }
+
   if (category === "Wellness") {
     return "2-4 people";
   }
@@ -431,6 +459,10 @@ export function deriveGroupSize(category, tags = {}) {
 export function derivePlanning(category, tags = {}) {
   if (tags.reservation === "required" || tags.leisure === "escape_game") {
     return "Book ahead";
+  }
+
+  if (category === "Nightlife") {
+    return tags.amenity === "nightclub" ? "Check lineup" : "Walk-in";
   }
 
   if (category === "Culture") {
@@ -449,6 +481,10 @@ export function deriveTimeWindow(category, tags = {}) {
     return tags.amenity === "cafe" ? "Morning" : "Lunch";
   }
 
+  if (category === "Nightlife") {
+    return "Evening";
+  }
+
   if (category === "Outdoors") {
     return "Daylight";
   }
@@ -463,6 +499,7 @@ export function friendScore(category, tags = {}) {
     Culture: 78,
     Wellness: 72,
     Shopping: 62,
+    Nightlife: 80,
   }[category] ?? 60;
 
   if (tags.opening_hours) score += 5;
@@ -817,7 +854,7 @@ export function dedupeAndRank(spots, limit = 500) {
   };
 
   const sorted = deduped.sort(rank);
-  const categories = ["Food", "Outdoors", "Culture", "Wellness", "Shopping"];
+  const categories = ["Food", "Outdoors", "Culture", "Wellness", "Shopping", "Nightlife"];
   const perCategoryTarget = Math.max(75, Math.floor(limit / categories.length));
   const selected = [];
   const selectedIds = new Set();

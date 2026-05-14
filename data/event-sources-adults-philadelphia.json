@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "note": "Adult-audience event sources for Philadelphia — music venues, comedy, nightlife.",
+  "defaults": {
+    "windowDays": 30,
+    "audiences": ["adults"],
+    "userAgent": "nighthop/0.1 event-ingest"
+  },
+  "coverage": {
+    "cities": [
+      "Philadelphia",
+      "Fishtown",
+      "Northern Liberties",
+      "Old City",
+      "South Philadelphia",
+      "University City"
+    ]
+  },
+  "sources": [
+    {
+      "id": "union-transfer",
+      "name": "Union Transfer",
+      "url": "https://www.utphilly.com/events",
+      "city": "Philadelphia",
+      "neighborhood": "Spring Garden",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 39.9621,
+      "lon": -75.1539
+    },
+    {
+      "id": "the-fillmore-philly",
+      "name": "The Fillmore Philadelphia",
+      "url": "https://www.thefillmorephilly.com/events",
+      "city": "Philadelphia",
+      "neighborhood": "Fishtown",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 39.9677,
+      "lon": -75.1314
+    },
+    {
+      "id": "johnny-brendas",
+      "name": "Johnny Brenda's",
+      "url": "https://www.johnnybrendas.com/events",
+      "city": "Philadelphia",
+      "neighborhood": "Fishtown",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 39.9686,
+      "lon": -75.1343
+    },
+    {
+      "id": "the-foundry-philly",
+      "name": "The Foundry",
+      "url": "https://www.thefoundryphilly.com/events",
+      "city": "Philadelphia",
+      "neighborhood": "Fishtown",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 39.9707,
+      "lon": -75.1278
+    },
+    {
+      "id": "helium-comedy-philly",
+      "name": "Helium Comedy Club",
+      "url": "https://philadelphia.heliumcomedy.com/events",
+      "city": "Philadelphia",
+      "neighborhood": "Center City",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 39.9527,
+      "lon": -75.1622
+    },
+    {
+      "id": "punchline-philly",
+      "name": "Punch Line Philly",
+      "url": "https://www.punchlinephilly.com/shows",
+      "city": "Philadelphia",
+      "neighborhood": "Fishtown",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 39.9683,
+      "lon": -75.1307
+    }
+  ]
+}

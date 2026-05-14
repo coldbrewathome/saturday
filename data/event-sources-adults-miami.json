@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "note": "Adult-audience event sources for Miami — music venues, nightclubs, comedy.",
+  "defaults": {
+    "windowDays": 30,
+    "audiences": ["adults"],
+    "userAgent": "nighthop/0.1 event-ingest"
+  },
+  "coverage": {
+    "cities": [
+      "Miami",
+      "Miami Beach",
+      "Wynwood",
+      "Brickell",
+      "Fort Lauderdale",
+      "Coral Gables",
+      "Little Havana",
+      "South Beach"
+    ]
+  },
+  "sources": [
+    {
+      "id": "e11even-miami",
+      "name": "E11EVEN Miami",
+      "url": "https://11miami.com/events",
+      "city": "Miami",
+      "neighborhood": "Downtown",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 25.7825,
+      "lon": -80.1947
+    },
+    {
+      "id": "space-miami",
+      "name": "Club Space",
+      "url": "https://clubspace.com/events",
+      "city": "Miami",
+      "neighborhood": "Downtown",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 25.7852,
+      "lon": -80.1951
+    },
+    {
+      "id": "the-ground-miami",
+      "name": "The Ground Miami",
+      "url": "https://thegroundmiami.com/events",
+      "city": "Miami",
+      "neighborhood": "Wynwood",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 25.8005,
+      "lon": -80.1998
+    },
+    {
+      "id": "gramps-wynwood",
+      "name": "Gramps",
+      "url": "https://www.grframps.com/calendar",
+      "city": "Miami",
+      "neighborhood": "Wynwood",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 25.8012,
+      "lon": -80.1991
+    },
+    {
+      "id": "the-oasis-wynwood",
+      "name": "The Oasis",
+      "url": "https://www.oasiswynwood.com/events",
+      "city": "Miami",
+      "neighborhood": "Wynwood",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 25.8025,
+      "lon": -80.1994
+    },
+    {
+      "id": "las-rosas-miami",
+      "name": "Las Rosas",
+      "url": "https://www.lasrosasbar.com/events",
+      "city": "Miami",
+      "neighborhood": "Little Havana",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 25.7659,
+      "lon": -80.2248
+    },
+    {
+      "id": "south-beach-comedy",
+      "name": "Miami Improv",
+      "url": "https://www.miamiimprov.com/calendar",
+      "city": "Fort Lauderdale",
+      "neighborhood": "Dania Beach",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 26.0563,
+      "lon": -80.1443
+    }
+  ]
+}

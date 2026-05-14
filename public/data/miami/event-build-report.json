@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "metroId": "miami",
-  "generatedAt": "2026-05-13T21:04:16.463Z",
+  "generatedAt": "2026-05-14T02:19:27.875Z",
   "registryPath": "data/event-sources-miami.json",
   "outputPath": "public/data/miami/events.json",
-  "eventCount": 35,
-  "sourceCount": 5,
-  "liveEventCount": 27,
+  "eventCount": 65,
+  "sourceCount": 12,
+  "liveEventCount": 57,
   "fallbackEventCount": 8,
   "errors": [],
   "sources": [
@@ -40,9 +40,9 @@
       "metroId": "miami",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 6,
+      "liveEvents": 5,
       "fallbackEvents": 0,
-      "eventCount": 6,
+      "eventCount": 5,
       "fetches": [
         {
           "url": "https://www.miamidade.gov/global/calendar/global.page?calendarName=Parks",
@@ -53,7 +53,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 1
     },
     {
       "id": "miami-museum-family",
@@ -125,6 +125,168 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "e11even-miami",
+      "name": "E11EVEN Miami",
+      "url": "https://11miami.com/events",
+      "sourceType": "html",
+      "city": "Miami",
+      "metroId": "miami",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 31,
+      "fallbackEvents": 0,
+      "eventCount": 31,
+      "fetches": [
+        {
+          "url": "https://11miami.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 47
+    },
+    {
+      "id": "space-miami",
+      "name": "Club Space",
+      "url": "https://clubspace.com/events",
+      "sourceType": "html",
+      "city": "Miami",
+      "metroId": "miami",
+      "category": "Music",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://clubspace.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ],
+      "httpStatus": 404,
+      "contentType": "text/html;charset=utf-8"
+    },
+    {
+      "id": "the-ground-miami",
+      "name": "The Ground Miami",
+      "url": "https://thegroundmiami.com/events",
+      "sourceType": "html",
+      "city": "Miami",
+      "metroId": "miami",
+      "category": "Music",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://thegroundmiami.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ],
+      "httpStatus": 404,
+      "contentType": "text/html;charset=utf-8"
+    },
+    {
+      "id": "gramps-wynwood",
+      "name": "Gramps",
+      "url": "https://www.grframps.com/calendar",
+      "sourceType": "html",
+      "city": "Miami",
+      "metroId": "miami",
+      "category": "Music",
+      "status": "fetch-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.grframps.com/calendar",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ],
+      "reason": "fetch failed"
+    },
+    {
+      "id": "the-oasis-wynwood",
+      "name": "The Oasis",
+      "url": "https://www.oasiswynwood.com/events",
+      "sourceType": "html",
+      "city": "Miami",
+      "metroId": "miami",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.oasiswynwood.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html;charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "las-rosas-miami",
+      "name": "Las Rosas",
+      "url": "https://www.lasrosasbar.com/events",
+      "sourceType": "html",
+      "city": "Miami",
+      "metroId": "miami",
+      "category": "Music",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.lasrosasbar.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html"
+        }
+      ],
+      "httpStatus": 404,
+      "contentType": "text/html"
+    },
+    {
+      "id": "south-beach-comedy",
+      "name": "Miami Improv",
+      "url": "https://www.miamiimprov.com/calendar",
+      "sourceType": "html",
+      "city": "Fort Lauderdale",
+      "metroId": "miami",
+      "category": "Comedy",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.miamiimprov.com/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0
     }
   ]

@@ -4,6 +4,24 @@
   "note": "Editor-curated starter plans + auto-generated per-city plans. Hand-written plans (no generated:true) are kept across runs; generated entries are rebuilt by scripts/generate-featured-plans.mjs each ingest. Each entry carries lat/lon + city so the frontend can show plans near the user's map view.",
   "plans": [
     {
+      "id": "gen-day-alvin",
+      "name": "Family day in Alvin",
+      "summary": "Family-friendly spots in Alvin - Bub's Sports Bar, The Garage Bar & Grill.",
+      "accent": "park",
+      "stopIds": [
+        "osm-node-5998835804",
+        "osm-node-6013908229"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Alvin",
+      "lat": 29.44268,
+      "lon": -95.23512,
+      "generated": true
+    },
+    {
       "id": "gen-day-baytown",
       "name": "Family day in Baytown",
       "summary": "Three family-friendly stops in Baytown - San Jacinto Battleground State Historic Site, Central Heights Park, Bicentennial Park.",
@@ -63,19 +81,20 @@
     {
       "id": "gen-day-el-lago",
       "name": "Family day in El Lago",
-      "summary": "Family-friendly spots in El Lago - McNair Memorial Park & Pavilion, Witty Memorial Park.",
+      "summary": "Three family-friendly stops in El Lago - Boondoggle's, Chelsea Wine Bar, McNair Memorial Park & Pavilion.",
       "accent": "park",
       "stopIds": [
-        "osm-way-1460314020",
-        "osm-way-1460314021"
+        "osm-node-3810831241",
+        "osm-node-3810831242",
+        "osm-way-1460314020"
       ],
       "eventIds": [],
       "audiences": [
         "all"
       ],
       "city": "El Lago",
-      "lat": 29.57327,
-      "lon": -95.04071,
+      "lat": 29.56848,
+      "lon": -95.04914,
       "generated": true
     },
     {
@@ -100,14 +119,14 @@
     {
       "id": "gen-events-houston",
       "name": "Houston family events",
-      "summary": "Two upcoming family events in Houston plus a nearby stop - Create Together: Join Our Family Craft Adventure! | Get Crafty: Kids Craft Time at the Library!.",
+      "summary": "Two upcoming family events in Houston plus a nearby stop - Art of Duck and Moose AND Squiggle Party | Echoes & Reverberations: Everyone is an Artist and an Engine.",
       "accent": "festival",
       "stopIds": [
         "osm-way-450420761"
       ],
       "eventIds": [
-        "houston-library-family-16327809",
-        "houston-library-family-15409556"
+        "houston-library-family-16276434",
+        "houston-library-family-16765363"
       ],
       "audiences": [
         "all"
@@ -120,39 +139,57 @@
     {
       "id": "gen-day-humble",
       "name": "Family day in Humble",
-      "summary": "Three family-friendly stops in Humble - Jesse Jones Park, Los Cucos Mexican Cafe, Resillience Trail.",
+      "summary": "Three family-friendly stops in Humble - Jesse Jones Park, Los Cucos Mexican Cafe, Green Oaks Tavern.",
       "accent": "park",
       "stopIds": [
         "osm-way-189930327",
         "osm-node-11285069369",
-        "osm-way-480492168"
+        "osm-way-318784595"
       ],
       "eventIds": [],
       "audiences": [
         "all"
       ],
       "city": "Humble",
-      "lat": 29.93863,
-      "lon": -95.24793,
+      "lat": 29.98622,
+      "lon": -95.26935,
       "generated": true
     },
     {
       "id": "gen-day-katy",
       "name": "Family day in Katy",
-      "summary": "Three family-friendly stops in Katy - Mini Park, MUD park, Towne Lake Crossing Playground.",
+      "summary": "Three family-friendly stops in Katy - Mini Park, MUD park, Kings Lounge.",
       "accent": "park",
       "stopIds": [
         "osm-node-13115551814",
         "osm-way-736410308",
-        "osm-way-841490753"
+        "osm-node-3905545662"
       ],
       "eventIds": [],
       "audiences": [
         "all"
       ],
       "city": "Katy",
-      "lat": 29.87117,
-      "lon": -95.68716,
+      "lat": 29.82113,
+      "lon": -95.69816,
+      "generated": true
+    },
+    {
+      "id": "gen-day-kemah",
+      "name": "Family day in Kemah",
+      "summary": "Family-friendly spots in Kemah - Jackie's Bar & Grill, Kemah Boardwalk.",
+      "accent": "festival",
+      "stopIds": [
+        "osm-way-1188652798",
+        "osm-way-680914601"
+      ],
+      "eventIds": [],
+      "audiences": [
+        "all"
+      ],
+      "city": "Kemah",
+      "lat": 29.54361,
+      "lon": -95.02631,
       "generated": true
     },
     {
@@ -234,20 +271,20 @@
     {
       "id": "gen-day-spring",
       "name": "Family day in Spring",
-      "summary": "Three family-friendly stops in Spring - Cypresswood Water Conservation Garden, Forest Oaks Park, The Farm League.",
+      "summary": "Three family-friendly stops in Spring - Cypresswood Water Conservation Garden, Big Tyme Billiards, I Don't Know Yet Lounge.",
       "accent": "park",
       "stopIds": [
         "osm-way-604306327",
-        "osm-way-468561377",
-        "osm-way-1111196542"
+        "osm-node-11037664808",
+        "osm-node-12154649993"
       ],
       "eventIds": [],
       "audiences": [
         "all"
       ],
       "city": "Spring",
-      "lat": 30.04333,
-      "lon": -95.48898,
+      "lat": 30.0567,
+      "lon": -95.46067,
       "generated": true
     },
     {
@@ -310,19 +347,20 @@
     {
       "id": "gen-day-webster",
       "name": "Family day in Webster",
-      "summary": "Family-friendly spots in Webster - District Theatres, William’s Indoor Pool.",
-      "accent": "festival",
+      "summary": "Three family-friendly stops in Webster - Beers Looking At You, Cockeyed Seagull, Nobi Public House.",
+      "accent": "park",
       "stopIds": [
-        "osm-way-762311572",
-        "osm-way-1117748129"
+        "osm-node-5190968021",
+        "osm-node-6013609323",
+        "osm-node-4469127876"
       ],
       "eventIds": [],
       "audiences": [
         "all"
       ],
       "city": "Webster",
-      "lat": 29.54954,
-      "lon": -95.14002,
+      "lat": 29.54356,
+      "lon": -95.11611,
       "generated": true
     },
     {

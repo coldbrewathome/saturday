@@ -66,7 +66,13 @@ function formatEventWhen(event: EventSummary): string {
   return event.timeWindow ?? "";
 }
 
-export default function PollView({ pollId }: { pollId: string }) {
+export default function PollView({
+  pollId,
+  embed = false,
+}: {
+  pollId: string;
+  embed?: boolean;
+}) {
   const [status, setStatus] = useState<Status>("loading");
   const [error, setError] = useState<string | null>(null);
   const [poll, setPoll] = useState<PollSnapshot | null>(null);
@@ -176,9 +182,17 @@ export default function PollView({ pollId }: { pollId: string }) {
     window.location.hash = "";
   }
 
+  const shellClass = embed ? "poll-shell poll-shell-embed" : "poll-shell";
+  const fullPollUrl =
+    typeof window === "undefined"
+      ? ""
+      : `${window.location.origin}${window.location.pathname}#/p/${encodeURIComponent(
+          pollId,
+        )}`;
+
   if (status === "loading") {
     return (
-      <div className="poll-shell">
+      <div className={shellClass}>
         <p className="poll-status">Loading plan…</p>
       </div>
     );
@@ -186,12 +200,18 @@ export default function PollView({ pollId }: { pollId: string }) {
 
   if (status === "error" || !poll) {
     return (
-      <div className="poll-shell">
+      <div className={shellClass}>
         <p className="poll-status error">{error ?? "Plan not found."}</p>
-        <button className="text-button" onClick={backToApp}>
-          <ArrowLeft aria-hidden="true" />
-          Back to app
-        </button>
+        {embed ? (
+          <a className="poll-embed-open" href={fullPollUrl} target="_blank" rel="noreferrer">
+            Open in {APP_BRAND}
+          </a>
+        ) : (
+          <button className="text-button" onClick={backToApp}>
+            <ArrowLeft aria-hidden="true" />
+            Back to app
+          </button>
+        )}
       </div>
     );
   }
@@ -203,12 +223,14 @@ export default function PollView({ pollId }: { pollId: string }) {
     displayItems.every((item) => myVotes[item.id] === "up");
 
   return (
-    <div className="poll-shell">
+    <div className={shellClass}>
       <header className="poll-header">
-        <button className="text-button" onClick={backToApp}>
-          <ArrowLeft aria-hidden="true" />
-          Back to app
-        </button>
+        {!embed && (
+          <button className="text-button" onClick={backToApp}>
+            <ArrowLeft aria-hidden="true" />
+            Back to app
+          </button>
+        )}
         <p className="eyebrow">Vote on the plan</p>
         <h1>{poll.title}</h1>
         <p className="poll-meta">
@@ -320,21 +342,30 @@ export default function PollView({ pollId }: { pollId: string }) {
         })}
       </ol>
 
-      <section className="poll-cta" aria-label="Make your own plan">
-        <h2>Like this kind of plan?</h2>
-        <p>
-          Pick a vibe, get a 3-stop family Saturday in seconds, then share a vote
-          link of your own — no 11am "what are we doing today" debate.
-        </p>
-        <button
-          type="button"
-          className="primary-button wide"
-          onClick={backToApp}
-        >
-          Make your own plan with {APP_BRAND}
-        </button>
-        <p className="poll-cta-sub">Free · no signup needed</p>
-      </section>
+      {embed ? (
+        <footer className="poll-embed-footer">
+          <span>{APP_BRAND}</span>
+          <a href={fullPollUrl} target="_blank" rel="noreferrer">
+            Open full plan
+          </a>
+        </footer>
+      ) : (
+        <section className="poll-cta" aria-label="Make your own plan">
+          <h2>Like this kind of plan?</h2>
+          <p>
+            Pick a vibe, get a 3-stop family Saturday in seconds, then share a vote
+            link of your own — no 11am "what are we doing today" debate.
+          </p>
+          <button
+            type="button"
+            className="primary-button wide"
+            onClick={backToApp}
+          >
+            Make your own plan with {APP_BRAND}
+          </button>
+          <p className="poll-cta-sub">Free · no signup needed</p>
+        </section>
+      )}
     </div>
   );
 }

@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "note": "Adult-audience event sources for San Diego — music venues, comedy, nightlife.",
+  "defaults": {
+    "windowDays": 30,
+    "audiences": ["adults"],
+    "userAgent": "nighthop/0.1 event-ingest"
+  },
+  "coverage": {
+    "cities": [
+      "San Diego",
+      "North Park",
+      "Gaslamp Quarter",
+      "Pacific Beach",
+      "Ocean Beach",
+      "Hillcrest"
+    ]
+  },
+  "sources": [
+    {
+      "id": "the-casbah",
+      "name": "The Casbah",
+      "url": "https://www.casbahmusic.com/events",
+      "city": "San Diego",
+      "neighborhood": "Little Italy",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 32.7476,
+      "lon": -117.175
+    },
+    {
+      "id": "belly-up-tavern",
+      "name": "Belly Up Tavern",
+      "url": "https://www.bellyup.com/events",
+      "city": "San Diego",
+      "neighborhood": "Solana Beach",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 32.9914,
+      "lon": -117.2709
+    },
+    {
+      "id": "music-box-sd",
+      "name": "Music Box",
+      "url": "https://www.musicboxsd.com/events",
+      "city": "San Diego",
+      "neighborhood": "Little Italy",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 32.7255,
+      "lon": -117.1699
+    },
+    {
+      "id": "the-observatory-north-park",
+      "name": "Observatory North Park",
+      "url": "https://www.observatorysd.com/events",
+      "city": "San Diego",
+      "neighborhood": "North Park",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 32.7483,
+      "lon": -117.1299
+    },
+    {
+      "id": "american-comedy-co",
+      "name": "American Comedy Co.",
+      "url": "https://www.americancomedyco.com/calendar",
+      "city": "San Diego",
+      "neighborhood": "Gaslamp Quarter",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 32.7141,
+      "lon": -117.1618
+    },
+    {
+      "id": "the-comedy-store-la-jolla",
+      "name": "The Comedy Store La Jolla",
+      "url": "https://thecomedystore.com/la-jolla/",
+      "city": "San Diego",
+      "neighborhood": "La Jolla",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 32.8468,
+      "lon": -117.2713
+    }
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "note": "Adult-audience event sources for Los Angeles — music venues, comedy clubs, nightlife.",
+  "defaults": {
+    "windowDays": 30,
+    "audiences": ["adults"],
+    "userAgent": "nighthop/0.1 event-ingest"
+  },
+  "coverage": {
+    "cities": [
+      "Los Angeles",
+      "Hollywood",
+      "West Hollywood",
+      "Silver Lake",
+      "Echo Park",
+      "Santa Monica",
+      "Culver City",
+      "Long Beach",
+      "Pasadena",
+      "Downtown LA"
+    ]
+  },
+  "sources": [
+    {
+      "id": "the-troubadour",
+      "name": "The Troubadour",
+      "url": "https://www.troubadour.com/events",
+      "city": "West Hollywood",
+      "neighborhood": "West Hollywood",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 34.0811,
+      "lon": -118.389
+    },
+    {
+      "id": "the-echo-la",
+      "name": "The Echo",
+      "url": "https://www.theecho.com/events",
+      "city": "Los Angeles",
+      "neighborhood": "Echo Park",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 34.0779,
+      "lon": -118.2607
+    },
+    {
+      "id": "the-echoplex",
+      "name": "The Echoplex",
+      "url": "https://www.theecho.com/echoplex-events",
+      "city": "Los Angeles",
+      "neighborhood": "Echo Park",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 34.0776,
+      "lon": -118.2605
+    },
+    {
+      "id": "el-rey-theatre",
+      "name": "El Rey Theatre",
+      "url": "https://www.theelrey.com/events",
+      "city": "Los Angeles",
+      "neighborhood": "Mid-Wilshire",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 34.0623,
+      "lon": -118.3534
+    },
+    {
+      "id": "the-roxy-la",
+      "name": "The Roxy Theatre",
+      "url": "https://www.theroxy.com/events",
+      "city": "West Hollywood",
+      "neighborhood": "Sunset Strip",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 34.0902,
+      "lon": -118.386
+    },
+    {
+      "id": "the-comedy-store",
+      "name": "The Comedy Store",
+      "url": "https://thecomedystore.com/calendar/",
+      "city": "West Hollywood",
+      "neighborhood": "Sunset Strip",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 34.0905,
+      "lon": -118.3873
+    },
+    {
+      "id": "laugh-factory-la",
+      "name": "Laugh Factory",
+      "url": "https://www.laughfactory.com/shows",
+      "city": "West Hollywood",
+      "neighborhood": "Sunset Strip",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 34.0904,
+      "lon": -118.3636
+    },
+    {
+      "id": "the-improv-la",
+      "name": "The Hollywood Improv",
+      "url": "https://improv.com/hollywood/calendar/",
+      "city": "Hollywood",
+      "neighborhood": "Hollywood",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 34.0986,
+      "lon": -118.3258
+    },
+    {
+      "id": "the-wiltern",
+      "name": "The Wiltern",
+      "url": "https://www.wiltern.com/events",
+      "city": "Los Angeles",
+      "neighborhood": "Koreatown",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 34.0621,
+      "lon": -118.3093
+    },
+    {
+      "id": "the-regent-dtla",
+      "name": "The Regent Theater",
+      "url": "https://www.theregenttheater.com/events",
+      "city": "Los Angeles",
+      "neighborhood": "Downtown",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 34.0476,
+      "lon": -118.2536
+    }
+  ]
+}

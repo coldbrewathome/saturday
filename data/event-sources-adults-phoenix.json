@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "note": "Adult-audience event sources for Phoenix — music venues, comedy, nightlife.",
+  "defaults": {
+    "windowDays": 30,
+    "audiences": ["adults"],
+    "userAgent": "nighthop/0.1 event-ingest"
+  },
+  "coverage": {
+    "cities": [
+      "Phoenix",
+      "Scottsdale",
+      "Tempe",
+      "Mesa",
+      "Old Town Scottsdale",
+      "Mill Avenue"
+    ]
+  },
+  "sources": [
+    {
+      "id": "crescent-ballroom",
+      "name": "Crescent Ballroom",
+      "url": "https://www.crescentphx.com/events",
+      "city": "Phoenix",
+      "neighborhood": "Downtown",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 33.4514,
+      "lon": -112.0757
+    },
+    {
+      "id": "the-van-buren",
+      "name": "The Van Buren",
+      "url": "https://www.thevanburenphx.com/events",
+      "city": "Phoenix",
+      "neighborhood": "Downtown",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 33.4517,
+      "lon": -112.0691
+    },
+    {
+      "id": "rebel-lounge-phx",
+      "name": "The Rebel Lounge",
+      "url": "https://www.therebellounge.com/events",
+      "city": "Phoenix",
+      "neighborhood": "Arcadia",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 33.4931,
+      "lon": -111.9939
+    },
+    {
+      "id": "marquee-theatre-tempe",
+      "name": "Marquee Theatre",
+      "url": "https://www.luckymanonline.com/marquee-theatre",
+      "city": "Tempe",
+      "neighborhood": "Mill Avenue",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 33.4284,
+      "lon": -111.9391
+    },
+    {
+      "id": "stand-up-live-phx",
+      "name": "Stand Up Live Phoenix",
+      "url": "https://phoenix.standuplive.com/events",
+      "city": "Phoenix",
+      "neighborhood": "Downtown",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 33.4512,
+      "lon": -112.0722
+    },
+    {
+      "id": "rick-bronsons-house-of-comedy",
+      "name": "Rick Bronson's House of Comedy",
+      "url": "https://houseofcomedy.net/scottsdale",
+      "city": "Scottsdale",
+      "neighborhood": "Old Town",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 33.4504,
+      "lon": -111.9265
+    }
+  ]
+}

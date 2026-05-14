@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "note": "Adult-audience event sources for Washington DC — music venues, comedy, nightlife.",
+  "defaults": {
+    "windowDays": 30,
+    "audiences": ["adults"],
+    "userAgent": "nighthop/0.1 event-ingest"
+  },
+  "coverage": {
+    "cities": [
+      "Washington",
+      "Georgetown",
+      "Adams Morgan",
+      "U Street",
+      "Dupont Circle",
+      "H Street",
+      "Arlington",
+      "Alexandria"
+    ]
+  },
+  "sources": [
+    {
+      "id": "930-club",
+      "name": "9:30 Club",
+      "url": "https://www.930.com/events",
+      "city": "Washington",
+      "neighborhood": "U Street",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 38.9177,
+      "lon": -77.0242
+    },
+    {
+      "id": "the-anthem-dc",
+      "name": "The Anthem",
+      "url": "https://www.theanthemdc.com/events",
+      "city": "Washington",
+      "neighborhood": "The Wharf",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 38.8778,
+      "lon": -77.0236
+    },
+    {
+      "id": "black-cat-dc",
+      "name": "Black Cat",
+      "url": "https://www.blackcatdc.com/schedule.html",
+      "city": "Washington",
+      "neighborhood": "U Street",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 38.9146,
+      "lon": -77.0293
+    },
+    {
+      "id": "dc-improv",
+      "name": "DC Improv",
+      "url": "https://www.dcimprov.com/shows",
+      "city": "Washington",
+      "neighborhood": "Dupont Circle",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 38.9082,
+      "lon": -77.0419
+    },
+    {
+      "id": "union-stage-dc",
+      "name": "Union Stage",
+      "url": "https://www.unionstage.com/events",
+      "city": "Washington",
+      "neighborhood": "The Wharf",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 38.8778,
+      "lon": -77.0227
+    },
+    {
+      "id": "songbyrd-dc",
+      "name": "Songbyrd Music House",
+      "url": "https://www.songbyrddc.com/events",
+      "city": "Washington",
+      "neighborhood": "Adams Morgan",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 38.9216,
+      "lon": -77.0421
+    }
+  ]
+}

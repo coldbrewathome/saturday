@@ -92,7 +92,8 @@ type Category =
   | "Food"
   | "Culture"
   | "Wellness"
-  | "Shopping";
+  | "Shopping"
+  | "Nightlife";
 type Cost = "Free" | "$" | "$$" | "$$$" | "Unknown";
 
 type ScheduleWindow = { open: number; close: number };
@@ -249,15 +250,45 @@ export type Plan = {
   profile?: PlannerProfile;
 };
 
+const PLAN_ID_TOKEN_LENGTH = 12;
+
+function createCompactPlanToken(length = PLAN_ID_TOKEN_LENGTH) {
+  if (typeof globalThis.crypto?.randomUUID === "function") {
+    return globalThis.crypto.randomUUID().replace(/-/g, "").slice(0, length);
+  }
+
+  const alphabet = "0123456789abcdefghijklmnopqrstuvwxyz";
+  let output = "";
+  if (typeof globalThis.crypto?.getRandomValues === "function") {
+    const bytes = new Uint8Array(length);
+    globalThis.crypto.getRandomValues(bytes);
+    for (const byte of bytes) {
+      output += alphabet[byte % alphabet.length];
+    }
+    return output;
+  }
+
+  for (let i = 0; i < length; i += 1) {
+    output += alphabet[Math.floor(Math.random() * alphabet.length)];
+  }
+  return output;
+}
+
+function createPlanId(existingPlans: Plan[]) {
+  const existing = new Set(existingPlans.map((plan) => plan.id));
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    const id = `plan-${createCompactPlanToken()}`;
+    if (!existing.has(id)) return id;
+  }
+  return `plan-${createCompactPlanToken(16)}`;
+}
+
 type EventDateFilter = "all" | "today" | "tomorrow" | "weekend";
 
-const categories: Category[] = [
-  "Outdoors",
-  "Food",
-  "Culture",
-  "Wellness",
-  "Shopping",
-];
+const categories: Category[] =
+  APP_AUDIENCE === "adults"
+    ? ["Nightlife", "Food", "Culture", "Wellness", "Outdoors"]
+    : ["Outdoors", "Food", "Culture", "Wellness", "Shopping"];
 
 const ageBandOptions = Object.entries(ageBandLabels) as Array<[AgeBand, string]>;
 
@@ -453,6 +484,7 @@ function eventWhenLabel(event: FamilyEvent): string {
 }
 
 function eventCategoryToSpotCategory(category: string): Category {
+  if (/\b(music|comedy|nightclub|bar|dj|concert)\b/i.test(category)) return "Nightlife";
   if (/\b(library|museum|ticketed)\b/i.test(category)) return "Culture";
   if (/\b(park|farm|zoo|garden|nature)\b/i.test(category)) return "Outdoors";
   return "Culture";
@@ -608,6 +640,16 @@ const categoryImagePool: Record<Category, string[]> = {
     "1483985988355-763728e1935b",
     "1472851294608-062f824d29cc",
     "1555529771-7888783a18d3",
+  ].map(unsplash),
+  Nightlife: [
+    "1514525253161-7a46d19cd819",
+    "1566737236500-c8ac43014a67",
+    "1470225620780-dba8ba36b745",
+    "1516450360452-9258136e8735",
+    "1574391884720-bbc3740c59d1",
+    "1543007631-283050bb3e8c",
+    "1571204829887-3b8d69e4094d",
+    "1508997449629-303059a039c0",
   ].map(unsplash),
 };
 
@@ -957,7 +999,15 @@ const SpotMap = forwardRef<SpotMapHandle, ComponentProps<typeof LazySpotMap>>(
 
 function PlanMap(props: ComponentProps<typeof LazyPlanMap>) {
   return (
-    <Suspense fallback={null}>
+    <Suspense
+      fallback={
+        <div
+          className="plan-map plan-map-loading"
+          aria-busy="true"
+          aria-label="Loading plan map"
+        />
+      }
+    >
       <LazyPlanMap {...props} />
     </Suspense>
   );
@@ -2355,6 +2405,47 @@ function App({ metro }: AppProps) {
     return out;
   }, [activePlan, activePlanStops, activePlanEvents]);
 
+  const activePlanMapItems = useMemo<PlanMapItem[]>(
+    () =>
+      activePlanItems
+        .map((it) => {
+          if (it.kind === "spot") {
+            if (
+              typeof it.spot.lat !== "number" ||
+              typeof it.spot.lon !== "number"
+            ) {
+              return null;
+            }
+            return {
+              kind: "spot" as const,
+              lat: it.spot.lat,
+              lon: it.spot.lon,
+              label: it.spot.name,
+              sublabel: `${it.spot.neighborhood} · ${it.spot.category}`,
+            };
+          }
+          const date = it.event.startDateTime
+            ? new Date(it.event.startDateTime)
+            : null;
+          const when = date
+            ? date.toLocaleDateString(undefined, {
+                weekday: "short",
+                month: "short",
+                day: "numeric",
+              })
+            : it.event.timeWindow;
+          return {
+            kind: "event" as const,
+            lat: it.event.lat,
+            lon: it.event.lon,
+            label: it.event.title,
+            sublabel: `${when} · ${it.event.venue}`,
+          };
+        })
+        .filter((x): x is PlanMapItem => x !== null),
+    [activePlanItems],
+  );
+
   const planNearbyEvents = useMemo(() => {
     if (!activePlan || activePlanStops.length === 0 || events.length === 0) {
       return [] as FamilyEvent[];
@@ -2438,7 +2529,7 @@ function App({ metro }: AppProps) {
   }, [activePlan, savedEvents]);
 
   function createPlan() {
-    const id = `plan-${Date.now()}`;
+    const id = createPlanId(plans);
     const next: Plan = {
       id,
       name: "New plan",
@@ -2454,7 +2545,7 @@ function App({ metro }: AppProps) {
     if (savedSpots.length === 0 && savedEvents.length === 0) {
       return;
     }
-    const id = `plan-${Date.now()}`;
+    const id = createPlanId(plans);
     const totalCount = savedSpots.length + savedEvents.length;
     const stopIds = savedSpots.map((spot) => spot.id);
     const eventIds = savedEvents.map((event) => event.id);
@@ -2493,7 +2584,7 @@ function App({ metro }: AppProps) {
       );
       return;
     }
-    const id = `plan-${Date.now()}`;
+    const id = createPlanId(plans);
     const next: Plan = {
       id,
       name: featured.name,
@@ -2941,7 +3032,7 @@ function App({ metro }: AppProps) {
           result.picks.length > 0
             ? result.picks.map((p) => p.id)
             : stopPayload.slice(0, 3).map((s) => s.id);
-        const id = `plan-${Date.now()}`;
+        const id = createPlanId(plans);
         const plan: Plan = {
           id,
           name: result.brief.title || `${APP_VIBE_LABELS[nextVibe]} plan`,
@@ -2984,7 +3075,7 @@ function App({ metro }: AppProps) {
       setHomeError("No matching spots for that vibe.");
       return;
     }
-    const id = `plan-${Date.now()}`;
+    const id = createPlanId(plans);
     const plan: Plan = {
       id,
       name: `${APP_VIBE_LABELS[nextVibe]} plan`,
@@ -3081,7 +3172,7 @@ function App({ metro }: AppProps) {
         result.picks.length > 0
           ? result.picks.map((p) => p.id)
           : spots.slice(0, 3).map((s) => s.id);
-      const id = `plan-${Date.now()}`;
+      const id = createPlanId(plans);
       const plan: Plan = {
         id,
         name: result.brief.title || `${APP_VIBE_LABELS[vibe]} plan`,
@@ -4006,13 +4097,21 @@ function App({ metro }: AppProps) {
                 <span className="cat-row-count">{allSpots.length}</span>
               </button>
               {(
-                [
-                  ["Outdoors", "var(--forest)"],
-                  ["Culture", "var(--blue)"],
-                  ["Food", "var(--sun)"],
-                  ["Wellness", "var(--berry)"],
-                  ["Shopping", "var(--accent)"],
-                ] as const
+                APP_AUDIENCE === "adults"
+                  ? [
+                      ["Nightlife", "var(--accent)"],
+                      ["Food", "var(--sun)"],
+                      ["Culture", "var(--blue)"],
+                      ["Wellness", "var(--berry)"],
+                      ["Outdoors", "var(--forest)"],
+                    ]
+                  : [
+                      ["Outdoors", "var(--forest)"],
+                      ["Culture", "var(--blue)"],
+                      ["Food", "var(--sun)"],
+                      ["Wellness", "var(--berry)"],
+                      ["Shopping", "var(--accent)"],
+                    ]
               ).map(([cat, color]) => {
                 const count = allSpots.filter((s) => s.category === cat).length;
                 return (
@@ -4744,47 +4843,12 @@ function App({ metro }: AppProps) {
                 </ul>
               )}
 
-              {activePlanItems.length > 0 && (
+              {activePlanMapItems.length > 0 && (
                 <PlanMap
                   stops={activePlanStops}
                   events={activePlanEvents}
                   defaultCenter={defaultMapCenter}
-                  items={activePlanItems
-                    .map((it) => {
-                      if (it.kind === "spot") {
-                        if (
-                          typeof it.spot.lat !== "number" ||
-                          typeof it.spot.lon !== "number"
-                        ) {
-                          return null;
-                        }
-                        return {
-                          kind: "spot" as const,
-                          lat: it.spot.lat,
-                          lon: it.spot.lon,
-                          label: it.spot.name,
-                          sublabel: `${it.spot.neighborhood} · ${it.spot.category}`,
-                        };
-                      }
-                      const date = it.event.startDateTime
-                        ? new Date(it.event.startDateTime)
-                        : null;
-                      const when = date
-                        ? date.toLocaleDateString(undefined, {
-                            weekday: "short",
-                            month: "short",
-                            day: "numeric",
-                          })
-                        : it.event.timeWindow;
-                      return {
-                        kind: "event" as const,
-                        lat: it.event.lat,
-                        lon: it.event.lon,
-                        label: it.event.title,
-                        sublabel: `${when} · ${it.event.venue}`,
-                      };
-                    })
-                    .filter((x): x is PlanMapItem => x !== null)}
+                  items={activePlanMapItems}
                 />
               )}
 
@@ -5072,6 +5136,10 @@ function App({ metro }: AppProps) {
                     url={shareState.url}
                     title={activePlan.name || "Untitled plan"}
                   />
+                  <ShareEmbedPanel
+                    url={shareState.url}
+                    title={activePlan.name || "Untitled plan"}
+                  />
                 </div>
               )}
               {shareState.status === "error" && (
@@ -5087,6 +5155,10 @@ function App({ metro }: AppProps) {
                     {`${shareBaseUrl}/#/p/${activePlan.pollId}`}
                   </a>
                   <ShareQuickLinks
+                    url={`${shareBaseUrl}/#/p/${activePlan.pollId}`}
+                    title={activePlan.name || "Untitled plan"}
+                  />
+                  <ShareEmbedPanel
                     url={`${shareBaseUrl}/#/p/${activePlan.pollId}`}
                     title={activePlan.name || "Untitled plan"}
                   />
@@ -5548,6 +5620,84 @@ function ShareQuickLinks({ url, title }: { url: string; title: string }) {
       </button>
     </div>
   );
+}
+
+function ShareEmbedPanel({ url, title }: { url: string; title: string }) {
+  const [copied, setCopied] = useState(false);
+  const embedUrl = buildPollEmbedUrl(url);
+  const embedCode = buildPlanEmbedCode(embedUrl, title);
+
+  async function copyEmbedCode() {
+    try {
+      await navigator.clipboard.writeText(embedCode);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  return (
+    <details className="share-embed">
+      <summary>Embed this voting card</summary>
+      <div className="share-embed-body">
+        <label>
+          <span>Iframe code</span>
+          <textarea readOnly value={embedCode} rows={5} />
+        </label>
+        <div className="share-embed-actions">
+          <button
+            type="button"
+            className="share-quick-link copy"
+            onClick={copyEmbedCode}
+          >
+            <Copy aria-hidden="true" />
+            {copied ? "Copied" : "Copy embed"}
+          </button>
+          <a
+            className="share-quick-link"
+            href={embedUrl}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <ExternalLink aria-hidden="true" />
+            Preview tab
+          </a>
+        </div>
+        <div className="share-embed-preview" aria-label="Embed preview">
+          <iframe title={`FamHop embed preview: ${cleanShareTitle(title)}`} src={embedUrl} />
+        </div>
+      </div>
+    </details>
+  );
+}
+
+function buildPollEmbedUrl(url: string) {
+  try {
+    const parsed = new URL(url, window.location.href);
+    const hash = parsed.hash.replace(/^#/, "");
+    if (hash.startsWith("/p/")) {
+      parsed.hash = `${hash.split("?")[0]}?embed=1`;
+      return parsed.toString();
+    }
+  } catch {
+    // fall through
+  }
+  return `${url}${url.includes("?") ? "&" : "?"}embed=1`;
+}
+
+function escapeHtmlAttr(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+function buildPlanEmbedCode(url: string, title: string) {
+  const escapedUrl = escapeHtmlAttr(url);
+  const escapedTitle = escapeHtmlAttr(`FamHop plan: ${cleanShareTitle(title)}`);
+  return `<iframe title="${escapedTitle}" src="${escapedUrl}" width="420" height="640" style="border:0;border-radius:12px;width:100%;max-width:420px;min-height:640px;" loading="lazy"></iframe>`;
 }
 
 function cleanShareTitle(title: string) {

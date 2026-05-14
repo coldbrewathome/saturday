@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "note": "Adult-audience event sources for Houston — music venues, comedy, nightlife.",
+  "defaults": {
+    "windowDays": 30,
+    "audiences": ["adults"],
+    "userAgent": "nighthop/0.1 event-ingest"
+  },
+  "coverage": {
+    "cities": [
+      "Houston",
+      "Montrose",
+      "Midtown",
+      "Heights",
+      "EaDo",
+      "Rice Village"
+    ]
+  },
+  "sources": [
+    {
+      "id": "white-oak-music-hall",
+      "name": "White Oak Music Hall",
+      "url": "https://www.whiteoakmusichall.com/events",
+      "city": "Houston",
+      "neighborhood": "Heights",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 29.7843,
+      "lon": -95.3886
+    },
+    {
+      "id": "warehouse-live",
+      "name": "Warehouse Live",
+      "url": "https://www.warehouselive.com/events",
+      "city": "Houston",
+      "neighborhood": "EaDo",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 29.7507,
+      "lon": -95.3516
+    },
+    {
+      "id": "continental-club-houston",
+      "name": "The Continental Club",
+      "url": "https://continentalclub.com/houston",
+      "city": "Houston",
+      "neighborhood": "Midtown",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 29.7401,
+      "lon": -95.3874
+    },
+    {
+      "id": "the-secret-group",
+      "name": "The Secret Group",
+      "url": "https://www.thesecretgrouphtx.com/calendar",
+      "city": "Houston",
+      "neighborhood": "EaDo",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 29.7481,
+      "lon": -95.3499
+    },
+    {
+      "id": "houston-improv",
+      "name": "Houston Improv",
+      "url": "https://improv.com/houston/calendar/",
+      "city": "Houston",
+      "neighborhood": "Marq-E Center",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 29.7821,
+      "lon": -95.5614
+    }
+  ]
+}

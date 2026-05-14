@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "note": "Adult-audience event sources for Atlanta — music venues, comedy, nightlife.",
+  "defaults": {
+    "windowDays": 30,
+    "audiences": ["adults"],
+    "userAgent": "nighthop/0.1 event-ingest"
+  },
+  "coverage": {
+    "cities": [
+      "Atlanta",
+      "East Atlanta",
+      "Little Five Points",
+      "Midtown",
+      "Buckhead",
+      "Decatur",
+      "Old Fourth Ward"
+    ]
+  },
+  "sources": [
+    {
+      "id": "terminal-west-atl",
+      "name": "Terminal West",
+      "url": "https://www.terminalwestatl.com/events",
+      "city": "Atlanta",
+      "neighborhood": "West Midtown",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 33.7893,
+      "lon": -84.4131
+    },
+    {
+      "id": "variety-playhouse",
+      "name": "Variety Playhouse",
+      "url": "https://www.varietyplayhouse.com/events",
+      "city": "Atlanta",
+      "neighborhood": "Little Five Points",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 33.7645,
+      "lon": -84.3494
+    },
+    {
+      "id": "the-earl-atl",
+      "name": "The EARL",
+      "url": "https://www.badearl.com/calendar",
+      "city": "Atlanta",
+      "neighborhood": "East Atlanta",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 33.7399,
+      "lon": -84.3404
+    },
+    {
+      "id": "the-masquerade-atl",
+      "name": "The Masquerade",
+      "url": "https://www.masqueradeatlanta.com/events",
+      "city": "Atlanta",
+      "neighborhood": "Old Fourth Ward",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 33.7643,
+      "lon": -84.3652
+    },
+    {
+      "id": "laughing-skull-atl",
+      "name": "Laughing Skull Lounge",
+      "url": "https://laughingskulllounge.com/calendar",
+      "city": "Atlanta",
+      "neighborhood": "Midtown",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 33.7893,
+      "lon": -84.3817
+    },
+    {
+      "id": "dad-garage-atl",
+      "name": "Dad's Garage Theatre",
+      "url": "https://www.dadsgarage.com/calendar",
+      "city": "Atlanta",
+      "neighborhood": "Old Fourth Ward",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 33.7612,
+      "lon": -84.3598
+    }
+  ]
+}

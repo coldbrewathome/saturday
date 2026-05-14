@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "note": "Adult-audience event sources for New York City — music venues, comedy clubs, nightlife calendars.",
+  "defaults": {
+    "windowDays": 30,
+    "audiences": ["adults"],
+    "userAgent": "nighthop/0.1 event-ingest"
+  },
+  "coverage": {
+    "cities": [
+      "Manhattan",
+      "Brooklyn",
+      "Queens",
+      "Bronx",
+      "Williamsburg",
+      "Long Island City",
+      "Astoria",
+      "Bushwick",
+      "Lower East Side",
+      "East Village",
+      "Harlem"
+    ]
+  },
+  "sources": [
+    {
+      "id": "brooklyn-steel",
+      "name": "Brooklyn Steel",
+      "url": "https://www.brooklynsteel.com/calendar",
+      "city": "Brooklyn",
+      "neighborhood": "Williamsburg",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 40.7142,
+      "lon": -73.9506
+    },
+    {
+      "id": "bowery-ballroom",
+      "name": "Bowery Ballroom",
+      "url": "https://www.boweryballroom.com/calendar",
+      "city": "Manhattan",
+      "neighborhood": "Lower East Side",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 40.7205,
+      "lon": -73.9936
+    },
+    {
+      "id": "music-hall-williamsburg",
+      "name": "Music Hall of Williamsburg",
+      "url": "https://www.musichallofwilliamsburg.com/calendar",
+      "city": "Brooklyn",
+      "neighborhood": "Williamsburg",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 40.7118,
+      "lon": -73.9603
+    },
+    {
+      "id": "le-poisson-rouge",
+      "name": "Le Poisson Rouge",
+      "url": "https://lpr.com/calendar",
+      "city": "Manhattan",
+      "neighborhood": "Greenwich Village",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 40.7288,
+      "lon": -74.0004
+    },
+    {
+      "id": "terminal-5",
+      "name": "Terminal 5",
+      "url": "https://www.terminal5nyc.com/calendar",
+      "city": "Manhattan",
+      "neighborhood": "Hell's Kitchen",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 40.7695,
+      "lon": -73.9936
+    },
+    {
+      "id": "webster-hall",
+      "name": "Webster Hall",
+      "url": "https://www.websterhall.com/events",
+      "city": "Manhattan",
+      "neighborhood": "East Village",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 40.7318,
+      "lon": -73.9894
+    },
+    {
+      "id": "comedy-cellar",
+      "name": "Comedy Cellar",
+      "url": "https://www.comedycellar.com/line-up/",
+      "city": "Manhattan",
+      "neighborhood": "Greenwich Village",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 40.7304,
+      "lon": -74.0003
+    },
+    {
+      "id": "gotham-comedy-club",
+      "name": "Gotham Comedy Club",
+      "url": "https://gothamcomedyclub.com/calendar",
+      "city": "Manhattan",
+      "neighborhood": "Chelsea",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 40.7421,
+      "lon": -73.9944
+    },
+    {
+      "id": "elsewhere-brooklyn",
+      "name": "Elsewhere",
+      "url": "https://www.elsewherebrooklyn.com/events",
+      "city": "Brooklyn",
+      "neighborhood": "Bushwick",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 40.7048,
+      "lon": -73.9226
+    },
+    {
+      "id": "rough-trade-nyc",
+      "name": "Rough Trade NYC",
+      "url": "https://www.roughtradenyc.com/events",
+      "city": "Brooklyn",
+      "neighborhood": "Williamsburg",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 40.7122,
+      "lon": -73.9553
+    },
+    {
+      "id": "blue-note-nyc",
+      "name": "Blue Note Jazz Club",
+      "url": "https://www.bluenotejazz.com/new-york/schedule",
+      "city": "Manhattan",
+      "neighborhood": "Greenwich Village",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 40.7311,
+      "lon": -74.0008
+    },
+    {
+      "id": "village-vanguard",
+      "name": "Village Vanguard",
+      "url": "https://villagevanguard.com/events",
+      "city": "Manhattan",
+      "neighborhood": "Greenwich Village",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 40.7361,
+      "lon": -74.0012
+    }
+  ]
+}

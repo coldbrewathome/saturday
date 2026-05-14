@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "metroId": "new-york-city",
-  "generatedAt": "2026-05-13T21:02:02.490Z",
+  "generatedAt": "2026-05-14T02:15:49.025Z",
   "registryPath": "data/event-sources-new-york-city.json",
   "outputPath": "public/data/new-york-city/events.json",
-  "eventCount": 781,
-  "sourceCount": 10,
-  "liveEventCount": 753,
+  "eventCount": 786,
+  "sourceCount": 22,
+  "liveEventCount": 758,
   "fallbackEventCount": 28,
   "errors": [],
   "sources": [
@@ -92,9 +92,9 @@
       "metroId": "new-york-city",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 691,
+      "liveEvents": 694,
       "fallbackEvents": 0,
-      "eventCount": 691,
+      "eventCount": 694,
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/kids",
@@ -105,7 +105,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 2094
+      "rejectedLiveEvents": 2077
     },
     {
       "id": "brooklyn-childrens-museum",
@@ -249,6 +249,290 @@
       "httpStatus": 200,
       "contentType": "application/json;charset=utf-8",
       "rejectedLiveEvents": 0
+    },
+    {
+      "id": "brooklyn-steel",
+      "name": "Brooklyn Steel",
+      "url": "https://www.brooklynsteel.com/calendar",
+      "sourceType": "html",
+      "city": "Brooklyn",
+      "metroId": "new-york-city",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.brooklynsteel.com/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "bowery-ballroom",
+      "name": "Bowery Ballroom",
+      "url": "https://www.boweryballroom.com/calendar",
+      "sourceType": "html",
+      "city": "Manhattan",
+      "metroId": "new-york-city",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://www.boweryballroom.com/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "music-hall-williamsburg",
+      "name": "Music Hall of Williamsburg",
+      "url": "https://www.musichallofwilliamsburg.com/calendar",
+      "sourceType": "html",
+      "city": "Brooklyn",
+      "metroId": "new-york-city",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://www.musichallofwilliamsburg.com/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "le-poisson-rouge",
+      "name": "Le Poisson Rouge",
+      "url": "https://lpr.com/calendar",
+      "sourceType": "html",
+      "city": "Manhattan",
+      "metroId": "new-york-city",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://lpr.com/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "terminal-5",
+      "name": "Terminal 5",
+      "url": "https://www.terminal5nyc.com/calendar",
+      "sourceType": "html",
+      "city": "Manhattan",
+      "metroId": "new-york-city",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.terminal5nyc.com/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "webster-hall",
+      "name": "Webster Hall",
+      "url": "https://www.websterhall.com/events",
+      "sourceType": "html",
+      "city": "Manhattan",
+      "metroId": "new-york-city",
+      "category": "Music",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.websterhall.com/events",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ],
+      "httpStatus": 403,
+      "contentType": "text/html"
+    },
+    {
+      "id": "comedy-cellar",
+      "name": "Comedy Cellar",
+      "url": "https://www.comedycellar.com/line-up/",
+      "sourceType": "html",
+      "city": "Manhattan",
+      "metroId": "new-york-city",
+      "category": "Comedy",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.comedycellar.com/line-up/",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 404,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "id": "gotham-comedy-club",
+      "name": "Gotham Comedy Club",
+      "url": "https://gothamcomedyclub.com/calendar",
+      "sourceType": "html",
+      "city": "Manhattan",
+      "metroId": "new-york-city",
+      "category": "Comedy",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://gothamcomedyclub.com/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "elsewhere-brooklyn",
+      "name": "Elsewhere",
+      "url": "https://www.elsewherebrooklyn.com/events",
+      "sourceType": "html",
+      "city": "Brooklyn",
+      "metroId": "new-york-city",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.elsewherebrooklyn.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "rough-trade-nyc",
+      "name": "Rough Trade NYC",
+      "url": "https://www.roughtradenyc.com/events",
+      "sourceType": "html",
+      "city": "Brooklyn",
+      "metroId": "new-york-city",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.roughtradenyc.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "blue-note-nyc",
+      "name": "Blue Note Jazz Club",
+      "url": "https://www.bluenotejazz.com/new-york/schedule",
+      "sourceType": "html",
+      "city": "Manhattan",
+      "metroId": "new-york-city",
+      "category": "Music",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.bluenotejazz.com/new-york/schedule",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 404,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "id": "village-vanguard",
+      "name": "Village Vanguard",
+      "url": "https://villagevanguard.com/events",
+      "sourceType": "html",
+      "city": "Manhattan",
+      "metroId": "new-york-city",
+      "category": "Music",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://villagevanguard.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 404,
+      "contentType": "text/html; charset=UTF-8"
     }
   ]
 }

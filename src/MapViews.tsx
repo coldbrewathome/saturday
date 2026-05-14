@@ -541,9 +541,10 @@ export function PlanMap({
     }
     return fallback;
   }, [stops, events, items]);
+  const hasSequence = sequence.length > 0;
 
   useEffect(() => {
-    if (!containerRef.current || mapRef.current) return;
+    if (!hasSequence || !containerRef.current || mapRef.current) return;
     let disposed = false;
     const map = L.map(containerRef.current, {
       center: defaultCenter,
@@ -574,7 +575,7 @@ export function PlanMap({
       mapRef.current = null;
       layerRef.current = null;
     };
-  }, [defaultCenter]);
+  }, [defaultCenter, hasSequence]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -625,7 +626,7 @@ export function PlanMap({
     }
   }, [defaultCenter, sequence]);
 
-  if (sequence.length === 0) return null;
+  if (!hasSequence) return null;
 
   return (
     <div

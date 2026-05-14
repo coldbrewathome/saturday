@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "note": "Adult-audience event sources for Dallas-Fort Worth — music venues, comedy, nightlife.",
+  "defaults": {
+    "windowDays": 30,
+    "audiences": ["adults"],
+    "userAgent": "nighthop/0.1 event-ingest"
+  },
+  "coverage": {
+    "cities": [
+      "Dallas",
+      "Fort Worth",
+      "Deep Ellum",
+      "Denton",
+      "Arlington",
+      "Uptown"
+    ]
+  },
+  "sources": [
+    {
+      "id": "trees-dallas",
+      "name": "Trees",
+      "url": "https://www.treesdallas.com/events",
+      "city": "Dallas",
+      "neighborhood": "Deep Ellum",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 32.7833,
+      "lon": -96.7827
+    },
+    {
+      "id": "the-bomb-factory",
+      "name": "The Factory in Deep Ellum",
+      "url": "https://www.thefactoryindeepellum.com/events",
+      "city": "Dallas",
+      "neighborhood": "Deep Ellum",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 32.7845,
+      "lon": -96.7812
+    },
+    {
+      "id": "dada-dallas",
+      "name": "Dada",
+      "url": "https://www.daboredada.com/events",
+      "city": "Dallas",
+      "neighborhood": "Deep Ellum",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 32.784,
+      "lon": -96.7834
+    },
+    {
+      "id": "tulips-fort-worth",
+      "name": "Tulips FTW",
+      "url": "https://www.tulipsftw.com/events",
+      "city": "Fort Worth",
+      "neighborhood": "Near Southside",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 32.7411,
+      "lon": -97.3271
+    },
+    {
+      "id": "dallas-comedy-club",
+      "name": "Dallas Comedy Club",
+      "url": "https://dallascomedyclub.com/shows/",
+      "city": "Dallas",
+      "neighborhood": "Deep Ellum",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 32.7831,
+      "lon": -96.7841
+    },
+    {
+      "id": "hyenas-dfw",
+      "name": "Hyena's Comedy Club",
+      "url": "https://www.hyenascomedynightclub.com/calendar",
+      "city": "Dallas",
+      "neighborhood": "Mockingbird Station",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 32.8383,
+      "lon": -96.7733
+    }
+  ]
+}

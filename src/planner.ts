@@ -294,6 +294,7 @@ function spotLooksIndoor(spot: PlannerSpot, text: string) {
     spot.category === "Food" ||
     spot.category === "Wellness" ||
     spot.category === "Shopping" ||
+    spot.category === "Nightlife" ||
     /\b(indoor|inside|covered|library|museum|story|cafe|restaurant|aquarium|gym|greenhouse)\b/.test(
       text,
     )
@@ -427,6 +428,7 @@ export function scoreSpotForVibe(
   if (vibe === "low-effort") {
     score -= spot.transitMinutes * 0.65;
     if (spot.planning === "Walk-in" || spot.planning === "Flexible") score += 10;
+    if (spot.category === "Nightlife") score += 12;
   }
 
   if (vibe === "active") {
@@ -441,6 +443,7 @@ export function scoreSpotForVibe(
 
   if (vibe === "culture") {
     if (spot.category === "Culture") score += 22;
+    if (spot.category === "Nightlife") score += 20;
     if (spot.category === "Shopping") score += 4;
   }
 

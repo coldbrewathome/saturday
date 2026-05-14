@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "note": "Adult-audience event sources for Chicago — music venues, comedy clubs, nightlife.",
+  "defaults": {
+    "windowDays": 30,
+    "audiences": ["adults"],
+    "userAgent": "nighthop/0.1 event-ingest"
+  },
+  "coverage": {
+    "cities": [
+      "Chicago",
+      "Evanston",
+      "Oak Park",
+      "Wicker Park",
+      "Logan Square",
+      "Lincoln Park",
+      "Pilsen",
+      "River North"
+    ]
+  },
+  "sources": [
+    {
+      "id": "metro-chicago",
+      "name": "Metro Chicago",
+      "url": "https://metrochicago.com/shows/",
+      "city": "Chicago",
+      "neighborhood": "Wrigleyville",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 41.9498,
+      "lon": -87.6596
+    },
+    {
+      "id": "empty-bottle",
+      "name": "Empty Bottle",
+      "url": "https://www.emptybottle.com/events/",
+      "city": "Chicago",
+      "neighborhood": "Ukrainian Village",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 41.8956,
+      "lon": -87.6865
+    },
+    {
+      "id": "lincoln-hall",
+      "name": "Lincoln Hall",
+      "url": "https://www.lh-st.com/events",
+      "city": "Chicago",
+      "neighborhood": "Lincoln Park",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 41.9263,
+      "lon": -87.6526
+    },
+    {
+      "id": "schubas-tavern",
+      "name": "Schubas Tavern",
+      "url": "https://www.lh-st.com/events",
+      "city": "Chicago",
+      "neighborhood": "Lakeview",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 41.9393,
+      "lon": -87.6588
+    },
+    {
+      "id": "thalia-hall-chicago",
+      "name": "Thalia Hall",
+      "url": "https://www.thaliahallchicago.com/events",
+      "city": "Chicago",
+      "neighborhood": "Pilsen",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 41.8497,
+      "lon": -87.6559
+    },
+    {
+      "id": "second-city-chicago",
+      "name": "The Second City",
+      "url": "https://www.secondcity.com/shows/chicago",
+      "city": "Chicago",
+      "neighborhood": "Old Town",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 41.9115,
+      "lon": -87.6347
+    },
+    {
+      "id": "zanies-chicago",
+      "name": "Zanies Comedy Club",
+      "url": "https://chicago.zanies.com/events",
+      "city": "Chicago",
+      "neighborhood": "Old Town",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 41.9089,
+      "lon": -87.6371
+    },
+    {
+      "id": "hideout-chicago",
+      "name": "The Hideout",
+      "url": "https://www.hideoutchicago.com/events",
+      "city": "Chicago",
+      "neighborhood": "Bucktown",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 41.9073,
+      "lon": -87.6686
+    }
+  ]
+}

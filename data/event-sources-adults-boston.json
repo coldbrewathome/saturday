@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "note": "Adult-audience event sources for Boston — music venues, comedy, nightlife.",
+  "defaults": {
+    "windowDays": 30,
+    "audiences": ["adults"],
+    "userAgent": "nighthop/0.1 event-ingest"
+  },
+  "coverage": {
+    "cities": [
+      "Boston",
+      "Cambridge",
+      "Somerville",
+      "Allston",
+      "Jamaica Plain",
+      "Brookline"
+    ]
+  },
+  "sources": [
+    {
+      "id": "paradise-rock-club",
+      "name": "Paradise Rock Club",
+      "url": "https://www.crossroadspresents.com/paradise-rock-club",
+      "city": "Boston",
+      "neighborhood": "Allston",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 42.3516,
+      "lon": -71.1281
+    },
+    {
+      "id": "brighton-music-hall",
+      "name": "Brighton Music Hall",
+      "url": "https://www.crossroadspresents.com/brighton-music-hall",
+      "city": "Boston",
+      "neighborhood": "Allston",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 42.3531,
+      "lon": -71.1316
+    },
+    {
+      "id": "the-sinclair",
+      "name": "The Sinclair",
+      "url": "https://www.sinclaircambridge.com/events",
+      "city": "Cambridge",
+      "neighborhood": "Harvard Square",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 42.3721,
+      "lon": -71.1189
+    },
+    {
+      "id": "crystal-ballroom-somerville",
+      "name": "Crystal Ballroom",
+      "url": "https://www.crystalballroomboston.com/events",
+      "city": "Somerville",
+      "neighborhood": "Davis Square",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 42.3966,
+      "lon": -71.1225
+    },
+    {
+      "id": "nick-comedy-stop",
+      "name": "Nick's Comedy Stop",
+      "url": "https://www.nickscomedystop.com/calendar",
+      "city": "Boston",
+      "neighborhood": "Theater District",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 42.3509,
+      "lon": -71.0635
+    },
+    {
+      "id": "laugh-boston",
+      "name": "Laugh Boston",
+      "url": "https://www.laughboston.com/calendar",
+      "city": "Boston",
+      "neighborhood": "Seaport",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 42.3477,
+      "lon": -71.0434
+    }
+  ]
+}

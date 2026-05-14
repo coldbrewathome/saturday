@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "note": "Adult-audience event sources for Seattle — music venues, comedy clubs, nightlife.",
+  "defaults": {
+    "windowDays": 30,
+    "audiences": ["adults"],
+    "userAgent": "nighthop/0.1 event-ingest"
+  },
+  "coverage": {
+    "cities": [
+      "Seattle",
+      "Capitol Hill",
+      "Ballard",
+      "Fremont",
+      "Georgetown",
+      "Pioneer Square",
+      "Belltown",
+      "University District"
+    ]
+  },
+  "sources": [
+    {
+      "id": "neumos-seattle",
+      "name": "Neumos",
+      "url": "https://www.neumos.com/events",
+      "city": "Seattle",
+      "neighborhood": "Capitol Hill",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 47.6148,
+      "lon": -122.3208
+    },
+    {
+      "id": "the-crocodile",
+      "name": "The Crocodile",
+      "url": "https://www.thecrocodile.com/events",
+      "city": "Seattle",
+      "neighborhood": "Belltown",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 47.6133,
+      "lon": -122.3461
+    },
+    {
+      "id": "the-showbox",
+      "name": "The Showbox",
+      "url": "https://www.showboxpresents.com/events",
+      "city": "Seattle",
+      "neighborhood": "Pike Place",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 47.6078,
+      "lon": -122.3397
+    },
+    {
+      "id": "tractor-tavern",
+      "name": "Tractor Tavern",
+      "url": "https://www.tractortavern.com/events",
+      "city": "Seattle",
+      "neighborhood": "Ballard",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 47.6639,
+      "lon": -122.3839
+    },
+    {
+      "id": "the-sunset-tavern",
+      "name": "The Sunset Tavern",
+      "url": "https://www.sunsettavern.com/events",
+      "city": "Seattle",
+      "neighborhood": "Ballard",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 47.6655,
+      "lon": -122.3849
+    },
+    {
+      "id": "unexpected-productions",
+      "name": "Unexpected Productions",
+      "url": "https://www.unexpectedproductions.org/shows",
+      "city": "Seattle",
+      "neighborhood": "Pike Place",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 47.6084,
+      "lon": -122.3402
+    },
+    {
+      "id": "comedy-underground",
+      "name": "Comedy Underground",
+      "url": "https://www.comedyunderground.com/calendar",
+      "city": "Seattle",
+      "neighborhood": "Pioneer Square",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 47.5992,
+      "lon": -122.3321
+    }
+  ]
+}

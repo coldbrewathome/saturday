@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "washington-dc",
-  "generatedAt": "2026-05-13T21:03:36.677Z",
+  "generatedAt": "2026-05-14T02:18:30.336Z",
   "registryPath": "data/event-sources-washington-dc.json",
   "outputPath": "public/data/washington-dc/events.json",
-  "eventCount": 339,
-  "sourceCount": 5,
-  "liveEventCount": 323,
-  "fallbackEventCount": 16,
+  "eventCount": 337,
+  "sourceCount": 11,
+  "liveEventCount": 325,
+  "fallbackEventCount": 12,
   "errors": [],
   "sources": [
     {
@@ -27,12 +27,12 @@
           "url": "https://dclibrary.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=1252; locations=27"
+          "contentType": "application/json; source=communico-events; events=1213; locations=27"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=1252; locations=27",
-      "rejectedLiveEvents": 9
+      "contentType": "application/json; source=communico-events; events=1213; locations=27",
+      "rejectedLiveEvents": 0
     },
     {
       "id": "washington-dc-parks-family",
@@ -89,18 +89,21 @@
       "city": "Washington",
       "metroId": "washington-dc",
       "category": "Zoo",
-      "status": "fetch-error",
-      "liveEvents": 0,
-      "fallbackEvents": 4,
-      "eventCount": 4,
+      "status": "ok",
+      "liveEvents": 2,
+      "fallbackEvents": 0,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://nationalzoo.si.edu/events",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/vnd.api+json; source=national-zoo-jsonapi; events=31"
         }
       ],
-      "reason": "This operation was aborted"
+      "httpStatus": 200,
+      "contentType": "application/vnd.api+json; source=national-zoo-jsonapi; events=31",
+      "rejectedLiveEvents": 287
     },
     {
       "id": "ticketmaster-washington-dc-family",
@@ -125,6 +128,145 @@
       "httpStatus": 200,
       "contentType": "application/json;charset=utf-8",
       "rejectedLiveEvents": 0
+    },
+    {
+      "id": "930-club",
+      "name": "9:30 Club",
+      "url": "https://www.930.com/events",
+      "sourceType": "html",
+      "city": "Washington",
+      "metroId": "washington-dc",
+      "category": "Music",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.930.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 404,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "id": "the-anthem-dc",
+      "name": "The Anthem",
+      "url": "https://www.theanthemdc.com/events",
+      "sourceType": "html",
+      "city": "Washington",
+      "metroId": "washington-dc",
+      "category": "Music",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.theanthemdc.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 404,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "id": "black-cat-dc",
+      "name": "Black Cat",
+      "url": "https://www.blackcatdc.com/schedule.html",
+      "sourceType": "html",
+      "city": "Washington",
+      "metroId": "washington-dc",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.blackcatdc.com/schedule.html",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "dc-improv",
+      "name": "DC Improv",
+      "url": "https://www.dcimprov.com/shows",
+      "sourceType": "html",
+      "city": "Washington",
+      "metroId": "washington-dc",
+      "category": "Comedy",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.dcimprov.com/shows",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "union-stage-dc",
+      "name": "Union Stage",
+      "url": "https://www.unionstage.com/events",
+      "sourceType": "html",
+      "city": "Washington",
+      "metroId": "washington-dc",
+      "category": "Music",
+      "status": "fetch-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.unionstage.com/events",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ],
+      "reason": "fetch failed"
+    },
+    {
+      "id": "songbyrd-dc",
+      "name": "Songbyrd Music House",
+      "url": "https://www.songbyrddc.com/events",
+      "sourceType": "html",
+      "city": "Washington",
+      "metroId": "washington-dc",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.songbyrddc.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 1
     }
   ]
 }
