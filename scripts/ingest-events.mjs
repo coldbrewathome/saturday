@@ -1270,7 +1270,7 @@ async function main() {
     if (!Array.isArray(a) || a.length === 0) return true;
     return a.includes("kids") || a.includes("all");
   });
-  const KIDS_EVENT_RE = /\b(story\s*time|storytime|lapsit|lap\s*sit|toddler|preschool|baby|babies|infant|diaper|stroller|family\s*craft|kids?\s*craft|puppet|pajama|pj\b|bedtime|mommy|daddy|parent.child|child|children)\b/i;
+  const KIDS_EVENT_RE = /\b(story\s*time|storytime|lapsit|lap\s*sit|toddler|preschool|baby|babies|infant|diaper|stroller|family|families|kids?\s*craft|puppet|pajama|pj\b|bedtime|mommy|daddy|parent.child|child|children|kid|kids|daniel\s*tiger|sesame|peppa)\b/i;
   const KIDS_CATEGORIES = new Set(["Library"]);
   const adultsEvents = allEvents.filter((e) => {
     const a = e.audiences;

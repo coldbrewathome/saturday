@@ -144,7 +144,7 @@ function slugCity(city) {
     .slice(0, 60);
 }
 
-function buildPlans(spots, events, { namePrefix = "Day out", audiences = ["all"] } = {}) {
+function buildKidsPlans(spots, events) {
   const spotsByCity = groupSpotsByCity(spots);
   const eventsByCity = groupUpcomingEventsByCity(events);
   const generated = [];
@@ -160,22 +160,17 @@ function buildPlans(spots, events, { namePrefix = "Day out", audiences = ["all"]
     const slug = slugCity(city);
 
     if (cityAnchorSpots.length >= 2) {
-      const picks = pickTopSpots(
-        cityAnchorSpots,
-        Math.min(3, cityAnchorSpots.length),
-      );
+      const picks = pickTopSpots(cityAnchorSpots, Math.min(3, cityAnchorSpots.length));
       const center = centroid(picks);
-      const summary = `${picks.length} stops in ${city} - ${picks
-            .map((p) => p.name.split(",")[0])
-            .join(", ")}.`;
+      const summary = `${picks.length} stops in ${city} - ${picks.map((p) => p.name.split(",")[0]).join(", ")}.`;
       generated.push({
         id: `gen-day-${slug}`,
-        name: `${namePrefix} in ${city}`,
+        name: `Day out in ${city}`,
         summary: summary.slice(0, 220),
         accent: inferAccent(picks),
         stopIds: picks.map((p) => p.id),
         eventIds: [],
-        audiences,
+        audiences: ["all"],
         city,
         lat: center?.lat ?? null,
         lon: center?.lon ?? null,
@@ -188,9 +183,7 @@ function buildPlans(spots, events, { namePrefix = "Day out", audiences = ["all"]
       const spotPick = pickTopSpots(cityAnchorSpots, 1);
       const items = [...spotPick, ...eventPicks];
       const center = centroid(items);
-      const summary = `Two upcoming events in ${city} plus a nearby stop - ${eventPicks
-        .map((e) => e.title.slice(0, 60))
-        .join(" | ")}.`;
+      const summary = `Two upcoming events in ${city} plus a nearby stop - ${eventPicks.map((e) => e.title.slice(0, 60)).join(" | ")}.`;
       generated.push({
         id: `gen-events-${slug}`,
         name: `${city} events`,
@@ -198,7 +191,123 @@ function buildPlans(spots, events, { namePrefix = "Day out", audiences = ["all"]
         accent: "festival",
         stopIds: spotPick.map((s) => s.id),
         eventIds: eventPicks.map((e) => e.id),
-        audiences,
+        audiences: ["all"],
+        city,
+        lat: center?.lat ?? null,
+        lon: center?.lon ?? null,
+        generated: true,
+      });
+    }
+  }
+  return { generated, cityCount: cities.length };
+}
+
+const NIGHTLIFE_CATS = new Set(["Nightlife"]);
+const GOING_OUT_CATS = new Set(["Nightlife", "Food"]);
+const DAYTIME_CATS = new Set(["Outdoors", "Culture", "Wellness"]);
+
+function adultsPlanName(picks) {
+  const cats = picks.map((p) => p.category);
+  const hasNightlife = cats.some((c) => NIGHTLIFE_CATS.has(c));
+  const hasFood = cats.some((c) => c === "Food");
+  const hasCulture = cats.some((c) => c === "Culture");
+  const hasOutdoors = cats.some((c) => c === "Outdoors");
+  const hasWellness = cats.some((c) => c === "Wellness");
+
+  if (hasNightlife && hasFood) return "Dinner & drinks";
+  if (hasNightlife) return "Night out";
+  if (hasFood && hasCulture) return "Bites & culture";
+  if (hasFood) return "Food crawl";
+  if (hasCulture) return "Culture hop";
+  if (hasOutdoors && hasFood) return "Day out";
+  if (hasOutdoors) return "Outdoor day";
+  if (hasWellness) return "Active day";
+  return "Day out";
+}
+
+function adultsPlanAccent(picks) {
+  for (const spot of picks) {
+    if (spot.category === "Nightlife") return "festival";
+    if (spot.category === "Food") return "food";
+    if (spot.category === "Culture") return "festival";
+  }
+  return "park";
+}
+
+function buildAdultsPlans(spots, events) {
+  const spotsByCity = groupSpotsByCity(spots);
+  const eventsByCity = groupUpcomingEventsByCity(events);
+  const generated = [];
+  const cities = Array.from(
+    new Set([...spotsByCity.keys(), ...eventsByCity.keys()]),
+  ).sort();
+
+  for (const city of cities) {
+    const citySpots = spotsByCity.get(city) || [];
+    const cityEvents = eventsByCity.get(city) || [];
+    if (citySpots.length < 2 && cityEvents.length === 0) continue;
+    const slug = slugCity(city);
+
+    const nightlifeSpots = citySpots.filter((s) => NIGHTLIFE_CATS.has(s.category));
+    const goingOutSpots = citySpots.filter((s) => GOING_OUT_CATS.has(s.category));
+    const nonNightlife = citySpots.filter((s) => !NIGHTLIFE_CATS.has(s.category));
+
+    if (goingOutSpots.length >= 2) {
+      const picks = pickTopSpots(goingOutSpots, Math.min(3, goingOutSpots.length));
+      const center = centroid(picks);
+      const name = adultsPlanName(picks);
+      const summary = `${picks.length} stops in ${city} - ${picks.map((p) => p.name.split(",")[0]).join(", ")}.`;
+      generated.push({
+        id: `gen-night-${slug}`,
+        name: `${name} in ${city}`,
+        summary: summary.slice(0, 220),
+        accent: adultsPlanAccent(picks),
+        stopIds: picks.map((p) => p.id),
+        eventIds: [],
+        audiences: ["adults"],
+        city,
+        lat: center?.lat ?? null,
+        lon: center?.lon ?? null,
+        generated: true,
+      });
+    }
+
+    if (nonNightlife.length >= 2) {
+      const picks = pickTopSpots(nonNightlife, Math.min(3, nonNightlife.length));
+      const center = centroid(picks);
+      const name = adultsPlanName(picks);
+      if (name !== (generated[generated.length - 1]?.name?.replace(` in ${city}`, "") || "")) {
+        const summary = `${picks.length} stops in ${city} - ${picks.map((p) => p.name.split(",")[0]).join(", ")}.`;
+        generated.push({
+          id: `gen-day-${slug}`,
+          name: `${name} in ${city}`,
+          summary: summary.slice(0, 220),
+          accent: adultsPlanAccent(picks),
+          stopIds: picks.map((p) => p.id),
+          eventIds: [],
+          audiences: ["adults"],
+          city,
+          lat: center?.lat ?? null,
+          lon: center?.lon ?? null,
+          generated: true,
+        });
+      }
+    }
+
+    if (cityEvents.length >= 2 && citySpots.length >= 1) {
+      const eventPicks = pickNextEvents(cityEvents, 2);
+      const spotPick = pickTopSpots(nightlifeSpots.length > 0 ? nightlifeSpots : goingOutSpots.length > 0 ? goingOutSpots : citySpots, 1);
+      const items = [...spotPick, ...eventPicks];
+      const center = centroid(items);
+      const summary = `Upcoming in ${city} - ${eventPicks.map((e) => e.title.slice(0, 60)).join(" | ")}.`;
+      generated.push({
+        id: `gen-events-${slug}`,
+        name: `${city} tonight`,
+        summary: summary.slice(0, 240),
+        accent: "festival",
+        stopIds: spotPick.map((s) => s.id),
+        eventIds: eventPicks.map((e) => e.id),
+        audiences: ["adults"],
         city,
         lat: center?.lat ?? null,
         lon: center?.lon ?? null,
@@ -222,7 +331,7 @@ function generateForMetro(metro) {
   ];
   const kidsEvents = Array.isArray(kidsEventsDoc.events) ? kidsEventsDoc.events : [];
 
-  const kids = buildPlans(kidsSpots, kidsEvents, { namePrefix: "Day out", audiences: ["all"] });
+  const kids = buildKidsPlans(kidsSpots, kidsEvents);
   const kidsFinal = [...handCurated, ...kids.generated];
   const kidsOut = {
     schemaVersion: 2,
@@ -242,7 +351,7 @@ function generateForMetro(metro) {
   const adultsSpots = Array.isArray(adultsSpotsDoc.spots) ? adultsSpotsDoc.spots : [];
   const adultsEvents = Array.isArray(adultsEventsDoc.events) ? adultsEventsDoc.events : [];
 
-  const adults = buildPlans(adultsSpots, adultsEvents, { namePrefix: "Night out", audiences: ["adults"] });
+  const adults = buildAdultsPlans(adultsSpots, adultsEvents);
   const adultsOut = {
     schemaVersion: 2,
     metroId: metro.id,
