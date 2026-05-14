@@ -114,6 +114,7 @@ export async function createAiBrief(
   body: {
     vibe: string;
     spots: StopSummary[];
+    audience?: string;
     ageBand?: string;
     date?: string;
     dayOfWeek?: string;

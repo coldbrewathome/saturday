@@ -535,8 +535,8 @@ function eventToPlanningSpot(event: FamilyEvent, transitMinutes: number): Spot {
     cost: eventCostToSpotCost(event.cost),
     transitMinutes,
     timeWindow: event.timeWindow,
-    mood: `Scheduled family event: ${when}`,
-    groupSize: "Family",
+    mood: `Scheduled event: ${when}`,
+    groupSize: APP_AUDIENCE === "adults" ? "2-8 people" : "Family",
     planning: `${when}. Confirm details with ${event.sourceName || "the venue"}.`,
     openNow: false,
     note: `${event.description}${ageText ? ` Ages: ${ageText}.` : ""}`,
@@ -932,24 +932,42 @@ const starterSpots: Spot[] = [
     note: "A compact coffee stop with records, pastries, and enough browsing to fill a slow morning.",
     tags: ["coffee", "music", "nearby", "low key"],
   },
-  {
-    id: "library-storytime",
-    name: "Library Storytime",
-    neighborhood: "Downtown",
-    category: "Culture",
-    imageUrl:
-      "https://images.unsplash.com/photo-1485738422979-f5c462d49f74?auto=format&fit=crop&w=1200&q=80",
-    cost: "Free",
-    transitMinutes: 10,
-    timeWindow: "Morning",
-    mood: "Quiet morning",
-    groupSize: "1 adult + kids",
-    planning: "Walk-in",
-    openNow: true,
-    note: "Free story session for toddlers and preschoolers. Pair with a stroller-friendly walk afterward.",
-    tags: ["library", "free", "toddler", "indoor"],
-    kidsFriendly: true,
-  },
+  ...(APP_AUDIENCE === "adults"
+    ? [{
+        id: "cocktail-lounge",
+        name: "Cocktail Lounge",
+        neighborhood: "Downtown",
+        category: "Nightlife" as Category,
+        imageUrl:
+          "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80",
+        cost: "$$" as Cost,
+        transitMinutes: 10,
+        timeWindow: "Evening",
+        mood: "Cocktails and conversation",
+        groupSize: "2-8 people",
+        planning: "Walk-in",
+        openNow: true,
+        note: "Craft cocktails in a low-key lounge. Good for starting the night or a chill catch-up.",
+        tags: ["cocktails", "lounge", "evening", "indoor"],
+      }]
+    : [{
+        id: "library-storytime",
+        name: "Library Storytime",
+        neighborhood: "Downtown",
+        category: "Culture" as Category,
+        imageUrl:
+          "https://images.unsplash.com/photo-1485738422979-f5c462d49f74?auto=format&fit=crop&w=1200&q=80",
+        cost: "Free" as Cost,
+        transitMinutes: 10,
+        timeWindow: "Morning",
+        mood: "Quiet morning",
+        groupSize: "1 adult + kids",
+        planning: "Walk-in",
+        openNow: true,
+        note: "Free story session for toddlers and preschoolers. Pair with a stroller-friendly walk afterward.",
+        tags: ["library", "free", "toddler", "indoor"],
+        kidsFriendly: true,
+      }]),
 ];
 
 const emptyNewSpot: NewSpotForm = {
@@ -1159,8 +1177,12 @@ function App({ metro }: AppProps) {
   }), [metro]);
   const shareBaseUrl = useMemo(() => metroShareBase(metro), [metro]);
   useEffect(() => {
-    const title = `${APP_BRAND} — ${metro.label} Family Events & Kid-Friendly Spots`;
-    const description = `${APP_BRAND} helps families find ${metro.label} kid-friendly spots, family events, parks, libraries, museums, and weekend plans.`;
+    const title = APP_AUDIENCE === "adults"
+      ? `${APP_BRAND} — ${metro.label} Nightlife, Bars & Live Music`
+      : `${APP_BRAND} — ${metro.label} Family Events & Kid-Friendly Spots`;
+    const description = APP_AUDIENCE === "adults"
+      ? `${APP_BRAND} helps you find ${metro.label} bars, live music, comedy clubs, and late-night spots. Pick a vibe, get a 3-stop night out, and share with the crew to vote.`
+      : `${APP_BRAND} helps families find ${metro.label} kid-friendly spots, family events, parks, libraries, museums, and weekend plans.`;
     const canonicalUrl = new URL(metro.canonicalPath, window.location.origin)
       .toString();
 
@@ -1971,7 +1993,7 @@ function App({ metro }: AppProps) {
       mood: boaIsThisWeekend
         ? `BoA Museums on Us option for ${weekendLabel}`
         : "Museum day option for a culture-focused plan",
-      groupSize: "Family",
+      groupSize: APP_AUDIENCE === "adults" ? "2-6 people" : "Family",
       planning: boaIsThisWeekend
         ? "Bring a BoA or Merrill card plus photo ID; confirm exclusions."
         : "Check admission, hours, and exhibit fit before going.",
@@ -2123,7 +2145,7 @@ function App({ metro }: AppProps) {
 
   const selectedLabel =
     ageBand === "any"
-      ? "Family-friendly spots"
+      ? (APP_AUDIENCE === "adults" ? "All spots" : "Family-friendly spots")
       : `For ${ageBandLabels[ageBand].toLowerCase()}`;
 
   const daysThroughSunday = useMemo(() => {
@@ -3019,6 +3041,7 @@ function App({ metro }: AppProps) {
           {
             vibe: nextVibe,
             spots: stopPayload,
+            audience: APP_AUDIENCE,
             ageBand: ageBand === "any" ? undefined : ageBand,
             date: targetDate,
             dayOfWeek: planDate.toLocaleDateString("en-US", { weekday: "long" }),
@@ -3159,6 +3182,7 @@ function App({ metro }: AppProps) {
         {
           vibe,
           spots,
+          audience: APP_AUDIENCE,
           ageBand: ageBand === "any" ? undefined : ageBand,
           date: targetDate,
           dayOfWeek: planDate.toLocaleDateString("en-US", { weekday: "long" }),

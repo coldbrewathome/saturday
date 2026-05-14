@@ -8,7 +8,7 @@
     <meta name="description" content="%VITE_APP_OG_DESCRIPTION%" />
     <meta
       name="keywords"
-      content="famhop, weekend with kids, family activities, things to do with kids, kids events, family weekend planner, library storytime, free kids events, toddler activities, family-friendly parks, museums for kids, chicago family events, dallas family events, houston family events, dc family events, atlanta family events, philadelphia family events, miami family events, phoenix family events, boston family events, san diego family events, share family plan, vote on weekend plan"
+      content="%VITE_APP_KEYWORDS%"
     />
     <link rel="canonical" href="%VITE_APP_SITE_URL%" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -57,111 +57,34 @@
         "@graph": [
           {
             "@type": "WebSite",
-            "@id": "https://famhop.com/#website",
-            "url": "https://famhop.com/",
-            "name": "FamHop",
-            "alternateName": [
-              "FamHop weekend planner",
-              "Bay Area family events",
-              "famhop.com"
-            ],
-            "description": "Bay Area family events and kid-friendly spots — search 1,500+ parks, libraries, museums, zoos and family farms plus 2,700+ upcoming weekend events. Pick a vibe and FamHop builds a 3-stop family plan you can share with co-parents to vote on.",
+            "@id": "%VITE_APP_SITE_URL%#website",
+            "url": "%VITE_APP_SITE_URL%",
+            "name": "%VITE_APP_BRAND%",
+            "description": "%VITE_APP_OG_DESCRIPTION%",
             "inLanguage": "en-US",
-            "publisher": { "@id": "https://famhop.com/#org" }
+            "publisher": { "@id": "%VITE_APP_SITE_URL%#org" }
           },
           {
             "@type": "Organization",
-            "@id": "https://famhop.com/#org",
-            "name": "FamHop",
-            "url": "https://famhop.com/",
-            "logo": "https://famhop.com/icon-512.png",
-            "slogan": "Plan · Hop · Repeat."
+            "@id": "%VITE_APP_SITE_URL%#org",
+            "name": "%VITE_APP_BRAND%",
+            "url": "%VITE_APP_SITE_URL%",
+            "slogan": "%VITE_APP_TAGLINE%"
           },
           {
             "@type": "WebApplication",
-            "@id": "https://famhop.com/#app",
-            "name": "FamHop",
-            "url": "https://famhop.com/",
+            "@id": "%VITE_APP_SITE_URL%#app",
+            "name": "%VITE_APP_BRAND%",
+            "url": "%VITE_APP_SITE_URL%",
             "applicationCategory": "LifestyleApplication",
             "operatingSystem": "Web",
             "browserRequirements": "Requires JavaScript",
-            "description": "Discover Bay Area family events and kid-friendly spots. Browse parks, libraries, museums, zoos and family farms; see upcoming weekend events by city and category; build a 3-stop family plan and share a vote-link with co-parents.",
-            "featureList": [
-              "Pick-a-vibe 3-stop family plan in one tap",
-              "Bay Area parks, libraries, museums and family venues",
-              "Live weekend events by city and category",
-              "Share a vote link with co-parents and friends",
-              "Filter by age band: toddler, preschool, school-age, tween",
-              "Find me on the map and sort spots by distance"
-            ],
-            "areaServed": {
-              "@type": "Place",
-              "name": "San Francisco Bay Area"
-            },
-            "audience": {
-              "@type": "PeopleAudience",
-              "suggestedMinAge": 0,
-              "suggestedMaxAge": 14
-            },
+            "description": "%VITE_APP_OG_DESCRIPTION%",
             "offers": {
               "@type": "Offer",
               "price": "0",
               "priceCurrency": "USD"
             }
-          },
-          {
-            "@type": "FAQPage",
-            "@id": "https://famhop.com/#faq",
-            "mainEntity": [
-              {
-                "@type": "Question",
-                "name": "What is FamHop?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "FamHop is a free San Francisco Bay Area weekend planner for families. Pick a vibe (chill, adventure, museum day…) and FamHop builds a 3-stop plan combining family-friendly parks, libraries, museums, and weekend events, then lets you share a link so co-parents and friends can vote on each stop."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Is FamHop free to use?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Yes. FamHop is free for visitors. The places and events themselves vary — most parks and library events are free, while museums and ticketed events show their price on each card."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "How does the share-and-vote feature work?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "After you build a plan, tap Share to generate a vote link. Anyone you send it to can vote Yes / Maybe / Skip on each stop without signing up. The plan creator sees the running tally to settle on what the family is doing."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Where do FamHop's events come from?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Events are pulled directly from public source pages (libraries like SFPL, SJPL, Oakland; parks; museums; family festivals) using their official event calendars in JSON-LD, iCal, RSS, LibCal, and dated HTML formats. The full list of sources is in the project's data/event-sources.json."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "What ages does FamHop cover?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "FamHop covers four age bands you can filter by: toddler (0–2), preschool (3–5), school-age (6–9), and tween (10–14). Plans, the AI suggester and the event list all bias toward your selected band."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Where does FamHop work?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "FamHop covers the San Francisco Bay Area: San Francisco, the Peninsula (Palo Alto, Redwood City, San Mateo, Mountain View, Sunnyvale), the South Bay (San Jose, Santa Clara, Cupertino, Los Altos, Saratoga, Campbell, Milpitas, Morgan Hill, Gilroy), the East Bay (Oakland, Berkeley, Alameda, Fremont, Hayward, Walnut Creek, Richmond), and the North Bay (Marin, San Rafael)."
-                }
-              }
-            ]
           }
         ]
       }
@@ -171,29 +94,13 @@
     <div id="root">
       <noscript>
         <header>
-          <h1>FamHop — Family Events &amp; Kid-Friendly Spots by Metro</h1>
-          <p>
-            FamHop is a free planner for families with kids in major U.S. metro areas. Search
-            kid-friendly spots — parks, libraries, museums, zoos and family farms — and see
-            upcoming family events: library storytimes, museum free days, festivals and more.
-            Pick a vibe to get a 3-stop weekend plan, then share a link so co-parents and
-            friends can vote Yes / Maybe / Skip on each stop.
-          </p>
+          <h1>%VITE_APP_OG_TITLE%</h1>
+          <p>%VITE_APP_OG_DESCRIPTION%</p>
         </header>
-        <section>
-          <h2>What you can do on FamHop</h2>
-          <ul>
-            <li>Browse family-friendly spots by metro — parks, libraries, museums, zoos and farms.</li>
-            <li>See hundreds of upcoming weekend events, including library storytimes, museum free days, and family festivals.</li>
-            <li>Filter by age band: toddler, preschool, school-age and tween.</li>
-            <li>Sort by distance using your current location, or browse by city.</li>
-            <li>Build a 3-stop plan and share a link so co-parents and friends can vote.</li>
-          </ul>
-        </section>
         <section>
           <h2>Choose your metro</h2>
           <p>
-            Family activities in <a href="/bay-area/">San Francisco Bay Area</a>,
+            <a href="/bay-area/">San Francisco Bay Area</a>,
             <a href="/los-angeles/">Los Angeles</a>, <a href="/new-york-city/">New York City</a>,
             <a href="/seattle/">Seattle</a>, <a href="/chicago/">Chicago</a>,
             <a href="/dallas-fort-worth/">Dallas-Fort Worth</a>, <a href="/houston/">Houston</a>,
@@ -203,19 +110,7 @@
             and <a href="/san-diego/">San Diego</a>.
           </p>
         </section>
-        <section>
-          <h2>Browse by category</h2>
-          <p>
-            <a href="/category/library/">Library events for kids</a>,
-            <a href="/category/museum/">museums</a>,
-            <a href="/category/park/">parks and outdoors</a>,
-            <a href="/category/festival/">festivals</a>,
-            <a href="/category/zoo/">zoos</a>,
-            <a href="/category/farm/">family farms</a>, plus
-            <a href="/this-weekend/">things to do this weekend</a>.
-          </p>
-        </section>
-        <p><strong>Heads-up:</strong> FamHop is an interactive planner — please enable JavaScript to plan, share and vote.</p>
+        <p><strong>Heads-up:</strong> This is an interactive planner — please enable JavaScript to plan, share and vote.</p>
       </noscript>
     </div>
     <script type="module" src="/src/main.tsx"></script>

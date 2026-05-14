@@ -1,3 +1,5 @@
+import { APP_AUDIENCE } from "./appConfig";
+
 export type PlannerVibe =
   | "balanced"
   | "low-effort"
@@ -395,16 +397,17 @@ export function scoreSpotForVibe(
   if (spot.transitMinutes > 45) score -= 8;
   if (spot.planning.toLowerCase().includes("book")) score -= 2;
 
-  // Universal kid bias (applies to every vibe in the family-only build).
-  if (spot.kidsFriendly === true) score += 12;
-  if (spot.kidsFriendly === false) score -= 25;
-  if (spot.cost === "Free") score += 4;
-  if (spot.cost === "$") score += 2;
-  if (
-    spot.dataSource === "family-event" ||
-    spot.tags?.some((tag) => tag.toLowerCase() === "event")
-  ) {
-    score += 8;
+  if (APP_AUDIENCE === "kids") {
+    if (spot.kidsFriendly === true) score += 12;
+    if (spot.kidsFriendly === false) score -= 25;
+    if (spot.cost === "Free") score += 4;
+    if (spot.cost === "$") score += 2;
+    if (
+      spot.dataSource === "family-event" ||
+      spot.tags?.some((tag) => tag.toLowerCase() === "event")
+    ) {
+      score += 8;
+    }
   }
 
   // Google rating signal — only trust ratings with enough reviews to be stable.
@@ -447,26 +450,27 @@ export function scoreSpotForVibe(
     if (spot.category === "Shopping") score += 4;
   }
 
-  // Age-band bias on top of vibe.
-  if (ageBand === "toddler") {
-    if (spot.category === "Outdoors") score += 8;
-    if (spot.category === "Culture") score += 4;
-    if (spot.planning === "Walk-in" || spot.planning === "Flexible") score += 6;
-    if (spot.transitMinutes > 30) score -= 5;
-  }
-  if (ageBand === "preschool") {
-    if (spot.category === "Outdoors") score += 6;
-    if (spot.category === "Culture") score += 6;
-  }
-  if (ageBand === "school-age") {
-    if (spot.category === "Wellness") score += 5;
-    if (spot.category === "Culture") score += 4;
-    if (spot.category === "Shopping") score -= 6;
-  }
-  if (ageBand === "tween") {
-    if (spot.category === "Wellness") score += 6;
-    if (spot.category === "Food") score += 4;
-    if (spot.category === "Shopping") score += 4;
+  if (APP_AUDIENCE === "kids") {
+    if (ageBand === "toddler") {
+      if (spot.category === "Outdoors") score += 8;
+      if (spot.category === "Culture") score += 4;
+      if (spot.planning === "Walk-in" || spot.planning === "Flexible") score += 6;
+      if (spot.transitMinutes > 30) score -= 5;
+    }
+    if (ageBand === "preschool") {
+      if (spot.category === "Outdoors") score += 6;
+      if (spot.category === "Culture") score += 6;
+    }
+    if (ageBand === "school-age") {
+      if (spot.category === "Wellness") score += 5;
+      if (spot.category === "Culture") score += 4;
+      if (spot.category === "Shopping") score -= 6;
+    }
+    if (ageBand === "tween") {
+      if (spot.category === "Wellness") score += 6;
+      if (spot.category === "Food") score += 4;
+      if (spot.category === "Shopping") score += 4;
+    }
   }
 
   if (hasPreference(preferences, "parks-nature")) {

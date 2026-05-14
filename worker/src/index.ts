@@ -659,6 +659,7 @@ async function aiBrief(
   const data = payload as {
     vibe?: unknown;
     spots?: unknown;
+    audience?: unknown;
     ageBand?: unknown;
     date?: unknown;
     dayOfWeek?: unknown;
@@ -667,6 +668,7 @@ async function aiBrief(
     profile?: unknown;
   };
   const vibe = cleanText(data.vibe, 40) || "balanced";
+  const audience = cleanText(data.audience, 10) || "kids";
   const ageBand = cleanText(data.ageBand, 40) || "";
   const date = cleanText(data.date, 12) || "";
   const dayOfWeek = cleanText(data.dayOfWeek, 12) || "";
@@ -685,6 +687,15 @@ async function aiBrief(
     return json({ error: "spots required" }, { status: 400 }, cors);
   }
 
+  const isAdults = audience === "adults";
+  const instructions = isAdults
+    ? "You are a nightlife plan assistant helping friends plan a night out. Build a 2-4 stop evening/night plan from the provided spots. Favor bars, cocktail lounges, live music venues, comedy clubs, breweries, late-night restaurants, and entertainment spots (bowling, escape rooms, karaoke). Some candidates may be scheduled events (concerts, comedy shows, DJ sets); for those, treat the date/time as fixed. GEOGRAPHIC CONSTRAINT: all picks must be near each other — same neighborhood or adjacent area, ideally within 4 miles between any two stops so the crew can walk or take a short ride. Do NOT chain stops in distant areas. When in doubt, prefer fewer stops in one tight cluster. Return only JSON with keys: title (short, fun — e.g. 'Cocktails & Comedy in the Mission'), summary (1-2 sentences for the group organizer), rationale (array of 2-4 strings, each citing why the choice fits the vibe and noting the cluster neighborhood), cautions (array of strings about hours uncertainty, cover charges, reservations needed, or capacity limits), picks (array of {id, reason} ordered as the night should flow; ids must come from the provided spots; 2-4 picks). Do not invent hours, prices, or availability. Mention uncertainty in cautions when info is missing."
+    : "You are a Bay Area family-plan assistant for parents planning the weekend with their kids. Build a 2-4 stop kid-friendly weekend plan from the provided sanitized spots. Some candidates may be scheduled family events rather than general venues; for those, treat the date/time in mood/planning as fixed and mention the timing in rationale or cautions. NEVER include bars, breweries, or adult-only venues. Favor parks, libraries, museums, family restaurants, scheduled family events, and active indoor places (bowling, mini-golf, escape rooms appropriate for the age). GEOGRAPHIC CONSTRAINT: all picks must be near each other — same city or one adjacent neighborhood, ideally within 6 miles between any two stops. Do NOT chain stops in distant cities (e.g., Sunnyvale → SF → Sunnyvale is forbidden — that would be 90+ minutes of driving with kids). When in doubt, prefer fewer stops in one tight cluster over more stops spread out. Return only JSON with keys: title (short), summary (1-2 sentences for the parent), rationale (array of 2-4 strings, each citing why the choice fits kids of the given age and noting the cluster city/neighborhood), cautions (array of strings about source-data uncertainty, scheduled-event timing, AND any age-appropriateness caveats), picks (array of {id, reason} ordered as the plan should be done; ids must come from the provided spots; 2-4 picks). Do not invent hours, prices, locations, event times, or availability. Mention uncertainty in cautions when hours or websites are missing.";
+
+  const task = isAdults
+    ? "Build a night-out plan for the date above: choose 2-4 stops in order, give a fun title and summary aimed at the group organizer, explain the tradeoffs in rationale (mention the vibe, weather, and preferences when relevant), list cautions, and return picks with the ordered stop ids. If weather is rainy, lean toward indoor venues. Honor each item in 'preferences' and groupProfile as constraints. Make each pick reason specific — matched because X, Y, and Z. Make the picks flow naturally as a night progresses (e.g. dinner → drinks → music → late-night bite). Output JSON only."
+    : "Build a kid-friendly weekend plan for the date above: choose 2-4 stops in order, give a brief title and summary aimed at the parent, explain the tradeoffs in rationale (mention age-fit explicitly, AND mention the weather, family preferences, and familyProfile when relevant), list source-data cautions, and return picks with the ordered stop ids. If weather has high precipChance or label is Rainy/Showers/Stormy, lean indoor (Museum, Library, Wellness). Honor each item in 'preferences' and familyProfile as constraints. Make each pick reason specific enough to read as: matched because X, Y, and Z. Make the picks feel different from a generic suggestion — use the day-of-week and shuffled candidate ordering to vary your choice. Output JSON only.";
+
   const response = await fetch("https://api.openai.com/v1/responses", {
     method: "POST",
     headers: {
@@ -699,18 +710,16 @@ async function aiBrief(
         format: { type: "json_object" },
         verbosity: "low",
       },
-      instructions:
-        "You are a Bay Area family-plan assistant for parents planning the weekend with their kids. Build a 2-4 stop kid-friendly weekend plan from the provided sanitized spots. Some candidates may be scheduled family events rather than general venues; for those, treat the date/time in mood/planning as fixed and mention the timing in rationale or cautions. NEVER include bars, breweries, or adult-only venues. Favor parks, libraries, museums, family restaurants, scheduled family events, and active indoor places (bowling, mini-golf, escape rooms appropriate for the age). GEOGRAPHIC CONSTRAINT: all picks must be near each other — same city or one adjacent neighborhood, ideally within 6 miles between any two stops. Do NOT chain stops in distant cities (e.g., Sunnyvale → SF → Sunnyvale is forbidden — that would be 90+ minutes of driving with kids). When in doubt, prefer fewer stops in one tight cluster over more stops spread out. Return only JSON with keys: title (short), summary (1-2 sentences for the parent), rationale (array of 2-4 strings, each citing why the choice fits kids of the given age and noting the cluster city/neighborhood), cautions (array of strings about source-data uncertainty, scheduled-event timing, AND any age-appropriateness caveats), picks (array of {id, reason} ordered as the plan should be done; ids must come from the provided spots; 2-4 picks). Do not invent hours, prices, locations, event times, or availability. Mention uncertainty in cautions when hours or websites are missing.",
+      instructions,
       input: JSON.stringify({
         vibe,
-        ageBand: ageBand || "mixed ages",
+        ...(isAdults ? {} : { ageBand: ageBand || "mixed ages" }),
         today: date,
         dayOfWeek,
         weather,
         preferences,
-        familyProfile: profile,
-        task:
-          "Build a kid-friendly weekend plan for the date above: choose 2-4 stops in order, give a brief title and summary aimed at the parent, explain the tradeoffs in rationale (mention age-fit explicitly, AND mention the weather, family preferences, and familyProfile when relevant), list source-data cautions, and return picks with the ordered stop ids. If weather has high precipChance or label is Rainy/Showers/Stormy, lean indoor (Museum, Library, Wellness). Honor each item in 'preferences' and familyProfile as constraints. Make each pick reason specific enough to read as: matched because X, Y, and Z. Make the picks feel different from a generic suggestion — use the day-of-week and shuffled candidate ordering to vary your choice. Output JSON only.",
+        ...(isAdults ? { groupProfile: profile } : { familyProfile: profile }),
+        task,
         spots,
       }),
       max_output_tokens: 700,
@@ -911,6 +920,7 @@ async function aiSwap(
   }
   const data = payload as {
     vibe?: unknown;
+    audience?: unknown;
     ageBand?: unknown;
     date?: unknown;
     dayOfWeek?: unknown;
@@ -922,6 +932,8 @@ async function aiSwap(
     profile?: unknown;
   };
   const vibe = cleanText(data.vibe, 40) || "balanced";
+  const audience = cleanText(data.audience, 10) || "kids";
+  const isAdults = audience === "adults";
   const ageBand = cleanText(data.ageBand, 40) || "";
   const date = cleanText(data.date, 12) || "";
   const dayOfWeek = cleanText(data.dayOfWeek, 12) || "";
@@ -945,6 +957,14 @@ async function aiSwap(
     return json({ error: "candidates required" }, { status: 400 }, cors);
   }
 
+  const swapInstructions = isAdults
+    ? "You are a nightlife plan assistant. Replace ONE stop in an existing night-out plan with a better-fitting alternative from the provided candidates. Some candidates may be scheduled events (concerts, DJ sets, comedy shows); for those, treat the time as fixed. NEVER pick a candidate whose id already appears in currentPicks. Pick should be GEOGRAPHICALLY CLOSE to the other stops — same neighborhood, ideally within 4 miles. Return only JSON {pick: {id, reason}} where reason is one short sentence for the crew."
+    : "You are a Bay Area family-plan assistant. Replace ONE stop in an existing kid-friendly plan with a better-fitting alternative from the provided candidates. Some candidates may be scheduled family events rather than general venues; for those, treat the date/time in mood/planning as fixed. NEVER pick a candidate whose id already appears in currentPicks. Pick should be GEOGRAPHICALLY CLOSE to the other stops in currentPicks — same city or adjacent neighborhood, ideally within 5 miles. Stay age-appropriate. Return only JSON {pick: {id, reason}} where reason is one short sentence for the parent.";
+
+  const swapTask = isAdults
+    ? "Pick one candidate to replace the stop with id=replaceStopId in currentPicks. Reject any candidate whose id appears in currentPicks. Honor 'preferences' and groupProfile as constraints. If weather is rainy, lean indoor. Make the reason specific — matched because X, Y, and Z. Output JSON {pick: {id, reason}} only."
+    : "Pick one candidate to replace the stop with id=replaceStopId in currentPicks. Reject any candidate whose id appears in currentPicks. Honor 'preferences' and familyProfile as constraints. If weather is rainy/stormy, lean indoor. Make the reason specific enough to read as: matched because X, Y, and Z. Output JSON {pick: {id, reason}} only.";
+
   const response = await fetch("https://api.openai.com/v1/responses", {
     method: "POST",
     headers: {
@@ -959,21 +979,19 @@ async function aiSwap(
         format: { type: "json_object" },
         verbosity: "low",
       },
-      instructions:
-        "You are a Bay Area family-plan assistant. Replace ONE stop in an existing kid-friendly plan with a better-fitting alternative from the provided candidates. Some candidates may be scheduled family events rather than general venues; for those, treat the date/time in mood/planning as fixed. NEVER pick a candidate whose id already appears in currentPicks. Pick should be GEOGRAPHICALLY CLOSE to the other stops in currentPicks — same city or adjacent neighborhood, ideally within 5 miles. Stay age-appropriate. Return only JSON {pick: {id, reason}} where reason is one short sentence for the parent.",
+      instructions: swapInstructions,
       input: JSON.stringify({
         vibe,
-        ageBand: ageBand || "mixed ages",
+        ...(isAdults ? {} : { ageBand: ageBand || "mixed ages" }),
         today: date,
         dayOfWeek,
         weather,
         preferences,
-        familyProfile: profile,
+        ...(isAdults ? { groupProfile: profile } : { familyProfile: profile }),
         currentPicks,
         replaceStopId,
         candidates,
-        task:
-          "Pick one candidate to replace the stop with id=replaceStopId in currentPicks. Reject any candidate whose id appears in currentPicks. Honor 'preferences' and familyProfile as constraints. If weather is rainy/stormy, lean indoor. Make the reason specific enough to read as: matched because X, Y, and Z. Output JSON {pick: {id, reason}} only.",
+        task: swapTask,
       }),
       max_output_tokens: 300,
     }),

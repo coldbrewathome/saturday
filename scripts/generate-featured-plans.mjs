@@ -175,16 +175,12 @@ function generateForMetro(metro) {
         Math.min(3, cityAnchorSpots.length),
       );
       const center = centroid(picks);
-      const summary = picks.length === 3
-        ? `Three family-friendly stops in ${city} - ${picks
-            .map((p) => p.name.split(",")[0])
-            .join(", ")}.`
-        : `Family-friendly spots in ${city} - ${picks
+      const summary = `${picks.length} stops in ${city} - ${picks
             .map((p) => p.name.split(",")[0])
             .join(", ")}.`;
       generated.push({
         id: `gen-day-${slug}`,
-        name: `Family day in ${city}`,
+        name: `Day out in ${city}`,
         summary: summary.slice(0, 220),
         accent: inferAccent(picks),
         stopIds: picks.map((p) => p.id),
@@ -202,12 +198,12 @@ function generateForMetro(metro) {
       const spotPick = pickTopSpots(cityAnchorSpots, 1);
       const items = [...spotPick, ...eventPicks];
       const center = centroid(items);
-      const summary = `Two upcoming family events in ${city} plus a nearby stop - ${eventPicks
+      const summary = `Two upcoming events in ${city} plus a nearby stop - ${eventPicks
         .map((e) => e.title.slice(0, 60))
         .join(" | ")}.`;
       generated.push({
         id: `gen-events-${slug}`,
-        name: `${city} family events`,
+        name: `${city} events`,
         summary: summary.slice(0, 240),
         accent: "festival",
         stopIds: spotPick.map((s) => s.id),
