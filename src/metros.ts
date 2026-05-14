@@ -38,6 +38,7 @@ const DATA_FILES: Record<DataKey, string> = {
 const ADULTS_DATA_FILES: Partial<Record<DataKey, string>> = {
   spots: "spots-adults.json",
   events: "events-adults.json",
+  featuredPlans: "featured-plans-adults.json",
 };
 
 export function metroBySlug(slug: string | null | undefined): MetroConfig {

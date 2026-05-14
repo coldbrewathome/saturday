@@ -144,19 +144,9 @@ function slugCity(city) {
     .slice(0, 60);
 }
 
-function generateForMetro(metro) {
-  const plansDoc = metroJson(metro, "featuredPlans", { plans: [] });
-  const spotsDoc = metroJson(metro, "spots", { spots: [] });
-  const eventsDoc = metroJson(metro, "events", { events: [] });
-  const curatedDoc = metroJson(metro, "curatedSpots", { spots: [] });
-  const allSpots = [
-    ...(Array.isArray(spotsDoc.spots) ? spotsDoc.spots : []),
-    ...(Array.isArray(curatedDoc.spots) ? curatedDoc.spots : []),
-  ];
-  const events = Array.isArray(eventsDoc.events) ? eventsDoc.events : [];
-  const spotsByCity = groupSpotsByCity(allSpots);
+function buildPlans(spots, events, { namePrefix = "Day out", audiences = ["all"] } = {}) {
+  const spotsByCity = groupSpotsByCity(spots);
   const eventsByCity = groupUpcomingEventsByCity(events);
-  const handCurated = (plansDoc.plans || []).filter((p) => !p.generated);
   const generated = [];
   const cities = Array.from(
     new Set([...spotsByCity.keys(), ...eventsByCity.keys()]),
@@ -180,12 +170,12 @@ function generateForMetro(metro) {
             .join(", ")}.`;
       generated.push({
         id: `gen-day-${slug}`,
-        name: `Day out in ${city}`,
+        name: `${namePrefix} in ${city}`,
         summary: summary.slice(0, 220),
         accent: inferAccent(picks),
         stopIds: picks.map((p) => p.id),
         eventIds: [],
-        audiences: ["all"],
+        audiences,
         city,
         lat: center?.lat ?? null,
         lon: center?.lon ?? null,
@@ -208,7 +198,7 @@ function generateForMetro(metro) {
         accent: "festival",
         stopIds: spotPick.map((s) => s.id),
         eventIds: eventPicks.map((e) => e.id),
-        audiences: ["all"],
+        audiences,
         city,
         lat: center?.lat ?? null,
         lon: center?.lon ?? null,
@@ -216,19 +206,54 @@ function generateForMetro(metro) {
       });
     }
   }
+  return { generated, cityCount: cities.length };
+}
 
-  const finalPlans = [...handCurated, ...generated];
-  const out = {
+function generateForMetro(metro) {
+  const plansDoc = metroJson(metro, "featuredPlans", { plans: [] });
+  const curatedDoc = metroJson(metro, "curatedSpots", { spots: [] });
+  const handCurated = (plansDoc.plans || []).filter((p) => !p.generated);
+
+  const kidsSpotsDoc = readJsonOrEmpty(path.join(ROOT, metroDataFile(metro, "spots")), { spots: [] });
+  const kidsEventsDoc = readJsonOrEmpty(path.join(ROOT, metroDataFile(metro, "events")), { events: [] });
+  const kidsSpots = [
+    ...(Array.isArray(kidsSpotsDoc.spots) ? kidsSpotsDoc.spots : []),
+    ...(Array.isArray(curatedDoc.spots) ? curatedDoc.spots : []),
+  ];
+  const kidsEvents = Array.isArray(kidsEventsDoc.events) ? kidsEventsDoc.events : [];
+
+  const kids = buildPlans(kidsSpots, kidsEvents, { namePrefix: "Day out", audiences: ["all"] });
+  const kidsFinal = [...handCurated, ...kids.generated];
+  const kidsOut = {
     schemaVersion: 2,
     metroId: metro.id,
-    note:
-      "Editor-curated starter plans + auto-generated per-city plans. Hand-written plans (no generated:true) are kept across runs; generated entries are rebuilt by scripts/generate-featured-plans.mjs each ingest. Each entry carries lat/lon + city so the frontend can show plans near the user's map view.",
-    plans: finalPlans,
+    note: "Auto-generated per-city plans for kids audience.",
+    plans: kidsFinal,
   };
-
-  writeJsonWithLegacy(metro, "featuredPlans", out);
+  writeJsonWithLegacy(metro, "featuredPlans", kidsOut);
   console.log(
-    `[featured-plans:${metro.id}] kept ${handCurated.length} hand-curated, generated ${generated.length} from ${cities.length} cities -> ${finalPlans.length} total`,
+    `[featured-plans:${metro.id}] kept ${handCurated.length} hand-curated, generated ${kids.generated.length} from ${kids.cityCount} cities -> ${kidsFinal.length} total`,
+  );
+
+  const adultsSpotPath = path.join(ROOT, metroDataFile(metro, "spots")).replace(/spots\.json$/, "spots-adults.json");
+  const adultsEventPath = path.join(ROOT, metroDataFile(metro, "events")).replace(/events\.json$/, "events-adults.json");
+  const adultsSpotsDoc = readJsonOrEmpty(adultsSpotPath, { spots: [] });
+  const adultsEventsDoc = readJsonOrEmpty(adultsEventPath, { events: [] });
+  const adultsSpots = Array.isArray(adultsSpotsDoc.spots) ? adultsSpotsDoc.spots : [];
+  const adultsEvents = Array.isArray(adultsEventsDoc.events) ? adultsEventsDoc.events : [];
+
+  const adults = buildPlans(adultsSpots, adultsEvents, { namePrefix: "Night out", audiences: ["adults"] });
+  const adultsOut = {
+    schemaVersion: 2,
+    metroId: metro.id,
+    note: "Auto-generated per-city plans for adults audience.",
+    plans: adults.generated,
+  };
+  const adultsOutPath = path.join(ROOT, metroDataFile(metro, "featuredPlans")).replace(/featured-plans\.json$/, "featured-plans-adults.json");
+  fs.mkdirSync(path.dirname(adultsOutPath), { recursive: true });
+  fs.writeFileSync(adultsOutPath, JSON.stringify(adultsOut, null, 2) + "\n");
+  console.log(
+    `[featured-plans-adults:${metro.id}] generated ${adults.generated.length} from ${adults.cityCount} cities`,
   );
 }
 

@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "metroId": "miami",
-  "generatedAt": "2026-05-14T03:30:15.788Z",
+  "generatedAt": "2026-05-14T04:32:40.568Z",
   "registryPath": "data/event-sources-miami.json",
   "outputPath": "public/data/miami/events.json",
   "eventCount": 34,
-  "adultsEventCount": 61,
+  "adultsEventCount": 57,
   "sourceCount": 12,
   "liveEventCount": 57,
   "fallbackEventCount": 8,
@@ -54,7 +54,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 1
+      "rejectedLiveEvents": 0
     },
     {
       "id": "miami-museum-family",
@@ -251,20 +251,18 @@
       "city": "Miami",
       "metroId": "miami",
       "category": "Music",
-      "status": "http-error",
+      "status": "fetch-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.lasrosasbar.com/events",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html"
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ],
-      "httpStatus": 404,
-      "contentType": "text/html"
+      "reason": "This operation was aborted"
     },
     {
       "id": "south-beach-comedy",

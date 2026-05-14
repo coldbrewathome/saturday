@@ -1270,10 +1270,17 @@ async function main() {
     if (!Array.isArray(a) || a.length === 0) return true;
     return a.includes("kids") || a.includes("all");
   });
+  const KIDS_EVENT_RE = /\b(story\s*time|storytime|lapsit|lap\s*sit|toddler|preschool|baby|babies|infant|diaper|stroller|family\s*craft|kids?\s*craft|puppet|pajama|pj\b|bedtime|mommy|daddy|parent.child|child|children)\b/i;
+  const KIDS_CATEGORIES = new Set(["Library"]);
   const adultsEvents = allEvents.filter((e) => {
     const a = e.audiences;
-    if (!Array.isArray(a) || a.length === 0) return true;
-    return a.includes("adults") || a.includes("all");
+    if (Array.isArray(a) && a.includes("adults")) return true;
+    if (!Array.isArray(a) || a.length === 0 || a.includes("all")) {
+      if (KIDS_CATEGORIES.has(e.category)) return false;
+      if (KIDS_EVENT_RE.test(e.title || "")) return false;
+      return true;
+    }
+    return false;
   });
 
   const kidsDataset = buildEventsDataset(kidsEvents, datasetOpts);
