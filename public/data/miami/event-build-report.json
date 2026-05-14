@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "metroId": "miami",
-  "generatedAt": "2026-05-14T04:49:15.932Z",
+  "generatedAt": "2026-05-14T05:03:54.951Z",
   "registryPath": "data/event-sources-miami.json",
   "outputPath": "public/data/miami/events.json",
-  "eventCount": 1834,
-  "adultsEventCount": 57,
+  "eventCount": 34,
+  "adultsEventCount": 48,
   "sourceCount": 12,
-  "liveEventCount": 1865,
-  "fallbackEventCount": 0,
+  "liveEventCount": 57,
+  "fallbackEventCount": 8,
   "errors": [],
   "sources": [
     {
@@ -19,21 +19,18 @@
       "city": "Miami",
       "metroId": "miami",
       "category": "Library",
-      "status": "ok",
-      "liveEvents": 1808,
-      "fallbackEvents": 0,
-      "eventCount": 1808,
+      "status": "fetch-error",
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "eventCount": 8,
       "fetches": [
         {
           "url": "https://mdpls.libnet.info/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=3655; locations=54"
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=3655; locations=54",
-      "rejectedLiveEvents": 0
+      "reason": "This operation was aborted"
     },
     {
       "id": "miami-parks-family",

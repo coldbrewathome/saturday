@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "metroId": "bay-area",
-  "generatedAt": "2026-05-14T04:45:08.523Z",
+  "generatedAt": "2026-05-14T04:59:29.715Z",
   "registryPath": "data/event-sources.json",
   "outputPath": "public/data/bay-area/events.json",
   "eventCount": 2734,
-  "adultsEventCount": 554,
+  "adultsEventCount": 440,
   "sourceCount": 86,
   "liveEventCount": 2658,
   "fallbackEventCount": 80,
@@ -1907,21 +1907,18 @@
       "city": "San Francisco",
       "metroId": "bay-area",
       "category": "Outdoors",
-      "status": "ok",
+      "status": "fetch-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.sfbg.org/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "reason": "This operation was aborted"
     },
     {
       "id": "sf-conservatory-of-flowers",
