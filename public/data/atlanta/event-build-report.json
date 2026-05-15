@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "atlanta",
-  "generatedAt": "2026-05-14T05:03:26.731Z",
+  "generatedAt": "2026-05-15T16:33:10.204Z",
   "registryPath": "data/event-sources-atlanta.json",
   "outputPath": "public/data/atlanta/events.json",
-  "eventCount": 234,
+  "eventCount": 231,
   "adultsEventCount": 204,
-  "sourceCount": 11,
-  "liveEventCount": 223,
+  "sourceCount": 13,
+  "liveEventCount": 220,
   "fallbackEventCount": 12,
   "errors": [],
   "sources": [
@@ -20,9 +20,9 @@
       "metroId": "atlanta",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 4,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://fulcolibrary.bibliocommons.com/v2/events",
@@ -67,9 +67,9 @@
       "metroId": "atlanta",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 218,
+      "liveEvents": 216,
       "fallbackEvents": 0,
-      "eventCount": 218,
+      "eventCount": 216,
       "fetches": [
         {
           "url": "https://childrensmuseumatlanta.org/program-calendar/",
@@ -80,7 +80,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; charset=UTF-8",
-      "rejectedLiveEvents": 20
+      "rejectedLiveEvents": 16
     },
     {
       "id": "atlanta-zoo-family",
@@ -128,6 +128,54 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "north-georgia-state-fair",
+      "name": "North Georgia State Fair",
+      "url": "https://www.northgeorgiastatefair.com/",
+      "sourceType": "html",
+      "city": "Marietta",
+      "metroId": "atlanta",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.northgeorgiastatefair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "gwinnett-county-fair",
+      "name": "Gwinnett County Fair",
+      "url": "https://www.gwinnettcountyfair.com/",
+      "sourceType": "html",
+      "city": "Lawrenceville",
+      "metroId": "atlanta",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.gwinnettcountyfair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0
     },
     {

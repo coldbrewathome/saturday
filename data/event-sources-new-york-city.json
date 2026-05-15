@@ -9,7 +9,8 @@
       "Brooklyn",
       "Queens",
       "Bronx",
-      "Staten Island"
+      "Staten Island",
+      "East Rutherford"
     ]
   },
   "defaults": {
@@ -30,7 +31,10 @@
       "communicoApiServer": "https://api.communico.co",
       "lat": 40.7282,
       "lon": -73.7949,
-      "fallbackEventIds": ["qpl-family-storytime", "qpl-lego-club"]
+      "fallbackEventIds": [
+        "qpl-family-storytime",
+        "qpl-lego-club"
+      ]
     },
     {
       "id": "nypl-children",
@@ -50,7 +54,10 @@
         "requireFamilySignal": false,
         "defaultDurationMinutes": 60
       },
-      "fallbackEventIds": ["nypl-family-storytime", "nypl-kids-steam"]
+      "fallbackEventIds": [
+        "nypl-family-storytime",
+        "nypl-kids-steam"
+      ]
     },
     {
       "id": "brooklyn-library-youth-family",
@@ -69,7 +76,10 @@
         "requireFamilySignal": false,
         "defaultDurationMinutes": 90
       },
-      "fallbackEventIds": ["bpl-youth-family-storytime", "bpl-kids-create"]
+      "fallbackEventIds": [
+        "bpl-youth-family-storytime",
+        "bpl-kids-create"
+      ]
     },
     {
       "id": "nyc-parks-kids",
@@ -80,12 +90,17 @@
       "sourceType": "nycParksEvents",
       "trust": "official",
       "requiresBrowserHeaders": true,
-      "urls": ["https://www.nycgovparks.org/events/kids"],
+      "urls": [
+        "https://www.nycgovparks.org/events/kids"
+      ],
       "lat": 40.7128,
       "lon": -74.006,
       "defaultAudienceText": "kids family parks outdoors",
       "cost": "Free",
-      "fallbackEventIds": ["nyc-parks-family-nature", "nyc-parks-family-fitness"]
+      "fallbackEventIds": [
+        "nyc-parks-family-nature",
+        "nyc-parks-family-fitness"
+      ]
     },
     {
       "id": "brooklyn-childrens-museum",
@@ -140,7 +155,9 @@
       "lat": 40.7813,
       "lon": -73.9739,
       "defaultAudienceText": "children family kids museum",
-      "fallbackEventIds": ["amnh-family-program"]
+      "fallbackEventIds": [
+        "amnh-family-program"
+      ]
     },
     {
       "id": "bronx-zoo-events",
@@ -164,6 +181,18 @@
       "trust": "commercial",
       "enabled": false,
       "requiresEnv": "TICKETMASTER_API_KEY"
+    },
+    {
+      "id": "state-fair-meadowlands",
+      "name": "State Fair Meadowlands",
+      "url": "https://njfair.com/",
+      "city": "East Rutherford",
+      "neighborhood": "Meadowlands",
+      "category": "Festival",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 40.8128,
+      "lon": -74.0742
     }
   ]
 }

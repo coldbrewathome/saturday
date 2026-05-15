@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
   "metroId": "washington-dc",
-  "generatedAt": "2026-05-14T05:03:07.960Z",
+  "generatedAt": "2026-05-15T16:32:50.947Z",
   "source": {
     "name": "Washington DC event source registry",
     "registryPath": "data/event-sources-washington-dc.json",
-    "sourceCount": 11,
+    "sourceCount": 13,
     "attribution": "Official source pages and configured public event feeds"
   },
   "coverage": {
@@ -20,6 +20,8 @@
       "Rockville",
       "Falls Church",
       "Tysons",
+      "Gaithersburg",
+      "Timonium",
       "Georgetown",
       "Adams Morgan",
       "U Street",
@@ -27,6 +29,77 @@
       "H Street"
     ]
   },
-  "count": 0,
-  "events": []
+  "count": 2,
+  "events": [
+    {
+      "id": "montgomery-county-ag-fair-paws-in-the-park-dog-walk-fest-338b89e86d",
+      "baseId": null,
+      "title": "Paws in the Park – Dog Walk & fest",
+      "description": "Mark your calendar for Paws in the Park! Saturday, May 16, 2026 12 - 4 pm Montgomery County Agricultural Center (County Fairgrounds) 501 Perry Parkway, Gaithersburg, Md. Use the Perry Parkway entrance across the street from Veterinary Referral Associates. Dogs and their people love Paws in the Park, and return every year for the fun! We’re excited to be back",
+      "venue": "Montgomery County Fairgrounds",
+      "city": "Gaithersburg",
+      "neighborhood": "Gaithersburg",
+      "lat": 39.1318,
+      "lon": -77.2165,
+      "category": "Festival",
+      "daysOfWeek": [
+        6
+      ],
+      "timeWindow": "Morning",
+      "startDateTime": "2026-05-16T12:00:00.000Z",
+      "endDateTime": "2026-05-16T16:00:00.000Z",
+      "ageBands": [
+        "preschool",
+        "school-age"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "cost": "Unknown",
+      "url": "https://mcagfair.com/events/paws-in-the-park-dog-walk-fest-2/",
+      "sourceUrl": "https://mcagfair.com/",
+      "sourceId": "montgomery-county-ag-fair",
+      "sourceName": "Montgomery County Agricultural Fair",
+      "sourceMode": "json-ld",
+      "extractionMethod": "json-ld",
+      "verified": true,
+      "fetchedAt": "2026-05-15T16:32:50.947Z",
+      "metroId": "washington-dc"
+    },
+    {
+      "id": "montgomery-county-ag-fair-pokefair-renaissance-125551438b",
+      "baseId": null,
+      "title": "PokeFair Renaissance",
+      "description": "Step into a world of elegance, pageantry, and adventure at PokeFair Renaissance, a summer Pokémon celebration where Trainers gather in a setting inspired by regal splendor and timeless fantasy. Hosted at the Montgomery County Fairgrounds, this special event will mark an exciting new chapter as our first-ever two-day show, held in a much larger hall than our ",
+      "venue": "Montgomery County Fairgrounds - Building 6, Hall 2",
+      "city": "Gaithersburg",
+      "neighborhood": "Gaithersburg",
+      "lat": 39.1318,
+      "lon": -77.2165,
+      "category": "Festival",
+      "daysOfWeek": [
+        5
+      ],
+      "timeWindow": "Evening",
+      "startDateTime": "2026-06-20T00:00:00.000Z",
+      "endDateTime": "2026-06-21T00:00:00.000Z",
+      "ageBands": [
+        "preschool",
+        "school-age"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "cost": "Unknown",
+      "url": "https://www.pokefair.com/",
+      "sourceUrl": "https://mcagfair.com/",
+      "sourceId": "montgomery-county-ag-fair",
+      "sourceName": "Montgomery County Agricultural Fair",
+      "sourceMode": "json-ld",
+      "extractionMethod": "json-ld",
+      "verified": true,
+      "fetchedAt": "2026-05-15T16:32:50.947Z",
+      "metroId": "washington-dc"
+    }
+  ]
 }

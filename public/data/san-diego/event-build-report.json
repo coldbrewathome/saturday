@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "san-diego",
-  "generatedAt": "2026-05-14T05:04:37.405Z",
+  "generatedAt": "2026-05-15T16:34:42.079Z",
   "registryPath": "data/event-sources-san-diego.json",
   "outputPath": "public/data/san-diego/events.json",
-  "eventCount": 144,
-  "adultsEventCount": 3,
-  "sourceCount": 11,
-  "liveEventCount": 144,
+  "eventCount": 145,
+  "adultsEventCount": 2,
+  "sourceCount": 12,
+  "liveEventCount": 145,
   "fallbackEventCount": 0,
   "errors": [],
   "sources": [
@@ -20,9 +20,9 @@
       "metroId": "san-diego",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://sdcl.bibliocommons.com/v2/events",
@@ -129,6 +129,30 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "san-diego-county-fair",
+      "name": "San Diego County Fair",
+      "url": "https://www.sdfair.com/",
+      "sourceType": "html",
+      "city": "Del Mar",
+      "metroId": "san-diego",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.sdfair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0
     },
     {

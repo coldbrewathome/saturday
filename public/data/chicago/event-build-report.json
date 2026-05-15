@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "chicago",
-  "generatedAt": "2026-05-14T05:02:07.022Z",
+  "generatedAt": "2026-05-15T16:32:11.481Z",
   "registryPath": "data/event-sources-chicago.json",
   "outputPath": "public/data/chicago/events.json",
-  "eventCount": 76,
+  "eventCount": 84,
   "adultsEventCount": 41,
-  "sourceCount": 13,
-  "liveEventCount": 76,
+  "sourceCount": 15,
+  "liveEventCount": 84,
   "fallbackEventCount": 0,
   "errors": [],
   "sources": [
@@ -20,9 +20,9 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 14,
+      "liveEvents": 19,
       "fallbackEvents": 0,
-      "eventCount": 14,
+      "eventCount": 19,
       "fetches": [
         {
           "url": "https://chipublib.bibliocommons.com/v2/events?audiences=53f250153860d10000000010",
@@ -44,9 +44,9 @@
       "metroId": "chicago",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 14,
+      "liveEvents": 16,
       "fallbackEvents": 0,
-      "eventCount": 14,
+      "eventCount": 16,
       "fetches": [
         {
           "url": "https://www.chicagoparkdistrict.com/events?field_event_category_target_id=766&field_location_target_id=All&field_community_area_target_id=All&field_zip_code_target_id=All&title=&field_date_value=&field_age_range_target_id=All",
@@ -93,7 +93,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 34
+      "rejectedLiveEvents": 38
     },
     {
       "id": "chicago-museum-family",
@@ -117,7 +117,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; charset=utf-8",
-      "rejectedLiveEvents": 34
+      "rejectedLiveEvents": 33
     },
     {
       "id": "chicago-zoo-family",
@@ -165,6 +165,54 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "dupage-county-fair",
+      "name": "DuPage County Fair",
+      "url": "https://dupagecountyfair.org/",
+      "sourceType": "html",
+      "city": "Wheaton",
+      "metroId": "chicago",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://dupagecountyfair.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "lake-county-fair-il",
+      "name": "Lake County Fair",
+      "url": "https://lcfair.com/",
+      "sourceType": "html",
+      "city": "Grayslake",
+      "metroId": "chicago",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://lcfair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html;charset=utf-8",
       "rejectedLiveEvents": 0
     },
     {

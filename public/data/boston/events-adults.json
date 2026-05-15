@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
   "metroId": "boston",
-  "generatedAt": "2026-05-14T05:04:21.307Z",
+  "generatedAt": "2026-05-15T16:34:25.387Z",
   "source": {
     "name": "Boston event source registry",
     "registryPath": "data/event-sources-boston.json",
-    "sourceCount": 11,
+    "sourceCount": 13,
     "attribution": "Official source pages and configured public event feeds"
   },
   "coverage": {
@@ -20,10 +20,47 @@
       "Quincy",
       "Medford",
       "Waltham",
+      "West Springfield",
+      "Marshfield",
       "Allston",
       "Jamaica Plain"
     ]
   },
-  "count": 0,
-  "events": []
+  "count": 1,
+  "events": [
+    {
+      "id": "marshfield-fair-marshfield-farmers-market-2667456776",
+      "baseId": null,
+      "title": "Marshfield Farmers Market",
+      "description": "Marshfield Farmers Market May 16, 2026 - 10:00 am to 1:00 pm All local produce, grass fed meats, honey, artisan bread, bakery items, select home goods by local artisans. Free Kids’ Activities, live music, SNAP/HIP EBT with matching. Spend $20 EBT Get $10 in farm goods (Meat, Cheese, honey, eggs, maple syrup, produce). Free Talk at 10:30 am. Park by marquee i",
+      "venue": "Marshfield Fair",
+      "city": "Marshfield",
+      "neighborhood": "Marshfield",
+      "lat": 42.0918,
+      "lon": -70.7092,
+      "category": "Festival",
+      "daysOfWeek": [
+        6
+      ],
+      "timeWindow": "Morning",
+      "startDateTime": "2026-05-16T14:00:00.000Z",
+      "endDateTime": "2026-05-16T15:00:00.000Z",
+      "ageBands": [
+        "school-age"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "cost": "Free",
+      "url": "https://marshfieldfair.org/event/marshfield-farmers-market-3/2026-05-16/",
+      "sourceUrl": "https://marshfieldfair.org/",
+      "sourceId": "marshfield-fair",
+      "sourceName": "Marshfield Fair",
+      "sourceMode": "html",
+      "extractionMethod": "html",
+      "verified": false,
+      "fetchedAt": "2026-05-15T16:34:25.387Z",
+      "metroId": "boston"
+    }
+  ]
 }

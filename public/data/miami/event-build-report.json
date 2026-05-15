@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "miami",
-  "generatedAt": "2026-05-14T05:03:54.951Z",
+  "generatedAt": "2026-05-15T16:33:37.812Z",
   "registryPath": "data/event-sources-miami.json",
   "outputPath": "public/data/miami/events.json",
   "eventCount": 34,
   "adultsEventCount": 48,
-  "sourceCount": 12,
-  "liveEventCount": 57,
+  "sourceCount": 14,
+  "liveEventCount": 58,
   "fallbackEventCount": 8,
   "errors": [],
   "sources": [
@@ -89,9 +89,9 @@
       "metroId": "miami",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 4,
+      "liveEvents": 5,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 5,
       "fetches": [
         {
           "url": "https://www.zoomiami.org/",
@@ -113,9 +113,9 @@
       "metroId": "miami",
       "category": "Ticketed",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -129,6 +129,54 @@
       "rejectedLiveEvents": 0
     },
     {
+      "id": "miami-dade-youth-fair",
+      "name": "Miami-Dade County Youth Fair",
+      "url": "https://www.fairexpo.com/",
+      "sourceType": "html",
+      "city": "Miami",
+      "metroId": "miami",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.fairexpo.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 1
+    },
+    {
+      "id": "south-florida-fair",
+      "name": "South Florida Fair",
+      "url": "https://www.southfloridafair.com/",
+      "sourceType": "html",
+      "city": "West Palm Beach",
+      "metroId": "miami",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.southfloridafair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
       "id": "e11even-miami",
       "name": "E11EVEN Miami",
       "url": "https://11miami.com/events",
@@ -137,9 +185,9 @@
       "metroId": "miami",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 31,
+      "liveEvents": 32,
       "fallbackEvents": 0,
-      "eventCount": 31,
+      "eventCount": 32,
       "fetches": [
         {
           "url": "https://11miami.com/events",
@@ -150,7 +198,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 47
+      "rejectedLiveEvents": 46
     },
     {
       "id": "space-miami",

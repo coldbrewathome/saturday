@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "washington-dc",
-  "generatedAt": "2026-05-14T05:03:07.960Z",
+  "generatedAt": "2026-05-15T16:32:50.947Z",
   "registryPath": "data/event-sources-washington-dc.json",
   "outputPath": "public/data/washington-dc/events.json",
-  "eventCount": 337,
-  "adultsEventCount": 0,
-  "sourceCount": 11,
-  "liveEventCount": 325,
+  "eventCount": 326,
+  "adultsEventCount": 2,
+  "sourceCount": 13,
+  "liveEventCount": 314,
   "fallbackEventCount": 12,
   "errors": [],
   "sources": [
@@ -20,20 +20,20 @@
       "metroId": "washington-dc",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 323,
+      "liveEvents": 310,
       "fallbackEvents": 0,
-      "eventCount": 323,
+      "eventCount": 310,
       "fetches": [
         {
           "url": "https://dclibrary.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=1213; locations=27"
+          "contentType": "application/json; source=communico-events; events=1207; locations=27"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=1213; locations=27",
-      "rejectedLiveEvents": 0
+      "contentType": "application/json; source=communico-events; events=1207; locations=27",
+      "rejectedLiveEvents": 1
     },
     {
       "id": "washington-dc-parks-family",
@@ -128,6 +128,54 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "montgomery-county-ag-fair",
+      "name": "Montgomery County Agricultural Fair",
+      "url": "https://mcagfair.com/",
+      "sourceType": "html",
+      "city": "Gaithersburg",
+      "metroId": "washington-dc",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 2,
+      "fallbackEvents": 0,
+      "eventCount": 2,
+      "fetches": [
+        {
+          "url": "https://mcagfair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 8
+    },
+    {
+      "id": "maryland-state-fair",
+      "name": "Maryland State Fair",
+      "url": "https://marylandstatefair.com/",
+      "sourceType": "html",
+      "city": "Timonium",
+      "metroId": "washington-dc",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://marylandstatefair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
     },
     {

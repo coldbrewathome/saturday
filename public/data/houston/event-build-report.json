@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "houston",
-  "generatedAt": "2026-05-14T05:03:01.341Z",
+  "generatedAt": "2026-05-15T16:32:42.177Z",
   "registryPath": "data/event-sources-houston.json",
   "outputPath": "public/data/houston/events.json",
-  "eventCount": 249,
+  "eventCount": 248,
   "adultsEventCount": 0,
-  "sourceCount": 10,
-  "liveEventCount": 237,
+  "sourceCount": 11,
+  "liveEventCount": 236,
   "fallbackEventCount": 12,
   "errors": [],
   "sources": [
@@ -20,9 +20,9 @@
       "metroId": "houston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 233,
+      "liveEvents": 232,
       "fallbackEvents": 0,
-      "eventCount": 233,
+      "eventCount": 232,
       "fetches": [
         {
           "url": "https://calendar.houstonlibrary.org/calendar/events?cal=-1&cid=-1&d=0000-00-00&inc=0",
@@ -33,7 +33,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 42
+      "rejectedLiveEvents": 40
     },
     {
       "id": "houston-parks-family",
@@ -129,6 +129,30 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "fort-bend-county-fair",
+      "name": "Fort Bend County Fair",
+      "url": "https://www.fortbendcountyfair.com/",
+      "sourceType": "html",
+      "city": "Rosenberg",
+      "metroId": "houston",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.fortbendcountyfair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0
     },
     {

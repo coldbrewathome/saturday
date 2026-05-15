@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "metroId": "dallas-fort-worth",
-  "generatedAt": "2026-05-14T05:02:20.380Z",
+  "generatedAt": "2026-05-15T16:32:31.193Z",
   "registryPath": "data/event-sources-dallas-fort-worth.json",
   "outputPath": "public/data/dallas-fort-worth/events.json",
   "eventCount": 27,
   "adultsEventCount": 0,
-  "sourceCount": 11,
+  "sourceCount": 12,
   "liveEventCount": 15,
   "fallbackEventCount": 12,
   "errors": [],
@@ -129,6 +129,30 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "state-fair-of-texas",
+      "name": "State Fair of Texas",
+      "url": "https://bigtex.com/",
+      "sourceType": "html",
+      "city": "Dallas",
+      "metroId": "dallas-fort-worth",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://bigtex.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
     },
     {

@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "seattle",
-  "generatedAt": "2026-05-14T05:01:55.948Z",
+  "generatedAt": "2026-05-15T16:31:51.804Z",
   "registryPath": "data/event-sources-seattle.json",
   "outputPath": "public/data/seattle/events.json",
-  "eventCount": 250,
-  "adultsEventCount": 47,
-  "sourceCount": 15,
-  "liveEventCount": 251,
+  "eventCount": 236,
+  "adultsEventCount": 45,
+  "sourceCount": 17,
+  "liveEventCount": 237,
   "fallbackEventCount": 0,
   "errors": [],
   "sources": [
@@ -20,9 +20,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 20,
+      "liveEvents": 16,
       "fallbackEvents": 0,
-      "eventCount": 20,
+      "eventCount": 16,
       "fetches": [
         {
           "url": "https://kcls.bibliocommons.com/v2/events?programs=6092fc2d8910133a0055a335",
@@ -44,9 +44,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 151,
+      "liveEvents": 144,
       "fallbackEvents": 0,
-      "eventCount": 151,
+      "eventCount": 144,
       "fetches": [
         {
           "url": "https://www.trumba.com/calendars/kalendaro.json?filterview=SeriesStoryTime",
@@ -57,7 +57,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=UTF-8",
-      "rejectedLiveEvents": 40
+      "rejectedLiveEvents": 46
     },
     {
       "id": "seattle-childrens-museum-calendar",
@@ -68,9 +68,9 @@
       "metroId": "seattle",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 64,
+      "liveEvents": 61,
       "fallbackEvents": 0,
-      "eventCount": 64,
+      "eventCount": 61,
       "fetches": [
         {
           "url": "https://seattlechildrensmuseum.org/calendar/",
@@ -81,7 +81,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 46
+      "rejectedLiveEvents": 49
     },
     {
       "id": "woodland-park-zoo-family",
@@ -201,6 +201,54 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "washington-state-fair",
+      "name": "Washington State Fair",
+      "url": "https://www.thefair.com/",
+      "sourceType": "html",
+      "city": "Puyallup",
+      "metroId": "seattle",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.thefair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "evergreen-state-fair",
+      "name": "Evergreen State Fair",
+      "url": "https://www.evergreenfair.org/",
+      "sourceType": "html",
+      "city": "Monroe",
+      "metroId": "seattle",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.evergreenfair.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0
     },
     {
