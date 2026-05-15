@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "note": "Event sources for Honolulu / Oahu — libraries, museums, parks, festivals.",
+  "defaults": {
+    "windowDays": 30,
+    "audiences": [
+      "all"
+    ],
+    "userAgent": "famhop/0.1 event-ingest"
+  },
+  "coverage": {
+    "cities": [
+      "Honolulu",
+      "Waikiki",
+      "Pearl City",
+      "Aiea",
+      "Kailua",
+      "Kaneohe",
+      "Kapolei",
+      "Ewa Beach",
+      "Mililani",
+      "Haleiwa",
+      "Waipahu",
+      "Pāhoa",
+      "Hilo",
+      "Lihue",
+      "Wailuku",
+      "Lahaina",
+      "Kihei",
+      "Kahului"
+    ]
+  },
+  "sources": [
+    {
+      "id": "hawaii-state-library",
+      "name": "Hawaii State Public Library System",
+      "url": "https://www.librarieshawaii.org/events",
+      "city": "Honolulu",
+      "neighborhood": "Downtown",
+      "category": "Library",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 21.3069,
+      "lon": -157.8583
+    },
+    {
+      "id": "bishop-museum",
+      "name": "Bishop Museum",
+      "url": "https://www.bishopmuseum.org/events/",
+      "city": "Honolulu",
+      "neighborhood": "Kalihi",
+      "category": "Museum",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 21.3333,
+      "lon": -157.8718
+    },
+    {
+      "id": "honolulu-museum-art",
+      "name": "Honolulu Museum of Art",
+      "url": "https://honolulumuseum.org/events/",
+      "city": "Honolulu",
+      "neighborhood": "Makiki",
+      "category": "Museum",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 21.3042,
+      "lon": -157.8483
+    },
+    {
+      "id": "honolulu-zoo",
+      "name": "Honolulu Zoo",
+      "url": "https://www.honoluluzoo.org/experiences-events/",
+      "city": "Honolulu",
+      "neighborhood": "Waikiki",
+      "category": "Zoo",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 21.2711,
+      "lon": -157.8222
+    },
+    {
+      "id": "hawaii-childrens-discovery",
+      "name": "Hawaii Children's Discovery Center",
+      "url": "https://discoverycenterhawaii.org/events/",
+      "city": "Honolulu",
+      "neighborhood": "Kakaako",
+      "category": "Museum",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 21.2975,
+      "lon": -157.8625
+    },
+    {
+      "id": "waikiki-aquarium",
+      "name": "Waikiki Aquarium",
+      "url": "https://www.waikikiaquarium.org/experience/events/",
+      "city": "Honolulu",
+      "neighborhood": "Waikiki",
+      "category": "Zoo",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 21.2658,
+      "lon": -157.8214
+    },
+    {
+      "id": "iolani-palace",
+      "name": "Iolani Palace",
+      "url": "https://www.iolanipalace.org/events/",
+      "city": "Honolulu",
+      "neighborhood": "Downtown",
+      "category": "Museum",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 21.3067,
+      "lon": -157.8589
+    },
+    {
+      "id": "kualoa-ranch",
+      "name": "Kualoa Ranch",
+      "url": "https://www.kualoa.com/activities/",
+      "city": "Kaneohe",
+      "neighborhood": "Kualoa",
+      "category": "Farm",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 21.5216,
+      "lon": -157.8372
+    }
+  ]
+}

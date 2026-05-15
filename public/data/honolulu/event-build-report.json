@@ -1,0 +1,298 @@
+{
+  "schemaVersion": 1,
+  "metroId": "honolulu",
+  "generatedAt": "2026-05-15T21:47:36.648Z",
+  "registryPath": "data/event-sources-honolulu.json",
+  "outputPath": "public/data/honolulu/events.json",
+  "eventCount": 6,
+  "adultsEventCount": 1,
+  "sourceCount": 12,
+  "liveEventCount": 7,
+  "fallbackEventCount": 0,
+  "errors": [],
+  "sources": [
+    {
+      "id": "hawaii-state-library",
+      "name": "Hawaii State Public Library System",
+      "url": "https://www.librarieshawaii.org/events",
+      "sourceType": "html",
+      "city": "Honolulu",
+      "metroId": "honolulu",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 6,
+      "fallbackEvents": 0,
+      "eventCount": 6,
+      "fetches": [
+        {
+          "url": "https://www.librarieshawaii.org/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 6
+    },
+    {
+      "id": "bishop-museum",
+      "name": "Bishop Museum",
+      "url": "https://www.bishopmuseum.org/events/",
+      "sourceType": "html",
+      "city": "Honolulu",
+      "metroId": "honolulu",
+      "category": "Museum",
+      "status": "blocked",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.bishopmuseum.org/events/",
+          "status": "blocked",
+          "reason": "challenge page returned instead of event content",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "reason": "challenge page returned instead of event content",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "id": "honolulu-museum-art",
+      "name": "Honolulu Museum of Art",
+      "url": "https://honolulumuseum.org/events/",
+      "sourceType": "html",
+      "city": "Honolulu",
+      "metroId": "honolulu",
+      "category": "Museum",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://honolulumuseum.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "honolulu-zoo",
+      "name": "Honolulu Zoo",
+      "url": "https://www.honoluluzoo.org/experiences-events/",
+      "sourceType": "html",
+      "city": "Honolulu",
+      "metroId": "honolulu",
+      "category": "Zoo",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.honoluluzoo.org/experiences-events/",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 404,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "id": "hawaii-childrens-discovery",
+      "name": "Hawaii Children's Discovery Center",
+      "url": "https://discoverycenterhawaii.org/events/",
+      "sourceType": "html",
+      "city": "Honolulu",
+      "metroId": "honolulu",
+      "category": "Museum",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://discoverycenterhawaii.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "waikiki-aquarium",
+      "name": "Waikiki Aquarium",
+      "url": "https://www.waikikiaquarium.org/experience/events/",
+      "sourceType": "html",
+      "city": "Honolulu",
+      "metroId": "honolulu",
+      "category": "Zoo",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.waikikiaquarium.org/experience/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "iolani-palace",
+      "name": "Iolani Palace",
+      "url": "https://www.iolanipalace.org/events/",
+      "sourceType": "html",
+      "city": "Honolulu",
+      "metroId": "honolulu",
+      "category": "Museum",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.iolanipalace.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "kualoa-ranch",
+      "name": "Kualoa Ranch",
+      "url": "https://www.kualoa.com/activities/",
+      "sourceType": "html",
+      "city": "Kaneohe",
+      "metroId": "honolulu",
+      "category": "Farm",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.kualoa.com/activities/",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 404,
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "id": "the-republik-hi",
+      "name": "The Republik",
+      "url": "https://jointherepublik.com/events/",
+      "sourceType": "html",
+      "city": "Honolulu",
+      "metroId": "honolulu",
+      "category": "Music",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://jointherepublik.com/events/",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 404,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "id": "blue-note-hawaii",
+      "name": "Blue Note Hawaii",
+      "url": "https://www.bluenotehawaii.com/events",
+      "sourceType": "html",
+      "city": "Honolulu",
+      "metroId": "honolulu",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://www.bluenotehawaii.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "hawaii-theatre",
+      "name": "Hawaii Theatre Center",
+      "url": "https://www.hawaiitheatre.com/events/",
+      "sourceType": "html",
+      "city": "Honolulu",
+      "metroId": "honolulu",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.hawaiitheatre.com/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "aloha-comedy",
+      "name": "Aloha Comedy Club",
+      "url": "https://www.alohacomedyclub.com/calendar",
+      "sourceType": "html",
+      "city": "Honolulu",
+      "metroId": "honolulu",
+      "category": "Comedy",
+      "status": "fetch-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.alohacomedyclub.com/calendar",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ],
+      "reason": "fetch failed"
+    }
+  ]
+}

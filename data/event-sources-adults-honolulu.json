@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "note": "Adult-audience event sources for Honolulu — music venues, bars, comedy.",
+  "defaults": {
+    "windowDays": 30,
+    "audiences": ["adults"],
+    "userAgent": "nighthop/0.1 event-ingest"
+  },
+  "coverage": {
+    "cities": [
+      "Honolulu",
+      "Waikiki",
+      "Kailua",
+      "Chinatown",
+      "Kakaako"
+    ]
+  },
+  "sources": [
+    {
+      "id": "the-republik-hi",
+      "name": "The Republik",
+      "url": "https://jointherepublik.com/events/",
+      "city": "Honolulu",
+      "neighborhood": "Kakaako",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 21.2972,
+      "lon": -157.8597
+    },
+    {
+      "id": "blue-note-hawaii",
+      "name": "Blue Note Hawaii",
+      "url": "https://www.bluenotehawaii.com/events",
+      "city": "Honolulu",
+      "neighborhood": "Waikiki",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 21.2866,
+      "lon": -157.8358
+    },
+    {
+      "id": "hawaii-theatre",
+      "name": "Hawaii Theatre Center",
+      "url": "https://www.hawaiitheatre.com/events/",
+      "city": "Honolulu",
+      "neighborhood": "Chinatown",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 21.3107,
+      "lon": -157.8631
+    },
+    {
+      "id": "aloha-comedy",
+      "name": "Aloha Comedy Club",
+      "url": "https://www.alohacomedyclub.com/calendar",
+      "city": "Honolulu",
+      "neighborhood": "Waikiki",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 21.2793,
+      "lon": -157.8292
+    }
+  ]
+}
