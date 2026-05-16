@@ -16,24 +16,42 @@ import {
   loadMetroConfig,
   metroDataFile,
 } from "./metroConfig.mjs";
+import {
+  defaultLocale,
+  supportedLocales,
+  localeConfig,
+  routeMap,
+  subMetroCities,
+  subMetroLabels,
+  getAlternateLinks,
+  findRouteKey,
+  t,
+} from "../i18n/config.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const DIST = path.join(ROOT, "dist");
 const DATA = path.join(ROOT, "public", "data");
 const metroConfig = loadMetroConfig();
+const BUILD_ENV = readBuildEnv();
+
+function envValue(name, fallback = "") {
+  return process.env[name] || BUILD_ENV[name] || fallback;
+}
 
 // SEO output adapts to the same VITE_APP_AUDIENCE the SPA reads. Defaults
 // to the kids brand. Override with VITE_APP_AUDIENCE=adults at build time
 // (the `npm run build:adults` script sets it via .env.adults + Vite).
-const APP_AUDIENCE = process.env.VITE_APP_AUDIENCE || "kids";
+const APP_AUDIENCE = envValue("VITE_APP_AUDIENCE", "kids");
 const IS_ADULTS = APP_AUDIENCE === "adults";
 
-const SITE = process.env.VITE_APP_SITE_URL?.replace(/\/$/, "") ||
+const SITE = envValue("VITE_APP_SITE_URL").replace(/\/$/, "") ||
   (IS_ADULTS ? "https://nighthop.pages.dev" : "https://famhop.com");
-const BRAND = process.env.VITE_APP_BRAND || (IS_ADULTS ? "NightHop" : "FamHop");
+const BRAND = envValue("VITE_APP_BRAND", IS_ADULTS ? "NightHop" : "FamHop");
 const BRAND_TAG = IS_ADULTS ? "night-out planner" : "family weekend planner";
-const OG_IMAGE = process.env.VITE_APP_OG_IMAGE || `${SITE}/og-image.png`;
+const OG_IMAGE = envValue("VITE_APP_OG_IMAGE", `${SITE}/og-image.png`);
+const POLLS_API = envValue("VITE_POLLS_API").replace(/\/$/, "");
+const GOOGLE_CLIENT_ID = envValue("VITE_GOOGLE_CLIENT_ID");
 const MAX_SPOT_PAGES_PER_METRO = Number(process.env.SEO_MAX_SPOT_PAGES_PER_METRO || 700);
 const SEO_PINNED_PATHS = readJson(path.join(ROOT, "data", "seo-pinned-paths.json")) || {};
 const FREE_CATEGORIES = new Set(["Library", "Park"]);
@@ -124,17 +142,48 @@ const CATEGORY_PAGES = [
 ];
 
 const PAGE_CSS = `
-:root{--bg:#FFF6EE;--ink:#22221f;--muted:#5b5b54;--brand:#f59e0b;--brand-strong:#d97706;--card:#fff;--line:rgba(34,34,31,.08);}
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap");
+:root{--font-ui:"Plus Jakarta Sans",Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--font-display:"Bricolage Grotesque","Plus Jakarta Sans",Inter,ui-sans-serif,system-ui,sans-serif;--bg:#faf5eb;--surface:#fff;--surface-strong:#f2ead9;--line:#e8dfca;--ink:#1b1916;--muted:#6b7280;--blue:#5a7896;--accent:#dd6a1a;--accent-strong:#b8541a;--brand:var(--accent);--brand-strong:var(--accent-strong);--card:var(--surface);--glass-bg:rgba(250,245,235,.82);--glass-blur:blur(20px) saturate(160%);--glass-border:.5px solid rgba(255,255,255,.6);--glass-shadow:0 6px 24px rgba(0,0,0,.08);--glass-radius:16px;--overlay-gap:16px;}
 *{box-sizing:border-box}
-body{margin:0;font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);}
+body{margin:0;font:16px/1.55 var(--font-ui);background:var(--bg);color:var(--ink);}
+button,input,select,textarea{font:inherit}
 a{color:var(--brand);text-decoration:none}
 a:hover{text-decoration:underline}
-.famhop-topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;border-bottom:1px solid var(--line);background:#fff;}
-.famhop-brand{font-weight:800;font-size:20px;color:var(--ink);}
-.metro-links{display:flex;align-items:center;justify-content:flex-end;gap:14px;flex-wrap:wrap;}
-.metro-links a{font-weight:600;color:var(--ink);font-size:14px;}
-.metro-links a[aria-current="page"]{color:var(--brand-strong);}
-.famhop-page{max-width:780px;margin:0 auto;padding:32px 24px 56px;}
+.famhop-topbar{align-items:center;background:var(--glass-bg);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border:var(--glass-border);border-radius:var(--glass-radius);box-shadow:0 1px 0 rgba(255,255,255,.6) inset,var(--glass-shadow);column-gap:12px;display:flex;flex-wrap:nowrap;left:var(--overlay-gap);margin:0 auto 16px;max-width:1500px;min-height:62px;padding:8px 12px;position:fixed;right:var(--overlay-gap);row-gap:0;top:var(--overlay-gap);z-index:500;}
+.famhop-brand{align-items:center;color:var(--ink);display:flex;flex:0 0 auto;font-weight:800;gap:8px;margin-right:4px;}
+.famhop-brand:hover{text-decoration:none;}
+.famhop-mark{align-items:center;display:inline-flex;flex:0 0 auto;justify-content:center;}
+.famhop-wordmark{color:var(--ink);font-family:var(--font-display);font-size:1.15rem;font-weight:700;letter-spacing:-.02em;line-height:1;margin:0;}
+.famhop-metro{align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;display:inline-flex;flex:0 0 auto;gap:6px;padding:7px 10px 7px 12px;}
+.famhop-metro-prefix{color:var(--muted);font-size:.78rem;font-weight:500;line-height:normal;}
+.famhop-metro select{appearance:none;-webkit-appearance:none;background-color:transparent;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='%236b7280' d='M0 0h10L5 6z'/></svg>");background-position:right 0 center;background-repeat:no-repeat;border:0;color:var(--ink);cursor:pointer;font:inherit;font-family:var(--font-display);font-size:.88rem;font-weight:700;letter-spacing:-.01em;line-height:normal;outline:0;padding:0 16px 0 0;}
+.famhop-tabs{align-items:center;background:var(--surface-strong);border-radius:999px;display:inline-flex;flex:0 0 auto;gap:2px;padding:3px;}
+.famhop-tabs a{align-items:center;background:transparent;border:0;border-radius:999px;color:var(--muted);display:inline-flex;font:600 .78rem/1 var(--font-ui);gap:5px;padding:6px 12px;text-decoration:none;transition:background .15s ease,color .15s ease;}
+.famhop-tabs a:hover{color:var(--ink);text-decoration:none;}
+.famhop-tabs a[aria-current="page"]{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.06);color:var(--ink);}
+.famhop-tabs svg{height:14px;width:14px;}
+.famhop-tabs .tab-count{background:rgba(0,0,0,.06);border-radius:999px;color:var(--muted);font-size:.72rem;font-style:normal;font-weight:700;margin-left:2px;padding:1px 6px;}
+.famhop-tabs a[aria-current="page"] .tab-count{background:#fdece7;color:var(--brand-strong);}
+.famhop-topbar-spacer{flex:1 1 auto;}
+.famhop-auth{display:flex;flex:0 0 auto;justify-content:flex-end;}
+.famhop-auth-link{align-items:center;background:var(--surface-strong);border:1px solid var(--line);border-radius:999px;color:var(--muted);display:flex;height:40px;justify-content:center;text-decoration:none;width:40px;}
+.famhop-auth-link:hover{border-color:var(--brand);color:var(--brand);text-decoration:none;}
+.famhop-auth-link svg{height:16px;width:16px;}
+.famhop-auth .user-chip{align-items:center;background:#fff;border:1px solid var(--line);border-radius:999px;display:inline-flex;gap:8px;padding:4px 12px 4px 4px;}
+.famhop-auth .user-chip-avatar{background:none;border:0;border-radius:50%;cursor:pointer;display:flex;padding:0;text-decoration:none;}
+.famhop-auth .user-chip-avatar img{border-radius:50%;height:28px;width:28px;}
+.famhop-auth .user-avatar-fallback{align-items:center;background:var(--surface-strong);border:1px solid var(--line);border-radius:50%;color:var(--muted);display:flex;height:28px;justify-content:center;width:28px;}
+.famhop-auth .user-avatar-fallback svg{height:14px;width:14px;}
+.famhop-auth .user-name{color:var(--ink);font-size:.86rem;font-weight:800;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.famhop-auth .text-button{align-items:center;background:transparent;border:0;color:var(--blue);display:inline-flex;font-size:.78rem;font-weight:800;gap:6px;justify-content:center;padding:0;text-decoration:none;}
+.famhop-auth .text-button:hover{color:var(--brand);text-decoration:none;}
+.famhop-auth .sync-pill{background:#fdece7;border-radius:999px;color:var(--brand-strong);font-size:.7rem;font-style:normal;font-weight:900;letter-spacing:.04em;padding:2px 6px;}
+.famhop-auth .signin-wrap{align-items:center;display:flex;justify-content:flex-end;min-height:40px;}
+.famhop-auth .signin-slot{align-items:center;display:inline-flex;min-height:36px;}
+.famhop-auth .signin-wrap .user-avatar-fallback{border-radius:999px;display:none;height:40px;text-decoration:none;width:40px;}
+.famhop-auth .signin-wrap.no-google .user-avatar-fallback{display:flex;}
+.famhop-auth .signin-error{color:var(--brand-strong);font-size:.72rem;font-weight:800;margin-left:8px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.famhop-page{max-width:780px;margin:0 auto;padding:108px 24px 56px;}
 .famhop-page h1{font-size:34px;line-height:1.18;margin:8px 0 18px;letter-spacing:-.01em;}
 .eyebrow{color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-size:12px;font-weight:600;margin:0 0 4px;}
 .lede{font-size:18px;color:#33332e;margin:8px 0 22px;}
@@ -160,9 +209,39 @@ a:hover{text-decoration:underline}
 .card-list li a{color:var(--ink);}
 .card-list li a:hover strong{color:var(--brand);}
 .card-list li p{margin:6px 0 0;color:var(--muted);font-size:14px;}
+.guide-summary{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin:20px 0 24px;box-shadow:0 12px 30px rgba(34,34,31,.05);}
+.guide-summary h2,.guide-day h2{font-size:22px;line-height:1.25;margin:0 0 10px;}
+.guide-summary p{margin:0 0 12px;color:var(--muted);}
+.guide-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0 0;}
+.guide-fact{background:#fff8ec;border:1px solid rgba(245,158,11,.22);border-radius:12px;padding:12px;}
+.guide-fact strong{display:block;font-size:22px;line-height:1;color:var(--brand-strong);}
+.guide-fact span{display:block;margin-top:5px;color:var(--muted);font-size:13px;font-weight:700;}
+.guide-highlights{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:10px;}
+.guide-highlights li{border-top:1px solid var(--line);padding-top:10px;}
+.guide-highlights a{color:var(--ink);font-weight:800;}
+.guide-day{margin:30px 0 0;}
+.guide-day-note{color:var(--muted);font-size:14px;margin:0 0 12px;}
+.timeline-list{list-style:none;margin:0;padding:0;display:grid;gap:12px;}
+.timeline-card{background:var(--card);border:1px solid var(--line);border-radius:16px;display:grid;grid-template-columns:92px minmax(0,1fr);gap:16px;padding:16px;box-shadow:0 10px 28px rgba(34,34,31,.05);}
+.timeline-time{color:var(--brand-strong);font-size:15px;font-weight:900;line-height:1.2;}
+.timeline-time span{display:block;color:var(--muted);font-size:12px;font-weight:800;margin-top:4px;}
+.timeline-card h3{font-size:18px;line-height:1.25;margin:4px 0 6px;}
+.timeline-card h3 a{color:var(--ink);}
+.timeline-meta{color:var(--muted);font-size:14px;font-weight:700;margin:0 0 8px;}
+.timeline-desc{color:#3b3b35;font-size:14px;margin:0 0 10px;}
+.timeline-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;}
+.timeline-links a{font-size:14px;font-weight:800;}
+.event-chip{display:inline-block;background:#fff3d5;border:1px solid rgba(245,158,11,.3);border-radius:999px;color:#8a4f00;font-size:11px;font-weight:900;letter-spacing:.07em;padding:3px 8px;text-transform:uppercase;}
+.famhop-lang-switcher{display:flex;gap:4px;align-items:center;justify-content:flex-end;max-width:1500px;margin:78px auto 0;padding:0 var(--overlay-gap);font-size:13px;font-weight:600;}
+.famhop-lang-switcher a{color:var(--muted);padding:4px 8px;border-radius:6px;text-decoration:none;}
+.famhop-lang-switcher a:hover{color:var(--ink);background:var(--surface-strong);}
+.famhop-lang-switcher a[aria-current="page"]{color:var(--ink);background:var(--surface);border:1px solid var(--line);}
+@media (max-width:820px){.famhop-lang-switcher{margin-top:66px;padding:0 12px;}}
 .famhop-footer{border-top:1px solid var(--line);padding:24px 28px;color:var(--muted);font-size:13px;}
 .famhop-footer p{margin:0 0 4px;}
-@media (max-width:640px){.famhop-topbar{align-items:flex-start;gap:12px;flex-direction:column;}.metro-links{justify-content:flex-start;gap:10px 12px;}.famhop-page{padding:22px 18px 40px;}.famhop-page h1{font-size:28px;}}
+@media (max-width:820px){.famhop-topbar{column-gap:5px;flex-wrap:nowrap;left:12px;min-height:0;padding:8px;right:12px;row-gap:0;}.famhop-brand{gap:5px;margin-right:0;min-width:0;order:1;}.famhop-mark svg{height:20px;width:20px;}.famhop-wordmark{display:block;font-size:.9rem;letter-spacing:0;max-width:none;overflow:visible;white-space:nowrap;}.famhop-metro{flex:1 1 72px;max-width:none;min-width:72px;order:2;padding:5px 6px 5px 7px;}.famhop-metro-prefix{display:none;}.famhop-metro select{font-family:var(--font-ui);font-size:.76rem;max-width:none;min-width:0;overflow:hidden;padding-right:11px;text-overflow:ellipsis;width:100%;}.famhop-tabs{flex:0 0 88px;margin-left:0;order:3;width:88px;}.famhop-tabs a{font-size:0;gap:0;padding:5px 6px;}.famhop-tabs svg{height:14px;width:14px;}.famhop-tabs .tab-count{display:none;}.famhop-topbar-spacer{display:none;}.famhop-auth{flex:0 0 40px;justify-content:flex-end;margin-left:0;order:4;width:40px;}.famhop-auth .user-chip{gap:0;padding:0;}.famhop-auth .user-name,.famhop-auth .sync-pill,.famhop-auth .text-button,.famhop-auth .signin-error{display:none;}.famhop-auth .signin-wrap{min-height:32px;}.famhop-auth .signin-slot{min-height:32px;}.famhop-auth .user-chip-avatar,.famhop-auth .user-chip-avatar img,.famhop-auth .user-avatar-fallback{height:32px;width:32px;}.famhop-auth .user-avatar-fallback svg{height:16px;width:16px;}}
+@media (max-width:640px){.famhop-page{padding:100px 18px 40px;}.famhop-page h1{font-size:28px;}.timeline-card{grid-template-columns:1fr;gap:8px}.timeline-time{display:flex;gap:8px;align-items:baseline}.timeline-time span{margin-top:0}}
+@media (max-width:370px){.famhop-topbar{column-gap:4px;left:10px;right:10px;}.famhop-wordmark{font-size:.84rem;max-width:none;}.famhop-metro{flex-basis:68px;min-width:68px;padding-left:5px;padding-right:5px;}.famhop-metro select{font-size:.72rem;}.famhop-tabs{flex-basis:76px;width:76px;}.famhop-tabs a{padding:5px 4px;}}
 `;
 
 if (!fs.existsSync(DIST)) {
@@ -205,10 +284,12 @@ for (const metro of metroConfig.metros) {
   totalWeekendPages += wroteThisWeekend ? 1 : 0;
 }
 
+const totalLocalizedPages = IS_ADULTS ? 0 : generateLocalizedWeekendPages();
+
 writeSitemap(sitemapEntries);
 
 console.log(
-  `[seo] wrote ${totalSpotPages} spot pages, ${totalEventPages} event pages, ${totalCityPages} city pages, ${totalCategoryPages} category pages, ${totalWeekendPages} this-weekend pages, sitemap with ${sitemapEntries.length} URLs.`,
+  `[seo] wrote ${totalSpotPages} spot pages, ${totalEventPages} event pages, ${totalCityPages} city pages, ${totalCategoryPages} category pages, ${totalWeekendPages} this-weekend pages, ${totalLocalizedPages} localized i18n pages, sitemap with ${sitemapEntries.length} URLs.`,
 );
 
 function metroDataPath(metro, key) {
@@ -251,6 +332,330 @@ function metroLinksHtml() {
       return `<a href="${esc(href)}"${current}>${label}</a>`;
     })
     .join("");
+}
+
+function metroHrefFor(metro, rel = "") {
+  const prefix = String(metro.canonicalPath || "").replace(/\/+$/, "");
+  const suffix = String(rel || "").replace(/^\/+/, "");
+  const pathname = suffix ? `${prefix}/${suffix}` : `${prefix || ""}/`;
+  return `${SITE}${pathname}`.replace(/(?<!:)\/{2,}/g, "/");
+}
+
+function metroSelectOptionsHtml(rel = "") {
+  return metroConfig.metros
+    .map((metro) => {
+      const label = esc(metro.label || metro.seoName || metro.id);
+      const selected = metro.id === activeMetro.id ? " selected" : "";
+      return `<option value="${esc(metroHrefFor(metro, rel))}"${selected}>${label}</option>`;
+    })
+    .join("");
+}
+
+function topbarIcon(name) {
+  const paths = {
+    explore: `<path d="M12 21s7-6.2 7-12A7 7 0 0 0 5 9c0 5.8 7 12 7 12Z"></path><circle cx="12" cy="9" r="2.5"></circle>`,
+    guide: `<circle cx="12" cy="12" r="10"></circle><path d="M12 6v6h4"></path>`,
+    plans: `<path d="M8 6h13"></path><path d="M8 12h13"></path><path d="M8 18h13"></path><path d="M3 6h.01"></path><path d="M3 12h.01"></path><path d="M3 18h.01"></path>`,
+    users: `<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>`,
+  };
+  return `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${paths[name] || ""}</svg>`;
+}
+
+function brandMarkSvg() {
+  return `<svg width="22" height="22" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="var(--brand)"></rect><path d="M 14 46 Q 32 18 50 46" stroke="#fff" stroke-width="3" stroke-dasharray="3 4" stroke-linecap="round" fill="none"></path><circle cx="14" cy="46" r="3.5" fill="#fff"></circle><circle cx="50" cy="46" r="3.5" fill="#fff"></circle><circle cx="32" cy="24" r="9" fill="#fff"></circle><circle cx="29.5" cy="21.5" r="2.4" fill="var(--brand)" opacity=".55"></circle></svg>`;
+}
+
+function activeMetroStorageKey(suffix) {
+  return activeMetro.id === "bay-area"
+    ? `saturday.${suffix}`
+    : `saturday.${activeMetro.id}.${suffix}`;
+}
+
+function renderStaticTopbar({ guideCurrent = false } = {}) {
+  const guideRel = "this-weekend/";
+  return `<header class="famhop-topbar">
+  <a class="famhop-brand" href="${metroPath("")}" aria-label="${esc(BRAND)} home">
+    <span class="famhop-mark">${brandMarkSvg()}</span>
+    <span class="famhop-wordmark">${esc(BRAND)}</span>
+  </a>
+  <label class="famhop-metro" title="Browsing ${esc(activeMetro.label || metroLabel())}">
+    <span class="famhop-metro-prefix">in</span>
+    <select aria-label="Choose metro area" onchange="if(this.value) window.location.href=this.value">
+      ${metroSelectOptionsHtml(guideCurrent ? guideRel : "")}
+    </select>
+  </label>
+  <nav class="famhop-tabs" aria-label="View">
+    <a href="${metroPath("")}#/browse">${topbarIcon("explore")}<span>Explore</span></a>
+    <a href="${metroPath(guideRel)}"${guideCurrent ? ` aria-current="page"` : ""}>${topbarIcon("guide")}<span>Guide</span></a>
+    <a href="${metroPath("")}#/plans">${topbarIcon("plans")}<span>Plans</span><em class="tab-count" data-static-plan-count>0</em></a>
+  </nav>
+  <div class="famhop-topbar-spacer"></div>
+  <div class="famhop-auth" data-static-auth data-app-href="${metroPath("")}">
+    <div class="signin-wrap" data-static-signin>
+      <div class="signin-slot" data-static-signin-slot></div>
+      <a class="user-avatar-fallback" href="${metroPath("")}" title="Sign in with Google" aria-label="Open ${esc(BRAND)} app to sign in">${topbarIcon("users")}</a>
+      <span class="signin-error" data-static-signin-error hidden></span>
+    </div>
+  </div>
+</header>`;
+}
+
+function renderStaticAuthScript() {
+  const usersIcon = topbarIcon("users");
+  const plansKey = activeMetroStorageKey("plans");
+  return `<script>
+(() => {
+  const sessionKey = "saturday.session";
+  const plansKey = ${JSON.stringify(plansKey)};
+  const apiBase = ${JSON.stringify(POLLS_API)};
+  const googleClientId = ${JSON.stringify(GOOGLE_CLIENT_ID)};
+  const root = document.querySelector("[data-static-auth]");
+  const countEl = document.querySelector("[data-static-plan-count]");
+  if (!root) return;
+  const signedOutHtml = root.innerHTML;
+  const usersIcon = ${JSON.stringify(usersIcon)};
+  let gisPromise = null;
+
+  function readJsonStorage(storageKey) {
+    try {
+      const raw = window.localStorage.getItem(storageKey);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function writeSession(session) {
+    try {
+      window.localStorage.setItem(sessionKey, JSON.stringify(session));
+    } catch {
+      // ignore storage errors
+    }
+  }
+
+  function readSession() {
+    return readJsonStorage(sessionKey);
+  }
+
+  function setPlanCount(count) {
+    if (!countEl) return;
+    const value = Number.isFinite(count) && count > 0 ? count : 0;
+    countEl.textContent = String(value);
+  }
+
+  function updatePlanCountFromLocal() {
+    const plans = readJsonStorage(plansKey);
+    setPlanCount(Array.isArray(plans) ? plans.length : 0);
+  }
+
+  async function refreshPlanCount(session) {
+    updatePlanCountFromLocal();
+    if (!apiBase || !session?.token) return;
+    try {
+      const response = await fetch(apiBase + "/me/state", {
+        headers: { authorization: "Bearer " + session.token },
+      });
+      if (!response.ok) return;
+      const body = await response.json();
+      const plans = body?.state?.plans;
+      if (!Array.isArray(plans)) return;
+      try {
+        window.localStorage.setItem(plansKey, JSON.stringify(plans));
+      } catch {
+        // ignore storage errors
+      }
+      setPlanCount(plans.length);
+    } catch {
+      // keep the local count if remote sync is unavailable
+    }
+  }
+
+  function setSignInError(message) {
+    const errorEl = root.querySelector("[data-static-signin-error]");
+    if (!errorEl) return;
+    errorEl.textContent = message || "";
+    errorEl.hidden = !message;
+  }
+
+  function loadGoogleIdentity() {
+    if (window.google?.accounts?.id) return Promise.resolve();
+    if (gisPromise) return gisPromise;
+    gisPromise = new Promise((resolve, reject) => {
+      const src = "https://accounts.google.com/gsi/client";
+      const existing = document.querySelector('script[src="' + src + '"]');
+      if (existing) {
+        existing.addEventListener("load", resolve, { once: true });
+        existing.addEventListener("error", () => reject(new Error("Google Identity script failed to load")), { once: true });
+        return;
+      }
+      const script = document.createElement("script");
+      script.src = src;
+      script.async = true;
+      script.defer = true;
+      script.addEventListener("load", resolve, { once: true });
+      script.addEventListener("error", () => reject(new Error("Google Identity script failed to load")), { once: true });
+      document.head.appendChild(script);
+    });
+    return gisPromise;
+  }
+
+  async function googleSignIn(idToken) {
+    const response = await fetch(apiBase + "/auth/google", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ idToken }),
+    });
+    if (!response.ok) throw new Error("Sign-in failed (" + response.status + ")");
+    return response.json();
+  }
+
+  function logoutSession(token) {
+    if (!apiBase || !token) return;
+    fetch(apiBase + "/auth/logout", {
+      method: "POST",
+      headers: { authorization: "Bearer " + token },
+    }).catch(() => {});
+  }
+
+  function setupGoogleSignIn() {
+    const wrap = root.querySelector("[data-static-signin]");
+    const slot = root.querySelector("[data-static-signin-slot]");
+    const fallback = root.querySelector(".signin-wrap .user-avatar-fallback");
+    if (!wrap || !slot) return;
+    if (!googleClientId || !apiBase) {
+      wrap.classList.add("no-google");
+      return;
+    }
+    loadGoogleIdentity()
+      .then(() => {
+        if (!window.google?.accounts?.id) return;
+        window.google.accounts.id.initialize({
+          client_id: googleClientId,
+          callback: async (response) => {
+            try {
+              const result = await googleSignIn(response.credential);
+              const next = {
+                token: result.sessionToken,
+                user: result.user,
+              };
+              writeSession(next);
+              setSignInError("");
+              render();
+            } catch (error) {
+              setSignInError(error instanceof Error ? error.message : "Sign-in failed");
+            }
+          },
+          ux_mode: "popup",
+          use_fedcm_for_button: true,
+          use_fedcm_for_prompt: true,
+          itp_support: true,
+          auto_select: false,
+          cancel_on_tap_outside: false,
+        });
+        slot.innerHTML = "";
+        window.google.accounts.id.renderButton(slot, {
+          theme: "outline",
+          size: "medium",
+          type: "icon",
+          shape: "circle",
+        });
+      })
+      .catch((error) => {
+        wrap.classList.add("no-google");
+        setSignInError(error instanceof Error ? error.message : "Sign-in unavailable");
+      });
+    if (fallback) {
+      fallback.addEventListener("click", (event) => {
+        const button = slot.querySelector('[role="button"], iframe, div[tabindex]');
+        if (button) {
+          event.preventDefault();
+          button.click();
+          return;
+        }
+        if (window.google?.accounts?.id?.prompt) {
+          event.preventDefault();
+          window.google.accounts.id.prompt();
+        }
+      });
+    }
+  }
+
+  function signOut() {
+    const session = readSession();
+    logoutSession(session?.token);
+    try {
+      window.google?.accounts?.id?.disableAutoSelect?.();
+      window.localStorage.removeItem(sessionKey);
+    } catch {
+      // ignore storage errors
+    }
+    render();
+  }
+
+  function render() {
+    const session = readSession();
+    refreshPlanCount(session);
+    const user = session?.user;
+    if (!user || (!user.name && !user.email)) {
+      root.innerHTML = signedOutHtml;
+      setupGoogleSignIn();
+      return;
+    }
+
+    const name = user.name || user.email;
+    root.textContent = "";
+
+    const chip = document.createElement("div");
+    chip.className = "user-chip";
+    if (user.email) chip.title = user.email;
+
+    const avatar = document.createElement("button");
+    avatar.type = "button";
+    avatar.className = "user-chip-avatar";
+    avatar.title = \`Signed in as \${name} - tap to sign out\`;
+    avatar.setAttribute("aria-label", \`Signed in as \${name}. Sign out\`);
+    avatar.addEventListener("click", signOut);
+
+    if (user.picture) {
+      const img = document.createElement("img");
+      img.src = user.picture;
+      img.alt = "";
+      img.referrerPolicy = "no-referrer";
+      avatar.appendChild(img);
+    } else {
+      const fallback = document.createElement("span");
+      fallback.className = "user-avatar-fallback";
+      fallback.innerHTML = usersIcon;
+      avatar.appendChild(fallback);
+    }
+
+    const label = document.createElement("span");
+    label.className = "user-name";
+    label.textContent = name;
+
+    const sync = document.createElement("em");
+    sync.className = "sync-pill sync-synced";
+    sync.title = "Saved + plans synced to your account";
+    sync.textContent = "✓";
+
+    const signOutButton = document.createElement("button");
+    signOutButton.type = "button";
+    signOutButton.className = "text-button";
+    signOutButton.title = "Sign out";
+    signOutButton.textContent = "Sign out";
+    signOutButton.addEventListener("click", signOut);
+
+    chip.append(avatar, label, sync, signOutButton);
+    root.appendChild(chip);
+  }
+
+  render();
+  window.addEventListener("storage", (event) => {
+    if (event.key === sessionKey) render();
+    if (event.key === plansKey) updatePlanCountFromLocal();
+  });
+})();
+</script>`;
 }
 
 function metroText(text) {
@@ -442,7 +847,7 @@ function replaceMetroShellCopy(html, title, description) {
         <section>
           <h2>Browse ${esc(area)}</h2>
           <p>
-            <a href="${metroPath("this-weekend/")}">Things to do this weekend</a>,
+            <a href="${metroPath("this-weekend/")}">Weekend guide</a>,
             <a href="${metroPath("category/library/")}">library events</a>,
             <a href="${metroPath("category/museum/")}">museums</a>,
             <a href="${metroPath("category/park/")}">parks and outdoors</a>, and
@@ -796,6 +1201,7 @@ function buildEventJsonLd(event, canonical) {
       "@type": "Offer",
       url: event.url,
       priceCurrency: "USD",
+      availability: "https://schema.org/InStock",
     };
     if (free) {
       offers.price = "0";
@@ -1041,7 +1447,7 @@ function generateCategoryPages(spotItems, eventItems) {
 
     const body = `
       <p class="lede">${esc(description)}</p>
-      <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a day with ${BRAND}</a> <a class="cta-secondary" href="${metroPath("this-weekend/")}">This weekend's events</a></p>
+      <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a day with ${BRAND}</a> <a class="cta-secondary" href="${metroPath("this-weekend/")}">Weekend guide</a></p>
       ${eventsList}
       ${spotsList}
     `;
@@ -1095,22 +1501,14 @@ function generateCategoryPages(spotItems, eventItems) {
 function generateThisWeekendPage(eventItems) {
   const eventSlugLookup = buildEventSlugLookup(eventItems);
   const now = new Date();
-  // Snap to the upcoming Saturday/Sunday in the metro timezone. If today is Sat or
-  // Sun, "this weekend" means today + tomorrow; otherwise it means the next
-  // weekend (Sat 00:00 → Sun 23:59 Pacific).
-  const dow = now.getDay();
-  const daysToSat = dow === 6 ? 0 : (6 - dow + 7) % 7;
-  const sat = new Date(now);
-  sat.setDate(sat.getDate() + daysToSat);
-  sat.setHours(0, 0, 0, 0);
-  const monMidnight = new Date(sat);
-  monMidnight.setDate(sat.getDate() + 2);
+  const weekend = getWeekendDateKeys(now, activeMetro.timezone);
 
   const upcoming = eventItems
     .filter((e) => {
       if (!e.startDateTime) return false;
-      const t = new Date(e.startDateTime).getTime();
-      return Number.isFinite(t) && t >= sat.getTime() && t < monMidnight.getTime();
+      const d = new Date(e.startDateTime);
+      if (!Number.isFinite(d.getTime())) return false;
+      return weekend.keys.has(zonedDateKey(d, activeMetro.timezone));
     })
     .sort((a, b) =>
       (a.startDateTime || "").localeCompare(b.startDateTime || ""),
@@ -1119,56 +1517,111 @@ function generateThisWeekendPage(eventItems) {
   if (upcoming.length === 0) return false;
 
   const canonical = metroUrl("this-weekend/");
-  const weekendLabel = sat.toLocaleDateString("en-US", {
+  const weekendLabel = weekend.saturday.toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",
     day: "numeric",
     timeZone: activeMetro.timezone || "America/Los_Angeles",
   });
-  const title = `Things to do with kids this weekend in ${metroLabel()} — ${BRAND}`;
-  const description = `Family-friendly things to do in ${metroLabel()} this weekend (starting ${weekendLabel}): ${upcoming.length} events including library storytimes, museum free days, festivals, and family activities. Build a 3-stop plan in seconds with ${BRAND}.`.slice(
+  const sundayLabel = weekend.sunday.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    timeZone: activeMetro.timezone || "America/Los_Angeles",
+  });
+  const title = `${metroLabel()} weekend guide: family events for ${weekendLabel} — ${BRAND}`;
+  const description = `A timeline weekend guide to family-friendly events in ${metroLabel()} from ${weekendLabel} through ${sundayLabel}: ${upcoming.length} events with times, venues, details, and official links. Build a 3-stop plan with ${BRAND}.`.slice(
     0,
     300,
   );
 
-  // Group by category for scannability.
-  const byCat = new Map();
+  const byDay = new Map();
   for (const e of upcoming) {
-    const k = e.category || "Other";
-    if (!byCat.has(k)) byCat.set(k, []);
-    byCat.get(k).push(e);
+    const dayKey = zonedDateKey(new Date(e.startDateTime), activeMetro.timezone);
+    if (!byDay.has(dayKey)) byDay.set(dayKey, []);
+    byDay.get(dayKey).push(e);
   }
-  const sections = [...byCat.entries()].map(([cat, list]) => {
-    const items = list
-      .map((e) => {
-        const eslug = eventSlugLookup.get(e);
-        if (!eslug) return "";
-        const dateStr = formatEventDate(e);
-        return `<li><a href="${metroPath(`event/${eslug}/`)}"><strong>${esc(e.title)}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}</a>${e.venue ? `<p>${esc(e.venue)}${e.city ? `, ${esc(e.city)}` : ""}${e.cost && e.cost !== "Unknown" ? ` · ${esc(e.cost)}` : ""}</p>` : ""}</li>`;
-      })
-      .join("");
-    return `<section><h2>${esc(cat)}</h2><ul class="card-list">${items}</ul></section>`;
+
+  const categoryCounts = countBy(upcoming, (event) => event.category || "Other");
+  const cityCounts = countBy(upcoming, (event) => event.city || event.neighborhood || metroLabel());
+  const topCategories = topCountLabels(categoryCounts, 4);
+  const topCities = topCountLabels(cityCounts, 5);
+  const freeCount = upcoming.filter(eventLikelyFree).length;
+  const highlights = pickWeekendHighlights(upcoming, eventSlugLookup).slice(0, 6);
+  const daySections = [weekend.saturdayKey, weekend.sundayKey]
+    .map((dayKey) => renderWeekendDaySection(dayKey, byDay.get(dayKey) || [], eventSlugLookup))
+    .filter(Boolean);
+  const generatedLabel = now.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: activeMetro.timezone || "America/Los_Angeles",
   });
 
   const body = `
     <p class="lede">${esc(description)}</p>
-    <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a 3-stop day with ${BRAND}</a></p>
-    ${sections.join("")}
+    <section class="guide-summary" aria-label="Weekend summary">
+      <h2>Weekend snapshot</h2>
+      <p>${esc(buildWeekendGuideSummary(upcoming, topCategories, topCities, weekendLabel, sundayLabel))}</p>
+      <div class="guide-facts">
+        <div class="guide-fact"><strong>${upcoming.length}</strong><span>dated family events</span></div>
+        <div class="guide-fact"><strong>${freeCount}</strong><span>likely free options</span></div>
+        <div class="guide-fact"><strong>${cityCounts.size}</strong><span>metro cities represented</span></div>
+      </div>
+      ${highlights.length ? `<ul class="guide-highlights">${highlights.map((item) => `<li><a href="${item.href}">${esc(item.event.title)}</a><p>${esc(formatTimelineMeta(item.event))}</p></li>`).join("")}</ul>` : ""}
+    </section>
+    <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a 3-stop day with ${BRAND}</a> <a class="cta-secondary" href="#timeline">Jump to the timeline</a></p>
+    <section id="timeline" aria-label="Weekend event timeline">
+      <p class="eyebrow">Generated ${esc(generatedLabel)} from official event sources</p>
+      ${daySections.join("")}
+    </section>
   `;
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "@id": `${canonical}#page`,
-    url: canonical,
-    name: `Things to do with kids this weekend in ${metroLabel()}`,
-    description,
-    isPartOf: { "@id": `${metroUrl("")}#website` },
-    about: {
-      "@type": "Place",
-      name: metroLabel(),
-    },
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": `${canonical}#page`,
+        url: canonical,
+        name: `${metroLabel()} weekend guide`,
+        description,
+        isPartOf: { "@id": `${metroUrl("")}#website` },
+        about: {
+          "@type": "Place",
+          name: metroLabel(),
+        },
+      },
+      {
+        "@type": "Article",
+        "@id": `${canonical}#guide`,
+        headline: title,
+        description,
+        dateModified: today(),
+        author: { "@type": "Organization", name: BRAND },
+        publisher: { "@type": "Organization", name: BRAND },
+        mainEntityOfPage: canonical,
+      },
+      {
+        "@type": "ItemList",
+        "@id": `${canonical}#timeline`,
+        name: `${metroLabel()} family events this weekend`,
+        itemListElement: upcoming.slice(0, 30).map((event, index) => {
+          const slug = eventSlugLookup.get(event);
+          return {
+            "@type": "ListItem",
+            position: index + 1,
+            url: slug ? metroUrl(`event/${slug}/`) : event.url || canonical,
+            name: event.title,
+          };
+        }),
+      },
+    ],
   };
+
+  const weekendRouteKey = findRouteKey("en", metroPath("this-weekend/"));
+  const hreflangLinks = weekendRouteKey ? getAlternateLinks(weekendRouteKey, SITE) : [];
+  const langSwitcherHtml = weekendRouteKey ? renderLangSwitcher(weekendRouteKey, "en") : "";
 
   const html = renderShell({
     title,
@@ -1178,11 +1631,13 @@ function generateThisWeekendPage(eventItems) {
     jsonLd,
     breadcrumb: [
       { name: BRAND, url: metroUrl("") },
-      { name: "This weekend", url: canonical },
+      { name: "Weekend guide", url: canonical },
     ],
-    h1: `Things to do with kids this weekend in ${metroLabel()}`,
+    h1: `${metroLabel()} weekend guide for families`,
     eyebrow: metroTag(),
     body,
+    hreflangLinks,
+    langSwitcherHtml,
   });
 
   writeMetroPage("this-weekend/index.html", html);
@@ -1194,6 +1649,221 @@ function generateThisWeekendPage(eventItems) {
     priority: 0.95,
   });
   return true;
+}
+
+function getWeekendDateKeys(now, timeZone = "America/Los_Angeles") {
+  const todayParts = zonedDateParts(now, timeZone);
+  const dow = weekdayNumber(todayParts.weekday);
+  const daysToSat = dow === 6 ? 0 : (6 - dow + 7) % 7;
+  const saturdayYmd = addDaysToYmd(todayParts, daysToSat);
+  const sundayYmd = addDaysToYmd(saturdayYmd, 1);
+  const saturdayKey = ymdKey(saturdayYmd);
+  const sundayKey = ymdKey(sundayYmd);
+  return {
+    saturday: ymdToUtcDate(saturdayYmd),
+    sunday: ymdToUtcDate(sundayYmd),
+    saturdayKey,
+    sundayKey,
+    keys: new Set([saturdayKey, sundayKey]),
+  };
+}
+
+function zonedDateParts(date, timeZone = "America/Los_Angeles") {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    weekday: "short",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
+  const get = (type) => parts.find((part) => part.type === type)?.value || "";
+  return {
+    year: Number(get("year")),
+    month: Number(get("month")),
+    day: Number(get("day")),
+    weekday: get("weekday"),
+  };
+}
+
+function zonedTimeParts(date, timeZone = "America/Los_Angeles") {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).formatToParts(date);
+  const get = (type) => parts.find((part) => part.type === type)?.value || "";
+  const hour = Number(get("hour"));
+  return {
+    hour: hour === 24 ? 0 : hour,
+    minute: Number(get("minute")),
+  };
+}
+
+function weekdayNumber(shortName) {
+  const normalized = String(shortName || "").slice(0, 3).toLowerCase();
+  return ["sun", "mon", "tue", "wed", "thu", "fri", "sat"].indexOf(normalized);
+}
+
+function addDaysToYmd(ymd, days) {
+  const d = new Date(Date.UTC(ymd.year, ymd.month - 1, ymd.day + days));
+  return { year: d.getUTCFullYear(), month: d.getUTCMonth() + 1, day: d.getUTCDate() };
+}
+
+function ymdKey(ymd) {
+  return `${ymd.year}-${String(ymd.month).padStart(2, "0")}-${String(ymd.day).padStart(2, "0")}`;
+}
+
+function ymdToUtcDate(ymd) {
+  return new Date(Date.UTC(ymd.year, ymd.month - 1, ymd.day, 12));
+}
+
+function zonedDateKey(date, timeZone = "America/Los_Angeles") {
+  return ymdKey(zonedDateParts(date, timeZone));
+}
+
+function countBy(items, getter) {
+  const map = new Map();
+  for (const item of items) {
+    const key = getter(item);
+    if (!key) continue;
+    map.set(key, (map.get(key) || 0) + 1);
+  }
+  return map;
+}
+
+function topCountLabels(counts, limit) {
+  return [...counts.entries()]
+    .sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(String(b[0])))
+    .slice(0, limit)
+    .map(([label, count]) => ({ label, count }));
+}
+
+function buildWeekendGuideSummary(events, topCategories, topCities, saturdayLabel, sundayLabel) {
+  const categoryText = topCategories.length
+    ? topCategories.map((item) => `${item.label.toLowerCase()} (${item.count})`).join(", ")
+    : "family programs";
+  const cityText = topCities.length
+    ? topCities.map((item) => item.label).join(", ")
+    : metroLabel();
+  return `From ${saturdayLabel} through ${sundayLabel}, ${BRAND} found ${events.length} dated family events across ${metroLabel()}. The biggest clusters are ${categoryText}, with options in ${cityText}. Use the timeline below to compare times, venues, costs, age fit, and official event links before building a plan.`;
+}
+
+function pickWeekendHighlights(events, eventSlugLookup) {
+  const picked = [];
+  const seenCategories = new Set();
+  const sorted = events.slice().sort((a, b) => {
+    const aFree = eventLikelyFree(a) ? 0 : 1;
+    const bFree = eventLikelyFree(b) ? 0 : 1;
+    return aFree - bFree || (a.startDateTime || "").localeCompare(b.startDateTime || "");
+  });
+  for (const event of sorted) {
+    const category = event.category || "Other";
+    if (seenCategories.has(category) && picked.length < 4) continue;
+    const slug = eventSlugLookup.get(event);
+    if (!slug) continue;
+    picked.push({ event, href: metroPath(`event/${slug}/`) });
+    seenCategories.add(category);
+    if (picked.length >= 6) break;
+  }
+  return picked;
+}
+
+function renderWeekendDaySection(dayKey, events, eventSlugLookup, locale = "en") {
+  if (!events.length) return "";
+  const date = ymdToUtcDate({
+    year: Number(dayKey.slice(0, 4)),
+    month: Number(dayKey.slice(5, 7)),
+    day: Number(dayKey.slice(8, 10)),
+  });
+  const dateLocale = locale === "zh-Hans" ? "zh-CN" : (locale === "es" ? "es-US" : "en-US");
+  const dayLabel = date.toLocaleDateString(dateLocale, {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+  const sorted = events
+    .slice()
+    .sort((a, b) => (a.startDateTime || "").localeCompare(b.startDateTime || ""));
+  const items = sorted.map((event) => renderTimelineEvent(event, eventSlugLookup, locale)).join("");
+  const noteMap = {
+    en: `${events.length} event${events.length === 1 ? "" : "s"} ordered by start time.`,
+    es: `${events.length} evento${events.length === 1 ? "" : "s"} en orden cronológico.`,
+    "zh-Hans": `${events.length} 个活动，按开始时间排列。`,
+  };
+  return `<section class="guide-day"><h2>${esc(dayLabel)}</h2><p class="guide-day-note">${noteMap[locale] || noteMap.en}</p><ol class="timeline-list">${items}</ol></section>`;
+}
+
+function renderTimelineEvent(event, eventSlugLookup, locale = "en") {
+  const slug = eventSlugLookup.get(event);
+  const internalHref = slug ? metroPath(`event/${slug}/`) : "";
+  const time = formatEventTime(event, locale);
+  const bucket = timelineBucket(event, locale);
+  const description = buildTimelineDescription(event);
+  const meta = formatTimelineMeta(event);
+  const timeTba = { en: "Time TBA", es: "Hora por confirmar", "zh-Hans": "时间待定" };
+  const detailsLabel = { en: "FamHop event details", es: "Detalles del evento en FamHop", "zh-Hans": "FamHop 活动详情" };
+  const officialLabel = { en: "Official event page", es: "Página oficial del evento", "zh-Hans": "官方活动页面" };
+  return `<li class="timeline-card">
+    <time class="timeline-time" datetime="${esc(event.startDateTime || "")}">${esc(time || (timeTba[locale] || timeTba.en))}<span>${esc(bucket)}</span></time>
+    <div>
+      ${event.category ? `<span class="event-chip">${esc(event.category)}</span>` : ""}
+      <h3>${internalHref ? `<a href="${internalHref}">${esc(event.title)}</a>` : esc(event.title)}</h3>
+      <p class="timeline-meta">${esc(meta)}</p>
+      ${description ? `<p class="timeline-desc">${esc(description)}</p>` : ""}
+      <p class="timeline-links">
+        ${internalHref ? `<a href="${internalHref}">${detailsLabel[locale] || detailsLabel.en}</a>` : ""}
+        ${event.url ? `<a rel="noopener nofollow" href="${esc(event.url)}">${officialLabel[locale] || officialLabel.en}</a>` : ""}
+      </p>
+    </div>
+  </li>`;
+}
+
+function timelineBucket(event, locale = "en") {
+  const buckets = {
+    en: { tba: "Time TBA", morning: "Morning", afternoon: "Afternoon", evening: "Evening" },
+    es: { tba: "Hora por confirmar", morning: "Mañana", afternoon: "Tarde", evening: "Noche" },
+    "zh-Hans": { tba: "时间待定", morning: "上午", afternoon: "下午", evening: "晚上" },
+  };
+  const b = buckets[locale] || buckets.en;
+  if (!event.startDateTime) return b.tba;
+  const date = new Date(event.startDateTime);
+  const { hour } = zonedTimeParts(date, activeMetro.timezone);
+  if (hour < 12) return b.morning;
+  if (hour < 17) return b.afternoon;
+  return b.evening;
+}
+
+function formatEventTime(event, locale = "en") {
+  if (!event.startDateTime) return "";
+  const date = new Date(event.startDateTime);
+  if (!Number.isFinite(date.getTime())) return "";
+  const dateLocale = locale === "zh-Hans" ? "zh-CN" : (locale === "es" ? "es-US" : "en-US");
+  return date.toLocaleTimeString(dateLocale, {
+    timeZone: activeMetro.timezone || "America/Los_Angeles",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
+function formatTimelineMeta(event) {
+  const parts = [];
+  if (event.venue) parts.push(event.venue);
+  if (event.city) parts.push(event.city);
+  if (event.cost && event.cost !== "Unknown") parts.push(event.cost);
+  if (Array.isArray(event.ageBands) && event.ageBands.length) {
+    parts.push(`Ages: ${event.ageBands.join(", ")}`);
+  }
+  return parts.join(" · ");
+}
+
+function buildTimelineDescription(event) {
+  const desc = String(event.description || "").replace(/\s+/g, " ").trim();
+  if (desc) return desc.length > 210 ? `${desc.slice(0, 207)}…` : desc;
+  const where = [event.venue, event.city].filter(Boolean).join(" in ");
+  const cat = event.category ? `${event.category.toLowerCase()} event` : "family event";
+  return `${event.title} is a ${cat}${where ? ` at ${where}` : ""}. Confirm registration, cost, and age fit on the official listing.`;
 }
 
 function buildEventSlugLookup(eventItems) {
@@ -1230,6 +1900,253 @@ function buildSpotSlugLookup(spotItems) {
 }
 
 // ---------------------------------------------------------------------------
+// Language switcher
+// ---------------------------------------------------------------------------
+
+function renderLangSwitcher(routeKey, currentLocale) {
+  const cluster = routeMap[routeKey];
+  if (!cluster) return "";
+  const links = [];
+  for (const locale of supportedLocales) {
+    const pagePath = cluster[locale];
+    if (!pagePath) continue;
+    const cfg = localeConfig[locale];
+    const href = `${SITE}${pagePath}`;
+    const ariaCurrent = locale === currentLocale ? ` aria-current="page"` : "";
+    links.push(`<a href="${esc(href)}" hreflang="${esc(cfg.hreflang)}"${ariaCurrent}>${esc(cfg.displayName)}</a>`);
+  }
+  if (links.length <= 1) return "";
+  return `<nav class="famhop-lang-switcher" aria-label="Change language">${links.join("")}</nav>`;
+}
+
+// ---------------------------------------------------------------------------
+// Localized (i18n) weekend guide pages
+// ---------------------------------------------------------------------------
+
+function generateLocalizedWeekendPages() {
+  let count = 0;
+  for (const [routeKey, cluster] of Object.entries(routeMap)) {
+    for (const locale of supportedLocales) {
+      if (locale === defaultLocale) continue;
+      const pagePath = cluster[locale];
+      if (!pagePath) continue;
+
+      const metro = metroConfig.byId.get(cluster.metroId);
+      if (!metro) continue;
+
+      const previousMetro = activeMetro;
+      activeMetro = metro;
+
+      const eventsDoc = readJson(metroDataPath(metro, "events"));
+      let events = (Array.isArray(eventsDoc?.events) ? eventsDoc.events : []).filter(audienceVisible);
+
+      if (cluster.subMetro) {
+        const cities = subMetroCities[cluster.subMetro];
+        if (cities) {
+          events = events.filter((e) => {
+            const city = (e.city || "").toLowerCase();
+            return cities.some((c) => city.includes(c));
+          });
+        }
+      }
+
+      const wrote = generateLocalizedWeekendPage(events, locale, routeKey, cluster);
+      if (wrote) count++;
+      activeMetro = previousMetro;
+    }
+  }
+  console.log(`[seo:i18n] generated ${count} localized weekend guide pages`);
+  return count;
+}
+
+function generateLocalizedWeekendPage(eventItems, locale, routeKey, cluster) {
+  const eventSlugLookup = buildEventSlugLookup(eventItems);
+  const now = new Date();
+  const weekend = getWeekendDateKeys(now, activeMetro.timezone);
+  const cfg = localeConfig[locale];
+  const pagePath = cluster[locale];
+
+  const upcoming = eventItems
+    .filter((e) => {
+      if (!e.startDateTime) return false;
+      const d = new Date(e.startDateTime);
+      if (!Number.isFinite(d.getTime())) return false;
+      return weekend.keys.has(zonedDateKey(d, activeMetro.timezone));
+    })
+    .sort((a, b) => (a.startDateTime || "").localeCompare(b.startDateTime || ""));
+
+  const area = cluster.subMetro
+    ? (subMetroLabels[cluster.subMetro] || cluster.subMetro)
+    : metroLabel();
+
+  const canonical = `${SITE}${pagePath}`;
+  const hreflangLinks = getAlternateLinks(routeKey, SITE);
+  const langSwitcherHtml = renderLangSwitcher(routeKey, locale);
+
+  const weekendLabel = weekend.saturday.toLocaleDateString(cfg.htmlLang === "zh-Hans" ? "zh-CN" : cfg.htmlLang, {
+    weekday: "long", month: "long", day: "numeric",
+    timeZone: activeMetro.timezone || "America/Los_Angeles",
+  });
+  const sundayLabel = weekend.sunday.toLocaleDateString(cfg.htmlLang === "zh-Hans" ? "zh-CN" : cfg.htmlLang, {
+    weekday: "long", month: "long", day: "numeric",
+    timeZone: activeMetro.timezone || "America/Los_Angeles",
+  });
+
+  const title = t(locale, "weekendGuideTitle", { metro: area });
+  const description = t(locale, "metaDescription", { metro: area, eventCount: String(upcoming.length) });
+  const h1 = t(locale, "weekendGuideH1", { metro: area });
+  const intro = t(locale, "weekendGuideIntro", {
+    metro: area,
+    weekendDate: weekendLabel,
+    sundayDate: sundayLabel,
+    eventCount: String(upcoming.length),
+  });
+
+  const ogLocaleMap = { en: "en_US", es: "es_US", "zh-Hans": "zh_CN" };
+
+  if (upcoming.length === 0) {
+    const body = `
+      <p class="lede">${esc(intro)}</p>
+      <section class="guide-summary" aria-label="${esc(t(locale, "weekendSnapshot"))}">
+        <h2>${esc(t(locale, "weekendSnapshot"))}</h2>
+        <p>${esc(t(locale, "noEventsFound"))}</p>
+        <p>${esc(t(locale, "checkBackSoon"))}</p>
+      </section>
+      <p class="cta-row"><a class="cta" href="${metroPath("")}">${esc(t(locale, "buildPlanCta"))}</a></p>
+    `;
+
+    const html = renderShell({
+      title, description, canonical, ogImage: OG_IMAGE,
+      jsonLd: buildLocalizedJsonLd(canonical, title, description, area, locale),
+      breadcrumb: [
+        { name: t(locale, "breadcrumbHome"), url: `${SITE}/` },
+        { name: t(locale, "breadcrumbGuide"), url: canonical },
+      ],
+      h1, eyebrow: "", body,
+      lang: cfg.htmlLang, hreflangLinks, langSwitcherHtml,
+      ogLocale: ogLocaleMap[locale] || "en_US",
+    });
+
+    writeLocalizedPage(pagePath, html);
+    pushLocalizedSitemapEntry(canonical);
+    return true;
+  }
+
+  const byDay = new Map();
+  for (const e of upcoming) {
+    const dayKey = zonedDateKey(new Date(e.startDateTime), activeMetro.timezone);
+    if (!byDay.has(dayKey)) byDay.set(dayKey, []);
+    byDay.get(dayKey).push(e);
+  }
+
+  const categoryCounts = countBy(upcoming, (event) => event.category || "Other");
+  const cityCounts = countBy(upcoming, (event) => event.city || event.neighborhood || area);
+  const freeCount = upcoming.filter(eventLikelyFree).length;
+  const highlights = pickWeekendHighlights(upcoming, eventSlugLookup).slice(0, 6);
+  const daySections = [weekend.saturdayKey, weekend.sundayKey]
+    .map((dayKey) => renderWeekendDaySection(dayKey, byDay.get(dayKey) || [], eventSlugLookup, locale))
+    .filter(Boolean);
+
+  const generatedLabel = now.toLocaleDateString(cfg.htmlLang === "zh-Hans" ? "zh-CN" : cfg.htmlLang, {
+    month: "long", day: "numeric", year: "numeric",
+    timeZone: activeMetro.timezone || "America/Los_Angeles",
+  });
+
+  const body = `
+    <p class="lede">${esc(intro)}</p>
+    <section class="guide-summary" aria-label="${esc(t(locale, "weekendSnapshot"))}">
+      <h2>${esc(t(locale, "weekendSnapshot"))}</h2>
+      <div class="guide-facts">
+        <div class="guide-fact"><strong>${upcoming.length}</strong><span>${esc(t(locale, "datedEvents"))}</span></div>
+        <div class="guide-fact"><strong>${freeCount}</strong><span>${esc(t(locale, "freeOptions"))}</span></div>
+        <div class="guide-fact"><strong>${cityCounts.size}</strong><span>${esc(t(locale, "metroCitiesRepresented"))}</span></div>
+      </div>
+      ${highlights.length ? `<ul class="guide-highlights">${highlights.map((item) => `<li><a href="${item.href}">${esc(item.event.title)}</a><p>${esc(formatTimelineMeta(item.event))}</p></li>`).join("")}</ul>` : ""}
+    </section>
+    <p class="cta-row"><a class="cta" href="${metroPath("")}">${esc(t(locale, "buildThreeStopPlan"))}</a> <a class="cta-secondary" href="#timeline">${esc(t(locale, "jumpToTimeline"))}</a></p>
+    <section id="timeline" aria-label="${esc(t(locale, "weekendSnapshot"))}">
+      <p class="eyebrow">${esc(t(locale, "generatedFrom", { date: generatedLabel }))}</p>
+      ${daySections.join("")}
+    </section>
+  `;
+
+  const jsonLd = buildLocalizedJsonLd(canonical, title, description, area, locale);
+  jsonLd["@graph"].push({
+    "@type": "ItemList",
+    "@id": `${canonical}#timeline`,
+    name: h1,
+    itemListElement: upcoming.slice(0, 30).map((event, index) => {
+      const slug = eventSlugLookup.get(event);
+      return {
+        "@type": "ListItem",
+        position: index + 1,
+        url: slug ? metroUrl(`event/${slug}/`) : event.url || canonical,
+        name: event.title,
+      };
+    }),
+  });
+
+  const html = renderShell({
+    title, description, canonical, ogImage: OG_IMAGE, jsonLd,
+    breadcrumb: [
+      { name: t(locale, "breadcrumbHome"), url: `${SITE}/` },
+      { name: t(locale, "breadcrumbGuide"), url: canonical },
+    ],
+    h1, eyebrow: "", body,
+    lang: cfg.htmlLang, hreflangLinks, langSwitcherHtml,
+    ogLocale: ogLocaleMap[locale] || "en_US",
+  });
+
+  writeLocalizedPage(pagePath, html);
+  pushLocalizedSitemapEntry(canonical);
+  return true;
+}
+
+function buildLocalizedJsonLd(canonical, title, description, area, locale) {
+  const inLanguage = locale === "zh-Hans" ? "zh-CN" : locale;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": `${canonical}#page`,
+        url: canonical,
+        name: title,
+        description,
+        inLanguage,
+        isPartOf: { "@id": `${SITE}/#website` },
+        about: { "@type": "Place", name: area },
+      },
+      {
+        "@type": "Article",
+        "@id": `${canonical}#guide`,
+        headline: title,
+        description,
+        inLanguage,
+        dateModified: today(),
+        author: { "@type": "Organization", name: BRAND },
+        publisher: { "@type": "Organization", name: BRAND },
+        mainEntityOfPage: canonical,
+      },
+    ],
+  };
+}
+
+function writeLocalizedPage(pagePath, html) {
+  const rel = pagePath.replace(/^\//, "").replace(/\/$/, "/index.html");
+  writePage(rel, html);
+}
+
+function pushLocalizedSitemapEntry(canonical) {
+  sitemapEntries.push({
+    loc: canonical,
+    lastmod: today(),
+    changefreq: "daily",
+    priority: 0.85,
+  });
+}
+
+// ---------------------------------------------------------------------------
 // Sitemap
 // ---------------------------------------------------------------------------
 
@@ -1255,7 +2172,7 @@ ${entries
 // Page shell
 // ---------------------------------------------------------------------------
 
-function renderShell({ title, description, canonical, ogImage, jsonLd, breadcrumb, h1, eyebrow, body }) {
+function renderShell({ title, description, canonical, ogImage, jsonLd, breadcrumb, h1, eyebrow, body, lang = "en", hreflangLinks = [], langSwitcherHtml = "", ogLocale = "en_US" }) {
   const breadcrumbLd = breadcrumb && breadcrumb.length
     ? {
         "@context": "https://schema.org",
@@ -1278,9 +2195,14 @@ function renderShell({ title, description, canonical, ogImage, jsonLd, breadcrum
         )
         .join("")}</ol></nav>`
     : "";
+  const guideCurrent = String(canonical || "").replace(/\/+$/, "").endsWith("/this-weekend");
+
+  const hreflangHtml = hreflangLinks.map((link) =>
+    `<link rel="alternate" hreflang="${esc(link.hreflang)}" href="${esc(link.href)}">`
+  ).join("\n");
 
   return `<!doctype html>
-<html lang="en">
+<html lang="${esc(lang)}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -1288,11 +2210,12 @@ function renderShell({ title, description, canonical, ogImage, jsonLd, breadcrum
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${esc(canonical)}">
+${hreflangHtml}
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="${BRAND}">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale" content="${esc(ogLocale)}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:url" content="${esc(canonical)}">
@@ -1306,13 +2229,9 @@ function renderShell({ title, description, canonical, ogImage, jsonLd, breadcrum
 ${allLd.map((node) => `<script type="application/ld+json">${safeJsonScript(node)}</script>`).join("\n")}
 </head>
 <body>
-<header class="famhop-topbar">
-  <a class="famhop-brand" href="${metroPath("")}">${BRAND}</a>
-  <nav class="metro-links">
-    ${metroLinksHtml()}
-    <a href="${metroPath("this-weekend/")}">This weekend</a>
-  </nav>
-</header>
+${renderStaticTopbar({ guideCurrent })}
+${langSwitcherHtml}
+${renderStaticAuthScript()}
 <main class="famhop-page">
   ${breadcrumbHtml}
   ${eyebrow ? `<p class="eyebrow">${eyebrow}</p>` : ""}
@@ -1338,6 +2257,30 @@ function readJson(p) {
     console.warn(`[seo] could not read ${p}: ${err.message}`);
     return null;
   }
+}
+
+function readBuildEnv() {
+  const result = {};
+  for (const filename of [".env", ".env.local"]) {
+    const file = path.join(ROOT, filename);
+    if (!fs.existsSync(file)) continue;
+    const text = fs.readFileSync(file, "utf8");
+    for (const line of text.split(/\r?\n/)) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) continue;
+      const match = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+      if (!match) continue;
+      const [, key, rawValue] = match;
+      if (process.env[key]) continue;
+      let value = rawValue.trim();
+      const quote = value[0];
+      if ((quote === "\"" || quote === "'") && value.endsWith(quote)) {
+        value = value.slice(1, -1);
+      }
+      result[key] = value;
+    }
+  }
+  return result;
 }
 
 function upsertHeadTag(html, tag, content) {
