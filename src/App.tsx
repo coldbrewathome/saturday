@@ -1163,6 +1163,10 @@ function App({ metro }: AppProps) {
     () => [metro.center.lat, metro.center.lon] as [number, number],
     [metro],
   );
+  const weekendGuideHref = useMemo(
+    () => `${metro.canonicalPath.replace(/\/+$/, "")}/this-weekend/`,
+    [metro],
+  );
   const storageKeys = useMemo(() => ({
     savedSpots: metroStorageKey(metro, "savedSpots"),
     savedEvents: metroStorageKey(metro, "savedEvents"),
@@ -2353,10 +2357,9 @@ function App({ metro }: AppProps) {
     if (category !== "All") n += 1;
     if (city !== "All") n += 1;
     if (cost !== "All") n += 1;
-    if (onlyOpen) n += 1;
     if (eventDateFilter !== "all") n += 1;
     return n;
-  }, [query, ageBand, category, city, cost, onlyOpen, eventDateFilter]);
+  }, [query, ageBand, category, city, cost, eventDateFilter]);
 
   const activePlan = useMemo(
     () => plans.find((plan) => plan.id === activePlanId) ?? null,
@@ -3494,6 +3497,10 @@ function App({ metro }: AppProps) {
             <MapPin aria-hidden="true" />
             Explore
           </button>
+          <a href={weekendGuideHref} title={`${metro.label} weekend guide`}>
+            <Clock3 aria-hidden="true" />
+            Guide
+          </a>
           <button
             className={view === "plans" ? "active" : ""}
             onClick={() => setView("plans")}
@@ -3638,6 +3645,16 @@ function App({ metro }: AppProps) {
             {APP_HERO_SUB}
             {inferredGeo?.city ? ` Tuned for ${inferredGeo.city}.` : ""}
           </p>
+          <div className="home-hero-actions">
+            <a className="home-guide-cta" href={weekendGuideHref}>
+              <Clock3 aria-hidden="true" />
+              <span>
+                <strong>Weekend guide</strong>
+                <small>{metro.label} events ordered by time</small>
+              </span>
+              <ChevronRight aria-hidden="true" />
+            </a>
+          </div>
         </div>
 
         <div className="home-date" role="group" aria-label="Plan date">
@@ -3916,6 +3933,9 @@ function App({ metro }: AppProps) {
                 {inferredGeo?.city ? ` near ${inferredGeo.city}` : ""}
                 . Times vary by venue — tap through to confirm.
               </p>
+              <a className="home-events-guide-link" href={weekendGuideHref}>
+                Read the weekend guide
+              </a>
             </div>
             <ul className="home-events-list">
               {weekendEvents.slice(0, 6).map((event) => (
@@ -4074,7 +4094,7 @@ function App({ metro }: AppProps) {
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search spots"
+              placeholder="Search"
             />
           </label>
 
@@ -4107,7 +4127,7 @@ function App({ metro }: AppProps) {
           )}
 
           <div className="filter-group">
-            <span className="filter-label">Category · legend</span>
+            <span className="filter-label">Spot legend</span>
             <div className="cat-legend">
               <button
                 type="button"
@@ -4144,7 +4164,7 @@ function App({ metro }: AppProps) {
                     type="button"
                     className={`cat-row${category === cat ? " active" : ""}`}
                     style={category === cat ? { "--cat-active-color": color, "--cat-active-bg": `color-mix(in srgb, ${color} 8%, white)` } as React.CSSProperties : undefined}
-                    onClick={() => setCategory(category === cat ? "All" : cat)}
+                    onClick={() => setCategory(category === cat ? "All" : (cat as Category))}
                   >
                     <span className="cat-swatch" style={{ background: color }} />
                     <span className="cat-row-label">{cat}</span>
@@ -4204,16 +4224,6 @@ function App({ metro }: AppProps) {
             </div>
           </div>
 
-          <label className="switch-row">
-            <input
-              type="checkbox"
-              checked={onlyOpen}
-              onChange={(event) => setOnlyOpen(event.target.checked)}
-            />
-            <Clock3 aria-hidden="true" style={{ height: 14, width: 14, color: "var(--accent)" }} />
-            <span>Open now</span>
-          </label>
-
           <div className="filter-group">
             <span className="filter-label">When</span>
             <div className="segmented compact">
@@ -4229,23 +4239,6 @@ function App({ metro }: AppProps) {
               ))}
             </div>
           </div>
-
-          <label className="select-field">
-            <span>Sort</span>
-            <select
-              value={sortBy}
-              onChange={(event) =>
-                setSortBy(event.target.value as "best" | "nearest" | "price" | "name")
-              }
-            >
-              <option value="best">Best fit</option>
-              <option value="nearest">
-                {userLocation ? "Nearest to me" : `Nearest to ${metro.label}`}
-              </option>
-              <option value="price">Lowest cost</option>
-              <option value="name">Name</option>
-            </select>
-          </label>
 
           {/* Geolocation handled by map-controls locate button */}
         </aside>

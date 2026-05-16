@@ -242,7 +242,8 @@ button {
   padding: 3px;
 }
 
-.topbar-tabs button {
+.topbar-tabs button,
+.topbar-tabs a {
   align-items: center;
   background: transparent;
   border: 0;
@@ -252,12 +253,14 @@ button {
   font: 600 0.78rem/1 var(--font-ui);
   gap: 5px;
   padding: 6px 12px;
+  text-decoration: none;
   transition:
     background 0.15s ease,
     color 0.15s ease;
 }
 
-.topbar-tabs button:hover {
+.topbar-tabs button:hover,
+.topbar-tabs a:hover {
   color: var(--ink);
 }
 
@@ -267,7 +270,8 @@ button {
   color: var(--ink);
 }
 
-.topbar-tabs button svg {
+.topbar-tabs button svg,
+.topbar-tabs a svg {
   height: 14px;
   width: 14px;
 }
@@ -3276,6 +3280,60 @@ h3 {
   margin: 0;
 }
 
+.home-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.home-guide-cta {
+  align-items: center;
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  border-radius: 8px;
+  color: #ffffff;
+  display: inline-flex;
+  gap: 10px;
+  min-height: 48px;
+  padding: 8px 14px;
+  text-decoration: none;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.06s ease;
+}
+
+.home-guide-cta:hover {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  transform: translateY(-1px);
+}
+
+.home-guide-cta > svg {
+  flex: 0 0 auto;
+  height: 18px;
+  width: 18px;
+}
+
+.home-guide-cta span {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.home-guide-cta strong {
+  font-size: 0.9rem;
+  line-height: 1.1;
+}
+
+.home-guide-cta small {
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 0.76rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
 .home-vibes {
   display: grid;
   gap: 12px;
@@ -3532,6 +3590,19 @@ h3 {
   font-size: 0.86rem;
   font-weight: 800;
   margin: 0;
+}
+
+.home-events-guide-link {
+  color: var(--accent-strong);
+  display: inline-flex;
+  font-size: 0.84rem;
+  font-weight: 900;
+  margin-top: 8px;
+  text-decoration: none;
+}
+
+.home-events-guide-link:hover {
+  text-decoration: underline;
 }
 
 .home-events-list {
@@ -4608,28 +4679,32 @@ h3 {
     word-break: break-word;
   }
 
-  /* Phase 2 topbar wraps to two rows on phones: brand + actions stay on
-     row 1, metro/tabs/auth flow below. Tabs go full-width and center so
-     they stay tappable. */
+  /* Mobile topbar: brand stays visible, metro flexes, tabs/auth stay right. */
   .topbar {
-    column-gap: 8px;
+    column-gap: 5px;
     flex-wrap: nowrap;
+    left: 12px;
+    padding: 8px;
+    right: 12px;
     row-gap: 0;
   }
 
-  .topbar-brand { flex: 0 0 auto; }
-  .topbar-wordmark { font-size: 0.9rem; }
-  .topbar-metro { flex: 0 1 auto; min-width: 0; order: 2; padding: 5px 6px 5px 8px; }
-  .topbar-metro select { max-width: 130px; padding-right: 12px; }
+  .topbar-brand { flex: 0 0 auto; gap: 5px; margin-right: 0; min-width: 0; order: 1; }
+  .topbar-mark svg { height: 20px; width: 20px; }
+  .topbar-wordmark { display: block; font-size: 0.9rem; letter-spacing: 0; max-width: none; overflow: visible; white-space: nowrap; }
+  .topbar-metro { flex: 1 1 72px; max-width: none; min-width: 72px; order: 2; padding: 5px 6px 5px 7px; }
+  .topbar-metro select { font-family: var(--font-ui); font-size: 0.76rem; max-width: none; min-width: 0; overflow: hidden; padding-right: 11px; text-overflow: ellipsis; width: 100%; }
   .topbar-metro-prefix { display: none; }
-  .topbar-tabs { flex: 0 0 auto; order: 3; }
-  .topbar-tabs button { font-size: 0; gap: 0; padding: 6px 8px; }
-  .topbar-tabs button svg { height: 14px; width: 14px; }
+  .topbar-tabs { flex: 0 0 88px; margin-left: 0; order: 3; width: 88px; }
+  .topbar-tabs button,
+  .topbar-tabs a { font-size: 0; gap: 0; padding: 5px 6px; }
+  .topbar-tabs button svg,
+  .topbar-tabs a svg { height: 14px; width: 14px; }
   .topbar-tabs .tab-count { display: none; }
   .topbar-spacer { display: none; }
   .topbar-refresh { display: none; }
   .topbar-add { display: none; }
-  .topbar-auth { flex: 0 0 auto; margin-left: auto; order: 10; }
+  .topbar-auth { flex: 0 0 40px; justify-content: flex-end; margin-left: 0; order: 4; width: 40px; }
 
   .section-heading {
     align-items: stretch;
@@ -4744,6 +4819,40 @@ h3 {
     font-weight: 800;
     margin-left: auto;
     padding: 6px 14px;
+  }
+}
+
+@media (max-width: 370px) {
+  .topbar {
+    column-gap: 4px;
+    left: 10px;
+    right: 10px;
+  }
+
+  .topbar-wordmark {
+    font-size: 0.84rem;
+    max-width: none;
+  }
+
+  .topbar-metro {
+    flex-basis: 68px;
+    min-width: 68px;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .topbar-metro select {
+    font-size: 0.72rem;
+  }
+
+  .topbar-tabs button,
+  .topbar-tabs a {
+    padding: 5px 4px;
+  }
+
+  .topbar-tabs {
+    flex-basis: 76px;
+    width: 76px;
   }
 }
 
