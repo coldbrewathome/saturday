@@ -1116,23 +1116,6 @@ h3 {
   margin-top: 18px;
 }
 
-.show-food-toggle {
-  align-items: center;
-  color: var(--ink);
-  cursor: pointer;
-  display: inline-flex;
-  font: 600 0.8rem/1 var(--font-ui);
-  gap: 8px;
-  margin-bottom: 10px;
-  user-select: none;
-}
-
-.show-food-toggle input {
-  accent-color: var(--accent);
-  cursor: pointer;
-  height: 16px;
-  width: 16px;
-}
 
 .filter-label,
 .select-field span,
@@ -1182,29 +1165,94 @@ h3 {
   background: var(--surface-strong);
 }
 
-.cat-row.active {
-  background: var(--cat-active-color, var(--accent));
+.cat-row-all-wrap {
+  align-items: center;
+  display: flex;
+  gap: 2px;
+}
+
+.cat-row-all-wrap .cat-row-all {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.cat-expand {
+  align-items: center;
+  background: transparent;
   border: 0;
-  padding: 6px 8px;
+  border-radius: 6px;
+  color: var(--ink-mute);
+  cursor: pointer;
+  display: inline-flex;
+  height: 28px;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.12s, transform 0.18s;
+  width: 28px;
 }
 
-.cat-row.active .cat-swatch {
-  background: rgba(255, 255, 255, 0.3) !important;
-  border: 2px solid #ffffff;
+.cat-expand:hover {
+  background: var(--surface-strong);
+  color: var(--ink);
 }
 
-.cat-row.active .cat-swatch-dot {
+.cat-expand.is-open {
+  transform: rotate(180deg);
+}
+
+.cat-expand svg {
+  height: 16px;
+  width: 16px;
+}
+
+.cat-children {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-left: 18px;
+  margin-top: 2px;
+}
+
+.cat-state-box {
+  align-items: center;
+  background: transparent;
+  border: 1.5px solid var(--ink-mute);
+  border-radius: 5px;
+  display: flex;
+  height: 18px;
+  justify-content: center;
+  width: 18px;
+}
+
+.cat-row-all.is-all .cat-state-box {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.cat-row-all.is-partial .cat-state-box {
+  border-color: var(--accent);
+}
+
+.cat-state-dot {
   background: #ffffff;
+  border-radius: 999px;
+  height: 6px;
+  width: 6px;
 }
 
-.cat-row.active .cat-row-label {
-  color: #ffffff;
-  font-weight: 700;
+.cat-state-dash {
+  background: var(--accent);
+  border-radius: 1.5px;
+  height: 2.5px;
+  width: 10px;
 }
 
-.cat-row.active .cat-row-count {
-  color: rgba(255, 255, 255, 0.8);
-  font-weight: 600;
+.cat-row-child .cat-swatch {
+  border: 1.5px solid var(--ink-mute);
+}
+
+.cat-row-child.is-selected .cat-swatch {
+  border-color: transparent;
 }
 
 .cat-swatch {

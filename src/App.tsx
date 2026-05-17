@@ -3,6 +3,7 @@ import {
   ArrowUp,
   Bookmark,
   Check,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Clock3,
@@ -1212,7 +1213,7 @@ function App({ metro }: AppProps) {
     preferences: metroStorageKey(metro, "preferences"),
     plannerProfile: metroStorageKey(metro, "plannerProfile"),
     mapView: metroStorageKey(metro, "mapView"),
-    showFood: metroStorageKey(metro, "showFood"),
+    selectedCategories: metroStorageKey(metro, "selectedCategories"),
   }), [metro]);
   const shareBaseUrl = useMemo(() => metroShareBase(metro), [metro]);
   useEffect(() => {
@@ -1322,7 +1323,31 @@ function App({ metro }: AppProps) {
   const [query, setQuery] = useState("");
   const [ageBand, setAgeBand] = useState<AgeBand | "any">("any");
   const [vibe, setVibe] = useState<PlannerVibe>("balanced");
-  const [category, setCategory] = useState<Category | "All">("All");
+  const [selectedCategories, setSelectedCategories] = useState<ReadonlySet<Category>>(
+    () => {
+      try {
+        const raw = window.localStorage.getItem(storageKeys.selectedCategories);
+        if (raw) {
+          const parsed = JSON.parse(raw) as string[];
+          const valid = new Set<Category>(categories);
+          return new Set<Category>(
+            parsed.filter((c): c is Category => valid.has(c as Category)),
+          );
+        }
+      } catch {
+        // fall through to default
+      }
+      // Food is hidden by default on kids — the dataset is dominated by
+      // restaurants and most parents aren't browsing for food when planning
+      // family time. Adults keep food on since it's core to nightlife.
+      const defaults =
+        APP_AUDIENCE === "adults"
+          ? categories
+          : categories.filter((c) => c !== "Food");
+      return new Set<Category>(defaults);
+    },
+  );
+  const [categoriesExpanded, setCategoriesExpanded] = useState(false);
   const [city, setCity] = useState("All");
   const [cost, setCost] = useState<Cost | "All">("All");
   const [onlyOpen, setOnlyOpen] = useState(false);
@@ -1408,18 +1433,6 @@ function App({ metro }: AppProps) {
   const [featuredPlans, setFeaturedPlans] = useState<FeaturedPlan[]>([]);
   const [boaMuseums, setBoaMuseums] = useState<BoaMuseum[]>([]);
   const [weather, setWeather] = useState<WeatherForecast | null>(null);
-  const [showFood, setShowFood] = useState<boolean>(() => {
-    // Food is hidden by default on the kids app — most parents are not
-    // looking for restaurants when browsing family activities. Adults keep
-    // the default-on behavior since food is core to that experience.
-    if (APP_AUDIENCE === "adults") return true;
-    try {
-      const raw = window.localStorage.getItem(storageKeys.showFood);
-      return raw === "true";
-    } catch {
-      return false;
-    }
-  });
   const [preferences, setPreferences] = useState<PlannerPreferenceId[]>(() => {
     try {
       const raw = window.localStorage.getItem(storageKeys.preferences);
@@ -1634,9 +1647,11 @@ function App({ metro }: AppProps) {
   }, [preferences, storageKeys.preferences]);
 
   useEffect(() => {
-    if (APP_AUDIENCE === "adults") return;
-    window.localStorage.setItem(storageKeys.showFood, String(showFood));
-  }, [showFood, storageKeys.showFood]);
+    window.localStorage.setItem(
+      storageKeys.selectedCategories,
+      JSON.stringify(Array.from(selectedCategories)),
+    );
+  }, [selectedCategories, storageKeys.selectedCategories]);
 
   useEffect(() => {
     window.localStorage.setItem(
@@ -2016,7 +2031,7 @@ function App({ metro }: AppProps) {
   useEffect(() => {
     setAiState({ status: "idle" });
   }, [
-    category,
+    selectedCategories,
     city,
     ageBand,
     cost,
@@ -2031,7 +2046,7 @@ function App({ metro }: AppProps) {
 
   useEffect(() => {
     setPage(1);
-  }, [category, city, ageBand, cost, onlyOpen, pageSize, query, sortBy, vibe]);
+  }, [selectedCategories, city, ageBand, cost, onlyOpen, pageSize, query, sortBy, vibe]);
 
   const allSpots = useMemo(
     () => [...remoteSpots, ...curatedSpots, ...customSpots],
@@ -2198,8 +2213,7 @@ function App({ metro }: AppProps) {
         (!normalizedQuery || searchable.includes(normalizedQuery)) &&
         (ageBand === "any" ||
           spot.kidsFriendly !== false) &&
-        (category === "All" || spot.category === category) &&
-        (showFood || category === "Food" || spot.category !== "Food") &&
+        selectedCategories.has(spot.category) &&
         (city === "All" || spot.neighborhood === city) &&
         (cost === "All" || spot.cost === cost) &&
         (!onlyOpen || describeStatus(spot).kind === "open" || describeStatus(spot).kind === "always")
@@ -2237,7 +2251,7 @@ function App({ metro }: AppProps) {
 
       return left.transitMinutes - right.transitMinutes;
     });
-  }, [allSpots, category, city, ageBand, cost, onlyOpen, query, scoringOptions, showFood, sortBy, vibe, userLocation]);
+  }, [allSpots, selectedCategories, city, ageBand, cost, onlyOpen, query, scoringOptions, sortBy, vibe, userLocation]);
 
   const pageCount = Math.max(1, Math.ceil(filteredSpots.length / pageSize));
   const safePage = Math.min(page, pageCount);
@@ -2461,12 +2475,12 @@ function App({ metro }: AppProps) {
     let n = 0;
     if (query) n += 1;
     if (ageBand !== "any") n += 1;
-    if (category !== "All") n += 1;
+    if (selectedCategories.size !== categories.length) n += 1;
     if (city !== "All") n += 1;
     if (cost !== "All") n += 1;
     if (eventDateFilter !== "all") n += 1;
     return n;
-  }, [query, ageBand, category, city, cost, eventDateFilter]);
+  }, [query, ageBand, selectedCategories, city, cost, eventDateFilter]);
 
   const activePlan = useMemo(
     () => plans.find((plan) => plan.id === activePlanId) ?? null,
@@ -3552,11 +3566,16 @@ function App({ metro }: AppProps) {
     setQuery("");
     setAgeBand("any");
     setVibe("balanced");
-    setCategory("All");
+    setSelectedCategories(
+      new Set<Category>(
+        APP_AUDIENCE === "adults"
+          ? categories
+          : categories.filter((c) => c !== "Food"),
+      ),
+    );
     setCity("All");
     setCost("All");
     setOnlyOpen(false);
-    setShowFood(APP_AUDIENCE === "adults");
     setEventDateFilter("all");
     setSortBy("best");
     setPreferences([]);
@@ -4287,60 +4306,29 @@ function App({ metro }: AppProps) {
 
           <div className="filter-group">
             <span className="filter-label">Spot legend</span>
-            {APP_AUDIENCE === "kids" && (
-              <label className="show-food-toggle">
-                <input
-                  type="checkbox"
-                  checked={showFood}
-                  onChange={(event) => setShowFood(event.target.checked)}
-                />
-                <span>Show food places</span>
-              </label>
-            )}
             <div className="cat-legend">
-              <button
-                type="button"
-                className={`cat-row${category === "All" ? " active" : ""}`}
-                onClick={() => setCategory("All")}
-              >
-                <span className="cat-swatch" style={{ background: "var(--ink-mute)" }}>
-                  <span className="cat-swatch-dot" />
-                </span>
-                <span className="cat-row-label">All categories</span>
-                <span className="cat-row-count">{allSpots.length}</span>
-              </button>
-              {(
-                APP_AUDIENCE === "adults"
-                  ? [
-                      ["Nightlife", "var(--accent)"],
-                      ["Food", "var(--sun)"],
-                      ["Culture", "var(--blue)"],
-                      ["Wellness", "var(--berry)"],
-                      ["Outdoors", "var(--forest)"],
-                    ]
-                  : [
-                      ["Outdoors", "var(--forest)"],
-                      ["Culture", "var(--blue)"],
-                      ["Food", "var(--sun)"],
-                      ["Wellness", "var(--berry)"],
-                      ["Shopping", "var(--accent)"],
-                    ]
-              ).map(([cat, color]) => {
-                const count = allSpots.filter((s) => s.category === cat).length;
-                return (
-                  <button
-                    key={cat}
-                    type="button"
-                    className={`cat-row${category === cat ? " active" : ""}`}
-                    style={category === cat ? { "--cat-active-color": color, "--cat-active-bg": `color-mix(in srgb, ${color} 8%, white)` } as React.CSSProperties : undefined}
-                    onClick={() => setCategory(category === cat ? "All" : (cat as Category))}
-                  >
-                    <span className="cat-swatch" style={{ background: color }} />
-                    <span className="cat-row-label">{cat}</span>
-                    <span className="cat-row-count">{count}</span>
-                  </button>
-                );
-              })}
+              <CategoryLegend
+                categories={categories}
+                allSpots={allSpots}
+                selected={selectedCategories}
+                expanded={categoriesExpanded}
+                onToggleExpand={() => setCategoriesExpanded((v) => !v)}
+                onToggleAll={() =>
+                  setSelectedCategories((current) =>
+                    current.size === categories.length
+                      ? new Set<Category>()
+                      : new Set<Category>(categories),
+                  )
+                }
+                onToggleCategory={(cat) =>
+                  setSelectedCategories((current) => {
+                    const next = new Set(current);
+                    if (next.has(cat)) next.delete(cat);
+                    else next.add(cat);
+                    return next;
+                  })
+                }
+              />
             </div>
           </div>
 
@@ -5865,6 +5853,96 @@ function HopNowCard({
         )}
       </div>
     </li>
+  );
+}
+
+const CATEGORY_COLORS: Record<Category, string> = {
+  Outdoors: "var(--forest)",
+  Culture: "var(--blue)",
+  Food: "var(--sun)",
+  Wellness: "var(--berry)",
+  Shopping: "var(--accent)",
+  Nightlife: "var(--accent)",
+};
+
+function CategoryLegend({
+  categories,
+  allSpots,
+  selected,
+  expanded,
+  onToggleExpand,
+  onToggleAll,
+  onToggleCategory,
+}: {
+  categories: Category[];
+  allSpots: Spot[];
+  selected: ReadonlySet<Category>;
+  expanded: boolean;
+  onToggleExpand: () => void;
+  onToggleAll: () => void;
+  onToggleCategory: (cat: Category) => void;
+}) {
+  const allState: "all" | "none" | "partial" =
+    selected.size === 0
+      ? "none"
+      : selected.size === categories.length
+        ? "all"
+        : "partial";
+  return (
+    <>
+      <div className="cat-row-all-wrap">
+        <button
+          type="button"
+          className={`cat-row cat-row-all is-${allState}`}
+          onClick={onToggleAll}
+        >
+          <span className="cat-state-box" aria-hidden="true">
+            {allState === "all" && <span className="cat-state-dot" />}
+            {allState === "partial" && <span className="cat-state-dash" />}
+          </span>
+          <span className="cat-row-label">All categories</span>
+          <span className="cat-row-count">{allSpots.length}</span>
+        </button>
+        <button
+          type="button"
+          className={`cat-expand${expanded ? " is-open" : ""}`}
+          onClick={onToggleExpand}
+          aria-expanded={expanded}
+          aria-label={expanded ? "Hide category list" : "Show category list"}
+        >
+          <ChevronDown aria-hidden="true" />
+        </button>
+      </div>
+      {expanded && (
+        <div className="cat-children">
+          {categories.map((cat) => {
+            const count = allSpots.filter((s) => s.category === cat).length;
+            const isSelected = selected.has(cat);
+            const color = CATEGORY_COLORS[cat] ?? "var(--ink-mute)";
+            return (
+              <button
+                key={cat}
+                type="button"
+                className={`cat-row cat-row-child${isSelected ? " is-selected" : ""}`}
+                onClick={() => onToggleCategory(cat)}
+              >
+                <span
+                  className="cat-swatch"
+                  style={{
+                    background: isSelected ? color : "transparent",
+                    borderColor: color,
+                  }}
+                >
+                  {isSelected && <span className="cat-swatch-dot" />}
+                </span>
+                <span className="cat-row-label">{cat}</span>
+                <span className="cat-row-count">{count}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </>
   );
 }
 
