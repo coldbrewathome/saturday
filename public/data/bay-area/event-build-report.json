@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "bay-area",
-  "generatedAt": "2026-05-17T16:49:07.869Z",
+  "generatedAt": "2026-05-17T21:00:12.410Z",
   "registryPath": "data/event-sources.json",
   "outputPath": "public/data/bay-area/events.json",
-  "eventCount": 2776,
-  "adultsEventCount": 478,
-  "sourceCount": 90,
-  "liveEventCount": 2700,
+  "eventCount": 2865,
+  "adultsEventCount": 495,
+  "sourceCount": 94,
+  "liveEventCount": 2789,
   "fallbackEventCount": 80,
   "errors": [],
   "sources": [
@@ -153,9 +153,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 8,
+      "liveEvents": 4,
       "fallbackEvents": 0,
-      "eventCount": 8,
+      "eventCount": 4,
       "fetches": [
         {
           "url": "https://smcl.bibliocommons.com/v2/events",
@@ -411,9 +411,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 14,
+      "liveEvents": 15,
       "fallbackEvents": 0,
-      "eventCount": 14,
+      "eventCount": 15,
       "fetches": [
         {
           "url": "https://sccl.bibliocommons.com/v2/events?locations=MI",
@@ -1176,7 +1176,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 21
+      "rejectedLiveEvents": 22
     },
     {
       "id": "san-mateo-county-parks",
@@ -1201,6 +1201,114 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0
+    },
+    {
+      "id": "sf-rec-park-calendar",
+      "name": "San Francisco Recreation and Parks",
+      "url": "https://sfrecpark.org/calendar.aspx?view=list",
+      "sourceType": "civicpluscal",
+      "city": "San Francisco",
+      "metroId": "bay-area",
+      "category": "Park",
+      "status": "ok",
+      "liveEvents": 40,
+      "fallbackEvents": 0,
+      "eventCount": 40,
+      "fetches": [
+        {
+          "url": "https://sfrecpark.org/calendar.aspx?view=list",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        },
+        {
+          "url": "https://sfrecpark.org/calendar.aspx?view=list&month=6&year=2026&CID=0",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "sfmoma-events",
+      "name": "SFMOMA Events",
+      "url": "https://www.sfmoma.org/events/",
+      "sourceType": "sfmomaEvents",
+      "city": "San Francisco",
+      "metroId": "bay-area",
+      "category": "Museum",
+      "status": "ok",
+      "liveEvents": 5,
+      "fallbackEvents": 0,
+      "eventCount": 5,
+      "fetches": [
+        {
+          "url": "https://www.sfmoma.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0
+    },
+    {
+      "id": "famsf-family-events",
+      "name": "Fine Arts Museums of San Francisco Family Events",
+      "url": "https://www.famsf.org/calendar",
+      "sourceType": "famsfEvents",
+      "city": "San Francisco",
+      "metroId": "bay-area",
+      "category": "Museum",
+      "status": "ok",
+      "liveEvents": 2,
+      "fallbackEvents": 0,
+      "eventCount": 2,
+      "fetches": [
+        {
+          "url": "https://www.famsf.org/events/family-art-making-0",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        },
+        {
+          "url": "https://www.famsf.org/events/family-tour-0",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 1
+    },
+    {
+      "id": "omca-family-events",
+      "name": "Oakland Museum of California Family Events",
+      "url": "https://museumca.org/events/",
+      "sourceType": "tribeEvents",
+      "city": "Oakland",
+      "metroId": "bay-area",
+      "category": "Museum",
+      "status": "ok",
+      "liveEvents": 13,
+      "fallbackEvents": 0,
+      "eventCount": 13,
+      "fetches": [
+        {
+          "url": "https://museumca.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=111; pages=3"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=111; pages=3",
+      "rejectedLiveEvents": 98
     },
     {
       "id": "sf-cherry-blossom",
@@ -1587,19 +1695,19 @@
       "metroId": "bay-area",
       "category": "Ticketed",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 33,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 33,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json;charset=utf-8"
+          "contentType": "application/json; source=ticketmaster; events=33; queries=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json;charset=utf-8",
+      "contentType": "application/json; source=ticketmaster; events=33; queries=3",
       "rejectedLiveEvents": 0
     },
     {
@@ -1611,9 +1719,9 @@
       "metroId": "bay-area",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 397,
+      "liveEvents": 396,
       "fallbackEvents": 0,
-      "eventCount": 397,
+      "eventCount": 396,
       "fetches": [
         {
           "url": "https://events.stanford.edu/",
@@ -1909,21 +2017,18 @@
       "city": "San Francisco",
       "metroId": "bay-area",
       "category": "Outdoors",
-      "status": "ok",
+      "status": "fetch-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.sfbg.org/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "reason": "fetch failed"
     },
     {
       "id": "sf-conservatory-of-flowers",

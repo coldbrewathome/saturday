@@ -120,27 +120,56 @@ async function fetchSource(source, registry) {
       return { status: "skipped", reason: `missing ${keyName}` };
     }
     const now = new Date();
-    const end = new Date(now.getTime() + Number(registry.defaults?.windowDays || 45) * 86400000);
-    const url = new URL(source.url);
-    url.searchParams.set("apikey", apiKey);
-    url.searchParams.set("countryCode", "US");
-    url.searchParams.set("classificationName", "Family");
-    const lat = Number(source.lat);
-    const lon = Number(source.lon);
-    if (Number.isFinite(lat) && Number.isFinite(lon)) {
-      url.searchParams.set("latlong", `${lat},${lon}`);
-      url.searchParams.set("radius", String(source.radiusMiles || 50));
-      url.searchParams.set("unit", "miles");
-    } else {
-      url.searchParams.set("city", source.city || "San Francisco");
+    const end = new Date(now.getTime() + Number(source.windowDays || registry.defaults?.windowDays || 45) * 86400000);
+    const queries = Array.isArray(source.ticketmasterQueries) && source.ticketmasterQueries.length > 0
+      ? source.ticketmasterQueries
+      : [{ classificationName: "Family" }];
+    const eventsById = new Map();
+    let fetched = 0;
+    for (const query of queries) {
+      const url = new URL(source.url);
+      url.searchParams.set("apikey", apiKey);
+      url.searchParams.set("countryCode", "US");
+      for (const [key, value] of Object.entries(query || {})) {
+        if (value !== null && value !== undefined && value !== "") {
+          url.searchParams.set(key, String(value));
+        }
+      }
+      if (!url.searchParams.has("classificationName") && !url.searchParams.has("segmentName") && !url.searchParams.has("keyword")) {
+        url.searchParams.set("classificationName", "Family");
+      }
+      const lat = Number(source.lat);
+      const lon = Number(source.lon);
+      if (Number.isFinite(lat) && Number.isFinite(lon)) {
+        url.searchParams.set("latlong", `${lat},${lon}`);
+        url.searchParams.set("radius", String(source.radiusMiles || 50));
+        url.searchParams.set("unit", "miles");
+      } else {
+        url.searchParams.set("city", source.city || "San Francisco");
+      }
+      url.searchParams.set("startDateTime", now.toISOString().replace(/\.\d{3}Z$/, "Z"));
+      url.searchParams.set("endDateTime", end.toISOString().replace(/\.\d{3}Z$/, "Z"));
+      url.searchParams.set("size", String(source.ticketmasterPageSize || 100));
+      const payload = await fetchUrlForSource(source, url.toString(), registry.defaults?.userAgent, {
+        browserHeaders: true,
+        headers: { accept: "application/json" },
+      });
+      if (payload.status !== "ok") return payload;
+      const json = payload.json || JSON.parse(payload.text || "{}");
+      for (const event of json?._embedded?.events || []) {
+        const key = event.id || `${event.name}|${event.dates?.start?.dateTime || event.dates?.start?.localDate || ""}`;
+        eventsById.set(key, event);
+      }
+      fetched += 1;
     }
-    url.searchParams.set("startDateTime", now.toISOString().replace(/\.\d{3}Z$/, "Z"));
-    url.searchParams.set("endDateTime", end.toISOString().replace(/\.\d{3}Z$/, "Z"));
-    url.searchParams.set("size", "100");
-    return fetchUrlForSource(source, url.toString(), registry.defaults?.userAgent, {
-      browserHeaders: true,
-      headers: { accept: "application/json" },
-    });
+    const json = { _embedded: { events: [...eventsById.values()] } };
+    return {
+      status: "ok",
+      httpStatus: 200,
+      contentType: `application/json; source=ticketmaster; events=${eventsById.size}; queries=${fetched}`,
+      json,
+      text: JSON.stringify(json),
+    };
   }
   return fetchUrlForSource(source, source.url, registry.defaults?.userAgent, {
     browserHeaders: source.requiresBrowserHeaders === true,
@@ -920,12 +949,20 @@ async function fetchSourcePayloads(source, registry) {
   // URL so we cover the full planning window even at month-end. Generalized:
   // works for both /events/calendar-month-view (Sunnyvale) and /calendar/events
   // (Santa Clara City) and any other CivicPlus instance.
-  if (source.sourceType === "civicpluscal" && !/-curm-\d/.test(source.url)) {
+  if (source.sourceType === "civicpluscal" && source.appendNextMonth !== false && !/-curm-\d/.test(source.url)) {
     const next = new Date();
     next.setUTCMonth(next.getUTCMonth() + 1);
     const nm = next.getUTCMonth() + 1;
     const ny = next.getUTCFullYear();
-    const nextUrl = `${source.url.replace(/\/$/, "")}/-curm-${nm}/-cury-${ny}`;
+    let nextUrl = `${source.url.replace(/\/$/, "")}/-curm-${nm}/-cury-${ny}`;
+    if (/calendar\.aspx/i.test(source.url)) {
+      const url = new URL(source.url);
+      url.searchParams.set("view", url.searchParams.get("view") || "list");
+      url.searchParams.set("month", String(nm));
+      url.searchParams.set("year", String(ny));
+      if (!url.searchParams.has("CID")) url.searchParams.set("CID", "0");
+      nextUrl = url.toString();
+    }
     if (!urls.includes(nextUrl)) urls = [...urls, nextUrl];
   }
   const payloads = [];

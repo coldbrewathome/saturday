@@ -355,6 +355,11 @@ function sourceAudienceText(source = {}) {
   );
 }
 
+function patternMatches(text, pattern) {
+  if (!pattern) return true;
+  return new RegExp(pattern, "i").test(text);
+}
+
 function walkJsonLd(value, out = []) {
   if (!value || typeof value !== "object") return out;
   if (Array.isArray(value)) {
@@ -1129,6 +1134,8 @@ function shouldKeepSourceSpecificEvent(signalText, source = {}) {
   const config = eventListOptions(source);
   const excludePattern = config.excludePattern || source.excludePattern;
   if (excludePattern && new RegExp(excludePattern, "i").test(signalText)) return false;
+  const includePattern = config.includePattern || source.includePattern;
+  if (includePattern && !patternMatches(signalText, includePattern)) return false;
   if (config.requireEventSignal !== false && !isEventish(signalText)) return false;
   if (config.requireFamilySignal !== false && !hasFamilySignal(signalText)) return false;
   return !hasAdultOnlySignal(signalText);
@@ -2212,52 +2219,109 @@ export function expandRecurringTemplates(templates, source = {}, options = {}) {
 export function extractCivicPlusCalendarEvents(html, source = {}, options = {}) {
   if (typeof html !== "string" || html.length === 0) return [];
   const monthYear = inferCivicPlusMonthYear(html);
-  if (!monthYear) return [];
-  const { month, year } = monthYear;
   const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
-
   const events = [];
-  const dayCellRegex = /<td[^>]*class="[^"]*calendar_day[^"]*"[^>]*>([\s\S]*?)<\/td>/gi;
-  for (const cellMatch of html.matchAll(dayCellRegex)) {
-    const cell = cellMatch[1];
-    if (!/calendar_day_with_items/i.test(cellMatch[0])) continue;
-    const dayMatch = cell.match(/^\s*(\d{1,2})/);
-    if (!dayMatch) continue;
-    const day = Number(dayMatch[1]);
-    if (!day || day < 1 || day > 31) continue;
-    const itemRegex =
-      /<div class="calendar_item">\s*(?:<span[^>]*class="calendar_eventtime"[^>]*>([^<]+)<\/span>)?\s*<a[^>]*class="calendar_eventlink"[^>]*href="([^"]+)"[^>]*title="([^"]*)"[^>]*>([^<]*)<\/a>/gi;
-    for (const item of cell.matchAll(itemRegex)) {
-      const timeText = (item[1] || "").trim();
-      const href = item[2];
-      const title = decodeHtmlEntities((item[3] || item[4] || "").trim());
-      if (!title) continue;
-      const startClock = parseCivicPlusClock(timeText);
-      if (!startClock) continue;
-      const startDateTime = localDateTime(
-        new Date(Date.UTC(year, month - 1, day)),
-        startClock,
-        timezoneOffset,
-      );
-      if (!startDateTime) continue;
-      const endDateTime = addMinutesToLocalIso(startDateTime, 60);
-      const url = href.startsWith("http")
-        ? href
-        : new URL(href, source.url).toString();
-      const event = normalizeRawEvent(
-        {
-          title,
-          startDateTime,
-          endDateTime,
-          url,
-          sourceUrl: source.url,
-          sourceMode: "civicpluscal",
-          extractionMethod: "civicpluscal",
-        },
-        source,
-      );
-      if (event) events.push(event);
+
+  if (monthYear) {
+    const { month, year } = monthYear;
+    const dayCellRegex = /<td[^>]*class="[^"]*calendar_day[^"]*"[^>]*>([\s\S]*?)<\/td>/gi;
+    for (const cellMatch of html.matchAll(dayCellRegex)) {
+      const cell = cellMatch[1];
+      if (!/calendar_day_with_items/i.test(cellMatch[0])) continue;
+      const dayMatch = cell.match(/^\s*(\d{1,2})/);
+      if (!dayMatch) continue;
+      const day = Number(dayMatch[1]);
+      if (!day || day < 1 || day > 31) continue;
+      const itemRegex =
+        /<div class="calendar_item">\s*(?:<span[^>]*class="calendar_eventtime"[^>]*>([^<]+)<\/span>)?\s*<a[^>]*class="calendar_eventlink"[^>]*href="([^"]+)"[^>]*title="([^"]*)"[^>]*>([^<]*)<\/a>/gi;
+      for (const item of cell.matchAll(itemRegex)) {
+        const timeText = (item[1] || "").trim();
+        const href = item[2];
+        const title = decodeHtmlEntities((item[3] || item[4] || "").trim());
+        if (!title) continue;
+        const startClock = parseCivicPlusClock(timeText);
+        if (!startClock) continue;
+        const startDateTime = localDateTime(
+          new Date(Date.UTC(year, month - 1, day)),
+          startClock,
+          timezoneOffset,
+        );
+        if (!startDateTime) continue;
+        const endDateTime = addMinutesToLocalIso(startDateTime, 60);
+        const url = href.startsWith("http")
+          ? href
+          : new URL(href, source.url).toString();
+        const event = normalizeRawEvent(
+          {
+            title,
+            startDateTime,
+            endDateTime,
+            url,
+            sourceUrl: source.url,
+            sourceMode: "civicpluscal",
+            extractionMethod: "civicpluscal",
+          },
+          source,
+        );
+        if (event) events.push(event);
+      }
     }
+  }
+
+  events.push(...extractCivicPlusListEvents(html, source, options));
+  return dedupeEvents(events);
+}
+
+function extractCivicPlusListEvents(html, source = {}) {
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
+  const blocks = html.match(/<li>\s*<h3>[\s\S]*?(?=<li>\s*<h3>|<!-- END CALENDAR DISPLAY|<\/ul>|$)/gi) || [];
+  const events = [];
+  for (const block of blocks) {
+    if (!/schema\.org\/Event/i.test(block)) continue;
+    const title =
+      stripUnsafeText(block.match(/<a[^>]+id=["']eventTitle_[^"']+["'][^>]*>[\s\S]*?<span>([\s\S]*?)<\/span>/i)?.[1], 140) ||
+      stripUnsafeText(block.match(/itemprop=["']name["'][^>]*>([\s\S]*?)<\/span>/i)?.[1], 140);
+    const start = block.match(/itemprop=["']startDate["'][^>]*>([^<]+)/i)?.[1];
+    const description = stripUnsafeText(
+      block.match(/itemprop=["']description["'][^>]*>([\s\S]*?)<\/p>/i)?.[1] ||
+        block.match(/<p>([\s\S]*?)<\/p>/i)?.[1] ||
+        "",
+      500,
+    );
+    const venue = stripUnsafeText(
+      block.match(/<div class=["']name["']>([\s\S]*?)<\/div>/i)?.[1] ||
+        block.match(/itemprop=["']location["'][\s\S]*?itemprop=["']name["'][^>]*>([\s\S]*?)<\/span>/i)?.[1] ||
+        source.venue ||
+        source.name,
+      120,
+    );
+    const href = block.match(/<a[^>]+id=["']calendarEvent[^"']+["'][^>]+href=["']([^"']+)["']/i)?.[1];
+    const eventText = `${title} ${description} ${venue}`;
+    const signalText = `${eventText} ${sourceAudienceText(source)}`;
+    if (!title || !start) continue;
+    if (source.includePattern && !patternMatches(eventText, source.includePattern)) continue;
+    if (source.excludePattern && patternMatches(eventText, source.excludePattern)) continue;
+    if (!source.includePattern && !hasFamilySignal(signalText)) continue;
+    if (hasAdultOnlySignal(signalText)) continue;
+    const startDateTime = normalizeDateTime(start, timezoneOffset);
+    const event = normalizeRawEvent({
+      title,
+      description,
+      venue,
+      city: source.city,
+      category: source.category || inferCategory(signalText),
+      startDateTime,
+      endDateTime: startDateTime ? addMinutesToLocalIso(startDateTime, Number(source.defaultDurationMinutes || 60)) : null,
+      ageBands: inferAgeBands(signalText),
+      url: sanitizeUrl(href, source.url) || source.url,
+      cost: inferCost(signalText),
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.url,
+      extractionMethod: "civicpluscal",
+      verified: true,
+    }, source);
+    if (event) events.push(event);
   }
   return events;
 }
@@ -2411,6 +2475,131 @@ export function extractTribeEvents(json, source = {}) {
       }, source);
     })
     .filter(Boolean);
+}
+
+export function extractSfmomaEvents(html, source = {}) {
+  const match = html.match(/APP\.data\[['"]archive_filter_posts['"]\]\s*=\s*(\[[\s\S]*?\]);/);
+  if (!match) return [];
+  let rawEvents = [];
+  try {
+    rawEvents = JSON.parse(match[1]);
+  } catch {
+    return [];
+  }
+  if (!Array.isArray(rawEvents)) return [];
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
+  return dedupeEvents(rawEvents
+    .map((item) => {
+      const title = htmlText(item.title || item.post_title, 140);
+      const description = htmlText(item.description || item.post_excerpt || item.subtitle, 700);
+      const eventType = htmlText(item.supertitle, 80);
+      const eventText = `${title} ${description} ${eventType}`;
+      const signalText = `${eventText} ${sourceAudienceText(source)}`;
+      if (source.includePattern && !patternMatches(eventText, source.includePattern)) return null;
+      if (source.excludePattern && patternMatches(eventText, source.excludePattern)) return null;
+      if (!source.includePattern && !hasFamilySignal(signalText)) return null;
+      if (hasAdultOnlySignal(signalText)) return null;
+      const startDateTime = localDateTimeFromString(
+        `${item.StartDate || item.start_date || ""} ${item.StartTime || "10:00:00"}`,
+        timezoneOffset,
+      );
+      const endDate = item.EndDate || item.StartDate || item.start_date;
+      const endTime = item.EndTime || item.FinishTime || "";
+      const endDateTime = endDate && endTime
+        ? localDateTimeFromString(`${endDate} ${endTime}`, timezoneOffset)
+        : null;
+      return normalizeRawEvent({
+        id: item.ID ? `${source.id}-${item.ID}` : null,
+        title,
+        description,
+        venue: source.venue || source.name,
+        city: source.city,
+        category: source.category || inferCategory(signalText),
+        startDateTime,
+        endDateTime,
+        ageBands: inferAgeBands(signalText),
+        url: sanitizeUrl(item.permalink, source.url) || source.url,
+        cost: inferCost(signalText),
+        sourceId: source.id,
+        sourceName: source.name,
+        sourceUrl: source.url,
+        extractionMethod: "sfmoma-events",
+        verified: true,
+      }, source);
+    })
+    .filter(Boolean));
+}
+
+function famsfDetailYear(html) {
+  const text = stripUnsafeText(html, 4000);
+  const range = text.match(/[A-Z][a-z]+\s+\d{1,2}\s*[–-]\s*[A-Z][a-z]+\s+\d{1,2},\s*(\d{4})/);
+  if (range) return range[1];
+  return String(new Date().getFullYear());
+}
+
+function famsfDetailTimeText(html) {
+  const text = stripUnsafeText(html, 5000);
+  return text.match(/\bfrom\s+(\d{1,2}(?::\d{2})?\s*(?:am|pm)\s+to\s+\d{1,2}(?::\d{2})?\s*(?:am|pm))/i)?.[1] ||
+    text.match(/\bat\s+(\d{1,2}(?::\d{2})?\s*(?:am|pm))/i)?.[1] ||
+    "";
+}
+
+export function extractFamsfEvents(html, source = {}, options = {}) {
+  const title =
+    stripUnsafeText(html.match(/<meta[^>]+itemprop=["']name["'][^>]+content=["']([^"']+)["']/i)?.[1], 140) ||
+    pageTitle(html).replace(/\s+\|\s+.*$/i, "");
+  const description =
+    pageDescription(html) ||
+    stripUnsafeText(html.match(/<main[\s\S]*?<\/main>/i)?.[0] || html, 700);
+  const year = famsfDetailYear(html);
+  const timeText = famsfDetailTimeText(html);
+  const listItems = [...html.matchAll(/<li>\s*<p>([\s\S]*?)<\/p>\s*<\/li>/gi)]
+    .map((match) => stripUnsafeText(match[1], 260))
+    .filter((line) => /\b(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s+[A-Z][a-z]+\s+\d{1,2}:/i.test(line));
+  const items = listItems.length > 0 ? listItems : [""];
+  const events = [];
+  for (const item of items) {
+    const occurrenceTitle = stripUnsafeText(item.replace(/^[A-Z][a-z]{2},\s+[A-Z][a-z]+\s+\d{1,2}:\s*/i, ""), 120);
+    const dateText = item
+      ? item.replace(/^([A-Z][a-z]{2},\s+[A-Z][a-z]+\s+\d{1,2})(:.*)?$/i, `$1, ${year} ${timeText}`)
+      : `${title} ${timeText}`;
+    const range = parseDateTimeRange(dateText, options.now || new Date(), source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET) ||
+      (() => {
+        const startDateTime = parseLooseDate(dateText, options.now || new Date(), source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET);
+        return startDateTime
+          ? {
+              startDateTime,
+              endDateTime: addMinutesToLocalIso(startDateTime, Number(source.defaultDurationMinutes || 60)),
+            }
+          : null;
+      })();
+    if (!range) continue;
+    const eventText = `${title} ${occurrenceTitle} ${description}`;
+    const signalText = `${eventText} ${sourceAudienceText(source)}`;
+    if (source.includePattern && !patternMatches(eventText, source.includePattern)) continue;
+    if (source.excludePattern && patternMatches(eventText, source.excludePattern)) continue;
+    if (hasAdultOnlySignal(signalText)) continue;
+    const event = normalizeRawEvent({
+      title: occurrenceTitle ? `${title}: ${occurrenceTitle}` : title,
+      description,
+      venue: source.venue || source.name,
+      city: source.city,
+      neighborhood: source.neighborhood || source.city,
+      category: source.category || "Museum",
+      startDateTime: range.startDateTime,
+      endDateTime: range.endDateTime,
+      ageBands: inferAgeBands(signalText),
+      url: source.url,
+      cost: inferCost(signalText),
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.homeUrl || source.url,
+      extractionMethod: "famsf-events",
+      verified: true,
+    }, source);
+    if (event) events.push(event);
+  }
+  return dedupeEvents(events);
 }
 
 export function extractDallasZooEvents(html, source = {}) {
@@ -2696,6 +2885,12 @@ export function extractEventsFromPayload(payload, source = {}, options = {}) {
   }
   if (source.sourceType === "tribeEvents") {
     return extractTribeEvents(payload.json, source);
+  }
+  if (source.sourceType === "sfmomaEvents") {
+    return extractSfmomaEvents(text, source);
+  }
+  if (source.sourceType === "famsfEvents") {
+    return extractFamsfEvents(text, source, options);
   }
   if (source.sourceType === "libraryMarket") {
     return extractLibraryCalendarEvents(text, source, options);
@@ -3546,14 +3741,29 @@ export function extractTicketmasterEvents(json, source = {}) {
   return events
     .map((item) => {
       const venue = item._embedded?.venues?.[0];
+      const classifications = maybeArray(item.classifications)
+        .flatMap((classification) => [
+          classification.segment?.name,
+          classification.genre?.name,
+          classification.subGenre?.name,
+          classification.type?.name,
+          classification.subType?.name,
+        ])
+        .filter(Boolean)
+        .join(" ");
+      const signalText = `${item.name || ""} ${item.info || ""} ${item.pleaseNote || ""} ${classifications}`;
+      if (source.ticketmasterAllowedPattern && !patternMatches(signalText, source.ticketmasterAllowedPattern)) return null;
+      if (source.ticketmasterExcludePattern && patternMatches(signalText, source.ticketmasterExcludePattern)) return null;
+      if (!source.ticketmasterAllowedPattern && !hasFamilySignal(`${signalText} ${sourceAudienceText(source)}`)) return null;
+      if (hasAdultOnlySignal(signalText)) return null;
       return normalizeRawEvent({
         title: item.name,
-        description: item.info || item.pleaseNote || "",
+        description: item.info || item.pleaseNote || classifications,
         venue: venue?.name || source.name,
         city: venue?.city?.name || source.city,
         lat: venue?.location?.latitude,
         lon: venue?.location?.longitude,
-        category: "Ticketed",
+        category: source.category || "Ticketed",
         startDateTime: item.dates?.start?.dateTime || item.dates?.start?.localDate,
         endDateTime: item.dates?.end?.dateTime,
         url: item.url,

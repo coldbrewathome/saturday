@@ -801,6 +801,77 @@
       "defaultAudienceText": "family kids nature hikes storytime parks trails bicycle"
     },
     {
+      "id": "sf-rec-park-calendar",
+      "name": "San Francisco Recreation and Parks",
+      "url": "https://sfrecpark.org/calendar.aspx?view=list",
+      "urls": [
+        "https://sfrecpark.org/calendar.aspx?view=list"
+      ],
+      "city": "San Francisco",
+      "category": "Park",
+      "sourceType": "civicpluscal",
+      "trust": "official",
+      "lat": 37.7796,
+      "lon": -122.4156,
+      "defaultAudienceText": "family kids children all ages parks outdoor",
+      "includePattern": "Kids Festival|Sunday Fun Days|Toddler Tuesdays|Crafternoons|Juggling Lessons|Chess Lessons|Imagination Mondays|family|families|children|kids|youth",
+      "excludePattern": "Fitness Class|Yoga Class|Soundtrack Concert Series|Tai Chi|Cardio Dance",
+      "defaultDurationMinutes": 120,
+      "notes": "Official CivicPlus calendar. The list view embeds schema.org event microdata; includePattern keeps this source focused on family-relevant park programming."
+    },
+    {
+      "id": "sfmoma-events",
+      "name": "SFMOMA Events",
+      "url": "https://www.sfmoma.org/events/",
+      "city": "San Francisco",
+      "category": "Museum",
+      "sourceType": "sfmomaEvents",
+      "trust": "official",
+      "lat": 37.7857,
+      "lon": -122.4011,
+      "venue": "SFMOMA",
+      "defaultAudienceText": "family kids children art-making workshops museum all ages",
+      "includePattern": "Free Family|Family Day|MAKE!|SCRAP|Community Day|Hat Party|art[- ]making|craft|kids|children",
+      "excludePattern": "tasting|cocktail|21\\+",
+      "notes": "SFMOMA renders its event archive into APP.data.archive_filter_posts; the parser reads that inline JSON and keeps family/art-making listings."
+    },
+    {
+      "id": "famsf-family-events",
+      "name": "Fine Arts Museums of San Francisco Family Events",
+      "url": "https://www.famsf.org/calendar",
+      "urls": [
+        "https://www.famsf.org/events/family-art-making-0",
+        "https://www.famsf.org/events/family-tour-0"
+      ],
+      "city": "San Francisco",
+      "category": "Museum",
+      "sourceType": "famsfEvents",
+      "trust": "official",
+      "lat": 37.7715,
+      "lon": -122.4687,
+      "venue": "de Young Museum",
+      "homeUrl": "https://www.famsf.org/calendar",
+      "defaultAudienceText": "family children kids all ages art-making museum tour",
+      "includePattern": "Family Art Making|Family Tour|children|kids|all ages|artists of all ages",
+      "notes": "Official FAMSF family detail pages list dated occurrences inside recurring series copy."
+    },
+    {
+      "id": "omca-family-events",
+      "name": "Oakland Museum of California Family Events",
+      "url": "https://museumca.org/events/",
+      "city": "Oakland",
+      "category": "Museum",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 37.7986,
+      "lon": -122.2634,
+      "categories": "6",
+      "perPage": 100,
+      "maxPages": 4,
+      "defaultAudienceText": "family kids children all ages museum gallery chats friday nights",
+      "notes": "Official WordPress Tribe Events API; category 6 is OMCA's Family category."
+    },
+    {
       "id": "sf-cherry-blossom",
       "name": "Northern California Cherry Blossom Festival",
       "url": "https://sfcherryblossom.org/faqs/",
@@ -1592,7 +1663,25 @@
       "trust": "commercial",
       "enabled": false,
       "requiresEnv": "TICKETMASTER_API_KEY",
-      "notes": "Enable after adding an API key. Query params are built by ingest-events.mjs."
+      "lat": 37.7749,
+      "lon": -122.4194,
+      "radiusMiles": 55,
+      "windowDays": 45,
+      "ticketmasterQueries": [
+        {
+          "classificationName": "Family"
+        },
+        {
+          "keyword": "children",
+          "segmentName": "Arts & Theatre"
+        },
+        {
+          "keyword": "Disney"
+        }
+      ],
+      "ticketmasterAllowedPattern": "Family|Children|children under|Recommended ages?|Disney|Beauty And The Beast|Phantom Of The Opera|all guests require ticket",
+      "ticketmasterExcludePattern": "\\b21\\+|club|nightclub|wine|beer|cocktail",
+      "notes": "Runs when TICKETMASTER_API_KEY is present. Family classification alone is sparse in the Bay Area, so the source also uses narrow arts/theatre keyword queries and parser-side filters."
     },
     {
       "id": "stanford-events",

@@ -7,9 +7,11 @@ import {
   extractBrooklynLibraryEvents,
   extractCommunicoEvents,
   extractChicagoParkDistrictEvents,
+  extractCivicPlusCalendarEvents,
   extractDrupalCardEvents,
   extractEventOnEvents,
   extractEventListEvents,
+  extractFamsfEvents,
   extractHtmlEvents,
   extractIcsEvents,
   extractLibCalEvents,
@@ -20,7 +22,9 @@ import {
   extractOpenCitiesEventEvents,
   extractOfficialTextEvents,
   extractPhoenixZooEvents,
+  extractSfmomaEvents,
   extractSfplEvents,
+  extractTicketmasterEvents,
   extractTicketureEvents,
   extractWebflowEvents,
   extractWpRestEvents,
@@ -1245,4 +1249,148 @@ test("inferAgeBands and parseLooseDate handle common calendar text", () => {
     startDateTime: "2026-06-14T09:00:00-07:00",
     endDateTime: "2026-06-14T12:00:00-07:00",
   });
+});
+
+test("extractSfmomaEvents reads inline archive JSON and filters family listings", () => {
+  const html = `
+    <script>
+      APP.data['archive_filter_posts'] = [
+        {
+          "ID": 1,
+          "title": "MAKE! with SCRAP: Thinking Big",
+          "description": "Hands-on art making for visitors.",
+          "supertitle": "Workshop Series",
+          "StartDate": "2026-06-07",
+          "StartTime": "11:00:00",
+          "EndDate": "2026-06-07",
+          "EndTime": "14:00:00",
+          "permalink": "https://www.sfmoma.org/event/make-with-scrap-thinking-big/"
+        },
+        {
+          "ID": 2,
+          "title": "Rooftop Radio",
+          "description": "Evening DJ set.",
+          "supertitle": "Special Event",
+          "StartDate": "2026-06-18",
+          "StartTime": "17:00:00",
+          "permalink": "https://www.sfmoma.org/event/rooftop-radio/"
+        }
+      ];
+    </script>
+  `;
+  const events = extractSfmomaEvents(html, {
+    id: "sfmoma-events",
+    name: "SFMOMA Events",
+    url: "https://www.sfmoma.org/events/",
+    city: "San Francisco",
+    category: "Museum",
+    venue: "SFMOMA",
+    defaultAudienceText: "family kids children art-making",
+    includePattern: "MAKE!|SCRAP|Family",
+  });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "MAKE! with SCRAP: Thinking Big");
+  assert.equal(events[0].startDateTime, "2026-06-07T18:00:00.000Z");
+  assert.equal(events[0].extractionMethod, "sfmoma-events");
+});
+
+test("extractFamsfEvents expands dated family detail-page occurrences", () => {
+  const html = `
+    <title>Family Tour</title>
+    <meta itemprop="name" content="Family Tour" />
+    <meta name="description" content="Have fun and connect with your family." />
+    <p>January 31 - June 20, 2026</p>
+    <p>Come with your loved ones and make new memories on select Saturdays at 10:30 am!</p>
+    <h2>Tour schedule + theme</h2>
+    <ul><li><p>Sat, June 20: <em>Heroes</em><br></p></li></ul>
+  `;
+  const events = extractFamsfEvents(html, {
+    id: "famsf-family-events",
+    name: "Fine Arts Museums of San Francisco Family Events",
+    url: "https://www.famsf.org/events/family-tour-0",
+    city: "San Francisco",
+    category: "Museum",
+    venue: "de Young Museum",
+    defaultAudienceText: "family children kids all ages museum tour",
+    includePattern: "Family Tour|children|kids|all ages",
+  }, { now: new Date("2026-05-17T12:00:00Z") });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "Family Tour: Heroes");
+  assert.equal(events[0].startDateTime, "2026-06-20T17:30:00.000Z");
+  assert.equal(events[0].extractionMethod, "famsf-events");
+});
+
+test("extractCivicPlusCalendarEvents reads schema.org list-view events with source include filters", () => {
+  const html = `
+    <ul>
+      <li>
+        <h3><a id="eventTitle_9550" href="/Calendar.aspx?EID=9550"><span>Golden Gate Bandshell: Kids Festival</span></a></h3>
+        <div class="hidden" itemscope itemtype="http://schema.org/Event">
+          <span itemprop="name">Golden Gate Bandshell: Kids Festival</span>
+          <span itemprop="startDate" class="hidden">2026-05-30T10:30:00</span>
+          <p itemprop="description">Come out for a Kids Festival</p>
+          <span itemprop="location" itemscope itemtype="http://schema.org/Place"><span itemprop="name">Golden Gate Bandshell</span></span>
+        </div>
+        <a id="calendarEvent9550" href="/Calendar.aspx?EID=9550">More Details</a>
+      </li>
+      <li>
+        <h3><a id="eventTitle_9890" href="/Calendar.aspx?EID=9890"><span>Jazz Funk Fitness Class</span></a></h3>
+        <div class="hidden" itemscope itemtype="http://schema.org/Event">
+          <span itemprop="name">Jazz Funk Fitness Class</span>
+          <span itemprop="startDate" class="hidden">2026-05-18T18:00:00</span>
+          <p itemprop="description">Free dance fitness class</p>
+        </div>
+      </li>
+    </ul>
+  `;
+  const events = extractCivicPlusCalendarEvents(html, {
+    id: "sf-rec-park-calendar",
+    name: "San Francisco Recreation and Parks",
+    url: "https://sfrecpark.org/Calendar/home",
+    city: "San Francisco",
+    category: "Park",
+    includePattern: "Kids Festival|Sunday Fun Days|children|kids",
+    excludePattern: "Fitness Class",
+  });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "Golden Gate Bandshell: Kids Festival");
+  assert.equal(events[0].venue, "Golden Gate Bandshell");
+  assert.equal(events[0].extractionMethod, "civicpluscal");
+});
+
+test("extractTicketmasterEvents applies source allow and exclude filters", () => {
+  const events = extractTicketmasterEvents({
+    _embedded: {
+      events: [
+        {
+          name: "Beauty And The Beast (Touring) - Recommended ages 6 and Up",
+          url: "https://ticketmaster.example/beauty",
+          dates: { start: { dateTime: "2026-07-14T19:30:00Z" } },
+          classifications: [{ segment: { name: "Arts & Theatre" }, genre: { name: "Theatre" } }],
+          _embedded: { venues: [{ name: "Orpheum Theatre", city: { name: "San Francisco" } }] },
+        },
+        {
+          name: "Kid Cudi",
+          url: "https://ticketmaster.example/kid-cudi",
+          dates: { start: { dateTime: "2026-06-23T19:30:00Z" } },
+          classifications: [{ segment: { name: "Music" }, genre: { name: "Hip-Hop/Rap" } }],
+          _embedded: { venues: [{ name: "Shoreline", city: { name: "Mountain View" } }] },
+        },
+      ],
+    },
+  }, {
+    id: "ticketmaster-bay-area-family",
+    name: "Ticketmaster Bay Area Family Events",
+    url: "https://app.ticketmaster.com/discovery/v2/events.json",
+    city: "San Francisco",
+    category: "Ticketed",
+    ticketmasterAllowedPattern: "Recommended ages?|Disney|Beauty And The Beast|children under",
+  });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "Beauty And The Beast (Touring) - Recommended ages 6 and Up");
+  assert.equal(events[0].extractionMethod, "ticketmaster");
 });
