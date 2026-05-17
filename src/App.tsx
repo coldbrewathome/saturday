@@ -1212,6 +1212,7 @@ function App({ metro }: AppProps) {
     preferences: metroStorageKey(metro, "preferences"),
     plannerProfile: metroStorageKey(metro, "plannerProfile"),
     mapView: metroStorageKey(metro, "mapView"),
+    showFood: metroStorageKey(metro, "showFood"),
   }), [metro]);
   const shareBaseUrl = useMemo(() => metroShareBase(metro), [metro]);
   useEffect(() => {
@@ -1407,6 +1408,18 @@ function App({ metro }: AppProps) {
   const [featuredPlans, setFeaturedPlans] = useState<FeaturedPlan[]>([]);
   const [boaMuseums, setBoaMuseums] = useState<BoaMuseum[]>([]);
   const [weather, setWeather] = useState<WeatherForecast | null>(null);
+  const [showFood, setShowFood] = useState<boolean>(() => {
+    // Food is hidden by default on the kids app — most parents are not
+    // looking for restaurants when browsing family activities. Adults keep
+    // the default-on behavior since food is core to that experience.
+    if (APP_AUDIENCE === "adults") return true;
+    try {
+      const raw = window.localStorage.getItem(storageKeys.showFood);
+      return raw === "true";
+    } catch {
+      return false;
+    }
+  });
   const [preferences, setPreferences] = useState<PlannerPreferenceId[]>(() => {
     try {
       const raw = window.localStorage.getItem(storageKeys.preferences);
@@ -1619,6 +1632,11 @@ function App({ metro }: AppProps) {
       JSON.stringify(preferences),
     );
   }, [preferences, storageKeys.preferences]);
+
+  useEffect(() => {
+    if (APP_AUDIENCE === "adults") return;
+    window.localStorage.setItem(storageKeys.showFood, String(showFood));
+  }, [showFood, storageKeys.showFood]);
 
   useEffect(() => {
     window.localStorage.setItem(
@@ -2181,6 +2199,7 @@ function App({ metro }: AppProps) {
         (ageBand === "any" ||
           spot.kidsFriendly !== false) &&
         (category === "All" || spot.category === category) &&
+        (showFood || category === "Food" || spot.category !== "Food") &&
         (city === "All" || spot.neighborhood === city) &&
         (cost === "All" || spot.cost === cost) &&
         (!onlyOpen || describeStatus(spot).kind === "open" || describeStatus(spot).kind === "always")
@@ -2218,7 +2237,7 @@ function App({ metro }: AppProps) {
 
       return left.transitMinutes - right.transitMinutes;
     });
-  }, [allSpots, category, city, ageBand, cost, onlyOpen, query, scoringOptions, sortBy, vibe, userLocation]);
+  }, [allSpots, category, city, ageBand, cost, onlyOpen, query, scoringOptions, showFood, sortBy, vibe, userLocation]);
 
   const pageCount = Math.max(1, Math.ceil(filteredSpots.length / pageSize));
   const safePage = Math.min(page, pageCount);
@@ -3537,6 +3556,7 @@ function App({ metro }: AppProps) {
     setCity("All");
     setCost("All");
     setOnlyOpen(false);
+    setShowFood(APP_AUDIENCE === "adults");
     setEventDateFilter("all");
     setSortBy("best");
     setPreferences([]);
@@ -4267,6 +4287,16 @@ function App({ metro }: AppProps) {
 
           <div className="filter-group">
             <span className="filter-label">Spot legend</span>
+            {APP_AUDIENCE === "kids" && (
+              <label className="show-food-toggle">
+                <input
+                  type="checkbox"
+                  checked={showFood}
+                  onChange={(event) => setShowFood(event.target.checked)}
+                />
+                <span>Show food places</span>
+              </label>
+            )}
             <div className="cat-legend">
               <button
                 type="button"
