@@ -219,6 +219,28 @@ a:hover{text-decoration:underline}
 .guide-highlights{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:10px;}
 .guide-highlights li{border-top:1px solid var(--line);padding-top:10px;}
 .guide-highlights a{color:var(--ink);font-weight:800;}
+.guide-presets,.guide-editorial,.guide-newsletter{margin:26px 0;}
+.guide-section-heading{margin:0 0 12px;}
+.guide-section-heading h2{font-size:22px;line-height:1.25;margin:0 0 6px;}
+.guide-section-heading p{color:var(--muted);margin:0;}
+.guide-preset-grid,.guide-editorial-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;}
+.guide-preset-card,.guide-editorial-card,.guide-newsletter{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 10px 28px rgba(34,34,31,.05);}
+.guide-preset-card h3,.guide-editorial-card h3{font-size:18px;line-height:1.25;margin:0 0 6px;}
+.guide-preset-card p,.guide-editorial-card p{color:var(--muted);font-size:14px;margin:0 0 10px;}
+.guide-mini-list{display:grid;gap:8px;list-style:none;margin:12px 0;padding:0;}
+.guide-mini-list li{border-top:1px solid var(--line);padding-top:8px;}
+.guide-mini-list a{color:var(--ink);font-size:14px;font-weight:900;}
+.guide-mini-list span{color:var(--muted);display:block;font-size:12px;font-weight:700;margin-top:2px;}
+.guide-card-cta{display:inline-flex;align-items:center;background:var(--brand);border-radius:999px;color:#fff;font-size:14px;font-weight:900;margin-top:4px;padding:9px 13px;}
+.guide-card-cta:hover{filter:brightness(.95);text-decoration:none;}
+.guide-newsletter{display:grid;gap:12px;}
+.guide-newsletter h2{font-size:22px;line-height:1.25;margin:0;}
+.guide-newsletter p{color:var(--muted);margin:0;}
+.guide-newsletter form{display:grid;gap:10px;grid-template-columns:minmax(0,1fr) 150px auto;}
+.guide-newsletter input,.guide-newsletter select{background:#fff;border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:11px 12px;width:100%;}
+.guide-newsletter button{background:var(--brand);border:0;border-radius:999px;color:#fff;cursor:pointer;font-weight:900;padding:11px 16px;}
+.guide-newsletter button:hover{filter:brightness(.95);}
+.guide-newsletter-status{color:var(--muted);font-size:13px;font-weight:700;min-height:18px;}
 .guide-day{margin:30px 0 0;}
 .guide-day-note{color:var(--muted);font-size:14px;margin:0 0 12px;}
 .timeline-list{list-style:none;margin:0;padding:0;display:grid;gap:12px;}
@@ -232,6 +254,11 @@ a:hover{text-decoration:underline}
 .timeline-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;}
 .timeline-links a{font-size:14px;font-weight:800;}
 .event-chip{display:inline-block;background:#fff3d5;border:1px solid rgba(245,158,11,.3);border-radius:999px;color:#8a4f00;font-size:11px;font-weight:900;letter-spacing:.07em;padding:3px 8px;text-transform:uppercase;}
+.timeline-chip-row{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 4px;}
+.quality-chip{display:inline-block;border:1px solid var(--line);border-radius:999px;font-size:11px;font-weight:900;letter-spacing:.06em;padding:3px 8px;text-transform:uppercase;}
+.quality-high{background:#ecfdf5;border-color:#a7f3d0;color:#047857;}
+.quality-medium{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8;}
+.quality-low{background:#fff7ed;border-color:#fed7aa;color:#9a3412;}
 .famhop-lang-switcher{display:flex;gap:4px;align-items:center;justify-content:flex-end;max-width:1500px;margin:78px auto 0;padding:0 var(--overlay-gap);font-size:13px;font-weight:600;}
 .famhop-lang-switcher a{color:var(--muted);padding:4px 8px;border-radius:6px;text-decoration:none;}
 .famhop-lang-switcher a:hover{color:var(--ink);background:var(--surface-strong);}
@@ -240,7 +267,7 @@ a:hover{text-decoration:underline}
 .famhop-footer{border-top:1px solid var(--line);padding:24px 28px;color:var(--muted);font-size:13px;}
 .famhop-footer p{margin:0 0 4px;}
 @media (max-width:820px){.famhop-topbar{column-gap:5px;flex-wrap:nowrap;left:12px;min-height:0;padding:8px;right:12px;row-gap:0;}.famhop-brand{gap:5px;margin-right:0;min-width:0;order:1;}.famhop-mark svg{height:20px;width:20px;}.famhop-wordmark{display:block;font-size:.9rem;letter-spacing:0;max-width:none;overflow:visible;white-space:nowrap;}.famhop-metro{flex:1 1 72px;max-width:none;min-width:72px;order:2;padding:5px 6px 5px 7px;}.famhop-metro-prefix{display:none;}.famhop-metro select{font-family:var(--font-ui);font-size:.76rem;max-width:none;min-width:0;overflow:hidden;padding-right:11px;text-overflow:ellipsis;width:100%;}.famhop-tabs{flex:0 0 88px;margin-left:0;order:3;width:88px;}.famhop-tabs a{font-size:0;gap:0;padding:5px 6px;}.famhop-tabs svg{height:14px;width:14px;}.famhop-tabs .tab-count{display:none;}.famhop-topbar-spacer{display:none;}.famhop-auth{flex:0 0 40px;justify-content:flex-end;margin-left:0;order:4;width:40px;}.famhop-auth .user-chip{gap:0;padding:0;}.famhop-auth .user-name,.famhop-auth .sync-pill,.famhop-auth .text-button,.famhop-auth .signin-error{display:none;}.famhop-auth .signin-wrap{min-height:32px;}.famhop-auth .signin-slot{min-height:32px;}.famhop-auth .user-chip-avatar,.famhop-auth .user-chip-avatar img,.famhop-auth .user-avatar-fallback{height:32px;width:32px;}.famhop-auth .user-avatar-fallback svg{height:16px;width:16px;}}
-@media (max-width:640px){.famhop-page{padding:100px 18px 40px;}.famhop-page h1{font-size:28px;}.timeline-card{grid-template-columns:1fr;gap:8px}.timeline-time{display:flex;gap:8px;align-items:baseline}.timeline-time span{margin-top:0}}
+@media (max-width:640px){.famhop-page{padding:100px 18px 40px;}.famhop-page h1{font-size:28px;}.guide-newsletter form{grid-template-columns:1fr;}.timeline-card{grid-template-columns:1fr;gap:8px}.timeline-time{display:flex;gap:8px;align-items:baseline}.timeline-time span{margin-top:0}}
 @media (max-width:370px){.famhop-topbar{column-gap:4px;left:10px;right:10px;}.famhop-wordmark{font-size:.84rem;max-width:none;}.famhop-metro{flex-basis:68px;min-width:68px;padding-left:5px;padding-right:5px;}.famhop-metro select{font-size:.72rem;}.famhop-tabs{flex-basis:76px;width:76px;}.famhop-tabs a{padding:5px 4px;}}
 `;
 
@@ -1548,6 +1575,9 @@ function generateThisWeekendPage(eventItems) {
   const topCities = topCountLabels(cityCounts, 5);
   const freeCount = upcoming.filter(eventLikelyFree).length;
   const highlights = pickWeekendHighlights(upcoming, eventSlugLookup).slice(0, 6);
+  const qualityCount = upcoming.filter((event) => eventQualityScore(event) >= 70).length;
+  const planPresets = buildWeekendPlanPresets(upcoming, eventSlugLookup);
+  const editorialBuckets = buildWeekendEditorialBuckets(upcoming, eventSlugLookup);
   const daySections = [weekend.saturdayKey, weekend.sundayKey]
     .map((dayKey) => renderWeekendDaySection(dayKey, byDay.get(dayKey) || [], eventSlugLookup))
     .filter(Boolean);
@@ -1566,10 +1596,14 @@ function generateThisWeekendPage(eventItems) {
       <div class="guide-facts">
         <div class="guide-fact"><strong>${upcoming.length}</strong><span>dated family events</span></div>
         <div class="guide-fact"><strong>${freeCount}</strong><span>likely free options</span></div>
+        <div class="guide-fact"><strong>${qualityCount}</strong><span>strong-detail listings</span></div>
         <div class="guide-fact"><strong>${cityCounts.size}</strong><span>metro cities represented</span></div>
       </div>
       ${highlights.length ? `<ul class="guide-highlights">${highlights.map((item) => `<li><a href="${item.href}">${esc(item.event.title)}</a><p>${esc(formatTimelineMeta(item.event))}</p></li>`).join("")}</ul>` : ""}
     </section>
+    ${planPresets.length ? renderWeekendPlanPresets(planPresets) : ""}
+    ${editorialBuckets.length ? renderWeekendEditorialBuckets(editorialBuckets) : ""}
+    ${renderNewsletterSignup()}
     <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a 3-stop day with ${BRAND}</a> <a class="cta-secondary" href="#timeline">Jump to the timeline</a></p>
     <section id="timeline" aria-label="Weekend event timeline">
       <p class="eyebrow">Generated ${esc(generatedLabel)} from official event sources</p>
@@ -1749,13 +1783,282 @@ function buildWeekendGuideSummary(events, topCategories, topCities, saturdayLabe
   return `From ${saturdayLabel} through ${sundayLabel}, ${BRAND} found ${events.length} dated family events across ${metroLabel()}. The biggest clusters are ${categoryText}, with options in ${cityText}. Use the timeline below to compare times, venues, costs, age fit, and official event links before building a plan.`;
 }
 
+function eventQualityScore(event) {
+  let score = 0;
+  if (event.verified) score += 20;
+  if (event.startDateTime) score += 22;
+  if (event.endDateTime) score += 4;
+  if (event.url) score += 8;
+  if (event.venue && event.city) score += 10;
+  if (Number.isFinite(Number(event.lat)) && Number.isFinite(Number(event.lon))) score += 8;
+  if (event.cost && event.cost !== "Unknown") score += 6;
+  if (Array.isArray(event.ageBands) && event.ageBands.length) score += 7;
+  if (String(event.description || "").replace(/\s+/g, " ").trim().length > 80) score += 9;
+  if (event.sourceMode === "recurring-template") score -= 18;
+  return Math.max(0, Math.min(100, score));
+}
+
+function eventQualityLabel(score) {
+  if (score >= 78) return { text: "Verified detail", className: "quality-high" };
+  if (score >= 58) return { text: "Good detail", className: "quality-medium" };
+  return { text: "Confirm details", className: "quality-low" };
+}
+
+function highSignalEvents(events) {
+  const strong = events.filter((event) => eventQualityScore(event) >= 58);
+  return strong.length >= 3 ? strong : events;
+}
+
+function buildWeekendPlanPresets(events, eventSlugLookup) {
+  const source = highSignalEvents(events);
+  const presets = [];
+  const addPreset = (id, title, blurb, candidates) => {
+    const picked = pickPresetEvents(candidates);
+    if (picked.length === 0) return;
+    presets.push({
+      id,
+      title,
+      blurb,
+      events: picked,
+      href: buildGuidePlanHref(id, title, picked),
+      eventSlugLookup,
+    });
+  };
+
+  addPreset(
+    "free-family-day",
+    "Free family day",
+    "No-ticket or likely-free events that work well as the anchor for a low-cost weekend plan.",
+    source.filter(eventLikelyFree),
+  );
+  addPreset(
+    "little-kids",
+    "Toddler and preschool picks",
+    "Shorter, earlier programs with age signals that are easier for little kids.",
+    source.filter((event) =>
+      eventHasAge(event, ["toddler", "preschool"]) ||
+      /storytime|toddler|preschool|music and movement/i.test(`${event.title} ${event.description}`),
+    ),
+  );
+  addPreset(
+    "indoor-backup",
+    "Indoor backup plan",
+    "Libraries, museums, makerspaces, and indoor culture picks for weather or low-energy days.",
+    source.filter(isIndoorEvent),
+  );
+
+  const cityCounts = countBy(source, (event) => event.city || event.neighborhood || "");
+  const topCity = topCountLabels(cityCounts, 1)[0]?.label;
+  if (topCity) {
+    addPreset(
+      "low-drive",
+      `Low-drive plan in ${topCity}`,
+      "A tighter cluster in one city so the day does not become a cross-Bay drive.",
+      source.filter((event) => (event.city || event.neighborhood || "") === topCity),
+    );
+  }
+
+  const seen = new Set();
+  return presets.filter((preset) => {
+    if (seen.has(preset.id)) return false;
+    seen.add(preset.id);
+    return true;
+  });
+}
+
+function pickPresetEvents(events) {
+  const seen = new Set();
+  return events
+    .slice()
+    .sort((a, b) => {
+      const time = (a.startDateTime || "").localeCompare(b.startDateTime || "");
+      if (time !== 0) return time;
+      return eventQualityScore(b) - eventQualityScore(a);
+    })
+    .filter((event) => {
+      if (!event.id || seen.has(event.id)) return false;
+      seen.add(event.id);
+      return true;
+    })
+    .slice(0, 3);
+}
+
+function buildGuidePlanHref(id, title, events) {
+  const params = new URLSearchParams();
+  params.set("guidePlan", id);
+  params.set("guideTitle", title);
+  params.set("guideEventIds", events.map((event) => event.id).join(","));
+  return `${metroPath("")}?${params.toString()}#/plans`;
+}
+
+function eventHasAge(event, ages) {
+  return Array.isArray(event.ageBands) && ages.some((age) => event.ageBands.includes(age));
+}
+
+function isIndoorEvent(event) {
+  const haystack = `${event.category} ${event.title} ${event.venue} ${event.description}`;
+  return /library|museum|indoor|theater|theatre|gallery|workshop|maker|storytime|class|concert/i.test(haystack);
+}
+
+function buildWeekendEditorialBuckets(events, eventSlugLookup) {
+  const source = highSignalEvents(events);
+  const buckets = [
+    {
+      title: "Best free bets",
+      blurb: "Good first stops when you want a flexible family day without committing to tickets.",
+      events: pickPresetEvents(source.filter(eventLikelyFree)).slice(0, 4),
+    },
+    {
+      title: "Morning starters",
+      blurb: "Earlier programs that leave the rest of the day open for lunch, naps, or a park stop.",
+      events: pickPresetEvents(source.filter((event) => timelineBucket(event) === "Morning")).slice(0, 4),
+    },
+    {
+      title: "Culture and learning",
+      blurb: "Museums, libraries, performances, and hands-on programs with strong family fit.",
+      events: pickPresetEvents(source.filter((event) =>
+        /library|museum|art|music|theater|theatre|science|story/i.test(
+          `${event.category} ${event.title} ${event.description}`,
+        ),
+      )).slice(0, 4),
+    },
+  ];
+  return buckets
+    .map((bucket) => ({
+      ...bucket,
+      eventSlugLookup,
+      events: bucket.events.filter(Boolean),
+    }))
+    .filter((bucket) => bucket.events.length > 0);
+}
+
+function renderWeekendPlanPresets(presets) {
+  return `<section class="guide-presets" aria-label="Weekend plan starters">
+    <div class="guide-section-heading">
+      <h2>Start with a ready-made plan</h2>
+      <p>Pick a guide preset and ${BRAND} will open it as an editable plan you can share for votes.</p>
+    </div>
+    <div class="guide-preset-grid">
+      ${presets.map(renderWeekendPlanPresetCard).join("")}
+    </div>
+  </section>`;
+}
+
+function renderWeekendPlanPresetCard(preset) {
+  return `<article class="guide-preset-card">
+    <h3>${esc(preset.title)}</h3>
+    <p>${esc(preset.blurb)}</p>
+    ${renderMiniEventList(preset.events, preset.eventSlugLookup)}
+    <a class="guide-card-cta" href="${esc(preset.href)}">Open this plan</a>
+  </article>`;
+}
+
+function renderWeekendEditorialBuckets(buckets) {
+  return `<section class="guide-editorial" aria-label="Weekend highlights by need">
+    <div class="guide-section-heading">
+      <h2>Weekend picks by need</h2>
+      <p>Short editorial clusters help parents scan the weekend without reading every listing.</p>
+    </div>
+    <div class="guide-editorial-grid">
+      ${buckets.map((bucket) => `<article class="guide-editorial-card">
+        <h3>${esc(bucket.title)}</h3>
+        <p>${esc(bucket.blurb)}</p>
+        ${renderMiniEventList(bucket.events, bucket.eventSlugLookup)}
+      </article>`).join("")}
+    </div>
+  </section>`;
+}
+
+function renderMiniEventList(events, eventSlugLookup) {
+  return `<ul class="guide-mini-list">
+    ${events.map((event) => {
+      const slug = eventSlugLookup.get(event);
+      const href = slug ? metroPath(`event/${slug}/`) : event.url || metroPath("this-weekend/");
+      return `<li><a href="${esc(href)}">${esc(event.title)}</a><span>${esc(formatTimelineMeta(event))}</span></li>`;
+    }).join("")}
+  </ul>`;
+}
+
+function renderNewsletterSignup() {
+  if (IS_ADULTS) return "";
+  return `<section class="guide-newsletter" data-guide-newsletter data-api-base="${esc(POLLS_API)}" data-metro="${esc(activeMetro.id)}" aria-label="Weekend guide email signup">
+    <div>
+      <h2>Get the weekend guide before Friday</h2>
+      <p>A short family-events email for ${esc(metroLabel())}, ordered by time and grouped by age fit.</p>
+    </div>
+    <form data-guide-newsletter-form>
+      <input name="email" type="email" autocomplete="email" placeholder="you@example.com" aria-label="Email address" required>
+      <select name="ageBand" aria-label="Child age range">
+        <option value="">Any age</option>
+        <option value="toddler">Toddler</option>
+        <option value="preschool">Preschool</option>
+        <option value="school-age">School age</option>
+        <option value="tween">Tween</option>
+      </select>
+      <button type="submit">Notify me</button>
+    </form>
+    <p class="guide-newsletter-status" data-guide-newsletter-status>One useful guide, no daily noise.</p>
+  </section>${renderNewsletterScript()}`;
+}
+
+function renderNewsletterScript() {
+  return `<script>
+(() => {
+  const root = document.querySelector("[data-guide-newsletter]");
+  if (!root) return;
+  const form = root.querySelector("[data-guide-newsletter-form]");
+  const status = root.querySelector("[data-guide-newsletter-status]");
+  const apiBase = root.getAttribute("data-api-base") || "";
+  const metroId = root.getAttribute("data-metro") || "";
+  if (!form || !status) return;
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const data = new FormData(form);
+    const email = String(data.get("email") || "").trim();
+    if (!email) return;
+    if (!apiBase) {
+      status.textContent = "Email signup is not configured in this build.";
+      return;
+    }
+    const button = form.querySelector("button");
+    if (button) button.disabled = true;
+    status.textContent = "Saving...";
+    try {
+      const response = await fetch(apiBase + "/newsletter", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          email,
+          metroId,
+          ageBand: String(data.get("ageBand") || ""),
+          source: "weekend-guide",
+          url: window.location.href
+        })
+      });
+      if (!response.ok) throw new Error("Subscribe failed");
+      status.textContent = "You're on the list for the next weekend guide.";
+      form.reset();
+    } catch {
+      status.textContent = "Could not save that email. Please try again.";
+    } finally {
+      if (button) button.disabled = false;
+    }
+  });
+})();
+</script>`;
+}
+
 function pickWeekendHighlights(events, eventSlugLookup) {
   const picked = [];
   const seenCategories = new Set();
   const sorted = events.slice().sort((a, b) => {
     const aFree = eventLikelyFree(a) ? 0 : 1;
     const bFree = eventLikelyFree(b) ? 0 : 1;
-    return aFree - bFree || (a.startDateTime || "").localeCompare(b.startDateTime || "");
+    return (
+      aFree - bFree ||
+      eventQualityScore(b) - eventQualityScore(a) ||
+      (a.startDateTime || "").localeCompare(b.startDateTime || "")
+    );
   });
   for (const event of sorted) {
     const category = event.category || "Other";
@@ -1802,13 +2105,17 @@ function renderTimelineEvent(event, eventSlugLookup, locale = "en") {
   const bucket = timelineBucket(event, locale);
   const description = buildTimelineDescription(event);
   const meta = formatTimelineMeta(event);
+  const quality = eventQualityLabel(eventQualityScore(event));
   const timeTba = { en: "Time TBA", es: "Hora por confirmar", "zh-Hans": "时间待定" };
   const detailsLabel = { en: "FamHop event details", es: "Detalles del evento en FamHop", "zh-Hans": "FamHop 活动详情" };
   const officialLabel = { en: "Official event page", es: "Página oficial del evento", "zh-Hans": "官方活动页面" };
   return `<li class="timeline-card">
     <time class="timeline-time" datetime="${esc(event.startDateTime || "")}">${esc(time || (timeTba[locale] || timeTba.en))}<span>${esc(bucket)}</span></time>
     <div>
-      ${event.category ? `<span class="event-chip">${esc(event.category)}</span>` : ""}
+      <div class="timeline-chip-row">
+        ${event.category ? `<span class="event-chip">${esc(event.category)}</span>` : ""}
+        <span class="quality-chip ${esc(quality.className)}">${esc(quality.text)}</span>
+      </div>
       <h3>${internalHref ? `<a href="${internalHref}">${esc(event.title)}</a>` : esc(event.title)}</h3>
       <p class="timeline-meta">${esc(meta)}</p>
       ${description ? `<p class="timeline-desc">${esc(description)}</p>` : ""}

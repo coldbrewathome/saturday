@@ -4271,6 +4271,50 @@ h3 {
   width: 100%;
 }
 
+.share-card-panel {
+  border-top: 1px solid #d7e3ed;
+  margin-top: 10px;
+  padding-top: 10px;
+}
+
+.share-card-panel summary {
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 0.84rem;
+  font-weight: 900;
+}
+
+.share-card-body {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.share-card-body p {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.45;
+  margin: 0;
+  word-break: normal;
+}
+
+.share-card-body .share-quick-link {
+  justify-self: start;
+}
+
+.share-card-body .share-quick-link:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.share-card-error {
+  color: var(--coral);
+  font-size: 0.78rem;
+  font-weight: 800;
+  word-break: normal;
+}
+
 .poll-shell {
   margin: 0 auto;
   max-width: 720px;

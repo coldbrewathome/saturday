@@ -42,6 +42,16 @@ type PollRecord = {
   createdAt: string;
 };
 
+type NewsletterRecord = {
+  email: string;
+  metroId: string;
+  ageBand?: string;
+  source?: string;
+  url?: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 type VotesRecord = Record<string, Record<string, Vote>>;
 
 type Tallies = Record<string, { up: number; down: number; meh: number }>;
@@ -130,6 +140,15 @@ function cleanText(value: unknown, max = 240): string {
         .trim()
         .slice(0, max)
     : "";
+}
+
+function cleanEmail(value: unknown): string {
+  const email = cleanText(value, 254).toLowerCase();
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : "";
+}
+
+function safeKvSegment(value: string): string {
+  return encodeURIComponent(value).slice(0, 260);
 }
 
 function cleanStops(value: unknown): StopSummary[] {
@@ -1177,6 +1196,61 @@ async function recordVote(
   );
 }
 
+async function subscribeNewsletter(
+  request: Request,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  let payload: unknown;
+  try {
+    payload = await request.json();
+  } catch {
+    return json({ error: "invalid json" }, { status: 400 }, cors);
+  }
+
+  const data = payload as {
+    email?: unknown;
+    metroId?: unknown;
+    ageBand?: unknown;
+    source?: unknown;
+    url?: unknown;
+  };
+  const email = cleanEmail(data.email);
+  if (!email) {
+    return json({ error: "valid email required" }, { status: 400 }, cors);
+  }
+
+  const metroId = cleanText(data.metroId, 60) || "unknown";
+  const ageBand = cleanText(data.ageBand, 40) || undefined;
+  const source = cleanText(data.source, 80) || "weekend-guide";
+  const url = cleanText(data.url, 500) || undefined;
+  const now = new Date().toISOString();
+  const key = `newsletter:${safeKvSegment(metroId)}:${safeKvSegment(email)}`;
+
+  let createdAt = now;
+  const existingRaw = await env.POLLS.get(key);
+  if (existingRaw) {
+    try {
+      const existing = JSON.parse(existingRaw) as Partial<NewsletterRecord>;
+      if (typeof existing.createdAt === "string") createdAt = existing.createdAt;
+    } catch {
+      // keep a new createdAt if the old value is malformed
+    }
+  }
+
+  const record: NewsletterRecord = {
+    email,
+    metroId,
+    ageBand,
+    source,
+    url,
+    createdAt,
+    updatedAt: now,
+  };
+  await env.POLLS.put(key, JSON.stringify(record));
+  return json({ ok: true }, { status: 200 }, cors);
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const cors = corsHeaders(env, request.headers.get("origin"));
@@ -1201,6 +1275,10 @@ export default {
 
     if (path === "/weather" && request.method === "GET") {
       return getWeather(request, env, cors);
+    }
+
+    if (path === "/newsletter" && request.method === "POST") {
+      return subscribeNewsletter(request, env, cors);
     }
 
     if (path === "/auth/google" && request.method === "POST") {

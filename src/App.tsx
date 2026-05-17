@@ -7,6 +7,7 @@ import {
   ChevronRight,
   Clock3,
   Copy,
+  Download,
   ExternalLink,
   List,
   Mail,
@@ -250,6 +251,10 @@ export type Plan = {
   profile?: PlannerProfile;
 };
 
+type PlanItem =
+  | { kind: "spot"; id: string; spot: Spot }
+  | { kind: "event"; id: string; event: FamilyEvent };
+
 const PLAN_ID_TOKEN_LENGTH = 12;
 
 function createCompactPlanToken(length = PLAN_ID_TOKEN_LENGTH) {
@@ -281,6 +286,27 @@ function createPlanId(existingPlans: Plan[]) {
     if (!existing.has(id)) return id;
   }
   return `plan-${createCompactPlanToken(16)}`;
+}
+
+function parseGuideEventIds(value: string | null): string[] {
+  if (!value) return [];
+  const seen = new Set<string>();
+  const ids: string[] = [];
+  for (const part of value.split(",")) {
+    const id = part.trim();
+    if (!id || seen.has(id)) continue;
+    seen.add(id);
+    ids.push(id);
+    if (ids.length >= 6) break;
+  }
+  return ids;
+}
+
+function cleanGuidePlanTitle(value: string | null): string {
+  const title = (value || "").replace(/\s+/g, " ").trim();
+  return title.length > 0 && title.length <= 90
+    ? title
+    : "Weekend guide plan";
 }
 
 type EventDateFilter = "all" | "today" | "tomorrow" | "weekend";
@@ -1368,6 +1394,7 @@ function App({ metro }: AppProps) {
   const [mapCenter, setMapCenter] = useState<{ lat: number; lon: number } | null>(
     null,
   );
+  const guidePlanConsumedRef = useRef(false);
 
   const [featuredPlans, setFeaturedPlans] = useState<FeaturedPlan[]>([]);
   const [boaMuseums, setBoaMuseums] = useState<BoaMuseum[]>([]);
@@ -1524,6 +1551,58 @@ function App({ metro }: AppProps) {
       active = false;
     };
   }, [dataUrls.events, metro.id]);
+
+  useEffect(() => {
+    if (guidePlanConsumedRef.current || events.length === 0) return;
+    const params = new URLSearchParams(window.location.search);
+    const guidePlan = params.get("guidePlan");
+    const guideTitle = params.get("guideTitle");
+    const eventIds = parseGuideEventIds(params.get("guideEventIds"));
+    if (!guidePlan || eventIds.length === 0) return;
+
+    guidePlanConsumedRef.current = true;
+    const byId = new Map(events.map((event) => [event.id, event] as const));
+    const selectedEvents = eventIds
+      .map((id) => byId.get(id))
+      .filter((event): event is FamilyEvent => Boolean(event));
+
+    params.delete("guidePlan");
+    params.delete("guideTitle");
+    params.delete("guideEventIds");
+    const query = params.toString();
+    const hash = window.location.hash || "#/plans";
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${query ? `?${query}` : ""}${hash}`,
+    );
+
+    if (selectedEvents.length === 0) return;
+
+    const id = createPlanId(plans);
+    const title = cleanGuidePlanTitle(guideTitle);
+    const eventPlanIds = selectedEvents.map((event) => event.id);
+    const next: Plan = {
+      id,
+      name: title,
+      stopIds: [],
+      eventIds: eventPlanIds,
+      itemOrder: eventPlanIds.map((eventId) => ({
+        kind: "event" as const,
+        id: eventId,
+      })),
+      createdAt: new Date().toISOString(),
+      source: "manual",
+      summary: `Started from the ${metro.label} weekend guide.`,
+      rationale: [
+        `Preset: ${guidePlan.replace(/-/g, " ")}.`,
+        "Events are ordered by the guide timeline. Confirm timing and tickets on the official listings.",
+      ],
+    };
+    setPlans((current) => [...current, next]);
+    setActivePlanId(id);
+    setView("plans");
+  }, [events, metro.label, plans]);
 
   useEffect(() => {
     window.localStorage.setItem(
@@ -2395,9 +2474,6 @@ function App({ metro }: AppProps) {
   // Single ordered visit sequence used by the plan detail, the plan map, and
   // the share payload. Honors plan.itemOrder when set, otherwise falls back
   // to "stops in stopIds order, then events sorted by start date".
-  type PlanItem =
-    | { kind: "spot"; id: string; spot: Spot }
-    | { kind: "event"; id: string; event: FamilyEvent };
   const activePlanItems = useMemo<PlanItem[]>(() => {
     if (!activePlan) return [];
     const stopMap = new Map(activePlanStops.map((s) => [s.id, s] as const));
@@ -5157,6 +5233,11 @@ function App({ metro }: AppProps) {
                     url={shareState.url}
                     title={activePlan.name || "Untitled plan"}
                   />
+                  <ShareCardPanel
+                    title={activePlan.name || "Untitled plan"}
+                    items={activePlanItems}
+                    metroLabel={metro.label}
+                  />
                 </div>
               )}
               {shareState.status === "error" && (
@@ -5178,6 +5259,11 @@ function App({ metro }: AppProps) {
                   <ShareEmbedPanel
                     url={`${shareBaseUrl}/#/p/${activePlan.pollId}`}
                     title={activePlan.name || "Untitled plan"}
+                  />
+                  <ShareCardPanel
+                    title={activePlan.name || "Untitled plan"}
+                    items={activePlanItems}
+                    metroLabel={metro.label}
                   />
                 </div>
               )}
@@ -5689,6 +5775,79 @@ function ShareEmbedPanel({ url, title }: { url: string; title: string }) {
   );
 }
 
+function ShareCardPanel({
+  title,
+  items,
+  metroLabel,
+}: {
+  title: string;
+  items: PlanItem[];
+  metroLabel: string;
+}) {
+  const [status, setStatus] = useState<"idle" | "ready" | "error">("idle");
+  const hasItems = items.length > 0;
+
+  async function downloadStoryCard() {
+    if (!hasItems) return;
+    try {
+      const canvas = document.createElement("canvas");
+      canvas.width = 1080;
+      canvas.height = 1350;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("Canvas unavailable");
+
+      drawPlanShareCard(ctx, {
+        title: cleanShareTitle(title),
+        metroLabel,
+        items,
+      });
+
+      const blob = await new Promise<Blob | null>((resolve) =>
+        canvas.toBlob(resolve, "image/png"),
+      );
+      if (!blob) throw new Error("Export failed");
+
+      const href = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = href;
+      link.download = `${slugifyDownloadName(title || "famhop-plan")}-story.png`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(href), 1000);
+      setStatus("ready");
+      window.setTimeout(() => setStatus("idle"), 1800);
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  return (
+    <details className="share-card-panel">
+      <summary>Instagram or story card</summary>
+      <div className="share-card-body">
+        <p>
+          Download a vertical PNG for Instagram Stories, group chats, or a
+          quick marketing post. Instagram does not provide a reliable web share
+          URL, so use this card with the native share sheet or upload it there.
+        </p>
+        <button
+          type="button"
+          className="share-quick-link copy"
+          disabled={!hasItems}
+          onClick={downloadStoryCard}
+        >
+          <Download aria-hidden="true" />
+          {status === "ready" ? "Downloaded" : "Download story card"}
+        </button>
+        {status === "error" && (
+          <span className="share-card-error">Could not create the image.</span>
+        )}
+      </div>
+    </details>
+  );
+}
+
 function buildPollEmbedUrl(url: string) {
   try {
     const parsed = new URL(url, window.location.href);
@@ -5727,11 +5886,176 @@ function buildPlanShareSubject(title: string) {
 
 function buildPlanShareMessage(title: string, url?: string) {
   const lines = [
-    `I made a FamHop plan: ${cleanShareTitle(title)}.`,
-    "Can you vote on which stops work for you?",
+    `I put together a FamHop plan: ${cleanShareTitle(title)}.`,
+    "Can you take a quick look and vote on the stops that work for you?",
   ];
   if (url) lines.push(url);
   return lines.join("\n");
+}
+
+function drawPlanShareCard(
+  ctx: CanvasRenderingContext2D,
+  {
+    title,
+    metroLabel,
+    items,
+  }: {
+    title: string;
+    metroLabel: string;
+    items: PlanItem[];
+  },
+) {
+  const width = ctx.canvas.width;
+  const height = ctx.canvas.height;
+  ctx.fillStyle = "#faf5eb";
+  ctx.fillRect(0, 0, width, height);
+
+  const gradient = ctx.createLinearGradient(0, 0, width, height);
+  gradient.addColorStop(0, "#fff7e8");
+  gradient.addColorStop(0.52, "#f7fbff");
+  gradient.addColorStop(1, "#fff1ec");
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, width, height);
+
+  ctx.fillStyle = "#ffffff";
+  drawRoundedRect(ctx, 72, 78, 936, 1194, 36);
+  ctx.fill();
+  ctx.strokeStyle = "#eadfc9";
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  ctx.fillStyle = "#dd6a1a";
+  drawRoundedRect(ctx, 112, 118, 88, 88, 24);
+  ctx.fill();
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "700 44px Arial, sans-serif";
+  ctx.fillText("F", 141, 177);
+
+  ctx.fillStyle = "#1b1916";
+  ctx.font = "800 42px Arial, sans-serif";
+  ctx.fillText("FamHop", 224, 153);
+  ctx.fillStyle = "#6b7280";
+  ctx.font = "700 25px Arial, sans-serif";
+  ctx.fillText(`${metroLabel} weekend plan`, 224, 190);
+
+  let y = 298;
+  ctx.fillStyle = "#1b1916";
+  ctx.font = "800 64px Arial, sans-serif";
+  y = drawWrappedText(ctx, title, 112, y, 856, 72, 3);
+
+  y += 36;
+  const visibleItems = items.slice(0, 5);
+  visibleItems.forEach((item, index) => {
+    ctx.fillStyle = "#fff8ec";
+    drawRoundedRect(ctx, 112, y, 856, 132, 24);
+    ctx.fill();
+    ctx.strokeStyle = "#f1dfbe";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.fillStyle = "#dd6a1a";
+    ctx.font = "800 42px Arial, sans-serif";
+    ctx.fillText(String(index + 1), 148, y + 76);
+
+    ctx.fillStyle = "#1b1916";
+    ctx.font = "800 31px Arial, sans-serif";
+    drawWrappedText(ctx, shareCardItemTitle(item), 214, y + 48, 700, 38, 1);
+    ctx.fillStyle = "#5a7896";
+    ctx.font = "700 24px Arial, sans-serif";
+    drawWrappedText(ctx, shareCardItemMeta(item), 214, y + 88, 700, 30, 1);
+
+    y += 154;
+  });
+
+  if (items.length > visibleItems.length) {
+    ctx.fillStyle = "#6b7280";
+    ctx.font = "700 26px Arial, sans-serif";
+    ctx.fillText(`+ ${items.length - visibleItems.length} more stop`, 112, y + 28);
+  }
+
+  ctx.fillStyle = "#1b1916";
+  ctx.font = "800 30px Arial, sans-serif";
+  ctx.fillText("Vote on the plan at famhop.com", 112, 1210);
+  ctx.fillStyle = "#6b7280";
+  ctx.font = "700 22px Arial, sans-serif";
+  ctx.fillText("Family-friendly events and plans, ordered by real timing.", 112, 1248);
+}
+
+function drawRoundedRect(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  radius: number,
+) {
+  const r = Math.min(radius, width / 2, height / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + width - r, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + r);
+  ctx.lineTo(x + width, y + height - r);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+  ctx.lineTo(x + r, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function drawWrappedText(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  x: number,
+  y: number,
+  maxWidth: number,
+  lineHeight: number,
+  maxLines: number,
+) {
+  const words = text.replace(/\s+/g, " ").trim().split(" ");
+  const lines: string[] = [];
+  let line = "";
+  for (const word of words) {
+    const candidate = line ? `${line} ${word}` : word;
+    if (ctx.measureText(candidate).width <= maxWidth) {
+      line = candidate;
+      continue;
+    }
+    if (line) lines.push(line);
+    line = word;
+    if (lines.length >= maxLines) break;
+  }
+  if (line && lines.length < maxLines) lines.push(line);
+  if (lines.length === maxLines && words.join(" ").length > lines.join(" ").length) {
+    const last = lines[maxLines - 1];
+    lines[maxLines - 1] = `${last.slice(0, Math.max(0, last.length - 3))}...`;
+  }
+  lines.forEach((item, index) => ctx.fillText(item, x, y + index * lineHeight));
+  return y + lines.length * lineHeight;
+}
+
+function shareCardItemTitle(item: PlanItem) {
+  return item.kind === "spot" ? item.spot.name : item.event.title;
+}
+
+function shareCardItemMeta(item: PlanItem) {
+  if (item.kind === "spot") {
+    return [item.spot.neighborhood, item.spot.category, item.spot.cost]
+      .filter(Boolean)
+      .join(" - ");
+  }
+  return [eventWhenLabel(item.event), item.event.venue, item.event.city]
+    .filter(Boolean)
+    .join(" - ");
+}
+
+function slugifyDownloadName(value: string) {
+  const cleaned = value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 60);
+  return cleaned || "famhop-plan";
 }
 
 export default App;

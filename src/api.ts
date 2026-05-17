@@ -252,6 +252,24 @@ export async function createAiSwap(
   return response.json();
 }
 
+export async function subscribeNewsletter(body: {
+  email: string;
+  metroId?: string;
+  ageBand?: string;
+  source?: string;
+  url?: string;
+}): Promise<{ ok: boolean }> {
+  const response = await fetch(`${requireApi()}/newsletter`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) {
+    throw new Error(`Subscribe failed (${response.status})`);
+  }
+  return response.json();
+}
+
 export async function googleSignIn(
   idToken: string,
 ): Promise<{ sessionToken: string; user: { email: string; name: string; picture?: string } }> {
