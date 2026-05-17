@@ -408,6 +408,20 @@ describe("hopNowPicks", () => {
     expect(result.picks.length).toBe(9);
   });
 
+  it("filters out IDs in excludeIds (powers 'Try a new batch')", () => {
+    const a = spot({ id: "a" });
+    const b = spot({ id: "b" });
+    const result = hopNowPicks([a, b], [], {
+      now: NOW,
+      audience: "kids",
+      userLocation: USER,
+      excludeIds: new Set(["a"]),
+    });
+    const ids = result.picks.map((p) => p.id);
+    expect(ids).toContain("b");
+    expect(ids).not.toContain("a");
+  });
+
   it("accepts events that start up to ~4 hours out", () => {
     const farOut: HopNowEvent = {
       id: "far",

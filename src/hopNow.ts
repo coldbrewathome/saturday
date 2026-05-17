@@ -67,6 +67,9 @@ export type HopNowOptions = {
   eventLookaheadMinutes?: number;
   shuffleSeed?: number;
   limit?: number;
+  // IDs to skip — used by "Try a new batch" so repeats actually show new items
+  // rather than re-jittered same ones. Caller resets when the pool gets thin.
+  excludeIds?: ReadonlySet<string>;
 };
 
 export type HopNowSpotPick = {
@@ -479,15 +482,22 @@ export function hopNowPicks(
     options.eventLookaheadMinutes ?? DEFAULT_EVENT_LOOKAHEAD_MINUTES;
   const shuffleSeed = options.shuffleSeed ?? 0;
   const userLocation = options.userLocation ?? null;
+  const excludeIds = options.excludeIds ?? null;
+  const visibleSpots = excludeIds
+    ? spots.filter((s) => !excludeIds.has(s.id))
+    : spots;
+  const visibleEvents = excludeIds
+    ? events.filter((e) => !excludeIds.has(e.id))
+    : events;
 
-  const spotCtx = gatherSpotCandidates(spots, {
+  const spotCtx = gatherSpotCandidates(visibleSpots, {
     now: options.now,
     userLocation,
     maxDriveMinutes,
     maxDistanceMiles,
     minOpenWindowMinutes,
   });
-  const eventCtx = gatherEventCandidates(events, {
+  const eventCtx = gatherEventCandidates(visibleEvents, {
     now: options.now,
     userLocation,
     maxDriveMinutes,

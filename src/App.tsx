@@ -1449,7 +1449,6 @@ function App({ metro }: AppProps) {
   });
   const [isAdding, setIsAdding] = useState(false);
   const [isHopNowOpen, setIsHopNowOpen] = useState(false);
-  const [hopNowSeed, setHopNowSeed] = useState(0);
   const [newSpot, setNewSpot] = useState<NewSpotForm>(emptyNewSpot);
 
   useEffect(() => {
@@ -2675,6 +2674,50 @@ function App({ metro }: AppProps) {
     setPlans((current) => [...current, next]);
     setActivePlanId(id);
     setView("plans");
+  }
+
+  function addHopNowItemToPlan(item: PlanItemRef) {
+    if (activePlanId) {
+      setPlans((current) =>
+        current.map((plan) => {
+          if (plan.id !== activePlanId) return plan;
+          const stopSet = new Set(plan.stopIds);
+          const eventSet = new Set(plan.eventIds ?? []);
+          const orderRefs = plan.itemOrder ?? [
+            ...plan.stopIds.map((id) => ({ kind: "spot" as const, id })),
+            ...(plan.eventIds ?? []).map((id) => ({
+              kind: "event" as const,
+              id,
+            })),
+          ];
+          const alreadyOrdered = orderRefs.some(
+            (ref) => ref.kind === item.kind && ref.id === item.id,
+          );
+          if (item.kind === "spot") stopSet.add(item.id);
+          else eventSet.add(item.id);
+          return {
+            ...plan,
+            stopIds: Array.from(stopSet),
+            eventIds: Array.from(eventSet),
+            itemOrder: alreadyOrdered ? orderRefs : [...orderRefs, item],
+          };
+        }),
+      );
+      return;
+    }
+    const id = createPlanId(plans);
+    const next: Plan = {
+      id,
+      name: "Hop now picks",
+      stopIds: item.kind === "spot" ? [item.id] : [],
+      eventIds: item.kind === "event" ? [item.id] : [],
+      itemOrder: [item],
+      createdAt: new Date().toISOString(),
+      source: "manual",
+      summary: "Built from Hop me now suggestions.",
+    };
+    setPlans((current) => [...current, next]);
+    setActivePlanId(id);
   }
 
   function forkFeaturedPlan(featured: FeaturedPlan) {
@@ -5374,8 +5417,8 @@ function App({ metro }: AppProps) {
               : null)
           }
           audience={APP_AUDIENCE === "adults" ? "adults" : "kids"}
-          seed={hopNowSeed}
-          onShuffle={() => setHopNowSeed((s) => s + 1)}
+          activePlanName={activePlan?.name ?? null}
+          onAddToPlan={addHopNowItemToPlan}
           onClose={() => setIsHopNowOpen(false)}
         />
       )}
@@ -5564,20 +5607,26 @@ function HopNowPanel({
   events,
   userLocation,
   audience,
-  seed,
-  onShuffle,
+  activePlanName,
+  onAddToPlan,
   onClose,
 }: {
   spots: Spot[];
   events: FamilyEvent[];
   userLocation: { lat: number; lon: number } | null;
   audience: "kids" | "adults";
-  seed: number;
-  onShuffle: () => void;
+  activePlanName: string | null;
+  onAddToPlan: (item: PlanItemRef) => void;
   onClose: () => void;
 }) {
-  // Re-evaluate on each open / shuffle. We deliberately don't memoize on `now`
-  // because the modal is short-lived and a fresh `new Date()` per render is fine.
+  const [seed, setSeed] = useState(0);
+  const [excludeIds, setExcludeIds] = useState<ReadonlySet<string>>(
+    () => new Set<string>(),
+  );
+  const [addedIds, setAddedIds] = useState<ReadonlySet<string>>(
+    () => new Set<string>(),
+  );
+
   const result: HopNowResult = useMemo(() => {
     const hopSpots = spots.map(spotToHopNow);
     const hopEvents = events
@@ -5588,8 +5637,33 @@ function HopNowPanel({
       audience,
       userLocation,
       shuffleSeed: seed,
+      excludeIds,
     });
-  }, [audience, events, seed, spots, userLocation]);
+  }, [audience, events, seed, spots, userLocation, excludeIds]);
+
+  function tryNewBatch() {
+    // Park the IDs we just showed so the next batch surfaces fresh items.
+    const shown = new Set(excludeIds);
+    for (const pick of result.picks) shown.add(pick.id);
+    setExcludeIds(shown);
+    setSeed((s) => s + 1);
+  }
+
+  function resetBatch() {
+    setExcludeIds(new Set());
+    setSeed((s) => s + 1);
+  }
+
+  function handleAdd(pick: HopNowPick) {
+    onAddToPlan({ kind: pick.kind, id: pick.id });
+    setAddedIds((current) => {
+      const next = new Set(current);
+      next.add(pick.id);
+      return next;
+    });
+  }
+
+  const exhausted = excludeIds.size > 0 && result.picks.length === 0;
 
   return (
     <div className="hop-now-backdrop" role="presentation" onClick={onClose}>
@@ -5618,27 +5692,48 @@ function HopNowPanel({
           </button>
         </div>
 
-        {result.reason && (
+        {result.reason && !exhausted && (
           <p className="hop-now-reason">{result.reason}</p>
+        )}
+        {exhausted && (
+          <p className="hop-now-reason">
+            That's everything nearby right now. Reset to start over.
+          </p>
         )}
 
         {result.picks.length > 0 && (
           <ul className="hop-now-list">
             {result.picks.map((pick) => (
-              <HopNowCard key={`${pick.kind}:${pick.id}`} pick={pick} />
+              <HopNowCard
+                key={`${pick.kind}:${pick.id}`}
+                pick={pick}
+                added={addedIds.has(pick.id)}
+                activePlanName={activePlanName}
+                onAdd={() => handleAdd(pick)}
+              />
             ))}
           </ul>
         )}
 
         <div className="hop-now-foot">
-          <button
-            type="button"
-            className="text-button"
-            onClick={onShuffle}
-            disabled={result.picks.length === 0}
-          >
-            Shuffle
-          </button>
+          {exhausted ? (
+            <button
+              type="button"
+              className="text-button"
+              onClick={resetBatch}
+            >
+              Reset
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="text-button"
+              onClick={tryNewBatch}
+              disabled={result.picks.length === 0}
+            >
+              Try a new batch
+            </button>
+          )}
           {!userLocation && (
             <span className="hop-now-hint">
               Tip: allow location for better picks.
@@ -5650,7 +5745,17 @@ function HopNowPanel({
   );
 }
 
-function HopNowCard({ pick }: { pick: HopNowPick }) {
+function HopNowCard({
+  pick,
+  added,
+  activePlanName,
+  onAdd,
+}: {
+  pick: HopNowPick;
+  added: boolean;
+  activePlanName: string | null;
+  onAdd: () => void;
+}) {
   const meta: string[] = [];
   if (pick.etaMinutes != null) {
     meta.push(`${pick.etaMinutes} min away`);
@@ -5693,6 +5798,21 @@ function HopNowCard({ pick }: { pick: HopNowPick }) {
         >
           Take me there
         </a>
+        <button
+          type="button"
+          className="text-button hop-now-add"
+          onClick={onAdd}
+          disabled={added}
+          title={
+            added
+              ? "Added"
+              : activePlanName
+                ? `Add to "${activePlanName}"`
+                : "Save to a new plan"
+          }
+        >
+          {added ? "Added ✓" : activePlanName ? "Add to plan" : "Save to plan"}
+        </button>
         {pick.kind === "event" && pick.url && (
           <a
             className="text-button"
