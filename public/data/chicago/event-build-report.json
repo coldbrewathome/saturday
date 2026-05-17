@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "chicago",
-  "generatedAt": "2026-05-15T16:32:11.481Z",
+  "generatedAt": "2026-05-17T16:52:55.876Z",
   "registryPath": "data/event-sources-chicago.json",
   "outputPath": "public/data/chicago/events.json",
-  "eventCount": 84,
-  "adultsEventCount": 41,
+  "eventCount": 88,
+  "adultsEventCount": 42,
   "sourceCount": 15,
-  "liveEventCount": 84,
+  "liveEventCount": 88,
   "fallbackEventCount": 0,
   "errors": [],
   "sources": [
@@ -20,9 +20,9 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 19,
+      "liveEvents": 20,
       "fallbackEvents": 0,
-      "eventCount": 19,
+      "eventCount": 20,
       "fetches": [
         {
           "url": "https://chipublib.bibliocommons.com/v2/events?audiences=53f250153860d10000000010",
@@ -44,9 +44,9 @@
       "metroId": "chicago",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 16,
+      "liveEvents": 18,
       "fallbackEvents": 0,
-      "eventCount": 16,
+      "eventCount": 18,
       "fetches": [
         {
           "url": "https://www.chicagoparkdistrict.com/events?field_event_category_target_id=766&field_location_target_id=All&field_community_area_target_id=All&field_zip_code_target_id=All&title=&field_date_value=&field_age_range_target_id=All",
@@ -80,9 +80,8 @@
         },
         {
           "url": "https://www.chicagoparkdistrict.com/events?field_event_category_target_id=766&field_location_target_id=All&field_community_area_target_id=All&field_zip_code_target_id=All&title=&field_date_value=&field_age_range_target_id=All&page=5",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         },
         {
           "url": "https://www.chicagoparkdistrict.com/events?field_event_category_target_id=766&field_location_target_id=All&field_community_area_target_id=All&field_zip_code_target_id=All&title=&field_date_value=&field_age_range_target_id=All&page=6",
@@ -93,7 +92,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 38
+      "rejectedLiveEvents": 28
     },
     {
       "id": "chicago-museum-family",
@@ -104,9 +103,9 @@
       "metroId": "chicago",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 47,
+      "liveEvents": 48,
       "fallbackEvents": 0,
-      "eventCount": 47,
+      "eventCount": 48,
       "fetches": [
         {
           "url": "https://www.fieldmuseum.org/our-events",

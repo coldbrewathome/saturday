@@ -984,9 +984,24 @@ function blocksByClass(html, classNamePattern) {
   });
 }
 
+function classTexts(block, classNamePattern, maxLength = 180) {
+  return Array.from(block.matchAll(
+    new RegExp(`<[^>]+class=["'][^"']*${classNamePattern}[^"']*["'][^>]*>([\\s\\S]*?)<\\/[^>]+>`, "gi"),
+  ))
+    .map((match) => stripUnsafeText(match[1], maxLength))
+    .filter(Boolean);
+}
+
 function firstClassText(block, classNamePattern, maxLength = 180) {
   const match = block.match(
     new RegExp(`<[^>]+class=["'][^"']*${classNamePattern}[^"']*["'][^>]*>([\\s\\S]*?)<\\/[^>]+>`, "i"),
+  );
+  return stripUnsafeText(match?.[1] || "", maxLength);
+}
+
+function firstDivClassText(block, classNamePattern, maxLength = 180) {
+  const match = block.match(
+    new RegExp(`<div[^>]+class=["'][^"']*${classNamePattern}[^"']*["'][^>]*>([\\s\\S]*?)<\\/div>`, "i"),
   );
   return stripUnsafeText(match?.[1] || "", maxLength);
 }
@@ -1000,6 +1015,498 @@ function firstClassLink(block, classNamePattern, baseUrl) {
     url: sanitizeUrl(classBlock[1], baseUrl),
     text: stripUnsafeText(classBlock[2], 180),
   };
+}
+
+function titleByTagClass(block, tagName, classNamePattern, maxLength = 140) {
+  return stripUnsafeText(
+    block.match(
+      new RegExp(`<${tagName}[^>]+class=["'][^"']*${classNamePattern}[^"']*["'][^>]*>([\\s\\S]*?)<\\/${tagName}>`, "i"),
+    )?.[1] || "",
+    maxLength,
+  );
+}
+
+function firstHref(block, baseUrl, classNamePattern = "") {
+  const pattern = classNamePattern
+    ? new RegExp(`<a(?=[^>]+class=["'][^"']*${classNamePattern}[^"']*["'])[^>]+href=["']([^"']+)["'][^>]*>`, "i")
+    : /<a[^>]+href=["']([^"']+)["'][^>]*>/i;
+  return sanitizeUrl(block.match(pattern)?.[1] || "", baseUrl);
+}
+
+function utcDay(date) {
+  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+}
+
+function dateOnlyRangeFromText(dateText, endDateText, source = {}, options = {}) {
+  const now = options.now || new Date();
+  const config = eventListOptions(source);
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
+  const startDate = parseMonthDay(dateText, now);
+  const endDate = parseMonthDay(endDateText || dateText, now) || startDate;
+  if (!startDate) return null;
+
+  const today = utcDay(now);
+  let eventDate = startDate;
+  if (endDate && startDate < today && endDate >= today) {
+    eventDate = today;
+  } else if (startDate < addDays(today, -1)) {
+    return null;
+  }
+
+  const startClock = parseClock(config.defaultStartTime || source.defaultStartTime || "10:00");
+  const endClock = parseClock(config.defaultEndTime || source.defaultEndTime || "");
+  const startDateTime = localDateTime(eventDate, startClock, timezoneOffset);
+  if (!startDateTime) return null;
+  return {
+    startDateTime,
+    endDateTime: endClock
+      ? localDateTime(eventDate, endClock, timezoneOffset)
+      : addMinutesToLocalIso(startDateTime, Number(config.defaultDurationMinutes || source.defaultDurationMinutes || 60)),
+  };
+}
+
+function dateOnlyRangeFromDate(date, source = {}, options = {}) {
+  const now = options.now || new Date();
+  const config = eventListOptions(source);
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
+  const today = utcDay(now);
+  const eventDate = utcDay(date);
+  if (eventDate < addDays(today, -1)) return null;
+
+  const startClock = parseClock(config.defaultStartTime || source.defaultStartTime || "10:00");
+  const endClock = parseClock(config.defaultEndTime || source.defaultEndTime || "");
+  const startDateTime = localDateTime(eventDate, startClock, timezoneOffset);
+  if (!startDateTime) return null;
+  return {
+    startDateTime,
+    endDateTime: endClock
+      ? localDateTime(eventDate, endClock, timezoneOffset)
+      : addMinutesToLocalIso(startDateTime, Number(config.defaultDurationMinutes || source.defaultDurationMinutes || 60)),
+  };
+}
+
+function dateOnlyRangesFromText(dateText, source = {}, options = {}) {
+  const clean = cleanDateText(dateText);
+  if (!clean) return [];
+  const now = options.now || new Date();
+  const today = utcDay(now);
+  const explicitYear = clean.match(/\b(20\d{2})\b/)?.[1];
+  const monthMatches = Array.from(clean.matchAll(new RegExp(`\\b(${MONTH_PATTERN})\\b`, "gi")));
+  const ranges = [];
+  const seen = new Set();
+
+  for (let index = 0; index < monthMatches.length; index += 1) {
+    const match = monthMatches[index];
+    const month = MONTH_INDEX[match[1].replace(/\./g, "").toLowerCase()];
+    if (month === undefined || match.index === undefined) continue;
+    const segmentStart = match.index + match[0].length;
+    const segmentEnd = monthMatches[index + 1]?.index ?? clean.length;
+    const segment = clean.slice(segmentStart, segmentEnd).replace(/\b20\d{2}\b/g, "");
+    const days = Array.from(segment.matchAll(/\b(\d{1,2})\b/g))
+      .map((dayMatch) => Number(dayMatch[1]))
+      .filter((day) => day >= 1 && day <= 31);
+
+    for (const day of days) {
+      let year = Number(explicitYear || now.getUTCFullYear());
+      let date = new Date(Date.UTC(year, month, day));
+      if (!explicitYear && date < addDays(today, -1)) {
+        year += 1;
+        date = new Date(Date.UTC(year, month, day));
+      }
+      const range = dateOnlyRangeFromDate(date, source, options);
+      if (!range || seen.has(range.startDateTime)) continue;
+      seen.add(range.startDateTime);
+      ranges.push(range);
+    }
+  }
+
+  if (ranges.length > 0) return ranges;
+  const range = dateOnlyRangeFromText(clean, "", source, options);
+  return range ? [range] : [];
+}
+
+function shouldKeepSourceSpecificEvent(signalText, source = {}) {
+  const config = eventListOptions(source);
+  const excludePattern = config.excludePattern || source.excludePattern;
+  if (excludePattern && new RegExp(excludePattern, "i").test(signalText)) return false;
+  if (config.requireEventSignal !== false && !isEventish(signalText)) return false;
+  if (config.requireFamilySignal !== false && !hasFamilySignal(signalText)) return false;
+  return !hasAdultOnlySignal(signalText);
+}
+
+export function extractWwcEvents(html, source = {}, options = {}) {
+  const blocks = html.match(/<event\b[\s\S]*?<\/event>/gi) || [];
+  const events = [];
+
+  for (const block of blocks) {
+    const title = titleByTagClass(block, "h5", "elementor-heading-title");
+    if (!title || isGenericPageTitle(title)) continue;
+    const headingTexts = classTexts(block, "elementor-heading-title", 140);
+    const dateText = headingTexts.find((line) => parseMonthDay(line, options.now || new Date()));
+    const timeText = headingTexts.find((line) => new RegExp(CLOCK_PATTERN, "i").test(line) && /(?:-|to)/i.test(line));
+    const range = parseDateLineRange(`${dateText || ""} ${timeText || ""}`, source, options.now || new Date()) ||
+      dateOnlyRangeFromText(dateText, "", source, options);
+    if (!range) continue;
+
+    const description = stripUnsafeText(
+      block.match(/elementor-widget-theme-post-excerpt[\s\S]*?<div[^>]+class=["']elementor-widget-container["'][^>]*>([\s\S]*?)<\/div>/i)?.[1] ||
+        block,
+      420,
+    );
+    const signalText = `${title} ${description} ${dateText || ""} ${timeText || ""} ${sourceAudienceText(source)}`;
+    if (!shouldKeepSourceSpecificEvent(signalText, source)) continue;
+    const event = normalizeRawEvent({
+      title,
+      description,
+      venue: source.eventList?.venue || source.venue || source.name,
+      city: source.eventList?.city || source.city,
+      neighborhood: source.neighborhood || source.city,
+      lat: source.lat,
+      lon: source.lon,
+      category: source.eventList?.category || source.category || inferCategory(signalText, "Park"),
+      startDateTime: range.startDateTime,
+      endDateTime: range.endDateTime,
+      ageBands: inferAgeBands(signalText),
+      cost: source.cost || inferCost(signalText),
+      url: firstHref(block, source.url, "event-link-wrapper") || source.url,
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.url,
+      extractionMethod: "wwc-events",
+      verified: true,
+    }, source);
+    if (event) events.push(event);
+  }
+
+  return dedupeEvents(events);
+}
+
+export function extractWebflowEvents(html, source = {}, options = {}) {
+  const blocks = [
+    ...blocksByClass(html, "event-calendar-item"),
+    ...blocksByClass(html, "calendar-special-events-item"),
+  ];
+  const events = [];
+
+  for (const block of blocks) {
+    const title =
+      firstClassText(block, "h4-name", 140) ||
+      stripUnsafeText(block.match(/calendar-special-title[\s\S]*?<h1[^>]*>([\s\S]*?)<\/h1>/i)?.[1] || "", 140);
+    if (!title || isGenericPageTitle(title) || /museum closed/i.test(title)) continue;
+    const dateText = firstClassText(block, "\\bdateType\\b", 80) ||
+      firstClassText(block, "special-event-date", 80);
+    const endDateText = firstClassText(block, "\\bdateType2\\b", 80);
+    const range = dateOnlyRangeFromText(dateText, endDateText, source, options);
+    if (!range) continue;
+    const description = firstClassText(block, "event-preview", 420) ||
+      `${title} at ${source.name}.`;
+    const signalText = `${title} ${description} ${dateText} ${sourceAudienceText(source)}`;
+    if (!shouldKeepSourceSpecificEvent(signalText, source)) continue;
+    const event = normalizeRawEvent({
+      title,
+      description,
+      venue: source.eventList?.venue || source.venue || source.name,
+      city: source.eventList?.city || source.city,
+      neighborhood: source.neighborhood || source.city,
+      lat: source.lat,
+      lon: source.lon,
+      category: source.eventList?.category || source.category || inferCategory(signalText, "Museum"),
+      startDateTime: range.startDateTime,
+      endDateTime: range.endDateTime,
+      ageBands: inferAgeBands(signalText),
+      cost: source.cost || inferCost(signalText),
+      url: firstHref(block, source.url, "event-calendar-card") ||
+        firstHref(block, source.url, "calendar-special-title") ||
+        source.url,
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.url,
+      extractionMethod: "webflow-events",
+      verified: true,
+    }, source);
+    if (event) events.push(event);
+  }
+
+  return dedupeEvents(events);
+}
+
+export function extractPhoenixZooEvents(html, source = {}, options = {}) {
+  const blocks = blocksByClass(html, "event-inner-container");
+  const events = [];
+
+  for (const block of blocks) {
+    const title = stripUnsafeText(
+      block.match(/<h2[^>]+class=["'][^"']*\bh4\b[^"']*["'][^>]*>\s*<a[^>]+href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/i)?.[2] || "",
+      140,
+    );
+    if (!title || isGenericPageTitle(title)) continue;
+    const dateText = stripUnsafeText(block.match(/<h6[^>]*>([\s\S]*?)<\/h6>/i)?.[1] || "", 120);
+    const range = parseDateLineRange(dateText, source, options.now || new Date()) ||
+      dateOnlyRangeFromText(dateText, "", source, options);
+    if (!range) continue;
+    const description = stripUnsafeText(block.match(/<p[^>]*>([\s\S]*?)<\/p>/i)?.[1] || block, 420);
+    const signalText = `${title} ${description} ${dateText} ${sourceAudienceText(source)}`;
+    if (!shouldKeepSourceSpecificEvent(signalText, source)) continue;
+    const event = normalizeRawEvent({
+      title,
+      description,
+      venue: source.eventList?.venue || source.venue || source.name,
+      city: source.eventList?.city || source.city,
+      neighborhood: source.neighborhood || source.city,
+      lat: source.lat,
+      lon: source.lon,
+      category: source.eventList?.category || source.category || inferCategory(signalText, "Zoo"),
+      startDateTime: range.startDateTime,
+      endDateTime: range.endDateTime,
+      ageBands: inferAgeBands(signalText),
+      cost: source.cost || inferCost(signalText),
+      url: firstHref(block, source.url, "event-link") ||
+        sanitizeUrl(block.match(/<h2[^>]+class=["'][^"']*\bh4\b[^"']*["'][^>]*>\s*<a[^>]+href=["']([^"']+)["']/i)?.[1] || "", source.url) ||
+        source.url,
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.url,
+      extractionMethod: "phoenix-zoo-events",
+      verified: true,
+    }, source);
+    if (event) events.push(event);
+  }
+
+  return dedupeEvents(events);
+}
+
+function firstHeadingText(block, maxLength = 140) {
+  return stripUnsafeText(block.match(/<h[1-4][^>]*>([\s\S]*?)<\/h[1-4]>/i)?.[1] || "", maxLength);
+}
+
+function paragraphTexts(block, maxLength = 420) {
+  return Array.from(block.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi))
+    .map((match) => stripUnsafeText(match[1], maxLength))
+    .filter(Boolean);
+}
+
+export function extractZooAtlantaEvents(html, source = {}, options = {}) {
+  const blocks = blocksByClass(html, "\\bevent\\s+card\\b");
+  const events = [];
+
+  for (const block of blocks) {
+    const title = firstHeadingText(block);
+    if (!title || isGenericPageTitle(title)) continue;
+    const dateText = stripUnsafeText(block.match(/<em[^>]*>([\s\S]*?)<\/em>/i)?.[1] || "", 160);
+    const ranges = dateOnlyRangesFromText(dateText, source, options);
+    if (ranges.length === 0) continue;
+    const backContent = block.match(/<div[^>]+class=["'][^"']*back-content[^"']*["'][^>]*>([\s\S]*?)<\/div>/i)?.[1] || "";
+    const description = paragraphTexts(backContent, 520)
+      .find((text) => cleanDateText(text) !== cleanDateText(dateText)) ||
+      stripUnsafeText(block.match(/<p[^>]*>([\s\S]*?)<\/p>/i)?.[1] || block, 420);
+    const signalText = `${title} ${description} ${dateText} ${sourceAudienceText(source)}`;
+    if (!shouldKeepSourceSpecificEvent(signalText, source)) continue;
+
+    for (const range of ranges) {
+      const event = normalizeRawEvent({
+        title,
+        description,
+        venue: source.eventList?.venue || source.venue || source.name,
+        city: source.eventList?.city || source.city,
+        neighborhood: source.neighborhood || source.city,
+        lat: source.lat,
+        lon: source.lon,
+        category: source.eventList?.category || source.category || inferCategory(signalText, "Zoo"),
+        startDateTime: range.startDateTime,
+        endDateTime: range.endDateTime,
+        ageBands: inferAgeBands(signalText),
+        cost: source.cost || inferCost(signalText),
+        url: firstHref(block, source.url, "read-more") || firstHref(block, source.url) || source.url,
+        sourceId: source.id,
+        sourceName: source.name,
+        sourceUrl: source.url,
+        extractionMethod: "zoo-atlanta-events",
+        verified: true,
+      }, source);
+      if (event) events.push(event);
+    }
+  }
+
+  return dedupeEvents(events);
+}
+
+function eventOnValue(value) {
+  const selected = Array.isArray(value) ? value.find((item) => item != null && String(item).trim()) : value;
+  if (selected == null) return "";
+  if (typeof selected === "object") return selected.name || selected.title || selected.value || "";
+  return selected;
+}
+
+function eventOnMeta(item, keys) {
+  const meta = item?.event_pmv || item?.event_meta || {};
+  for (const key of keys) {
+    const value = eventOnValue(meta[key] ?? item?.[key]);
+    const clean = stripUnsafeText(value, 500);
+    if (clean) return clean;
+  }
+  return "";
+}
+
+function eventOnUnixMillis(value) {
+  const raw = eventOnValue(value);
+  const number = Number(raw);
+  if (!Number.isFinite(number) || number <= 0) return null;
+  return number > 100000000000 ? number : number * 1000;
+}
+
+export function extractEventOnEvents(json, source = {}) {
+  const container = json?.json || json?.events || json;
+  const records = Array.isArray(container) ? container : [];
+  const events = [];
+
+  for (const item of records) {
+    const title = stripUnsafeText(
+      item?.event_title || item?.post_title || item?.title || eventOnMeta(item, ["evcal_event_title"]),
+      160,
+    );
+    if (!title || isGenericPageTitle(title)) continue;
+    const startMillis = eventOnUnixMillis(item?.event_start_unix ?? item?.unix_start ?? item?.start);
+    if (!startMillis) continue;
+    const endMillis = eventOnUnixMillis(item?.event_end_unix ?? item?.unix_end ?? item?.end);
+    const description = eventOnMeta(item, [
+      "evcal_subtitle",
+      "event_subtitle",
+      "_evcal_subtitle",
+      "evcal_event_subtitle",
+      "description",
+    ]) || `${title} at ${source.name}.`;
+    const signalText = `${title} ${description} ${sourceAudienceText(source)}`;
+    if (!shouldKeepSourceSpecificEvent(signalText, source)) continue;
+
+    const event = normalizeRawEvent({
+      title,
+      description,
+      venue: eventOnMeta(item, ["evcal_location_name", "evcal_location", "_EventVenueID"]) ||
+        source.eventList?.venue ||
+        source.venue ||
+        source.name,
+      city: source.eventList?.city || source.city,
+      neighborhood: source.neighborhood || source.city,
+      lat: source.lat,
+      lon: source.lon,
+      category: source.eventList?.category || source.category || inferCategory(signalText, "Museum"),
+      startDateTime: new Date(startMillis).toISOString(),
+      endDateTime: endMillis ? new Date(endMillis).toISOString() : null,
+      ageBands: inferAgeBands(signalText),
+      cost: source.cost || inferCost(signalText),
+      url: sanitizeUrl(item?.event_permalink || item?.permalink || item?.link || "", source.url) || source.url,
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.url,
+      extractionMethod: "eventon-events",
+      verified: true,
+    }, source);
+    if (event) events.push(event);
+  }
+
+  return dedupeEvents(events);
+}
+
+export function extractBrooklynLibraryEvents(html, source = {}, options = {}) {
+  const blocks = blocksByClass(html, "\\bevent-item\\b");
+  const events = [];
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
+
+  for (const block of blocks) {
+    const title = titleByTagClass(block, "h4", "card-title");
+    if (!title || isGenericPageTitle(title)) continue;
+    const dateText = firstDivClassText(block, "\\bdate\\b", 120);
+    const startDateTime = parseLooseDate(dateText, options.now || new Date(), timezoneOffset);
+    if (!startDateTime) continue;
+    const tags = firstClassText(block, "\\btags\\b", 260);
+    const description = paragraphTexts(block, 520).find((text) => text !== tags) || `${title} at ${source.name}.`;
+    const venue = firstDivClassText(block, "\\blocation\\b", 180) ||
+      source.eventList?.venue ||
+      source.venue ||
+      source.name;
+    const signalText = `${title} ${description} ${tags} ${sourceAudienceText(source)}`;
+    if (!shouldKeepSourceSpecificEvent(signalText, source)) continue;
+
+    const event = normalizeRawEvent({
+      title,
+      description,
+      venue,
+      city: source.eventList?.city || source.city,
+      neighborhood: source.neighborhood || source.city,
+      lat: source.lat,
+      lon: source.lon,
+      category: source.eventList?.category || source.category || inferCategory(signalText, "Library"),
+      startDateTime,
+      endDateTime: addMinutesToLocalIso(startDateTime, Number(source.eventList?.defaultDurationMinutes || source.defaultDurationMinutes || 90)),
+      ageBands: inferAgeBands(signalText),
+      cost: source.cost || inferCost(signalText),
+      url: firstHref(block, source.url) || source.url,
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.url,
+      extractionMethod: "brooklyn-library-events",
+      verified: true,
+    }, source);
+    if (event) events.push(event);
+  }
+
+  return dedupeEvents(events);
+}
+
+function ticketureRows(json, key) {
+  return Array.isArray(json?.[key]?._data) ? json[key]._data : [];
+}
+
+export function extractTicketureEvents(json, source = {}, options = {}) {
+  const templates = ticketureRows(json, "event_template");
+  const venues = new Map(ticketureRows(json, "venue").map((venue) => [venue.id, venue]));
+  const calendars = json?.calendars || {};
+  const events = [];
+  const now = options.now || new Date();
+
+  for (const item of templates) {
+    const title = stripUnsafeText(item?.name || "", 160);
+    if (!title || isGenericPageTitle(title)) continue;
+    const description = htmlText(item.summary || item.description || "", 700) || `${title} at ${source.name}.`;
+    const signalText = `${title} ${description} ${item.category || ""} ${sourceAudienceText(source)}`;
+    if (!shouldKeepSourceSpecificEvent(signalText, source)) continue;
+    const venue = venues.get(item.venue_id)?.name || source.eventList?.venue || source.venue || source.name;
+    const calendarRows = Array.isArray(calendars[item.id]?.calendar?._data)
+      ? calendars[item.id].calendar._data
+      : [];
+    const parsedSummaryRange = parseDateTimeRange(description, now, source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET);
+    const ranges = parsedSummaryRange
+      ? [parsedSummaryRange]
+      : calendarRows
+          .map((row) => dateOnlyRangeFromText(row.date || row.start_date || "", "", source, options))
+          .filter(Boolean);
+
+    for (const range of ranges) {
+      const event = normalizeRawEvent({
+        title,
+        description,
+        venue,
+        city: source.eventList?.city || source.city,
+        neighborhood: source.neighborhood || source.city,
+        lat: source.lat,
+        lon: source.lon,
+        category: source.eventList?.category || source.category || inferCategory(signalText, "Museum"),
+        startDateTime: range.startDateTime,
+        endDateTime: range.endDateTime,
+        ageBands: inferAgeBands(signalText),
+        cost: source.cost || inferCost(signalText),
+        url: sanitizeUrl(`${source.ticketureBaseUrl || source.apiUrl || source.url.replace(/\/$/, "")}/events/${item.id}`, source.url),
+        sourceId: source.id,
+        sourceName: source.name,
+        sourceUrl: source.url,
+        extractionMethod: "ticketure-events",
+        verified: true,
+      }, source);
+      if (event) events.push(event);
+    }
+  }
+
+  return dedupeEvents(events);
 }
 
 export function extractLincolnCenterFamilyEvents(html, source = {}, options = {}) {
@@ -2097,23 +2604,25 @@ export function extractNationalZooJsonApiEvents(json, source = {}) {
 }
 
 export function extractWpRestEvents(json, source = {}) {
-  const rawEvents = Array.isArray(json) ? json : [];
+  const rawEvents = Array.isArray(json) ? json : maybeArray(json);
   const events = [];
   for (const item of rawEvents) {
     const acf = item.acf || {};
     const title = htmlText(item.title, 140);
     const description = htmlText(acf.card_description || acf.event_content || item.excerpt || item.content || "", 700);
     const signalText = `${title} ${description} ${sourceAudienceText(source)}`;
-    const rangeStart = dateFromCompact(acf.event_range_start || acf.start_date || "");
-    const rangeEnd = dateFromCompact(acf.event_range_end || acf.end_date || "") || rangeStart;
+    const rangeStart = dateFromCompact(acf.event_range_start || acf.start_date || acf.event_date || item.event_date || "");
+    const rangeEnd = dateFromCompact(acf.event_range_end || acf.end_date || acf.event_date || item.event_date || "") || rangeStart;
     if (!rangeStart) continue;
     const start = new Date(`${rangeStart}T00:00:00Z`);
     const end = new Date(`${rangeEnd}T00:00:00Z`);
     if (!Number.isFinite(start.getTime()) || !Number.isFinite(end.getTime())) continue;
+    const startTime = acf.start_time || item.start_time || source.defaultStartTime || "10:00:00";
+    const endTime = acf.end_time || item.end_time || source.defaultEndTime || "17:00:00";
     let emitted = 0;
     for (let cursor = new Date(start); cursor <= end; cursor = addDays(cursor, 1)) {
       const dateValue = dateOnly(cursor).replace(/-/g, "");
-      const startDateTime = dateTimeFromCompact(dateValue, acf.start_time || source.defaultStartTime || "10:00:00", source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET);
+      const startDateTime = dateTimeFromCompact(dateValue, startTime, source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET);
       const event = normalizeRawEvent({
         id: `${source.id}-${item.id || slugify(title)}-${dateOnly(cursor)}`,
         title,
@@ -2122,7 +2631,7 @@ export function extractWpRestEvents(json, source = {}) {
         city: source.city,
         category: source.category || inferCategory(signalText),
         startDateTime,
-        endDateTime: dateTimeFromCompact(dateValue, acf.end_time || source.defaultEndTime || "17:00:00", source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET),
+        endDateTime: dateTimeFromCompact(dateValue, endTime, source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET),
         ageBands: inferAgeBands(signalText),
         url: sanitizeUrl(item.link, source.url) || source.url,
         cost: inferCost(signalText),
@@ -2208,6 +2717,27 @@ export function extractEventsFromPayload(payload, source = {}, options = {}) {
   }
   if (source.sourceType === "wpRestEvents") {
     return extractWpRestEvents(payload.json, source);
+  }
+  if (source.sourceType === "wwcEvents") {
+    return extractWwcEvents(text, source, options);
+  }
+  if (source.sourceType === "webflowEvents") {
+    return extractWebflowEvents(text, source, options);
+  }
+  if (source.sourceType === "phoenixZooEvents") {
+    return extractPhoenixZooEvents(text, source, options);
+  }
+  if (source.sourceType === "zooAtlantaEvents") {
+    return extractZooAtlantaEvents(text, source, options);
+  }
+  if (source.sourceType === "eventOnEvents") {
+    return extractEventOnEvents(payload.json, source);
+  }
+  if (source.sourceType === "brooklynLibraryEvents") {
+    return extractBrooklynLibraryEvents(text, source, options);
+  }
+  if (source.sourceType === "ticketureEvents") {
+    return extractTicketureEvents(payload.json, source, options);
   }
   if (source.sourceType === "sanDiegoDrupalCalendar") {
     return extractSanDiegoDrupalCalendarEvents(text, source, options);

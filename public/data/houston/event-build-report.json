@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "metroId": "houston",
-  "generatedAt": "2026-05-15T16:32:42.177Z",
+  "generatedAt": "2026-05-17T16:54:59.445Z",
   "registryPath": "data/event-sources-houston.json",
   "outputPath": "public/data/houston/events.json",
-  "eventCount": 248,
-  "adultsEventCount": 0,
+  "eventCount": 222,
+  "adultsEventCount": 18,
   "sourceCount": 11,
-  "liveEventCount": 236,
-  "fallbackEventCount": 12,
+  "liveEventCount": 222,
+  "fallbackEventCount": 0,
   "errors": [],
   "sources": [
     {
@@ -20,9 +20,9 @@
       "metroId": "houston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 232,
+      "liveEvents": 192,
       "fallbackEvents": 0,
-      "eventCount": 232,
+      "eventCount": 192,
       "fetches": [
         {
           "url": "https://calendar.houstonlibrary.org/calendar/events?cal=-1&cid=-1&d=0000-00-00&inc=0",
@@ -33,44 +33,44 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 40
+      "rejectedLiveEvents": 18
     },
     {
       "id": "houston-parks-family",
       "name": "Discovery Green Family Events",
       "url": "https://www.discoverygreen.com/event-category/parks-play/",
-      "sourceType": "eventList",
+      "sourceType": "wwcEvents",
       "city": "Houston",
       "metroId": "houston",
       "category": "Park",
-      "status": "ok-template-fallback",
-      "liveEvents": 0,
-      "fallbackEvents": 8,
-      "eventCount": 8,
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://www.discoverygreen.com/event-category/parks-play/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "text/html; source=wwc-events; events=3; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "contentType": "text/html; source=wwc-events; events=3; pages=1",
+      "rejectedLiveEvents": 1
     },
     {
       "id": "houston-museum-family",
       "name": "Children's Museum Houston Events",
       "url": "https://www.cmhouston.org/events",
-      "sourceType": "eventList",
+      "sourceType": "webflowEvents",
       "city": "Houston",
       "metroId": "houston",
       "category": "Museum",
-      "status": "ok-template-fallback",
-      "liveEvents": 0,
-      "fallbackEvents": 4,
-      "eventCount": 4,
+      "status": "ok",
+      "liveEvents": 25,
+      "fallbackEvents": 0,
+      "eventCount": 25,
       "fetches": [
         {
           "url": "https://www.cmhouston.org/events",
@@ -81,7 +81,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 8
     },
     {
       "id": "houston-zoo-family",
@@ -105,7 +105,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 4
+      "rejectedLiveEvents": 3
     },
     {
       "id": "ticketmaster-houston-family",

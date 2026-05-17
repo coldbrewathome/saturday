@@ -1,31 +1,31 @@
 {
   "schemaVersion": 1,
   "metroId": "dallas-fort-worth",
-  "generatedAt": "2026-05-15T16:32:31.193Z",
+  "generatedAt": "2026-05-17T20:22:07.442Z",
   "registryPath": "data/event-sources-dallas-fort-worth.json",
   "outputPath": "public/data/dallas-fort-worth/events.json",
-  "eventCount": 27,
-  "adultsEventCount": 0,
+  "eventCount": 24,
+  "adultsEventCount": 1,
   "sourceCount": 12,
-  "liveEventCount": 15,
-  "fallbackEventCount": 12,
+  "liveEventCount": 24,
+  "fallbackEventCount": 0,
   "errors": [],
   "sources": [
     {
       "id": "dallas-fort-worth-library-family",
       "name": "Dallas Public Library Family Events",
-      "url": "https://dallaslibrary.librarymarket.com/events/month?ical=1",
-      "sourceType": "ics",
+      "url": "https://dallaslibrary.librarymarket.com/events/month",
+      "sourceType": "librarycalendar",
       "city": "Dallas",
       "metroId": "dallas-fort-worth",
       "category": "Library",
-      "status": "ok-template-fallback",
-      "liveEvents": 0,
-      "fallbackEvents": 8,
+      "status": "ok",
+      "liveEvents": 8,
+      "fallbackEvents": 0,
       "eventCount": 8,
       "fetches": [
         {
-          "url": "https://dallaslibrary.librarymarket.com/events/month?ical=1",
+          "url": "https://dallaslibrary.librarymarket.com/events/month",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -44,9 +44,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 4,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://www.dallasparks.org/RSSFeed.aspx?ModID=58&CID=Main-Calendar-14",
@@ -63,24 +63,24 @@
       "id": "dallas-fort-worth-museum-family",
       "name": "Perot Museum Events",
       "url": "https://www.perotmuseum.org/events/",
-      "sourceType": "eventList",
+      "sourceType": "ticketureEvents",
       "city": "Dallas",
       "metroId": "dallas-fort-worth",
       "category": "Museum",
-      "status": "ok-template-fallback",
-      "liveEvents": 0,
-      "fallbackEvents": 4,
-      "eventCount": 4,
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://www.perotmuseum.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "application/json; source=ticketure-events; events=3; calendars=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
+      "contentType": "application/json; source=ticketure-events; events=3; calendars=3",
       "rejectedLiveEvents": 0
     },
     {
@@ -92,9 +92,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 11,
+      "liveEvents": 12,
       "fallbackEvents": 0,
-      "eventCount": 11,
+      "eventCount": 12,
       "fetches": [
         {
           "url": "https://www.dallaszoo.com/dallas-zoo-events/calendar/",
@@ -105,7 +105,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; source=dallas-zoo-ajax; pages=3",
-      "rejectedLiveEvents": 10
+      "rejectedLiveEvents": 9
     },
     {
       "id": "ticketmaster-dallas-fort-worth-family",

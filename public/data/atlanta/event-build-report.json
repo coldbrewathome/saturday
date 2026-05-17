@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "metroId": "atlanta",
-  "generatedAt": "2026-05-15T16:33:10.204Z",
+  "generatedAt": "2026-05-17T19:52:23.757Z",
   "registryPath": "data/event-sources-atlanta.json",
   "outputPath": "public/data/atlanta/events.json",
-  "eventCount": 231,
-  "adultsEventCount": 204,
+  "eventCount": 224,
+  "adultsEventCount": 202,
   "sourceCount": 13,
-  "liveEventCount": 220,
-  "fallbackEventCount": 12,
+  "liveEventCount": 217,
+  "fallbackEventCount": 8,
   "errors": [],
   "sources": [
     {
@@ -67,9 +67,9 @@
       "metroId": "atlanta",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 216,
+      "liveEvents": 212,
       "fallbackEvents": 0,
-      "eventCount": 216,
+      "eventCount": 212,
       "fetches": [
         {
           "url": "https://childrensmuseumatlanta.org/program-calendar/",
@@ -80,20 +80,20 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; charset=UTF-8",
-      "rejectedLiveEvents": 16
+      "rejectedLiveEvents": 8
     },
     {
       "id": "atlanta-zoo-family",
       "name": "Zoo Atlanta Events",
       "url": "https://zooatlanta.org/visit/events/",
-      "sourceType": "eventList",
+      "sourceType": "zooAtlantaEvents",
       "city": "Atlanta",
       "metroId": "atlanta",
       "category": "Zoo",
-      "status": "ok-template-fallback",
-      "liveEvents": 0,
-      "fallbackEvents": 4,
-      "eventCount": 4,
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://zooatlanta.org/visit/events/",
@@ -104,7 +104,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 11
     },
     {
       "id": "ticketmaster-atlanta-family",

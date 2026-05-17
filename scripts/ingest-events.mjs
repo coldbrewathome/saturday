@@ -89,6 +89,15 @@ async function fetchSource(source, registry) {
   if (source.sourceType === "wpRestEvents") {
     return fetchWpRestEvents(source, registry);
   }
+  if (source.sourceType === "wwcEvents") {
+    return fetchWwcEvents(source, registry);
+  }
+  if (source.sourceType === "eventOnEvents") {
+    return fetchEventOnEvents(source, registry);
+  }
+  if (source.sourceType === "ticketureEvents") {
+    return fetchTicketureEvents(source, registry);
+  }
   if (source.sourceType === "sfplEvents") {
     return fetchSfplEvents(source, registry);
   }
@@ -576,6 +585,234 @@ async function fetchWpRestEvents(source, registry) {
     contentType: `application/json; source=wp-rest-events; events=${events.length}`,
     json: events,
     text: JSON.stringify(events),
+  };
+}
+
+async function fetchWwcEvents(source, registry) {
+  const limit = Number(source.limit || source.perPage || 8);
+  const maxPages = Number(source.maxPages || 3);
+  const items = [];
+  let fetchedPages = 0;
+
+  for (let page = 0; page < maxPages * limit; page += limit) {
+    const url = new URL(source.apiUrl || "/wp-json/discover/v1/events/", source.url);
+    const body = new URLSearchParams({
+      series: String(source.wwcSeries || "all"),
+      category: String(source.wwcCategory || source.categoryId || "all"),
+      query: String(source.wwcQuery || "all"),
+      limit: String(limit),
+      initcount: String(source.wwcInitCount || ""),
+      page: String(page),
+      group: String(source.wwcGroup || ""),
+      displaytype: String(source.wwcDisplayType || "list"),
+    });
+
+    const payload = await fetchUrlForSource(source, url.toString(), registry.defaults?.userAgent, {
+      method: "POST",
+      browserHeaders: source.requiresBrowserHeaders === true,
+      headers: {
+        accept: "application/json,text/html;q=0.9,*/*;q=0.8",
+        "content-type": "application/x-www-form-urlencoded",
+        "x-requested-with": "XMLHttpRequest",
+      },
+      body: body.toString(),
+    });
+    if (payload.status !== "ok") return payload;
+
+    let json = payload.json;
+    if (!json) {
+      try {
+        json = JSON.parse(payload.text || "{}");
+      } catch {
+        return { status: "fetch-error", reason: "invalid WWC events response" };
+      }
+    }
+
+    const pageItems = Array.isArray(json.items) ? json.items : [];
+    items.push(...pageItems);
+    fetchedPages += 1;
+    if (pageItems.length === 0 || pageItems.length < limit) break;
+  }
+
+  return {
+    status: "ok",
+    httpStatus: 200,
+    contentType: `text/html; source=wwc-events; events=${items.length}; pages=${fetchedPages}`,
+    json: { items, fetchedPages },
+    text: items.join("\n"),
+  };
+}
+
+function extractEventOnConfig(html) {
+  const scMatch =
+    html.match(/class=["'][^"']*evo_cal_data[^"']*["'][^>]*data-sc=(["'])([\s\S]*?)\1/i) ||
+    html.match(/data-sc=(["'])([\s\S]*?)\1[^>]*class=["'][^"']*evo_cal_data[^"']*["']/i);
+  const paramsMatch = html.match(/var\s+evo_general_params\s*=\s*({[\s\S]*?});/);
+  let shortcode = null;
+  let params = null;
+
+  if (scMatch) {
+    try {
+      shortcode = JSON.parse(decodeHtmlEntities(scMatch[2]));
+    } catch {
+      shortcode = null;
+    }
+  }
+  if (paramsMatch) {
+    try {
+      params = JSON.parse(paramsMatch[1]);
+    } catch {
+      params = null;
+    }
+  }
+
+  return { shortcode, params };
+}
+
+function appendNestedForm(body, key, value) {
+  if (value == null) return;
+  if (Array.isArray(value)) {
+    value.forEach((item, index) => appendNestedForm(body, `${key}[${index}]`, item));
+    return;
+  }
+  if (typeof value === "object") {
+    for (const [childKey, childValue] of Object.entries(value)) {
+      appendNestedForm(body, key ? `${key}[${childKey}]` : childKey, childValue);
+    }
+    return;
+  }
+  body.append(key, String(value));
+}
+
+async function fetchEventOnEvents(source, registry) {
+  const pagePayload = await fetchUrlForSource(source, source.url, registry.defaults?.userAgent, {
+    browserHeaders: source.requiresBrowserHeaders === true,
+  });
+  if (pagePayload.status !== "ok") return pagePayload;
+
+  const { shortcode, params } = extractEventOnConfig(pagePayload.text || "");
+  if (!shortcode) {
+    return { status: "fetch-error", reason: "missing EventON shortcode config" };
+  }
+
+  const ajaxUrl = source.apiUrl || params?.ajaxurl || new URL("/wp-admin/admin-ajax.php", source.url).toString();
+  const body = new URLSearchParams();
+  body.set("action", source.eventOnAction || "eventon_get_events");
+  body.set("direction", source.eventOnDirection || "none");
+  appendNestedForm(body, "shortcode", shortcode);
+  body.set("ajaxtype", source.eventOnAjaxType || "initial");
+  if (params?.n) body.set("nonce", params.n);
+  if (params?.nonce) body.set("nonceX", params.nonce);
+
+  const headers = {
+    accept: "application/json,text/javascript,*/*;q=0.01",
+    "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+    "x-requested-with": "XMLHttpRequest",
+  };
+  if (params?.nonce) headers["x-wp-nonce"] = params.nonce;
+
+  const payload = await fetchUrlForSource(source, ajaxUrl, registry.defaults?.userAgent, {
+    method: "POST",
+    browserHeaders: source.requiresBrowserHeaders === true,
+    headers,
+    body: body.toString(),
+  });
+  if (payload.status !== "ok") return payload;
+
+  let json = payload.json;
+  if (!json) {
+    try {
+      json = JSON.parse(payload.text || "{}");
+    } catch {
+      return { status: "fetch-error", reason: "invalid EventON response" };
+    }
+  }
+
+  const records = Array.isArray(json?.json) ? json.json : [];
+  return {
+    status: "ok",
+    httpStatus: payload.httpStatus,
+    contentType: `application/json; source=eventon-events; events=${records.length}`,
+    json,
+    text: JSON.stringify(json),
+  };
+}
+
+function ticketureUrl(source, pathName) {
+  const base = source.ticketureBaseUrl || source.apiUrl || source.url;
+  return new URL(pathName, base).toString();
+}
+
+async function fetchTicketureEvents(source, registry) {
+  const baseUrl = source.ticketureBaseUrl || source.apiUrl || source.url;
+  const categories = Array.isArray(source.ticketureCategories) && source.ticketureCategories.length > 0
+    ? source.ticketureCategories
+    : ["Family", "Events", "Programs"];
+  const hiddenTypes = Array.isArray(source.ticketureHiddenTypes) && source.ticketureHiddenTypes.length > 0
+    ? source.ticketureHiddenTypes
+    : ["public_browsable", "public_member_only"];
+  const embeds = [
+    "meta",
+    "config",
+    "venue",
+    "ticket_type",
+    "ticket_group",
+  ];
+  const url = new URL(ticketureUrl({ ...source, ticketureBaseUrl: baseUrl }, "/cached_api/events/available"));
+  url.searchParams.set("_withmemberevents", "true");
+  url.searchParams.set("hidden_type._in", hiddenTypes.join(","));
+  url.searchParams.set("ticket_group.hidden_type._in", hiddenTypes.join(","));
+  url.searchParams.set("category._in", categories.join(","));
+  url.searchParams.set("config.key._in", source.ticketureConfigKeys || "config.image");
+  if (source.ticketureMetaKeys) url.searchParams.set("meta.metakey._in", String(source.ticketureMetaKeys));
+  url.searchParams.set("_embed", embeds.join(","));
+
+  const payload = await fetchUrlForSource(source, url.toString(), registry.defaults?.userAgent, {
+    headers: { accept: "application/json" },
+  });
+  if (payload.status !== "ok") return payload;
+
+  let json = payload.json;
+  if (!json) {
+    try {
+      json = JSON.parse(payload.text || "{}");
+    } catch {
+      return { status: "fetch-error", reason: "invalid Ticketure events response" };
+    }
+  }
+
+  const templates = Array.isArray(json?.event_template?._data) ? json.event_template._data : [];
+  const ticketGroups = Array.isArray(json?.ticket_group?._data) ? json.ticket_group._data : [];
+  const calendars = {};
+  const publicGroupTypes = new Set(hiddenTypes);
+
+  for (const template of templates) {
+    const groupIds = ticketGroups
+      .filter((group) => group.event_template_id === template.id && publicGroupTypes.has(group.hidden_type))
+      .map((group) => group.id);
+    if (groupIds.length === 0) continue;
+
+    const calendarUrl = new URL(ticketureUrl({ ...source, ticketureBaseUrl: baseUrl }, `/cached_api/events/${template.id}/calendar`));
+    calendarUrl.searchParams.set("ticket_group_id._in", groupIds.join(","));
+    calendarUrl.searchParams.set("_format", "extended");
+    const calendarPayload = await fetchUrlForSource(source, calendarUrl.toString(), registry.defaults?.userAgent, {
+      headers: { accept: "application/json" },
+    });
+    if (calendarPayload.status !== "ok") continue;
+    try {
+      calendars[template.id] = calendarPayload.json || JSON.parse(calendarPayload.text || "{}");
+    } catch {
+      // Keep the event template; the parser can still use dated summary text.
+    }
+  }
+
+  const out = { ...json, calendars };
+  return {
+    status: "ok",
+    httpStatus: payload.httpStatus,
+    contentType: `application/json; source=ticketure-events; events=${templates.length}; calendars=${Object.keys(calendars).length}`,
+    json: out,
+    text: JSON.stringify(out),
   };
 }
 

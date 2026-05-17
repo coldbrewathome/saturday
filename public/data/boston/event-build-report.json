@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "metroId": "boston",
-  "generatedAt": "2026-05-15T16:34:25.387Z",
+  "generatedAt": "2026-05-17T19:50:38.735Z",
   "registryPath": "data/event-sources-boston.json",
   "outputPath": "public/data/boston/events.json",
-  "eventCount": 30,
-  "adultsEventCount": 1,
+  "eventCount": 81,
+  "adultsEventCount": 43,
   "sourceCount": 13,
-  "liveEventCount": 26,
-  "fallbackEventCount": 4,
+  "liveEventCount": 81,
+  "fallbackEventCount": 0,
   "errors": [],
   "sources": [
     {
@@ -20,9 +20,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 13,
+      "liveEvents": 16,
       "fallbackEvents": 0,
-      "eventCount": 13,
+      "eventCount": 16,
       "fetches": [
         {
           "url": "https://bpl.bibliocommons.com/v2/events?audiences=57f66113863736755f79b0ca",
@@ -44,9 +44,9 @@
       "metroId": "boston",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 9,
+      "liveEvents": 12,
       "fallbackEvents": 0,
-      "eventCount": 9,
+      "eventCount": 12,
       "fetches": [
         {
           "url": "https://www.boston.gov/rss/events",
@@ -57,31 +57,31 @@
       ],
       "httpStatus": 200,
       "contentType": "application/rss+xml; charset=utf-8",
-      "rejectedLiveEvents": 16
+      "rejectedLiveEvents": 13
     },
     {
       "id": "boston-museum-family",
       "name": "Boston Children's Museum Calendar",
       "url": "https://bostonchildrensmuseum.org/Calendar/",
-      "sourceType": "eventList",
+      "sourceType": "eventOnEvents",
       "city": "Boston",
       "metroId": "boston",
       "category": "Museum",
-      "status": "ok-template-fallback",
-      "liveEvents": 0,
-      "fallbackEvents": 4,
-      "eventCount": 4,
+      "status": "ok",
+      "liveEvents": 51,
+      "fallbackEvents": 0,
+      "eventCount": 51,
       "fetches": [
         {
           "url": "https://bostonchildrensmuseum.org/Calendar/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "application/json; source=eventon-events; events=113"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "contentType": "application/json; source=eventon-events; events=113",
+      "rejectedLiveEvents": 57
     },
     {
       "id": "boston-zoo-family",
@@ -92,9 +92,9 @@
       "metroId": "boston",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://www.zoonewengland.org/discover/program-calendar/",
@@ -105,7 +105,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 11
+      "rejectedLiveEvents": 12
     },
     {
       "id": "ticketmaster-boston-family",
@@ -164,9 +164,9 @@
       "metroId": "boston",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://marshfieldfair.org/",

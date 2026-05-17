@@ -4,9 +4,11 @@ import {
   buildEventsDataset,
   expandRecurringTemplates,
   extractBiblioEvents,
+  extractBrooklynLibraryEvents,
   extractCommunicoEvents,
   extractChicagoParkDistrictEvents,
   extractDrupalCardEvents,
+  extractEventOnEvents,
   extractEventListEvents,
   extractHtmlEvents,
   extractIcsEvents,
@@ -17,7 +19,13 @@ import {
   extractLocalistEvents,
   extractOpenCitiesEventEvents,
   extractOfficialTextEvents,
+  extractPhoenixZooEvents,
   extractSfplEvents,
+  extractTicketureEvents,
+  extractWebflowEvents,
+  extractWpRestEvents,
+  extractWwcEvents,
+  extractZooAtlantaEvents,
   inferAgeBands,
   parseDateTimeRange,
   parseLooseDate,
@@ -666,6 +674,362 @@ test("extractEventListEvents reads official festival list pages", () => {
   assert.equal(events[0].title, "Manilatown Ancestral Ensemble (Kids' Show)");
   assert.equal(events[0].venue, "Children's Garden, Yerba Buena Gardens");
   assert.equal(events[0].extractionMethod, "event-list");
+});
+
+test("extractWwcEvents reads Discovery Green widget cards", () => {
+  const html = `
+    <h6>Saturday Jun 20th</h6>
+    <event id="event-10276" class="event-grid-item">
+      <a class="event-link-wrapper" href="https://www.discoverygreen.com/event/mini-makers-workshop-9/june-20-2026-1200-pm/">
+        <div class="elementor-heading-title elementor-size-default">Saturday Jun 20th</div>
+        <div class="elementor-heading-title elementor-size-default">12:00 pm - 2:00 pm</div>
+        <h5 class="elementor-heading-title elementor-size-default">Mini Makers Workshop</h5>
+        <div class="elementor-widget-theme-post-excerpt">
+          <div class="elementor-widget-container">Create soccer crafts with the Discovery Green Ambassadors at Mini Makers Workshop!</div>
+        </div>
+      </a>
+    </event>
+  `;
+
+  const events = extractWwcEvents(html, {
+    id: "houston-parks-family",
+    name: "Discovery Green Family Events",
+    url: "https://www.discoverygreen.com/event-category/parks-play/",
+    city: "Houston",
+    category: "Park",
+    timezoneOffset: "-05:00",
+    defaultAudienceText: "children family kids parks outdoors nature recreation",
+    cost: "Free",
+    eventList: {
+      venue: "Houston Parks Events",
+      requireFamilySignal: false,
+      defaultDurationMinutes: 90,
+    },
+  }, { now: new Date("2026-05-17T12:00:00Z") });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "Mini Makers Workshop");
+  assert.equal(events[0].startDateTime, "2026-06-20T17:00:00.000Z");
+  assert.equal(events[0].endDateTime, "2026-06-20T19:00:00.000Z");
+  assert.equal(events[0].extractionMethod, "wwc-events");
+});
+
+test("extractWebflowEvents reads Children Museum Houston cards and keeps active ranges", () => {
+  const html = `
+    <div role="listitem" class="event-calendar-item w-dyn-item">
+      <div class="secret-wrapper" style="display:none;">
+        <div class="eventType">false</div>
+        <div class="dateType">Apr 18, 2026</div>
+        <div class="dateType2">Jun 12, 2026</div>
+      </div>
+      <a href="/events/eastarts-workshop-series-1" class="event-calendar-card w-inline-block">
+        <h4 class="h4-name">EastArts Workshop Series 1: Japanese Stencil Dyeing</h4>
+        <p class="event-preview">A workshop series that immerses kids in East Asian arts and craft techniques.</p>
+      </a>
+    </div>
+    <div role="listitem" class="calendar-special-events-item w-dyn-item">
+      <div class="secret-wrapper-events-header" style="display:none;">
+        <div class="dateType">Jun 08, 2026</div>
+        <div class="dateType2">Jun 08, 2026</div>
+      </div>
+      <a href="/events/museum-closed-private-event" class="calendar-special-title w-inline-block">
+        <h1>Museum Closed: Private Event!</h1>
+      </a>
+    </div>
+  `;
+
+  const events = extractWebflowEvents(html, {
+    id: "houston-museum-family",
+    name: "Children's Museum Houston Events",
+    url: "https://www.cmhouston.org/events",
+    city: "Houston",
+    category: "Museum",
+    timezoneOffset: "-05:00",
+    defaultAudienceText: "children family kids museum science art workshop",
+    eventList: {
+      venue: "Children's Museum Houston Events",
+      requireFamilySignal: false,
+      defaultStartTime: "10:00",
+      defaultDurationMinutes: 90,
+    },
+  }, { now: new Date("2026-05-17T12:00:00Z") });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "EastArts Workshop Series 1: Japanese Stencil Dyeing");
+  assert.equal(events[0].startDateTime, "2026-05-17T15:00:00.000Z");
+  assert.equal(events[0].extractionMethod, "webflow-events");
+});
+
+test("extractPhoenixZooEvents reads zoo event cards without picking CTA text", () => {
+  const html = `
+    <div class="event-inner-container">
+      <a href="https://www.phoenixzoo.org/events/member-event-coffee-with-curator/" class="event-img-wrapper"></a>
+      <div class="event-content-wrapper">
+        <h2 class="h4"><a href="https://www.phoenixzoo.org/events/member-event-coffee-with-curator/"> Member Event: Coffee and Conservation </a></h2>
+        <h6>Saturday, May 23</h6>
+        <p>Learn how zoo conservation efforts are making an impact for wildlife and families.</p>
+        <a class="event-link" href="https://www.phoenixzoo.org/events/member-event-coffee-with-curator/">Info &amp; Tickets</a>
+      </div>
+    </div>
+  `;
+
+  const events = extractPhoenixZooEvents(html, {
+    id: "phoenix-zoo-family",
+    name: "Phoenix Zoo Events",
+    url: "https://www.phoenixzoo.org/events/",
+    city: "Phoenix",
+    category: "Zoo",
+    timezoneOffset: "-07:00",
+    defaultAudienceText: "children family kids zoo animals aquarium nature",
+    eventList: {
+      venue: "Phoenix Zoo Events",
+      requireFamilySignal: false,
+      defaultStartTime: "10:00",
+      defaultDurationMinutes: 90,
+    },
+  }, { now: new Date("2026-05-17T12:00:00Z") });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "Member Event: Coffee and Conservation");
+  assert.equal(events[0].startDateTime, "2026-05-23T17:00:00.000Z");
+  assert.equal(events[0].url, "https://www.phoenixzoo.org/events/member-event-coffee-with-curator/");
+  assert.equal(events[0].extractionMethod, "phoenix-zoo-events");
+});
+
+test("extractZooAtlantaEvents expands multi-date zoo cards and rejects adults-only cards", () => {
+  const html = `
+    <div class="event card">
+      <div class="front-content">
+        <h3 role="heading" aria-level="3">Grossology Day</h3>
+        <em>July 12</em>
+      </div>
+      <div class="back-content">
+        <p>July 12</p>
+        <p>Explore animal science activities for kids and families.</p>
+      </div>
+      <a role="button" class="read-more" href="https://zooatlanta.org/event/grossology-day/">Learn More</a>
+    </div>
+    <div class="event card">
+      <div class="front-content">
+        <h3 role="heading" aria-level="3">Boo at the Zoo</h3>
+        <em>October 17, 18, 24, 25 &amp; 31</em>
+      </div>
+      <div class="back-content">
+        <p>October 17, 18, 24, 25 &amp; 31</p>
+        <p>Trick-or-treating and family-friendly Halloween activities.</p>
+      </div>
+      <a role="button" class="read-more" href="https://zooatlanta.org/event/boo-at-the-zoo/">Learn More</a>
+    </div>
+    <div class="event card">
+      <div class="front-content">
+        <h3 role="heading" aria-level="3">Pride Night</h3>
+        <em>June 12</em>
+      </div>
+      <div class="back-content">
+        <p>June 12</p>
+        <p>A 21+ evening with wine and beer.</p>
+      </div>
+    </div>
+  `;
+
+  const events = extractZooAtlantaEvents(html, {
+    id: "atlanta-zoo-family",
+    name: "Zoo Atlanta Events",
+    url: "https://zooatlanta.org/visit/events/",
+    city: "Atlanta",
+    category: "Zoo",
+    timezoneOffset: "-04:00",
+    defaultAudienceText: "children family kids zoo animals aquarium nature",
+    eventList: {
+      venue: "Zoo Atlanta Events",
+      requireFamilySignal: false,
+      excludePattern: "pride night|21\\+|wine|beer",
+      defaultStartTime: "10:00",
+      defaultDurationMinutes: 90,
+    },
+  }, { now: new Date("2026-05-17T12:00:00Z") });
+
+  assert.equal(events.length, 6);
+  assert.equal(events[0].title, "Grossology Day");
+  assert.equal(events[0].description, "Explore animal science activities for kids and families.");
+  assert.equal(events[0].startDateTime, "2026-07-12T14:00:00.000Z");
+  assert.equal(events[1].title, "Boo at the Zoo");
+  assert.equal(events[1].startDateTime, "2026-10-17T14:00:00.000Z");
+  assert.equal(events[5].startDateTime, "2026-10-31T14:00:00.000Z");
+  assert.equal(events[0].extractionMethod, "zoo-atlanta-events");
+});
+
+test("extractEventOnEvents reads EventON JSON and applies source excludes", () => {
+  const keptStart = 1777657200;
+  const events = extractEventOnEvents({
+    status: "GOOD",
+    json: [
+      {
+        event_id: 31368,
+        event_start_unix: keptStart,
+        event_end_unix: keptStart + 3600,
+        event_title: "Japan Art Hour!",
+        event_pmv: {
+          evcal_subtitle: ["Hands-on art workshop for kids ages 3 to 6."],
+        },
+      },
+      {
+        event_id: 29710,
+        event_start_unix: keptStart + 7200,
+        event_end_unix: keptStart + 9000,
+        event_title: "Boston Children's Museum Opens at 10am Due to Morningstar Access (Registration Only)",
+        event_pmv: {},
+      },
+    ],
+  }, {
+    id: "boston-museum-family",
+    name: "Boston Children's Museum Calendar",
+    url: "https://bostonchildrensmuseum.org/Calendar/",
+    city: "Boston",
+    category: "Museum",
+    defaultAudienceText: "children family kids museum science art workshop",
+    eventList: {
+      venue: "Boston Children's Museum Events",
+      requireFamilySignal: false,
+      excludePattern: "opens? at|morningstar access|registration only",
+    },
+  });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "Japan Art Hour!");
+  assert.equal(events[0].startDateTime, new Date(keptStart * 1000).toISOString());
+  assert.equal(events[0].description, "Hands-on art workshop for kids ages 3 to 6.");
+  assert.equal(events[0].extractionMethod, "eventon-events");
+});
+
+test("extractBrooklynLibraryEvents reads youth and family library cards", () => {
+  const html = `
+    <div class="d-flex my-4 event-item">
+      <div class="flex-grow-1 event-content">
+        <a href="/calendar/stomp-clap-and-sing-central-library-dweck-20260519-1030am">
+          <h4 class="card-title">Stomp, Clap and Sing with Amelia Robinson of Mil&#039;s Trills</h4>
+        </a>
+        <div class="meta my-2">
+          <div class="date"><i class="fa-regular fa-calendar icon"></i> Tue, May 19 10:30am</div>
+          <div class="location"><i class="fa-solid fa-location-dot icon"></i> Central Library, Dweck Center</div>
+        </div>
+        <p class="tags mb-3">
+          <a>Events for Youth and Family</a> <a>kids</a> <a>music</a>
+        </p>
+        <p>Special acoustic performance featuring nursery rhymes and interactive songs.</p>
+      </div>
+    </div>
+  `;
+
+  const events = extractBrooklynLibraryEvents(html, {
+    id: "brooklyn-library-youth-family",
+    name: "Brooklyn Public Library - Youth and Family",
+    url: "https://www.bklynlibrary.org/event-series/events-for-youth-and-family",
+    city: "Brooklyn",
+    category: "Library",
+    timezoneOffset: "-04:00",
+    defaultAudienceText: "children family kids",
+    eventList: {
+      venue: "Brooklyn Public Library",
+      city: "Brooklyn",
+      requireFamilySignal: false,
+      defaultDurationMinutes: 90,
+    },
+  }, { now: new Date("2026-05-17T12:00:00Z") });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "Stomp, Clap and Sing with Amelia Robinson of Mil's Trills");
+  assert.equal(events[0].startDateTime, "2026-05-19T14:30:00.000Z");
+  assert.equal(events[0].venue, "Central Library, Dweck Center");
+  assert.equal(events[0].extractionMethod, "brooklyn-library-events");
+});
+
+test("extractTicketureEvents reads dated ticketing templates and rejects adult events", () => {
+  const events = extractTicketureEvents({
+    event_template: {
+      _data: [
+        {
+          id: "perot-family",
+          name: "Member After Hours: Soccer Night",
+          category: "Events",
+          summary: "<b>June 5, 2026, 5:30-9pm</b><br>Enjoy family-friendly STEM activities.",
+          venue_id: "perot-venue",
+        },
+        {
+          id: "perot-adult",
+          name: "Thursdays on Tap",
+          category: "Events",
+          summary: "Ages 21+ evening with cocktails and adult beverages.",
+          venue_id: "perot-venue",
+        },
+      ],
+    },
+    venue: {
+      _data: [
+        { id: "perot-venue", name: "Perot Museum of Nature and Science" },
+      ],
+    },
+    calendars: {
+      "perot-family": {
+        calendar: {
+          _data: [{ date: "2026-06-05", status: "available" }],
+        },
+      },
+    },
+  }, {
+    id: "dallas-fort-worth-museum-family",
+    name: "Perot Museum Events",
+    url: "https://www.perotmuseum.org/events/",
+    ticketureBaseUrl: "https://ticketing.perotmuseum.org/",
+    city: "Dallas",
+    category: "Museum",
+    timezoneOffset: "-05:00",
+    defaultAudienceText: "children family kids museum science art workshop",
+    eventList: {
+      venue: "Perot Museum Events",
+      city: "Dallas",
+      requireFamilySignal: false,
+      excludePattern: "thursdays on tap|21\\+|adult beverages|cocktails",
+      defaultDurationMinutes: 90,
+    },
+  }, { now: new Date("2026-05-17T12:00:00Z") });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "Member After Hours: Soccer Night");
+  assert.equal(events[0].startDateTime, "2026-06-05T22:30:00.000Z");
+  assert.equal(events[0].endDateTime, "2026-06-06T02:00:00.000Z");
+  assert.equal(events[0].venue, "Perot Museum of Nature and Science");
+  assert.equal(events[0].extractionMethod, "ticketure-events");
+});
+
+test("extractWpRestEvents reads single-date ACF event fields", () => {
+  const events = extractWpRestEvents([
+    {
+      id: 71482,
+      title: { rendered: "Valentine&#8217;s Day Cupcake Decorating" },
+      link: "https://www.philadelphiazoo.org/events/valentines-day-cupcake-decorating/",
+      start_time: "10:00:00",
+      end_time: "14:00:00",
+      acf: {
+        event_date: "20260214",
+        card_description: "Decorate cupcakes at a family-friendly zoo event for kids.",
+      },
+    },
+  ], {
+    id: "philadelphia-zoo-family",
+    name: "Philadelphia Zoo Events",
+    url: "https://www.philadelphiazoo.org/events/",
+    city: "Philadelphia",
+    category: "Zoo",
+    timezoneOffset: "-05:00",
+    defaultAudienceText: "children family kids zoo animals aquarium nature",
+  });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "Valentine\u2019s Day Cupcake Decorating");
+  assert.equal(events[0].startDateTime, "2026-02-14T15:00:00.000Z");
+  assert.equal(events[0].endDateTime, "2026-02-14T19:00:00.000Z");
+  assert.equal(events[0].extractionMethod, "wp-rest-events");
 });
 
 test("extractMidpenTableEvents reads guided open-space rows and filters unsuitable rows", () => {

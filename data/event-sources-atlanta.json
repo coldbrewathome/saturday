@@ -96,7 +96,7 @@
       "url": "https://zooatlanta.org/visit/events/",
       "city": "Atlanta",
       "category": "Zoo",
-      "sourceType": "eventList",
+      "sourceType": "zooAtlantaEvents",
       "trust": "official",
       "requiresBrowserHeaders": true,
       "requiresBrowserContext": true,
@@ -107,6 +107,8 @@
         "venue": "Zoo Atlanta Events",
         "city": "Atlanta",
         "requireFamilySignal": false,
+        "excludePattern": "brew|pride night|savanna nights|sippin|college night|educator|teacher|21\\+|over-21|wine|beer",
+        "defaultStartTime": "10:00",
         "defaultDurationMinutes": 90
       },
       "fallbackEventIds": [

@@ -73,9 +73,10 @@
       "id": "boston-museum-family",
       "name": "Boston Children's Museum Calendar",
       "url": "https://bostonchildrensmuseum.org/Calendar/",
+      "apiUrl": "https://bostonchildrensmuseum.org/wp-admin/admin-ajax.php",
       "city": "Boston",
       "category": "Museum",
-      "sourceType": "eventList",
+      "sourceType": "eventOnEvents",
       "trust": "official",
       "requiresBrowserHeaders": true,
       "lat": 42.3601,
@@ -85,6 +86,7 @@
         "venue": "Boston Children's Museum Events",
         "city": "Boston",
         "requireFamilySignal": false,
+        "excludePattern": "opens? at|morningstar access|registration only|museum closed",
         "defaultDurationMinutes": 90
       },
       "fallbackEventIds": [

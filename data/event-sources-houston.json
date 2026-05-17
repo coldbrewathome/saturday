@@ -51,17 +51,22 @@
       "url": "https://www.discoverygreen.com/event-category/parks-play/",
       "city": "Houston",
       "category": "Park",
-      "sourceType": "eventList",
+      "sourceType": "wwcEvents",
       "trust": "official",
       "requiresBrowserHeaders": true,
       "lat": 29.7604,
       "lon": -95.3698,
       "defaultAudienceText": "children family kids parks outdoors nature recreation",
       "cost": "Free",
+      "apiUrl": "https://www.discoverygreen.com/wp-json/discover/v1/events/",
+      "wwcCategory": 232,
+      "limit": 8,
+      "maxPages": 3,
       "eventList": {
         "venue": "Houston Parks Events",
         "city": "Houston",
         "requireFamilySignal": false,
+        "defaultStartTime": "10:00",
         "defaultDurationMinutes": 90
       },
       "fallbackEventIds": [
@@ -75,7 +80,7 @@
       "url": "https://www.cmhouston.org/events",
       "city": "Houston",
       "category": "Museum",
-      "sourceType": "eventList",
+      "sourceType": "webflowEvents",
       "trust": "official",
       "requiresBrowserHeaders": true,
       "lat": 29.7604,
@@ -85,6 +90,7 @@
         "venue": "Children's Museum Houston Events",
         "city": "Houston",
         "requireFamilySignal": false,
+        "defaultStartTime": "10:00",
         "defaultDurationMinutes": 90
       },
       "fallbackEventIds": [
