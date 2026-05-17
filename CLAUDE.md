@@ -63,3 +63,15 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 ---
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
+
+---
+
+## Deploy
+
+When the user says "deploy", it means **deploy to Cloudflare Pages directly via wrangler** — not "git push and let CI deploy". Use:
+
+- `npm run deploy:kids` → FamHop (project `saturday-spots`)
+- `npm run deploy:adults` → NightHop (project `nighthop`)
+- `npm run deploy:data` → famhop-data
+
+If the user says "deploy" without specifying, default to both kids and adults (the shared `App.tsx` means a change usually ships to both). Run `npm run test` + `npm run validate:data` + `npm run validate:events` first to match what CI would check.

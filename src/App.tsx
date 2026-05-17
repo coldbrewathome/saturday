@@ -22,6 +22,7 @@ import {
   Trash2,
   Users,
   X,
+  Zap,
 } from "lucide-react";
 import {
   type ComponentProps,
@@ -79,6 +80,13 @@ import {
   type PlannerScoringOptions,
   type PlannerVibe,
 } from "./planner";
+import {
+  hopNowPicks,
+  type HopNowEvent,
+  type HopNowPick,
+  type HopNowResult,
+  type HopNowSpot,
+} from "./hopNow";
 import {
   METROS,
   legacyMetroDataPath,
@@ -1440,6 +1448,8 @@ function App({ metro }: AppProps) {
     loading: true,
   });
   const [isAdding, setIsAdding] = useState(false);
+  const [isHopNowOpen, setIsHopNowOpen] = useState(false);
+  const [hopNowSeed, setHopNowSeed] = useState(0);
   const [newSpot, setNewSpot] = useState<NewSpotForm>(emptyNewSpot);
 
   useEffect(() => {
@@ -3587,6 +3597,16 @@ function App({ metro }: AppProps) {
           </button>
         </nav>
 
+        <button
+          className="hop-now-button topbar-hop"
+          type="button"
+          onClick={() => setIsHopNowOpen(true)}
+          title="Things to do right now"
+        >
+          <Zap aria-hidden="true" />
+          <span className="hop-now-label">Hop now</span>
+        </button>
+
         <div className="topbar-spacer" />
 
         <button
@@ -5332,6 +5352,34 @@ function App({ metro }: AppProps) {
       </main>
       )}
 
+      <button
+        className="hop-now-fab"
+        type="button"
+        onClick={() => setIsHopNowOpen(true)}
+        aria-label="Hop me now — things to do right now"
+        title="Hop me now"
+      >
+        <Zap aria-hidden="true" />
+        <span>Now</span>
+      </button>
+
+      {isHopNowOpen && (
+        <HopNowPanel
+          spots={allSpots}
+          events={events}
+          userLocation={
+            userLocation ??
+            (inferredGeo?.lat != null && inferredGeo?.lon != null
+              ? { lat: inferredGeo.lat, lon: inferredGeo.lon }
+              : null)
+          }
+          audience={APP_AUDIENCE === "adults" ? "adults" : "kids"}
+          seed={hopNowSeed}
+          onShuffle={() => setHopNowSeed((s) => s + 1)}
+          onClose={() => setIsHopNowOpen(false)}
+        />
+      )}
+
       {isAdding && (
         <div className="modal-backdrop" role="presentation">
           <form className="spot-form" onSubmit={addSpot}>
@@ -5465,6 +5513,208 @@ function App({ metro }: AppProps) {
         </div>
       </footer>
     </div>
+  );
+}
+
+function spotToHopNow(spot: Spot): HopNowSpot {
+  return {
+    id: spot.id,
+    name: spot.name,
+    neighborhood: spot.neighborhood,
+    category: spot.category,
+    lat: spot.lat,
+    lon: spot.lon,
+    transitMinutes: spot.transitMinutes,
+    schedule: spot.schedule ?? null,
+    cost: spot.cost,
+    kidsFriendly: spot.kidsFriendly ?? null,
+    friendScore: spot.friendScore,
+    googleRating: spot.googleRating,
+    googleRatingCount: spot.googleRatingCount,
+    tags: spot.tags,
+    mood: spot.mood,
+    website: spot.website ?? null,
+    sourceUrl: spot.sourceUrl,
+  };
+}
+
+function eventToHopNow(event: FamilyEvent): HopNowEvent | null {
+  if (!event.startDateTime) return null;
+  return {
+    id: event.id,
+    title: event.title,
+    venue: event.venue,
+    neighborhood: event.neighborhood,
+    category: event.category,
+    lat: event.lat,
+    lon: event.lon,
+    startDateTime: event.startDateTime,
+    endDateTime: event.endDateTime ?? null,
+    cost: event.cost,
+    url: event.url,
+  };
+}
+
+function mapsHref(query: string): string {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}
+
+function HopNowPanel({
+  spots,
+  events,
+  userLocation,
+  audience,
+  seed,
+  onShuffle,
+  onClose,
+}: {
+  spots: Spot[];
+  events: FamilyEvent[];
+  userLocation: { lat: number; lon: number } | null;
+  audience: "kids" | "adults";
+  seed: number;
+  onShuffle: () => void;
+  onClose: () => void;
+}) {
+  // Re-evaluate on each open / shuffle. We deliberately don't memoize on `now`
+  // because the modal is short-lived and a fresh `new Date()` per render is fine.
+  const result: HopNowResult = useMemo(() => {
+    const hopSpots = spots.map(spotToHopNow);
+    const hopEvents = events
+      .map(eventToHopNow)
+      .filter((e): e is HopNowEvent => e !== null);
+    return hopNowPicks(hopSpots, hopEvents, {
+      now: new Date(),
+      audience,
+      userLocation,
+      shuffleSeed: seed,
+    });
+  }, [audience, events, seed, spots, userLocation]);
+
+  return (
+    <div className="hop-now-backdrop" role="presentation" onClick={onClose}>
+      <div
+        className="hop-now-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Hop me now"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="hop-now-head">
+          <div>
+            <p className="eyebrow">Right now</p>
+            <h2>Hop me now</h2>
+            <p className="hop-now-sub">
+              Open, nearby, and good for the next hour or two.
+            </p>
+          </div>
+          <button
+            className="icon-button"
+            type="button"
+            onClick={onClose}
+            aria-label="Close"
+          >
+            <X aria-hidden="true" />
+          </button>
+        </div>
+
+        {result.reason && (
+          <p className="hop-now-reason">{result.reason}</p>
+        )}
+
+        {result.picks.length > 0 && (
+          <ul className="hop-now-list">
+            {result.picks.map((pick) => (
+              <HopNowCard key={`${pick.kind}:${pick.id}`} pick={pick} />
+            ))}
+          </ul>
+        )}
+
+        <div className="hop-now-foot">
+          <button
+            type="button"
+            className="text-button"
+            onClick={onShuffle}
+            disabled={result.picks.length === 0}
+          >
+            Shuffle
+          </button>
+          {!userLocation && (
+            <span className="hop-now-hint">
+              Tip: allow location for better picks.
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function HopNowCard({ pick }: { pick: HopNowPick }) {
+  const meta: string[] = [];
+  if (pick.etaMinutes != null) {
+    meta.push(`${pick.etaMinutes} min away`);
+  }
+  if (pick.kind === "spot") {
+    if (pick.alwaysOpen) meta.push("Open 24/7");
+    else if (pick.closesAtMinutes != null) {
+      const m = ((pick.closesAtMinutes % 1440) + 1440) % 1440;
+      const h24 = Math.floor(m / 60);
+      const mm = m % 60;
+      const ampm = h24 >= 12 ? "PM" : "AM";
+      const h12 = ((h24 + 11) % 12) + 1;
+      const label = mm === 0 ? `${h12}${ampm}` : `${h12}:${mm.toString().padStart(2, "0")}${ampm}`;
+      meta.push(`Until ${label}`);
+    }
+  } else if (pick.kind === "event") {
+    if (pick.startsInMinutes <= 0) meta.push("In progress");
+    else meta.push(`Starts in ${pick.startsInMinutes} min`);
+  }
+  return (
+    <li className="hop-now-card">
+      <div className="hop-now-card-head">
+        <span className="hop-now-card-cat">{pick.category}</span>
+        {pick.kind === "event" && <span className="hop-now-card-badge">Event</span>}
+      </div>
+      <h3>{pick.name}</h3>
+      <p className="hop-now-card-where">
+        {pick.kind === "event" ? `${pick.venue} · ${pick.neighborhood}` : pick.neighborhood}
+      </p>
+      <p className="hop-now-card-why">{pick.whyNow}</p>
+      {meta.length > 0 && (
+        <p className="hop-now-card-meta">{meta.join(" · ")}</p>
+      )}
+      <div className="hop-now-card-actions">
+        <a
+          className="primary-button"
+          href={mapsHref(pick.mapsQuery)}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Take me there
+        </a>
+        {pick.kind === "event" && pick.url && (
+          <a
+            className="text-button"
+            href={pick.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Event details
+          </a>
+        )}
+        {pick.kind === "spot" && pick.url && (
+          <a
+            className="text-button"
+            href={pick.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Website
+          </a>
+        )}
+      </div>
+    </li>
   );
 }
 
