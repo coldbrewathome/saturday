@@ -17,6 +17,11 @@ import {
   selectedMetroFromArgs,
   sourceRegistryPath,
 } from "./metroConfig.mjs";
+import {
+  buildOperatorAlert,
+  collectPreviousEvents,
+  lastKnownGoodEventsForSource,
+} from "./eventSourceRecovery.mjs";
 
 const metroConfig = loadMetroConfig();
 const selection = selectedMetroFromArgs(process.argv.slice(2), metroConfig);
@@ -40,6 +45,9 @@ const manualEventsPath =
 const outputPath = process.env.EVENT_OUTPUT || metroDataFile(activeMetro, "events");
 const reportPath =
   process.env.EVENT_REPORT_OUTPUT || metroDataFile(activeMetro, "eventReport");
+const alertsPath =
+  process.env.EVENT_ALERTS_OUTPUT ||
+  reportPath.replace(/event-build-report\.json$/, "event-operator-alerts.json");
 const minEvents = Number(process.env.MIN_EVENTS || activeMetro.minEvents || 25);
 const timeoutMs = Number(process.env.EVENT_FETCH_TIMEOUT_MS || 12000);
 const offline = process.env.EVENT_INGEST_OFFLINE === "1";
@@ -1368,6 +1376,35 @@ function applyRegistryDefaults(reg, metro = activeMetro) {
   }
 }
 
+function addFetchedAt(event, generatedAt) {
+  if (event.sourceMode === "last-known-good") {
+    return {
+      ...event,
+      fetchedAt: event.fetchedAt || event.originalFetchedAt || generatedAt,
+      restoredAt: event.restoredAt || generatedAt,
+    };
+  }
+  return { ...event, fetchedAt: generatedAt };
+}
+
+function issueTypeForSource({ report, firstOk, extractedCount, liveCount }) {
+  if (report.status === "offline") return "offline";
+  if (report.status === "skipped") return "skipped";
+  if (!firstOk && report.status !== "ok") return "fetch-failed";
+  if (firstOk && extractedCount === 0) return "zero-extracted";
+  if (firstOk && extractedCount > 0 && liveCount === 0) return "zero-in-window";
+  return null;
+}
+
+function logOperatorAlert(alert) {
+  const recovery = alert.recoveredBy
+    ? `; recovered ${alert.recoveredEvents} via ${alert.recoveredBy}`
+    : "; no recovery available";
+  console.warn(
+    `[event-pipeline-alert] ${alert.severity} ${alert.metroId}/${alert.sourceId}: ${alert.issueType} - ${alert.reason}${recovery}`,
+  );
+}
+
 async function main() {
   const registry = await readJson(registryPath);
   const adultRegistry = await readJsonOrEmpty(adultRegistryPath);
@@ -1377,8 +1414,15 @@ async function main() {
   const templates = templateMap(templateDataset);
   const manualDataset = await readJsonOrEmpty(manualEventsPath);
   const generatedAt = new Date().toISOString();
+  const adultsOutputPath = outputPath.replace(/events\.json$/, "events-adults.json");
+  const previousDatasets = [
+    await readJsonOrEmpty(outputPath),
+    await readJsonOrEmpty(adultsOutputPath),
+  ];
+  const previousEvents = collectPreviousEvents(previousDatasets);
   const allEvents = [];
   const sourceReports = [];
+  const operatorAlerts = [];
 
   const registriesToProcess = [registry];
   if (Array.isArray(adultRegistry?.sources) && adultRegistry.sources.length > 0) {
@@ -1463,6 +1507,8 @@ async function main() {
       report.reason = source.disabledReason || source.notes;
     }
     let liveEvents = [];
+    let extractedCount = 0;
+    let firstOk = null;
 
     if (!offline && fetchEnabled) {
       const payloads = await fetchSourcePayloads(source, reg);
@@ -1473,7 +1519,7 @@ async function main() {
         httpStatus: payload.httpStatus,
         contentType: payload.contentType,
       }));
-      const firstOk = payloads.find((payload) => payload.status === "ok");
+      firstOk = payloads.find((payload) => payload.status === "ok");
       const firstPayload = firstOk || payloads[0] || {};
       report.status = firstPayload.status || "fetch-error";
       if (firstPayload.reason) report.reason = firstPayload.reason;
@@ -1490,6 +1536,7 @@ async function main() {
               windowDays: reg.defaults?.windowDays || 45,
             },
           ));
+        extractedCount = extracted.length;
         liveEvents = dedupeEvents(filterToPlanningWindow(
           extracted,
           generatedAt,
@@ -1501,23 +1548,63 @@ async function main() {
       report.status = source.enabled === false ? "disabled" : "offline";
     }
 
-    const fallbackEvents =
-      liveEvents.length > 0 ? [] : fallbackTemplates(source, templates, reg, generatedAt);
-    for (const event of [...liveEvents, ...fallbackEvents]) {
+    const sourceIssueType = issueTypeForSource({
+      report,
+      firstOk,
+      extractedCount,
+      liveCount: liveEvents.length,
+    });
+    const lastKnownGoodEvents =
+      liveEvents.length === 0 && sourceIssueType
+        ? lastKnownGoodEventsForSource(previousEvents, source, {
+            generatedAt,
+            windowDays: reg.defaults?.windowDays || 45,
+          })
+        : [];
+    const templateFallbackEvents =
+      liveEvents.length === 0 && lastKnownGoodEvents.length === 0
+        ? fallbackTemplates(source, templates, reg, generatedAt)
+        : [];
+    const recoveredBy =
+      lastKnownGoodEvents.length > 0
+        ? "last-known-good"
+        : templateFallbackEvents.length > 0
+          ? "recurring-template"
+          : null;
+
+    for (const event of [...liveEvents, ...lastKnownGoodEvents, ...templateFallbackEvents]) {
       allEvents.push({
-        ...event,
+        ...addFetchedAt(event, generatedAt),
         metroId: event.metroId || activeMetro.id,
         sourceId: event.sourceId || source.id,
         sourceName: event.sourceName || source.name,
         sourceUrl: event.sourceUrl || source.url,
-        fetchedAt: generatedAt,
       });
     }
+    report.extractedEvents = extractedCount;
     report.liveEvents = liveEvents.length;
-    report.fallbackEvents = fallbackEvents.length;
-    report.eventCount = liveEvents.length + fallbackEvents.length;
-    if (report.status === "ok" && liveEvents.length === 0 && fallbackEvents.length > 0) {
+    report.lastKnownGoodEvents = lastKnownGoodEvents.length;
+    report.fallbackEvents = templateFallbackEvents.length;
+    report.recoveryMode = recoveredBy;
+    report.eventCount =
+      liveEvents.length + lastKnownGoodEvents.length + templateFallbackEvents.length;
+    if (report.status === "ok" && liveEvents.length === 0 && lastKnownGoodEvents.length > 0) {
+      report.status = "ok-last-known-good";
+      report.reason = "source produced no live events; using last-known-good future events";
+    } else if (report.status === "ok" && liveEvents.length === 0 && templateFallbackEvents.length > 0) {
       report.status = "ok-template-fallback";
+    }
+    const alert = buildOperatorAlert({
+      source,
+      report,
+      generatedAt,
+      issueType: sourceIssueType,
+      recoveredBy,
+      recoveredEvents: lastKnownGoodEvents.length + templateFallbackEvents.length,
+    });
+    if (alert) {
+      operatorAlerts.push(alert);
+      logOperatorAlert(alert);
     }
     sourceReports.push(report);
     await new Promise((resolve) => setTimeout(resolve, Number(process.env.EVENT_FETCH_DELAY_MS || 100)));
@@ -1582,18 +1669,32 @@ async function main() {
     adultsEventCount: adultsDataset.events.length,
     sourceCount: sourceReports.length,
     liveEventCount: sourceReports.reduce((sum, item) => sum + item.liveEvents, 0),
+    lastKnownGoodEventCount: sourceReports.reduce(
+      (sum, item) => sum + (item.lastKnownGoodEvents || 0),
+      0,
+    ),
     fallbackEventCount: sourceReports.reduce((sum, item) => sum + item.fallbackEvents, 0),
+    operatorAlertCount: operatorAlerts.length,
     errors,
+    operatorAlerts,
     sources: sourceReports,
+  };
+  const alertsDoc = {
+    schemaVersion: 1,
+    metroId: activeMetro.id,
+    generatedAt,
+    alertCount: operatorAlerts.length,
+    alerts: operatorAlerts,
   };
 
   if (errors.length > 0) {
     await fs.mkdir(path.dirname(reportPath), { recursive: true });
     await fs.writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`);
+    await fs.mkdir(path.dirname(alertsPath), { recursive: true });
+    await fs.writeFile(alertsPath, `${JSON.stringify(alertsDoc, null, 2)}\n`);
     throw new Error(`Generated events failed validation:\n${errors.join("\n")}`);
   }
 
-  const adultsOutputPath = outputPath.replace(/events\.json$/, "events-adults.json");
   await fs.mkdir(path.dirname(outputPath), { recursive: true });
   await fs.writeFile(outputPath, `${JSON.stringify(kidsDataset, null, 2)}\n`);
   await fs.writeFile(adultsOutputPath, `${JSON.stringify(adultsDataset, null, 2)}\n`);
@@ -1604,10 +1705,17 @@ async function main() {
   }
   await fs.mkdir(path.dirname(reportPath), { recursive: true });
   await fs.writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`);
+  await fs.mkdir(path.dirname(alertsPath), { recursive: true });
+  await fs.writeFile(alertsPath, `${JSON.stringify(alertsDoc, null, 2)}\n`);
   const legacyReport = legacyMetroDataFile(activeMetro, "eventReport");
   if (legacyReport) {
     await fs.mkdir(path.dirname(legacyReport), { recursive: true });
     await fs.writeFile(legacyReport, `${JSON.stringify(report, null, 2)}\n`);
+    const legacyAlerts = legacyReport.replace(
+      /event-build-report\.json$/,
+      "event-operator-alerts.json",
+    );
+    await fs.writeFile(legacyAlerts, `${JSON.stringify(alertsDoc, null, 2)}\n`);
   }
   console.log(
     `Wrote ${kidsDataset.events.length} kids events to ${outputPath}`,
@@ -1616,6 +1724,7 @@ async function main() {
     `Wrote ${adultsDataset.events.length} adults events to ${adultsOutputPath}`,
   );
   console.log(`Wrote event build report to ${reportPath}`);
+  console.log(`Wrote ${operatorAlerts.length} operator alerts to ${alertsPath}`);
 }
 
 main()

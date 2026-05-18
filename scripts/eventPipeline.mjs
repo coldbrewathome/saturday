@@ -3824,6 +3824,7 @@ function scoreEvent(event) {
   if (event.extractionMethod === "midpen-table") score += 7;
   if (event.extractionMethod === "ticketmaster") score += 7;
   if (event.sourceMode === "recurring-template") score -= 2;
+  if (event.sourceMode === "last-known-good") score -= 4;
   if (event.verified) score += 3;
   return score;
 }

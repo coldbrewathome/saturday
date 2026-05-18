@@ -76,25 +76,26 @@ const headers = `# Cloudflare Pages headers — shared data feed (famhop-data)
 fs.writeFileSync(path.join(OUT, "_headers"), headers);
 
 const generatedAt = new Date().toISOString();
+const publicDataRoot = path.join("public", "data");
+const dataRel = (file) => path.relative(publicDataRoot, file);
+const eventAlertsFile = (metro) =>
+  metroDataFile(metro, "eventReport").replace(
+    /event-build-report\.json$/,
+    "event-operator-alerts.json",
+  );
+const existingDataRel = (file) =>
+  fs.existsSync(path.join(ROOT, file)) ? dataRel(file) : null;
 const metroFileLines = metroConfig.metros
-  .flatMap((metro) => [
-    `- ${metro.label}: /data/${path.relative(
-      path.join("public", "data"),
-      metroDataFile(metro, "spots"),
-    )} - scanned places.`,
-    `- ${metro.label}: /data/${path.relative(
-      path.join("public", "data"),
-      metroDataFile(metro, "events"),
-    )} - time-bounded events.`,
-    `- ${metro.label}: /data/${path.relative(
-      path.join("public", "data"),
-      metroDataFile(metro, "eventReport"),
-    )} - event ingest diagnostics.`,
-    `- ${metro.label}: /data/${path.relative(
-      path.join("public", "data"),
-      metroDataFile(metro, "featuredPlans"),
-    )} - editor starter plans.`,
-  ])
+  .flatMap((metro) => {
+    const alerts = existingDataRel(eventAlertsFile(metro));
+    return [
+      `- ${metro.label}: /data/${dataRel(metroDataFile(metro, "spots"))} - scanned places.`,
+      `- ${metro.label}: /data/${dataRel(metroDataFile(metro, "events"))} - time-bounded events.`,
+      `- ${metro.label}: /data/${dataRel(metroDataFile(metro, "eventReport"))} - event ingest diagnostics.`,
+      alerts ? `- ${metro.label}: /data/${alerts} - event source operator alerts.` : null,
+      `- ${metro.label}: /data/${dataRel(metroDataFile(metro, "featuredPlans"))} - editor starter plans.`,
+    ].filter(Boolean);
+  })
   .join("\n");
 const legacyLines = metroConfig.metros
   .flatMap((metro) =>
@@ -105,13 +106,16 @@ const legacyLines = metroConfig.metros
   )
   .join("\n");
 const endpointLinks = [
-  ...metroConfig.metros.flatMap((metro) => [
-    path.relative(path.join("public", "data"), metroDataFile(metro, "spots")),
-    `${metro.dataDir}/spots-adults.json`,
-    path.relative(path.join("public", "data"), metroDataFile(metro, "events")),
-    `${metro.dataDir}/events-adults.json`,
-    path.relative(path.join("public", "data"), metroDataFile(metro, "featuredPlans")),
-  ]),
+  ...metroConfig.metros.flatMap((metro) =>
+    [
+      dataRel(metroDataFile(metro, "spots")),
+      `${metro.dataDir}/spots-adults.json`,
+      dataRel(metroDataFile(metro, "events")),
+      `${metro.dataDir}/events-adults.json`,
+      existingDataRel(eventAlertsFile(metro)),
+      dataRel(metroDataFile(metro, "featuredPlans")),
+    ].filter(Boolean),
+  ),
   "boa-museums.json",
   "llms.txt",
 ];
