@@ -11,6 +11,9 @@ export type MetroConfig = {
   aliases: string[];
   dataDir: string;
   center: { lat: number; lon: number };
+  spotCoverage?: {
+    bbox?: { south: number; west: number; north: number; east: number };
+  };
   legacyData?: Partial<Record<DataKey, string>>;
 };
 

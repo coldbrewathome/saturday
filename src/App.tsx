@@ -1475,6 +1475,26 @@ function App({ metro }: AppProps) {
   });
   const [isAdding, setIsAdding] = useState(false);
   const [isHopNowOpen, setIsHopNowOpen] = useState(false);
+  const [hopNowSeen, setHopNowSeenState] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
+    try {
+      return window.localStorage.getItem("saturday.hopNowSeen") === "1";
+    } catch {
+      return false;
+    }
+  });
+  const markHopNowSeen = () => {
+    setHopNowSeenState(true);
+    try {
+      window.localStorage.setItem("saturday.hopNowSeen", "1");
+    } catch {
+      // ignore
+    }
+  };
+  const openHopNow = () => {
+    markHopNowSeen();
+    setIsHopNowOpen(true);
+  };
   const [newSpot, setNewSpot] = useState<NewSpotForm>(emptyNewSpot);
 
   useEffect(() => {
@@ -3682,7 +3702,7 @@ function App({ metro }: AppProps) {
         <button
           className="hop-now-button topbar-hop"
           type="button"
-          onClick={() => setIsHopNowOpen(true)}
+          onClick={openHopNow}
           title="Things to do right now"
         >
           <Zap aria-hidden="true" />
@@ -5414,26 +5434,37 @@ function App({ metro }: AppProps) {
       )}
 
       <button
-        className="hop-now-fab"
+        className={`hop-now-fab${hopNowSeen ? " is-seen" : ""}`}
         type="button"
-        onClick={() => setIsHopNowOpen(true)}
+        onClick={openHopNow}
         aria-label="Hop me now — things to do right now"
         title="Hop me now"
       >
         <Zap aria-hidden="true" />
-        <span>Now</span>
+        <span>Hop me now</span>
+        {!hopNowSeen && <span className="hop-now-fab-badge">NEW</span>}
       </button>
+      {!hopNowSeen && (
+        <div className="hop-now-coachmark" role="status" aria-live="polite">
+          <div className="hop-now-coachmark-body">
+            <span>Stuck on what to do? Tap for instant ideas near you.</span>
+            <button
+              className="hop-now-coachmark-dismiss"
+              type="button"
+              onClick={markHopNowSeen}
+              aria-label="Dismiss"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
 
       {isHopNowOpen && (
         <HopNowPanel
           spots={allSpots}
           events={events}
-          userLocation={
-            userLocation ??
-            (inferredGeo?.lat != null && inferredGeo?.lon != null
-              ? { lat: inferredGeo.lat, lon: inferredGeo.lon }
-              : null)
-          }
+          userLocation={resolveHopNowLocation(userLocation, inferredGeo, metro)}
           audience={APP_AUDIENCE === "adults" ? "adults" : "kids"}
           activePlanName={activePlan?.name ?? null}
           onAddToPlan={addHopNowItemToPlan}
@@ -5575,6 +5606,23 @@ function App({ metro }: AppProps) {
       </footer>
     </div>
   );
+}
+
+function resolveHopNowLocation(
+  saved: { lat: number; lon: number } | null,
+  inferred: { lat: number | null; lon: number | null } | null,
+  metro: MetroConfig,
+): { lat: number; lon: number } | null {
+  if (saved) return saved;
+  if (inferred?.lat == null || inferred?.lon == null) return null;
+  const bbox = metro.spotCoverage?.bbox;
+  if (!bbox) return { lat: inferred.lat, lon: inferred.lon };
+  const inMetro =
+    inferred.lat >= bbox.south &&
+    inferred.lat <= bbox.north &&
+    inferred.lon >= bbox.west &&
+    inferred.lon <= bbox.east;
+  return inMetro ? { lat: inferred.lat, lon: inferred.lon } : null;
 }
 
 function spotToHopNow(spot: Spot): HopNowSpot {
