@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 1,
+  "metroId": "atlanta",
+  "generatedAt": "2026-05-18T23:04:40.024Z",
+  "alertCount": 9,
+  "alerts": [
+    {
+      "severity": "warning",
+      "metroId": "atlanta",
+      "sourceId": "atlanta-parks-family",
+      "sourceName": "Atlanta Parks and Recreation Events",
+      "sourceType": "eventList",
+      "url": "https://www.atlantaga.gov/government/departments/parks-recreation/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": "recurring-template",
+      "recoveredEvents": 8,
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:04:40.024Z",
+      "fetches": [
+        {
+          "url": "https://www.atlantaga.gov/government/departments/parks-recreation/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "atlanta",
+      "sourceId": "ticketmaster-atlanta-family",
+      "sourceName": "Ticketmaster Atlanta Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:04:40.024Z",
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "atlanta",
+      "sourceId": "north-georgia-state-fair",
+      "sourceName": "North Georgia State Fair",
+      "sourceType": "html",
+      "url": "https://www.northgeorgiastatefair.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:04:40.024Z",
+      "fetches": [
+        {
+          "url": "https://www.northgeorgiastatefair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "atlanta",
+      "sourceId": "gwinnett-county-fair",
+      "sourceName": "Gwinnett County Fair",
+      "sourceType": "html",
+      "url": "https://www.gwinnettcountyfair.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:04:40.024Z",
+      "fetches": [
+        {
+          "url": "https://www.gwinnettcountyfair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "atlanta",
+      "sourceId": "terminal-west-atl",
+      "sourceName": "Terminal West",
+      "sourceType": "html",
+      "url": "https://www.terminalwestatl.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:04:40.024Z",
+      "fetches": [
+        {
+          "url": "https://www.terminalwestatl.com/events",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "atlanta",
+      "sourceId": "variety-playhouse",
+      "sourceName": "Variety Playhouse",
+      "sourceType": "html",
+      "url": "https://www.varietyplayhouse.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:04:40.024Z",
+      "fetches": [
+        {
+          "url": "https://www.varietyplayhouse.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "atlanta",
+      "sourceId": "the-earl-atl",
+      "sourceName": "The EARL",
+      "sourceType": "html",
+      "url": "https://www.badearl.com/calendar",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:04:40.024Z",
+      "fetches": [
+        {
+          "url": "https://www.badearl.com/calendar",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "atlanta",
+      "sourceId": "laughing-skull-atl",
+      "sourceName": "Laughing Skull Lounge",
+      "sourceType": "html",
+      "url": "https://laughingskulllounge.com/calendar",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:04:40.024Z",
+      "fetches": [
+        {
+          "url": "https://laughingskulllounge.com/calendar",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "atlanta",
+      "sourceId": "dad-garage-atl",
+      "sourceName": "Dad's Garage Theatre",
+      "sourceType": "html",
+      "url": "https://www.dadsgarage.com/calendar",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:04:40.024Z",
+      "fetches": [
+        {
+          "url": "https://www.dadsgarage.com/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    }
+  ]
+}

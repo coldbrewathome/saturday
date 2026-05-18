@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "metroId": "houston",
+  "generatedAt": "2026-05-18T23:03:58.559Z",
+  "alertCount": 7,
+  "alerts": [
+    {
+      "severity": "critical",
+      "metroId": "houston",
+      "sourceId": "ticketmaster-houston-family",
+      "sourceName": "Ticketmaster Houston Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:58.559Z",
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "houston",
+      "sourceId": "fort-bend-county-fair",
+      "sourceName": "Fort Bend County Fair",
+      "sourceType": "html",
+      "url": "https://www.fortbendcountyfair.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:58.559Z",
+      "fetches": [
+        {
+          "url": "https://www.fortbendcountyfair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "houston",
+      "sourceId": "white-oak-music-hall",
+      "sourceName": "White Oak Music Hall",
+      "sourceType": "html",
+      "url": "https://www.whiteoakmusichall.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:58.559Z",
+      "fetches": [
+        {
+          "url": "https://www.whiteoakmusichall.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "houston",
+      "sourceId": "warehouse-live",
+      "sourceName": "Warehouse Live",
+      "sourceType": "html",
+      "url": "https://www.warehouselive.com/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:58.559Z",
+      "fetches": [
+        {
+          "url": "https://www.warehouselive.com/events",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "houston",
+      "sourceId": "continental-club-houston",
+      "sourceName": "The Continental Club",
+      "sourceType": "html",
+      "url": "https://continentalclub.com/houston",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:58.559Z",
+      "fetches": [
+        {
+          "url": "https://continentalclub.com/houston",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "houston",
+      "sourceId": "the-secret-group",
+      "sourceName": "The Secret Group",
+      "sourceType": "html",
+      "url": "https://www.thesecretgrouphtx.com/calendar",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:58.559Z",
+      "fetches": [
+        {
+          "url": "https://www.thesecretgrouphtx.com/calendar",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "houston",
+      "sourceId": "houston-improv",
+      "sourceName": "Houston Improv",
+      "sourceType": "html",
+      "url": "https://improv.com/houston/calendar/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:58.559Z",
+      "fetches": [
+        {
+          "url": "https://improv.com/houston/calendar/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    }
+  ]
+}

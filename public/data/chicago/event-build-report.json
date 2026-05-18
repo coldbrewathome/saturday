@@ -1,15 +1,269 @@
 {
   "schemaVersion": 1,
   "metroId": "chicago",
-  "generatedAt": "2026-05-17T16:52:55.876Z",
+  "generatedAt": "2026-05-18T23:01:42.021Z",
   "registryPath": "data/event-sources-chicago.json",
   "outputPath": "public/data/chicago/events.json",
   "eventCount": 88,
-  "adultsEventCount": 42,
+  "adultsEventCount": 44,
   "sourceCount": 15,
   "liveEventCount": 88,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
+  "operatorAlertCount": 10,
   "errors": [],
+  "operatorAlerts": [
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "ticketmaster-chicago-family",
+      "sourceName": "Ticketmaster Chicago Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:42.021Z",
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "lake-county-fair-il",
+      "sourceName": "Lake County Fair",
+      "sourceType": "html",
+      "url": "https://lcfair.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:42.021Z",
+      "fetches": [
+        {
+          "url": "https://lcfair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "metro-chicago",
+      "sourceName": "Metro Chicago",
+      "sourceType": "html",
+      "url": "https://metrochicago.com/shows/",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:42.021Z",
+      "fetches": [
+        {
+          "url": "https://metrochicago.com/shows/",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "empty-bottle",
+      "sourceName": "Empty Bottle",
+      "sourceType": "html",
+      "url": "https://www.emptybottle.com/events/",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:42.021Z",
+      "fetches": [
+        {
+          "url": "https://www.emptybottle.com/events/",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "lincoln-hall",
+      "sourceName": "Lincoln Hall",
+      "sourceType": "html",
+      "url": "https://www.lh-st.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:42.021Z",
+      "fetches": [
+        {
+          "url": "https://www.lh-st.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "schubas-tavern",
+      "sourceName": "Schubas Tavern",
+      "sourceType": "html",
+      "url": "https://www.lh-st.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:42.021Z",
+      "fetches": [
+        {
+          "url": "https://www.lh-st.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "thalia-hall-chicago",
+      "sourceName": "Thalia Hall",
+      "sourceType": "html",
+      "url": "https://www.thaliahallchicago.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:42.021Z",
+      "fetches": [
+        {
+          "url": "https://www.thaliahallchicago.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "second-city-chicago",
+      "sourceName": "The Second City",
+      "sourceType": "html",
+      "url": "https://www.secondcity.com/shows/chicago",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:42.021Z",
+      "fetches": [
+        {
+          "url": "https://www.secondcity.com/shows/chicago",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "zanies-chicago",
+      "sourceName": "Zanies Comedy Club",
+      "sourceType": "html",
+      "url": "https://chicago.zanies.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:42.021Z",
+      "fetches": [
+        {
+          "url": "https://chicago.zanies.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "hideout-chicago",
+      "sourceName": "The Hideout",
+      "sourceType": "html",
+      "url": "https://www.hideoutchicago.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:42.021Z",
+      "fetches": [
+        {
+          "url": "https://www.hideoutchicago.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    }
+  ],
   "sources": [
     {
       "id": "chicago-library-family",
@@ -20,9 +274,9 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 20,
+      "liveEvents": 19,
       "fallbackEvents": 0,
-      "eventCount": 20,
+      "eventCount": 19,
       "fetches": [
         {
           "url": "https://chipublib.bibliocommons.com/v2/events?audiences=53f250153860d10000000010",
@@ -33,7 +287,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 19,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "chicago-parks-family",
@@ -44,9 +301,9 @@
       "metroId": "chicago",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 18,
+      "liveEvents": 17,
       "fallbackEvents": 0,
-      "eventCount": 18,
+      "eventCount": 17,
       "fetches": [
         {
           "url": "https://www.chicagoparkdistrict.com/events?field_event_category_target_id=766&field_location_target_id=All&field_community_area_target_id=All&field_zip_code_target_id=All&title=&field_date_value=&field_age_range_target_id=All",
@@ -80,8 +337,9 @@
         },
         {
           "url": "https://www.chicagoparkdistrict.com/events?field_event_category_target_id=766&field_location_target_id=All&field_community_area_target_id=All&field_zip_code_target_id=All&title=&field_date_value=&field_age_range_target_id=All&page=5",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         },
         {
           "url": "https://www.chicagoparkdistrict.com/events?field_event_category_target_id=766&field_location_target_id=All&field_community_area_target_id=All&field_zip_code_target_id=All&title=&field_date_value=&field_age_range_target_id=All&page=6",
@@ -92,7 +350,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 28
+      "rejectedLiveEvents": 36,
+      "extractedEvents": 53,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "chicago-museum-family",
@@ -103,9 +364,9 @@
       "metroId": "chicago",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 48,
+      "liveEvents": 50,
       "fallbackEvents": 0,
-      "eventCount": 48,
+      "eventCount": 50,
       "fetches": [
         {
           "url": "https://www.fieldmuseum.org/our-events",
@@ -116,7 +377,10 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; charset=utf-8",
-      "rejectedLiveEvents": 33
+      "rejectedLiveEvents": 32,
+      "extractedEvents": 82,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "chicago-zoo-family",
@@ -140,7 +404,10 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=184; pages=4",
-      "rejectedLiveEvents": 177
+      "rejectedLiveEvents": 177,
+      "extractedEvents": 178,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "ticketmaster-chicago-family",
@@ -159,12 +426,15 @@
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json;charset=utf-8"
+          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json;charset=utf-8",
-      "rejectedLiveEvents": 0
+      "contentType": "application/json; source=ticketmaster; events=0; queries=1",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "dupage-county-fair",
@@ -188,7 +458,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "lake-county-fair-il",
@@ -212,7 +485,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html;charset=utf-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "metro-chicago",
@@ -235,7 +511,10 @@
         }
       ],
       "httpStatus": 404,
-      "contentType": "text/html; charset=UTF-8"
+      "contentType": "text/html; charset=UTF-8",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "empty-bottle",
@@ -258,7 +537,10 @@
         }
       ],
       "httpStatus": 404,
-      "contentType": "text/html;charset=utf-8"
+      "contentType": "text/html;charset=utf-8",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "lincoln-hall",
@@ -281,7 +563,10 @@
         }
       ],
       "httpStatus": 404,
-      "contentType": "text/html; charset=UTF-8"
+      "contentType": "text/html; charset=UTF-8",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "schubas-tavern",
@@ -304,7 +589,10 @@
         }
       ],
       "httpStatus": 404,
-      "contentType": "text/html; charset=UTF-8"
+      "contentType": "text/html; charset=UTF-8",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "thalia-hall-chicago",
@@ -327,7 +615,10 @@
         }
       ],
       "httpStatus": 404,
-      "contentType": "text/html;charset=utf-8"
+      "contentType": "text/html;charset=utf-8",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "second-city-chicago",
@@ -351,7 +642,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "zanies-chicago",
@@ -375,7 +669,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "hideout-chicago",
@@ -399,7 +696,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     }
   ]
 }

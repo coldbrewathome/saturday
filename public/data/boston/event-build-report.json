@@ -1,15 +1,244 @@
 {
   "schemaVersion": 1,
   "metroId": "boston",
-  "generatedAt": "2026-05-17T19:50:38.735Z",
+  "generatedAt": "2026-05-18T23:05:59.240Z",
   "registryPath": "data/event-sources-boston.json",
   "outputPath": "public/data/boston/events.json",
-  "eventCount": 81,
-  "adultsEventCount": 43,
+  "eventCount": 77,
+  "adultsEventCount": 39,
   "sourceCount": 13,
-  "liveEventCount": 81,
+  "liveEventCount": 77,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
+  "operatorAlertCount": 9,
   "errors": [],
+  "operatorAlerts": [
+    {
+      "severity": "critical",
+      "metroId": "boston",
+      "sourceId": "ticketmaster-boston-family",
+      "sourceName": "Ticketmaster Boston Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:59.240Z",
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "boston",
+      "sourceId": "the-big-e",
+      "sourceName": "The Big E",
+      "sourceType": "html",
+      "url": "https://www.easternstatesexposition.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:59.240Z",
+      "fetches": [
+        {
+          "url": "https://www.easternstatesexposition.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "boston",
+      "sourceId": "marshfield-fair",
+      "sourceName": "Marshfield Fair",
+      "sourceType": "html",
+      "url": "https://marshfieldfair.org/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:59.240Z",
+      "fetches": [
+        {
+          "url": "https://marshfieldfair.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "boston",
+      "sourceId": "paradise-rock-club",
+      "sourceName": "Paradise Rock Club",
+      "sourceType": "html",
+      "url": "https://www.crossroadspresents.com/paradise-rock-club",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:59.240Z",
+      "fetches": [
+        {
+          "url": "https://www.crossroadspresents.com/paradise-rock-club",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "boston",
+      "sourceId": "brighton-music-hall",
+      "sourceName": "Brighton Music Hall",
+      "sourceType": "html",
+      "url": "https://www.crossroadspresents.com/brighton-music-hall",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:59.240Z",
+      "fetches": [
+        {
+          "url": "https://www.crossroadspresents.com/brighton-music-hall",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "boston",
+      "sourceId": "the-sinclair",
+      "sourceName": "The Sinclair",
+      "sourceType": "html",
+      "url": "https://www.sinclaircambridge.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:59.240Z",
+      "fetches": [
+        {
+          "url": "https://www.sinclaircambridge.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "boston",
+      "sourceId": "crystal-ballroom-somerville",
+      "sourceName": "Crystal Ballroom",
+      "sourceType": "html",
+      "url": "https://www.crystalballroomboston.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:59.240Z",
+      "fetches": [
+        {
+          "url": "https://www.crystalballroomboston.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "boston",
+      "sourceId": "nick-comedy-stop",
+      "sourceName": "Nick's Comedy Stop",
+      "sourceType": "html",
+      "url": "https://www.nickscomedystop.com/calendar",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:59.240Z",
+      "fetches": [
+        {
+          "url": "https://www.nickscomedystop.com/calendar",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "boston",
+      "sourceId": "laugh-boston",
+      "sourceName": "Laugh Boston",
+      "sourceType": "html",
+      "url": "https://www.laughboston.com/calendar",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:59.240Z",
+      "fetches": [
+        {
+          "url": "https://www.laughboston.com/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    }
+  ],
   "sources": [
     {
       "id": "boston-library-family",
@@ -20,9 +249,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 16,
+      "liveEvents": 15,
       "fallbackEvents": 0,
-      "eventCount": 16,
+      "eventCount": 15,
       "fetches": [
         {
           "url": "https://bpl.bibliocommons.com/v2/events?audiences=57f66113863736755f79b0ca",
@@ -33,7 +262,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 15,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "boston-parks-family",
@@ -44,9 +276,9 @@
       "metroId": "boston",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 12,
+      "liveEvents": 13,
       "fallbackEvents": 0,
-      "eventCount": 12,
+      "eventCount": 13,
       "fetches": [
         {
           "url": "https://www.boston.gov/rss/events",
@@ -57,7 +289,10 @@
       ],
       "httpStatus": 200,
       "contentType": "application/rss+xml; charset=utf-8",
-      "rejectedLiveEvents": 13
+      "rejectedLiveEvents": 12,
+      "extractedEvents": 25,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "boston-museum-family",
@@ -68,9 +303,9 @@
       "metroId": "boston",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 51,
+      "liveEvents": 47,
       "fallbackEvents": 0,
-      "eventCount": 51,
+      "eventCount": 47,
       "fetches": [
         {
           "url": "https://bostonchildrensmuseum.org/Calendar/",
@@ -81,7 +316,10 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=eventon-events; events=113",
-      "rejectedLiveEvents": 57
+      "rejectedLiveEvents": 61,
+      "extractedEvents": 108,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "boston-zoo-family",
@@ -105,7 +343,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 12
+      "rejectedLiveEvents": 12,
+      "extractedEvents": 14,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "ticketmaster-boston-family",
@@ -124,12 +365,15 @@
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json;charset=utf-8"
+          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json;charset=utf-8",
-      "rejectedLiveEvents": 0
+      "contentType": "application/json; source=ticketmaster; events=0; queries=1",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "the-big-e",
@@ -153,7 +397,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "marshfield-fair",
@@ -177,7 +424,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "paradise-rock-club",
@@ -200,7 +450,10 @@
         }
       ],
       "httpStatus": 404,
-      "contentType": "text/html; charset=utf-8"
+      "contentType": "text/html; charset=utf-8",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "brighton-music-hall",
@@ -223,7 +476,10 @@
         }
       ],
       "httpStatus": 404,
-      "contentType": "text/html; charset=utf-8"
+      "contentType": "text/html; charset=utf-8",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "the-sinclair",
@@ -247,7 +503,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "crystal-ballroom-somerville",
@@ -271,7 +530,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "nick-comedy-stop",
@@ -294,7 +556,10 @@
         }
       ],
       "httpStatus": 404,
-      "contentType": "text/html; charset=UTF-8"
+      "contentType": "text/html; charset=UTF-8",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "laugh-boston",
@@ -318,7 +583,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     }
   ]
 }

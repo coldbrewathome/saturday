@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 1,
+  "metroId": "san-diego",
+  "generatedAt": "2026-05-18T23:06:17.878Z",
+  "alertCount": 8,
+  "alerts": [
+    {
+      "severity": "critical",
+      "metroId": "san-diego",
+      "sourceId": "ticketmaster-san-diego-family",
+      "sourceName": "Ticketmaster San Diego Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:06:17.878Z",
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "san-diego",
+      "sourceId": "san-diego-county-fair",
+      "sourceName": "San Diego County Fair",
+      "sourceType": "html",
+      "url": "https://www.sdfair.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:06:17.878Z",
+      "fetches": [
+        {
+          "url": "https://www.sdfair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "san-diego",
+      "sourceId": "the-casbah",
+      "sourceName": "The Casbah",
+      "sourceType": "html",
+      "url": "https://www.casbahmusic.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:06:17.878Z",
+      "fetches": [
+        {
+          "url": "https://www.casbahmusic.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "san-diego",
+      "sourceId": "belly-up-tavern",
+      "sourceName": "Belly Up Tavern",
+      "sourceType": "html",
+      "url": "https://www.bellyup.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:06:17.878Z",
+      "fetches": [
+        {
+          "url": "https://www.bellyup.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "san-diego",
+      "sourceId": "music-box-sd",
+      "sourceName": "Music Box",
+      "sourceType": "html",
+      "url": "https://www.musicboxsd.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:06:17.878Z",
+      "fetches": [
+        {
+          "url": "https://www.musicboxsd.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "san-diego",
+      "sourceId": "the-observatory-north-park",
+      "sourceName": "Observatory North Park",
+      "sourceType": "html",
+      "url": "https://www.observatorysd.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:06:17.878Z",
+      "fetches": [
+        {
+          "url": "https://www.observatorysd.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "san-diego",
+      "sourceId": "american-comedy-co",
+      "sourceName": "American Comedy Co.",
+      "sourceType": "html",
+      "url": "https://www.americancomedyco.com/calendar",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:06:17.878Z",
+      "fetches": [
+        {
+          "url": "https://www.americancomedyco.com/calendar",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "san-diego",
+      "sourceId": "the-comedy-store-la-jolla",
+      "sourceName": "The Comedy Store La Jolla",
+      "sourceType": "html",
+      "url": "https://thecomedystore.com/la-jolla/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:06:17.878Z",
+      "fetches": [
+        {
+          "url": "https://thecomedystore.com/la-jolla/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    }
+  ]
+}

@@ -1,15 +1,193 @@
 {
   "schemaVersion": 1,
   "metroId": "houston",
-  "generatedAt": "2026-05-17T16:54:59.445Z",
+  "generatedAt": "2026-05-18T23:03:58.559Z",
   "registryPath": "data/event-sources-houston.json",
   "outputPath": "public/data/houston/events.json",
-  "eventCount": 222,
+  "eventCount": 197,
   "adultsEventCount": 18,
   "sourceCount": 11,
-  "liveEventCount": 222,
+  "liveEventCount": 197,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
+  "operatorAlertCount": 7,
   "errors": [],
+  "operatorAlerts": [
+    {
+      "severity": "critical",
+      "metroId": "houston",
+      "sourceId": "ticketmaster-houston-family",
+      "sourceName": "Ticketmaster Houston Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:58.559Z",
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "houston",
+      "sourceId": "fort-bend-county-fair",
+      "sourceName": "Fort Bend County Fair",
+      "sourceType": "html",
+      "url": "https://www.fortbendcountyfair.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:58.559Z",
+      "fetches": [
+        {
+          "url": "https://www.fortbendcountyfair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "houston",
+      "sourceId": "white-oak-music-hall",
+      "sourceName": "White Oak Music Hall",
+      "sourceType": "html",
+      "url": "https://www.whiteoakmusichall.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:58.559Z",
+      "fetches": [
+        {
+          "url": "https://www.whiteoakmusichall.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "houston",
+      "sourceId": "warehouse-live",
+      "sourceName": "Warehouse Live",
+      "sourceType": "html",
+      "url": "https://www.warehouselive.com/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:58.559Z",
+      "fetches": [
+        {
+          "url": "https://www.warehouselive.com/events",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "houston",
+      "sourceId": "continental-club-houston",
+      "sourceName": "The Continental Club",
+      "sourceType": "html",
+      "url": "https://continentalclub.com/houston",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:58.559Z",
+      "fetches": [
+        {
+          "url": "https://continentalclub.com/houston",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "houston",
+      "sourceId": "the-secret-group",
+      "sourceName": "The Secret Group",
+      "sourceType": "html",
+      "url": "https://www.thesecretgrouphtx.com/calendar",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:58.559Z",
+      "fetches": [
+        {
+          "url": "https://www.thesecretgrouphtx.com/calendar",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "houston",
+      "sourceId": "houston-improv",
+      "sourceName": "Houston Improv",
+      "sourceType": "html",
+      "url": "https://improv.com/houston/calendar/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:58.559Z",
+      "fetches": [
+        {
+          "url": "https://improv.com/houston/calendar/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    }
+  ],
   "sources": [
     {
       "id": "houston-library-family",
@@ -20,9 +198,9 @@
       "metroId": "houston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 192,
+      "liveEvents": 167,
       "fallbackEvents": 0,
-      "eventCount": 192,
+      "eventCount": 167,
       "fetches": [
         {
           "url": "https://calendar.houstonlibrary.org/calendar/events?cal=-1&cid=-1&d=0000-00-00&inc=0",
@@ -33,7 +211,10 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 18
+      "rejectedLiveEvents": 15,
+      "extractedEvents": 182,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "houston-parks-family",
@@ -57,7 +238,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; source=wwc-events; events=3; pages=1",
-      "rejectedLiveEvents": 1
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 2,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "houston-museum-family",
@@ -81,7 +265,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 8
+      "rejectedLiveEvents": 8,
+      "extractedEvents": 33,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "houston-zoo-family",
@@ -105,7 +292,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 3
+      "rejectedLiveEvents": 4,
+      "extractedEvents": 8,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "ticketmaster-houston-family",
@@ -124,12 +314,15 @@
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json;charset=utf-8"
+          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json;charset=utf-8",
-      "rejectedLiveEvents": 0
+      "contentType": "application/json; source=ticketmaster; events=0; queries=1",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "fort-bend-county-fair",
@@ -153,7 +346,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "white-oak-music-hall",
@@ -176,7 +372,10 @@
         }
       ],
       "httpStatus": 404,
-      "contentType": "text/html; charset=UTF-8"
+      "contentType": "text/html; charset=UTF-8",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "warehouse-live",
@@ -197,7 +396,10 @@
           "reason": "fetch failed"
         }
       ],
-      "reason": "fetch failed"
+      "reason": "fetch failed",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "continental-club-houston",
@@ -221,7 +423,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html;charset=utf-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "the-secret-group",
@@ -244,7 +449,10 @@
         }
       ],
       "httpStatus": 404,
-      "contentType": "text/html; charset=utf-8"
+      "contentType": "text/html; charset=utf-8",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "houston-improv",
@@ -268,7 +476,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     }
   ]
 }

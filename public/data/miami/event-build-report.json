@@ -1,15 +1,242 @@
 {
   "schemaVersion": 1,
   "metroId": "miami",
-  "generatedAt": "2026-05-17T16:56:16.871Z",
+  "generatedAt": "2026-05-18T23:05:24.483Z",
   "registryPath": "data/event-sources-miami.json",
   "outputPath": "public/data/miami/events.json",
-  "eventCount": 31,
+  "eventCount": 32,
   "adultsEventCount": 47,
   "sourceCount": 14,
-  "liveEventCount": 56,
+  "liveEventCount": 57,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 8,
+  "operatorAlertCount": 9,
   "errors": [],
+  "operatorAlerts": [
+    {
+      "severity": "warning",
+      "metroId": "miami",
+      "sourceId": "miami-library-family",
+      "sourceName": "Miami-Dade Public Library Events",
+      "sourceType": "communicoEvents",
+      "url": "https://mdpls.libnet.info/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "recurring-template",
+      "recoveredEvents": 8,
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:24.483Z",
+      "fetches": [
+        {
+          "url": "https://mdpls.libnet.info/events",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "miami",
+      "sourceId": "miami-dade-youth-fair",
+      "sourceName": "Miami-Dade County Youth Fair",
+      "sourceType": "html",
+      "url": "https://www.fairexpo.com/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:24.483Z",
+      "fetches": [
+        {
+          "url": "https://www.fairexpo.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "miami",
+      "sourceId": "south-florida-fair",
+      "sourceName": "South Florida Fair",
+      "sourceType": "html",
+      "url": "https://www.southfloridafair.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:24.483Z",
+      "fetches": [
+        {
+          "url": "https://www.southfloridafair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "miami",
+      "sourceId": "space-miami",
+      "sourceName": "Club Space",
+      "sourceType": "html",
+      "url": "https://clubspace.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:24.483Z",
+      "fetches": [
+        {
+          "url": "https://clubspace.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "miami",
+      "sourceId": "the-ground-miami",
+      "sourceName": "The Ground Miami",
+      "sourceType": "html",
+      "url": "https://thegroundmiami.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:24.483Z",
+      "fetches": [
+        {
+          "url": "https://thegroundmiami.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "miami",
+      "sourceId": "gramps-wynwood",
+      "sourceName": "Gramps",
+      "sourceType": "html",
+      "url": "https://www.grframps.com/calendar",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:24.483Z",
+      "fetches": [
+        {
+          "url": "https://www.grframps.com/calendar",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "miami",
+      "sourceId": "the-oasis-wynwood",
+      "sourceName": "The Oasis",
+      "sourceType": "html",
+      "url": "https://www.oasiswynwood.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:24.483Z",
+      "fetches": [
+        {
+          "url": "https://www.oasiswynwood.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "miami",
+      "sourceId": "las-rosas-miami",
+      "sourceName": "Las Rosas",
+      "sourceType": "html",
+      "url": "https://www.lasrosasbar.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:24.483Z",
+      "fetches": [
+        {
+          "url": "https://www.lasrosasbar.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "miami",
+      "sourceId": "south-beach-comedy",
+      "sourceName": "Miami Improv",
+      "sourceType": "html",
+      "url": "https://www.miamiimprov.com/calendar",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:24.483Z",
+      "fetches": [
+        {
+          "url": "https://www.miamiimprov.com/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    }
+  ],
   "sources": [
     {
       "id": "miami-library-family",
@@ -30,7 +257,10 @@
           "reason": "This operation was aborted"
         }
       ],
-      "reason": "This operation was aborted"
+      "reason": "This operation was aborted",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": "recurring-template"
     },
     {
       "id": "miami-parks-family",
@@ -41,9 +271,9 @@
       "metroId": "miami",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 5,
+      "liveEvents": 6,
       "fallbackEvents": 0,
-      "eventCount": 5,
+      "eventCount": 6,
       "fetches": [
         {
           "url": "https://www.miamidade.gov/global/calendar/global.page?calendarName=Parks",
@@ -54,7 +284,10 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 6,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "miami-museum-family",
@@ -78,7 +311,10 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=30; pages=1",
-      "rejectedLiveEvents": 17
+      "rejectedLiveEvents": 17,
+      "extractedEvents": 30,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "miami-zoo-family",
@@ -102,7 +338,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 5
+      "rejectedLiveEvents": 5,
+      "extractedEvents": 9,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "ticketmaster-miami-family",
@@ -121,12 +360,15 @@
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json;charset=utf-8"
+          "contentType": "application/json; source=ticketmaster; events=1; queries=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json;charset=utf-8",
-      "rejectedLiveEvents": 0
+      "contentType": "application/json; source=ticketmaster; events=1; queries=1",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "miami-dade-youth-fair",
@@ -150,7 +392,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "south-florida-fair",
@@ -174,7 +419,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "e11even-miami",
@@ -198,7 +446,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 44
+      "rejectedLiveEvents": 43,
+      "extractedEvents": 76,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "space-miami",
@@ -221,7 +472,10 @@
         }
       ],
       "httpStatus": 404,
-      "contentType": "text/html;charset=utf-8"
+      "contentType": "text/html;charset=utf-8",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "the-ground-miami",
@@ -244,7 +498,10 @@
         }
       ],
       "httpStatus": 404,
-      "contentType": "text/html;charset=utf-8"
+      "contentType": "text/html;charset=utf-8",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "gramps-wynwood",
@@ -265,7 +522,10 @@
           "reason": "fetch failed"
         }
       ],
-      "reason": "fetch failed"
+      "reason": "fetch failed",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "the-oasis-wynwood",
@@ -289,7 +549,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html;charset=utf-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "las-rosas-miami",
@@ -312,7 +575,10 @@
         }
       ],
       "httpStatus": 404,
-      "contentType": "text/html"
+      "contentType": "text/html",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "south-beach-comedy",
@@ -336,7 +602,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     }
   ]
 }

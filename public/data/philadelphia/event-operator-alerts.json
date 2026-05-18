@@ -1,0 +1,281 @@
+{
+  "schemaVersion": 1,
+  "metroId": "philadelphia",
+  "generatedAt": "2026-05-18T23:04:54.050Z",
+  "alertCount": 11,
+  "alerts": [
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "philadelphia-library-family",
+      "sourceName": "Free Library of Philadelphia Events",
+      "sourceType": "eventList",
+      "url": "https://libwww.freelibrary.org/calendar/",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": "recurring-template",
+      "recoveredEvents": 8,
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:04:54.050Z",
+      "fetches": [
+        {
+          "url": "https://libwww.freelibrary.org/calendar/",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "philadelphia-parks-family",
+      "sourceName": "Philadelphia Parks and Recreation Events",
+      "sourceType": "eventList",
+      "url": "https://www.phila.gov/departments/philadelphia-parks-recreation/#calendar",
+      "status": "ok-template-fallback",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": "recurring-template",
+      "recoveredEvents": 8,
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:04:54.050Z",
+      "fetches": [
+        {
+          "url": "https://www.phila.gov/departments/philadelphia-parks-recreation/#calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "philadelphia-zoo-family",
+      "sourceName": "Philadelphia Zoo Events",
+      "sourceType": "wpRestEvents",
+      "url": "https://www.philadelphiazoo.org/events/",
+      "status": "ok-template-fallback",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": "recurring-template",
+      "recoveredEvents": 4,
+      "liveEvents": 0,
+      "fallbackEvents": 4,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:04:54.050Z",
+      "fetches": [
+        {
+          "url": "https://www.philadelphiazoo.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=wp-rest-events; events=78"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "philadelphia",
+      "sourceId": "ticketmaster-philadelphia-family",
+      "sourceName": "Ticketmaster Philadelphia Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:04:54.050Z",
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "philadelphia",
+      "sourceId": "middletown-grange-fair",
+      "sourceName": "Middletown Grange Fair",
+      "sourceType": "html",
+      "url": "https://middletowngrangefair.org/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:04:54.050Z",
+      "fetches": [
+        {
+          "url": "https://middletowngrangefair.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "philadelphia",
+      "sourceId": "union-transfer",
+      "sourceName": "Union Transfer",
+      "sourceType": "html",
+      "url": "https://www.utphilly.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:04:54.050Z",
+      "fetches": [
+        {
+          "url": "https://www.utphilly.com/events",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "philadelphia",
+      "sourceId": "the-fillmore-philly",
+      "sourceName": "The Fillmore Philadelphia",
+      "sourceType": "html",
+      "url": "https://www.thefillmorephilly.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:04:54.050Z",
+      "fetches": [
+        {
+          "url": "https://www.thefillmorephilly.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "philadelphia",
+      "sourceId": "johnny-brendas",
+      "sourceName": "Johnny Brenda's",
+      "sourceType": "html",
+      "url": "https://www.johnnybrendas.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:04:54.050Z",
+      "fetches": [
+        {
+          "url": "https://www.johnnybrendas.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "philadelphia",
+      "sourceId": "the-foundry-philly",
+      "sourceName": "The Foundry",
+      "sourceType": "html",
+      "url": "https://www.thefoundryphilly.com/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:04:54.050Z",
+      "fetches": [
+        {
+          "url": "https://www.thefoundryphilly.com/events",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "philadelphia",
+      "sourceId": "helium-comedy-philly",
+      "sourceName": "Helium Comedy Club",
+      "sourceType": "html",
+      "url": "https://philadelphia.heliumcomedy.com/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:04:54.050Z",
+      "fetches": [
+        {
+          "url": "https://philadelphia.heliumcomedy.com/events",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "philadelphia",
+      "sourceId": "punchline-philly",
+      "sourceName": "Punch Line Philly",
+      "sourceType": "html",
+      "url": "https://www.punchlinephilly.com/shows",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:04:54.050Z",
+      "fetches": [
+        {
+          "url": "https://www.punchlinephilly.com/shows",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    }
+  ]
+}

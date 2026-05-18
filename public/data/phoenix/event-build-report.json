@@ -1,15 +1,194 @@
 {
   "schemaVersion": 1,
   "metroId": "phoenix",
-  "generatedAt": "2026-05-17T16:56:36.948Z",
+  "generatedAt": "2026-05-18T23:05:48.182Z",
   "registryPath": "data/event-sources-phoenix.json",
   "outputPath": "public/data/phoenix/events.json",
-  "eventCount": 364,
-  "adultsEventCount": 78,
+  "eventCount": 363,
+  "adultsEventCount": 77,
   "sourceCount": 12,
-  "liveEventCount": 369,
+  "liveEventCount": 368,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
+  "operatorAlertCount": 7,
   "errors": [],
+  "operatorAlerts": [
+    {
+      "severity": "critical",
+      "metroId": "phoenix",
+      "sourceId": "ticketmaster-phoenix-family",
+      "sourceName": "Ticketmaster Phoenix Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:48.182Z",
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "phoenix",
+      "sourceId": "arizona-state-fair",
+      "sourceName": "Arizona State Fair",
+      "sourceType": "html",
+      "url": "https://azstatefair.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:48.182Z",
+      "fetches": [
+        {
+          "url": "https://azstatefair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "phoenix",
+      "sourceId": "crescent-ballroom",
+      "sourceName": "Crescent Ballroom",
+      "sourceType": "html",
+      "url": "https://www.crescentphx.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:48.182Z",
+      "fetches": [
+        {
+          "url": "https://www.crescentphx.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "phoenix",
+      "sourceId": "the-van-buren",
+      "sourceName": "The Van Buren",
+      "sourceType": "html",
+      "url": "https://www.thevanburenphx.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:48.182Z",
+      "fetches": [
+        {
+          "url": "https://www.thevanburenphx.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "phoenix",
+      "sourceId": "marquee-theatre-tempe",
+      "sourceName": "Marquee Theatre",
+      "sourceType": "html",
+      "url": "https://www.luckymanonline.com/marquee-theatre",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:48.182Z",
+      "fetches": [
+        {
+          "url": "https://www.luckymanonline.com/marquee-theatre",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "phoenix",
+      "sourceId": "stand-up-live-phx",
+      "sourceName": "Stand Up Live Phoenix",
+      "sourceType": "html",
+      "url": "https://phoenix.standuplive.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:48.182Z",
+      "fetches": [
+        {
+          "url": "https://phoenix.standuplive.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "phoenix",
+      "sourceId": "rick-bronsons-house-of-comedy",
+      "sourceName": "Rick Bronson's House of Comedy",
+      "sourceType": "html",
+      "url": "https://houseofcomedy.net/scottsdale",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:48.182Z",
+      "fetches": [
+        {
+          "url": "https://houseofcomedy.net/scottsdale",
+          "status": "http-error",
+          "httpStatus": 500,
+          "contentType": "text/plain; charset=utf-8"
+        }
+      ]
+    }
+  ],
   "sources": [
     {
       "id": "phoenix-library-family",
@@ -33,7 +212,10 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 271,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "phoenix-parks-family",
@@ -57,7 +239,10 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=phoenix-city-calendar; events=20",
-      "rejectedLiveEvents": 8
+      "rejectedLiveEvents": 8,
+      "extractedEvents": 20,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "phoenix-museum-family",
@@ -68,20 +253,23 @@
       "metroId": "phoenix",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 77,
+      "liveEvents": 76,
       "fallbackEvents": 0,
-      "eventCount": 77,
+      "eventCount": 76,
       "fetches": [
         {
           "url": "https://childrensmuseumofphoenix.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=94; pages=2"
+          "contentType": "application/json; source=tribe-events; events=91; pages=2"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=94; pages=2",
-      "rejectedLiveEvents": 16
+      "contentType": "application/json; source=tribe-events; events=91; pages=2",
+      "rejectedLiveEvents": 14,
+      "extractedEvents": 90,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "phoenix-zoo-family",
@@ -105,7 +293,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 2
+      "rejectedLiveEvents": 2,
+      "extractedEvents": 7,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "ticketmaster-phoenix-family",
@@ -124,12 +315,15 @@
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json;charset=utf-8"
+          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json;charset=utf-8",
-      "rejectedLiveEvents": 0
+      "contentType": "application/json; source=ticketmaster; events=0; queries=1",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "arizona-state-fair",
@@ -153,7 +347,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "crescent-ballroom",
@@ -177,7 +374,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "the-van-buren",
@@ -201,7 +401,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "rebel-lounge-phx",
@@ -225,7 +428,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 4,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "marquee-theatre-tempe",
@@ -249,7 +455,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "stand-up-live-phx",
@@ -273,7 +482,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "rick-bronsons-house-of-comedy",
@@ -296,7 +508,10 @@
         }
       ],
       "httpStatus": 500,
-      "contentType": "text/plain; charset=utf-8"
+      "contentType": "text/plain; charset=utf-8",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     }
   ]
 }

@@ -1,15 +1,217 @@
 {
   "schemaVersion": 1,
   "metroId": "dallas-fort-worth",
-  "generatedAt": "2026-05-17T20:22:07.442Z",
+  "generatedAt": "2026-05-18T23:03:16.319Z",
   "registryPath": "data/event-sources-dallas-fort-worth.json",
   "outputPath": "public/data/dallas-fort-worth/events.json",
-  "eventCount": 24,
+  "eventCount": 27,
   "adultsEventCount": 1,
   "sourceCount": 12,
-  "liveEventCount": 24,
+  "liveEventCount": 27,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
+  "operatorAlertCount": 8,
   "errors": [],
+  "operatorAlerts": [
+    {
+      "severity": "critical",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "ticketmaster-dallas-fort-worth-family",
+      "sourceName": "Ticketmaster Dallas-Fort Worth Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "state-fair-of-texas",
+      "sourceName": "State Fair of Texas",
+      "sourceType": "html",
+      "url": "https://bigtex.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetches": [
+        {
+          "url": "https://bigtex.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "trees-dallas",
+      "sourceName": "Trees",
+      "sourceType": "html",
+      "url": "https://www.treesdallas.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetches": [
+        {
+          "url": "https://www.treesdallas.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "the-bomb-factory",
+      "sourceName": "The Factory in Deep Ellum",
+      "sourceType": "html",
+      "url": "https://www.thefactoryindeepellum.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetches": [
+        {
+          "url": "https://www.thefactoryindeepellum.com/events",
+          "status": "http-error",
+          "httpStatus": 422,
+          "contentType": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dada-dallas",
+      "sourceName": "Dada",
+      "sourceType": "html",
+      "url": "https://www.daboredada.com/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetches": [
+        {
+          "url": "https://www.daboredada.com/events",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "tulips-fort-worth",
+      "sourceName": "Tulips FTW",
+      "sourceType": "html",
+      "url": "https://www.tulipsftw.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetches": [
+        {
+          "url": "https://www.tulipsftw.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dallas-comedy-club",
+      "sourceName": "Dallas Comedy Club",
+      "sourceType": "html",
+      "url": "https://dallascomedyclub.com/shows/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetches": [
+        {
+          "url": "https://dallascomedyclub.com/shows/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "hyenas-dfw",
+      "sourceName": "Hyena's Comedy Club",
+      "sourceType": "html",
+      "url": "https://www.hyenascomedynightclub.com/calendar",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetches": [
+        {
+          "url": "https://www.hyenascomedynightclub.com/calendar",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    }
+  ],
   "sources": [
     {
       "id": "dallas-fort-worth-library-family",
@@ -33,7 +235,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 8,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "dallas-fort-worth-parks-family",
@@ -44,9 +249,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 5,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 5,
       "fetches": [
         {
           "url": "https://www.dallasparks.org/RSSFeed.aspx?ModID=58&CID=Main-Calendar-14",
@@ -57,7 +262,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/xml; charset=utf-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 5,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "dallas-fort-worth-museum-family",
@@ -76,12 +284,15 @@
           "url": "https://www.perotmuseum.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketure-events; events=3; calendars=3"
+          "contentType": "application/json; source=ticketure-events; events=4; calendars=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=ticketure-events; events=3; calendars=3",
-      "rejectedLiveEvents": 0
+      "contentType": "application/json; source=ticketure-events; events=4; calendars=4",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "dallas-fort-worth-zoo-family",
@@ -92,9 +303,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 12,
+      "liveEvents": 13,
       "fallbackEvents": 0,
-      "eventCount": 12,
+      "eventCount": 13,
       "fetches": [
         {
           "url": "https://www.dallaszoo.com/dallas-zoo-events/calendar/",
@@ -105,7 +316,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; source=dallas-zoo-ajax; pages=3",
-      "rejectedLiveEvents": 9
+      "rejectedLiveEvents": 9,
+      "extractedEvents": 22,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "ticketmaster-dallas-fort-worth-family",
@@ -124,12 +338,15 @@
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json;charset=utf-8"
+          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json;charset=utf-8",
-      "rejectedLiveEvents": 0
+      "contentType": "application/json; source=ticketmaster; events=0; queries=1",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "state-fair-of-texas",
@@ -153,7 +370,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "trees-dallas",
@@ -176,7 +396,10 @@
         }
       ],
       "httpStatus": 404,
-      "contentType": "text/html; charset=UTF-8"
+      "contentType": "text/html; charset=UTF-8",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "the-bomb-factory",
@@ -194,12 +417,15 @@
         {
           "url": "https://www.thefactoryindeepellum.com/events",
           "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=utf-8"
+          "httpStatus": 422,
+          "contentType": "text/plain; charset=utf-8"
         }
       ],
-      "httpStatus": 404,
-      "contentType": "text/html; charset=utf-8"
+      "httpStatus": 422,
+      "contentType": "text/plain; charset=utf-8",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "dada-dallas",
@@ -220,7 +446,10 @@
           "reason": "fetch failed"
         }
       ],
-      "reason": "fetch failed"
+      "reason": "fetch failed",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "tulips-fort-worth",
@@ -244,7 +473,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "dallas-comedy-club",
@@ -265,7 +497,10 @@
           "reason": "fetch failed"
         }
       ],
-      "reason": "fetch failed"
+      "reason": "fetch failed",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "hyenas-dfw",
@@ -288,7 +523,10 @@
         }
       ],
       "httpStatus": 404,
-      "contentType": "text/html; charset=utf-8"
+      "contentType": "text/html; charset=utf-8",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     }
   ]
 }

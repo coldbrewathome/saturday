@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "metroId": "dallas-fort-worth",
+  "generatedAt": "2026-05-18T23:03:16.319Z",
+  "alertCount": 8,
+  "alerts": [
+    {
+      "severity": "critical",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "ticketmaster-dallas-fort-worth-family",
+      "sourceName": "Ticketmaster Dallas-Fort Worth Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "state-fair-of-texas",
+      "sourceName": "State Fair of Texas",
+      "sourceType": "html",
+      "url": "https://bigtex.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetches": [
+        {
+          "url": "https://bigtex.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "trees-dallas",
+      "sourceName": "Trees",
+      "sourceType": "html",
+      "url": "https://www.treesdallas.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetches": [
+        {
+          "url": "https://www.treesdallas.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "the-bomb-factory",
+      "sourceName": "The Factory in Deep Ellum",
+      "sourceType": "html",
+      "url": "https://www.thefactoryindeepellum.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetches": [
+        {
+          "url": "https://www.thefactoryindeepellum.com/events",
+          "status": "http-error",
+          "httpStatus": 422,
+          "contentType": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dada-dallas",
+      "sourceName": "Dada",
+      "sourceType": "html",
+      "url": "https://www.daboredada.com/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetches": [
+        {
+          "url": "https://www.daboredada.com/events",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "tulips-fort-worth",
+      "sourceName": "Tulips FTW",
+      "sourceType": "html",
+      "url": "https://www.tulipsftw.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetches": [
+        {
+          "url": "https://www.tulipsftw.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dallas-comedy-club",
+      "sourceName": "Dallas Comedy Club",
+      "sourceType": "html",
+      "url": "https://dallascomedyclub.com/shows/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetches": [
+        {
+          "url": "https://dallascomedyclub.com/shows/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "hyenas-dfw",
+      "sourceName": "Hyena's Comedy Club",
+      "sourceType": "html",
+      "url": "https://www.hyenascomedynightclub.com/calendar",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetches": [
+        {
+          "url": "https://www.hyenascomedynightclub.com/calendar",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    }
+  ]
+}

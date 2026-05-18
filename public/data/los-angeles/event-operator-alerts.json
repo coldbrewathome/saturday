@@ -1,0 +1,663 @@
+{
+  "schemaVersion": 1,
+  "metroId": "los-angeles",
+  "generatedAt": "2026-05-18T23:00:31.852Z",
+  "alertCount": 26,
+  "alerts": [
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "lapl-kids",
+      "sourceName": "Los Angeles Public Library Kids Events",
+      "sourceType": "eventList",
+      "url": "https://www.lapl.org/whats-on/calendar?field_event_audience_tid=232&field_event_family_event_value=All&items_per_page=25",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://www.lapl.org/whats-on/calendar?field_event_audience_tid=232&field_event_family_event_value=All&items_per_page=25",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "beverly-hills-library-calendar",
+      "sourceName": "Beverly Hills Public Library",
+      "sourceType": "civicpluscal",
+      "url": "https://www.beverlyhills.org/Calendar.aspx?CID=25",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://www.beverlyhills.org/Calendar.aspx?CID=25",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        },
+        {
+          "url": "https://www.beverlyhills.org/Calendar.aspx?CID=25&view=list&month=6&year=2026",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "nhm-family-calendar",
+      "sourceName": "Natural History Museums of Los Angeles County",
+      "sourceType": "eventList",
+      "url": "https://nhm.org/calendar",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://nhm.org/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "getty-center",
+      "sourceName": "Getty Center",
+      "sourceType": "html",
+      "url": "https://www.getty.edu/visit/cal/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://www.getty.edu/visit/cal/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "skirball-cultural-center",
+      "sourceName": "Skirball Cultural Center",
+      "sourceType": "html",
+      "url": "https://www.skirball.org/programs",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://www.skirball.org/programs",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "aquarium-of-the-pacific",
+      "sourceName": "Aquarium of the Pacific",
+      "sourceType": "html",
+      "url": "https://www.aquariumofpacific.org/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://www.aquariumofpacific.org/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "california-science-center",
+      "sourceName": "California Science Center",
+      "sourceType": "html",
+      "url": "https://californiasciencecenter.org/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://californiasciencecenter.org/events",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "los-angeles-zoo",
+      "sourceName": "Los Angeles Zoo",
+      "sourceType": "html",
+      "url": "https://www.lazoo.org/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://www.lazoo.org/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "huntington-library",
+      "sourceName": "The Huntington Library, Art Museum & Botanical Gardens",
+      "sourceType": "html",
+      "url": "https://www.huntington.org/calendar",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://www.huntington.org/calendar",
+          "status": "http-error",
+          "httpStatus": 429,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "pasadena-library",
+      "sourceName": "Pasadena Public Library",
+      "sourceType": "html",
+      "url": "https://www.cityofpasadena.net/library/calendar/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://www.cityofpasadena.net/library/calendar/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "long-beach-library",
+      "sourceName": "Long Beach Public Library",
+      "sourceType": "html",
+      "url": "https://www.longbeach.gov/library/events/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://www.longbeach.gov/library/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "grand-park-la",
+      "sourceName": "Grand Park",
+      "sourceType": "html",
+      "url": "https://grandparkla.org/events/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://grandparkla.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "ticketmaster-los-angeles-family",
+      "sourceName": "Ticketmaster Los Angeles Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "la-county-fair",
+      "sourceName": "LA County Fair",
+      "sourceType": "html",
+      "url": "https://www.lacountyfair.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://www.lacountyfair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "oc-fair",
+      "sourceName": "OC Fair",
+      "sourceType": "html",
+      "url": "https://ocfair.com/oc-fair/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://ocfair.com/oc-fair/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "ventura-county-fair",
+      "sourceName": "Ventura County Fair",
+      "sourceType": "html",
+      "url": "https://venturacountyfair.org/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://venturacountyfair.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "the-troubadour",
+      "sourceName": "The Troubadour",
+      "sourceType": "html",
+      "url": "https://www.troubadour.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://www.troubadour.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "the-echo-la",
+      "sourceName": "The Echo",
+      "sourceType": "html",
+      "url": "https://www.theecho.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://www.theecho.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "the-echoplex",
+      "sourceName": "The Echoplex",
+      "sourceType": "html",
+      "url": "https://www.theecho.com/echoplex-events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://www.theecho.com/echoplex-events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "el-rey-theatre",
+      "sourceName": "El Rey Theatre",
+      "sourceType": "html",
+      "url": "https://www.theelrey.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://www.theelrey.com/events",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "the-roxy-la",
+      "sourceName": "The Roxy Theatre",
+      "sourceType": "html",
+      "url": "https://www.theroxy.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://www.theroxy.com/events",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "the-comedy-store",
+      "sourceName": "The Comedy Store",
+      "sourceType": "html",
+      "url": "https://thecomedystore.com/calendar/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://thecomedystore.com/calendar/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "laugh-factory-la",
+      "sourceName": "Laugh Factory",
+      "sourceType": "html",
+      "url": "https://www.laughfactory.com/shows",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://www.laughfactory.com/shows",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "the-improv-la",
+      "sourceName": "The Hollywood Improv",
+      "sourceType": "html",
+      "url": "https://improv.com/hollywood/calendar/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://improv.com/hollywood/calendar/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "the-wiltern",
+      "sourceName": "The Wiltern",
+      "sourceType": "html",
+      "url": "https://www.wiltern.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://www.wiltern.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "the-regent-dtla",
+      "sourceName": "The Regent Theater",
+      "sourceType": "html",
+      "url": "https://www.theregenttheater.com/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:00:31.852Z",
+      "fetches": [
+        {
+          "url": "https://www.theregenttheater.com/events",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    }
+  ]
+}

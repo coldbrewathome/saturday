@@ -1,0 +1,258 @@
+{
+  "schemaVersion": 1,
+  "metroId": "chicago",
+  "generatedAt": "2026-05-18T23:01:42.021Z",
+  "alertCount": 10,
+  "alerts": [
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "ticketmaster-chicago-family",
+      "sourceName": "Ticketmaster Chicago Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:42.021Z",
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "lake-county-fair-il",
+      "sourceName": "Lake County Fair",
+      "sourceType": "html",
+      "url": "https://lcfair.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:42.021Z",
+      "fetches": [
+        {
+          "url": "https://lcfair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "metro-chicago",
+      "sourceName": "Metro Chicago",
+      "sourceType": "html",
+      "url": "https://metrochicago.com/shows/",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:42.021Z",
+      "fetches": [
+        {
+          "url": "https://metrochicago.com/shows/",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "empty-bottle",
+      "sourceName": "Empty Bottle",
+      "sourceType": "html",
+      "url": "https://www.emptybottle.com/events/",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:42.021Z",
+      "fetches": [
+        {
+          "url": "https://www.emptybottle.com/events/",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "lincoln-hall",
+      "sourceName": "Lincoln Hall",
+      "sourceType": "html",
+      "url": "https://www.lh-st.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:42.021Z",
+      "fetches": [
+        {
+          "url": "https://www.lh-st.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "schubas-tavern",
+      "sourceName": "Schubas Tavern",
+      "sourceType": "html",
+      "url": "https://www.lh-st.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:42.021Z",
+      "fetches": [
+        {
+          "url": "https://www.lh-st.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "thalia-hall-chicago",
+      "sourceName": "Thalia Hall",
+      "sourceType": "html",
+      "url": "https://www.thaliahallchicago.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:42.021Z",
+      "fetches": [
+        {
+          "url": "https://www.thaliahallchicago.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "second-city-chicago",
+      "sourceName": "The Second City",
+      "sourceType": "html",
+      "url": "https://www.secondcity.com/shows/chicago",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:42.021Z",
+      "fetches": [
+        {
+          "url": "https://www.secondcity.com/shows/chicago",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "zanies-chicago",
+      "sourceName": "Zanies Comedy Club",
+      "sourceType": "html",
+      "url": "https://chicago.zanies.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:42.021Z",
+      "fetches": [
+        {
+          "url": "https://chicago.zanies.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "hideout-chicago",
+      "sourceName": "The Hideout",
+      "sourceType": "html",
+      "url": "https://www.hideoutchicago.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:42.021Z",
+      "fetches": [
+        {
+          "url": "https://www.hideoutchicago.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    }
+  ]
+}

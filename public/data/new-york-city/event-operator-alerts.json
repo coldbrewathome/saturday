@@ -1,0 +1,384 @@
+{
+  "schemaVersion": 1,
+  "metroId": "new-york-city",
+  "generatedAt": "2026-05-18T23:01:09.813Z",
+  "alertCount": 15,
+  "alerts": [
+    {
+      "severity": "warning",
+      "metroId": "new-york-city",
+      "sourceId": "queens-library",
+      "sourceName": "Queens Public Library",
+      "sourceType": "communicoEvents",
+      "url": "https://queens.libnet.info/events",
+      "status": "ok-template-fallback",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": "recurring-template",
+      "recoveredEvents": 8,
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:09.813Z",
+      "fetches": [
+        {
+          "url": "https://queens.libnet.info/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=communico-events; events=0; locations=69"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "new-york-city",
+      "sourceId": "nypl-children",
+      "sourceName": "The New York Public Library Events",
+      "sourceType": "eventList",
+      "url": "https://www.nypl.org/events/calendar",
+      "status": "blocked",
+      "issueType": "fetch-failed",
+      "reason": "challenge page returned instead of event content",
+      "recoveredBy": "recurring-template",
+      "recoveredEvents": 8,
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:09.813Z",
+      "fetches": [
+        {
+          "url": "https://www.nypl.org/events/calendar",
+          "status": "blocked",
+          "reason": "challenge page returned instead of event content",
+          "httpStatus": 200,
+          "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "new-york-city",
+      "sourceId": "amnh-calendar",
+      "sourceName": "American Museum of Natural History",
+      "sourceType": "html",
+      "url": "https://www.amnh.org/calendar",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": "recurring-template",
+      "recoveredEvents": 4,
+      "liveEvents": 0,
+      "fallbackEvents": 4,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:09.813Z",
+      "fetches": [
+        {
+          "url": "https://www.amnh.org/calendar",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "state-fair-meadowlands",
+      "sourceName": "State Fair Meadowlands",
+      "sourceType": "html",
+      "url": "https://njfair.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:09.813Z",
+      "fetches": [
+        {
+          "url": "https://njfair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "brooklyn-steel",
+      "sourceName": "Brooklyn Steel",
+      "sourceType": "html",
+      "url": "https://www.brooklynsteel.com/calendar",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:09.813Z",
+      "fetches": [
+        {
+          "url": "https://www.brooklynsteel.com/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "bowery-ballroom",
+      "sourceName": "Bowery Ballroom",
+      "sourceType": "html",
+      "url": "https://www.boweryballroom.com/calendar",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:09.813Z",
+      "fetches": [
+        {
+          "url": "https://www.boweryballroom.com/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "le-poisson-rouge",
+      "sourceName": "Le Poisson Rouge",
+      "sourceType": "html",
+      "url": "https://lpr.com/calendar",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:09.813Z",
+      "fetches": [
+        {
+          "url": "https://lpr.com/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "new-york-city",
+      "sourceId": "terminal-5",
+      "sourceName": "Terminal 5",
+      "sourceType": "html",
+      "url": "https://www.terminal5nyc.com/calendar",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:09.813Z",
+      "fetches": [
+        {
+          "url": "https://www.terminal5nyc.com/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "webster-hall",
+      "sourceName": "Webster Hall",
+      "sourceType": "html",
+      "url": "https://www.websterhall.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:09.813Z",
+      "fetches": [
+        {
+          "url": "https://www.websterhall.com/events",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "comedy-cellar",
+      "sourceName": "Comedy Cellar",
+      "sourceType": "html",
+      "url": "https://www.comedycellar.com/line-up/",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:09.813Z",
+      "fetches": [
+        {
+          "url": "https://www.comedycellar.com/line-up/",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "gotham-comedy-club",
+      "sourceName": "Gotham Comedy Club",
+      "sourceType": "html",
+      "url": "https://gothamcomedyclub.com/calendar",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:09.813Z",
+      "fetches": [
+        {
+          "url": "https://gothamcomedyclub.com/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "elsewhere-brooklyn",
+      "sourceName": "Elsewhere",
+      "sourceType": "html",
+      "url": "https://www.elsewherebrooklyn.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:09.813Z",
+      "fetches": [
+        {
+          "url": "https://www.elsewherebrooklyn.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "rough-trade-nyc",
+      "sourceName": "Rough Trade NYC",
+      "sourceType": "html",
+      "url": "https://www.roughtradenyc.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:09.813Z",
+      "fetches": [
+        {
+          "url": "https://www.roughtradenyc.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "blue-note-nyc",
+      "sourceName": "Blue Note Jazz Club",
+      "sourceType": "html",
+      "url": "https://www.bluenotejazz.com/new-york/schedule",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:09.813Z",
+      "fetches": [
+        {
+          "url": "https://www.bluenotejazz.com/new-york/schedule",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "village-vanguard",
+      "sourceName": "Village Vanguard",
+      "sourceType": "html",
+      "url": "https://villagevanguard.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:01:09.813Z",
+      "fetches": [
+        {
+          "url": "https://villagevanguard.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    }
+  ]
+}

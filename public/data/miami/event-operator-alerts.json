@@ -1,0 +1,231 @@
+{
+  "schemaVersion": 1,
+  "metroId": "miami",
+  "generatedAt": "2026-05-18T23:05:24.483Z",
+  "alertCount": 9,
+  "alerts": [
+    {
+      "severity": "warning",
+      "metroId": "miami",
+      "sourceId": "miami-library-family",
+      "sourceName": "Miami-Dade Public Library Events",
+      "sourceType": "communicoEvents",
+      "url": "https://mdpls.libnet.info/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "recurring-template",
+      "recoveredEvents": 8,
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:24.483Z",
+      "fetches": [
+        {
+          "url": "https://mdpls.libnet.info/events",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "miami",
+      "sourceId": "miami-dade-youth-fair",
+      "sourceName": "Miami-Dade County Youth Fair",
+      "sourceType": "html",
+      "url": "https://www.fairexpo.com/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:24.483Z",
+      "fetches": [
+        {
+          "url": "https://www.fairexpo.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "miami",
+      "sourceId": "south-florida-fair",
+      "sourceName": "South Florida Fair",
+      "sourceType": "html",
+      "url": "https://www.southfloridafair.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:24.483Z",
+      "fetches": [
+        {
+          "url": "https://www.southfloridafair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "miami",
+      "sourceId": "space-miami",
+      "sourceName": "Club Space",
+      "sourceType": "html",
+      "url": "https://clubspace.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:24.483Z",
+      "fetches": [
+        {
+          "url": "https://clubspace.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "miami",
+      "sourceId": "the-ground-miami",
+      "sourceName": "The Ground Miami",
+      "sourceType": "html",
+      "url": "https://thegroundmiami.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:24.483Z",
+      "fetches": [
+        {
+          "url": "https://thegroundmiami.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "miami",
+      "sourceId": "gramps-wynwood",
+      "sourceName": "Gramps",
+      "sourceType": "html",
+      "url": "https://www.grframps.com/calendar",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:24.483Z",
+      "fetches": [
+        {
+          "url": "https://www.grframps.com/calendar",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "miami",
+      "sourceId": "the-oasis-wynwood",
+      "sourceName": "The Oasis",
+      "sourceType": "html",
+      "url": "https://www.oasiswynwood.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:24.483Z",
+      "fetches": [
+        {
+          "url": "https://www.oasiswynwood.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "miami",
+      "sourceId": "las-rosas-miami",
+      "sourceName": "Las Rosas",
+      "sourceType": "html",
+      "url": "https://www.lasrosasbar.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:24.483Z",
+      "fetches": [
+        {
+          "url": "https://www.lasrosasbar.com/events",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "miami",
+      "sourceId": "south-beach-comedy",
+      "sourceName": "Miami Improv",
+      "sourceType": "html",
+      "url": "https://www.miamiimprov.com/calendar",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-18T23:05:24.483Z",
+      "fetches": [
+        {
+          "url": "https://www.miamiimprov.com/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    }
+  ]
+}
