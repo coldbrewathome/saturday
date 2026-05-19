@@ -431,7 +431,10 @@ function generateForMetro(metro) {
 
   const kids = buildKidsPlans(kidsSpots, kidsEvents);
   const kidsHoliday = buildHolidayWeekendPlans(kidsSpots, kidsEvents, "all");
-  const kidsFinal = [...handCurated, ...kidsHoliday, ...kids.generated];
+  // Holiday plans go FIRST — they're time-sensitive and the date window in
+  // HOLIDAY_WEEKENDS makes them age out automatically once the weekend passes,
+  // so promoting them above evergreen hand-curated plans is safe.
+  const kidsFinal = [...kidsHoliday, ...handCurated, ...kids.generated];
   const kidsOut = {
     schemaVersion: 2,
     metroId: metro.id,
