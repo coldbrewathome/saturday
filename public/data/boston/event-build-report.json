@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "boston",
-  "generatedAt": "2026-05-18T23:05:59.240Z",
+  "generatedAt": "2026-05-19T03:43:58.207Z",
   "registryPath": "data/event-sources-boston.json",
   "outputPath": "public/data/boston/events.json",
-  "eventCount": 77,
-  "adultsEventCount": 39,
-  "sourceCount": 13,
-  "liveEventCount": 77,
+  "eventCount": 78,
+  "adultsEventCount": 42,
+  "sourceCount": 14,
+  "liveEventCount": 78,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
   "operatorAlertCount": 9,
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-18T23:05:59.240Z",
+      "fetchedAt": "2026-05-19T03:43:58.207Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-18T23:05:59.240Z",
+      "fetchedAt": "2026-05-19T03:43:58.207Z",
       "fetches": [
         {
           "url": "https://www.easternstatesexposition.com/",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-18T23:05:59.240Z",
+      "fetchedAt": "2026-05-19T03:43:58.207Z",
       "fetches": [
         {
           "url": "https://marshfieldfair.org/",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-18T23:05:59.240Z",
+      "fetchedAt": "2026-05-19T03:43:58.207Z",
       "fetches": [
         {
           "url": "https://www.crossroadspresents.com/paradise-rock-club",
@@ -128,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-18T23:05:59.240Z",
+      "fetchedAt": "2026-05-19T03:43:58.207Z",
       "fetches": [
         {
           "url": "https://www.crossroadspresents.com/brighton-music-hall",
@@ -153,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-18T23:05:59.240Z",
+      "fetchedAt": "2026-05-19T03:43:58.207Z",
       "fetches": [
         {
           "url": "https://www.sinclaircambridge.com/events",
@@ -178,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-18T23:05:59.240Z",
+      "fetchedAt": "2026-05-19T03:43:58.207Z",
       "fetches": [
         {
           "url": "https://www.crystalballroomboston.com/events",
@@ -203,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-18T23:05:59.240Z",
+      "fetchedAt": "2026-05-19T03:43:58.207Z",
       "fetches": [
         {
           "url": "https://www.nickscomedystop.com/calendar",
@@ -228,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-18T23:05:59.240Z",
+      "fetchedAt": "2026-05-19T03:43:58.207Z",
       "fetches": [
         {
           "url": "https://www.laughboston.com/calendar",
@@ -240,6 +240,20 @@
     }
   ],
   "sources": [
+    {
+      "id": "manual",
+      "name": "Manual entries",
+      "url": "data/manual-events-boston.json",
+      "sourceType": "manual",
+      "city": null,
+      "metroId": "boston",
+      "category": null,
+      "status": "ok",
+      "liveEvents": 5,
+      "fallbackEvents": 0,
+      "eventCount": 5,
+      "fetches": []
+    },
     {
       "id": "boston-library-family",
       "name": "Boston Public Library Family Programs",
@@ -276,9 +290,9 @@
       "metroId": "boston",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 13,
+      "liveEvents": 11,
       "fallbackEvents": 0,
-      "eventCount": 13,
+      "eventCount": 11,
       "fetches": [
         {
           "url": "https://www.boston.gov/rss/events",
@@ -289,7 +303,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/rss+xml; charset=utf-8",
-      "rejectedLiveEvents": 12,
+      "rejectedLiveEvents": 14,
       "extractedEvents": 25,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -303,9 +317,9 @@
       "metroId": "boston",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 47,
+      "liveEvents": 45,
       "fallbackEvents": 0,
-      "eventCount": 47,
+      "eventCount": 45,
       "fetches": [
         {
           "url": "https://bostonchildrensmuseum.org/Calendar/",
@@ -316,7 +330,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=eventon-events; events=113",
-      "rejectedLiveEvents": 61,
+      "rejectedLiveEvents": 63,
       "extractedEvents": 108,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
