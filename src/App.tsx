@@ -1078,6 +1078,7 @@ type FeaturedPlan = {
   lat?: number | null;
   lon?: number | null;
   generated?: boolean;
+  themed?: string;
 };
 
 type AppRoute = {
@@ -2367,8 +2368,13 @@ function App({ metro }: AppProps) {
       (inferredGeo?.lat && inferredGeo?.lon
         ? { lat: inferredGeo.lat, lon: inferredGeo.lon }
         : { lat: 37.7749, lon: -122.4194 });
-    const handCurated = featuredPlans.filter((p) => !p.generated);
-    const generated = featuredPlans.filter((p) => p.generated);
+    // Themed plans (e.g. Memorial Day weekend) are pinned at the top of the
+    // rail regardless of map center — they're time-sensitive and metro-wide,
+    // not local, so distance ranking would bury them. They auto-expire from
+    // the data feed once the holiday window passes.
+    const themed = featuredPlans.filter((p) => Boolean(p.themed));
+    const handCurated = featuredPlans.filter((p) => !p.generated && !p.themed);
+    const generated = featuredPlans.filter((p) => p.generated && !p.themed);
     const scored = generated
       .map((p) => {
         if (!Number.isFinite(p.lat) || !Number.isFinite(p.lon)) {
@@ -2386,7 +2392,11 @@ function App({ metro }: AppProps) {
     // Cap the rail so it doesn't get unwieldy. Generated plans are
     // re-ranked every map move, so the top of the rail follows the user.
     const generatedCap = 8;
-    return [...handCurated, ...scored.slice(0, generatedCap).map((s) => s.plan)];
+    return [
+      ...themed,
+      ...handCurated,
+      ...scored.slice(0, generatedCap).map((s) => s.plan),
+    ];
   }, [featuredPlans, mapCenter, userLocation, inferredGeo]);
 
   const mapEvents = useMemo(() => {
