@@ -144,6 +144,104 @@ function slugCity(city) {
     .slice(0, 60);
 }
 
+// Holiday weekends get their own themed plans on top of the regular city
+// plans. The themed plan groups events that fall in the holiday window AND
+// match a holiday-specific keyword/source pattern, then anchors them with a
+// nearby spot. Reusable for future holidays — add another entry below.
+const HOLIDAY_WEEKENDS = [
+  {
+    id: "memorial-day-2026",
+    name: "Memorial Day Weekend",
+    short: "Memorial Day",
+    start: "2026-05-23T00:00:00-08:00",
+    end: "2026-05-26T00:00:00-08:00",
+    re: /\b(memorial|fleet\s*week|carnaval|flag\s*garden|fort\s*rosecrans|uss\s*midway|uss\s*pampanito|hillsborough|rohnert|foodieland|brooklyn.{0,40}parade|intrepid|danceafrica|arlington|rolling\s*to\s*remember|seaport.{0,40}parade|dorchester.{0,40}parade|canoga|national\s*memorial|veteran)\b/i,
+    accent: "festival",
+  },
+];
+
+function eventMatchesHoliday(event, holiday) {
+  if (!event.startDateTime) return false;
+  const t = Date.parse(event.startDateTime);
+  if (!Number.isFinite(t)) return false;
+  if (t < Date.parse(holiday.start) || t >= Date.parse(holiday.end)) return false;
+  const title = event.title || "";
+  // Drop closure announcements ("Library closed for Memorial Day"). Match only
+  // against the title — venue/description matching pulls in events whose only
+  // connection is a venue named "Martin Luther King Jr. Memorial Library".
+  if (/\b(closed|closure|cancel{1,2}ed)\b/i.test(title)) return false;
+  return holiday.re.test(title);
+}
+
+function holidayDedupeKey(event) {
+  const base = (event.title || "")
+    .split(/[—:|·]/)[0]
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+  return base || event.id;
+}
+
+function buildHolidayWeekendPlans(spots, events, audienceTag) {
+  const generated = [];
+  const spotsByCity = groupSpotsByCity(spots);
+  for (const holiday of HOLIDAY_WEEKENDS) {
+    const matched = events.filter((e) => eventMatchesHoliday(e, holiday));
+    if (matched.length === 0) continue;
+    const byCity = new Map();
+    for (const e of matched) {
+      const city = normalizeCity(e.city) || normalizeCity(e.neighborhood);
+      if (!city) continue;
+      if (!byCity.has(city)) byCity.set(city, []);
+      byCity.get(city).push(e);
+    }
+    for (const [city, cityEvents] of byCity) {
+      cityEvents.sort(
+        (a, b) => Date.parse(a.startDateTime) - Date.parse(b.startDateTime),
+      );
+      const seenIds = new Set();
+      const seenTitleKeys = new Set();
+      const eventPicks = [];
+      for (const e of cityEvents) {
+        if (seenIds.has(e.id)) continue;
+        const titleKey = holidayDedupeKey(e);
+        if (seenTitleKeys.has(titleKey)) continue;
+        seenIds.add(e.id);
+        seenTitleKeys.add(titleKey);
+        eventPicks.push(e);
+        if (eventPicks.length >= 3) break;
+      }
+      const citySpots = spotsByCity.get(city) || [];
+      const cityAnchorSpots = citySpots.filter(isPlanAnchorSpot);
+      const spotPick =
+        cityAnchorSpots.length > 0 ? pickTopSpots(cityAnchorSpots, 1) : [];
+      const items = [...spotPick, ...eventPicks];
+      if (items.length < 2) continue;
+      const center = centroid(items);
+      const titles = eventPicks.map((e) =>
+        (e.title || "").split(/[—•·|]/)[0].trim().slice(0, 60),
+      );
+      const summary = `${holiday.name} in ${city} — ${titles.join(" · ")}.`;
+      const slug = slugCity(city);
+      generated.push({
+        id: `gen-holiday-${holiday.id}-${slug}`,
+        name: `${holiday.short} in ${city}`,
+        summary: summary.slice(0, 240),
+        accent: holiday.accent,
+        stopIds: spotPick.map((s) => s.id),
+        eventIds: eventPicks.map((e) => e.id),
+        audiences: [audienceTag],
+        city,
+        lat: center?.lat ?? null,
+        lon: center?.lon ?? null,
+        generated: true,
+        themed: holiday.id,
+      });
+    }
+  }
+  return generated;
+}
+
 function buildKidsPlans(spots, events) {
   const spotsByCity = groupSpotsByCity(spots);
   const eventsByCity = groupUpcomingEventsByCity(events);
@@ -332,7 +430,8 @@ function generateForMetro(metro) {
   const kidsEvents = Array.isArray(kidsEventsDoc.events) ? kidsEventsDoc.events : [];
 
   const kids = buildKidsPlans(kidsSpots, kidsEvents);
-  const kidsFinal = [...handCurated, ...kids.generated];
+  const kidsHoliday = buildHolidayWeekendPlans(kidsSpots, kidsEvents, "all");
+  const kidsFinal = [...handCurated, ...kidsHoliday, ...kids.generated];
   const kidsOut = {
     schemaVersion: 2,
     metroId: metro.id,
@@ -341,7 +440,7 @@ function generateForMetro(metro) {
   };
   writeJsonWithLegacy(metro, "featuredPlans", kidsOut);
   console.log(
-    `[featured-plans:${metro.id}] kept ${handCurated.length} hand-curated, generated ${kids.generated.length} from ${kids.cityCount} cities -> ${kidsFinal.length} total`,
+    `[featured-plans:${metro.id}] kept ${handCurated.length} hand-curated, generated ${kids.generated.length} from ${kids.cityCount} cities, holiday ${kidsHoliday.length} -> ${kidsFinal.length} total`,
   );
 
   const adultsSpotPath = path.join(ROOT, metroDataFile(metro, "spots")).replace(/spots\.json$/, "spots-adults.json");
@@ -352,17 +451,18 @@ function generateForMetro(metro) {
   const adultsEvents = Array.isArray(adultsEventsDoc.events) ? adultsEventsDoc.events : [];
 
   const adults = buildAdultsPlans(adultsSpots, adultsEvents);
+  const adultsHoliday = buildHolidayWeekendPlans(adultsSpots, adultsEvents, "adults");
   const adultsOut = {
     schemaVersion: 2,
     metroId: metro.id,
     note: "Auto-generated per-city plans for adults audience.",
-    plans: adults.generated,
+    plans: [...adultsHoliday, ...adults.generated],
   };
   const adultsOutPath = path.join(ROOT, metroDataFile(metro, "featuredPlans")).replace(/featured-plans\.json$/, "featured-plans-adults.json");
   fs.mkdirSync(path.dirname(adultsOutPath), { recursive: true });
   fs.writeFileSync(adultsOutPath, JSON.stringify(adultsOut, null, 2) + "\n");
   console.log(
-    `[featured-plans-adults:${metro.id}] generated ${adults.generated.length} from ${adults.cityCount} cities`,
+    `[featured-plans-adults:${metro.id}] generated ${adults.generated.length} from ${adults.cityCount} cities, holiday ${adultsHoliday.length}`,
   );
 }
 
