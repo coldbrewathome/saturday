@@ -118,7 +118,29 @@
       "Walnut Creek",
       "Windsor",
       "Woodside",
-      "Yountville"
+      "Yountville",
+      "Santa Cruz",
+      "Capitola",
+      "Scotts Valley",
+      "Watsonville",
+      "Aptos",
+      "Soquel",
+      "Felton",
+      "Live Oak",
+      "Ben Lomond",
+      "Boulder Creek",
+      "Monterey",
+      "Carmel",
+      "Carmel-by-the-Sea",
+      "Carmel Valley",
+      "Pacific Grove",
+      "Seaside",
+      "Marina",
+      "Salinas",
+      "Sand City",
+      "Del Rey Oaks",
+      "Castroville",
+      "Pebble Beach"
     ]
   },
   "defaults": {
@@ -2223,6 +2245,70 @@
       "trust": "official",
       "lat": 37.312,
       "lon": -121.8558
+    },
+    {
+      "id": "santa-cruz-library",
+      "name": "Santa Cruz Public Libraries",
+      "url": "https://santacruzpl.libnet.info/events",
+      "city": "Santa Cruz",
+      "category": "Library",
+      "sourceType": "communicoEvents",
+      "trust": "official",
+      "communicoClient": "santacruzpl",
+      "communicoApiServer": "https://api.communico.co",
+      "fallbackEventIds": [
+        "santa-cruz-downtown-storytime",
+        "santa-cruz-baby-storytime",
+        "santa-cruz-lego-club"
+      ],
+      "lat": 36.9741,
+      "lon": -122.0263
+    },
+    {
+      "id": "napa-county-library",
+      "name": "Napa County Library",
+      "url": "https://napalibrary.libnet.info/events",
+      "city": "Napa",
+      "category": "Library",
+      "sourceType": "communicoEvents",
+      "trust": "official",
+      "communicoClient": "napalibrary",
+      "communicoApiServer": "https://api.communico.co",
+      "fallbackEventIds": [
+        "napa-main-storytime",
+        "napa-baby-lapsit",
+        "napa-family-craft"
+      ],
+      "lat": 38.2975,
+      "lon": -122.2869
+    },
+    {
+      "id": "monterey-library",
+      "name": "Monterey Public Library",
+      "url": "https://montereypl.libcal.com/calendar/events?cid=10382&t=g&d=0000-00-00&cal=10382&inc=0",
+      "city": "Monterey",
+      "category": "Library",
+      "sourceType": "libcal",
+      "trust": "official",
+      "libcalCalendarId": 10382,
+      "fallbackEventIds": [
+        "monterey-main-storytime",
+        "monterey-family-craft"
+      ],
+      "lat": 36.597,
+      "lon": -121.8956
+    },
+    {
+      "id": "watsonville-library",
+      "name": "Watsonville Public Library",
+      "url": "https://www.watsonville.gov/calendar.aspx?CID=23&view=list",
+      "city": "Watsonville",
+      "category": "Library",
+      "sourceType": "civicpluscal",
+      "trust": "official",
+      "defaultAudienceText": "family kids children all ages library storytime",
+      "lat": 36.91,
+      "lon": -121.7568
     }
   ]
 }
