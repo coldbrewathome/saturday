@@ -1642,12 +1642,22 @@ function generateThisWeekendPage(eventItems) {
         name: `${metroLabel()} family events this weekend`,
         itemListElement: upcoming.slice(0, 30).map((event, index) => {
           const slug = eventSlugLookup.get(event);
-          return {
+          const eventUrl = slug ? metroUrl(`event/${slug}/`) : event.url || canonical;
+          const listItem = {
             "@type": "ListItem",
             position: index + 1,
-            url: slug ? metroUrl(`event/${slug}/`) : event.url || canonical,
+            url: eventUrl,
             name: event.title,
           };
+          // Embed the full Event object so the weekend guide is eligible for
+          // Google's event rich results / "things to do" carousel, not just a
+          // plain list of names.
+          const eventNode = buildEventJsonLd(event, eventUrl);
+          if (eventNode) {
+            delete eventNode["@context"];
+            listItem.item = eventNode;
+          }
+          return listItem;
         }),
       },
     ],

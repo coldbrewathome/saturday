@@ -2975,7 +2975,7 @@ function App({ metro }: AppProps) {
         events: eventPayload,
         itemOrder: itemOrderPayload,
       });
-      const url = `${shareBaseUrl}/#/p/${result.pollId}`;
+      const url = pollShareUrl(result.pollId);
       updatePlan(activePlan.id, {
         pollId: result.pollId,
         ownerToken: result.ownerToken,
@@ -5360,15 +5360,15 @@ function App({ metro }: AppProps) {
               {activePlan.pollId && shareState.status === "idle" && (
                 <div className="share-banner">
                   <strong>Already shared.</strong>
-                  <a href={`${shareBaseUrl}/#/p/${activePlan.pollId}`}>
-                    {`${shareBaseUrl}/#/p/${activePlan.pollId}`}
+                  <a href={pollShareUrl(activePlan.pollId)}>
+                    {pollShareUrl(activePlan.pollId)}
                   </a>
                   <ShareQuickLinks
-                    url={`${shareBaseUrl}/#/p/${activePlan.pollId}`}
+                    url={pollShareUrl(activePlan.pollId)}
                     title={activePlan.name || "Untitled plan"}
                   />
                   <ShareEmbedPanel
-                    url={`${shareBaseUrl}/#/p/${activePlan.pollId}`}
+                    url={pollShareUrl(activePlan.pollId)}
                     title={activePlan.name || "Untitled plan"}
                   />
                   <ShareCardPanel
@@ -6384,9 +6384,22 @@ function ShareCardPanel({
   );
 }
 
+// External share links use the /p/{id} path form (a Pages Function serves rich
+// Open Graph previews there). In-app, the canonical poll URL is metro-agnostic.
+function pollShareUrl(pollId: string) {
+  const origin =
+    typeof window === "undefined" ? "" : window.location.origin;
+  return `${origin}/p/${pollId}`;
+}
+
 function buildPollEmbedUrl(url: string) {
   try {
     const parsed = new URL(url, window.location.href);
+    // Path form (/p/{id}) from a share link → convert to the hash embed route.
+    const pathMatch = parsed.pathname.match(/^\/p\/([\w-]+)$/);
+    if (pathMatch) {
+      return `${parsed.origin}/#/p/${pathMatch[1]}?embed=1`;
+    }
     const hash = parsed.hash.replace(/^#/, "");
     if (hash.startsWith("/p/")) {
       parsed.hash = `${hash.split("?")[0]}?embed=1`;
