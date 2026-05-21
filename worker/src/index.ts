@@ -1251,6 +1251,82 @@ async function subscribeNewsletter(
   return json({ ok: true }, { status: 200 }, cors);
 }
 
+// ── First-party funnel metrics ──────────────────────────────────────────
+// Aggregate, no-PII counters keyed by metric:{name}:{metro}:{date}. Used to
+// answer "is the share loop / SEO actually working" without third-party
+// trackers or cookies (the site is family-facing, so we avoid GA4/PII).
+const METRIC_NAMES = new Set([
+  "app_open",
+  "hop_now_opened",
+  "plan_shared",
+  "poll_viewed",
+  "vote_cast",
+]);
+const METRIC_TTL_SECONDS = 60 * 60 * 24 * 120; // ~120 days
+
+async function recordMetric(
+  request: Request,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  // Light per-IP cap so a single client can't inflate or run up KV writes.
+  const cap = await checkAndIncrementCap(request, env, "metric", 500);
+  if (!cap.ok) return new Response(null, { status: 204, headers: cors });
+  const url = new URL(request.url);
+  const name = cleanText(url.searchParams.get("name"), 40);
+  if (!METRIC_NAMES.has(name)) {
+    return new Response(null, { status: 204, headers: cors });
+  }
+  const metroRaw = cleanText(url.searchParams.get("metro") || "all", 40) || "all";
+  const metro = safeKvSegment(metroRaw);
+  const day = new Date().toISOString().slice(0, 10);
+  for (const key of [
+    `metric:${name}:all:${day}`,
+    `metric:${name}:${metro}:${day}`,
+  ]) {
+    const raw = await env.POLLS.get(key);
+    const count = raw ? Number(raw) : 0;
+    await env.POLLS.put(key, String(count + 1), {
+      expirationTtl: METRIC_TTL_SECONDS,
+    });
+  }
+  return new Response(null, { status: 204, headers: cors });
+}
+
+async function readMetrics(
+  request: Request,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  const session = await getSession(env, request);
+  if (!session) return json({ error: "sign in required" }, { status: 401 }, cors);
+  if (!isAdmin(env, session.data.email)) {
+    return json({ error: "admin access required" }, { status: 403 }, cors);
+  }
+  const url = new URL(request.url);
+  const days = Math.min(90, Math.max(1, Number(url.searchParams.get("days") || "30") || 30));
+  const cutoff = new Date(Date.now() - days * 86400000).toISOString().slice(0, 10);
+  const totals: Record<string, number> = {};
+  const byDay: Record<string, Record<string, number>> = {};
+  let cursor: string | undefined;
+  do {
+    const list = await env.POLLS.list({ prefix: "metric:", cursor });
+    for (const k of list.keys) {
+      const parts = k.name.split(":");
+      if (parts.length !== 4) continue;
+      const [, name, metro, date] = parts;
+      if (metro !== "all" || date < cutoff) continue;
+      const raw = await env.POLLS.get(k.name);
+      const count = raw ? Number(raw) : 0;
+      totals[name] = (totals[name] || 0) + count;
+      byDay[date] = byDay[date] || {};
+      byDay[date][name] = (byDay[date][name] || 0) + count;
+    }
+    cursor = list.list_complete ? undefined : list.cursor;
+  } while (cursor);
+  return json({ days, totals, byDay }, { status: 200 }, cors);
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const cors = corsHeaders(env, request.headers.get("origin"));
@@ -1279,6 +1355,14 @@ export default {
 
     if (path === "/newsletter" && request.method === "POST") {
       return subscribeNewsletter(request, env, cors);
+    }
+
+    if (path === "/metric") {
+      return recordMetric(request, env, cors);
+    }
+
+    if (path === "/metrics" && request.method === "GET") {
+      return readMetrics(request, env, cors);
     }
 
     if (path === "/auth/google" && request.method === "POST") {

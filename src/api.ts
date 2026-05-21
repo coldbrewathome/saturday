@@ -216,6 +216,25 @@ export async function fetchGeo(): Promise<GeoInfo | null> {
   }
 }
 
+// Fire-and-forget aggregate funnel metric (no PII). Used to measure the
+// share loop + feature engagement. Safe to call anywhere; no-ops without API.
+export function trackMetric(name: string, metroId?: string): void {
+  if (!API_BASE || typeof navigator === "undefined") return;
+  try {
+    const qs = `name=${encodeURIComponent(name)}${
+      metroId ? `&metro=${encodeURIComponent(metroId)}` : ""
+    }`;
+    const url = `${API_BASE}/metric?${qs}`;
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(url);
+    } else {
+      void fetch(url, { method: "POST", keepalive: true, mode: "no-cors" });
+    }
+  } catch {
+    /* ignore */
+  }
+}
+
 export async function createAiSwap(
   body: {
     vibe: string;

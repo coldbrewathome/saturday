@@ -9,6 +9,7 @@ import {
   getOrCreateVoterId,
   getPoll,
   postVote,
+  trackMetric,
 } from "./api";
 
 type Status = "loading" | "ready" | "error";
@@ -80,6 +81,7 @@ export default function PollView({
     readMyVotes(pollId),
   );
   const [submitting, setSubmitting] = useState(false);
+  const [trackedVote, setTrackedVote] = useState(false);
   const voterId = useMemo(() => getOrCreateVoterId(), []);
 
   // Build a single ordered visit list mixing places + events. Honors the
@@ -135,6 +137,7 @@ export default function PollView({
         if (!active) return;
         setPoll(data);
         setStatus("ready");
+        trackMetric("poll_viewed", data.metroId);
       })
       .catch((err: Error) => {
         if (!active) return;
@@ -157,6 +160,10 @@ export default function PollView({
           ? { ...current, tallies: result.tallies, voterCount: result.voterCount }
           : current,
       );
+      if (!trackedVote) {
+        setTrackedVote(true);
+        trackMetric("vote_cast", poll?.metroId);
+      }
     } catch (err) {
       setError((err as Error).message);
     } finally {

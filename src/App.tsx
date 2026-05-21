@@ -45,6 +45,7 @@ import {
   createPoll,
   fetchAdminEvents,
   fetchGeo,
+  trackMetric,
   fetchWeather,
   type WeatherForecast,
   getUserState,
@@ -1495,6 +1496,7 @@ function App({ metro }: AppProps) {
   const openHopNow = () => {
     markHopNowSeen();
     setIsHopNowOpen(true);
+    trackMetric("hop_now_opened", metro.id);
   };
   const [newSpot, setNewSpot] = useState<NewSpotForm>(emptyNewSpot);
 
@@ -1833,6 +1835,7 @@ function App({ metro }: AppProps) {
   }, [activePlanId, view]);
 
   useEffect(() => {
+    trackMetric("app_open", metro.id);
     let cancelled = false;
     fetchGeo().then((geo) => {
       if (cancelled || !geo) return;
@@ -2987,6 +2990,7 @@ function App({ metro }: AppProps) {
         // ignore clipboard failures
       }
       setShareState({ status: "shared", url });
+      trackMetric("plan_shared", metro.id);
     } catch (error) {
       setShareState({ status: "error", error: (error as Error).message });
     }
