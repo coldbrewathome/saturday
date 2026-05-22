@@ -269,6 +269,194 @@ a:hover{text-decoration:underline}
 @media (max-width:820px){.famhop-topbar{column-gap:5px;flex-wrap:nowrap;left:12px;min-height:0;padding:8px;right:12px;row-gap:0;}.famhop-brand{gap:5px;margin-right:0;min-width:0;order:1;}.famhop-mark svg{height:20px;width:20px;}.famhop-wordmark{display:block;font-size:.9rem;letter-spacing:0;max-width:none;overflow:visible;white-space:nowrap;}.famhop-metro{flex:1 1 72px;max-width:none;min-width:72px;order:2;padding:5px 6px 5px 7px;}.famhop-metro-prefix{display:none;}.famhop-metro select{font-family:var(--font-ui);font-size:.76rem;max-width:none;min-width:0;overflow:hidden;padding-right:11px;text-overflow:ellipsis;width:100%;}.famhop-tabs{flex:0 0 88px;margin-left:0;order:3;width:88px;}.famhop-tabs a{font-size:0;gap:0;padding:5px 6px;}.famhop-tabs svg{height:14px;width:14px;}.famhop-tabs .tab-count{display:none;}.famhop-topbar-spacer{display:none;}.famhop-auth{flex:0 0 40px;justify-content:flex-end;margin-left:0;order:4;width:40px;}.famhop-auth .user-chip{gap:0;padding:0;}.famhop-auth .user-name,.famhop-auth .sync-pill,.famhop-auth .text-button,.famhop-auth .signin-error{display:none;}.famhop-auth .signin-wrap{min-height:32px;}.famhop-auth .signin-slot{min-height:32px;}.famhop-auth .user-chip-avatar,.famhop-auth .user-chip-avatar img,.famhop-auth .user-avatar-fallback{height:32px;width:32px;}.famhop-auth .user-avatar-fallback svg{height:16px;width:16px;}}
 @media (max-width:640px){.famhop-page{padding:100px 18px 40px;}.famhop-page h1{font-size:28px;}.guide-newsletter form{grid-template-columns:1fr;}.timeline-card{grid-template-columns:1fr;gap:8px}.timeline-time{display:flex;gap:8px;align-items:baseline}.timeline-time span{margin-top:0}}
 @media (max-width:370px){.famhop-topbar{column-gap:4px;left:10px;right:10px;}.famhop-wordmark{font-size:.84rem;max-width:none;}.famhop-metro{flex-basis:68px;min-width:68px;padding-left:5px;padding-right:5px;}.famhop-metro select{font-size:.72rem;}.famhop-tabs{flex-basis:76px;width:76px;}.famhop-tabs a{padding:5px 4px;}}
+
+/* Interactive Timeline Filters */
+.timeline-filters-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+  margin: 24px 0;
+  box-shadow: 0 10px 30px rgba(34, 34, 31, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: all 0.25s ease;
+}
+.filters-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--surface-strong);
+  padding-bottom: 12px;
+}
+.filters-header h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.filters-icon {
+  color: var(--brand);
+}
+.filters-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.filter-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  width: 90px;
+  flex-shrink: 0;
+}
+.filter-options {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.filter-chip {
+  background: var(--surface-strong);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+}
+.filter-chip:hover {
+  background: var(--surface-strong);
+  color: var(--ink);
+  border-color: var(--line);
+}
+.filter-chip.active {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+  box-shadow: 0 4px 12px rgba(221, 106, 26, 0.25);
+}
+.filter-row-secondary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: center;
+}
+@media (max-width: 640px) {
+  .filter-row-secondary {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+.category-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.select-wrapper {
+  position: relative;
+  flex-grow: 1;
+}
+.filter-select {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--surface-strong);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 32px 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.filter-select:hover {
+  border-color: var(--brand);
+}
+.select-wrapper::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid var(--muted);
+  pointer-events: none;
+}
+.filter-status-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--surface-strong);
+  padding-top: 12px;
+  margin-top: 4px;
+}
+.filter-results-count {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.clear-filters-btn {
+  background: transparent;
+  border: 0;
+  color: var(--brand-strong);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+.clear-filters-btn:hover {
+  background: #fdece7;
+  text-decoration: none;
+}
+.no-events-found-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  margin: 32px 0;
+  box-shadow: 0 10px 28px rgba(34,34,31,.04);
+}
+.no-events-icon {
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.no-events-found-card p {
+  font-size: 15px;
+  color: var(--muted);
+  margin: 0 0 16px;
+  max-width: 320px;
+}
+.no-events-found-card button {
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+}
 `;
 
 if (!fs.existsSync(DIST)) {
@@ -1607,8 +1795,10 @@ function generateThisWeekendPage(eventItems) {
     <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a 3-stop day with ${BRAND}</a> <a class="cta-secondary" href="#timeline">Jump to the timeline</a></p>
     <section id="timeline" aria-label="Weekend event timeline">
       <p class="eyebrow">Generated ${esc(generatedLabel)} from official event sources</p>
+      ${renderWeekendFilters("en", upcoming.length)}
       ${daySections.join("")}
     </section>
+    ${renderWeekendFilterScript("en")}
   `;
 
   const jsonLd = {
@@ -2113,13 +2303,16 @@ function renderTimelineEvent(event, eventSlugLookup, locale = "en") {
   const internalHref = slug ? metroPath(`event/${slug}/`) : "";
   const time = formatEventTime(event, locale);
   const bucket = timelineBucket(event, locale);
+  const bucketKey = timelineBucket(event, "en").toLowerCase();
+  const free = eventLikelyFree(event);
+  const ageBands = Array.isArray(event.ageBands) ? event.ageBands.join(",") : "";
   const description = buildTimelineDescription(event);
   const meta = formatTimelineMeta(event);
   const quality = eventQualityLabel(eventQualityScore(event));
   const timeTba = { en: "Time TBA", es: "Hora por confirmar", "zh-Hans": "时间待定" };
   const detailsLabel = { en: "FamHop event details", es: "Detalles del evento en FamHop", "zh-Hans": "FamHop 活动详情" };
   const officialLabel = { en: "Official event page", es: "Página oficial del evento", "zh-Hans": "官方活动页面" };
-  return `<li class="timeline-card">
+  return `<li class="timeline-card" data-age-bands="${esc(ageBands)}" data-cost-free="${free}" data-category="${esc(event.category || "")}" data-bucket="${esc(bucketKey)}">
     <time class="timeline-time" datetime="${esc(event.startDateTime || "")}">${esc(time || (timeTba[locale] || timeTba.en))}<span>${esc(bucket)}</span></time>
     <div>
       <div class="timeline-chip-row">
@@ -2150,6 +2343,206 @@ function timelineBucket(event, locale = "en") {
   if (hour < 12) return b.morning;
   if (hour < 17) return b.afternoon;
   return b.evening;
+}
+
+function renderWeekendFilters(locale, totalCount) {
+  const ageFilterHtml = IS_ADULTS ? "" : `
+    <div class="filter-group">
+      <span class="filter-label">${esc(t(locale, "filterLabelAge"))}</span>
+      <div class="filter-options" data-filter-group="age">
+        <button class="filter-chip active" data-age-band="all">${esc(t(locale, "filterAllAges"))}</button>
+        <button class="filter-chip" data-age-band="toddler">${esc(t(locale, "filterAgeToddler"))}</button>
+        <button class="filter-chip" data-age-band="preschool">${esc(t(locale, "filterAgePreschool"))}</button>
+        <button class="filter-chip" data-age-band="school-age">${esc(t(locale, "filterAgeSchoolAge"))}</button>
+        <button class="filter-chip" data-age-band="tween">${esc(t(locale, "filterAgeTween"))}</button>
+      </div>
+    </div>
+  `;
+
+  return `
+    <div class="timeline-filters-card" data-timeline-filters>
+      <div class="filters-header">
+        <svg class="filters-icon" viewBox="0 0 20 20" fill="currentColor" width="18" height="18">
+          <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+        </svg>
+        <h3>${locale === "es" ? "Buscador interactivo" : (locale === "zh-Hans" ? "互动活动筛选" : "Interactive Event Finder")}</h3>
+      </div>
+      <div class="filters-body">
+        ${ageFilterHtml}
+        <div class="filter-group">
+          <span class="filter-label">${esc(t(locale, "filterLabelTime"))}</span>
+          <div class="filter-options" data-filter-group="time">
+            <button class="filter-chip active" data-time="all">${esc(t(locale, "filterAllTimes"))}</button>
+            <button class="filter-chip" data-time="morning">${esc(t(locale, "filterMorning"))}</button>
+            <button class="filter-chip" data-time="afternoon">${esc(t(locale, "filterAfternoon"))}</button>
+            <button class="filter-chip" data-time="evening">${esc(t(locale, "filterEvening"))}</button>
+          </div>
+        </div>
+        <div class="filter-row-secondary">
+          <div class="filter-group">
+            <span class="filter-label">${esc(t(locale, "filterLabelCost"))}</span>
+            <div class="filter-options" data-filter-group="cost">
+              <button class="filter-chip active" data-free="all">${esc(t(locale, "filterAllPrices"))}</button>
+              <button class="filter-chip" data-free="true">${esc(t(locale, "filterFreeOnly"))}</button>
+            </div>
+          </div>
+          <div class="filter-group category-filter-group">
+            <span class="filter-label">${esc(t(locale, "filterLabelCategory"))}</span>
+            <div class="select-wrapper">
+              <select class="filter-select" data-category-select aria-label="${esc(t(locale, "filterLabelCategory"))}">
+                <option value="all">${esc(t(locale, "filterAllCategories"))}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="filter-status-row" data-filter-status>
+        <span class="filter-results-count" data-results-text>${esc(t(locale, "filterResultsCount", { count: String(totalCount), total: String(totalCount) }))}</span>
+        <button class="clear-filters-btn" data-reset-btn type="button" style="display: none;">${esc(t(locale, "filterReset"))}</button>
+      </div>
+    </div>
+    <div id="no-matching-events-message" class="no-events-found-card" style="display: none;">
+      <svg class="no-events-icon" viewBox="0 0 20 20" fill="currentColor" width="48" height="48">
+        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+      </svg>
+      <p>${esc(t(locale, "noMatchingEvents"))}</p>
+      <button class="cta-secondary" data-reset-btn-empty type="button">${esc(t(locale, "filterReset"))}</button>
+    </div>
+  `;
+}
+
+function renderWeekendFilterScript(locale) {
+  return `<script>
+(() => {
+  const container = document.querySelector("[data-timeline-filters]");
+  if (!container) return;
+
+  const cards = Array.from(document.querySelectorAll(".timeline-list .timeline-card"));
+  const days = Array.from(document.querySelectorAll(".guide-day"));
+  const categorySelect = container.querySelector("[data-category-select]");
+  const statusText = container.querySelector("[data-results-text]");
+  const resetBtn = container.querySelector("[data-reset-btn]");
+  const resetBtnEmpty = document.querySelector("[data-reset-btn-empty]");
+  const noEventsMsg = document.getElementById("no-matching-events-message");
+
+  let activeFilters = {
+    age: "all",
+    time: "all",
+    cost: "all",
+    category: "all"
+  };
+
+  const categories = new Set();
+  cards.forEach(card => {
+    const cat = card.getAttribute("data-category");
+    if (cat) categories.add(cat);
+  });
+  
+  Array.from(categories).sort().forEach(cat => {
+    const opt = document.createElement("option");
+    opt.value = cat;
+    opt.textContent = cat;
+    categorySelect.appendChild(opt);
+  });
+
+  const resultsTpl = ${JSON.stringify(t(locale, "filterResultsCount", { count: "{count}", total: "{total}" }))};
+
+  function updateResults() {
+    let visibleCount = 0;
+    const dayCardCount = new Map();
+    days.forEach(day => {
+      dayCardCount.set(day, 0);
+    });
+
+    cards.forEach(card => {
+      const ageBands = (card.getAttribute("data-age-bands") || "").split(",").filter(Boolean);
+      const isFree = card.getAttribute("data-cost-free") === "true";
+      const category = card.getAttribute("data-category") || "";
+      const bucket = card.getAttribute("data-bucket") || "";
+
+      let matchAge = activeFilters.age === "all" || ageBands.includes(activeFilters.age);
+      let matchTime = activeFilters.time === "all" || bucket === activeFilters.time;
+      let matchCost = activeFilters.cost === "all" || (activeFilters.cost === "true" && isFree);
+      let matchCategory = activeFilters.category === "all" || category === activeFilters.category;
+
+      if (matchAge && matchTime && matchCost && matchCategory) {
+        card.style.display = "";
+        visibleCount++;
+        const parentDay = card.closest(".guide-day");
+        if (parentDay) {
+          dayCardCount.set(parentDay, dayCardCount.get(parentDay) + 1);
+        }
+      } else {
+        card.style.display = "none";
+      }
+    });
+
+    days.forEach(day => {
+      const count = dayCardCount.get(day);
+      if (count === 0) {
+        day.style.display = "none";
+      } else {
+        day.style.display = "";
+      }
+    });
+
+    statusText.textContent = resultsTpl.replace("{count}", visibleCount).replace("{total}", cards.length);
+
+    const hasActiveFilters = activeFilters.age !== "all" || activeFilters.time !== "all" || activeFilters.cost !== "all" || activeFilters.category !== "all";
+    resetBtn.style.display = hasActiveFilters ? "" : "none";
+
+    if (visibleCount === 0) {
+      noEventsMsg.style.display = "flex";
+    } else {
+      noEventsMsg.style.display = "none";
+    }
+  }
+
+  function handleFilterClick(group, value, clickedBtn) {
+    activeFilters[group] = value;
+    const buttons = container.querySelectorAll(\`[data-filter-group="\${group}"] .filter-chip\`);
+    buttons.forEach(btn => btn.classList.remove("active"));
+    clickedBtn.classList.add("active");
+    updateResults();
+  }
+
+  const filterGroups = ["age", "time", "cost"];
+  filterGroups.forEach(group => {
+    const buttons = container.querySelectorAll(\`[data-filter-group="\${group}"] .filter-chip\`);
+    buttons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const val = btn.getAttribute("data-age-band") || btn.getAttribute("data-time") || btn.getAttribute("data-free");
+        handleFilterClick(group, val, btn);
+      });
+    });
+  });
+
+  categorySelect.addEventListener("change", (e) => {
+    activeFilters.category = e.target.value;
+    updateResults();
+  });
+
+  function resetAll() {
+    activeFilters = { age: "all", time: "all", cost: "all", category: "all" };
+    filterGroups.forEach(group => {
+      const buttons = container.querySelectorAll(\`[data-filter-group="\${group}"] .filter-chip\`);
+      buttons.forEach(btn => {
+        const val = btn.getAttribute("data-age-band") || btn.getAttribute("data-time") || btn.getAttribute("data-free");
+        if (val === "all") {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+      });
+    });
+    categorySelect.value = "all";
+    updateResults();
+  }
+
+  resetBtn.addEventListener("click", resetAll);
+  if (resetBtnEmpty) resetBtnEmpty.addEventListener("click", resetAll);
+})();
+</script>`;
 }
 
 function formatEventTime(event, locale = "en") {
@@ -2383,8 +2776,10 @@ function generateLocalizedWeekendPage(eventItems, locale, routeKey, cluster) {
     <p class="cta-row"><a class="cta" href="${metroPath("")}">${esc(t(locale, "buildThreeStopPlan"))}</a> <a class="cta-secondary" href="#timeline">${esc(t(locale, "jumpToTimeline"))}</a></p>
     <section id="timeline" aria-label="${esc(t(locale, "weekendSnapshot"))}">
       <p class="eyebrow">${esc(t(locale, "generatedFrom", { date: generatedLabel }))}</p>
+      ${renderWeekendFilters(locale, upcoming.length)}
       ${daySections.join("")}
     </section>
+    ${renderWeekendFilterScript(locale)}
   `;
 
   const jsonLd = buildLocalizedJsonLd(canonical, title, description, area, locale);
