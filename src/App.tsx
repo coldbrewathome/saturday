@@ -2540,15 +2540,7 @@ function App({ metro }: AppProps) {
         : inWeekend;
     if (scoped.length < 3) return null;
     const free = scoped.filter((e) => e.cost === "Free").length;
-    const catCounts = new Map<string, number>();
-    for (const e of scoped) {
-      catCounts.set(e.category, (catCounts.get(e.category) ?? 0) + 1);
-    }
-    const topCats = [...catCounts.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 3)
-      .map(([c]) => c.toLowerCase());
-    return { count: scoped.length, free, topCats };
+    return { count: scoped.length, free };
   }, [events, ageBand]);
 
   const activeFilterCount = useMemo(() => {
@@ -4296,12 +4288,6 @@ function App({ metro }: AppProps) {
                 {weekendGuideStats.free > 0
                   ? ` · ${weekendGuideStats.free} free`
                   : ""}
-                {weekendGuideStats.topCats.length > 0 ? (
-                  <span className="weekend-guide-banner-cats">
-                    {" · "}
-                    {weekendGuideStats.topCats.join(", ")}
-                  </span>
-                ) : null}
               </small>
             </span>
             <span className="weekend-guide-banner-cta" aria-hidden="true">
