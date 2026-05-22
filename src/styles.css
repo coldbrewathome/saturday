@@ -742,14 +742,14 @@ h3 {
 }
 
 @media (max-width: 820px) {
-  /* Compact, content-width pill tucked just under the topbar (not full
-     width). Filter + summary controls drop to their own row below it. */
+  /* One row under the topbar: Filters stays left, the weekend bar is a
+     compact right-aligned pill. */
   .weekend-guide-banner {
     top: 82px;
-    left: 8px;
-    right: auto;
+    left: auto;
+    right: 8px;
     width: fit-content;
-    max-width: calc(100vw - 16px);
+    max-width: calc(100vw - 150px);
     transform: none;
     justify-content: flex-start;
     gap: 8px;
@@ -778,7 +778,7 @@ h3 {
     width: 16px;
   }
   .is-browse .browse-filter-trigger {
-    top: 134px;
+    top: 82px;
   }
   .is-browse .summary-chip {
     top: 134px;
