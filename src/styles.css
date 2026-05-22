@@ -665,6 +665,108 @@ h3 {
   font-weight: 600;
 }
 
+/* ── Weekend-guide hook (browse map, top-center) ──────────────────── */
+.weekend-guide-banner {
+  position: absolute;
+  top: 84px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 470;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(440px, calc(100vw - 32px));
+  padding: 9px 10px 9px 14px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #ffffff;
+  box-shadow: var(--glass-shadow);
+  text-decoration: none;
+  transition:
+    transform 0.08s ease,
+    background 0.15s ease;
+}
+
+.weekend-guide-banner:hover {
+  background: var(--accent-strong);
+  transform: translateX(-50%) translateY(-1px);
+}
+
+.weekend-guide-banner:active {
+  transform: translateX(-50%) translateY(0);
+}
+
+.weekend-guide-banner-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.weekend-guide-banner-icon svg {
+  height: 22px;
+  width: 22px;
+}
+
+.weekend-guide-banner-text {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.weekend-guide-banner-text strong {
+  font: 800 0.84rem/1.15 var(--font-ui);
+  white-space: nowrap;
+}
+
+.weekend-guide-banner-text small {
+  font: 700 0.7rem/1.2 var(--font-ui);
+  color: rgba(255, 255, 255, 0.88);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.weekend-guide-banner-cta {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  height: 26px;
+  width: 26px;
+}
+
+.weekend-guide-banner-cta svg {
+  height: 18px;
+  width: 18px;
+}
+
+@media (max-width: 820px) {
+  /* Own full-width row under the topbar; push the filter + summary controls
+     below it so nothing overlaps. */
+  .weekend-guide-banner {
+    top: 60px;
+    left: 8px;
+    right: 8px;
+    transform: none;
+    max-width: none;
+    justify-content: flex-start;
+  }
+  .weekend-guide-banner:hover,
+  .weekend-guide-banner:active {
+    transform: none;
+  }
+  .weekend-guide-banner-cta {
+    margin-left: auto;
+  }
+  .browse-filter-trigger {
+    top: 112px;
+  }
+  .summary-chip {
+    top: 112px;
+  }
+}
+
 /* ── Mobile filter trigger (inside browse-viewport) ───────────────── */
 .browse-filter-trigger {
   display: none;
@@ -5465,6 +5567,9 @@ h3 {
 @media (max-width: 640px) {
   .topbar-hop {
     display: none;
+  }
+  .saved-cart-collapsed {
+    bottom: 84px;
   }
   .hop-now-fab {
     align-items: center;

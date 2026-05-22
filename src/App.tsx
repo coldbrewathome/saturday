@@ -2,6 +2,7 @@ import {
   ArrowDown,
   ArrowUp,
   Bookmark,
+  CalendarDays,
   Check,
   ChevronDown,
   ChevronLeft,
@@ -2504,6 +2505,52 @@ function App({ metro }: AppProps) {
       .map((entry) => entry.event);
   }, [events, ageBand, plannerAnchor, targetDayOfWeek]);
 
+  // Dynamic teaser for the weekend-guide entry point on the browse view: how
+  // much is actually happening this weekend, so the link feels promising
+  // rather than generic.
+  const weekendGuideStats = useMemo(() => {
+    if (events.length === 0) return null;
+    // Count events actually dated to the upcoming Sat/Sun (matches the guide
+    // page), not every recurring series — an inflated "this weekend" number
+    // reads as not credible.
+    const now = new Date();
+    const dow = now.getDay();
+    const daysToSat = dow === 0 ? -1 : 6 - dow;
+    const sat = new Date(now);
+    sat.setHours(0, 0, 0, 0);
+    sat.setDate(now.getDate() + daysToSat);
+    const keyOf = (d: Date) =>
+      `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
+        d.getDate(),
+      ).padStart(2, "0")}`;
+    const satKey = keyOf(sat);
+    const sun = new Date(sat);
+    sun.setDate(sat.getDate() + 1);
+    const sunKey = keyOf(sun);
+    const inWeekend = events.filter((e) => {
+      if (!e.startDateTime) return false;
+      const d = new Date(e.startDateTime);
+      if (!Number.isFinite(d.getTime())) return false;
+      const k = keyOf(d);
+      return k === satKey || k === sunKey;
+    });
+    const scoped =
+      ageBand !== "any"
+        ? inWeekend.filter((e) => e.ageBands.includes(ageBand))
+        : inWeekend;
+    if (scoped.length < 3) return null;
+    const free = scoped.filter((e) => e.cost === "Free").length;
+    const catCounts = new Map<string, number>();
+    for (const e of scoped) {
+      catCounts.set(e.category, (catCounts.get(e.category) ?? 0) + 1);
+    }
+    const topCats = [...catCounts.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([c]) => c.toLowerCase());
+    return { count: scoped.length, free, topCats };
+  }, [events, ageBand]);
+
   const activeFilterCount = useMemo(() => {
     let n = 0;
     if (query) n += 1;
@@ -4231,6 +4278,34 @@ function App({ metro }: AppProps) {
             )}
           </div>
         </div>
+
+        {/* ── Weekend-guide hook (top-center) ──────────────────────── */}
+        {weekendGuideStats && (
+          <a
+            className="weekend-guide-banner"
+            href={weekendGuideHref}
+            onClick={() => trackMetric("weekend_guide_click", metro.id)}
+          >
+            <span className="weekend-guide-banner-icon" aria-hidden="true">
+              <CalendarDays />
+            </span>
+            <span className="weekend-guide-banner-text">
+              <strong>This weekend in {metro.label}</strong>
+              <small>
+                {weekendGuideStats.count} family events
+                {weekendGuideStats.free > 0
+                  ? ` · ${weekendGuideStats.free} free`
+                  : ""}
+                {weekendGuideStats.topCats.length > 0
+                  ? ` · ${weekendGuideStats.topCats.join(", ")}`
+                  : ""}
+              </small>
+            </span>
+            <span className="weekend-guide-banner-cta" aria-hidden="true">
+              <ChevronRight />
+            </span>
+          </a>
+        )}
 
         {/* ── Events date strip (when events filter active) ──────── */}
         {eventDateFilter !== "all" && (

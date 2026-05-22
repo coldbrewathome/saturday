@@ -1261,6 +1261,7 @@ const METRIC_NAMES = new Set([
   "plan_shared",
   "poll_viewed",
   "vote_cast",
+  "weekend_guide_click",
 ]);
 const METRIC_TTL_SECONDS = 60 * 60 * 24 * 120; // ~120 days
 
