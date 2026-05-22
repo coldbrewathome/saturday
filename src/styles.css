@@ -742,28 +742,49 @@ h3 {
 }
 
 @media (max-width: 820px) {
-  /* Own full-width row under the topbar; push the filter + summary controls
-     below it so nothing overlaps. */
+  /* Compact, content-width pill tucked just under the topbar (not full
+     width). Filter + summary controls drop to their own row below it. */
   .weekend-guide-banner {
-    top: 60px;
+    top: 82px;
     left: 8px;
-    right: 8px;
+    right: auto;
+    width: fit-content;
+    max-width: calc(100vw - 16px);
     transform: none;
-    max-width: none;
     justify-content: flex-start;
+    gap: 8px;
+    padding: 7px 9px 7px 11px;
   }
   .weekend-guide-banner:hover,
   .weekend-guide-banner:active {
     transform: none;
   }
+  .weekend-guide-banner-icon svg {
+    height: 18px;
+    width: 18px;
+  }
+  .weekend-guide-banner-text strong {
+    font-size: 0.78rem;
+  }
+  .weekend-guide-banner-text small {
+    font-size: 0.66rem;
+  }
+  .weekend-guide-banner-cats {
+    display: none;
+  }
   .weekend-guide-banner-cta {
-    margin-left: auto;
+    height: 22px;
+    width: 22px;
   }
-  .browse-filter-trigger {
-    top: 112px;
+  .weekend-guide-banner-cta svg {
+    height: 16px;
+    width: 16px;
   }
-  .summary-chip {
-    top: 112px;
+  .is-browse .browse-filter-trigger {
+    top: 134px;
+  }
+  .is-browse .summary-chip {
+    top: 134px;
   }
 }
 

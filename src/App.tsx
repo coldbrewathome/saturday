@@ -4296,9 +4296,12 @@ function App({ metro }: AppProps) {
                 {weekendGuideStats.free > 0
                   ? ` · ${weekendGuideStats.free} free`
                   : ""}
-                {weekendGuideStats.topCats.length > 0
-                  ? ` · ${weekendGuideStats.topCats.join(", ")}`
-                  : ""}
+                {weekendGuideStats.topCats.length > 0 ? (
+                  <span className="weekend-guide-banner-cats">
+                    {" · "}
+                    {weekendGuideStats.topCats.join(", ")}
+                  </span>
+                ) : null}
               </small>
             </span>
             <span className="weekend-guide-banner-cta" aria-hidden="true">
