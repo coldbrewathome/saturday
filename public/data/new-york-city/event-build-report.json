@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "new-york-city",
-  "generatedAt": "2026-05-19T03:43:18.716Z",
+  "generatedAt": "2026-05-22T21:46:37.554Z",
   "registryPath": "data/event-sources-new-york-city.json",
   "outputPath": "public/data/new-york-city/events.json",
-  "eventCount": 770,
+  "eventCount": 1110,
   "adultsEventCount": 48,
   "sourceCount": 24,
-  "liveEventCount": 751,
-  "lastKnownGoodEventCount": 0,
+  "liveEventCount": 1090,
+  "lastKnownGoodEventCount": 1,
   "fallbackEventCount": 20,
-  "operatorAlertCount": 15,
+  "operatorAlertCount": 16,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-19T03:43:18.716Z",
+      "fetchedAt": "2026-05-22T21:46:37.554Z",
       "fetches": [
         {
           "url": "https://queens.libnet.info/events",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-19T03:43:18.716Z",
+      "fetchedAt": "2026-05-22T21:46:37.554Z",
       "fetches": [
         {
           "url": "https://www.nypl.org/events/calendar",
@@ -79,7 +79,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-19T03:43:18.716Z",
+      "fetchedAt": "2026-05-22T21:46:37.554Z",
       "fetches": [
         {
           "url": "https://www.amnh.org/calendar",
@@ -104,7 +104,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-19T03:43:18.716Z",
+      "fetchedAt": "2026-05-22T21:46:37.554Z",
       "fetches": [
         {
           "url": "https://njfair.com/",
@@ -129,7 +129,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-19T03:43:18.716Z",
+      "fetchedAt": "2026-05-22T21:46:37.554Z",
       "fetches": [
         {
           "url": "https://www.brooklynsteel.com/calendar",
@@ -154,10 +154,35 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-19T03:43:18.716Z",
+      "fetchedAt": "2026-05-22T21:46:37.554Z",
       "fetches": [
         {
           "url": "https://www.boweryballroom.com/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "new-york-city",
+      "sourceId": "music-hall-williamsburg",
+      "sourceName": "Music Hall of Williamsburg",
+      "sourceType": "html",
+      "url": "https://www.musichallofwilliamsburg.com/calendar",
+      "status": "ok-last-known-good",
+      "issueType": "zero-extracted",
+      "reason": "source produced no live events; using last-known-good future events",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-05-22T21:46:37.554Z",
+      "fetches": [
+        {
+          "url": "https://www.musichallofwilliamsburg.com/calendar",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -179,7 +204,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-19T03:43:18.716Z",
+      "fetchedAt": "2026-05-22T21:46:37.554Z",
       "fetches": [
         {
           "url": "https://lpr.com/calendar",
@@ -190,21 +215,21 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "new-york-city",
       "sourceId": "terminal-5",
       "sourceName": "Terminal 5",
       "sourceType": "html",
       "url": "https://www.terminal5nyc.com/calendar",
       "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-19T03:43:18.716Z",
+      "fetchedAt": "2026-05-22T21:46:37.554Z",
       "fetches": [
         {
           "url": "https://www.terminal5nyc.com/calendar",
@@ -229,7 +254,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-19T03:43:18.716Z",
+      "fetchedAt": "2026-05-22T21:46:37.554Z",
       "fetches": [
         {
           "url": "https://www.websterhall.com/events",
@@ -254,7 +279,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-19T03:43:18.716Z",
+      "fetchedAt": "2026-05-22T21:46:37.554Z",
       "fetches": [
         {
           "url": "https://www.comedycellar.com/line-up/",
@@ -279,7 +304,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-19T03:43:18.716Z",
+      "fetchedAt": "2026-05-22T21:46:37.554Z",
       "fetches": [
         {
           "url": "https://gothamcomedyclub.com/calendar",
@@ -304,7 +329,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-19T03:43:18.716Z",
+      "fetchedAt": "2026-05-22T21:46:37.554Z",
       "fetches": [
         {
           "url": "https://www.elsewherebrooklyn.com/events",
@@ -321,21 +346,20 @@
       "sourceName": "Rough Trade NYC",
       "sourceType": "html",
       "url": "https://www.roughtradenyc.com/events",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-19T03:43:18.716Z",
+      "fetchedAt": "2026-05-22T21:46:37.554Z",
       "fetches": [
         {
           "url": "https://www.roughtradenyc.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -354,7 +378,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-19T03:43:18.716Z",
+      "fetchedAt": "2026-05-22T21:46:37.554Z",
       "fetches": [
         {
           "url": "https://www.bluenotejazz.com/new-york/schedule",
@@ -379,7 +403,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-19T03:43:18.716Z",
+      "fetchedAt": "2026-05-22T21:46:37.554Z",
       "fetches": [
         {
           "url": "https://villagevanguard.com/events",
@@ -496,9 +520,9 @@
       "metroId": "new-york-city",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 690,
+      "liveEvents": 1031,
       "fallbackEvents": 0,
-      "eventCount": 690,
+      "eventCount": 1031,
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/kids",
@@ -509,8 +533,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 2032,
-      "extractedEvents": 2722,
+      "rejectedLiveEvents": 573,
+      "extractedEvents": 1604,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -630,9 +654,9 @@
       "metroId": "new-york-city",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://bronxzoo.com/things-to-do/events",
@@ -643,7 +667,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 2,
       "extractedEvents": 3,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -764,8 +788,8 @@
       "city": "Brooklyn",
       "metroId": "new-york-city",
       "category": "Music",
-      "status": "ok",
-      "liveEvents": 1,
+      "status": "ok-last-known-good",
+      "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 1,
       "fetches": [
@@ -779,9 +803,10 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "recoveryMode": "last-known-good",
+      "reason": "source produced no live events; using last-known-good future events"
     },
     {
       "id": "le-poisson-rouge",
@@ -832,8 +857,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 3,
-      "extractedEvents": 3,
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -951,21 +976,18 @@
       "city": "Brooklyn",
       "metroId": "new-york-city",
       "category": "Music",
-      "status": "ok",
+      "status": "fetch-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.roughtradenyc.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0,
+      "reason": "fetch failed",
       "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null

@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "dallas-fort-worth",
-  "generatedAt": "2026-05-18T23:03:16.319Z",
+  "generatedAt": "2026-05-22T21:48:29.654Z",
   "registryPath": "data/event-sources-dallas-fort-worth.json",
   "outputPath": "public/data/dallas-fort-worth/events.json",
-  "eventCount": 27,
+  "eventCount": 62,
   "adultsEventCount": 1,
   "sourceCount": 12,
-  "liveEventCount": 27,
+  "liveEventCount": 62,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
   "operatorAlertCount": 8,
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetchedAt": "2026-05-22T21:48:29.654Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetchedAt": "2026-05-22T21:48:29.654Z",
       "fetches": [
         {
           "url": "https://bigtex.com/",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetchedAt": "2026-05-22T21:48:29.654Z",
       "fetches": [
         {
           "url": "https://www.treesdallas.com/events",
@@ -103,13 +103,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetchedAt": "2026-05-22T21:48:29.654Z",
       "fetches": [
         {
           "url": "https://www.thefactoryindeepellum.com/events",
           "status": "http-error",
-          "httpStatus": 422,
-          "contentType": "text/plain; charset=utf-8"
+          "httpStatus": 404,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -128,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetchedAt": "2026-05-22T21:48:29.654Z",
       "fetches": [
         {
           "url": "https://www.daboredada.com/events",
@@ -144,21 +144,20 @@
       "sourceName": "Tulips FTW",
       "sourceType": "html",
       "url": "https://www.tulipsftw.com/events",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetchedAt": "2026-05-22T21:48:29.654Z",
       "fetches": [
         {
           "url": "https://www.tulipsftw.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -177,7 +176,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetchedAt": "2026-05-22T21:48:29.654Z",
       "fetches": [
         {
           "url": "https://dallascomedyclub.com/shows/",
@@ -201,7 +200,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-18T23:03:16.319Z",
+      "fetchedAt": "2026-05-22T21:48:29.654Z",
       "fetches": [
         {
           "url": "https://www.hyenascomedynightclub.com/calendar",
@@ -303,21 +302,21 @@
       "metroId": "dallas-fort-worth",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 13,
+      "liveEvents": 48,
       "fallbackEvents": 0,
-      "eventCount": 13,
+      "eventCount": 48,
       "fetches": [
         {
           "url": "https://www.dallaszoo.com/dallas-zoo-events/calendar/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; source=dallas-zoo-ajax; pages=3"
+          "contentType": "text/html; source=dallas-zoo-ajax; pages=7"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; source=dallas-zoo-ajax; pages=3",
-      "rejectedLiveEvents": 9,
-      "extractedEvents": 22,
+      "contentType": "text/html; source=dallas-zoo-ajax; pages=7",
+      "rejectedLiveEvents": 7,
+      "extractedEvents": 55,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -417,12 +416,12 @@
         {
           "url": "https://www.thefactoryindeepellum.com/events",
           "status": "http-error",
-          "httpStatus": 422,
-          "contentType": "text/plain; charset=utf-8"
+          "httpStatus": 404,
+          "contentType": "text/html; charset=utf-8"
         }
       ],
-      "httpStatus": 422,
-      "contentType": "text/plain; charset=utf-8",
+      "httpStatus": 404,
+      "contentType": "text/html; charset=utf-8",
       "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -459,21 +458,18 @@
       "city": "Fort Worth",
       "metroId": "dallas-fort-worth",
       "category": "Music",
-      "status": "ok",
+      "status": "fetch-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.tulipsftw.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "reason": "fetch failed",
       "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
