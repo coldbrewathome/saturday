@@ -5692,3 +5692,168 @@ h3 {
     padding: 0;
   }
 }
+
+/* ── Sign-in prompt (after N visits) ─────────────────────────────── */
+.signin-prompt-backdrop {
+  z-index: 1200;
+}
+
+.signin-prompt-card {
+  background: var(--surface);
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(20, 24, 28, 0.32);
+  max-width: 420px;
+  width: 100%;
+  padding: 24px 24px 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: hopNowModalIn 180ms ease-out;
+}
+
+.signin-prompt-card .eyebrow {
+  color: var(--accent);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.signin-prompt-card h2 {
+  font: 800 1.2rem/1.25 var(--font-display);
+  margin: 0;
+  color: var(--ink);
+}
+
+.signin-prompt-sub {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.signin-prompt-benefits {
+  list-style: none;
+  margin: 4px 0 4px;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.signin-prompt-benefits li {
+  font-size: 0.86rem;
+  color: var(--ink);
+  padding-left: 22px;
+  position: relative;
+}
+
+.signin-prompt-benefits li::before {
+  content: "✓";
+  color: var(--accent);
+  font-weight: 800;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.signin-prompt-close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.signin-prompt-skip {
+  align-self: center;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+/* ── Newsletter card (plans view) ────────────────────────────────── */
+.newsletter-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px 16px 14px;
+  margin: 14px 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.newsletter-card .eyebrow {
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 800 0.72rem/1 var(--font-ui);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.newsletter-card .eyebrow svg {
+  height: 14px;
+  width: 14px;
+}
+
+.newsletter-card h3 {
+  font: 800 1rem/1.25 var(--font-display);
+  margin: 0;
+  color: var(--ink);
+}
+
+.newsletter-sub {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.newsletter-form input[type="email"] {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px 10px;
+  font: 600 0.86rem/1 var(--font-ui);
+  background: #fff;
+  color: var(--ink);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.newsletter-form input[type="email"]:focus {
+  border-color: var(--accent);
+}
+
+.newsletter-form .primary-button {
+  width: 100%;
+  padding: 9px 14px;
+  font-size: 0.86rem;
+  justify-content: center;
+}
+
+.newsletter-error {
+  color: #b03a2a;
+  font-size: 0.78rem;
+  margin: 0;
+}
+
+.newsletter-card-close {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+}

@@ -46,6 +46,7 @@ import {
   createPoll,
   fetchAdminEvents,
   fetchGeo,
+  subscribeNewsletter,
   trackMetric,
   fetchWeather,
   type WeatherForecast,
@@ -1478,6 +1479,22 @@ function App({ metro }: AppProps) {
   });
   const [isAdding, setIsAdding] = useState(false);
   const [isHopNowOpen, setIsHopNowOpen] = useState(false);
+  const [showSignInPrompt, setShowSignInPrompt] = useState(false);
+  function dismissSignInPrompt() {
+    setShowSignInPrompt(false);
+    try {
+      window.localStorage.setItem("saturday.signInPromptDismissed", "1");
+    } catch {
+      // ignore
+    }
+  }
+  function clickSignInFromPrompt() {
+    trackMetric("signin_prompt_clicked", metro.id);
+    const btn = signInButtonRef.current?.querySelector<HTMLElement>(
+      '[role="button"], iframe, div[tabindex]',
+    );
+    btn?.click();
+  }
   const [hopNowSeen, setHopNowSeenState] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
     try {
@@ -1837,6 +1854,21 @@ function App({ metro }: AppProps) {
 
   useEffect(() => {
     trackMetric("app_open", metro.id);
+    // Increment per-browser visit counter so we can prompt engaged-but-not-
+    // signed-in users to sign in after they've come back a few times.
+    try {
+      const prev = Number(window.localStorage.getItem("saturday.visitCount") || "0") || 0;
+      const next = prev + 1;
+      window.localStorage.setItem("saturday.visitCount", String(next));
+      const dismissed =
+        window.localStorage.getItem("saturday.signInPromptDismissed") === "1";
+      if (next >= 3 && !dismissed && !session && API_CONFIGURED) {
+        setShowSignInPrompt(true);
+        trackMetric("signin_prompt_shown", metro.id);
+      }
+    } catch {
+      // ignore
+    }
     let cancelled = false;
     fetchGeo().then((geo) => {
       if (cancelled || !geo) return;
@@ -1846,6 +1878,10 @@ function App({ metro }: AppProps) {
       cancelled = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (session) setShowSignInPrompt(false);
+  }, [session]);
 
   useEffect(() => {
     if (!session || !API_CONFIGURED) {
@@ -5004,6 +5040,7 @@ function App({ metro }: AppProps) {
             <Plus aria-hidden="true" />
             New plan
           </button>
+          <NewsletterCard metroId={metro.id} metroLabel={metro.label} />
 
           {plans.length === 0 ? (
             <p className="empty-state">
@@ -5538,6 +5575,51 @@ function App({ metro }: AppProps) {
         </div>
       )}
 
+      {showSignInPrompt && !session && (
+        <div className="modal-backdrop signin-prompt-backdrop" role="presentation">
+          <div
+            className="signin-prompt-card"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="signin-prompt-title"
+          >
+            <button
+              type="button"
+              className="icon-button signin-prompt-close"
+              title="Not now"
+              onClick={dismissSignInPrompt}
+            >
+              <X aria-hidden="true" />
+            </button>
+            <p className="eyebrow">Welcome back</p>
+            <h2 id="signin-prompt-title">Save your plans across devices</h2>
+            <p className="signin-prompt-sub">
+              Sign in (free) and your saved spots, events, and plans follow you
+              everywhere — phone, laptop, kitchen tablet.
+            </p>
+            <ul className="signin-prompt-benefits">
+              <li>Plan on your laptop, open on your phone</li>
+              <li>Saved spots + events stay in sync</li>
+              <li>Your weekend plans persist forever</li>
+            </ul>
+            <button
+              type="button"
+              className="primary-button wide"
+              onClick={clickSignInFromPrompt}
+            >
+              Continue with Google
+            </button>
+            <button
+              type="button"
+              className="text-button signin-prompt-skip"
+              onClick={dismissSignInPrompt}
+            >
+              Not now
+            </button>
+          </div>
+        </div>
+      )}
+
       {isHopNowOpen && (
         <HopNowPanel
           spots={allSpots}
@@ -5683,6 +5765,109 @@ function App({ metro }: AppProps) {
         </div>
       </footer>
     </div>
+  );
+}
+
+function NewsletterCard({
+  metroId,
+  metroLabel,
+}: {
+  metroId: string;
+  metroLabel: string;
+}) {
+  type Status = "idle" | "submitting" | "done" | "dismissed" | "error";
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<Status>(() => {
+    if (typeof window === "undefined") return "idle";
+    try {
+      if (window.localStorage.getItem("saturday.newsletterSubscribed") === "1") {
+        return "done";
+      }
+      if (window.localStorage.getItem("saturday.newsletterDismissed") === "1") {
+        return "dismissed";
+      }
+    } catch {
+      // ignore
+    }
+    return "idle";
+  });
+  const [error, setError] = useState<string | null>(null);
+
+  if (status === "done" || status === "dismissed") return null;
+
+  function dismiss() {
+    setStatus("dismissed");
+    try {
+      window.localStorage.setItem("saturday.newsletterDismissed", "1");
+    } catch {
+      // ignore
+    }
+  }
+
+  async function submit(event: React.FormEvent) {
+    event.preventDefault();
+    const trimmed = email.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      setError("Enter a valid email.");
+      return;
+    }
+    setError(null);
+    setStatus("submitting");
+    try {
+      await subscribeNewsletter({
+        email: trimmed,
+        metroId,
+        source: "app-plans",
+      });
+      setStatus("done");
+      try {
+        window.localStorage.setItem("saturday.newsletterSubscribed", "1");
+      } catch {
+        // ignore
+      }
+      trackMetric("newsletter_subscribed", metroId);
+    } catch (e) {
+      setStatus("idle");
+      setError((e as Error).message || "Subscribe failed — try again.");
+    }
+  }
+
+  return (
+    <section className="newsletter-card" aria-label="Friday weekend digest">
+      <button
+        type="button"
+        className="icon-button newsletter-card-close"
+        title="Hide"
+        onClick={dismiss}
+      >
+        <X aria-hidden="true" />
+      </button>
+      <p className="eyebrow">
+        <Mail aria-hidden="true" /> Friday digest
+      </p>
+      <h3>5 family ideas for {metroLabel} this weekend</h3>
+      <p className="newsletter-sub">
+        A short email every Friday morning. Free. Unsubscribe anytime.
+      </p>
+      <form onSubmit={submit} className="newsletter-form">
+        <input
+          type="email"
+          placeholder="you@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          autoComplete="email"
+        />
+        <button
+          type="submit"
+          className="primary-button"
+          disabled={status === "submitting"}
+        >
+          {status === "submitting" ? "Subscribing…" : "Subscribe"}
+        </button>
+      </form>
+      {error && <p className="newsletter-error">{error}</p>}
+    </section>
   );
 }
 
