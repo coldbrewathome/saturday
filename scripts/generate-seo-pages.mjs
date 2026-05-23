@@ -474,7 +474,6 @@ let totalWeekendPages = 0;
 
 for (const metro of metroConfig.metros) {
   activeMetro = metro;
-  generateMetroAppShellPage(metro);
 
   const spotsDoc = readJson(metroDataPath(metro, "spots"));
   const eventsDoc = readJson(metroDataPath(metro, "events"));
@@ -486,11 +485,17 @@ for (const metro of metroConfig.metros) {
     audienceVisible,
   );
 
-  const spotSlugs = generateSpotPages(spots);
-  const eventSlugs = generateEventPages(events, eventsDoc?.generatedAt);
-  const citySlugs = generateCityPages(spots, events, spotSlugs, eventSlugs);
-  const categorySlugs = generateCategoryPages(spots, events);
-  const wroteThisWeekend = generateThisWeekendPage(events);
+  const spotSlugLookup = buildSpotSlugLookup(spots);
+  const eventSlugLookup = buildEventSlugLookup(events);
+  const citySlugsPre = getGeneratedCitySlugs(spots, events);
+
+  const spotSlugs = generateSpotPages(spots, spotSlugLookup, citySlugsPre);
+  const eventSlugs = generateEventPages(events, eventsDoc?.generatedAt, eventSlugLookup, citySlugsPre);
+  const citySlugs = generateCityPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs);
+  const categorySlugs = generateCategoryPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs);
+  const wroteThisWeekend = generateThisWeekendPage(events, eventSlugLookup);
+
+  generateMetroAppShellPage(metro, categorySlugs);
 
   totalSpotPages += spotSlugs.size;
   totalEventPages += eventSlugs.size;
@@ -881,7 +886,7 @@ function metroText(text) {
     .replace(/Peninsula, South Bay, and East Bay/g, `${metroLabel()} neighborhoods`);
 }
 
-function generateMetroAppShellPage(metro) {
+function generateMetroAppShellPage(metro, categorySlugs = null) {
   const shellPath = path.join(DIST, "index.html");
   if (!fs.existsSync(shellPath)) return;
   const canonical = metroUrl("");
@@ -928,7 +933,7 @@ function generateMetroAppShellPage(metro) {
   };
   let html = fs.readFileSync(shellPath, "utf8");
   html = metro.id === metroConfig.defaultMetro.id ? html : metroText(html);
-  html = replaceMetroShellCopy(html, title, description);
+  html = replaceMetroShellCopy(html, title, description, categorySlugs);
   html = html.replace(
     /<script type="application\/ld\+json">[\s\S]*?<\/script>/,
     `<script type="application/ld+json">${safeJsonScript(jsonLd)}</script>`,
@@ -1042,8 +1047,22 @@ function generateRootAppShellPage() {
   fs.writeFileSync(shellPath, html);
 }
 
-function replaceMetroShellCopy(html, title, description) {
+function replaceMetroShellCopy(html, title, description, categorySlugs = null) {
   const area = metroLabel();
+  
+  const categoriesList = [];
+  const allowedCats = [
+    { slug: "library", label: "library events" },
+    { slug: "museum", label: "museums" },
+    { slug: "park", label: "parks and outdoors" },
+    { slug: "festival", label: "family festivals" }
+  ];
+  for (const c of allowedCats) {
+    if (!categorySlugs || categorySlugs.has(c.slug)) {
+      categoriesList.push(`<a href="${metroPath(`category/${c.slug}/`)}">${esc(c.label)}</a>`);
+    }
+  }
+
   const noscript = `
       <noscript>
         <header>
@@ -1062,11 +1081,7 @@ function replaceMetroShellCopy(html, title, description) {
         <section>
           <h2>Browse ${esc(area)}</h2>
           <p>
-            <a href="${metroPath("this-weekend/")}">Weekend guide</a>,
-            <a href="${metroPath("category/library/")}">library events</a>,
-            <a href="${metroPath("category/museum/")}">museums</a>,
-            <a href="${metroPath("category/park/")}">parks and outdoors</a>, and
-            <a href="${metroPath("category/festival/")}">family festivals</a>.
+            <a href="${metroPath("this-weekend/")}">Weekend guide</a>${categoriesList.length ? ", " + categoriesList.join(", ") : ""}.
           </p>
         </section>
         <p><strong>Heads-up:</strong> ${esc(BRAND)} is an interactive planner. Please enable JavaScript to plan, share and vote.</p>
@@ -1088,29 +1103,42 @@ function replaceMetroShellCopy(html, title, description) {
 // Spots
 // ---------------------------------------------------------------------------
 
-function generateSpotPages(items) {
+function generateSpotPages(items, spotSlugLookup, generatedCitySlugs) {
   const all = new Map();
   const pinnedSlugs = pinnedSpotSlugsForMetro(activeMetro.id);
   const missingPinnedSlugs = new Set(pinnedSlugs);
 
   for (const spot of items) {
-    if (!spot || typeof spot.name !== "string") continue;
-    const baseSlug = slugify(`${spot.name} ${spot.neighborhood ?? ""}`);
-    if (!baseSlug) continue;
-    let slug = baseSlug;
-    let n = 2;
-    while (all.has(slug)) slug = `${baseSlug}-${n++}`;
+    const slug = spotSlugLookup.get(spot);
+    if (!slug) continue;
     all.set(slug, spot);
     missingPinnedSlugs.delete(slug);
+  }
+
+  const aliasCandidates = [];
+  const aliasBaseSlugs = new Set();
+  for (const pinned of missingPinnedSlugs) {
+    const m = /^(.*)-\d+$/.exec(pinned);
+    if (!m) continue;
+    const base = m[1];
+    if (!all.has(base)) continue;
+    aliasCandidates.push({ oldSlug: pinned, baseSlug: base, spot: all.get(base) });
+    aliasBaseSlugs.add(base);
   }
 
   const seen = new Map();
   let uncappedCount = 0;
   for (const [slug, spot] of all) {
-    if (uncappedCount < MAX_SPOT_PAGES_PER_METRO || pinnedSlugs.has(slug)) {
+    if (uncappedCount < MAX_SPOT_PAGES_PER_METRO || pinnedSlugs.has(slug) || aliasBaseSlugs.has(slug)) {
       seen.set(slug, spot);
     }
     uncappedCount += 1;
+  }
+
+  for (const { oldSlug, baseSlug, spot } of aliasCandidates) {
+    if (!seen.has(baseSlug)) continue;
+    writeSpotAliasPage(oldSlug, baseSlug, spot);
+    missingPinnedSlugs.delete(oldSlug);
   }
 
   if (missingPinnedSlugs.size) {
@@ -1122,6 +1150,8 @@ function generateSpotPages(items) {
   for (const [slug, spot] of seen) {
     const canonical = metroUrl(`spot/${slug}/`);
     const cityName = (spot.neighborhood || metroLabel()).trim();
+    const citySlug = cityName ? slugify(cityName) : "";
+    const showCityLink = citySlug && generatedCitySlugs && generatedCitySlugs.has(citySlug);
     const title = `${spot.name} — ${cityName} family-friendly spot | ${BRAND}`;
     const description = buildSpotDescription(spot);
 
@@ -1138,7 +1168,7 @@ function generateSpotPages(items) {
         <a class="cta" href="${metroPath("")}">Plan a day with ${BRAND}</a>
         ${spot.website ? `<a class="cta-secondary" rel="noopener nofollow" href="${esc(spot.website)}">Visit official website</a>` : ""}
       </p>
-      ${cityName ? `<p class="see-also">See more <a href="${metroPath(`city/${slugify(cityName)}/`)}">family activities in ${esc(cityName)}</a>.</p>` : ""}
+      ${showCityLink ? `<p class="see-also">See more <a href="${metroPath(`city/${citySlug}/`)}">family activities in ${esc(cityName)}</a>.</p>` : ""}
     `;
 
     const jsonLd = buildSpotJsonLd(spot, canonical);
@@ -1150,7 +1180,7 @@ function generateSpotPages(items) {
       jsonLd,
       breadcrumb: [
         { name: BRAND, url: metroUrl("") },
-        cityName ? { name: cityName, url: metroUrl(`city/${slugify(cityName)}/`) } : null,
+        showCityLink ? { name: cityName, url: metroUrl(`city/${citySlug}/`) } : null,
         { name: spot.name, url: canonical },
       ].filter(Boolean),
       h1: spot.name,
@@ -1168,6 +1198,30 @@ function generateSpotPages(items) {
     });
   }
   return new Set(seen.keys());
+}
+
+function writeSpotAliasPage(oldSlug, baseSlug, spot) {
+  const canonical = metroUrl(`spot/${baseSlug}/`);
+  const cityName = (spot.neighborhood || metroLabel()).trim();
+  const title = `${spot.name} — ${cityName} family-friendly spot | ${BRAND}`;
+  const description = `${spot.name} in ${cityName} has moved to a new ${BRAND} page.`;
+  const html = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>${esc(title)}</title>
+<meta name="description" content="${esc(description)}">
+<meta name="robots" content="noindex,follow">
+<link rel="canonical" href="${esc(canonical)}">
+<meta http-equiv="refresh" content="0;url=${esc(canonical)}">
+</head>
+<body>
+<h1>${esc(spot.name)}</h1>
+<p>This page has moved. <a href="${esc(canonical)}">Continue to ${esc(spot.name)} in ${esc(cityName)} →</a></p>
+<script>location.replace(${JSON.stringify(canonical)});</script>
+</body>
+</html>`;
+  writeMetroPage(`spot/${oldSlug}/index.html`, html);
 }
 
 function pinnedSpotSlugsForMetro(metroId) {
@@ -1268,22 +1322,16 @@ function mapPlaceType(category) {
 // Events
 // ---------------------------------------------------------------------------
 
-function generateEventPages(items, generatedAt) {
+function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySlugs) {
   const slugs = new Set();
-  const used = new Set();
   for (const event of items) {
-    if (!event || typeof event.title !== "string") continue;
-    if (!event.startDateTime) continue;
-    const id = typeof event.id === "string" ? event.id : "";
-    let slug = slugify(id) || slugify(`${event.title} ${event.venue ?? ""}`);
-    if (!slug) continue;
-    let candidate = slug;
-    let n = 2;
-    while (used.has(candidate)) candidate = `${slug}-${n++}`;
-    used.add(candidate);
+    const candidate = eventSlugLookup.get(event);
+    if (!candidate) continue;
 
     const canonical = metroUrl(`event/${candidate}/`);
     const cityName = event.city || event.neighborhood || metroLabel();
+    const citySlug = cityName ? slugify(cityName) : "";
+    const showCityLink = citySlug && generatedCitySlugs && generatedCitySlugs.has(citySlug);
     const dateStr = formatEventDate(event);
     const title = `${event.title} — ${cityName}${dateStr ? `, ${dateStr}` : ""} | ${BRAND}`;
     const description = buildEventDescription(event, dateStr);
@@ -1297,7 +1345,7 @@ function generateEventPages(items, generatedAt) {
         <a class="cta" href="${metroPath("")}">Plan a day with ${BRAND}</a>
         ${event.url ? `<a class="cta-secondary" rel="noopener nofollow" href="${esc(event.url)}">Event details</a>` : ""}
       </p>
-      ${cityName ? `<p class="see-also">More <a href="${metroPath(`city/${slugify(cityName)}/`)}">kid-friendly things to do in ${esc(cityName)}</a>.</p>` : ""}
+      ${showCityLink ? `<p class="see-also">More <a href="${metroPath(`city/${citySlug}/`)}">kid-friendly things to do in ${esc(cityName)}</a>.</p>` : ""}
     `;
 
     const jsonLd = buildEventJsonLd(event, canonical);
@@ -1309,9 +1357,9 @@ function generateEventPages(items, generatedAt) {
       jsonLd,
       breadcrumb: [
         { name: BRAND, url: metroUrl("") },
-        { name: cityName, url: metroUrl(`city/${slugify(cityName)}/`) },
+        showCityLink ? { name: cityName, url: metroUrl(`city/${citySlug}/`) } : null,
         { name: event.title, url: canonical },
-      ],
+      ].filter(Boolean),
       h1: event.title,
       eyebrow: `${esc(cityName)}${dateStr ? ` · ${esc(dateStr)}` : ""}`,
       body,
@@ -1412,16 +1460,26 @@ function buildEventJsonLd(event, canonical) {
     };
   }
   if (event.url) {
-    const offers = {
-      "@type": "Offer",
-      url: event.url,
-      priceCurrency: "USD",
-      availability: "https://schema.org/InStock",
-    };
+    let price = null;
     if (free) {
-      offers.price = "0";
+      price = "0";
+    } else if (event.cost) {
+      const costStr = String(event.cost);
+      const priceMatch = costStr.match(/([0-9]+(?:\.[0-9]{2})?)/);
+      if (priceMatch) {
+        price = priceMatch[1];
+      }
     }
-    node.offers = offers;
+
+    if (price !== null) {
+      node.offers = {
+        "@type": "Offer",
+        url: event.url,
+        price: price,
+        priceCurrency: "USD",
+        availability: "https://schema.org/InStock",
+      };
+    }
   }
   if (Array.isArray(event.ageBands) && event.ageBands.length) {
     node.audience = {
@@ -1449,7 +1507,7 @@ function formatEventDate(event) {
 // Cities
 // ---------------------------------------------------------------------------
 
-function generateCityPages(spotItems, eventItems, spotSlugMap, eventSlugMap) {
+function generateCityPages(spotItems, eventItems, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs) {
   const byCity = new Map();
 
   function bucket(city) {
@@ -1496,37 +1554,6 @@ function generateCityPages(spotItems, eventItems, spotSlugMap, eventSlugMap) {
 
   const slugs = new Set();
 
-  // For cross-linking: rebuild the same slug rule the spot page used.
-  const spotToSlug = new Map();
-  {
-    const used = new Map();
-    for (const spot of spotItems) {
-      if (!spot || typeof spot.name !== "string") continue;
-      const baseSlug = slugify(`${spot.name} ${spot.neighborhood ?? ""}`);
-      if (!baseSlug) continue;
-      let s = baseSlug;
-      let n = 2;
-      while (used.has(s)) s = `${baseSlug}-${n++}`;
-      used.set(s, true);
-      spotToSlug.set(spot, s);
-    }
-  }
-  const eventToSlug = new Map();
-  {
-    const used = new Set();
-    for (const event of eventItems) {
-      if (!event || typeof event.title !== "string") continue;
-      const id = typeof event.id === "string" ? event.id : "";
-      let base = slugify(id) || slugify(`${event.title} ${event.venue ?? ""}`);
-      if (!base) continue;
-      let s = base;
-      let n = 2;
-      while (used.has(s)) s = `${base}-${n++}`;
-      used.add(s);
-      eventToSlug.set(event, s);
-    }
-  }
-
   for (const city of cities) {
     const slug = slugify(city.name);
     if (!slug) continue;
@@ -1542,17 +1569,23 @@ function generateCityPages(spotItems, eventItems, spotSlugMap, eventSlugMap) {
 
     const spotsList = topSpots.length
       ? `<section><h2>Family-friendly spots in ${esc(city.name)}</h2><ul class="card-list">${topSpots.map((s) => {
-          const sslug = spotToSlug.get(s);
+          const sslug = spotSlugLookup.get(s);
           if (!sslug) return "";
+          if (!spotSlugs.has(sslug)) {
+            return `<li><strong>${esc(s.name)}</strong>${s.category ? `<span> · ${esc(s.category)}</span>` : ""}${s.note ? `<p>${esc(s.note)}</p>` : ""}</li>`;
+          }
           return `<li><a href="${metroPath(`spot/${sslug}/`)}"><strong>${esc(s.name)}</strong>${s.category ? `<span> · ${esc(s.category)}</span>` : ""}</a>${s.note ? `<p>${esc(s.note)}</p>` : ""}</li>`;
         }).join("")}</ul></section>`
       : "";
 
     const eventsList = upcomingEvents.length
       ? `<section><h2>Upcoming family events in ${esc(city.name)}</h2><ul class="card-list">${upcomingEvents.map((e) => {
-          const eslug = eventToSlug.get(e);
+          const eslug = eventSlugLookup.get(e);
           if (!eslug) return "";
           const dateStr = formatEventDate(e);
+          if (!eventSlugs.has(eslug)) {
+            return `<li><strong>${esc(e.title)}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}${e.venue ? `<p>${esc(e.venue)}${e.cost && e.cost !== "Unknown" ? ` · ${esc(e.cost)}` : ""}</p>` : ""}</li>`;
+          }
           return `<li><a href="${metroPath(`event/${eslug}/`)}"><strong>${esc(e.title)}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}</a>${e.venue ? `<p>${esc(e.venue)}${e.cost && e.cost !== "Unknown" ? ` · ${esc(e.cost)}` : ""}</p>` : ""}</li>`;
         }).join("")}</ul></section>`
       : "";
@@ -1615,10 +1648,8 @@ function generateCityPages(spotItems, eventItems, spotSlugMap, eventSlugMap) {
 // Categories
 // ---------------------------------------------------------------------------
 
-function generateCategoryPages(spotItems, eventItems) {
+function generateCategoryPages(spotItems, eventItems, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs) {
   const slugs = new Set();
-  const eventSlugLookup = buildEventSlugLookup(eventItems);
-  const spotSlugLookup = buildSpotSlugLookup(spotItems);
 
   for (const cat of CATEGORY_PAGES) {
     const matchingSpots = spotItems
@@ -1644,6 +1675,9 @@ function generateCategoryPages(spotItems, eventItems) {
           .map((s) => {
             const sslug = spotSlugLookup.get(s);
             if (!sslug) return "";
+            if (!spotSlugs.has(sslug)) {
+              return `<li><strong>${esc(s.name)}</strong>${s.neighborhood ? `<span> · ${esc(s.neighborhood)}</span>` : ""}</li>`;
+            }
             return `<li><a href="${metroPath(`spot/${sslug}/`)}"><strong>${esc(s.name)}</strong>${s.neighborhood ? `<span> · ${esc(s.neighborhood)}</span>` : ""}</a>${s.note ? `<p>${esc(s.note)}</p>` : ""}</li>`;
           })
           .join("")}</ul></section>`
@@ -1655,6 +1689,9 @@ function generateCategoryPages(spotItems, eventItems) {
             const eslug = eventSlugLookup.get(e);
             if (!eslug) return "";
             const dateStr = formatEventDate(e);
+            if (!eventSlugs.has(eslug)) {
+              return `<li><strong>${esc(e.title)}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}</li>`;
+            }
             return `<li><a href="${metroPath(`event/${eslug}/`)}"><strong>${esc(e.title)}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}</a>${e.venue ? `<p>${esc(e.venue)}${e.city ? `, ${esc(e.city)}` : ""}${e.cost && e.cost !== "Unknown" ? ` · ${esc(e.cost)}` : ""}</p>` : ""}</li>`;
           })
           .join("")}</ul></section>`
@@ -1713,8 +1750,8 @@ function generateCategoryPages(spotItems, eventItems) {
 // This weekend
 // ---------------------------------------------------------------------------
 
-function generateThisWeekendPage(eventItems) {
-  const eventSlugLookup = buildEventSlugLookup(eventItems);
+function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
+  const lookup = eventSlugLookup || buildEventSlugLookup(eventItems);
   const now = new Date();
   const weekend = getWeekendDateKeys(now, activeMetro.timezone);
 
@@ -1729,7 +1766,70 @@ function generateThisWeekendPage(eventItems) {
       (a.startDateTime || "").localeCompare(b.startDateTime || ""),
     );
 
-  if (upcoming.length === 0) return false;
+  if (upcoming.length === 0) {
+    const canonical = metroUrl("this-weekend/");
+    const title = `${metroLabel()} weekend guide: family events — ${BRAND}`;
+    const description = `A weekend guide to family-friendly events in ${metroLabel()}. No events are scheduled for this weekend. Plan a customized day out with ${BRAND}.`;
+
+    const body = `
+      <p class="lede">${esc(description)}</p>
+      <section class="guide-summary" aria-label="Weekend snapshot">
+        <h2>Weekend snapshot</h2>
+        <p>No events scheduled for this weekend. Please check back soon!</p>
+      </section>
+      <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a 3-stop day with ${BRAND}</a></p>
+    `;
+
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          "@id": `${canonical}#page`,
+          url: canonical,
+          name: `${metroLabel()} weekend guide`,
+          description,
+          isPartOf: { "@id": `${metroUrl("")}#website` },
+          about: {
+            "@type": "Place",
+            name: metroLabel(),
+          },
+        }
+      ]
+    };
+
+    const weekendRouteKey = findRouteKey("en", metroPath("this-weekend/"));
+    const hreflangLinks = weekendRouteKey ? getAlternateLinks(weekendRouteKey, SITE) : [];
+    const langSwitcherHtml = weekendRouteKey ? renderLangSwitcher(weekendRouteKey, "en") : "";
+
+    const html = renderShell({
+      title,
+      description,
+      canonical,
+      ogImage: OG_IMAGE,
+      jsonLd,
+      breadcrumb: [
+        { name: BRAND, url: metroUrl("") },
+        { name: "Weekend guide", url: canonical },
+      ],
+      h1: `${metroLabel()} weekend guide for families`,
+      eyebrow: metroTag(),
+      body,
+      hreflangLinks,
+      langSwitcherHtml,
+    });
+
+    writeMetroPage("this-weekend/index.html", html);
+
+    sitemapEntries.push({
+      loc: canonical,
+      lastmod: today(),
+      changefreq: "daily",
+      priority: 0.95,
+    });
+
+    return true;
+  }
 
   const canonical = metroUrl("this-weekend/");
   const weekendLabel = weekend.saturday.toLocaleDateString("en-US", {
@@ -1762,12 +1862,12 @@ function generateThisWeekendPage(eventItems) {
   const topCategories = topCountLabels(categoryCounts, 4);
   const topCities = topCountLabels(cityCounts, 5);
   const freeCount = upcoming.filter(eventLikelyFree).length;
-  const highlights = pickWeekendHighlights(upcoming, eventSlugLookup).slice(0, 6);
+  const highlights = pickWeekendHighlights(upcoming, lookup).slice(0, 6);
   const qualityCount = upcoming.filter((event) => eventQualityScore(event) >= 70).length;
-  const planPresets = buildWeekendPlanPresets(upcoming, eventSlugLookup);
-  const editorialBuckets = buildWeekendEditorialBuckets(upcoming, eventSlugLookup);
+  const planPresets = buildWeekendPlanPresets(upcoming, lookup);
+  const editorialBuckets = buildWeekendEditorialBuckets(upcoming, lookup);
   const daySections = [weekend.saturdayKey, weekend.sundayKey]
-    .map((dayKey) => renderWeekendDaySection(dayKey, byDay.get(dayKey) || [], eventSlugLookup))
+    .map((dayKey) => renderWeekendDaySection(dayKey, byDay.get(dayKey) || [], lookup))
     .filter(Boolean);
   const generatedLabel = now.toLocaleDateString("en-US", {
     month: "long",
@@ -1831,7 +1931,7 @@ function generateThisWeekendPage(eventItems) {
         "@id": `${canonical}#timeline`,
         name: `${metroLabel()} family events this weekend`,
         itemListElement: upcoming.slice(0, 30).map((event, index) => {
-          const slug = eventSlugLookup.get(event);
+          const slug = lookup.get(event);
           const eventUrl = slug ? metroUrl(`event/${slug}/`) : event.url || canonical;
           const listItem = {
             "@type": "ListItem",
@@ -2576,6 +2676,49 @@ function buildTimelineDescription(event) {
   return `${event.title} is a ${cat}${where ? ` at ${where}` : ""}. Confirm registration, cost, and age fit on the official listing.`;
 }
 
+function getStableSuffix(id) {
+  if (!id) return "";
+  return slugify(id.replace("osm-node-", "n").replace("osm-way-", "w").replace("osm-relation-", "r"));
+}
+
+function getGeneratedCitySlugs(spotItems, eventItems) {
+  const byCity = new Map();
+  function bucket(city) {
+    if (!city) return null;
+    const key = city.trim();
+    if (!key) return null;
+    if (!byCity.has(key)) byCity.set(key, { name: key, spots: [], events: [] });
+    return byCity.get(key);
+  }
+  for (const spot of spotItems) {
+    const b = bucket(spot.neighborhood);
+    if (b) b.spots.push(spot);
+  }
+  for (const event of eventItems) {
+    const b = bucket(event.city || event.neighborhood);
+    if (b) b.events.push(event);
+  }
+
+  const pinnedCitySlugs = pinnedCitySlugsForMetro(activeMetro.id);
+  const generated = new Set();
+  const rankedCities = [...byCity.values()]
+    .filter((c) => {
+      const slug = slugify(c.name);
+      return c.spots.length + c.events.length >= 3 || pinnedCitySlugs.has(slug);
+    })
+    .sort((a, b) => b.spots.length + b.events.length - (a.spots.length + a.events.length));
+  
+  let count = 0;
+  for (const city of rankedCities) {
+    const slug = slugify(city.name);
+    if (count < 40 || pinnedCitySlugs.has(slug)) {
+      generated.add(slug);
+      count++;
+    }
+  }
+  return generated;
+}
+
 function buildEventSlugLookup(eventItems) {
   const map = new Map();
   const used = new Set();
@@ -2601,9 +2744,13 @@ function buildSpotSlugLookup(spotItems) {
     const baseSlug = slugify(`${spot.name} ${spot.neighborhood ?? ""}`);
     if (!baseSlug) continue;
     let s = baseSlug;
-    let n = 2;
-    while (used.has(s)) s = `${baseSlug}-${n++}`;
-    used.set(s, true);
+    if (used.has(s)) {
+      const suffix = getStableSuffix(spot.id);
+      s = suffix ? `${baseSlug}-${suffix}` : `${baseSlug}-${used.get(baseSlug)}`;
+      used.set(baseSlug, (used.get(baseSlug) || 2) + 1);
+    } else {
+      used.set(s, 2);
+    }
     map.set(spot, s);
   }
   return map;
@@ -2648,7 +2795,9 @@ function generateLocalizedWeekendPages() {
       activeMetro = metro;
 
       const eventsDoc = readJson(metroDataPath(metro, "events"));
-      let events = (Array.isArray(eventsDoc?.events) ? eventsDoc.events : []).filter(audienceVisible);
+      const fullEvents = (Array.isArray(eventsDoc?.events) ? eventsDoc.events : []).filter(audienceVisible);
+      const eventSlugLookup = buildEventSlugLookup(fullEvents);
+      let events = fullEvents;
 
       if (cluster.subMetro) {
         const cities = subMetroCities[cluster.subMetro];
@@ -2660,7 +2809,7 @@ function generateLocalizedWeekendPages() {
         }
       }
 
-      const wrote = generateLocalizedWeekendPage(events, locale, routeKey, cluster);
+      const wrote = generateLocalizedWeekendPage(events, locale, routeKey, cluster, eventSlugLookup);
       if (wrote) count++;
       activeMetro = previousMetro;
     }
@@ -2669,8 +2818,8 @@ function generateLocalizedWeekendPages() {
   return count;
 }
 
-function generateLocalizedWeekendPage(eventItems, locale, routeKey, cluster) {
-  const eventSlugLookup = buildEventSlugLookup(eventItems);
+function generateLocalizedWeekendPage(eventItems, locale, routeKey, cluster, eventSlugLookup = null) {
+  const lookup = eventSlugLookup || buildEventSlugLookup(eventItems);
   const now = new Date();
   const weekend = getWeekendDateKeys(now, activeMetro.timezone);
   const cfg = localeConfig[locale];
@@ -2752,9 +2901,9 @@ function generateLocalizedWeekendPage(eventItems, locale, routeKey, cluster) {
   const categoryCounts = countBy(upcoming, (event) => event.category || "Other");
   const cityCounts = countBy(upcoming, (event) => event.city || event.neighborhood || area);
   const freeCount = upcoming.filter(eventLikelyFree).length;
-  const highlights = pickWeekendHighlights(upcoming, eventSlugLookup).slice(0, 6);
+  const highlights = pickWeekendHighlights(upcoming, lookup).slice(0, 6);
   const daySections = [weekend.saturdayKey, weekend.sundayKey]
-    .map((dayKey) => renderWeekendDaySection(dayKey, byDay.get(dayKey) || [], eventSlugLookup, locale))
+    .map((dayKey) => renderWeekendDaySection(dayKey, byDay.get(dayKey) || [], lookup, locale))
     .filter(Boolean);
 
   const generatedLabel = now.toLocaleDateString(cfg.htmlLang === "zh-Hans" ? "zh-CN" : cfg.htmlLang, {
@@ -2788,7 +2937,7 @@ function generateLocalizedWeekendPage(eventItems, locale, routeKey, cluster) {
     "@id": `${canonical}#timeline`,
     name: h1,
     itemListElement: upcoming.slice(0, 30).map((event, index) => {
-      const slug = eventSlugLookup.get(event);
+      const slug = lookup.get(event);
       return {
         "@type": "ListItem",
         position: index + 1,

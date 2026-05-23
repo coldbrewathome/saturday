@@ -31,7 +31,8 @@
     "test:planner": "vitest run tests/*.test.ts",
     "ci:worker": "npm --prefix worker run typecheck",
     "seo:i18n-check": "node scripts/validate-i18n-seo.mjs",
-    "ci": "npm run test && npm run validate:data:all && npm run validate:events:all && npm run build && npm run seo:i18n-check && npm run ci:worker"
+    "seo:audit": "node scripts/validate-all-seo.mjs",
+    "ci": "npm run test && npm run validate:data:all && npm run validate:events:all && npm run build && npm run seo:i18n-check && npm run seo:audit && npm run ci:worker"
   },
   "dependencies": {
     "@types/leaflet": "^1.9.21",
