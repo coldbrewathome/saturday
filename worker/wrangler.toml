@@ -15,6 +15,9 @@ AI_DAILY_LIMIT_PER_IP = "10"
 ADMIN_EMAILS = "kaining.usc@gmail.com"
 # Set NEWSLETTER_ENABLED = "true" to flip sendWeekendDigest from no-op
 # to a real Resend send (requires the RESEND_API_KEY secret below).
+# Set NEWSLETTER_TEST_ALLOWLIST = "you@example.com,other@..." to scope
+# a send to a fixed set of addresses (anything else is filtered out and
+# returned as an error). Leave unset for production list sends.
 
 # Secrets (set via `wrangler secret put <NAME>`, never commit values):
 #   NEWSLETTER_ADMIN_TOKEN — bearer token required by POST /newsletter/send

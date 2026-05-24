@@ -160,3 +160,114 @@ records persist indefinitely.
   `"weekend-guide"` server-side regardless of true source.** That's a
   data-quality nit, not a blocker — keep in mind when interpreting
   signup-funnel attribution.
+
+## Real-test runbook (operator)
+
+The first real send goes to a single allowlisted operator email so we
+can confirm rendering in Gmail + Apple Mail before opening the gate to
+the full subscriber list. The Doer scaffolded the safety rail
+(`NEWSLETTER_TEST_ALLOWLIST` env var checked inside
+`sendWeekendDigest`, `worker/src/newsletter.ts`) so even if the
+recipients payload is wider than intended, anything off the allowlist
+is filtered out and returned as an error attribution.
+
+### One-time setup (TODO(human) — needs operator)
+
+1. Create a Resend account, add `famhop.com`, and add the SPF/DKIM/DMARC
+   CNAMEs Resend shows in the dashboard. Wait until the domain shows
+   "Verified".
+2. Mint an API key (scope: send-only) and a 32+ char admin token for
+   our own endpoint:
+
+   ```bash
+   cd worker
+   npx wrangler secret put RESEND_API_KEY        # paste Resend key
+   npx wrangler secret put NEWSLETTER_ADMIN_TOKEN # paste random token
+   ```
+
+3. Flip the feature flags in `worker/wrangler.toml` `[vars]` for the
+   test send only:
+
+   ```toml
+   [vars]
+   NEWSLETTER_ENABLED = "true"
+   NEWSLETTER_TEST_ALLOWLIST = "kaining.usc@gmail.com"
+   ```
+
+   Re-deploy the worker: `cd worker && npx wrangler deploy`.
+
+### Trigger the test send
+
+POST a single-recipient payload to the deployed worker. Replace
+`<ADMIN_TOKEN>` with the value passed to `wrangler secret put` above,
+and pick a metro the operator wants the digest for.
+
+```bash
+curl -sS -X POST https://saturday-polls.<account>.workers.dev/newsletter/send \
+  -H "Authorization: Bearer <ADMIN_TOKEN>" \
+  -H "Content-Type: application/json" \
+  -d '{"recipients":[{"email":"kaining.usc@gmail.com","metroId":"atlanta"}]}' \
+  | jq .
+```
+
+Expected success shape:
+
+```json
+{ "ok": true, "count": 1 }
+```
+
+If `count` is 0 and `skipped` is `"disabled"` or `"no-api-key"`, the
+flag/secret didn't take — re-check step 1-3. If `errors[0].message`
+says `filtered by NEWSLETTER_TEST_ALLOWLIST`, the email being POSTed
+isn't on the allowlist (or casing differs — the gate lowercases both
+sides; double-check the wrangler.toml entry).
+
+### Confirm rendering (TODO(human) — manual QA)
+
+Open the delivered message in:
+
+- Gmail web (Chrome, light + dark theme)
+- Gmail iOS app
+- Apple Mail on macOS
+- Apple Mail on iOS
+
+Check for: subject line readability, plan/event cards rendering
+(no broken images, no exposed HTML, button-style links tappable),
+plaintext fallback reads correctly, unsubscribe / footer is visible.
+File any rendering bugs against `worker/src/newsletter-template.ts`
+(pure render fn, covered by `tests/newsletterTemplate.test.ts`).
+
+### Promote to the full list (after QA passes)
+
+Once Gmail + Apple Mail look good:
+
+1. Build the recipients list from KV. There is no list endpoint yet
+   (see "What's missing" above), so for the first weekly send the
+   operator can paginate the KV namespace via `wrangler kv:key list
+   --binding=POLLS --prefix=newsletter:` and assemble the JSON payload
+   locally, or write a one-off admin script. Filed as a follow-up;
+   not blocking the test send.
+2. Remove `NEWSLETTER_TEST_ALLOWLIST` from `wrangler.toml` `[vars]`
+   (or clear it: `NEWSLETTER_TEST_ALLOWLIST = ""`) and re-deploy.
+3. POST the full recipients payload to `/newsletter/send` the same way
+   as the test above. The response includes `count` (sent) and
+   optionally `failed` + `errors` for per-recipient failures.
+
+### Weekly cadence (manual, for now)
+
+Until a Cron Trigger is wired (see follow-up below), the digest is
+sent manually each Friday morning by the operator running the curl
+above with the full recipients list. The send is idempotent at the
+Resend level — re-running with the same payload re-sends. Treat the
+operator as the rate limiter.
+
+### Follow-ups (out of scope for this task)
+
+- Wire a Cloudflare Cron Trigger (e.g. Fridays 09:00 America/Los_Angeles)
+  that loads recipients from KV and calls `sendWeekendDigest` directly,
+  removing the need for the curl + admin-token round trip.
+- Implement `/newsletter/unsubscribe` (HMAC-signed token → tombstone
+  the KV record) so the `List-Unsubscribe` header promised above is
+  honored.
+- Resend webhook → mark `bouncedAt` on bouncing records and skip them
+  on subsequent sends.

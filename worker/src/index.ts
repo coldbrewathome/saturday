@@ -70,6 +70,7 @@ interface Env {
   NEWSLETTER_ADMIN_TOKEN?: string;
   NEWSLETTER_ENABLED?: string;
   RESEND_API_KEY?: string;
+  NEWSLETTER_TEST_ALLOWLIST?: string;
 }
 
 type SessionData = {

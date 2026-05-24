@@ -34,6 +34,11 @@ interface NewsletterEnv {
   // Override the site origin used for plan deep-links (defaults to
   // https://famhop.com). Same shape as the React app's DATA_ORIGIN.
   NEWSLETTER_SITE_ORIGIN?: string;
+  // Comma-separated email allowlist. When set (non-empty), recipients
+  // not on the list are filtered out before sending. Used as a safety
+  // gate for the first real operator test — set this to the operator's
+  // address so a fat-fingered subscriber payload can't blast the list.
+  NEWSLETTER_TEST_ALLOWLIST?: string;
 }
 
 const RESEND_ENDPOINT = "https://api.resend.com/emails";
@@ -95,12 +100,34 @@ export async function sendWeekendDigest(
     "",
   );
 
+  // Optional allowlist gate. When NEWSLETTER_TEST_ALLOWLIST is set,
+  // drop recipients whose lowercased email isn't on the list. The
+  // first real test send uses this to scope blast radius to the
+  // operator email even if the KV recipients dump is wider than
+  // expected.
+  const allowlist = parseAllowlist(env.NEWSLETTER_TEST_ALLOWLIST);
+  const errors: Array<{ email: string; status: number; message: string }> = [];
+  let filtered = recipients;
+  if (allowlist) {
+    filtered = [];
+    for (const recipient of recipients) {
+      if (allowlist.has(recipient.email.toLowerCase())) {
+        filtered.push(recipient);
+      } else {
+        errors.push({
+          email: recipient.email,
+          status: 0,
+          message: "filtered by NEWSLETTER_TEST_ALLOWLIST",
+        });
+      }
+    }
+  }
+
   // Group recipients by metroId. Recipients without a known metroId are
   // skipped with an error attribution so the operator can see them in
   // the response (they need a metro to build a digest from).
   const byMetro = new Map<string, NewsletterRecipient[]>();
-  const errors: Array<{ email: string; status: number; message: string }> = [];
-  for (const recipient of recipients) {
+  for (const recipient of filtered) {
     const metroId = recipient.metroId || "";
     if (!METROS[metroId]) {
       errors.push({
@@ -198,6 +225,19 @@ async function buildMetroDigest(
     events,
     siteBaseUrl: siteOrigin,
   });
+}
+
+// Exported for unit tests. Returns null when the env var is unset
+// or contains no valid entries (allowlist disabled). Otherwise a Set
+// of lowercased emails.
+export function parseAllowlist(raw: string | undefined): Set<string> | null {
+  if (!raw) return null;
+  const entries = raw
+    .split(",")
+    .map((s) => s.trim().toLowerCase())
+    .filter((s) => s.length > 0 && s.includes("@"));
+  if (entries.length === 0) return null;
+  return new Set(entries);
 }
 
 async function fetchJsonArray<T>(
