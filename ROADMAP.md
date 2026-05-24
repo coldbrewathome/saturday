@@ -5,15 +5,21 @@ _Last updated: 2026-05-23_
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
 
-_None._
-
-## Next
-_Committed, not yet started. Ordered by priority. Aim for ≤5 items._
-
 ### Newsletter delivery
 - **Why:** `1d3ae14` shipped the newsletter capture card in the plans view, but there's no send pipeline yet. Collecting emails with no value loop leaks signups and trains users that subscribing does nothing.
 - **Effort:** M (1–2 days)
-- **Links:** `src/App.tsx`, `src/api.ts` (newsletter card), `worker/` (likely host for send)
+- **Links:** `src/App.tsx`, `src/api.ts` (newsletter card), `worker/src/` (host for send)
+- **Tasks:**
+  - [ ] Pick provider (Resend vs. MailChannels vs. SES) and write the decision + chosen domain/from-address to `docs/decisions/01-newsletter-provider.md`. Should fit in <2h.
+  - [ ] Inventory the current capture path: trace where `src/App.tsx` newsletter card POSTs to and where addresses are stored today (KV? D1? nowhere?). Write findings as a short "Current state" section appended to the decision doc.
+  - [ ] Scaffold `worker/src/newsletter.ts` exporting a `sendWeekendDigest(env, recipients)` stub + wire `POST /api/newsletter/send` in `worker/index.ts` behind an admin token from `env`. No real send yet — log payload and return `{ ok: true, count }`.
+  - [ ] Implement the provider call inside `sendWeekendDigest` using the chosen SDK/HTTP; gate on `env.NEWSLETTER_ENABLED`. Add API key to `wrangler.toml` as a secret reference (not value).
+  - [ ] Build the digest HTML template (`worker/src/newsletter-template.ts`): per-metro "this weekend" top 3 plans + 5 events, pulled from `public/data/{metro}/featured-plans.json` and `events.json`. Plaintext fallback included.
+  - [ ] Add a dry-run CLI: `scripts/newsletter-preview.mjs <metro>` that renders the template to `tmp/newsletter-preview.html` for visual QA. No network.
+  - [ ] Send a real test to a single allowlisted address (operator email), confirm rendering in Gmail + Apple Mail, then document the manual weekly send command in `docs/decisions/01-newsletter-provider.md`.
+
+## Next
+_Committed, not yet started. Ordered by priority. Aim for ≤5 items._
 
 ### Operator-alerts triage UI
 - **Why:** `0936fea` and `22bdfb9` generate per-metro `event-operator-alerts.json` (broken sources, last-known-good fallbacks, etc.), but today they only exist as JSON in `public/data/{metro}/`. No human workflow to act on them — alerts will keep piling up.
