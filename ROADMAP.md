@@ -1,6 +1,6 @@
 # Roadmap
 
-_Last updated: 2026-05-24_ (tick 4)
+_Last updated: 2026-05-24_ (tick 5)
 
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
@@ -13,7 +13,7 @@ _In flight — actively being worked on. Keep this to 1–3 items._
   - [x] Pick provider (Resend vs. MailChannels vs. SES) and write the decision + chosen domain/from-address to `docs/decisions/01-newsletter-provider.md`. Should fit in <2h. _(af869b6: picked Resend; weekly@famhop.com)_
   - [x] Inventory the current capture path: trace where `src/App.tsx` newsletter card POSTs to and where addresses are stored today (KV? D1? nowhere?). Write findings as a short "Current state" section appended to the decision doc. _(0e64bfa: POST /newsletter → KV `POLLS` ns, key `newsletter:{metro}:{email}`)_
   - [x] Scaffold `worker/src/newsletter.ts` exporting a `sendWeekendDigest(env, recipients)` stub + wire `POST /api/newsletter/send` in `worker/index.ts` behind an admin token from `env`. No real send yet — log payload and return `{ ok: true, count }`. _(53aa6c5: route is `/newsletter/send` matching worker convention; bearer `NEWSLETTER_ADMIN_TOKEN` gate; pre-honors `NEWSLETTER_ENABLED` flag)_
-  - [ ] Implement the provider call inside `sendWeekendDigest` using the chosen SDK/HTTP; gate on `env.NEWSLETTER_ENABLED`. Add API key to `wrangler.toml` as a secret reference (not value).
+  - [x] Implement the provider call inside `sendWeekendDigest` using the chosen SDK/HTTP; gate on `env.NEWSLETTER_ENABLED`. Add API key to `wrangler.toml` as a secret reference (not value). _(c0dcaf4: Resend HTTP `POST /emails`, Bearer `RESEND_API_KEY`, double-gate on missing key, per-recipient failure attribution)_
   - [ ] Build the digest HTML template (`worker/src/newsletter-template.ts`): per-metro "this weekend" top 3 plans + 5 events, pulled from `public/data/{metro}/featured-plans.json` and `events.json`. Plaintext fallback included.
   - [ ] Add a dry-run CLI: `scripts/newsletter-preview.mjs <metro>` that renders the template to `tmp/newsletter-preview.html` for visual QA. No network.
   - [ ] Send a real test to a single allowlisted address (operator email), confirm rendering in Gmail + Apple Mail, then document the manual weekly send command in `docs/decisions/01-newsletter-provider.md`.
