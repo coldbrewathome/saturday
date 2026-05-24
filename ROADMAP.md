@@ -1,6 +1,6 @@
 # Roadmap
 
-_Last updated: 2026-05-24_ (tick 7)
+_Last updated: 2026-05-24_ (tick 8)
 
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
@@ -16,7 +16,7 @@ _In flight — actively being worked on. Keep this to 1–3 items._
   - [x] Implement the provider call inside `sendWeekendDigest` using the chosen SDK/HTTP; gate on `env.NEWSLETTER_ENABLED`. Add API key to `wrangler.toml` as a secret reference (not value). _(c0dcaf4: Resend HTTP `POST /emails`, Bearer `RESEND_API_KEY`, double-gate on missing key, per-recipient failure attribution)_
   - [x] Build the digest HTML template (`worker/src/newsletter-template.ts`): per-metro "this weekend" top 3 plans + 5 events, pulled from `public/data/{metro}/featured-plans.json` and `events.json`. Plaintext fallback included. _(cd3882f: pure render fn, 6 unit tests, dedupe by baseId, escaping; caller fetches JSON)_
   - [x] Add a dry-run CLI: `scripts/newsletter-preview.mjs <metro>` that renders the template to `tmp/newsletter-preview.html` for visual QA. No network. _(02ed174: imports `.ts` template directly via Node 22.6+ type-stripping; errors on unknown slug; `tmp/` added to .gitignore)_
-  - [ ] Wire `sendWeekendDigest` to fetch+render per metro: inside `worker/src/newsletter.ts`, group recipients by metro, fetch each metro's `featured-plans.json` + `events.json` via the worker's site origin (or bundled fetch), call `renderWeekendDigest`, and pass the resulting HTML/text to the Resend call (replacing the placeholder body). Honor existing `NEWSLETTER_ENABLED` gate.
+  - [x] Wire `sendWeekendDigest` to fetch+render per metro: inside `worker/src/newsletter.ts`, group recipients by metro, fetch each metro's `featured-plans.json` + `events.json` via the worker's site origin (or bundled fetch), call `renderWeekendDigest`, and pass the resulting HTML/text to the Resend call (replacing the placeholder body). Honor existing `NEWSLETTER_ENABLED` gate. _(b951728: per-metro grouping + fetch+render; previous Doer hit session limit, parent salvaged send-path wiring)_
   - [ ] Send a real test to a single allowlisted address (operator email), confirm rendering in Gmail + Apple Mail, then document the manual weekly send command in `docs/decisions/01-newsletter-provider.md`.
 
 ## Next
