@@ -1,3 +1,5 @@
+import { sendWeekendDigest, type NewsletterRecipient } from "./newsletter";
+
 type Vote = "up" | "down" | "meh";
 
 type StopSummary = {
@@ -65,6 +67,9 @@ interface Env {
   AI_DAILY_LIMIT_PER_IP?: string;
   POLLS_DAILY_LIMIT_PER_IP?: string;
   ADMIN_EMAILS?: string;
+  NEWSLETTER_ADMIN_TOKEN?: string;
+  NEWSLETTER_ENABLED?: string;
+  RESEND_API_KEY?: string;
 }
 
 type SessionData = {
@@ -1251,6 +1256,54 @@ async function subscribeNewsletter(
   return json({ ok: true }, { status: 200 }, cors);
 }
 
+async function sendNewsletter(
+  request: Request,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  const token = env.NEWSLETTER_ADMIN_TOKEN;
+  if (!token) {
+    return json(
+      { error: "newsletter sending not configured" },
+      { status: 503 },
+      cors,
+    );
+  }
+  const auth = request.headers.get("authorization") || "";
+  const provided = auth.startsWith("Bearer ") ? auth.slice(7).trim() : "";
+  if (!provided || provided !== token) {
+    return json({ error: "admin access required" }, { status: 403 }, cors);
+  }
+
+  let payload: unknown = null;
+  if (request.headers.get("content-type")?.includes("application/json")) {
+    try {
+      payload = await request.json();
+    } catch {
+      return json({ error: "invalid json" }, { status: 400 }, cors);
+    }
+  }
+  const data = (payload && typeof payload === "object" ? payload : {}) as {
+    recipients?: unknown;
+  };
+  const rawRecipients = Array.isArray(data.recipients) ? data.recipients : [];
+  const recipients: NewsletterRecipient[] = [];
+  for (const entry of rawRecipients) {
+    if (!entry || typeof entry !== "object") continue;
+    const e = entry as { email?: unknown; metroId?: unknown; ageBand?: unknown };
+    const email = cleanEmail(e.email);
+    if (!email) continue;
+    recipients.push({
+      email,
+      metroId: cleanText(e.metroId, 60) || undefined,
+      ageBand: cleanText(e.ageBand, 40) || undefined,
+    });
+  }
+
+  const result = await sendWeekendDigest(env, recipients);
+  return json(result, { status: 200 }, cors);
+}
+
 // ── First-party funnel metrics ──────────────────────────────────────────
 // Aggregate, no-PII counters keyed by metric:{name}:{metro}:{date}. Used to
 // answer "is the share loop / SEO actually working" without third-party
@@ -1359,6 +1412,10 @@ export default {
 
     if (path === "/newsletter" && request.method === "POST") {
       return subscribeNewsletter(request, env, cors);
+    }
+
+    if (path === "/newsletter/send" && request.method === "POST") {
+      return sendNewsletter(request, env, cors);
     }
 
     if (path === "/metric") {

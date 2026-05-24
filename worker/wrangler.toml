@@ -13,3 +13,6 @@ OPENAI_MODEL = "gpt-5.4"
 GOOGLE_CLIENT_ID = "673443526391-r7oj4up03jd13ti57a6fpq6bcdas91p6.apps.googleusercontent.com"
 AI_DAILY_LIMIT_PER_IP = "10"
 ADMIN_EMAILS = "kaining.usc@gmail.com"
+
+# Secrets (set via `wrangler secret put <NAME>`, never commit values):
+#   NEWSLETTER_ADMIN_TOKEN — bearer token required by POST /newsletter/send
