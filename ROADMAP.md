@@ -1,6 +1,6 @@
 # Roadmap
 
-_Last updated: 2026-05-25_ (tick 16)
+_Last updated: 2026-05-25_ (tick 17)
 
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
@@ -10,7 +10,7 @@ _In flight — actively being worked on. Keep this to 1–3 items._
 - **Effort:** M (1–2 days)
 - **Links:** `239ab7f` (metrics capture), `worker/src/` (likely ingestion endpoint), `src/ops/OpsAlertsView.tsx` (sibling ops surface to mirror)
 - **Tasks:**
-  - [ ] Inventory what's actually captured: read `239ab7f` + grep for the metrics emit call sites. Write a short decision doc at `docs/decisions/03-analytics-dashboard.md` listing (a) the event schema we have today, (b) which 3–5 funnel questions the dashboard should answer first (e.g. "plans-view sign-in conversion", "metro pageviews", "Hop-me-now usage"), (c) the storage surface (worker KV? D1? a flat JSON snapshot?), and (d) auth model (reuse `/ops/alerts` token gate vs. separate). <2h.
+  - [x] Inventory what's actually captured: read `239ab7f` + grep for the metrics emit call sites. Write a short decision doc at `docs/decisions/03-analytics-dashboard.md` listing (a) the event schema we have today, (b) which 3–5 funnel questions the dashboard should answer first (e.g. "plans-view sign-in conversion", "metro pageviews", "Hop-me-now usage"), (c) the storage surface (worker KV? D1? a flat JSON snapshot?), and (d) auth model (reuse `/ops/alerts` token gate vs. separate). <2h.
   - [ ] Scaffold the route: add an empty `/ops/analytics` view (mirroring `src/ops/OpsAlertsView.tsx`) with a placeholder "no data yet" state. Wire it into the hash-router next to `#/ops/alerts`. No data loading yet.
   - [ ] Add a loader that reads aggregated metrics from whatever storage the ADR picked. Land it at `src/ops/loadAnalytics.ts` with a unit test that asserts shape + empty-state behavior on missing data.
   - [ ] Render the top 3 funnel questions from the ADR as plain numeric cards (big number + label + 7-day delta). Static, no charts yet. Match the visual density of the alerts summary panel from `79a54db`.
