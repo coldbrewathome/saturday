@@ -1,6 +1,6 @@
 # Roadmap
 
-_Last updated: 2026-05-25_ (tick 20)
+_Last updated: 2026-05-25_ (tick 21)
 
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
@@ -14,7 +14,7 @@ _In flight — actively being worked on. Keep this to 1–3 items._
   - [x] Scaffold the route: add an empty `/ops/analytics` view (mirroring `src/ops/OpsAlertsView.tsx`) with a placeholder "no data yet" state. Wire it into the hash-router next to `#/ops/alerts`. No data loading yet.
   - [x] Add a loader that reads aggregated metrics from whatever storage the ADR picked. Land it at `src/ops/loadAnalytics.ts` with a unit test that asserts shape + empty-state behavior on missing data.
   - [x] Render the top 3 funnel questions from the ADR as plain numeric cards (big number + label + 7-day delta). Static, no charts yet. Match the visual density of the alerts summary panel from `79a54db`.
-  - [ ] Add a per-metro breakdown table for the highest-signal metric (likely pageviews or sign-in conversion). Sort desc, link metro name to the existing metro guide page.
+  - [x] Add a per-metro breakdown table for the highest-signal metric (likely pageviews or sign-in conversion). Sort desc, link metro name to the existing metro guide page.
   - [ ] Add a single trend chart for the headline metric (last 30 days, daily buckets). Use a minimal inline SVG sparkline — no chart library dep. Cache the rendered data so the page loads <500ms.
 
 ## Next
