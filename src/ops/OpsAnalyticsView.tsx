@@ -1,30 +1,35 @@
 // Operator analytics dashboard. ADR 03 picked a `#/ops/analytics` hash route
 // mirroring `#/ops/alerts`; this file renders the v1 summary cards for the
-// top funnel questions from the ADR.
+// top funnel questions from the ADR plus a per-metro breakdown table for
+// the headline metric (`app_open`).
 //
-// v1 scope (this task): plain numeric cards (big number + label + 7-day
-// delta) covering the headline counters from the top 3 ADR questions —
+// v1 scope: plain numeric cards (big number + label + 7-day delta) covering
+// the headline counters from the top 3 ADR questions —
 //   Q1 (traffic):    app_open
 //   Q2 (share loop): plan_shared, poll_viewed, vote_cast
 //   Q3 (hop-now):    hop_now_opened
-// No per-metro table, no sparkline yet — those are the next two roadmap
-// tasks. Ratios (poll_viewed/plan_shared, etc.) are deliberately left for
-// the next pass; the task asked for "plain numeric cards", and the share
-// loop is legible as three sequential counters.
+// Plus the per-metro breakdown table for `app_open` (ADR Q5). No sparkline
+// yet — that's the next roadmap task. Ratios (poll_viewed/plan_shared, etc.)
+// are deliberately left for the next pass.
 //
 // Reuses `ops-alerts-*` CSS classes for the layout shell to match the
 // visual density of the alerts summary panel per ADR 03.
 //
-// Pure helpers (`sumWindow`, `computeCardData`, `formatDelta`) are exported
-// for unit testing; `OpsAnalyticsView` is the thin React wrapper.
+// Pure helpers (`sumWindow`, `computeCardData`, `formatDelta`,
+// `computeMetroRows`) are exported for unit testing; `OpsAnalyticsView` is
+// the thin React wrapper.
 
 import { useEffect, useState } from "react";
+import { METROS } from "../metros";
 import {
   type AnalyticsData,
   type LoadAnalyticsResult,
   type MetricName,
   loadAnalytics,
 } from "./loadAnalytics";
+
+/** The single metric the per-metro breakdown table sorts on (ADR Q5). */
+export const METRO_TABLE_METRIC: MetricName = "app_open";
 
 /** A single numeric card spec. */
 export type CardSpec = {
@@ -138,6 +143,45 @@ export function deltaClass(card: Pick<CardValue, "delta" | "prior">): string {
   return "";
 }
 
+export type MetroRow = {
+  metroId: string;
+  /** Display label (falls back to id for metros not in `METROS`). */
+  label: string;
+  /** `/atlanta` etc. `null` for unknown metros (no guide page to link to). */
+  canonicalPath: string | null;
+  /** Total for the headline metric across the loaded window. */
+  total: number;
+};
+
+/**
+ * Per-metro rows for the breakdown table, sorted by `total` desc. Falls
+ * back to label asc for ties to keep the order stable across reloads.
+ * Metros with a zero total are omitted — they add noise and the loader
+ * already drops metros with no events.
+ */
+export function computeMetroRows(
+  data: AnalyticsData,
+  metric: MetricName = METRO_TABLE_METRIC,
+): MetroRow[] {
+  const rows: MetroRow[] = [];
+  for (const [metroId, counts] of Object.entries(data.byMetro)) {
+    const total = counts[metric];
+    if (typeof total !== "number" || total <= 0) continue;
+    const config = METROS.find((m) => m.id === metroId);
+    rows.push({
+      metroId,
+      label: config?.label ?? metroId,
+      canonicalPath: config?.canonicalPath ?? null,
+      total,
+    });
+  }
+  rows.sort((a, b) => {
+    if (b.total !== a.total) return b.total - a.total;
+    return a.label.localeCompare(b.label);
+  });
+  return rows;
+}
+
 type Status = "loading" | "ok" | "unauthorized" | "error";
 
 export default function OpsAnalyticsView() {
@@ -175,6 +219,7 @@ export default function OpsAnalyticsView() {
   }, []);
 
   const cards = data ? computeCardData(data) : [];
+  const metroRows = data ? computeMetroRows(data) : [];
 
   return (
     <div className="ops-alerts">
@@ -203,25 +248,59 @@ export default function OpsAnalyticsView() {
       )}
 
       {status === "ok" && data && (
-        <dl className="ops-alerts-summary" aria-label="Funnel summary">
-          {cards.map((card) => (
-            <div
-              key={card.metric}
-              className="ops-alerts-summary-item ops-analytics-card"
-            >
-              <dt>{card.label}</dt>
-              <dd>
-                {card.current.toLocaleString()}
-                <span
-                  className={`ops-analytics-delta ${deltaClass(card)}`.trim()}
-                  aria-label={`7-day delta: ${formatDelta(card)}`}
-                >
-                  {formatDelta(card)}
-                </span>
-              </dd>
-            </div>
-          ))}
-        </dl>
+        <>
+          <dl className="ops-alerts-summary" aria-label="Funnel summary">
+            {cards.map((card) => (
+              <div
+                key={card.metric}
+                className="ops-alerts-summary-item ops-analytics-card"
+              >
+                <dt>{card.label}</dt>
+                <dd>
+                  {card.current.toLocaleString()}
+                  <span
+                    className={`ops-analytics-delta ${deltaClass(card)}`.trim()}
+                    aria-label={`7-day delta: ${formatDelta(card)}`}
+                  >
+                    {formatDelta(card)}
+                  </span>
+                </dd>
+              </div>
+            ))}
+          </dl>
+
+          <h2 className="ops-analytics-section-h">
+            App opens by metro ({data.days}d)
+          </h2>
+          {metroRows.length === 0 ? (
+            <p className="ops-alerts-state">
+              No per-metro app opens recorded in the last {data.days} days.
+            </p>
+          ) : (
+            <table className="ops-alerts-table">
+              <thead>
+                <tr>
+                  <th scope="col">Metro</th>
+                  <th scope="col">App opens</th>
+                </tr>
+              </thead>
+              <tbody>
+                {metroRows.map((row) => (
+                  <tr key={row.metroId}>
+                    <td>
+                      {row.canonicalPath ? (
+                        <a href={row.canonicalPath}>{row.label}</a>
+                      ) : (
+                        row.label
+                      )}
+                    </td>
+                    <td>{row.total.toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </>
       )}
     </div>
   );

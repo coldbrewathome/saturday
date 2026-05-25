@@ -8,6 +8,7 @@ import {
 import {
   CARD_SPECS,
   computeCardData,
+  computeMetroRows,
   deltaClass,
   formatDelta,
   isoDay,
@@ -328,6 +329,77 @@ describe("formatDelta", () => {
 
   it("renders '0' when there's prior data but no change", () => {
     expect(formatDelta({ delta: 0, prior: 8 })).toBe("0");
+  });
+});
+
+describe("computeMetroRows", () => {
+  it("returns rows sorted by total desc for the headline metric", () => {
+    const data = normalizeMetricsResponse({
+      byMetro: {
+        atlanta: { app_open: 12 },
+        boston: { app_open: 30 },
+        chicago: { app_open: 7 },
+      },
+    });
+    const rows = computeMetroRows(data);
+    expect(rows.map((r) => r.metroId)).toEqual(["boston", "atlanta", "chicago"]);
+    expect(rows[0]?.total).toBe(30);
+  });
+
+  it("resolves label and canonicalPath from the metros config", () => {
+    const data = normalizeMetricsResponse({
+      byMetro: { atlanta: { app_open: 5 } },
+    });
+    const rows = computeMetroRows(data);
+    expect(rows[0]?.label).toBe("Atlanta");
+    expect(rows[0]?.canonicalPath).toBe("/atlanta");
+  });
+
+  it("omits metros whose headline-metric count is zero or missing", () => {
+    const data = normalizeMetricsResponse({
+      byMetro: {
+        atlanta: { app_open: 5 },
+        boston: { vote_cast: 3 }, // no app_open
+      },
+    });
+    const rows = computeMetroRows(data);
+    expect(rows.map((r) => r.metroId)).toEqual(["atlanta"]);
+  });
+
+  it("breaks ties on total by label asc for stable ordering", () => {
+    const data = normalizeMetricsResponse({
+      byMetro: {
+        boston: { app_open: 10 },
+        atlanta: { app_open: 10 },
+      },
+    });
+    const rows = computeMetroRows(data);
+    expect(rows.map((r) => r.metroId)).toEqual(["atlanta", "boston"]);
+  });
+
+  it("falls back to the raw metro id when the metro is not in the config", () => {
+    const data = normalizeMetricsResponse({
+      byMetro: { "made-up-metro": { app_open: 4 } },
+    });
+    const rows = computeMetroRows(data);
+    expect(rows[0]?.label).toBe("made-up-metro");
+    expect(rows[0]?.canonicalPath).toBeNull();
+  });
+
+  it("returns [] when byMetro is empty", () => {
+    const data = normalizeMetricsResponse({});
+    expect(computeMetroRows(data)).toEqual([]);
+  });
+
+  it("accepts an override metric for ad-hoc breakdowns", () => {
+    const data = normalizeMetricsResponse({
+      byMetro: {
+        atlanta: { app_open: 1, vote_cast: 9 },
+        boston: { app_open: 99, vote_cast: 2 },
+      },
+    });
+    const rows = computeMetroRows(data, "vote_cast");
+    expect(rows.map((r) => r.metroId)).toEqual(["atlanta", "boston"]);
   });
 });
 
