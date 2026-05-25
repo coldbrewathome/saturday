@@ -1366,6 +1366,11 @@ async function readMetrics(
   const cutoff = new Date(Date.now() - days * 86400000).toISOString().slice(0, 10);
   const totals: Record<string, number> = {};
   const byDay: Record<string, Record<string, number>> = {};
+  // Per-metro rollup keyed by real metro id (the `all` bucket is excluded —
+  // it's a denormalized sum already exposed via `totals`). Additive to the
+  // response per ADR 03 so the analytics dashboard can render the per-metro
+  // table without a second request.
+  const byMetro: Record<string, Record<string, number>> = {};
   let cursor: string | undefined;
   do {
     const list = await env.POLLS.list({ prefix: "metric:", cursor });
@@ -1373,16 +1378,21 @@ async function readMetrics(
       const parts = k.name.split(":");
       if (parts.length !== 4) continue;
       const [, name, metro, date] = parts;
-      if (metro !== "all" || date < cutoff) continue;
+      if (date < cutoff) continue;
       const raw = await env.POLLS.get(k.name);
       const count = raw ? Number(raw) : 0;
-      totals[name] = (totals[name] || 0) + count;
-      byDay[date] = byDay[date] || {};
-      byDay[date][name] = (byDay[date][name] || 0) + count;
+      if (metro === "all") {
+        totals[name] = (totals[name] || 0) + count;
+        byDay[date] = byDay[date] || {};
+        byDay[date][name] = (byDay[date][name] || 0) + count;
+      } else {
+        byMetro[metro] = byMetro[metro] || {};
+        byMetro[metro][name] = (byMetro[metro][name] || 0) + count;
+      }
     }
     cursor = list.list_complete ? undefined : list.cursor;
   } while (cursor);
-  return json({ days, totals, byDay }, { status: 200 }, cors);
+  return json({ days, totals, byDay, byMetro }, { status: 200 }, cors);
 }
 
 export default {
