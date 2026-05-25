@@ -10,6 +10,7 @@ import {
   validateEventsDataset,
 } from "./eventPipeline.mjs";
 import {
+  ROOT,
   adultSourceRegistryPath,
   legacyMetroDataFile,
   loadMetroConfig,
@@ -22,6 +23,11 @@ import {
   collectPreviousEvents,
   lastKnownGoodEventsForSource,
 } from "./eventSourceRecovery.mjs";
+import {
+  activeSnoozeMap,
+  annotateAlertsWithSnoozes,
+  readSnoozesFile,
+} from "./alertSnoozes.mjs";
 
 const metroConfig = loadMetroConfig();
 const selection = selectedMetroFromArgs(process.argv.slice(2), metroConfig);
@@ -1659,6 +1665,13 @@ async function main() {
     bbox: activeMetro.spotCoverage?.bbox,
   });
 
+  // ADR 02: tag alerts whose sourceId has an unexpired snooze in
+  // data/alert-snoozes.json. The UI greys these out; suppression
+  // (vs. tagging) is a UI concern.
+  const snoozesDoc = readSnoozesFile(ROOT);
+  const snoozeMap = activeSnoozeMap(snoozesDoc, new Date(generatedAt));
+  const annotatedAlerts = annotateAlertsWithSnoozes(operatorAlerts, snoozeMap);
+
   const report = {
     schemaVersion: 1,
     metroId: activeMetro.id,
@@ -1674,17 +1687,17 @@ async function main() {
       0,
     ),
     fallbackEventCount: sourceReports.reduce((sum, item) => sum + item.fallbackEvents, 0),
-    operatorAlertCount: operatorAlerts.length,
+    operatorAlertCount: annotatedAlerts.length,
     errors,
-    operatorAlerts,
+    operatorAlerts: annotatedAlerts,
     sources: sourceReports,
   };
   const alertsDoc = {
     schemaVersion: 1,
     metroId: activeMetro.id,
     generatedAt,
-    alertCount: operatorAlerts.length,
-    alerts: operatorAlerts,
+    alertCount: annotatedAlerts.length,
+    alerts: annotatedAlerts,
   };
 
   if (errors.length > 0) {

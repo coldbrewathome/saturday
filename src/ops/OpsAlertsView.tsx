@@ -8,7 +8,12 @@
 //   - Sort: severity desc (critical first), then fetchedAt desc.
 //   - Filters: severity (critical/warning/all) + metro multi-select, with
 //     URL-querystring persistence so reloads keep the view.
-//   - No snooze controls yet (later task).
+//   - Snooze: ADR 02 keeps snoozes local-only — the UI does NOT mutate any
+//     file or hit a worker. Per-row "Snooze" reveals a copy-to-clipboard
+//     JSON payload + one-line CLI command (`scripts/snooze-alert.mjs`) that
+//     the operator runs against the tracked `data/alert-snoozes.json`. The
+//     event pipeline tags matching alerts with `snoozedUntil` on next ingest,
+//     and the UI greys those rows out.
 //
 // The component re-uses `loadAllAlerts` for the live fetch and `sortAlerts`
 // for the deterministic order; both are pulled out so tests can cover them
@@ -124,7 +129,75 @@ function formatFetchedAt(value?: string): string {
   }).format(new Date(ms));
 }
 
+/**
+ * Is the alert currently snoozed relative to `now`? An alert is snoozed
+ * iff `snoozedUntil` parses to a future timestamp.
+ */
+export function isSnoozedNow(
+  alert: Pick<OperatorAlert, "snoozedUntil">,
+  now: Date = new Date(),
+): boolean {
+  if (!alert.snoozedUntil) return false;
+  const ms = Date.parse(alert.snoozedUntil);
+  return Number.isFinite(ms) && ms > now.getTime();
+}
+
+/**
+ * Build the JSON snippet the operator pastes into
+ * `data/alert-snoozes.json` (under `snoozes`). Kept separate so tests can
+ * assert the shape without a DOM.
+ */
+export function buildSnoozePayload(input: {
+  sourceId: string;
+  until: string;
+  note?: string;
+}): { sourceId: string; until: string; note?: string } {
+  const payload: { sourceId: string; until: string; note?: string } = {
+    sourceId: input.sourceId,
+    until: input.until,
+  };
+  const note = input.note?.trim();
+  if (note) payload.note = note;
+  return payload;
+}
+
+/**
+ * Build the one-line CLI invocation the operator can copy-paste. Quotes
+ * the note for shell safety; escapes embedded single quotes.
+ */
+export function buildSnoozeCommand(input: {
+  sourceId: string;
+  days: number;
+  note?: string;
+}): string {
+  const parts = [
+    "node scripts/snooze-alert.mjs",
+    JSON.stringify(input.sourceId),
+    `--days=${input.days}`,
+  ];
+  const note = input.note?.trim();
+  if (note) {
+    // Single-quote and escape any embedded single quotes so the shell
+    // sees the note verbatim.
+    const escaped = note.replace(/'/g, "'\\''");
+    parts.push(`--note='${escaped}'`);
+  }
+  return parts.join(" ");
+}
+
+/**
+ * Convert `now + days` to an ISO timestamp. Centralized so the UI and
+ * tests agree on the boundary.
+ */
+export function isoDaysFromNow(days: number, now: Date = new Date()): string {
+  return new Date(now.getTime() + days * 86400 * 1000).toISOString();
+}
+
 type Status = "loading" | "ready" | "error";
+
+type SnoozeDraft = { days: number; note: string };
+
+const DEFAULT_SNOOZE_DRAFT: SnoozeDraft = { days: 7, note: "" };
 
 export default function OpsAlertsView() {
   const [status, setStatus] = useState<Status>("loading");
@@ -135,6 +208,15 @@ export default function OpsAlertsView() {
       ? { ...DEFAULT_FILTER }
       : parseFilterFromHash(window.location.hash),
   );
+  // Which row currently has its snooze panel open, keyed by sourceId
+  // (alerts dedup on sourceId across files so this is sufficient).
+  const [openSnoozeSourceId, setOpenSnoozeSourceId] = useState<string | null>(
+    null,
+  );
+  const [snoozeDraft, setSnoozeDraft] = useState<SnoozeDraft>(
+    DEFAULT_SNOOZE_DRAFT,
+  );
+  const [copiedTarget, setCopiedTarget] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -202,6 +284,26 @@ export default function OpsAlertsView() {
 
   function clearMetros() {
     setFilter((prev) => ({ ...prev, metros: [] }));
+  }
+
+  function openSnooze(sourceId: string) {
+    setOpenSnoozeSourceId((prev) => (prev === sourceId ? null : sourceId));
+    setSnoozeDraft({ ...DEFAULT_SNOOZE_DRAFT });
+    setCopiedTarget(null);
+  }
+
+  async function copyToClipboard(text: string, target: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedTarget(target);
+      window.setTimeout(() => {
+        setCopiedTarget((prev) => (prev === target ? null : prev));
+      }, 1500);
+    } catch {
+      // Clipboard API can fail in non-secure contexts; surface the text
+      // via a prompt so the operator can copy it manually.
+      window.prompt("Copy this:", text);
+    }
   }
 
   const metrosWithAlerts = useMemo(() => {

@@ -41,6 +41,8 @@ export type OperatorAlert = {
   lastKnownGoodEvents?: number;
   fetchedAt?: string;
   fetches?: OperatorAlertFetch[];
+  /** ISO timestamp from `data/alert-snoozes.json` if the source is snoozed. */
+  snoozedUntil?: string;
 };
 
 export type OperatorAlertFile = {
