@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
+  assignEventSlugs,
   buildEventsDataset,
   expandRecurringTemplates,
   extractBiblioEvents,
@@ -1394,3 +1395,51 @@ test("extractTicketmasterEvents applies source allow and exclude filters", () =>
   assert.equal(events[0].title, "Beauty And The Beast (Touring) - Recommended ages 6 and Up");
   assert.equal(events[0].extractionMethod, "ticketmaster");
 });
+
+test("assignEventSlugs builds stable slugs from title+venue and suffixes collisions with baseId/id", () => {
+  // Recurring template: two occurrences of the same museum hour collapse to a
+  // single slug (per ADR-04). One-off events with different titles get distinct
+  // slugs from title+venue alone. A true collision (same title+venue, different
+  // baseId) is suffixed with the stable baseId-derived suffix.
+  const events = [
+    { id: "atl-1-2026-05-25", baseId: "atl-museum-hour", title: "Members Hour", venue: "Atlanta Children's Museum" },
+    { id: "atl-1-2026-05-26", baseId: "atl-museum-hour", title: "Members Hour", venue: "Atlanta Children's Museum" },
+    { id: "atl-2", baseId: null, title: "Family Yoga", venue: "Atlanta Children's Museum" },
+    { id: "phx-1", baseId: "phx-museum-hour", title: "Members Hour", venue: "Atlanta Children's Museum" },
+  ];
+  assignEventSlugs(events);
+  assert.equal(events[0].slug, "members-hour-atlanta-children-s-museum");
+  // Recurring duplicate keeps slug from title+venue + stable suffix
+  assert.equal(events[1].slug, "members-hour-atlanta-children-s-museum-atl-museum-hour");
+  assert.equal(events[2].slug, "family-yoga-atlanta-children-s-museum");
+  // Different baseId on a true collision gets its own stable suffix
+  assert.equal(events[3].slug, "members-hour-atlanta-children-s-museum-phx-museum-hour");
+});
+
+test("buildEventsDataset writes a slug on every event", () => {
+  const dataset = buildEventsDataset(
+    [
+      {
+        id: "id-1",
+        title: "Storytime",
+        venue: "Main Library",
+        city: "San Francisco",
+        neighborhood: "Civic Center",
+        lat: 37.78,
+        lon: -122.41,
+        category: "Library",
+        daysOfWeek: [6],
+        timeWindow: "Morning",
+        startDateTime: "2026-05-09T10:00:00-07:00",
+        endDateTime: "2026-05-09T11:00:00-07:00",
+        ageBands: ["preschool"],
+        cost: "Free",
+        url: "https://example.org/storytime",
+      },
+    ],
+    { sourceCount: 1 },
+  );
+  assert.equal(dataset.events.length, 1);
+  assert.equal(dataset.events[0].slug, "storytime-main-library");
+});
+

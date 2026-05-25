@@ -3829,12 +3829,46 @@ function scoreEvent(event) {
   return score;
 }
 
+// Per ADR-04: turn the OSM-id-style suffix used for spots (n123, w456, r789)
+// into something usable for event ids, which are pipeline-built strings, not
+// OSM nodes. Falls back to a plain slugify of the id.
+export function getStableEventSuffix(id) {
+  if (!id || typeof id !== "string") return "";
+  return slugify(id);
+}
+
+// Per ADR-04: slug = slugify(title + venue), with getStableSuffix(baseId ?? id)
+// appended only on collision. Mirrors buildSpotSlugLookup in
+// scripts/generate-seo-pages.mjs so the SEO-page renderer and the pipeline
+// agree on the canonical slug. The audit script
+// (scripts/audit-event-slugs.mjs) is the safety net for the rare case where
+// even the stable-suffixed slug collides.
+export function assignEventSlugs(events) {
+  const used = new Map();
+  for (const event of events) {
+    if (!event || typeof event.title !== "string") continue;
+    const base = slugify(`${event.title} ${event.venue ?? ""}`);
+    if (!base) continue;
+    let s = base;
+    if (used.has(s)) {
+      const suffix = getStableEventSuffix(event.baseId ?? event.id);
+      s = suffix ? `${base}-${suffix}` : `${base}-${used.get(base)}`;
+      used.set(base, (used.get(base) || 2) + 1);
+    } else {
+      used.set(s, 2);
+    }
+    event.slug = s;
+  }
+  return events;
+}
+
 export function buildEventsDataset(events, options = {}) {
   const generatedAt = options.generatedAt || new Date().toISOString();
   const deduped = dedupeEvents(events).map((event) => ({
     ...event,
     fetchedAt: event.fetchedAt || generatedAt,
   }));
+  assignEventSlugs(deduped);
   return {
     schemaVersion: 2,
     metroId: options.metroId || null,

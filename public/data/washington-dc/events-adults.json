@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "metroId": "washington-dc",
-  "generatedAt": "2026-05-22T21:49:25.119Z",
+  "generatedAt": "2026-05-25T16:46:18.230Z",
   "source": {
     "name": "Washington DC event source registry",
     "registryPath": "data/event-sources-washington-dc.json",
@@ -31,41 +31,6 @@
   },
   "count": 5,
   "events": [
-    {
-      "id": "dc-rolling-to-remember-2026-05-24",
-      "title": "Rolling to Remember Motorcycle Rally",
-      "description": "Annual motorcycle ride honoring veterans, POWs/MIAs, and fallen service members. Rides through DC over Memorial Day weekend.",
-      "venue": "RFK Stadium / National Mall",
-      "city": "Washington",
-      "neighborhood": "National Mall",
-      "lat": 38.8895,
-      "lon": -76.9719,
-      "category": "Community",
-      "daysOfWeek": [
-        0
-      ],
-      "timeWindow": "All-Day",
-      "startDateTime": "2026-05-24T08:00:00.000-04:00",
-      "endDateTime": "2026-05-24T17:00:00.000-04:00",
-      "ageBands": [
-        "preschool",
-        "school-age",
-        "tween"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Free",
-      "url": "https://rollingtoremember.com/",
-      "verified": true,
-      "metroId": "washington-dc",
-      "sourceId": "manual",
-      "sourceName": "Manual entry",
-      "sourceUrl": "https://rollingtoremember.com/",
-      "sourceMode": "manual",
-      "extractionMethod": "manual",
-      "fetchedAt": "2026-05-22T21:49:25.119Z"
-    },
     {
       "id": "dc-national-memorial-day-concert-2026-05-24",
       "title": "National Memorial Day Concert",
@@ -99,7 +64,8 @@
       "sourceUrl": "https://www.pbs.org/national-memorial-day-concert/",
       "sourceMode": "manual",
       "extractionMethod": "manual",
-      "fetchedAt": "2026-05-22T21:49:25.119Z"
+      "fetchedAt": "2026-05-25T16:46:18.230Z",
+      "slug": "national-memorial-day-concert-u-s-capitol-west-lawn"
     },
     {
       "id": "dc-national-memorial-day-parade-2026-05-25",
@@ -134,7 +100,8 @@
       "sourceUrl": "https://nationalmemorialdayparade.com/",
       "sourceMode": "manual",
       "extractionMethod": "manual",
-      "fetchedAt": "2026-05-22T21:49:25.119Z"
+      "fetchedAt": "2026-05-25T16:46:18.230Z",
+      "slug": "national-memorial-day-parade-constitution-avenue-nw-7th-to-17th"
     },
     {
       "id": "dc-arlington-memorial-day-observance-2026-05-25",
@@ -169,7 +136,46 @@
       "sourceUrl": "https://www.arlingtoncemetery.mil/",
       "sourceMode": "manual",
       "extractionMethod": "manual",
-      "fetchedAt": "2026-05-22T21:49:25.119Z"
+      "fetchedAt": "2026-05-25T16:46:18.230Z",
+      "slug": "arlington-national-cemetery-memorial-day-observance-memorial-amphitheater-arlington-national-cemetery"
+    },
+    {
+      "id": "songbyrd-dc-goodfella-records-presents-underground-lord-81faae17f1",
+      "baseId": null,
+      "title": "GOODFELLA RECORDS PRESENTS: UNDERGROUND LORD$",
+      "description": "Supporting Acts: ft. Ankhlejohn, Paco Panama, Nast B, Davon & 6KYae, LBE Hunt 07:00 PM 540 Penn Street NE Door Time:",
+      "venue": "Songbyrd Music House",
+      "city": "Washington",
+      "neighborhood": "Washington",
+      "lat": 38.9216,
+      "lon": -77.0421,
+      "category": "Music",
+      "daysOfWeek": [
+        5
+      ],
+      "timeWindow": "Afternoon",
+      "startDateTime": "2026-06-05T19:00:00.000Z",
+      "endDateTime": "2026-06-06T00:00:00.000Z",
+      "ageBands": [
+        "school-age"
+      ],
+      "audiences": [
+        "adults"
+      ],
+      "cost": "$",
+      "url": "https://www.songbyrddc.com/events",
+      "sourceUrl": "https://www.songbyrddc.com/events",
+      "sourceId": "songbyrd-dc",
+      "sourceName": "Songbyrd Music House",
+      "sourceMode": "last-known-good",
+      "extractionMethod": "html",
+      "verified": true,
+      "fetchedAt": "2026-05-23T21:25:11.119Z",
+      "metroId": "washington-dc",
+      "originalSourceMode": "html",
+      "originalFetchedAt": "2026-05-23T21:25:11.119Z",
+      "restoredAt": "2026-05-25T16:46:18.230Z",
+      "slug": "goodfella-records-presents-underground-lord-songbyrd-music-house"
     },
     {
       "id": "montgomery-county-ag-fair-pokefair-renaissance-125551438b",
@@ -203,8 +209,9 @@
       "sourceMode": "json-ld",
       "extractionMethod": "json-ld",
       "verified": true,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
-      "metroId": "washington-dc"
+      "fetchedAt": "2026-05-25T16:46:18.230Z",
+      "metroId": "washington-dc",
+      "slug": "pokefair-renaissance-montgomery-county-fairgrounds-building-6-hall-2"
     }
   ]
 }
