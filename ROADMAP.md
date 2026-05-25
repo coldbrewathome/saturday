@@ -1,6 +1,6 @@
 # Roadmap
 
-_Last updated: 2026-05-25_ (tick 22)
+_Last updated: 2026-05-25_ (tick 23)
 
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
@@ -10,7 +10,7 @@ _In flight — actively being worked on. Keep this to 1–3 items._
 - **Effort:** M (1–2 days)
 - **Links:** `46896a9` (rich share previews), `a28617b` (stable spot slugs + SEO audit pattern), `public/data/<metro>/events.json` (source data), `src/App.tsx:1096` (hash router)
 - **Tasks:**
-  - [ ] Decide URL shape + slug strategy. Write `docs/decisions/04-event-detail-pages.md` covering: (a) URL form (`/<metro>/events/<slug>` vs. hash `#/event/<id>`), (b) slug source (stable id from event pipeline vs. derived `slugify(title + date)` with collision handling), (c) whether SSR/prerender is needed for SEO or if client-rendered hash routes + sitemap suffice given current spots approach, (d) how legacy/stale event URLs (events disappear after weekend) redirect — 410, redirect to metro guide, or stub-with-noindex. <2h.
+  - [x] Decide URL shape + slug strategy. Write `docs/decisions/04-event-detail-pages.md` covering: (a) URL form (`/<metro>/events/<slug>` vs. hash `#/event/<id>`), (b) slug source (stable id from event pipeline vs. derived `slugify(title + date)` with collision handling), (c) whether SSR/prerender is needed for SEO or if client-rendered hash routes + sitemap suffice given current spots approach, (d) how legacy/stale event URLs (events disappear after weekend) redirect — 410, redirect to metro guide, or stub-with-noindex. <2h. _(209ce88)_
   - [ ] Add stable `slug` field to event records in the pipeline. Land in whatever module builds `public/data/<metro>/events.json` (grep for `events.json` writes). Add a `scripts/audit-event-slugs.*` check mirroring the spot-slug audit from `a28617b`, wired into `npm run validate:events` so CI fails on collisions or non-stable churn.
   - [ ] Scaffold an `EventDetailView` component at `src/EventDetailView.tsx` that takes a metro + slug, finds the event, and renders title/date/venue/description. Wire into the hash router in `src/App.tsx` (route alongside the existing `#/plans/...` and `#/p/...` matchers). Plain layout — visual polish in a later task.
   - [ ] Add JSON-LD `Event` structured data + OpenGraph meta tags on the detail view (or via the same prerender surface that handles spots). Mirror the rich-share-preview approach from `46896a9`.
