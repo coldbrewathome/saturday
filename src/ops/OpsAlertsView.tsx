@@ -3,17 +3,19 @@
 // hash route in the existing app; `main.tsx` mounts this component when the
 // hash matches.
 //
-// v1 scope (per ROADMAP "Operator-alerts triage UI" task 3):
+// v1 scope:
 //   - Columns: severity, metro, sourceName, issueType, recoveredBy, fetchedAt.
 //   - Sort: severity desc (critical first), then fetchedAt desc.
-//   - Static — no filtering, no snooze controls yet (later tasks).
+//   - Filters: severity (critical/warning/all) + metro multi-select, with
+//     URL-querystring persistence so reloads keep the view.
+//   - No snooze controls yet (later task).
 //
 // The component re-uses `loadAllAlerts` for the live fetch and `sortAlerts`
 // for the deterministic order; both are pulled out so tests can cover them
 // without a DOM.
 
 import { useEffect, useMemo, useState } from "react";
-import { METROS } from "../metros";
+import { METROS, type MetroId } from "../metros";
 import {
   type AlertSeverity,
   type MergedAlerts,
@@ -47,6 +49,69 @@ function metroLabel(metroId: string): string {
   return METROS.find((m) => m.id === metroId)?.label ?? metroId;
 }
 
+export type SeverityFilter = "all" | "critical" | "warning";
+
+export type AlertsFilter = {
+  severity: SeverityFilter;
+  /** Selected metro ids. Empty array = all metros. */
+  metros: MetroId[];
+};
+
+export const DEFAULT_FILTER: AlertsFilter = { severity: "all", metros: [] };
+
+/**
+ * Apply severity + metro filters. Severity "all" is a no-op; "critical" or
+ * "warning" keeps only that bucket. Metros empty = no metro filter; otherwise
+ * keep alerts whose `metroId` is in the set.
+ */
+export function filterAlerts(
+  alerts: OperatorAlert[],
+  filter: AlertsFilter,
+): OperatorAlert[] {
+  const metroSet =
+    filter.metros.length > 0 ? new Set<MetroId>(filter.metros) : null;
+  return alerts.filter((a) => {
+    if (filter.severity !== "all" && a.severity !== filter.severity)
+      return false;
+    if (metroSet && !metroSet.has(a.metroId)) return false;
+    return true;
+  });
+}
+
+/**
+ * Read filter state from a hash string like
+ * `#/ops/alerts?severity=critical&metros=atlanta,boston`. Unknown values fall
+ * back to defaults; the function never throws.
+ */
+export function parseFilterFromHash(hash: string): AlertsFilter {
+  const qIdx = hash.indexOf("?");
+  if (qIdx === -1) return { ...DEFAULT_FILTER };
+  const params = new URLSearchParams(hash.slice(qIdx + 1));
+  const sevRaw = (params.get("severity") || "all").toLowerCase();
+  const severity: SeverityFilter =
+    sevRaw === "critical" || sevRaw === "warning" ? sevRaw : "all";
+  const metrosRaw = params.get("metros") || "";
+  const knownMetroIds = new Set(METROS.map((m) => m.id));
+  const metros = metrosRaw
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0 && knownMetroIds.has(s));
+  return { severity, metros };
+}
+
+/**
+ * Serialize a filter back into a hash. Defaults are omitted so a "no filter"
+ * state produces `#/ops/alerts` without trailing query noise.
+ */
+export function buildOpsAlertsHash(filter: AlertsFilter): string {
+  const params = new URLSearchParams();
+  if (filter.severity !== "all") params.set("severity", filter.severity);
+  if (filter.metros.length > 0)
+    params.set("metros", [...filter.metros].sort().join(","));
+  const qs = params.toString();
+  return qs ? `#/ops/alerts?${qs}` : "#/ops/alerts";
+}
+
 function formatFetchedAt(value?: string): string {
   if (!value) return "—";
   const ms = Date.parse(value);
@@ -65,6 +130,11 @@ export default function OpsAlertsView() {
   const [status, setStatus] = useState<Status>("loading");
   const [merged, setMerged] = useState<MergedAlerts | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [filter, setFilter] = useState<AlertsFilter>(() =>
+    typeof window === "undefined"
+      ? { ...DEFAULT_FILTER }
+      : parseFilterFromHash(window.location.hash),
+  );
 
   useEffect(() => {
     let active = true;
@@ -87,10 +157,59 @@ export default function OpsAlertsView() {
     };
   }, []);
 
-  const sorted = useMemo(
-    () => (merged ? sortAlerts(merged.alerts) : []),
-    [merged],
-  );
+  // Keep filter in sync if the hash is changed externally (back/forward,
+  // pasted URL). We only react to changes that still target this route.
+  useEffect(() => {
+    function handler() {
+      if (!window.location.hash.startsWith("#/ops/alerts")) return;
+      setFilter(parseFilterFromHash(window.location.hash));
+    }
+    window.addEventListener("hashchange", handler);
+    return () => window.removeEventListener("hashchange", handler);
+  }, []);
+
+  // Push filter changes back into the URL via replaceState (no history spam).
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const nextHash = buildOpsAlertsHash(filter);
+    if (window.location.hash === nextHash) return;
+    if (!window.location.hash.startsWith("#/ops/alerts")) return;
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${window.location.search}${nextHash}`,
+    );
+  }, [filter]);
+
+  const sortedFiltered = useMemo(() => {
+    if (!merged) return [];
+    return sortAlerts(filterAlerts(merged.alerts, filter));
+  }, [merged, filter]);
+
+  function toggleMetro(metroId: MetroId) {
+    setFilter((prev) => {
+      const has = prev.metros.includes(metroId);
+      const nextMetros = has
+        ? prev.metros.filter((m) => m !== metroId)
+        : [...prev.metros, metroId];
+      return { ...prev, metros: nextMetros };
+    });
+  }
+
+  function setSeverity(severity: SeverityFilter) {
+    setFilter((prev) => ({ ...prev, severity }));
+  }
+
+  function clearMetros() {
+    setFilter((prev) => ({ ...prev, metros: [] }));
+  }
+
+  const metrosWithAlerts = useMemo(() => {
+    if (!merged) return new Set<MetroId>();
+    const set = new Set<MetroId>();
+    for (const a of merged.alerts) set.add(a.metroId);
+    return set;
+  }, [merged]);
 
   return (
     <div className="ops-alerts">
@@ -120,8 +239,78 @@ export default function OpsAlertsView() {
             {merged.bySeverity.warning} warning · {merged.bySeverity.info} info
           </p>
 
-          {sorted.length === 0 ? (
-            <p className="ops-alerts-state">No active alerts. Nice.</p>
+          <div className="ops-alerts-filters" role="group" aria-label="Filters">
+            <div
+              className="ops-alerts-filter-group"
+              role="radiogroup"
+              aria-label="Severity"
+            >
+              <span className="ops-alerts-filter-label">Severity</span>
+              {(["all", "critical", "warning"] as SeverityFilter[]).map(
+                (sev) => (
+                  <button
+                    key={sev}
+                    type="button"
+                    role="radio"
+                    aria-checked={filter.severity === sev}
+                    className={`ops-alerts-pill${
+                      filter.severity === sev ? " ops-alerts-pill-active" : ""
+                    }`}
+                    onClick={() => setSeverity(sev)}
+                  >
+                    {sev}
+                  </button>
+                ),
+              )}
+            </div>
+
+            <div
+              className="ops-alerts-filter-group"
+              role="group"
+              aria-label="Metros"
+            >
+              <span className="ops-alerts-filter-label">
+                Metros{" "}
+                {filter.metros.length > 0 && (
+                  <button
+                    type="button"
+                    className="ops-alerts-link-btn"
+                    onClick={clearMetros}
+                  >
+                    clear ({filter.metros.length})
+                  </button>
+                )}
+              </span>
+              <div className="ops-alerts-metro-list">
+                {METROS.map((metro) => {
+                  const checked = filter.metros.includes(metro.id);
+                  const hasAlerts = metrosWithAlerts.has(metro.id);
+                  return (
+                    <label
+                      key={metro.id}
+                      className={`ops-alerts-metro${
+                        hasAlerts ? "" : " ops-alerts-metro-empty"
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => toggleMetro(metro.id)}
+                      />
+                      <span>{metro.label}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {sortedFiltered.length === 0 ? (
+            <p className="ops-alerts-state">
+              {merged.total === 0
+                ? "No active alerts. Nice."
+                : "No alerts match the current filters."}
+            </p>
           ) : (
             <table className="ops-alerts-table">
               <thead>
@@ -135,7 +324,7 @@ export default function OpsAlertsView() {
                 </tr>
               </thead>
               <tbody>
-                {sorted.map((alert, idx) => (
+                {sortedFiltered.map((alert, idx) => (
                   <tr key={`${alert.metroId}:${alert.sourceId}:${idx}`}>
                     <td>
                       <span

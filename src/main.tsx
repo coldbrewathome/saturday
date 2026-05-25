@@ -22,7 +22,10 @@ function readPollRouteFromHash(): PollRoute {
 }
 
 function isOpsAlertsHash(): boolean {
-  return window.location.hash === "#/ops/alerts";
+  // Accept "#/ops/alerts" and "#/ops/alerts?..." so filter state can ride in
+  // a querystring inside the hash without breaking route detection.
+  const hash = window.location.hash;
+  return hash === "#/ops/alerts" || hash.startsWith("#/ops/alerts?");
 }
 
 function Root() {

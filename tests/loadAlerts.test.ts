@@ -4,7 +4,12 @@ import {
   type OperatorAlert,
   type OperatorAlertFile,
 } from "../src/ops/loadAlerts";
-import { sortAlerts } from "../src/ops/OpsAlertsView";
+import {
+  buildOpsAlertsHash,
+  filterAlerts,
+  parseFilterFromHash,
+  sortAlerts,
+} from "../src/ops/OpsAlertsView";
 
 function file(
   metroId: string,
@@ -162,5 +167,85 @@ describe("sortAlerts", () => {
     const order = input.map((a) => a.sourceId);
     sortAlerts(input);
     expect(input.map((a) => a.sourceId)).toEqual(order);
+  });
+});
+
+describe("filterAlerts", () => {
+  const sample: OperatorAlert[] = [
+    alert({ severity: "critical", sourceId: "a1", metroId: "atlanta" }),
+    alert({ severity: "warning", sourceId: "a2", metroId: "atlanta" }),
+    alert({ severity: "info", sourceId: "a3", metroId: "atlanta" }),
+    alert({ severity: "critical", sourceId: "b1", metroId: "boston" }),
+    alert({ severity: "warning", sourceId: "c1", metroId: "chicago" }),
+  ];
+
+  it("severity=all + no metros returns all alerts", () => {
+    expect(
+      filterAlerts(sample, { severity: "all", metros: [] }).map((a) => a.sourceId),
+    ).toEqual(["a1", "a2", "a3", "b1", "c1"]);
+  });
+
+  it("severity=critical keeps only critical alerts", () => {
+    expect(
+      filterAlerts(sample, { severity: "critical", metros: [] }).map(
+        (a) => a.sourceId,
+      ),
+    ).toEqual(["a1", "b1"]);
+  });
+
+  it("metro multi-select keeps only matching metros", () => {
+    expect(
+      filterAlerts(sample, {
+        severity: "all",
+        metros: ["atlanta", "chicago"],
+      }).map((a) => a.sourceId),
+    ).toEqual(["a1", "a2", "a3", "c1"]);
+  });
+
+  it("severity + metro filters combine (AND)", () => {
+    expect(
+      filterAlerts(sample, {
+        severity: "warning",
+        metros: ["atlanta"],
+      }).map((a) => a.sourceId),
+    ).toEqual(["a2"]);
+  });
+});
+
+describe("parseFilterFromHash / buildOpsAlertsHash", () => {
+  it("returns defaults for a bare hash", () => {
+    expect(parseFilterFromHash("#/ops/alerts")).toEqual({
+      severity: "all",
+      metros: [],
+    });
+  });
+
+  it("parses severity + metros and drops unknown metro ids", () => {
+    const parsed = parseFilterFromHash(
+      "#/ops/alerts?severity=critical&metros=atlanta,not-a-metro,boston",
+    );
+    expect(parsed.severity).toBe("critical");
+    expect(parsed.metros.sort()).toEqual(["atlanta", "boston"]);
+  });
+
+  it("falls back to 'all' for unknown severity values", () => {
+    expect(
+      parseFilterFromHash("#/ops/alerts?severity=spicy").severity,
+    ).toBe("all");
+  });
+
+  it("builds a bare hash when filter is at defaults", () => {
+    expect(
+      buildOpsAlertsHash({ severity: "all", metros: [] }),
+    ).toBe("#/ops/alerts");
+  });
+
+  it("round-trips a non-default filter", () => {
+    const filter = { severity: "warning" as const, metros: ["boston", "atlanta"] };
+    const hash = buildOpsAlertsHash(filter);
+    expect(hash).toBe("#/ops/alerts?severity=warning&metros=atlanta%2Cboston");
+    const parsed = parseFilterFromHash(hash);
+    expect(parsed.severity).toBe("warning");
+    expect(parsed.metros.sort()).toEqual(["atlanta", "boston"]);
   });
 });
