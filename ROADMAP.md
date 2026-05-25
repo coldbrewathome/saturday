@@ -1,29 +1,24 @@
 # Roadmap
 
-_Last updated: 2026-05-25_ (tick 15)
+_Last updated: 2026-05-25_ (tick 16)
 
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
 
-### Operator-alerts triage UI
-- **Why:** `0936fea` and `22bdfb9` generate per-metro `event-operator-alerts.json` (broken sources, last-known-good fallbacks, zero-extracted feeds), but today they only exist as JSON in `public/data/{metro}/`. No human workflow to act on them — alerts pile up across all 14 metros and silently degrade event coverage. Atlanta alone has 9 active alerts.
+### Analytics dashboard for funnel metrics
+- **Why:** `239ab7f` added privacy-safe first-party metrics, but the data is write-only today — no UI reads it, so funnel drop-off, metro popularity, and feature usage are invisible. Pairs naturally with the just-shipped `/ops/alerts` surface (same operator audience, same auth model).
 - **Effort:** M (1–2 days)
-- **Links:** `public/data/*/event-operator-alerts.json`, `scripts/event-ops-agent.mjs`, `scripts/source-repair-agent.mjs`
+- **Links:** `239ab7f` (metrics capture), `worker/src/` (likely ingestion endpoint), `src/ops/OpsAlertsView.tsx` (sibling ops surface to mirror)
 - **Tasks:**
-  - [x] Decide the surface: standalone `/ops/alerts` route in the existing app vs. a separate `worker/` admin page vs. a static CLI report. Write the decision (and the auth model — operator token? local-only?) to `docs/decisions/02-operator-alerts-ui.md`. <2h.
-  - [x] Add a loader that aggregates all `public/data/*/event-operator-alerts.json` into a single in-memory list with `metroId` attached. Land it at `src/ops/loadAlerts.ts` (or `worker/src/ops-alerts.ts` depending on the decision above) with a unit test covering merge + count totals.
-  - [x] Render a minimal triage table: columns = severity, metro, sourceName, issueType, recoveredBy, fetchedAt. Sort by severity desc then fetchedAt desc. Static HTML/JSX is fine — no filtering yet.
-  - [x] Add filter controls: severity (critical/warning/all) and metro (multi-select). Persist filter state in the URL querystring so reloads keep it.
-  - [x] Add a "snooze until next ingest" action per source: writes `sourceId` + expiry to a local JSON (`data/alert-snoozes.json`) that `scripts/event-ops-agent.mjs` reads when emitting alerts. Snoozed alerts grey-out in the UI; expiry auto-clears.
-  - [x] Backfill unit tests for the snooze pure helpers landed in `27636df`. Cover `scripts/alertSnoozes.mjs` (`parseSnoozesDoc`, `activeSnoozeMap`, `annotateAlertsWithSnoozes`, `upsertSnooze`) and `src/ops/OpsAlertsView.tsx` (`isSnoozedNow`, `buildSnoozePayload`, `buildSnoozeCommand`). Add to `tests/` next to the existing planner/pipeline suites; assert expiry boundaries, malformed-doc fallbacks, and idempotent upsert.
-  - [ ] Wire a top-of-page summary: total alerts, count by severity, count of metros with ≥1 critical. Make critical count link-jump to the filtered view.
+  - [ ] Inventory what's actually captured: read `239ab7f` + grep for the metrics emit call sites. Write a short decision doc at `docs/decisions/03-analytics-dashboard.md` listing (a) the event schema we have today, (b) which 3–5 funnel questions the dashboard should answer first (e.g. "plans-view sign-in conversion", "metro pageviews", "Hop-me-now usage"), (c) the storage surface (worker KV? D1? a flat JSON snapshot?), and (d) auth model (reuse `/ops/alerts` token gate vs. separate). <2h.
+  - [ ] Scaffold the route: add an empty `/ops/analytics` view (mirroring `src/ops/OpsAlertsView.tsx`) with a placeholder "no data yet" state. Wire it into the hash-router next to `#/ops/alerts`. No data loading yet.
+  - [ ] Add a loader that reads aggregated metrics from whatever storage the ADR picked. Land it at `src/ops/loadAnalytics.ts` with a unit test that asserts shape + empty-state behavior on missing data.
+  - [ ] Render the top 3 funnel questions from the ADR as plain numeric cards (big number + label + 7-day delta). Static, no charts yet. Match the visual density of the alerts summary panel from `79a54db`.
+  - [ ] Add a per-metro breakdown table for the highest-signal metric (likely pageviews or sign-in conversion). Sort desc, link metro name to the existing metro guide page.
+  - [ ] Add a single trend chart for the headline metric (last 30 days, daily buckets). Use a minimal inline SVG sparkline — no chart library dep. Cache the rendered data so the page loads <500ms.
 
 ## Next
 _Committed, not yet started. Ordered by priority. Aim for ≤5 items._
-
-### Analytics dashboard for funnel metrics
-- **Why:** `239ab7f` added privacy-safe first-party metrics; there's no UI to read them, so the data is invisible. Pairs naturally with the ops UI surface above.
-- **Effort:** M
 
 ### Event detail pages (shareable, SEO-indexed)
 - **Why:** Pairs with the rich share previews from `46896a9` and the heavy event pipeline investment; per-event landing pages are the missing surface.
@@ -52,6 +47,7 @@ _Candidates and ideas. Unordered. No commitment._
 ## Done
 _Recently shipped (last ~10 items). Trim older ones into a separate CHANGELOG if needed._
 
+- 2026-05-25 · **Operator-alerts triage UI** — `/ops/alerts` route with ADR-02 surface decision, alerts loader (`src/ops/loadAlerts.ts`), triage table sorted by severity, severity+metro filters with URL state, per-source snooze action (`data/alert-snoozes.json` + pipeline annotation), snooze-helper unit tests, and a top-of-page summary with link-jump to the critical filter (`79a54db`).
 - 2026-05-24 · **Newsletter delivery (code-complete)** — Resend provider chosen (ADR 01), capture path inventoried, `worker/src/newsletter.ts` scaffolded behind `NEWSLETTER_ADMIN_TOKEN`, Resend HTTP wired, digest HTML+text template w/ unit tests, dry-run preview CLI, per-metro fetch+render in `sendWeekendDigest`, operator-test allowlist + runbook. Activation (Resend account, DNS, secrets, mail-client QA) is external ops work tracked in Later.
 - 2026-05-22 · **Agentic event ops workflow** — automated event ops + source repair agents.
 - 2026-05-22 · **Newsletter capture card** — sign-in prompt + newsletter card on plans view.
