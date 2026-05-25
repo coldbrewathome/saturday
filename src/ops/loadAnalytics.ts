@@ -140,9 +140,85 @@ export type LoadAnalyticsOptions = {
 };
 
 /**
+ * sessionStorage key for the cached `AnalyticsData`. The trailing `:v1`
+ * lets us invalidate cleanly if the cached shape changes; `days` is part of
+ * the key so different window sizes don't collide.
+ */
+export const CACHE_KEY_PREFIX = "famhop.opsAnalytics.cache:v1";
+/** Cache TTL in ms. 5 min keeps reloads instant without serving badly stale data. */
+export const CACHE_TTL_MS = 5 * 60 * 1000;
+
+type CacheEntry = {
+  /** ms epoch the entry was written. */
+  ts: number;
+  /** The normalized data ready to render. */
+  data: AnalyticsData;
+};
+
+/**
+ * Read a cached `AnalyticsData` if one exists for this window and is still
+ * fresh. Returns `null` for missing/stale/corrupt entries. Pure on `now`
+ * and `storage` so tests don't need a real Storage.
+ */
+export function readCachedAnalytics(
+  days: number,
+  now: number = Date.now(),
+  storage: Pick<Storage, "getItem"> | null | undefined = typeof window !==
+    "undefined"
+    ? window.sessionStorage
+    : null,
+): AnalyticsData | null {
+  if (!storage) return null;
+  let raw: string | null;
+  try {
+    raw = storage.getItem(`${CACHE_KEY_PREFIX}:${days}`);
+  } catch {
+    return null;
+  }
+  if (!raw) return null;
+  let entry: CacheEntry;
+  try {
+    entry = JSON.parse(raw) as CacheEntry;
+  } catch {
+    return null;
+  }
+  if (!entry || typeof entry.ts !== "number" || !entry.data) return null;
+  if (now - entry.ts > CACHE_TTL_MS) return null;
+  return entry.data;
+}
+
+/**
+ * Persist `data` to the cache. Silently swallows storage errors (private
+ * mode, quota exceeded) — the cache is a performance hint, not a hard
+ * requirement.
+ */
+export function writeCachedAnalytics(
+  days: number,
+  data: AnalyticsData,
+  now: number = Date.now(),
+  storage: Pick<Storage, "setItem"> | null | undefined = typeof window !==
+    "undefined"
+    ? window.sessionStorage
+    : null,
+): void {
+  if (!storage) return;
+  const entry: CacheEntry = { ts: now, data };
+  try {
+    storage.setItem(`${CACHE_KEY_PREFIX}:${days}`, JSON.stringify(entry));
+  } catch {
+    // Ignore: cache is best-effort.
+  }
+}
+
+/**
  * Fetch `/metrics?days=N` from the worker with the admin session cookie.
  * Normalizes the response into `AnalyticsData`. Returns a discriminated
  * union so the caller can render the right empty state.
+ *
+ * Successful results are written to the sessionStorage cache so subsequent
+ * dashboard mounts in the same tab can render synchronously; the cache is
+ * read separately via `readCachedAnalytics` so the caller can paint the
+ * stale value before awaiting the network.
  */
 export async function loadAnalytics(
   opts: LoadAnalyticsOptions = {},
@@ -179,5 +255,7 @@ export async function loadAnalytics(
     };
   }
 
-  return { status: "ok", data: normalizeMetricsResponse(body) };
+  const data = normalizeMetricsResponse(body);
+  writeCachedAnalytics(days, data);
+  return { status: "ok", data };
 }

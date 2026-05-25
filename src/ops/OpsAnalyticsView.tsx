@@ -1,23 +1,26 @@
 // Operator analytics dashboard. ADR 03 picked a `#/ops/analytics` hash route
 // mirroring `#/ops/alerts`; this file renders the v1 summary cards for the
 // top funnel questions from the ADR plus a per-metro breakdown table for
-// the headline metric (`app_open`).
+// the headline metric (`app_open`) and a 30-day daily-bucket sparkline for
+// the same headline metric.
 //
 // v1 scope: plain numeric cards (big number + label + 7-day delta) covering
 // the headline counters from the top 3 ADR questions —
 //   Q1 (traffic):    app_open
 //   Q2 (share loop): plan_shared, poll_viewed, vote_cast
 //   Q3 (hop-now):    hop_now_opened
-// Plus the per-metro breakdown table for `app_open` (ADR Q5). No sparkline
-// yet — that's the next roadmap task. Ratios (poll_viewed/plan_shared, etc.)
-// are deliberately left for the next pass.
+// Plus the per-metro breakdown table for `app_open` (ADR Q5) and a single
+// inline-SVG sparkline for the same headline metric (no chart-library
+// dep). Ratios (poll_viewed/plan_shared, etc.) are deliberately left for
+// the next pass.
 //
 // Reuses `ops-alerts-*` CSS classes for the layout shell to match the
-// visual density of the alerts summary panel per ADR 03.
+// visual density of the alerts summary panel per ADR 03. The loader hits
+// a sessionStorage cache before the network so reloads paint <500ms.
 //
 // Pure helpers (`sumWindow`, `computeCardData`, `formatDelta`,
-// `computeMetroRows`) are exported for unit testing; `OpsAnalyticsView` is
-// the thin React wrapper.
+// `computeMetroRows`, `buildSparklineSeries`, `buildSparklinePath`) are
+// exported for unit testing; `OpsAnalyticsView` is the thin React wrapper.
 
 import { useEffect, useState } from "react";
 import { METROS } from "../metros";
@@ -26,7 +29,13 @@ import {
   type LoadAnalyticsResult,
   type MetricName,
   loadAnalytics,
+  readCachedAnalytics,
 } from "./loadAnalytics";
+
+/** Headline metric the sparkline tracks (matches the top numeric card). */
+export const SPARKLINE_METRIC: MetricName = "app_open";
+/** Number of daily buckets the sparkline renders. */
+export const SPARKLINE_DAYS = 30;
 
 /** The single metric the per-metro breakdown table sorts on (ADR Q5). */
 export const METRO_TABLE_METRIC: MetricName = "app_open";
@@ -182,44 +191,184 @@ export function computeMetroRows(
   return rows;
 }
 
+export type SparklinePoint = {
+  /** YYYY-MM-DD bucket. */
+  date: string;
+  /** Count for the metric on that day; missing days are filled with 0. */
+  value: number;
+};
+
+/**
+ * Build a contiguous `[oldest, ..., yesterday]` series for `metric` covering
+ * the last `days` buckets. Days absent from `byDay` are filled with 0 so
+ * the sparkline path has no gaps. Today is excluded (partial-day data is
+ * misleading at the right edge of a trend line); the rightmost point is
+ * always yesterday. Pure on `today`.
+ */
+export function buildSparklineSeries(
+  byDay: AnalyticsData["byDay"],
+  metric: MetricName,
+  days: number = SPARKLINE_DAYS,
+  today: Date = new Date(),
+): SparklinePoint[] {
+  const out: SparklinePoint[] = [];
+  // i=days → oldest; i=1 → yesterday.
+  for (let i = days; i >= 1; i--) {
+    const date = isoDay(today, i);
+    const raw = byDay[date]?.[metric];
+    const value = typeof raw === "number" && Number.isFinite(raw) ? raw : 0;
+    out.push({ date, value });
+  }
+  return out;
+}
+
+/**
+ * Build the SVG `d` attribute for a polyline through `series`. Coordinates
+ * are scaled into `[0, width] × [0, height]`; the y-axis is inverted (SVG
+ * origin is top-left) so taller bars draw higher. A series with all zeros
+ * draws a flat line at the bottom; a single-point series draws a single
+ * `M` command. Returns `""` for an empty series so the caller can branch
+ * on truthiness.
+ */
+export function buildSparklinePath(
+  series: SparklinePoint[],
+  width: number,
+  height: number,
+): string {
+  if (series.length === 0) return "";
+  const max = series.reduce((acc, p) => (p.value > acc ? p.value : acc), 0);
+  const denomX = series.length > 1 ? series.length - 1 : 1;
+  const parts: string[] = [];
+  for (let i = 0; i < series.length; i++) {
+    const x = (i / denomX) * width;
+    // Bottom-anchor zeros so a flat line sits at the baseline, not mid-chart.
+    const y = max > 0 ? height - (series[i]!.value / max) * height : height;
+    parts.push(`${i === 0 ? "M" : "L"}${x.toFixed(2)} ${y.toFixed(2)}`);
+  }
+  return parts.join(" ");
+}
+
 type Status = "loading" | "ok" | "unauthorized" | "error";
 
+const SPARKLINE_WIDTH = 720;
+const SPARKLINE_HEIGHT = 80;
+const SPARKLINE_PAD = 6;
+
+/**
+ * Tiny inline-SVG line chart. No deps; full series flat-zero renders the
+ * baseline + the "no activity" message instead of an empty SVG so the
+ * operator can tell the difference between a loaded-but-empty state and a
+ * broken render.
+ */
+function Sparkline({
+  series,
+  label,
+}: {
+  series: SparklinePoint[];
+  label: string;
+}) {
+  const innerW = SPARKLINE_WIDTH - SPARKLINE_PAD * 2;
+  const innerH = SPARKLINE_HEIGHT - SPARKLINE_PAD * 2;
+  const d = buildSparklinePath(series, innerW, innerH);
+  const total = series.reduce((acc, p) => acc + p.value, 0);
+  if (series.length === 0 || total === 0) {
+    return (
+      <p className="ops-alerts-state ops-analytics-sparkline-empty">
+        No daily activity recorded in this window yet.
+      </p>
+    );
+  }
+  const max = series.reduce((acc, p) => (p.value > acc ? p.value : acc), 0);
+  const first = series[0]!;
+  const last = series[series.length - 1]!;
+  return (
+    <figure className="ops-analytics-sparkline" aria-label={label}>
+      <svg
+        viewBox={`0 0 ${SPARKLINE_WIDTH} ${SPARKLINE_HEIGHT}`}
+        preserveAspectRatio="none"
+        role="img"
+        aria-label={label}
+      >
+        <g transform={`translate(${SPARKLINE_PAD} ${SPARKLINE_PAD})`}>
+          <path
+            d={d}
+            fill="none"
+            stroke="var(--accent)"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          />
+        </g>
+      </svg>
+      <figcaption className="ops-analytics-sparkline-caption">
+        <span>{first.date}</span>
+        <span>peak {max.toLocaleString()}</span>
+        <span>{last.date}</span>
+      </figcaption>
+    </figure>
+  );
+}
+
+/**
+ * Window the loader requests. 30 days = the sparkline window, which fully
+ * subsumes the 14 days the WoW cards need.
+ */
+const LOAD_DAYS = SPARKLINE_DAYS;
+
 export default function OpsAnalyticsView() {
-  const [status, setStatus] = useState<Status>("loading");
-  const [data, setData] = useState<AnalyticsData | null>(null);
+  // Seed state from the sessionStorage cache so a recent visit paints in
+  // <500ms without waiting on the network. The background fetch below then
+  // overwrites with fresh data; status stays "ok" the whole time so the
+  // user never sees a "Loading…" flash on a cache hit.
+  const cached =
+    typeof window !== "undefined" ? readCachedAnalytics(LOAD_DAYS) : null;
+  const [status, setStatus] = useState<Status>(cached ? "ok" : "loading");
+  const [data, setData] = useState<AnalyticsData | null>(cached);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
-    setStatus("loading");
-    // 14 days = current 7d window + prior 7d window for the WoW delta.
-    loadAnalytics({ days: 14 })
+    loadAnalytics({ days: LOAD_DAYS })
       .then((result: LoadAnalyticsResult) => {
         if (!active) return;
         if (result.status === "ok") {
           setData(result.data);
           setStatus("ok");
         } else if (result.status === "unauthorized") {
+          // If we had cached data, drop it — the operator's session expired.
+          setData(null);
           setStatus("unauthorized");
         } else {
-          setErrorMessage(result.message);
-          setStatus("error");
+          // Network/5xx error: keep any cached data on screen, only surface
+          // the error state when we have nothing else to show.
+          if (!data) {
+            setErrorMessage(result.message);
+            setStatus("error");
+          }
         }
       })
       .catch((err: unknown) => {
         if (!active) return;
-        setErrorMessage(
-          err instanceof Error ? err.message : "Failed to load analytics.",
-        );
-        setStatus("error");
+        if (!data) {
+          setErrorMessage(
+            err instanceof Error ? err.message : "Failed to load analytics.",
+          );
+          setStatus("error");
+        }
       });
     return () => {
       active = false;
     };
+    // Mount-only effect. `data` referenced inside the closure is the seed
+    // snapshot from the cache, which is intentional: we want the "did we
+    // have a cache on mount?" check, not a fresh read every re-render.
   }, []);
 
   const cards = data ? computeCardData(data) : [];
   const metroRows = data ? computeMetroRows(data) : [];
+  const sparklineSeries = data
+    ? buildSparklineSeries(data.byDay, SPARKLINE_METRIC, SPARKLINE_DAYS)
+    : [];
 
   return (
     <div className="ops-alerts">
@@ -268,6 +417,14 @@ export default function OpsAnalyticsView() {
               </div>
             ))}
           </dl>
+
+          <h2 className="ops-analytics-section-h">
+            App opens, last {SPARKLINE_DAYS} days
+          </h2>
+          <Sparkline
+            series={sparklineSeries}
+            label={`Daily ${SPARKLINE_METRIC} for the ${SPARKLINE_DAYS} days ending yesterday`}
+          />
 
           <h2 className="ops-analytics-section-h">
             App opens by metro ({data.days}d)

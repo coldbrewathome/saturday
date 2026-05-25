@@ -1,12 +1,18 @@
 import { describe, expect, it, vi } from "vitest";
 import {
+  CACHE_KEY_PREFIX,
+  CACHE_TTL_MS,
   loadAnalytics,
   normalizeMetricsResponse,
+  readCachedAnalytics,
+  writeCachedAnalytics,
   type AnalyticsData,
   type MetricsResponse,
 } from "../src/ops/loadAnalytics";
 import {
   CARD_SPECS,
+  buildSparklinePath,
+  buildSparklineSeries,
   computeCardData,
   computeMetroRows,
   deltaClass,
@@ -420,5 +426,163 @@ describe("deltaClass", () => {
 
   it("returns the empty class for a flat WoW comparison", () => {
     expect(deltaClass({ delta: 0, prior: 6 })).toBe("");
+  });
+});
+
+describe("buildSparklineSeries", () => {
+  const today = new Date("2026-05-25T10:00:00Z");
+
+  it("returns `days` points ending at yesterday (today excluded)", () => {
+    const series = buildSparklineSeries({}, "app_open", 30, today);
+    expect(series.length).toBe(30);
+    expect(series[0]?.date).toBe("2026-04-25"); // 30 days back
+    expect(series[series.length - 1]?.date).toBe("2026-05-24"); // yesterday
+  });
+
+  it("fills missing days with 0", () => {
+    const series = buildSparklineSeries({}, "app_open", 7, today);
+    for (const p of series) expect(p.value).toBe(0);
+  });
+
+  it("picks up the right metric values for known days", () => {
+    const data = normalizeMetricsResponse({
+      byDay: {
+        "2026-05-24": { app_open: 10, vote_cast: 99 },
+        "2026-05-22": { app_open: 3 },
+        "2026-05-25": { app_open: 50 }, // today, excluded
+      },
+    });
+    const series = buildSparklineSeries(data.byDay, "app_open", 7, today);
+    expect(series.find((p) => p.date === "2026-05-24")?.value).toBe(10);
+    expect(series.find((p) => p.date === "2026-05-22")?.value).toBe(3);
+    expect(series.find((p) => p.date === "2026-05-23")?.value).toBe(0);
+    expect(series.find((p) => p.date === "2026-05-25")).toBeUndefined();
+  });
+
+  it("ignores other metrics on the same day", () => {
+    const data = normalizeMetricsResponse({
+      byDay: { "2026-05-24": { vote_cast: 7 } },
+    });
+    const series = buildSparklineSeries(data.byDay, "app_open", 3, today);
+    for (const p of series) expect(p.value).toBe(0);
+  });
+});
+
+describe("buildSparklinePath", () => {
+  it("returns '' for an empty series", () => {
+    expect(buildSparklinePath([], 100, 50)).toBe("");
+  });
+
+  it("emits a single M command for a one-point series", () => {
+    const path = buildSparklinePath([{ date: "x", value: 5 }], 100, 50);
+    expect(path.startsWith("M")).toBe(true);
+    expect(path.includes("L")).toBe(false);
+  });
+
+  it("scales x evenly from 0..width", () => {
+    const series = [
+      { date: "a", value: 1 },
+      { date: "b", value: 1 },
+      { date: "c", value: 1 },
+    ];
+    const path = buildSparklinePath(series, 100, 50);
+    // 3 points → x = 0, 50, 100
+    expect(path).toContain("M0.00");
+    expect(path).toContain("L50.00");
+    expect(path).toContain("L100.00");
+  });
+
+  it("anchors a flat-zero series at the bottom (y=height)", () => {
+    const series = [
+      { date: "a", value: 0 },
+      { date: "b", value: 0 },
+    ];
+    const path = buildSparklinePath(series, 100, 50);
+    // Both points sit at y = 50 (the baseline).
+    expect(path).toBe("M0.00 50.00 L100.00 50.00");
+  });
+
+  it("inverts y so the peak draws at the top (y=0)", () => {
+    const series = [
+      { date: "a", value: 0 },
+      { date: "b", value: 10 },
+    ];
+    const path = buildSparklinePath(series, 100, 50);
+    // Peak (value=10) → y=0; trough (value=0) → y=50.
+    expect(path).toBe("M0.00 50.00 L100.00 0.00");
+  });
+});
+
+describe("analytics cache", () => {
+  function makeStorage(): Storage {
+    const store = new Map<string, string>();
+    return {
+      getItem: (k) => (store.has(k) ? store.get(k)! : null),
+      setItem: (k, v) => {
+        store.set(k, v);
+      },
+      removeItem: (k) => {
+        store.delete(k);
+      },
+      clear: () => store.clear(),
+      key: (i) => Array.from(store.keys())[i] ?? null,
+      get length() {
+        return store.size;
+      },
+    } as Storage;
+  }
+
+  it("round-trips a write/read within the TTL", () => {
+    const storage = makeStorage();
+    const data = normalizeMetricsResponse({ totals: { app_open: 12 } });
+    writeCachedAnalytics(30, data, 1000, storage);
+    const got = readCachedAnalytics(30, 2000, storage);
+    expect(got?.totals.app_open).toBe(12);
+  });
+
+  it("returns null past the TTL", () => {
+    const storage = makeStorage();
+    const data = normalizeMetricsResponse({});
+    writeCachedAnalytics(30, data, 1000, storage);
+    expect(readCachedAnalytics(30, 1000 + CACHE_TTL_MS + 1, storage)).toBeNull();
+  });
+
+  it("keys on days so different windows don't collide", () => {
+    const storage = makeStorage();
+    const small = normalizeMetricsResponse({ totals: { app_open: 1 } });
+    const big = normalizeMetricsResponse({ totals: { app_open: 99 } });
+    writeCachedAnalytics(7, small, 1000, storage);
+    writeCachedAnalytics(30, big, 1000, storage);
+    expect(readCachedAnalytics(7, 1000, storage)?.totals.app_open).toBe(1);
+    expect(readCachedAnalytics(30, 1000, storage)?.totals.app_open).toBe(99);
+  });
+
+  it("returns null for a missing entry", () => {
+    expect(readCachedAnalytics(30, 1000, makeStorage())).toBeNull();
+  });
+
+  it("returns null on corrupt JSON without throwing", () => {
+    const storage = makeStorage();
+    storage.setItem(`${CACHE_KEY_PREFIX}:30`, "{not json");
+    expect(readCachedAnalytics(30, 1000, storage)).toBeNull();
+  });
+
+  it("treats null storage as a no-op (SSR / disabled)", () => {
+    expect(readCachedAnalytics(30, 1000, null)).toBeNull();
+    expect(() =>
+      writeCachedAnalytics(30, normalizeMetricsResponse({}), 1000, null),
+    ).not.toThrow();
+  });
+
+  it("swallows setItem errors so quota issues don't break the loader", () => {
+    const broken: Storage = {
+      ...makeStorage(),
+      setItem: () => {
+        throw new Error("quota");
+      },
+    };
+    expect(() =>
+      writeCachedAnalytics(30, normalizeMetricsResponse({}), 1000, broken),
+    ).not.toThrow();
   });
 });
