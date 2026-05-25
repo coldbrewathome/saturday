@@ -6,7 +6,10 @@ import {
 } from "../src/ops/loadAlerts";
 import {
   buildOpsAlertsHash,
+  buildSnoozeCommand,
+  buildSnoozePayload,
   filterAlerts,
+  isSnoozedNow,
   parseFilterFromHash,
   sortAlerts,
 } from "../src/ops/OpsAlertsView";
@@ -247,5 +250,117 @@ describe("parseFilterFromHash / buildOpsAlertsHash", () => {
     const parsed = parseFilterFromHash(hash);
     expect(parsed.severity).toBe("warning");
     expect(parsed.metros.sort()).toEqual(["atlanta", "boston"]);
+  });
+});
+
+describe("isSnoozedNow", () => {
+  const now = new Date("2026-05-25T12:00:00Z");
+
+  it("returns false when snoozedUntil is missing", () => {
+    expect(isSnoozedNow({ snoozedUntil: undefined }, now)).toBe(false);
+  });
+
+  it("returns true for a timestamp strictly in the future", () => {
+    expect(
+      isSnoozedNow({ snoozedUntil: "2026-05-26T00:00:00Z" }, now),
+    ).toBe(true);
+  });
+
+  it("treats the exact `now` boundary as expired (not snoozed)", () => {
+    expect(
+      isSnoozedNow({ snoozedUntil: "2026-05-25T12:00:00Z" }, now),
+    ).toBe(false);
+  });
+
+  it("returns false for past timestamps", () => {
+    expect(
+      isSnoozedNow({ snoozedUntil: "2026-05-24T00:00:00Z" }, now),
+    ).toBe(false);
+  });
+
+  it("returns false for garbage timestamps", () => {
+    expect(isSnoozedNow({ snoozedUntil: "not-a-date" }, now)).toBe(false);
+  });
+});
+
+describe("buildSnoozePayload", () => {
+  it("returns sourceId + until without a note when none is provided", () => {
+    expect(
+      buildSnoozePayload({
+        sourceId: "zoo",
+        until: "2026-06-01T00:00:00Z",
+      }),
+    ).toEqual({ sourceId: "zoo", until: "2026-06-01T00:00:00Z" });
+  });
+
+  it("includes a trimmed note when provided", () => {
+    expect(
+      buildSnoozePayload({
+        sourceId: "zoo",
+        until: "2026-06-01T00:00:00Z",
+        note: "  parser broken  ",
+      }),
+    ).toEqual({
+      sourceId: "zoo",
+      until: "2026-06-01T00:00:00Z",
+      note: "parser broken",
+    });
+  });
+
+  it("drops whitespace-only notes", () => {
+    const payload = buildSnoozePayload({
+      sourceId: "zoo",
+      until: "2026-06-01T00:00:00Z",
+      note: "   ",
+    });
+    expect(payload).toEqual({
+      sourceId: "zoo",
+      until: "2026-06-01T00:00:00Z",
+    });
+    expect("note" in payload).toBe(false);
+  });
+});
+
+describe("buildSnoozeCommand", () => {
+  it("quotes the sourceId and renders the days flag", () => {
+    expect(
+      buildSnoozeCommand({ sourceId: "zoo-rss", days: 7 }),
+    ).toBe('node scripts/snooze-alert.mjs "zoo-rss" --days=7');
+  });
+
+  it("appends a single-quoted note when provided", () => {
+    expect(
+      buildSnoozeCommand({
+        sourceId: "zoo",
+        days: 14,
+        note: "parser broken",
+      }),
+    ).toBe(
+      "node scripts/snooze-alert.mjs \"zoo\" --days=14 --note='parser broken'",
+    );
+  });
+
+  it("escapes embedded single quotes in the note", () => {
+    expect(
+      buildSnoozeCommand({
+        sourceId: "zoo",
+        days: 7,
+        note: "it's busted",
+      }),
+    ).toBe(
+      "node scripts/snooze-alert.mjs \"zoo\" --days=7 --note='it'\\''s busted'",
+    );
+  });
+
+  it("omits the note flag when the note is whitespace-only", () => {
+    expect(
+      buildSnoozeCommand({ sourceId: "zoo", days: 7, note: "   " }),
+    ).toBe('node scripts/snooze-alert.mjs "zoo" --days=7');
+  });
+
+  it("JSON-escapes special characters in sourceId", () => {
+    expect(
+      buildSnoozeCommand({ sourceId: 'has"quote', days: 3 }),
+    ).toBe('node scripts/snooze-alert.mjs "has\\"quote" --days=3');
   });
 });
