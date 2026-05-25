@@ -5879,10 +5879,60 @@ h3 {
   font-size: 0.9rem;
 }
 
-.ops-alerts-totals {
-  margin: 0 0 16px;
-  font-size: 0.88rem;
-  color: #444;
+.ops-alerts-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.ops-alerts-summary-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 96px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1px solid #e4ddcc;
+  border-radius: 8px;
+}
+
+.ops-alerts-summary-item dt {
+  margin: 0;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #666;
+}
+
+.ops-alerts-summary-item dd {
+  margin: 2px 0 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.ops-alerts-summary-critical dd {
+  color: #9b1c1c;
+}
+
+.ops-alerts-summary-link {
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.ops-alerts-summary-link:hover {
+  text-decoration-thickness: 2px;
 }
 
 .ops-alerts-state {

@@ -335,11 +335,43 @@ export default function OpsAlertsView() {
 
       {status === "ready" && merged && (
         <>
-          <p className="ops-alerts-totals">
-            {merged.total} alert{merged.total === 1 ? "" : "s"} across{" "}
-            {METROS.length} metros · {merged.bySeverity.critical} critical ·{" "}
-            {merged.bySeverity.warning} warning · {merged.bySeverity.info} info
-          </p>
+          <dl className="ops-alerts-summary" aria-label="Alert summary">
+            <div className="ops-alerts-summary-item">
+              <dt>Total</dt>
+              <dd>{merged.total}</dd>
+            </div>
+            <div className="ops-alerts-summary-item ops-alerts-summary-critical">
+              <dt>Critical</dt>
+              <dd>
+                {merged.bySeverity.critical > 0 ? (
+                  <button
+                    type="button"
+                    className="ops-alerts-summary-link"
+                    onClick={() => setSeverity("critical")}
+                    aria-label={`Filter to ${merged.bySeverity.critical} critical alerts`}
+                  >
+                    {merged.bySeverity.critical}
+                  </button>
+                ) : (
+                  merged.bySeverity.critical
+                )}
+              </dd>
+            </div>
+            <div className="ops-alerts-summary-item">
+              <dt>Warning</dt>
+              <dd>{merged.bySeverity.warning}</dd>
+            </div>
+            <div className="ops-alerts-summary-item">
+              <dt>Info</dt>
+              <dd>{merged.bySeverity.info}</dd>
+            </div>
+            <div className="ops-alerts-summary-item">
+              <dt>Metros w/ critical</dt>
+              <dd>
+                {merged.metrosWithCritical} / {METROS.length}
+              </dd>
+            </div>
+          </dl>
 
           <div className="ops-alerts-filters" role="group" aria-label="Filters">
             <div
