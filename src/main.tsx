@@ -4,6 +4,7 @@ import App from "./App";
 import { APP_AUDIENCE } from "./appConfig";
 import { metroFromPath } from "./metros";
 import OpsAlertsView from "./ops/OpsAlertsView";
+import OpsAnalyticsView from "./ops/OpsAnalyticsView";
 import PollView from "./PollView";
 import "./styles.css";
 
@@ -28,11 +29,21 @@ function isOpsAlertsHash(): boolean {
   return hash === "#/ops/alerts" || hash.startsWith("#/ops/alerts?");
 }
 
+function isOpsAnalyticsHash(): boolean {
+  // Same shape as the alerts route — allow a future querystring for filter
+  // state without breaking route detection.
+  const hash = window.location.hash;
+  return hash === "#/ops/analytics" || hash.startsWith("#/ops/analytics?");
+}
+
 function Root() {
   const [pollRoute, setPollRoute] = useState<PollRoute>(() =>
     readPollRouteFromHash(),
   );
   const [opsAlerts, setOpsAlerts] = useState<boolean>(() => isOpsAlertsHash());
+  const [opsAnalytics, setOpsAnalytics] = useState<boolean>(() =>
+    isOpsAnalyticsHash(),
+  );
   const [{ metro, isAlias, canonicalPath }] = useState(() =>
     metroFromPath(window.location.pathname),
   );
@@ -50,6 +61,7 @@ function Root() {
     function handler() {
       setPollRoute(readPollRouteFromHash());
       setOpsAlerts(isOpsAlertsHash());
+      setOpsAnalytics(isOpsAnalyticsHash());
     }
     window.addEventListener("hashchange", handler);
     return () => window.removeEventListener("hashchange", handler);
@@ -60,6 +72,9 @@ function Root() {
   }
   if (opsAlerts) {
     return <OpsAlertsView />;
+  }
+  if (opsAnalytics) {
+    return <OpsAnalyticsView />;
   }
   return <App metro={metro} />;
 }
