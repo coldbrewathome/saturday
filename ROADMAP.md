@@ -1,6 +1,6 @@
 # Roadmap
 
-_Last updated: 2026-05-24_ (tick 9)
+_Last updated: 2026-05-24_ (tick 10)
 
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
@@ -10,7 +10,7 @@ _In flight — actively being worked on. Keep this to 1–3 items._
 - **Effort:** M (1–2 days)
 - **Links:** `public/data/*/event-operator-alerts.json`, `scripts/event-ops-agent.mjs`, `scripts/source-repair-agent.mjs`
 - **Tasks:**
-  - [ ] Decide the surface: standalone `/ops/alerts` route in the existing app vs. a separate `worker/` admin page vs. a static CLI report. Write the decision (and the auth model — operator token? local-only?) to `docs/decisions/02-operator-alerts-ui.md`. <2h.
+  - [x] Decide the surface: standalone `/ops/alerts` route in the existing app vs. a separate `worker/` admin page vs. a static CLI report. Write the decision (and the auth model — operator token? local-only?) to `docs/decisions/02-operator-alerts-ui.md`. <2h.
   - [ ] Add a loader that aggregates all `public/data/*/event-operator-alerts.json` into a single in-memory list with `metroId` attached. Land it at `src/ops/loadAlerts.ts` (or `worker/src/ops-alerts.ts` depending on the decision above) with a unit test covering merge + count totals.
   - [ ] Render a minimal triage table: columns = severity, metro, sourceName, issueType, recoveredBy, fetchedAt. Sort by severity desc then fetchedAt desc. Static HTML/JSX is fine — no filtering yet.
   - [ ] Add filter controls: severity (critical/warning/all) and metro (multi-select). Persist filter state in the URL querystring so reloads keep it.
