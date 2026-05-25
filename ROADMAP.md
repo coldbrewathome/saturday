@@ -1,28 +1,24 @@
 # Roadmap
 
-_Last updated: 2026-05-25_ (tick 21)
+_Last updated: 2026-05-25_ (tick 22)
 
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
 
-### Analytics dashboard for funnel metrics
-- **Why:** `239ab7f` added privacy-safe first-party metrics, but the data is write-only today — no UI reads it, so funnel drop-off, metro popularity, and feature usage are invisible. Pairs naturally with the just-shipped `/ops/alerts` surface (same operator audience, same auth model).
+### Event detail pages (shareable, SEO-indexed)
+- **Why:** Pairs with the rich share previews from `46896a9` and the heavy event pipeline investment; per-event landing pages are the missing surface. Spots already got stable slugs + SEO audit in CI (`a28617b`); events are the obvious next surface to extend the same treatment to. Also unlocks a real link target for newsletter digest items and shared plans.
 - **Effort:** M (1–2 days)
-- **Links:** `239ab7f` (metrics capture), `worker/src/` (likely ingestion endpoint), `src/ops/OpsAlertsView.tsx` (sibling ops surface to mirror)
+- **Links:** `46896a9` (rich share previews), `a28617b` (stable spot slugs + SEO audit pattern), `public/data/<metro>/events.json` (source data), `src/App.tsx:1096` (hash router)
 - **Tasks:**
-  - [x] Inventory what's actually captured: read `239ab7f` + grep for the metrics emit call sites. Write a short decision doc at `docs/decisions/03-analytics-dashboard.md` listing (a) the event schema we have today, (b) which 3–5 funnel questions the dashboard should answer first (e.g. "plans-view sign-in conversion", "metro pageviews", "Hop-me-now usage"), (c) the storage surface (worker KV? D1? a flat JSON snapshot?), and (d) auth model (reuse `/ops/alerts` token gate vs. separate). <2h.
-  - [x] Scaffold the route: add an empty `/ops/analytics` view (mirroring `src/ops/OpsAlertsView.tsx`) with a placeholder "no data yet" state. Wire it into the hash-router next to `#/ops/alerts`. No data loading yet.
-  - [x] Add a loader that reads aggregated metrics from whatever storage the ADR picked. Land it at `src/ops/loadAnalytics.ts` with a unit test that asserts shape + empty-state behavior on missing data.
-  - [x] Render the top 3 funnel questions from the ADR as plain numeric cards (big number + label + 7-day delta). Static, no charts yet. Match the visual density of the alerts summary panel from `79a54db`.
-  - [x] Add a per-metro breakdown table for the highest-signal metric (likely pageviews or sign-in conversion). Sort desc, link metro name to the existing metro guide page.
-  - [ ] Add a single trend chart for the headline metric (last 30 days, daily buckets). Use a minimal inline SVG sparkline — no chart library dep. Cache the rendered data so the page loads <500ms.
+  - [ ] Decide URL shape + slug strategy. Write `docs/decisions/04-event-detail-pages.md` covering: (a) URL form (`/<metro>/events/<slug>` vs. hash `#/event/<id>`), (b) slug source (stable id from event pipeline vs. derived `slugify(title + date)` with collision handling), (c) whether SSR/prerender is needed for SEO or if client-rendered hash routes + sitemap suffice given current spots approach, (d) how legacy/stale event URLs (events disappear after weekend) redirect — 410, redirect to metro guide, or stub-with-noindex. <2h.
+  - [ ] Add stable `slug` field to event records in the pipeline. Land in whatever module builds `public/data/<metro>/events.json` (grep for `events.json` writes). Add a `scripts/audit-event-slugs.*` check mirroring the spot-slug audit from `a28617b`, wired into `npm run validate:events` so CI fails on collisions or non-stable churn.
+  - [ ] Scaffold an `EventDetailView` component at `src/EventDetailView.tsx` that takes a metro + slug, finds the event, and renders title/date/venue/description. Wire into the hash router in `src/App.tsx` (route alongside the existing `#/plans/...` and `#/p/...` matchers). Plain layout — visual polish in a later task.
+  - [ ] Add JSON-LD `Event` structured data + OpenGraph meta tags on the detail view (or via the same prerender surface that handles spots). Mirror the rich-share-preview approach from `46896a9`.
+  - [ ] Include event detail URLs in the sitemap generator (find the existing sitemap script that handles spots; extend it). Add legacy-redirect handling per the ADR for events that have aged out.
+  - [ ] Add a "View details" link from event cards on the weekend guide + from plan share pages, so the detail page is reachable from the existing surfaces (not just direct URL).
 
 ## Next
 _Committed, not yet started. Ordered by priority. Aim for ≤5 items._
-
-### Event detail pages (shareable, SEO-indexed)
-- **Why:** Pairs with the rich share previews from `46896a9` and the heavy event pipeline investment; per-event landing pages are the missing surface.
-- **Effort:** M
 
 ### PWA / install + offline weekend cache
 - **Why:** Mobile-first weekend use case is the canonical PWA fit; the mobile FAB from `9754dda` shows the pattern is working.
@@ -47,6 +43,7 @@ _Candidates and ideas. Unordered. No commitment._
 ## Done
 _Recently shipped (last ~10 items). Trim older ones into a separate CHANGELOG if needed._
 
+- 2026-05-25 · **Analytics dashboard for funnel metrics** — `/ops/analytics` route (ADR 03 scope/storage/auth), `src/ops/loadAnalytics.ts` + worker `/metrics` `byMetro` aggregation, top funnel summary cards w/ 7-day delta, per-metro app-opens breakdown table linking to metro guides, and a 30-day inline-SVG sparkline for the headline metric with sessionStorage caching for <500ms loads (`45a7b06`).
 - 2026-05-25 · **Operator-alerts triage UI** — `/ops/alerts` route with ADR-02 surface decision, alerts loader (`src/ops/loadAlerts.ts`), triage table sorted by severity, severity+metro filters with URL state, per-source snooze action (`data/alert-snoozes.json` + pipeline annotation), snooze-helper unit tests, and a top-of-page summary with link-jump to the critical filter (`79a54db`).
 - 2026-05-24 · **Newsletter delivery (code-complete)** — Resend provider chosen (ADR 01), capture path inventoried, `worker/src/newsletter.ts` scaffolded behind `NEWSLETTER_ADMIN_TOKEN`, Resend HTTP wired, digest HTML+text template w/ unit tests, dry-run preview CLI, per-metro fetch+render in `sendWeekendDigest`, operator-test allowlist + runbook. Activation (Resend account, DNS, secrets, mail-client QA) is external ops work tracked in Later.
 - 2026-05-22 · **Agentic event ops workflow** — automated event ops + source repair agents.
