@@ -1,6 +1,6 @@
 # Roadmap
 
-_Last updated: 2026-05-24_ (tick 13)
+_Last updated: 2026-05-25_ (tick 14)
 
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
@@ -14,7 +14,8 @@ _In flight — actively being worked on. Keep this to 1–3 items._
   - [x] Add a loader that aggregates all `public/data/*/event-operator-alerts.json` into a single in-memory list with `metroId` attached. Land it at `src/ops/loadAlerts.ts` (or `worker/src/ops-alerts.ts` depending on the decision above) with a unit test covering merge + count totals.
   - [x] Render a minimal triage table: columns = severity, metro, sourceName, issueType, recoveredBy, fetchedAt. Sort by severity desc then fetchedAt desc. Static HTML/JSX is fine — no filtering yet.
   - [x] Add filter controls: severity (critical/warning/all) and metro (multi-select). Persist filter state in the URL querystring so reloads keep it.
-  - [ ] Add a "snooze until next ingest" action per source: writes `sourceId` + expiry to a local JSON (`data/alert-snoozes.json`) that `scripts/event-ops-agent.mjs` reads when emitting alerts. Snoozed alerts grey-out in the UI; expiry auto-clears.
+  - [x] Add a "snooze until next ingest" action per source: writes `sourceId` + expiry to a local JSON (`data/alert-snoozes.json`) that `scripts/event-ops-agent.mjs` reads when emitting alerts. Snoozed alerts grey-out in the UI; expiry auto-clears.
+  - [ ] Backfill unit tests for the snooze pure helpers landed in `27636df`. Cover `scripts/alertSnoozes.mjs` (`parseSnoozesDoc`, `activeSnoozeMap`, `annotateAlertsWithSnoozes`, `upsertSnooze`) and `src/ops/OpsAlertsView.tsx` (`isSnoozedNow`, `buildSnoozePayload`, `buildSnoozeCommand`). Add to `tests/` next to the existing planner/pipeline suites; assert expiry boundaries, malformed-doc fallbacks, and idempotent upsert.
   - [ ] Wire a top-of-page summary: total alerts, count by severity, count of metros with ≥1 critical. Make critical count link-jump to the filtered view.
 
 ## Next
