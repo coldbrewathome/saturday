@@ -1,47 +1,57 @@
 # Roadmap
 
-_Last updated: 2026-05-24_ (tick 8)
+_Last updated: 2026-05-24_ (tick 9)
 
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
 
-### Newsletter delivery
-- **Why:** `1d3ae14` shipped the newsletter capture card in the plans view, but there's no send pipeline yet. Collecting emails with no value loop leaks signups and trains users that subscribing does nothing.
+### Operator-alerts triage UI
+- **Why:** `0936fea` and `22bdfb9` generate per-metro `event-operator-alerts.json` (broken sources, last-known-good fallbacks, zero-extracted feeds), but today they only exist as JSON in `public/data/{metro}/`. No human workflow to act on them — alerts pile up across all 14 metros and silently degrade event coverage. Atlanta alone has 9 active alerts.
 - **Effort:** M (1–2 days)
-- **Links:** `src/App.tsx`, `src/api.ts` (newsletter card), `worker/src/` (host for send)
+- **Links:** `public/data/*/event-operator-alerts.json`, `scripts/event-ops-agent.mjs`, `scripts/source-repair-agent.mjs`
 - **Tasks:**
-  - [x] Pick provider (Resend vs. MailChannels vs. SES) and write the decision + chosen domain/from-address to `docs/decisions/01-newsletter-provider.md`. Should fit in <2h. _(af869b6: picked Resend; weekly@famhop.com)_
-  - [x] Inventory the current capture path: trace where `src/App.tsx` newsletter card POSTs to and where addresses are stored today (KV? D1? nowhere?). Write findings as a short "Current state" section appended to the decision doc. _(0e64bfa: POST /newsletter → KV `POLLS` ns, key `newsletter:{metro}:{email}`)_
-  - [x] Scaffold `worker/src/newsletter.ts` exporting a `sendWeekendDigest(env, recipients)` stub + wire `POST /api/newsletter/send` in `worker/index.ts` behind an admin token from `env`. No real send yet — log payload and return `{ ok: true, count }`. _(53aa6c5: route is `/newsletter/send` matching worker convention; bearer `NEWSLETTER_ADMIN_TOKEN` gate; pre-honors `NEWSLETTER_ENABLED` flag)_
-  - [x] Implement the provider call inside `sendWeekendDigest` using the chosen SDK/HTTP; gate on `env.NEWSLETTER_ENABLED`. Add API key to `wrangler.toml` as a secret reference (not value). _(c0dcaf4: Resend HTTP `POST /emails`, Bearer `RESEND_API_KEY`, double-gate on missing key, per-recipient failure attribution)_
-  - [x] Build the digest HTML template (`worker/src/newsletter-template.ts`): per-metro "this weekend" top 3 plans + 5 events, pulled from `public/data/{metro}/featured-plans.json` and `events.json`. Plaintext fallback included. _(cd3882f: pure render fn, 6 unit tests, dedupe by baseId, escaping; caller fetches JSON)_
-  - [x] Add a dry-run CLI: `scripts/newsletter-preview.mjs <metro>` that renders the template to `tmp/newsletter-preview.html` for visual QA. No network. _(02ed174: imports `.ts` template directly via Node 22.6+ type-stripping; errors on unknown slug; `tmp/` added to .gitignore)_
-  - [x] Wire `sendWeekendDigest` to fetch+render per metro: inside `worker/src/newsletter.ts`, group recipients by metro, fetch each metro's `featured-plans.json` + `events.json` via the worker's site origin (or bundled fetch), call `renderWeekendDigest`, and pass the resulting HTML/text to the Resend call (replacing the placeholder body). Honor existing `NEWSLETTER_ENABLED` gate. _(b951728: per-metro grouping + fetch+render; previous Doer hit session limit, parent salvaged send-path wiring)_
-  - [ ] Send a real test to a single allowlisted address (operator email), confirm rendering in Gmail + Apple Mail, then document the manual weekly send command in `docs/decisions/01-newsletter-provider.md`.
+  - [ ] Decide the surface: standalone `/ops/alerts` route in the existing app vs. a separate `worker/` admin page vs. a static CLI report. Write the decision (and the auth model — operator token? local-only?) to `docs/decisions/02-operator-alerts-ui.md`. <2h.
+  - [ ] Add a loader that aggregates all `public/data/*/event-operator-alerts.json` into a single in-memory list with `metroId` attached. Land it at `src/ops/loadAlerts.ts` (or `worker/src/ops-alerts.ts` depending on the decision above) with a unit test covering merge + count totals.
+  - [ ] Render a minimal triage table: columns = severity, metro, sourceName, issueType, recoveredBy, fetchedAt. Sort by severity desc then fetchedAt desc. Static HTML/JSX is fine — no filtering yet.
+  - [ ] Add filter controls: severity (critical/warning/all) and metro (multi-select). Persist filter state in the URL querystring so reloads keep it.
+  - [ ] Add a "snooze until next ingest" action per source: writes `sourceId` + expiry to a local JSON (`data/alert-snoozes.json`) that `scripts/event-ops-agent.mjs` reads when emitting alerts. Snoozed alerts grey-out in the UI; expiry auto-clears.
+  - [ ] Wire a top-of-page summary: total alerts, count by severity, count of metros with ≥1 critical. Make critical count link-jump to the filtered view.
 
 ## Next
 _Committed, not yet started. Ordered by priority. Aim for ≤5 items._
 
-### Operator-alerts triage UI
-- **Why:** `0936fea` and `22bdfb9` generate per-metro `event-operator-alerts.json` (broken sources, last-known-good fallbacks, etc.), but today they only exist as JSON in `public/data/{metro}/`. No human workflow to act on them — alerts will keep piling up.
-- **Effort:** M (1–2 days)
-- **Links:** `public/data/*/event-operator-alerts.json`, `scripts/event-ops-agent.mjs`, `scripts/source-repair-agent.mjs`
+### Analytics dashboard for funnel metrics
+- **Why:** `239ab7f` added privacy-safe first-party metrics; there's no UI to read them, so the data is invisible. Pairs naturally with the ops UI surface above.
+- **Effort:** M
+
+### Event detail pages (shareable, SEO-indexed)
+- **Why:** Pairs with the rich share previews from `46896a9` and the heavy event pipeline investment; per-event landing pages are the missing surface.
+- **Effort:** M
+
+### PWA / install + offline weekend cache
+- **Why:** Mobile-first weekend use case is the canonical PWA fit; the mobile FAB from `9754dda` shows the pattern is working.
+- **Effort:** M
+
+### Free-text search across spots + events
+- **Why:** Current discovery is filter-only; a known ceiling for browse-style apps as the dataset grows.
+- **Effort:** M
+
+### UI/component tests
+- **Why:** `tests/` covers pipeline + planner, but nothing exercises `App.tsx`, `auth.ts`, or the plans view; React refactors are unsafe.
+- **Effort:** M
 
 ## Later
 _Candidates and ideas. Unordered. No commitment._
 
-- **Analytics dashboard for funnel metrics** — `239ab7f` added privacy-safe first-party metrics; there's no UI to read them, so the data is invisible. _Effort: M._
-- **Event detail pages (shareable, SEO-indexed)** — pairs with the rich share previews from `46896a9` and the heavy event pipeline investment; per-event landing pages are the missing surface. _Effort: M._
-- **PWA / install + offline weekend cache** — mobile-first weekend use case is the canonical PWA fit; the mobile FAB from `9754dda` shows the pattern is working. _Effort: M._
 - **Weekend reminder push (Fri-AM "your weekend is set")** — retention play that pairs sign-in (`1d3ae14`) with Hop-me-now; depends on PWA shipping first. _Effort: M (after PWA)._
-- **Free-text search across spots + events** — current discovery is filter-only; a known ceiling for browse-style apps as the dataset grows. _Effort: M._
 - **NightHop content/parity audit** — `deploy:adults` and the `audiences` arrays exist, but it's unclear how much adult-specific surface there is vs. just filtered kid data. _Effort: S audit → L close gaps._
-- **UI/component tests** — `tests/` covers pipeline + planner, but nothing exercises `App.tsx`, `auth.ts`, or the plans view; React refactors are unsafe. _Effort: M._
 - **Repo cleanup: root-level screenshots + tracked drift** — ~35 PNG screenshots at repo root, plus ~50 files of routine event-data drift in the working tree. _Effort: XS._
+- **Newsletter: activate live sends** — code is shipped; needs Resend account creation, DNS verification of `famhop.com`, `RESEND_API_KEY` + `NEWSLETTER_ADMIN_TOKEN` wrangler secrets, then a real test send to an operator address with Gmail + Apple Mail QA. Pure ops work, not a code task — promote back to Now only once the human has completed the external setup.
 
 ## Done
 _Recently shipped (last ~10 items). Trim older ones into a separate CHANGELOG if needed._
 
+- 2026-05-24 · **Newsletter delivery (code-complete)** — Resend provider chosen (ADR 01), capture path inventoried, `worker/src/newsletter.ts` scaffolded behind `NEWSLETTER_ADMIN_TOKEN`, Resend HTTP wired, digest HTML+text template w/ unit tests, dry-run preview CLI, per-metro fetch+render in `sendWeekendDigest`, operator-test allowlist + runbook. Activation (Resend account, DNS, secrets, mail-client QA) is external ops work tracked in Later.
 - 2026-05-22 · **Agentic event ops workflow** — automated event ops + source repair agents.
 - 2026-05-22 · **Newsletter capture card** — sign-in prompt + newsletter card on plans view.
 - 2026-05-22 · **Stable spot slugs + SEO audit in CI** — legacy URL aliases preserved.
