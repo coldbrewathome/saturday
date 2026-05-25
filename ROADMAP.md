@@ -1,6 +1,6 @@
 # Roadmap
 
-_Last updated: 2026-05-24_ (tick 12)
+_Last updated: 2026-05-24_ (tick 13)
 
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
@@ -13,7 +13,7 @@ _In flight — actively being worked on. Keep this to 1–3 items._
   - [x] Decide the surface: standalone `/ops/alerts` route in the existing app vs. a separate `worker/` admin page vs. a static CLI report. Write the decision (and the auth model — operator token? local-only?) to `docs/decisions/02-operator-alerts-ui.md`. <2h.
   - [x] Add a loader that aggregates all `public/data/*/event-operator-alerts.json` into a single in-memory list with `metroId` attached. Land it at `src/ops/loadAlerts.ts` (or `worker/src/ops-alerts.ts` depending on the decision above) with a unit test covering merge + count totals.
   - [x] Render a minimal triage table: columns = severity, metro, sourceName, issueType, recoveredBy, fetchedAt. Sort by severity desc then fetchedAt desc. Static HTML/JSX is fine — no filtering yet.
-  - [ ] Add filter controls: severity (critical/warning/all) and metro (multi-select). Persist filter state in the URL querystring so reloads keep it.
+  - [x] Add filter controls: severity (critical/warning/all) and metro (multi-select). Persist filter state in the URL querystring so reloads keep it.
   - [ ] Add a "snooze until next ingest" action per source: writes `sourceId` + expiry to a local JSON (`data/alert-snoozes.json`) that `scripts/event-ops-agent.mjs` reads when emitting alerts. Snoozed alerts grey-out in the UI; expiry auto-clears.
   - [ ] Wire a top-of-page summary: total alerts, count by severity, count of metros with ≥1 critical. Make critical count link-jump to the filtered view.
 
