@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import { APP_AUDIENCE } from "./appConfig";
 import { metroFromPath } from "./metros";
+import OpsAlertsView from "./ops/OpsAlertsView";
 import PollView from "./PollView";
 import "./styles.css";
 
@@ -20,10 +21,15 @@ function readPollRouteFromHash(): PollRoute {
   return { pollId, embed: route === "embed" || params.get("embed") === "1" };
 }
 
+function isOpsAlertsHash(): boolean {
+  return window.location.hash === "#/ops/alerts";
+}
+
 function Root() {
   const [pollRoute, setPollRoute] = useState<PollRoute>(() =>
     readPollRouteFromHash(),
   );
+  const [opsAlerts, setOpsAlerts] = useState<boolean>(() => isOpsAlertsHash());
   const [{ metro, isAlias, canonicalPath }] = useState(() =>
     metroFromPath(window.location.pathname),
   );
@@ -40,16 +46,19 @@ function Root() {
   useEffect(() => {
     function handler() {
       setPollRoute(readPollRouteFromHash());
+      setOpsAlerts(isOpsAlertsHash());
     }
     window.addEventListener("hashchange", handler);
     return () => window.removeEventListener("hashchange", handler);
   }, []);
 
-  return pollRoute ? (
-    <PollView pollId={pollRoute.pollId} embed={pollRoute.embed} />
-  ) : (
-    <App metro={metro} />
-  );
+  if (pollRoute) {
+    return <PollView pollId={pollRoute.pollId} embed={pollRoute.embed} />;
+  }
+  if (opsAlerts) {
+    return <OpsAlertsView />;
+  }
+  return <App metro={metro} />;
 }
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

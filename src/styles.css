@@ -5857,3 +5857,111 @@ h3 {
   right: 8px;
   top: 8px;
 }
+
+/* Operator-alerts triage UI — internal route at #/ops/alerts.
+   Intentionally plain: no app chrome, no nav. See ADR 02. */
+.ops-alerts {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+  font-family: inherit;
+  color: var(--text);
+}
+
+.ops-alerts-header h1 {
+  margin: 0 0 4px;
+  font-size: 1.6rem;
+}
+
+.ops-alerts-sub {
+  margin: 0 0 20px;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.ops-alerts-totals {
+  margin: 0 0 16px;
+  font-size: 0.88rem;
+  color: #444;
+}
+
+.ops-alerts-state {
+  margin: 24px 0;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.ops-alerts-state-error {
+  color: #b03a2a;
+}
+
+.ops-alerts-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid #e4ddcc;
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 0.88rem;
+}
+
+.ops-alerts-table th,
+.ops-alerts-table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid #efeadd;
+  vertical-align: top;
+}
+
+.ops-alerts-table thead th {
+  background: var(--surface-strong);
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ops-alerts-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.ops-alerts-sev {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.ops-alerts-sev-critical {
+  background: #fdecea;
+  color: #9b1c1c;
+}
+
+.ops-alerts-sev-warning {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.ops-alerts-sev-info {
+  background: #e0f2fe;
+  color: #075985;
+}
+
+.ops-alerts-sev-unknown {
+  background: #ececec;
+  color: #444;
+}
+
+.ops-alerts-source {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ops-alerts-source a {
+  font-size: 0.78rem;
+  color: var(--accent);
+}

@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
   mergeAlertFiles,
+  type OperatorAlert,
   type OperatorAlertFile,
 } from "../src/ops/loadAlerts";
+import { sortAlerts } from "../src/ops/OpsAlertsView";
 
 function file(
   metroId: string,
@@ -105,5 +107,60 @@ describe("mergeAlertFiles", () => {
       atlanta: "2026-05-23T21:25:43.967Z",
       boston: "2026-05-23T21:30:00.000Z",
     });
+  });
+});
+
+function alert(
+  partial: Partial<OperatorAlert> & {
+    severity: OperatorAlert["severity"];
+    sourceId: string;
+  },
+): OperatorAlert {
+  return {
+    metroId: "atlanta",
+    sourceName: partial.sourceId,
+    ...partial,
+  } as OperatorAlert;
+}
+
+describe("sortAlerts", () => {
+  it("orders by severity desc, then fetchedAt desc within a bucket", () => {
+    const input: OperatorAlert[] = [
+      alert({ severity: "warning", sourceId: "w-old", fetchedAt: "2026-05-20T00:00:00Z" }),
+      alert({ severity: "critical", sourceId: "c-old", fetchedAt: "2026-05-20T00:00:00Z" }),
+      alert({ severity: "info", sourceId: "i-new", fetchedAt: "2026-05-23T00:00:00Z" }),
+      alert({ severity: "critical", sourceId: "c-new", fetchedAt: "2026-05-23T00:00:00Z" }),
+      alert({ severity: "warning", sourceId: "w-new", fetchedAt: "2026-05-23T00:00:00Z" }),
+    ];
+
+    expect(sortAlerts(input).map((a) => a.sourceId)).toEqual([
+      "c-new",
+      "c-old",
+      "w-new",
+      "w-old",
+      "i-new",
+    ]);
+  });
+
+  it("places alerts with missing fetchedAt at the bottom of their severity bucket", () => {
+    const input: OperatorAlert[] = [
+      alert({ severity: "critical", sourceId: "c-missing" }),
+      alert({ severity: "critical", sourceId: "c-dated", fetchedAt: "2026-05-23T00:00:00Z" }),
+    ];
+
+    expect(sortAlerts(input).map((a) => a.sourceId)).toEqual([
+      "c-dated",
+      "c-missing",
+    ]);
+  });
+
+  it("does not mutate the input array", () => {
+    const input: OperatorAlert[] = [
+      alert({ severity: "info", sourceId: "i" }),
+      alert({ severity: "critical", sourceId: "c" }),
+    ];
+    const order = input.map((a) => a.sourceId);
+    sortAlerts(input);
+    expect(input.map((a) => a.sourceId)).toEqual(order);
   });
 });
