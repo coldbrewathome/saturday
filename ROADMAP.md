@@ -1,28 +1,24 @@
 # Roadmap
 
-_Last updated: 2026-05-26_ (tick 27)
+_Last updated: 2026-05-26_ (tick 28)
 
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
 
-### Event detail pages (shareable, SEO-indexed)
-- **Why:** Pairs with the rich share previews from `46896a9` and the heavy event pipeline investment; per-event landing pages are the missing surface. Spots already got stable slugs + SEO audit in CI (`a28617b`); events are the obvious next surface to extend the same treatment to. Also unlocks a real link target for newsletter digest items and shared plans.
+### PWA / install + offline weekend cache
+- **Why:** Mobile-first weekend use case is the canonical PWA fit; the mobile FAB from `9754dda` shows the pattern is working. Unlocks the "Friday-AM weekend reminder push" Later item, which is blocked on PWA shipping. Manifest already exists at `public/manifest.webmanifest` and is linked from `index.html`, but no service worker is registered and PNG icons (`icon-192.png`, `icon-512.png`) exist on disk but aren't referenced — so installability is broken even though most of the scaffolding is there.
 - **Effort:** M (1–2 days)
-- **Links:** `46896a9` (rich share previews), `a28617b` (stable spot slugs + SEO audit pattern), `public/data/<metro>/events.json` (source data), `src/App.tsx:1096` (hash router)
+- **Links:** `public/manifest.webmanifest` (exists, SVG-only icons), `index.html:18` (manifest link), `public/icon-192.png` + `public/icon-512.png` (orphaned), `9754dda` (mobile FAB pattern)
 - **Tasks:**
-  - [x] Decide URL shape + slug strategy. Write `docs/decisions/04-event-detail-pages.md` covering: (a) URL form (`/<metro>/events/<slug>` vs. hash `#/event/<id>`), (b) slug source (stable id from event pipeline vs. derived `slugify(title + date)` with collision handling), (c) whether SSR/prerender is needed for SEO or if client-rendered hash routes + sitemap suffice given current spots approach, (d) how legacy/stale event URLs (events disappear after weekend) redirect — 410, redirect to metro guide, or stub-with-noindex. <2h. _(209ce88)_
-  - [x] Add stable `slug` field to event records in the pipeline. Land in whatever module builds `public/data/<metro>/events.json` (grep for `events.json` writes). Add a `scripts/audit-event-slugs.*` check mirroring the spot-slug audit from `a28617b`, wired into `npm run validate:events` so CI fails on collisions or non-stable churn. _(261ce3b)_
-  - [x] Scaffold an `EventDetailView` component at `src/EventDetailView.tsx` that takes a metro + slug, finds the event, and renders title/date/venue/description. Wire into the hash router in `src/App.tsx` (route alongside the existing `#/plans/...` and `#/p/...` matchers). Plain layout — visual polish in a later task. _(cb39561)_
-  - [x] Add JSON-LD `Event` structured data + OpenGraph meta tags on the detail view (or via the same prerender surface that handles spots). Mirror the rich-share-preview approach from `46896a9`. _(838b2fe)_
-  - [x] Include event detail URLs in the sitemap generator (find the existing sitemap script that handles spots; extend it). Add legacy-redirect handling per the ADR for events that have aged out. _(9909f37)_
-  - [ ] Add a "View details" link from event cards on the weekend guide + from plan share pages, so the detail page is reachable from the existing surfaces (not just direct URL).
+  - [ ] Decide PWA scope + caching strategy. Write `docs/decisions/05-pwa-offline.md` covering: (a) what "offline weekend" means concretely — cache the current metro's `events.json` + `featured-plans.json` + spot detail JSON, or only the app shell?, (b) service worker library choice (Workbox vs. hand-rolled — repo already builds with Vite, so `vite-plugin-pwa` is the obvious default), (c) cache versioning + invalidation strategy (event data rotates weekly; need a `stale-while-revalidate` story that doesn't serve last-week's events), (d) install-prompt UX — passive (browser-driven) vs. an explicit "Install FamHop" button somewhere near the mobile FAB. <2h.
+  - [ ] Fix the manifest to be actually installable. Add the existing `icon-192.png` and `icon-512.png` PNG entries to `public/manifest.webmanifest` (Chrome's installability check requires a 192+ PNG), verify `start_url` and `scope` against current routing, and add a `display_override` if the ADR calls for it. Run Lighthouse PWA audit locally to confirm "Installable" passes.
+  - [ ] Scaffold the service worker. Add `vite-plugin-pwa` (or chosen equivalent) to `vite.config.ts`, generate `sw.js` at build, register it from `src/main.tsx` behind a feature flag or a `import.meta.env.PROD` guard so dev isn't disrupted. Confirm SW shows up in DevTools → Application on a production build.
+  - [ ] Implement the offline cache strategy from the ADR. At minimum: precache app shell + `manifest.webmanifest` + favicon assets; runtime-cache `public/data/<metro>/events.json` and `featured-plans.json` with the strategy chosen in step 1. Verify by loading a metro guide, going offline in DevTools, hard-reloading, and confirming the page still renders.
+  - [ ] Add the install-prompt UX from the ADR. Capture the `beforeinstallprompt` event, stash it, and surface an explicit install affordance on mobile (likely near the existing FAB or in the header). Dismiss state should persist in `localStorage` so users aren't nagged.
+  - [ ] Write a smoke test or document a manual QA checklist for PWA install across iOS Safari (Add to Home Screen), Android Chrome (install prompt), and desktop Chrome. iOS doesn't fire `beforeinstallprompt` so confirm the manifest alone gives a reasonable A2HS experience.
 
 ## Next
 _Committed, not yet started. Ordered by priority. Aim for ≤5 items._
-
-### PWA / install + offline weekend cache
-- **Why:** Mobile-first weekend use case is the canonical PWA fit; the mobile FAB from `9754dda` shows the pattern is working.
-- **Effort:** M
 
 ### Free-text search across spots + events
 - **Why:** Current discovery is filter-only; a known ceiling for browse-style apps as the dataset grows.
@@ -43,6 +39,7 @@ _Candidates and ideas. Unordered. No commitment._
 ## Done
 _Recently shipped (last ~10 items). Trim older ones into a separate CHANGELOG if needed._
 
+- 2026-05-26 · **Event detail pages (shareable, SEO-indexed)** — ADR 04 (slug strategy + ended-event noindex stubs), stable `slug` field on event records w/ CI audit, `EventDetailView` at `#/event/<metro>/<slug>`, JSON-LD `Event` + OG meta on the SPA hash route, sitemap inclusion + slug-history aliases, and "View details" links from event cards across weekend guide + plan-share surfaces (`92f30f6`).
 - 2026-05-25 · **Analytics dashboard for funnel metrics** — `/ops/analytics` route (ADR 03 scope/storage/auth), `src/ops/loadAnalytics.ts` + worker `/metrics` `byMetro` aggregation, top funnel summary cards w/ 7-day delta, per-metro app-opens breakdown table linking to metro guides, and a 30-day inline-SVG sparkline for the headline metric with sessionStorage caching for <500ms loads (`45a7b06`).
 - 2026-05-25 · **Operator-alerts triage UI** — `/ops/alerts` route with ADR-02 surface decision, alerts loader (`src/ops/loadAlerts.ts`), triage table sorted by severity, severity+metro filters with URL state, per-source snooze action (`data/alert-snoozes.json` + pipeline annotation), snooze-helper unit tests, and a top-of-page summary with link-jump to the critical filter (`79a54db`).
 - 2026-05-24 · **Newsletter delivery (code-complete)** — Resend provider chosen (ADR 01), capture path inventoried, `worker/src/newsletter.ts` scaffolded behind `NEWSLETTER_ADMIN_TOKEN`, Resend HTTP wired, digest HTML+text template w/ unit tests, dry-run preview CLI, per-metro fetch+render in `sendWeekendDigest`, operator-test allowlist + runbook. Activation (Resend account, DNS, secrets, mail-client QA) is external ops work tracked in Later.
