@@ -471,6 +471,7 @@ let totalEventPages = 0;
 let totalCityPages = 0;
 let totalCategoryPages = 0;
 let totalWeekendPages = 0;
+let totalEndedEventStubs = 0;
 
 for (const metro of metroConfig.metros) {
   activeMetro = metro;
@@ -497,6 +498,9 @@ for (const metro of metroConfig.metros) {
 
   generateMetroAppShellPage(metro, categorySlugs);
 
+  const slugHistory = readEventSlugHistory(metro);
+  totalEndedEventStubs += generateEndedEventStubs(slugHistory, eventSlugs);
+
   totalSpotPages += spotSlugs.size;
   totalEventPages += eventSlugs.size;
   totalCityPages += citySlugs.size;
@@ -509,7 +513,7 @@ const totalLocalizedPages = IS_ADULTS ? 0 : generateLocalizedWeekendPages();
 writeSitemap(sitemapEntries);
 
 console.log(
-  `[seo] wrote ${totalSpotPages} spot pages, ${totalEventPages} event pages, ${totalCityPages} city pages, ${totalCategoryPages} category pages, ${totalWeekendPages} this-weekend pages, ${totalLocalizedPages} localized i18n pages, sitemap with ${sitemapEntries.length} URLs.`,
+  `[seo] wrote ${totalSpotPages} spot pages, ${totalEventPages} event pages, ${totalEndedEventStubs} ended-event stubs, ${totalCityPages} city pages, ${totalCategoryPages} category pages, ${totalWeekendPages} this-weekend pages, ${totalLocalizedPages} localized i18n pages, sitemap with ${sitemapEntries.length} URLs.`,
 );
 
 function metroDataPath(metro, key) {
@@ -517,6 +521,19 @@ function metroDataPath(metro, key) {
   if (fs.existsSync(primary)) return primary;
   const legacy = legacyMetroDataFile(metro, key);
   return legacy ? path.join(ROOT, legacy) : primary;
+}
+
+// Per ADR-04: the pipeline writes data/<metro>/event-slug-history.json on
+// every ingest run. We read it here to emit "event has ended" noindex stubs
+// for one-off URLs that just dropped out of events.json (30-day grace).
+function readEventSlugHistory(metro) {
+  const file = path.join(ROOT, "data", metro.dataDir || metro.id, "event-slug-history.json");
+  if (!fs.existsSync(file)) return { slugs: {} };
+  try {
+    return JSON.parse(fs.readFileSync(file, "utf8")) || { slugs: {} };
+  } catch {
+    return { slugs: {} };
+  }
 }
 
 function metroPath(rel = "") {
@@ -1376,6 +1393,58 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
     });
   }
   return slugs;
+}
+
+// Per ADR-04(d): when a one-off event's slug appears in the slug-history
+// cache but no longer in the live dataset, emit a noindex "event has ended"
+// stub for up to 30 days before dropping the page entirely. Recurring
+// templates (entries with isRecurring=true) are skipped — their canonical
+// page already comes from the live events.json or — if the template died —
+// will simply 404 (future work per the ADR's evergreen-page option).
+function generateEndedEventStubs(history, liveSlugs, now = new Date()) {
+  const stubDays = 30;
+  const cutoff = new Date(now);
+  cutoff.setUTCDate(cutoff.getUTCDate() - stubDays);
+  const cutoffMs = cutoff.getTime();
+  let count = 0;
+  for (const [slug, entry] of Object.entries(history?.slugs || {})) {
+    if (!slug || liveSlugs.has(slug)) continue;
+    if (entry?.isRecurring) continue;
+    const ts = entry?.lastSeenAt ? Date.parse(entry.lastSeenAt) : NaN;
+    if (!Number.isFinite(ts) || ts < cutoffMs) continue;
+    writeEndedEventStub(slug);
+    count += 1;
+  }
+  return count;
+}
+
+function writeEndedEventStub(slug) {
+  const canonical = metroUrl(`event/${slug}/`);
+  const metroHomeUrl = metroUrl("");
+  const title = `This event has ended — ${metroLabel()} | ${BRAND}`;
+  const description = `This ${metroLabel()} event is no longer scheduled. Browse the latest weekend picks on ${BRAND}.`;
+  // noindex + meta-refresh combination matches the alias-page pattern in
+  // validate-all-seo.mjs so the page is exempt from the "must appear in
+  // sitemap" check. The refresh is long enough that humans actually read
+  // the stub before being bounced to the metro guide.
+  const html = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>${esc(title)}</title>
+<meta name="description" content="${esc(description)}">
+<meta name="robots" content="noindex,follow">
+<link rel="canonical" href="${esc(canonical)}">
+<meta http-equiv="refresh" content="10;url=${esc(metroHomeUrl)}">
+<style>body{font-family:system-ui,sans-serif;max-width:36rem;margin:4rem auto;padding:0 1rem;line-height:1.5;color:#222}a{color:#0066cc}</style>
+</head>
+<body>
+<h1>This event has ended</h1>
+<p>The event at this link is no longer scheduled. It happened recently or was removed by the organizer.</p>
+<p><a href="${esc(metroHomeUrl)}">See this weekend in ${esc(metroLabel())} on ${esc(BRAND)} &rarr;</a></p>
+</body>
+</html>`;
+  writeMetroPage(`event/${slug}/index.html`, html);
 }
 
 function buildEventDescription(event, dateStr) {
@@ -2720,16 +2789,26 @@ function getGeneratedCitySlugs(spotItems, eventItems) {
 }
 
 function buildEventSlugLookup(eventItems) {
+  // Per ADR-04 the source of truth is `event.slug` (assigned by
+  // scripts/eventPipeline.mjs:assignEventSlugs) — title+venue based, with a
+  // stable baseId/id suffix on collision. Recurring-template occurrences
+  // intentionally share one slug and collapse to a single canonical URL.
+  // We only fall back to recomputing if the field is missing (legacy/older
+  // datasets); the validate:events audit prevents on-disk drift.
   const map = new Map();
   const used = new Set();
   for (const event of eventItems) {
     if (!event || typeof event.title !== "string") continue;
-    const id = typeof event.id === "string" ? event.id : "";
-    let base = slugify(id) || slugify(`${event.title} ${event.venue ?? ""}`);
-    if (!base) continue;
-    let s = base;
-    let n = 2;
-    while (used.has(s)) s = `${base}-${n++}`;
+    let s = typeof event.slug === "string" && event.slug ? event.slug : null;
+    if (!s) {
+      const base =
+        slugify(`${event.title} ${event.venue ?? ""}`) ||
+        slugify(event.id || "");
+      if (!base) continue;
+      s = base;
+      let n = 2;
+      while (used.has(s)) s = `${base}-${n++}`;
+    }
     used.add(s);
     map.set(event, s);
   }

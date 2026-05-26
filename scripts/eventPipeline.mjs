@@ -3843,6 +3843,22 @@ export function getStableEventSuffix(id) {
 // agree on the canonical slug. The audit script
 // (scripts/audit-event-slugs.mjs) is the safety net for the rare case where
 // even the stable-suffixed slug collides.
+// Hard cap so the slug always fits a single filesystem path segment
+// (macOS/HFS+ limit is 255 bytes; we leave headroom for `dist/.../event/`
+// prefix and the `index.html` suffix). Mirrored at lookup time in
+// generate-seo-pages.mjs via the on-disk slug, so URLs stay stable.
+const MAX_EVENT_SLUG_LENGTH = 180;
+
+function capSlugLength(slug, suffix) {
+  if (slug.length <= MAX_EVENT_SLUG_LENGTH) return slug;
+  if (!suffix) return slug.slice(0, MAX_EVENT_SLUG_LENGTH).replace(/-+$/, "");
+  // Preserve the suffix (stable id) so collisions stay disambiguated even
+  // after truncation.
+  const budget = MAX_EVENT_SLUG_LENGTH - suffix.length - 1;
+  if (budget <= 0) return slug.slice(0, MAX_EVENT_SLUG_LENGTH).replace(/-+$/, "");
+  return `${slug.slice(0, budget).replace(/-+$/, "")}-${suffix}`;
+}
+
 export function assignEventSlugs(events) {
   const used = new Map();
   for (const event of events) {
@@ -3850,14 +3866,15 @@ export function assignEventSlugs(events) {
     const base = slugify(`${event.title} ${event.venue ?? ""}`);
     if (!base) continue;
     let s = base;
+    let suffix = "";
     if (used.has(s)) {
-      const suffix = getStableEventSuffix(event.baseId ?? event.id);
+      suffix = getStableEventSuffix(event.baseId ?? event.id);
       s = suffix ? `${base}-${suffix}` : `${base}-${used.get(base)}`;
       used.set(base, (used.get(base) || 2) + 1);
     } else {
       used.set(s, 2);
     }
-    event.slug = s;
+    event.slug = capSlugLength(s, suffix);
   }
   return events;
 }
@@ -3882,6 +3899,56 @@ export function buildEventsDataset(events, options = {}) {
     coverage: options.coverage,
     count: deduped.length,
     events: deduped,
+  };
+}
+
+// Per ADR-04: rolling 90-day cache of recently-seen event slugs per metro.
+// Read by scripts/generate-seo-pages.mjs to decide which aged-out one-off
+// events should still get a `noindex` "event has ended" stub page.
+// Schema is intentionally small (one line per slug) so the file stays under
+// ~30KB per metro at full saturation.
+export const SLUG_HISTORY_SCHEMA_VERSION = 1;
+const SLUG_HISTORY_WINDOW_DAYS = 90;
+
+export function pruneSlugHistory(history, now = new Date()) {
+  const cutoff = new Date(now);
+  cutoff.setUTCDate(cutoff.getUTCDate() - SLUG_HISTORY_WINDOW_DAYS);
+  const cutoffMs = cutoff.getTime();
+  const fresh = {};
+  for (const [slug, entry] of Object.entries(history?.slugs || {})) {
+    const ts = entry?.lastSeenAt ? Date.parse(entry.lastSeenAt) : NaN;
+    if (Number.isFinite(ts) && ts >= cutoffMs) {
+      fresh[slug] = entry;
+    }
+  }
+  return fresh;
+}
+
+export function updateSlugHistory(history, eventDatasets, options = {}) {
+  const now = options.now || new Date();
+  const nowIso = now.toISOString();
+  const metroId =
+    options.metroId ||
+    history?.metroId ||
+    (Array.isArray(eventDatasets) && eventDatasets[0]?.metroId) ||
+    null;
+  const slugs = pruneSlugHistory(history, now);
+  for (const dataset of eventDatasets || []) {
+    for (const event of dataset?.events || []) {
+      if (!event?.slug || typeof event.slug !== "string") continue;
+      const baseId = event.baseId ?? null;
+      slugs[event.slug] = {
+        baseId,
+        lastSeenAt: nowIso,
+        isRecurring: Boolean(baseId),
+      };
+    }
+  }
+  return {
+    schemaVersion: SLUG_HISTORY_SCHEMA_VERSION,
+    metroId,
+    updatedAt: nowIso,
+    slugs,
   };
 }
 

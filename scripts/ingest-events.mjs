@@ -7,6 +7,7 @@ import {
   dedupeEvents,
   expandRecurringTemplates,
   extractEventsFromPayload,
+  updateSlugHistory,
   validateEventsDataset,
 } from "./eventPipeline.mjs";
 import {
@@ -54,6 +55,9 @@ const reportPath =
 const alertsPath =
   process.env.EVENT_ALERTS_OUTPUT ||
   reportPath.replace(/event-build-report\.json$/, "event-operator-alerts.json");
+const slugHistoryPath =
+  process.env.EVENT_SLUG_HISTORY_OUTPUT ||
+  path.join("data", activeMetro.dataDir || activeMetro.id, "event-slug-history.json");
 const minEvents = Number(process.env.MIN_EVENTS || activeMetro.minEvents || 25);
 const timeoutMs = Number(process.env.EVENT_FETCH_TIMEOUT_MS || 12000);
 const offline = process.env.EVENT_INGEST_OFFLINE === "1";
@@ -1720,6 +1724,18 @@ async function main() {
   await fs.writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`);
   await fs.mkdir(path.dirname(alertsPath), { recursive: true });
   await fs.writeFile(alertsPath, `${JSON.stringify(alertsDoc, null, 2)}\n`);
+
+  // Per ADR-04: roll the 90-day slug history forward so generate-seo-pages.mjs
+  // can emit "event has ended" noindex stubs for one-off URLs that just
+  // dropped out of events.json.
+  const previousHistory = await readJsonOrEmpty(slugHistoryPath);
+  const nextHistory = updateSlugHistory(
+    previousHistory,
+    [kidsDataset, adultsDataset],
+    { metroId: activeMetro.id, now: new Date(generatedAt) },
+  );
+  await fs.mkdir(path.dirname(slugHistoryPath), { recursive: true });
+  await fs.writeFile(slugHistoryPath, `${JSON.stringify(nextHistory, null, 2)}\n`);
   const legacyReport = legacyMetroDataFile(activeMetro, "eventReport");
   if (legacyReport) {
     await fs.mkdir(path.dirname(legacyReport), { recursive: true });

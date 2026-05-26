@@ -34,6 +34,8 @@ import {
   inferAgeBands,
   parseDateTimeRange,
   parseLooseDate,
+  pruneSlugHistory,
+  updateSlugHistory,
   validateEventsDataset,
 } from "../scripts/eventPipeline.mjs";
 
@@ -1441,5 +1443,77 @@ test("buildEventsDataset writes a slug on every event", () => {
   );
   assert.equal(dataset.events.length, 1);
   assert.equal(dataset.events[0].slug, "storytime-main-library");
+});
+
+test("updateSlugHistory stamps live slugs and tags recurring vs one-off via baseId", () => {
+  const now = new Date("2026-05-25T12:00:00Z");
+  const next = updateSlugHistory(
+    { slugs: {} },
+    [
+      {
+        metroId: "atlanta",
+        events: [
+          { slug: "members-hour", baseId: "atl-museum-hour" },
+          { slug: "family-yoga", baseId: null },
+        ],
+      },
+    ],
+    { metroId: "atlanta", now },
+  );
+  assert.equal(next.schemaVersion, 1);
+  assert.equal(next.metroId, "atlanta");
+  assert.equal(next.updatedAt, now.toISOString());
+  assert.deepEqual(next.slugs["members-hour"], {
+    baseId: "atl-museum-hour",
+    lastSeenAt: now.toISOString(),
+    isRecurring: true,
+  });
+  assert.equal(next.slugs["family-yoga"].isRecurring, false);
+});
+
+test("pruneSlugHistory drops slugs older than 90 days and keeps fresh ones", () => {
+  const now = new Date("2026-05-25T00:00:00Z");
+  const fresh = new Date("2026-04-01T00:00:00Z").toISOString(); // ~54 days old
+  const stale = new Date("2026-02-01T00:00:00Z").toISOString(); // ~113 days old
+  const pruned = pruneSlugHistory(
+    {
+      slugs: {
+        "fresh-slug": { baseId: null, lastSeenAt: fresh, isRecurring: false },
+        "stale-slug": { baseId: null, lastSeenAt: stale, isRecurring: false },
+      },
+    },
+    now,
+  );
+  assert.ok(pruned["fresh-slug"]);
+  assert.equal(pruned["stale-slug"], undefined);
+});
+
+test("updateSlugHistory refreshes lastSeenAt on re-seen slugs and prunes the rest", () => {
+  const now = new Date("2026-05-25T12:00:00Z");
+  const stale = new Date("2026-02-01T00:00:00Z").toISOString(); // outside 90d
+  const recent = new Date("2026-05-01T00:00:00Z").toISOString(); // inside 90d
+  const next = updateSlugHistory(
+    {
+      slugs: {
+        "stale-one-off": { baseId: null, lastSeenAt: stale, isRecurring: false },
+        "recent-one-off": { baseId: null, lastSeenAt: recent, isRecurring: false },
+        "recurring-template": {
+          baseId: "atl-museum-hour",
+          lastSeenAt: recent,
+          isRecurring: true,
+        },
+      },
+    },
+    [
+      {
+        events: [{ slug: "recurring-template", baseId: "atl-museum-hour" }],
+      },
+    ],
+    { metroId: "atlanta", now },
+  );
+  // stale slug pruned (> 90 days), recent kept verbatim, re-seen stamped to now.
+  assert.equal(next.slugs["stale-one-off"], undefined);
+  assert.equal(next.slugs["recent-one-off"].lastSeenAt, recent);
+  assert.equal(next.slugs["recurring-template"].lastSeenAt, now.toISOString());
 });
 

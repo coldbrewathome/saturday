@@ -85,11 +85,14 @@ for (const filePath of htmlFiles) {
   report.totalChecked++;
   const html = fs.readFileSync(filePath, "utf8");
 
-  // Detect alias pages (legacy URL redirected to a new canonical via meta-refresh).
-  // These are intentionally noindex'd and canonicalized off-page, so we skip mismatch
-  // and sitemap-coverage checks. We still verify the canonical target file exists.
+  // Detect alias / aged-out stub pages (legacy URL redirected or noindex'd
+  // because the underlying entity moved or expired). These are intentionally
+  // canonicalized off-page, so we skip mismatch and sitemap-coverage checks.
+  // We still verify the canonical target file exists for redirects.
+  // Per ADR-04 "event has ended" stubs use a delayed (non-zero) refresh so
+  // users actually see the message — match any refresh delay.
   const isAliasPage =
-    /<meta\s+http-equiv="refresh"\s+content="0\s*;\s*url=/i.test(html) &&
+    /<meta\s+http-equiv="refresh"\s+content="\d+\s*;\s*url=/i.test(html) &&
     /<meta\s+name="robots"\s+content="[^"]*noindex/i.test(html);
   if (isAliasPage) aliasPaths.add(relPath);
 
