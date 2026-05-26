@@ -1,6 +1,6 @@
 # Roadmap
 
-_Last updated: 2026-05-26_ (tick 29)
+_Last updated: 2026-05-26_ (tick 30)
 
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
@@ -11,7 +11,7 @@ _In flight — actively being worked on. Keep this to 1–3 items._
 - **Links:** `public/manifest.webmanifest` (exists, SVG-only icons), `index.html:18` (manifest link), `public/icon-192.png` + `public/icon-512.png` (orphaned), `9754dda` (mobile FAB pattern)
 - **Tasks:**
   - [x] Decide PWA scope + caching strategy. Write `docs/decisions/05-pwa-offline.md` covering: (a) what "offline weekend" means concretely — cache the current metro's `events.json` + `featured-plans.json` + spot detail JSON, or only the app shell?, (b) service worker library choice (Workbox vs. hand-rolled — repo already builds with Vite, so `vite-plugin-pwa` is the obvious default), (c) cache versioning + invalidation strategy (event data rotates weekly; need a `stale-while-revalidate` story that doesn't serve last-week's events), (d) install-prompt UX — passive (browser-driven) vs. an explicit "Install FamHop" button somewhere near the mobile FAB. <2h. _(dc5d887)_
-  - [ ] Fix the manifest to be actually installable. Add the existing `icon-192.png` and `icon-512.png` PNG entries to `public/manifest.webmanifest` (Chrome's installability check requires a 192+ PNG), verify `start_url` and `scope` against current routing, and add a `display_override` if the ADR calls for it. Run Lighthouse PWA audit locally to confirm "Installable" passes.
+  - [x] Fix the manifest to be actually installable. Add the existing `icon-192.png` and `icon-512.png` PNG entries to `public/manifest.webmanifest` (Chrome's installability check requires a 192+ PNG), verify `start_url` and `scope` against current routing, and add a `display_override` if the ADR calls for it. Run Lighthouse PWA audit locally to confirm "Installable" passes. _(f85385a)_
   - [ ] Scaffold the service worker. Add `vite-plugin-pwa` (or chosen equivalent) to `vite.config.ts`, generate `sw.js` at build, register it from `src/main.tsx` behind a feature flag or a `import.meta.env.PROD` guard so dev isn't disrupted. Confirm SW shows up in DevTools → Application on a production build.
   - [ ] Implement the offline cache strategy from the ADR. At minimum: precache app shell + `manifest.webmanifest` + favicon assets; runtime-cache `public/data/<metro>/events.json` and `featured-plans.json` with the strategy chosen in step 1. Verify by loading a metro guide, going offline in DevTools, hard-reloading, and confirming the page still renders.
   - [ ] Add the install-prompt UX from the ADR. Capture the `beforeinstallprompt` event, stash it, and surface an explicit install affordance on mobile (likely near the existing FAB or in the header). Dismiss state should persist in `localStorage` so users aren't nagged.
