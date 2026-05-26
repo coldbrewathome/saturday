@@ -99,6 +99,7 @@ import {
   metroStorageKey,
   type MetroConfig,
 } from "./metros";
+import EventDetailView from "./EventDetailView";
 
 type Category =
   | "Outdoors"
@@ -183,6 +184,9 @@ export type FamilyEvent = {
   sourceName?: string;
   sourceMode?: string;
   verified: boolean;
+  // Stable slug landed in 261ce3b. Drives the SPA `#/event/<slug>` route
+  // (this file) and the prerendered `/<metro>/events/<slug>/` URL (ADR-04).
+  slug?: string;
 };
 
 type SavedEventDateGroup = {
@@ -1085,32 +1089,56 @@ type FeaturedPlan = {
 };
 
 type AppRoute = {
-  view: "home" | "browse" | "plans";
+  view: "home" | "browse" | "plans" | "event";
   planId: string | null;
+  eventSlug: string | null;
 };
 
 function readAppRoute(): AppRoute {
   if (typeof window === "undefined") {
-    return { view: "browse", planId: null };
+    return { view: "browse", planId: null, eventSlug: null };
   }
   const hash = window.location.hash;
   if (hash.startsWith("#/p/")) {
     // Poll route — main.tsx handles rendering. App still mounts when the user
     // navigates back, so default to browse.
-    return { view: "browse", planId: null };
+    return { view: "browse", planId: null, eventSlug: null };
+  }
+  // Per ADR-04: the SPA hash route is `#/event/<slug>`. The prerendered SEO
+  // path `/<metro>/events/<slug>/` is a sibling surface, not handled here.
+  const eventMatch = hash.match(/^#\/event\/(.+)$/);
+  if (eventMatch) {
+    return {
+      view: "event",
+      planId: null,
+      eventSlug: decodeURIComponent(eventMatch[1]),
+    };
   }
   const planMatch = hash.match(/^#\/plans\/(.+)$/);
   if (planMatch) {
-    return { view: "plans", planId: decodeURIComponent(planMatch[1]) };
+    return {
+      view: "plans",
+      planId: decodeURIComponent(planMatch[1]),
+      eventSlug: null,
+    };
   }
-  if (hash === "#/plans") return { view: "plans", planId: null };
+  if (hash === "#/plans") {
+    return { view: "plans", planId: null, eventSlug: null };
+  }
   if (hash === "#/browse" || hash === "" || hash === "#/" || hash === "#") {
-    return { view: "browse", planId: null };
+    return { view: "browse", planId: null, eventSlug: null };
   }
-  return { view: "browse", planId: null };
+  return { view: "browse", planId: null, eventSlug: null };
 }
 
-function buildAppHash(view: AppRoute["view"], planId: string | null): string {
+function buildAppHash(
+  view: AppRoute["view"],
+  planId: string | null,
+  eventSlug: string | null,
+): string {
+  if (view === "event" && eventSlug) {
+    return `#/event/${encodeURIComponent(eventSlug)}`;
+  }
   if (view === "plans") {
     return planId ? `#/plans/${encodeURIComponent(planId)}` : "#/plans";
   }
@@ -1380,7 +1408,7 @@ function App({ metro }: AppProps) {
     readStoredArray(storageKeys.deletedPlanIds, []),
   );
   const initialRoute = readAppRoute();
-  const [view, setView] = useState<"home" | "browse" | "plans">(
+  const [view, setView] = useState<"home" | "browse" | "plans" | "event">(
     initialRoute.view,
   );
   const [inferredGeo, setInferredGeo] = useState<{ city: string | null; lat: number | null; lon: number | null } | null>(null);
@@ -1388,6 +1416,9 @@ function App({ metro }: AppProps) {
   const [homeError, setHomeError] = useState<string | null>(null);
   const [activePlanId, setActivePlanId] = useState<string | null>(
     initialRoute.planId,
+  );
+  const [activeEventSlug, setActiveEventSlug] = useState<string | null>(
+    initialRoute.eventSlug,
   );
   const [addStopChoice, setAddStopChoice] = useState<string>("");
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -1785,16 +1816,16 @@ function App({ metro }: AppProps) {
     window.localStorage.setItem(storageKeys.savedSpots, JSON.stringify(savedIds));
   }, [savedIds, storageKeys.savedSpots]);
 
-  // URL routing: keep window.location.hash in sync with view + activePlanId.
-  // pushState (no hashchange fired) when state changes; popstate listener
-  // handles back/forward navigation.
+  // URL routing: keep window.location.hash in sync with view + activePlanId +
+  // activeEventSlug. pushState (no hashchange fired) when state changes;
+  // popstate listener handles back/forward navigation.
   useEffect(() => {
     if (window.location.hash.startsWith("#/p/")) return; // poll page
-    const target = buildAppHash(view, activePlanId);
+    const target = buildAppHash(view, activePlanId, activeEventSlug);
     if (window.location.hash !== target) {
       window.history.pushState(null, "", target);
     }
-  }, [view, activePlanId]);
+  }, [view, activePlanId, activeEventSlug]);
 
   useEffect(() => {
     function onPop() {
@@ -1802,6 +1833,7 @@ function App({ metro }: AppProps) {
       const route = readAppRoute();
       setView(route.view);
       setActivePlanId(route.planId);
+      setActiveEventSlug(route.eventSlug);
     }
     window.addEventListener("popstate", onPop);
     window.addEventListener("hashchange", onPop);
@@ -5029,6 +5061,16 @@ function App({ metro }: AppProps) {
           );
         })()}
       </main>
+      ) : view === "event" ? (
+      <EventDetailView
+        events={events}
+        slug={activeEventSlug}
+        metro={metro}
+        onBack={() => {
+          setActiveEventSlug(null);
+          setView("browse");
+        }}
+      />
       ) : (
       <main className="plans-workspace" aria-label="Plans">
         <aside className="plan-list-panel" aria-label="Saved plans">
