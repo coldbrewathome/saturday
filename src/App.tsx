@@ -4276,6 +4276,14 @@ function App({ metro }: AppProps) {
                       {event.venue} · {event.city}
                     </span>
                   </a>
+                  {event.slug && (
+                    <a
+                      className="home-event-details"
+                      href={buildAppHash("event", null, event.slug)}
+                    >
+                      View details →
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>
@@ -4802,6 +4810,15 @@ function App({ metro }: AppProps) {
                           </button>
                         );
                       })()}
+                    {event.slug && (
+                      <a
+                        className="sheet-action"
+                        href={buildAppHash("event", null, event.slug)}
+                      >
+                        <ChevronRight aria-hidden="true" />
+                        View details
+                      </a>
+                    )}
                     <a
                       className="sheet-action"
                       href={event.url}
@@ -5557,6 +5574,15 @@ function App({ metro }: AppProps) {
                             <Plus aria-hidden="true" />
                             Add to plan
                           </button>
+                          {event.slug && (
+                            <a
+                              className="plan-nearby-details"
+                              href={buildAppHash("event", null, event.slug)}
+                              title="View event details"
+                            >
+                              Details
+                            </a>
+                          )}
                           <a
                             className="plan-nearby-open"
                             href={event.url}

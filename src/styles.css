@@ -3818,6 +3818,20 @@ h3 {
   background: #fdece7;
 }
 
+.home-event-details {
+  display: block;
+  padding: 6px 14px 10px;
+  color: var(--accent-strong);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-top: 1px solid var(--line);
+}
+
+.home-event-details:hover {
+  text-decoration: underline;
+}
+
 /* Plan-detail "While you're nearby" — horizontally scrolling rail of cards */
 .plan-nearby {
   margin: 16px 0;
@@ -3959,6 +3973,27 @@ h3 {
 }
 
 .plan-nearby-open:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.plan-nearby-details {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.plan-nearby-details:hover {
   border-color: var(--accent);
   color: var(--accent);
 }
