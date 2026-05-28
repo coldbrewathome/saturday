@@ -52,7 +52,7 @@ const BRAND_TAG = IS_ADULTS ? "night-out planner" : "family weekend planner";
 const OG_IMAGE = envValue("VITE_APP_OG_IMAGE", `${SITE}/og-image.png`);
 const POLLS_API = envValue("VITE_POLLS_API").replace(/\/$/, "");
 const GOOGLE_CLIENT_ID = envValue("VITE_GOOGLE_CLIENT_ID");
-const MAX_SPOT_PAGES_PER_METRO = Number(process.env.SEO_MAX_SPOT_PAGES_PER_METRO || 700);
+const MAX_SPOT_PAGES_PER_METRO = Number(process.env.SEO_MAX_SPOT_PAGES_PER_METRO || 600);
 const SEO_PINNED_PATHS = readJson(path.join(ROOT, "data", "seo-pinned-paths.json")) || {};
 const FREE_CATEGORIES = new Set(["Library", "Park"]);
 function eventLikelyFree(event) {
