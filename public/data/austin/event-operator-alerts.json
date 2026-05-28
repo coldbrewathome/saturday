@@ -1,0 +1,309 @@
+{
+  "schemaVersion": 1,
+  "metroId": "austin",
+  "generatedAt": "2026-05-28T04:09:44.025Z",
+  "alertCount": 12,
+  "alerts": [
+    {
+      "severity": "critical",
+      "metroId": "austin",
+      "sourceId": "austin-public-library",
+      "sourceName": "Austin Public Library",
+      "sourceType": "html",
+      "url": "https://library.austintexas.gov/events",
+      "status": "blocked",
+      "issueType": "fetch-failed",
+      "reason": "challenge page returned instead of event content",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-28T04:09:44.025Z",
+      "fetches": [
+        {
+          "url": "https://library.austintexas.gov/events",
+          "status": "blocked",
+          "reason": "challenge page returned instead of event content",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "austin",
+      "sourceId": "thinkery",
+      "sourceName": "Thinkery (Children's Museum)",
+      "sourceType": "html",
+      "url": "https://thinkeryaustin.org/events/",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-28T04:09:44.025Z",
+      "fetches": [
+        {
+          "url": "https://thinkeryaustin.org/events/",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "austin",
+      "sourceId": "bullock-museum",
+      "sourceName": "Bullock Texas State History Museum",
+      "sourceType": "html",
+      "url": "https://www.thestoryoftexas.com/visit/calendar",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-28T04:09:44.025Z",
+      "fetches": [
+        {
+          "url": "https://www.thestoryoftexas.com/visit/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "austin",
+      "sourceId": "blanton-museum",
+      "sourceName": "Blanton Museum of Art",
+      "sourceType": "html",
+      "url": "https://blantonmuseum.org/events/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-28T04:09:44.025Z",
+      "fetches": [
+        {
+          "url": "https://blantonmuseum.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "austin",
+      "sourceId": "umlauf-sculpture-garden",
+      "sourceName": "Umlauf Sculpture Garden",
+      "sourceType": "html",
+      "url": "https://www.umlaufsculpture.org/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-28T04:09:44.025Z",
+      "fetches": [
+        {
+          "url": "https://www.umlaufsculpture.org/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "austin",
+      "sourceId": "stubbs-austin",
+      "sourceName": "Stubb's BBQ",
+      "sourceType": "html",
+      "url": "https://www.stubbsaustin.com/calendar",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-28T04:09:44.025Z",
+      "fetches": [
+        {
+          "url": "https://www.stubbsaustin.com/calendar",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "austin",
+      "sourceId": "mohawk-austin",
+      "sourceName": "The Mohawk",
+      "sourceType": "html",
+      "url": "https://mohawkaustin.com/calendar",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-28T04:09:44.025Z",
+      "fetches": [
+        {
+          "url": "https://mohawkaustin.com/calendar",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "austin",
+      "sourceId": "continental-club",
+      "sourceName": "Continental Club",
+      "sourceType": "html",
+      "url": "https://continentalclub.com/austin-tx/",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-28T04:09:44.025Z",
+      "fetches": [
+        {
+          "url": "https://continentalclub.com/austin-tx/",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "austin",
+      "sourceId": "antones-nightclub",
+      "sourceName": "Antone's Nightclub",
+      "sourceType": "html",
+      "url": "https://antonesnightclub.com/calendar/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-28T04:09:44.025Z",
+      "fetches": [
+        {
+          "url": "https://antonesnightclub.com/calendar/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "austin",
+      "sourceId": "acl-live",
+      "sourceName": "ACL Live at the Moody Theater",
+      "sourceType": "html",
+      "url": "https://acl-live.com/calendar/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-28T04:09:44.025Z",
+      "fetches": [
+        {
+          "url": "https://acl-live.com/calendar/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "austin",
+      "sourceId": "alamo-drafthouse-austin",
+      "sourceName": "Alamo Drafthouse (South Lamar)",
+      "sourceType": "html",
+      "url": "https://drafthouse.com/austin/calendar",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-28T04:09:44.025Z",
+      "fetches": [
+        {
+          "url": "https://drafthouse.com/austin/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "austin",
+      "sourceId": "cap-city-comedy",
+      "sourceName": "Cap City Comedy Club",
+      "sourceType": "html",
+      "url": "https://www.capcitycomedy.com/shows",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-28T04:09:44.025Z",
+      "fetches": [
+        {
+          "url": "https://www.capcitycomedy.com/shows",
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    }
+  ]
+}

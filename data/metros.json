@@ -1770,6 +1770,119 @@
       },
       "eventSources": "data/event-sources-honolulu.json",
       "adultEventSources": "data/event-sources-adults-honolulu.json",
+      "eventTemplates": "data/event-templates-major-metros.json",
+      "manualEvents": "data/manual-events-honolulu.json"
+    },
+    {
+      "id": "austin",
+      "label": "Austin",
+      "seoName": "Austin",
+      "state": "TX",
+      "timezone": "America/Chicago",
+      "canonicalPath": "/austin",
+      "aliases": [
+        "atx"
+      ],
+      "dataDir": "austin",
+      "minSpots": 120,
+      "minEvents": 10,
+      "center": {
+        "lat": 30.2672,
+        "lon": -97.7431
+      },
+      "spotCoverage": {
+        "name": "Austin",
+        "bbox": {
+          "south": 29.95,
+          "west": -98.05,
+          "north": 30.65,
+          "east": -97.45
+        },
+        "boxes": [
+          {
+            "name": "Central Austin",
+            "south": 30.20,
+            "west": -97.85,
+            "north": 30.40,
+            "east": -97.65
+          },
+          {
+            "name": "North Austin and Round Rock",
+            "south": 30.40,
+            "west": -97.85,
+            "north": 30.65,
+            "east": -97.55
+          },
+          {
+            "name": "South Austin and Kyle",
+            "south": 29.95,
+            "west": -97.95,
+            "north": 30.25,
+            "east": -97.65
+          },
+          {
+            "name": "West Lakes (Lakeway, Bee Cave)",
+            "south": 30.25,
+            "west": -98.05,
+            "north": 30.45,
+            "east": -97.85
+          }
+        ],
+        "cityCenters": [
+          [
+            "Austin",
+            30.2672,
+            -97.7431
+          ],
+          [
+            "Round Rock",
+            30.5083,
+            -97.6789
+          ],
+          [
+            "Cedar Park",
+            30.5052,
+            -97.8203
+          ],
+          [
+            "Pflugerville",
+            30.4394,
+            -97.6200
+          ],
+          [
+            "Georgetown",
+            30.6333,
+            -97.6779
+          ],
+          [
+            "Lakeway",
+            30.3641,
+            -97.9789
+          ],
+          [
+            "Bee Cave",
+            30.3072,
+            -97.9472
+          ],
+          [
+            "Buda",
+            30.0852,
+            -97.8403
+          ],
+          [
+            "Kyle",
+            29.9893,
+            -97.8773
+          ],
+          [
+            "Leander",
+            30.5788,
+            -97.8531
+          ]
+        ]
+      },
+      "eventSources": "data/event-sources-austin.json",
+      "adultEventSources": "data/event-sources-adults-austin.json",
       "eventTemplates": "data/event-templates-major-metros.json"
     }
   ]

@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "note": "Adult event sources for Austin TX — live music venues, comedy, nightlife, breweries. Starter set; expand as new sources are vetted.",
+  "defaults": {
+    "windowDays": 30,
+    "audiences": [
+      "adults"
+    ],
+    "userAgent": "nighthop/0.1 event-ingest"
+  },
+  "coverage": {
+    "cities": [
+      "Austin",
+      "Round Rock",
+      "Cedar Park",
+      "Pflugerville",
+      "Georgetown",
+      "Lakeway"
+    ]
+  },
+  "sources": [
+    {
+      "id": "stubbs-austin",
+      "name": "Stubb's BBQ",
+      "url": "https://www.stubbsaustin.com/calendar",
+      "city": "Austin",
+      "neighborhood": "Downtown",
+      "category": "Live Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 30.2691,
+      "lon": -97.7351
+    },
+    {
+      "id": "mohawk-austin",
+      "name": "The Mohawk",
+      "url": "https://mohawkaustin.com/calendar",
+      "city": "Austin",
+      "neighborhood": "Red River District",
+      "category": "Live Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 30.2706,
+      "lon": -97.7370
+    },
+    {
+      "id": "continental-club",
+      "name": "Continental Club",
+      "url": "https://continentalclub.com/austin-tx/",
+      "city": "Austin",
+      "neighborhood": "SoCo",
+      "category": "Live Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 30.2495,
+      "lon": -97.7484
+    },
+    {
+      "id": "antones-nightclub",
+      "name": "Antone's Nightclub",
+      "url": "https://antonesnightclub.com/calendar/",
+      "city": "Austin",
+      "neighborhood": "Downtown",
+      "category": "Live Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 30.2680,
+      "lon": -97.7479
+    },
+    {
+      "id": "acl-live",
+      "name": "ACL Live at the Moody Theater",
+      "url": "https://acl-live.com/calendar/",
+      "city": "Austin",
+      "neighborhood": "2nd Street District",
+      "category": "Live Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 30.2654,
+      "lon": -97.7475
+    },
+    {
+      "id": "alamo-drafthouse-austin",
+      "name": "Alamo Drafthouse (South Lamar)",
+      "url": "https://drafthouse.com/austin/calendar",
+      "city": "Austin",
+      "neighborhood": "South Lamar",
+      "category": "Cinema",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 30.2424,
+      "lon": -97.7843
+    },
+    {
+      "id": "cap-city-comedy",
+      "name": "Cap City Comedy Club",
+      "url": "https://www.capcitycomedy.com/shows",
+      "city": "Austin",
+      "neighborhood": "Domain",
+      "category": "Comedy",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 30.4012,
+      "lon": -97.7261
+    }
+  ]
+}
