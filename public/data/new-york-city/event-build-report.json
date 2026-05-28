@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "metroId": "new-york-city",
-  "generatedAt": "2026-05-22T21:46:37.554Z",
+  "generatedAt": "2026-05-28T02:55:21.502Z",
   "registryPath": "data/event-sources-new-york-city.json",
   "outputPath": "public/data/new-york-city/events.json",
-  "eventCount": 1110,
-  "adultsEventCount": 48,
+  "eventCount": 1366,
+  "adultsEventCount": 38,
   "sourceCount": 24,
-  "liveEventCount": 1090,
-  "lastKnownGoodEventCount": 1,
+  "liveEventCount": 1348,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 20,
   "operatorAlertCount": 16,
   "errors": [],
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:37.554Z",
+      "fetchedAt": "2026-05-28T02:55:21.502Z",
       "fetches": [
         {
           "url": "https://queens.libnet.info/events",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:37.554Z",
+      "fetchedAt": "2026-05-28T02:55:21.502Z",
       "fetches": [
         {
           "url": "https://www.nypl.org/events/calendar",
@@ -79,13 +79,38 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:37.554Z",
+      "fetchedAt": "2026-05-28T02:55:21.502Z",
       "fetches": [
         {
           "url": "https://www.amnh.org/calendar",
           "status": "http-error",
           "httpStatus": 403,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "new-york-city",
+      "sourceId": "bronx-zoo-events",
+      "sourceName": "Bronx Zoo Events",
+      "sourceType": "html",
+      "url": "https://bronxzoo.com/things-to-do/events",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-28T02:55:21.502Z",
+      "fetches": [
+        {
+          "url": "https://bronxzoo.com/things-to-do/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -104,7 +129,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:37.554Z",
+      "fetchedAt": "2026-05-28T02:55:21.502Z",
       "fetches": [
         {
           "url": "https://njfair.com/",
@@ -129,7 +154,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:37.554Z",
+      "fetchedAt": "2026-05-28T02:55:21.502Z",
       "fetches": [
         {
           "url": "https://www.brooklynsteel.com/calendar",
@@ -154,7 +179,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:37.554Z",
+      "fetchedAt": "2026-05-28T02:55:21.502Z",
       "fetches": [
         {
           "url": "https://www.boweryballroom.com/calendar",
@@ -165,21 +190,21 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "new-york-city",
       "sourceId": "music-hall-williamsburg",
       "sourceName": "Music Hall of Williamsburg",
       "sourceType": "html",
       "url": "https://www.musichallofwilliamsburg.com/calendar",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-05-22T21:46:37.554Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-28T02:55:21.502Z",
       "fetches": [
         {
           "url": "https://www.musichallofwilliamsburg.com/calendar",
@@ -204,7 +229,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:37.554Z",
+      "fetchedAt": "2026-05-28T02:55:21.502Z",
       "fetches": [
         {
           "url": "https://lpr.com/calendar",
@@ -229,7 +254,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:37.554Z",
+      "fetchedAt": "2026-05-28T02:55:21.502Z",
       "fetches": [
         {
           "url": "https://www.terminal5nyc.com/calendar",
@@ -254,7 +279,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:37.554Z",
+      "fetchedAt": "2026-05-28T02:55:21.502Z",
       "fetches": [
         {
           "url": "https://www.websterhall.com/events",
@@ -279,7 +304,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:37.554Z",
+      "fetchedAt": "2026-05-28T02:55:21.502Z",
       "fetches": [
         {
           "url": "https://www.comedycellar.com/line-up/",
@@ -304,35 +329,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:37.554Z",
+      "fetchedAt": "2026-05-28T02:55:21.502Z",
       "fetches": [
         {
           "url": "https://gothamcomedyclub.com/calendar",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "new-york-city",
-      "sourceId": "elsewhere-brooklyn",
-      "sourceName": "Elsewhere",
-      "sourceType": "html",
-      "url": "https://www.elsewherebrooklyn.com/events",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:37.554Z",
-      "fetches": [
-        {
-          "url": "https://www.elsewherebrooklyn.com/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -354,7 +354,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:37.554Z",
+      "fetchedAt": "2026-05-28T02:55:21.502Z",
       "fetches": [
         {
           "url": "https://www.roughtradenyc.com/events",
@@ -378,7 +378,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:37.554Z",
+      "fetchedAt": "2026-05-28T02:55:21.502Z",
       "fetches": [
         {
           "url": "https://www.bluenotejazz.com/new-york/schedule",
@@ -403,7 +403,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:37.554Z",
+      "fetchedAt": "2026-05-28T02:55:21.502Z",
       "fetches": [
         {
           "url": "https://villagevanguard.com/events",
@@ -424,9 +424,9 @@
       "metroId": "new-york-city",
       "category": null,
       "status": "ok",
-      "liveEvents": 6,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 6,
+      "eventCount": 0,
       "fetches": []
     },
     {
@@ -520,9 +520,9 @@
       "metroId": "new-york-city",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 1031,
+      "liveEvents": 1297,
       "fallbackEvents": 0,
-      "eventCount": 1031,
+      "eventCount": 1297,
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/kids",
@@ -533,8 +533,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 573,
-      "extractedEvents": 1604,
+      "rejectedLiveEvents": 491,
+      "extractedEvents": 1788,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -547,9 +547,9 @@
       "metroId": "new-york-city",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 6,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 6,
       "fetches": [
         {
           "url": "https://www.brooklynkids.org/events/",
@@ -561,7 +561,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 3,
+      "extractedEvents": 6,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -574,9 +574,9 @@
       "metroId": "new-york-city",
       "category": "Theater",
       "status": "ok",
-      "liveEvents": 25,
+      "liveEvents": 23,
       "fallbackEvents": 0,
-      "eventCount": 25,
+      "eventCount": 23,
       "fetches": [
         {
           "url": "https://www.newvictory.org/api/event-instances.json",
@@ -588,7 +588,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 143,
-      "extractedEvents": 168,
+      "extractedEvents": 166,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -654,9 +654,9 @@
       "metroId": "new-york-city",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://bronxzoo.com/things-to-do/events",
@@ -667,7 +667,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 2,
+      "rejectedLiveEvents": 3,
       "extractedEvents": 3,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -681,21 +681,21 @@
       "metroId": "new-york-city",
       "category": "Ticketed",
       "status": "ok",
-      "liveEvents": 17,
+      "liveEvents": 13,
       "fallbackEvents": 0,
-      "eventCount": 17,
+      "eventCount": 13,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=17; queries=1"
+          "contentType": "application/json; source=ticketmaster; events=13; queries=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=ticketmaster; events=17; queries=1",
+      "contentType": "application/json; source=ticketmaster; events=13; queries=1",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 17,
+      "extractedEvents": 13,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -788,10 +788,10 @@
       "city": "Brooklyn",
       "metroId": "new-york-city",
       "category": "Music",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.musichallofwilliamsburg.com/calendar",
@@ -804,9 +804,8 @@
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "recoveryMode": "last-known-good",
-      "reason": "source produced no live events; using last-known-good future events"
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "le-poisson-rouge",
@@ -950,9 +949,9 @@
       "metroId": "new-york-city",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://www.elsewherebrooklyn.com/events",
@@ -964,7 +963,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

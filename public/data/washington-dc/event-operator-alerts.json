@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "metroId": "washington-dc",
-  "generatedAt": "2026-05-22T21:49:25.119Z",
+  "generatedAt": "2026-05-28T02:58:09.036Z",
   "alertCount": 10,
   "alerts": [
     {
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
+      "fetchedAt": "2026-05-28T02:58:09.036Z",
       "fetches": [
         {
           "url": "https://dpr.dc.gov/events",
@@ -44,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
+      "fetchedAt": "2026-05-28T02:58:09.036Z",
       "fetches": [
         {
           "url": "https://naturalhistory.si.edu/events/family-programs",
@@ -69,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
+      "fetchedAt": "2026-05-28T02:58:09.036Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -94,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
+      "fetchedAt": "2026-05-28T02:58:09.036Z",
       "fetches": [
         {
           "url": "https://marylandstatefair.com/",
@@ -119,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
+      "fetchedAt": "2026-05-28T02:58:09.036Z",
       "fetches": [
         {
           "url": "https://www.930.com/events",
@@ -144,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
+      "fetchedAt": "2026-05-28T02:58:09.036Z",
       "fetches": [
         {
           "url": "https://www.theanthemdc.com/events",
@@ -169,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
+      "fetchedAt": "2026-05-28T02:58:09.036Z",
       "fetches": [
         {
           "url": "https://www.blackcatdc.com/schedule.html",
@@ -194,7 +194,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
+      "fetchedAt": "2026-05-28T02:58:09.036Z",
       "fetches": [
         {
           "url": "https://www.dcimprov.com/shows",
@@ -219,7 +219,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
+      "fetchedAt": "2026-05-28T02:58:09.036Z",
       "fetches": [
         {
           "url": "https://www.unionstage.com/events",
@@ -229,21 +229,21 @@
       ]
     },
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "washington-dc",
       "sourceId": "songbyrd-dc",
       "sourceName": "Songbyrd Music House",
       "sourceType": "html",
       "url": "https://www.songbyrddc.com/events",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
+      "status": "ok-last-known-good",
+      "issueType": "zero-in-window",
+      "reason": "source produced no live events; using last-known-good future events",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-05-28T02:58:09.036Z",
       "fetches": [
         {
           "url": "https://www.songbyrddc.com/events",

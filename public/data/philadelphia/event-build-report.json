@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "philadelphia",
-  "generatedAt": "2026-05-22T21:50:09.738Z",
+  "generatedAt": "2026-05-28T02:58:55.478Z",
   "registryPath": "data/event-sources-philadelphia.json",
   "outputPath": "public/data/philadelphia/events.json",
-  "eventCount": 579,
-  "adultsEventCount": 467,
+  "eventCount": 536,
+  "adultsEventCount": 433,
   "sourceCount": 12,
-  "liveEventCount": 563,
+  "liveEventCount": 520,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 16,
   "operatorAlertCount": 10,
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:50:09.738Z",
+      "fetchedAt": "2026-05-28T02:58:55.478Z",
       "fetches": [
         {
           "url": "https://libwww.freelibrary.org/calendar/",
@@ -46,14 +46,14 @@
       "sourceType": "eventList",
       "url": "https://www.phila.gov/departments/philadelphia-parks-recreation/#calendar",
       "status": "ok-template-fallback",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": "recurring-template",
       "recoveredEvents": 8,
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:50:09.738Z",
+      "fetchedAt": "2026-05-28T02:58:55.478Z",
       "fetches": [
         {
           "url": "https://www.phila.gov/departments/philadelphia-parks-recreation/#calendar",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:50:09.738Z",
+      "fetchedAt": "2026-05-28T02:58:55.478Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:50:09.738Z",
+      "fetchedAt": "2026-05-28T02:58:55.478Z",
       "fetches": [
         {
           "url": "https://middletowngrangefair.org/",
@@ -128,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:50:09.738Z",
+      "fetchedAt": "2026-05-28T02:58:55.478Z",
       "fetches": [
         {
           "url": "https://www.utphilly.com/events",
@@ -153,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:50:09.738Z",
+      "fetchedAt": "2026-05-28T02:58:55.478Z",
       "fetches": [
         {
           "url": "https://www.thefillmorephilly.com/events",
@@ -178,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:50:09.738Z",
+      "fetchedAt": "2026-05-28T02:58:55.478Z",
       "fetches": [
         {
           "url": "https://www.johnnybrendas.com/events",
@@ -203,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:50:09.738Z",
+      "fetchedAt": "2026-05-28T02:58:55.478Z",
       "fetches": [
         {
           "url": "https://www.thefoundryphilly.com/events",
@@ -227,7 +227,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:50:09.738Z",
+      "fetchedAt": "2026-05-28T02:58:55.478Z",
       "fetches": [
         {
           "url": "https://philadelphia.heliumcomedy.com/events",
@@ -252,7 +252,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:50:09.738Z",
+      "fetchedAt": "2026-05-28T02:58:55.478Z",
       "fetches": [
         {
           "url": "https://www.punchlinephilly.com/shows",
@@ -312,8 +312,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": "recurring-template"
     },
@@ -326,9 +326,9 @@
       "metroId": "philadelphia",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 561,
+      "liveEvents": 518,
       "fallbackEvents": 0,
-      "eventCount": 561,
+      "eventCount": 518,
       "fetches": [
         {
           "url": "https://www.pleasetouchmuseum.org/calendar/month/",
@@ -339,7 +339,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=600; pages=12",
-      "rejectedLiveEvents": 39,
+      "rejectedLiveEvents": 82,
       "extractedEvents": 600,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null

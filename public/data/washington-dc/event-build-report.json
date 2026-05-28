@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "metroId": "washington-dc",
-  "generatedAt": "2026-05-22T21:49:25.119Z",
+  "generatedAt": "2026-05-28T02:58:09.036Z",
   "registryPath": "data/event-sources-washington-dc.json",
   "outputPath": "public/data/washington-dc/events.json",
-  "eventCount": 347,
-  "adultsEventCount": 5,
+  "eventCount": 360,
+  "adultsEventCount": 2,
   "sourceCount": 14,
-  "liveEventCount": 335,
-  "lastKnownGoodEventCount": 0,
+  "liveEventCount": 348,
+  "lastKnownGoodEventCount": 1,
   "fallbackEventCount": 12,
   "operatorAlertCount": 10,
   "errors": [],
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
+      "fetchedAt": "2026-05-28T02:58:09.036Z",
       "fetches": [
         {
           "url": "https://dpr.dc.gov/events",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
+      "fetchedAt": "2026-05-28T02:58:09.036Z",
       "fetches": [
         {
           "url": "https://naturalhistory.si.edu/events/family-programs",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
+      "fetchedAt": "2026-05-28T02:58:09.036Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
+      "fetchedAt": "2026-05-28T02:58:09.036Z",
       "fetches": [
         {
           "url": "https://marylandstatefair.com/",
@@ -128,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
+      "fetchedAt": "2026-05-28T02:58:09.036Z",
       "fetches": [
         {
           "url": "https://www.930.com/events",
@@ -153,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
+      "fetchedAt": "2026-05-28T02:58:09.036Z",
       "fetches": [
         {
           "url": "https://www.theanthemdc.com/events",
@@ -178,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
+      "fetchedAt": "2026-05-28T02:58:09.036Z",
       "fetches": [
         {
           "url": "https://www.blackcatdc.com/schedule.html",
@@ -203,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
+      "fetchedAt": "2026-05-28T02:58:09.036Z",
       "fetches": [
         {
           "url": "https://www.dcimprov.com/shows",
@@ -228,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
+      "fetchedAt": "2026-05-28T02:58:09.036Z",
       "fetches": [
         {
           "url": "https://www.unionstage.com/events",
@@ -238,21 +238,21 @@
       ]
     },
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "washington-dc",
       "sourceId": "songbyrd-dc",
       "sourceName": "Songbyrd Music House",
       "sourceType": "html",
       "url": "https://www.songbyrddc.com/events",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
+      "status": "ok-last-known-good",
+      "issueType": "zero-in-window",
+      "reason": "source produced no live events; using last-known-good future events",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:49:25.119Z",
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-05-28T02:58:09.036Z",
       "fetches": [
         {
           "url": "https://www.songbyrddc.com/events",
@@ -273,9 +273,9 @@
       "metroId": "washington-dc",
       "category": null,
       "status": "ok",
-      "liveEvents": 4,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 0,
       "fetches": []
     },
     {
@@ -287,21 +287,21 @@
       "metroId": "washington-dc",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 329,
+      "liveEvents": 345,
       "fallbackEvents": 0,
-      "eventCount": 329,
+      "eventCount": 345,
       "fetches": [
         {
           "url": "https://dclibrary.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=1254; locations=27"
+          "contentType": "application/json; source=communico-events; events=1303; locations=27"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=1254; locations=27",
-      "rejectedLiveEvents": 7,
-      "extractedEvents": 336,
+      "contentType": "application/json; source=communico-events; events=1303; locations=27",
+      "rejectedLiveEvents": 2,
+      "extractedEvents": 347,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -367,9 +367,9 @@
       "metroId": "washington-dc",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://nationalzoo.si.edu/events",
@@ -380,7 +380,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/vnd.api+json; source=national-zoo-jsonapi; events=31",
-      "rejectedLiveEvents": 282,
+      "rejectedLiveEvents": 281,
       "extractedEvents": 283,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -604,10 +604,10 @@
       "city": "Washington",
       "metroId": "washington-dc",
       "category": "Music",
-      "status": "ok",
+      "status": "ok-last-known-good",
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://www.songbyrddc.com/events",
@@ -618,10 +618,11 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 1,
+      "recoveryMode": "last-known-good",
+      "reason": "source produced no live events; using last-known-good future events"
     }
   ]
 }

@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "seattle",
-  "generatedAt": "2026-05-22T21:46:52.834Z",
+  "generatedAt": "2026-05-28T02:55:38.909Z",
   "registryPath": "data/event-sources-seattle.json",
   "outputPath": "public/data/seattle/events.json",
-  "eventCount": 202,
-  "adultsEventCount": 31,
+  "eventCount": 204,
+  "adultsEventCount": 20,
   "sourceCount": 17,
-  "liveEventCount": 203,
+  "liveEventCount": 205,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 11,
+  "operatorAlertCount": 12,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:52.834Z",
+      "fetchedAt": "2026-05-28T02:55:38.909Z",
       "fetches": [
         {
           "url": "https://www.burkemuseum.org/events",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:52.834Z",
+      "fetchedAt": "2026-05-28T02:55:38.909Z",
       "fetches": [
         {
           "url": "https://pacificsciencecenter.org/events/",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:52.834Z",
+      "fetchedAt": "2026-05-28T02:55:38.909Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -103,13 +103,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:52.834Z",
+      "fetchedAt": "2026-05-28T02:55:38.909Z",
       "fetches": [
         {
           "url": "https://www.thefair.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "seattle",
+      "sourceId": "evergreen-state-fair",
+      "sourceName": "Evergreen State Fair",
+      "sourceType": "html",
+      "url": "https://www.evergreenfair.org/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-05-28T02:55:38.909Z",
+      "fetches": [
+        {
+          "url": "https://www.evergreenfair.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -128,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:52.834Z",
+      "fetchedAt": "2026-05-28T02:55:38.909Z",
       "fetches": [
         {
           "url": "https://www.neumos.com/events",
@@ -153,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:52.834Z",
+      "fetchedAt": "2026-05-28T02:55:38.909Z",
       "fetches": [
         {
           "url": "https://www.thecrocodile.com/events",
@@ -178,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:52.834Z",
+      "fetchedAt": "2026-05-28T02:55:38.909Z",
       "fetches": [
         {
           "url": "https://www.showboxpresents.com/events",
@@ -203,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:52.834Z",
+      "fetchedAt": "2026-05-28T02:55:38.909Z",
       "fetches": [
         {
           "url": "https://www.tractortavern.com/events",
@@ -228,7 +253,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:52.834Z",
+      "fetchedAt": "2026-05-28T02:55:38.909Z",
       "fetches": [
         {
           "url": "https://www.sunsettavern.com/events",
@@ -253,7 +278,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:52.834Z",
+      "fetchedAt": "2026-05-28T02:55:38.909Z",
       "fetches": [
         {
           "url": "https://www.unexpectedproductions.org/shows",
@@ -270,20 +295,20 @@
       "sourceName": "Comedy Underground",
       "sourceType": "html",
       "url": "https://www.comedyunderground.com/calendar",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-22T21:46:52.834Z",
+      "fetchedAt": "2026-05-28T02:55:38.909Z",
       "fetches": [
         {
           "url": "https://www.comedyunderground.com/calendar",
-          "status": "http-error",
-          "httpStatus": 404,
+          "status": "ok",
+          "httpStatus": 200,
           "contentType": "text/html"
         }
       ]
@@ -326,9 +351,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 126,
+      "liveEvents": 144,
       "fallbackEvents": 0,
-      "eventCount": 126,
+      "eventCount": 144,
       "fetches": [
         {
           "url": "https://www.trumba.com/calendars/kalendaro.json?filterview=SeriesStoryTime",
@@ -339,8 +364,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=UTF-8",
-      "rejectedLiveEvents": 67,
-      "extractedEvents": 193,
+      "rejectedLiveEvents": 50,
+      "extractedEvents": 194,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -353,9 +378,9 @@
       "metroId": "seattle",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 42,
+      "liveEvents": 27,
       "fallbackEvents": 0,
-      "eventCount": 42,
+      "eventCount": 27,
       "fetches": [
         {
           "url": "https://seattlechildrensmuseum.org/calendar/",
@@ -366,7 +391,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 68,
+      "rejectedLiveEvents": 83,
       "extractedEvents": 110,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -542,9 +567,9 @@
       "metroId": "seattle",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.evergreenfair.org/",
@@ -556,7 +581,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -727,20 +752,21 @@
       "city": "Seattle",
       "metroId": "seattle",
       "category": "Comedy",
-      "status": "http-error",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.comedyunderground.com/calendar",
-          "status": "http-error",
-          "httpStatus": 404,
+          "status": "ok",
+          "httpStatus": 200,
           "contentType": "text/html"
         }
       ],
-      "httpStatus": 404,
+      "httpStatus": 200,
       "contentType": "text/html",
+      "rejectedLiveEvents": 0,
       "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
