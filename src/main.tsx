@@ -84,3 +84,16 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <Root />
   </React.StrictMode>,
 );
+
+// Register the service worker only in production builds. Dev gets no SW so
+// HMR isn't disrupted by cached chunks. Caching strategies land in a follow-up
+// task per ADR 05; this scaffold ships the autoUpdate registration only.
+if (import.meta.env.PROD) {
+  import("virtual:pwa-register")
+    .then(({ registerSW }) => {
+      registerSW({ immediate: true });
+    })
+    .catch(() => {
+      // SW registration is best-effort; failures here shouldn't break the app.
+    });
+}

@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
+import { VitePWA } from "vite-plugin-pwa";
 
 const repositoryName = process.env.GITHUB_REPOSITORY?.split("/")[1];
 const base =
@@ -178,6 +179,27 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   return {
     base,
-    plugins: [react(), audienceJsonLdPlugin(env)],
+    plugins: [
+      react(),
+      audienceJsonLdPlugin(env),
+      // Service worker registration. Per ADR 05, the static
+      // `public/manifest.webmanifest` remains the source of truth for this
+      // task (commit f85385a just fixed it), so `manifest: false` keeps
+      // VitePWA from generating a competing copy. Caching strategies + TTLs
+      // from the ADR's table land in the next roadmap task — for now this
+      // ships the SW scaffold with workbox defaults so dev/prod don't break.
+      VitePWA({
+        registerType: "autoUpdate",
+        injectRegister: null, // we register from src/main.tsx behind import.meta.env.PROD
+        manifest: false,
+        workbox: {
+          cleanupOutdatedCaches: true,
+          globPatterns: ["**/*.{js,css,html,svg,png,ico,webmanifest}"],
+        },
+        devOptions: {
+          enabled: false,
+        },
+      }),
+    ],
   };
 });
