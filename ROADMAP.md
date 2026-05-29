@@ -10,10 +10,6 @@ _Nothing in flight. Pull the top of **Next** when ready._
 ## Next
 _Committed, not yet started. Ordered by priority. Aim for ≤5 items._
 
-### Free-text search across spots + events
-- **Why:** Current discovery is filter-only; a known ceiling for browse-style apps as the dataset grows.
-- **Effort:** M
-
 ### UI/component tests
 - **Why:** `tests/` covers pipeline + planner, but nothing exercises `App.tsx`, `auth.ts`, or the plans view; React refactors are unsafe.
 - **Effort:** M
