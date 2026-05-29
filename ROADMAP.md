@@ -27,7 +27,7 @@ _Candidates and ideas. Unordered. No commitment._
 - **Newsletter: activate live sends** — code is shipped; needs Resend account creation, DNS verification of `famhop.com`, `RESEND_API_KEY` + `NEWSLETTER_ADMIN_TOKEN` wrangler secrets, then a real test send to an operator address with Gmail + Apple Mail QA. Pure ops work, not a code task — promote back to Now only once the human has completed the external setup.
 
 ## Done
-_Recently shipped (last ~10 items). Trim older ones into a separate CHANGELOG if needed._
+_Recently shipped (last ~10 items). Older items live in [CHANGELOG.md](CHANGELOG.md)._
 
 - 2026-05-28 · **PWA: install + offline weekend cache** — ADR 05; `vite-plugin-pwa` SW with runtime caching (events/featured-plans SWR 6h, spots SWR 30d, tiles/imagery CacheFirst 30d) + SPA shell fallback; mobile install banner (`InstallBanner.tsx` + `installPrompt.ts`) with native prompt on Android/desktop and iOS A2HS tutorial, per-origin gating; QA checklist in `docs/pwa-qa-checklist.md`. Deployed to both apps. (`offline.html` for unvisited metros + NightHop-branded icons deferred.)
 - 2026-05-26 · **Event detail pages (shareable, SEO-indexed)** — ADR 04 (slug strategy + ended-event noindex stubs), stable `slug` field on event records w/ CI audit, `EventDetailView` at `#/event/<metro>/<slug>`, JSON-LD `Event` + OG meta on the SPA hash route, sitemap inclusion + slug-history aliases, and "View details" links from event cards across weekend guide + plan-share surfaces (`92f30f6`).
@@ -36,7 +36,5 @@ _Recently shipped (last ~10 items). Trim older ones into a separate CHANGELOG if
 - 2026-05-24 · **Newsletter delivery (code-complete)** — Resend provider chosen (ADR 01), capture path inventoried, `worker/src/newsletter.ts` scaffolded behind `NEWSLETTER_ADMIN_TOKEN`, Resend HTTP wired, digest HTML+text template w/ unit tests, dry-run preview CLI, per-metro fetch+render in `sendWeekendDigest`, operator-test allowlist + runbook. Activation (Resend account, DNS, secrets, mail-client QA) is external ops work tracked in Later.
 - 2026-05-22 · **Agentic event ops workflow** — automated event ops + source repair agents.
 - 2026-05-22 · **Newsletter capture card** — sign-in prompt + newsletter card on plans view.
-- 2026-05-22 · **Stable spot slugs + SEO audit in CI** — legacy URL aliases preserved.
-- 2026-05-22 · **Interactive Event Finder** — on weekend guide pages.
-- 2026-05-19 · **Privacy-safe funnel metrics** — first-party measurement, no third-party trackers.
-- 2026-05-19 · **Rich share previews** — weekend-guide event rich results.
+
+_Older items in [CHANGELOG.md](CHANGELOG.md)._
