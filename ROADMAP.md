@@ -1,11 +1,19 @@
 # Roadmap
 
-_Last updated: 2026-05-28_ (tick 32)
+_Last updated: 2026-05-29_ (tick 33)
 
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
 
-_Nothing in flight. Pull the top of **Next** when ready._
+### Interest-theme grouping for the weekend summary (Phase 1)
+- **Why:** Event `category` is venue-type and brutally skewed (77% "Library" in Bay Area), so filter-by-category is near-useless for a targeted browse. An interest-theme layer (story time, STEM, arts, music, animals & nature, active/outdoors, food & markets) splits that blob into something parents navigate by interest — a more engaged, targeted weekend experience. The pattern is already proven in embryo by the SEO page's hard-coded "Culture and learning" regex bucket (`generate-seo-pages.mjs:2288`). Foundation for later personalization (Phase 2: user-picked interests + "for you").
+- **Effort:** M (rule-based, no accounts)
+- **Tasks:**
+  - [x] Define the theme taxonomy + rule-based classifier in `scripts/eventThemes.mjs` (8 themes; keyword regexes over `category + title + description` → `themes[]`). Validated distribution across 5 metros (Bay Area: story-time 42%, arts 14%, music 11%…; ~30% no-theme, which is fine — themed sections are additive over the full list). Tuned word-start stems after validation caught misses (music→musical, bird→birding, the toddler "stay & play / rhyme" cluster).
+  - [x] Backfill `themes[]` into `public/data/<metro>/events.json` (13,721 events across 33 files via `scripts/backfill-event-themes.mjs`); wired `classifyEventThemes` into `buildEventsDataset` (`eventPipeline.mjs`) so every future scan tags automatically.
+  - [x] App: added `themes?: string[]` to `FamilyEvent`; "Browse by interest" chip band in the filter sidebar (`eventThemes.ts` display metadata, since the app can't import the `.mjs` under `allowJs:false`), filtering `mapEvents` + wired into reset/active-filter-count. Verified: STEM filters 1234→38 events.
+  - [x] SEO: replaced the 3 hard-coded editorial buckets in `generate-seo-pages.mjs` with taxonomy-driven "Browse by interest" sections (sorted by count), reading `event.themes` with a render-time classify fallback.
+  - [ ] Build + validate + screenshot; deploy data feed (`deploy:data`) then both apps. _(build + 213 tests + validate green; screenshot sent; deploy pending)_
 
 ## Next
 _Committed, not yet started. Ordered by priority. Aim for ≤5 items._

@@ -101,6 +101,7 @@ import {
 } from "./metros";
 import EventDetailView from "./EventDetailView";
 import InstallBanner from "./InstallBanner";
+import { EVENT_THEMES } from "./eventThemes";
 
 type Category =
   | "Outdoors"
@@ -188,6 +189,9 @@ export type FamilyEvent = {
   // Stable slug landed in 261ce3b. Drives the SPA `#/event/<slug>` route
   // (this file) and the prerendered `/<metro>/events/<slug>/` URL (ADR-04).
   slug?: string;
+  // Interest themes assigned at ingest (scripts/eventThemes.mjs). Drives the
+  // "Browse by interest" filter; see EVENT_THEMES in eventThemes.ts.
+  themes?: string[];
 };
 
 type SavedEventDateGroup = {
@@ -1354,6 +1358,7 @@ function App({ metro }: AppProps) {
   }, []);
 
   const [query, setQuery] = useState("");
+  const [activeTheme, setActiveTheme] = useState<string | null>(null);
   const [ageBand, setAgeBand] = useState<AgeBand | "any">("any");
   const [vibe, setVibe] = useState<PlannerVibe>("balanced");
   const [selectedCategories, setSelectedCategories] = useState<ReadonlySet<Category>>(
@@ -2487,6 +2492,7 @@ function App({ metro }: AppProps) {
     const normalizedQuery = query.trim().toLowerCase();
     return events.filter((event) => {
       if (ageBand !== "any" && !event.ageBands.includes(ageBand)) return false;
+      if (activeTheme && !(event.themes || []).includes(activeTheme)) return false;
       if (normalizedQuery) {
         const haystack = [
           event.title,
@@ -2526,7 +2532,17 @@ function App({ metro }: AppProps) {
       // Recurring without a specific date — keep weekend recurrences.
       return event.daysOfWeek.some((d) => d === 0 || d === 6);
     });
-  }, [events, ageBand, eventDateFilter, query]);
+  }, [events, ageBand, eventDateFilter, query, activeTheme]);
+
+  // Interest themes present in this metro, in taxonomy order. Drives the
+  // "Browse by interest" chip band; themes with no events here are hidden.
+  const themeOptions = useMemo(() => {
+    const present = new Set<string>();
+    for (const event of events) {
+      for (const id of event.themes || []) present.add(id);
+    }
+    return EVENT_THEMES.filter((theme) => present.has(theme.id));
+  }, [events]);
 
   const highlightedEventIds = useMemo(() => {
     const ids = new Set<string>();
@@ -2620,8 +2636,9 @@ function App({ metro }: AppProps) {
     if (city !== "All") n += 1;
     if (cost !== "All") n += 1;
     if (eventDateFilter !== "all") n += 1;
+    if (activeTheme) n += 1;
     return n;
-  }, [query, ageBand, selectedCategories, city, cost, eventDateFilter]);
+  }, [query, ageBand, selectedCategories, city, cost, eventDateFilter, activeTheme]);
 
   const activePlan = useMemo(
     () => plans.find((plan) => plan.id === activePlanId) ?? null,
@@ -3706,6 +3723,7 @@ function App({ metro }: AppProps) {
 
   function resetFilters() {
     setQuery("");
+    setActiveTheme(null);
     setAgeBand("any");
     setVibe("balanced");
     setSelectedCategories(
@@ -4450,6 +4468,37 @@ function App({ metro }: AppProps) {
               placeholder="Search"
             />
           </label>
+
+          {themeOptions.length > 0 && (
+            <div className="filter-group">
+              <span className="filter-label">Browse by interest</span>
+              <div className="theme-chips">
+                <button
+                  type="button"
+                  className={`theme-chip${activeTheme === null ? " active" : ""}`}
+                  onClick={() => setActiveTheme(null)}
+                >
+                  All
+                </button>
+                {themeOptions.map((theme) => (
+                  <button
+                    key={theme.id}
+                    type="button"
+                    className={`theme-chip${activeTheme === theme.id ? " active" : ""}`}
+                    title={theme.blurb}
+                    aria-pressed={activeTheme === theme.id}
+                    onClick={() =>
+                      setActiveTheme((current) =>
+                        current === theme.id ? null : theme.id,
+                      )
+                    }
+                  >
+                    {theme.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           {SHOW_AGE_BAND_UI && (
             <div className="filter-group">

@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import { classifyEventThemes } from "./eventThemes.mjs";
 
 export const DEFAULT_TIMEZONE = "America/Los_Angeles";
 export const DEFAULT_TIMEZONE_OFFSET = "-07:00";
@@ -3884,6 +3885,7 @@ export function buildEventsDataset(events, options = {}) {
   const deduped = dedupeEvents(events).map((event) => ({
     ...event,
     fetchedAt: event.fetchedAt || generatedAt,
+    themes: classifyEventThemes(event),
   }));
   assignEventSlugs(deduped);
   return {

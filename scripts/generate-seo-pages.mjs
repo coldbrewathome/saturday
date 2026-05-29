@@ -16,6 +16,7 @@ import {
   loadMetroConfig,
   metroDataFile,
 } from "./metroConfig.mjs";
+import { THEMES, classifyEventThemes } from "./eventThemes.mjs";
 import {
   defaultLocale,
   supportedLocales,
@@ -2269,36 +2270,29 @@ function isIndoorEvent(event) {
   return /library|museum|indoor|theater|theatre|gallery|workshop|maker|storytime|class|concert/i.test(haystack);
 }
 
+// Interest-theme buckets (ROADMAP: themed weekend summary). Each event carries
+// a `themes[]` from ingest; fall back to classifying at render so this still
+// works if a feed predates the backfill. Themes are ordered by how many events
+// they have this weekend so the richest interests lead, keeping the venue-type
+// `category` skew (77% "Library") from flattening the summary.
+function eventThemeIds(event) {
+  return Array.isArray(event.themes) ? event.themes : classifyEventThemes(event);
+}
+
 function buildWeekendEditorialBuckets(events, eventSlugLookup) {
   const source = highSignalEvents(events);
-  const buckets = [
-    {
-      title: "Best free bets",
-      blurb: "Good first stops when you want a flexible family day without committing to tickets.",
-      events: pickPresetEvents(source.filter(eventLikelyFree)).slice(0, 4),
-    },
-    {
-      title: "Morning starters",
-      blurb: "Earlier programs that leave the rest of the day open for lunch, naps, or a park stop.",
-      events: pickPresetEvents(source.filter((event) => timelineBucket(event) === "Morning")).slice(0, 4),
-    },
-    {
-      title: "Culture and learning",
-      blurb: "Museums, libraries, performances, and hands-on programs with strong family fit.",
-      events: pickPresetEvents(source.filter((event) =>
-        /library|museum|art|music|theater|theatre|science|story/i.test(
-          `${event.category} ${event.title} ${event.description}`,
-        ),
-      )).slice(0, 4),
-    },
-  ];
-  return buckets
-    .map((bucket) => ({
-      ...bucket,
+  return THEMES.map((theme) => {
+    const matched = source.filter((event) => eventThemeIds(event).includes(theme.id));
+    return {
+      title: theme.label,
+      blurb: theme.blurb,
+      count: matched.length,
+      events: pickPresetEvents(matched).slice(0, 4).filter(Boolean),
       eventSlugLookup,
-      events: bucket.events.filter(Boolean),
-    }))
-    .filter((bucket) => bucket.events.length > 0);
+    };
+  })
+    .filter((bucket) => bucket.events.length > 0)
+    .sort((a, b) => b.count - a.count);
 }
 
 function renderWeekendPlanPresets(presets) {
@@ -2323,10 +2317,10 @@ function renderWeekendPlanPresetCard(preset) {
 }
 
 function renderWeekendEditorialBuckets(buckets) {
-  return `<section class="guide-editorial" aria-label="Weekend highlights by need">
+  return `<section class="guide-editorial" aria-label="Weekend events by interest">
     <div class="guide-section-heading">
-      <h2>Weekend picks by need</h2>
-      <p>Short editorial clusters help parents scan the weekend without reading every listing.</p>
+      <h2>Browse by interest</h2>
+      <p>Jump to the kind of weekend you're after — story time, hands-on science, music, the outdoors, and more.</p>
     </div>
     <div class="guide-editorial-grid">
       ${buckets.map((bucket) => `<article class="guide-editorial-card">
