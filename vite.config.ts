@@ -183,11 +183,12 @@ export default defineConfig(({ mode }) => {
       react(),
       audienceJsonLdPlugin(env),
       // Service worker registration. Per ADR 05, the static
-      // `public/manifest.webmanifest` remains the source of truth for this
-      // task (commit f85385a just fixed it), so `manifest: false` keeps
-      // VitePWA from generating a competing copy. Caching strategies + TTLs
-      // from the ADR's table land in the next roadmap task — for now this
-      // ships the SW scaffold with workbox defaults so dev/prod don't break.
+      // `public/manifest.webmanifest` remains the source of truth (commit
+      // f85385a fixed it), so `manifest: false` keeps VitePWA from
+      // generating a competing copy. Runtime-caching table below implements
+      // ADR 05 §(a). Note: in production the per-metro JSON is served
+      // cross-origin from VITE_DATA_ORIGIN (famhop-data.pages.dev), so the
+      // urlPatterns match on the `/data/<metro>/…json` path, not origin.
       VitePWA({
         registerType: "autoUpdate",
         injectRegister: null, // we register from src/main.tsx behind import.meta.env.PROD
@@ -195,6 +196,48 @@ export default defineConfig(({ mode }) => {
         workbox: {
           cleanupOutdatedCaches: true,
           globPatterns: ["**/*.{js,css,html,svg,png,ico,webmanifest}"],
+          // SPA shell fallback: a hard-reload of an already-visited route
+          // serves the precached index.html offline, which then hydrates
+          // from the cached JSON below. /ops needs live data, so exclude it.
+          navigateFallback: `${base}index.html`,
+          navigateFallbackDenylist: [/^\/ops\//, /^\/api\//],
+          runtimeCaching: [
+            {
+              // Per-metro weekend feed (kids + adults). Rotates ~weekly, so
+              // a short SWR window keeps a single weekend fresh while still
+              // surviving offline. Anchoring to `.json$` means a `?nocache=1`
+              // request falls through to network (ADR 05 escape hatch).
+              urlPattern: /\/data\/[^/]+\/(events|featured-plans)(-adults)?\.json$/,
+              handler: "StaleWhileRevalidate",
+              options: {
+                cacheName: "famhop-events-v1",
+                expiration: { maxEntries: 60, maxAgeSeconds: 6 * 60 * 60 },
+                cacheableResponse: { statuses: [0, 200] },
+              },
+            },
+            {
+              // Curated spot catalog — churns slowly, ~2.7 MB, cache hard.
+              urlPattern: /\/data\/[^/]+\/spots(-adults)?\.json$/,
+              handler: "StaleWhileRevalidate",
+              options: {
+                cacheName: "famhop-spots-v1",
+                expiration: { maxEntries: 30, maxAgeSeconds: 30 * 24 * 60 * 60 },
+                cacheableResponse: { statuses: [0, 200] },
+              },
+            },
+            {
+              // Map tiles + remote imagery. Opaque cross-origin responses,
+              // so allow status 0.
+              urlPattern:
+                /^https:\/\/([a-c]\.tile\.openstreetmap\.org|images\.unsplash\.com|[^/]*\.wikimedia\.org)\//,
+              handler: "CacheFirst",
+              options: {
+                cacheName: "famhop-images-v1",
+                expiration: { maxEntries: 200, maxAgeSeconds: 30 * 24 * 60 * 60 },
+                cacheableResponse: { statuses: [0, 200] },
+              },
+            },
+          ],
         },
         devOptions: {
           enabled: false,
