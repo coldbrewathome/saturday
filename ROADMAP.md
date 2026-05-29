@@ -5,15 +5,7 @@ _Last updated: 2026-05-29_ (tick 33)
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
 
-### Interest-theme grouping for the weekend summary (Phase 1)
-- **Why:** Event `category` is venue-type and brutally skewed (77% "Library" in Bay Area), so filter-by-category is near-useless for a targeted browse. An interest-theme layer (story time, STEM, arts, music, animals & nature, active/outdoors, food & markets) splits that blob into something parents navigate by interest — a more engaged, targeted weekend experience. The pattern is already proven in embryo by the SEO page's hard-coded "Culture and learning" regex bucket (`generate-seo-pages.mjs:2288`). Foundation for later personalization (Phase 2: user-picked interests + "for you").
-- **Effort:** M (rule-based, no accounts)
-- **Tasks:**
-  - [x] Define the theme taxonomy + rule-based classifier in `scripts/eventThemes.mjs` (8 themes; keyword regexes over `category + title + description` → `themes[]`). Validated distribution across 5 metros (Bay Area: story-time 42%, arts 14%, music 11%…; ~30% no-theme, which is fine — themed sections are additive over the full list). Tuned word-start stems after validation caught misses (music→musical, bird→birding, the toddler "stay & play / rhyme" cluster).
-  - [x] Backfill `themes[]` into `public/data/<metro>/events.json` (13,721 events across 33 files via `scripts/backfill-event-themes.mjs`); wired `classifyEventThemes` into `buildEventsDataset` (`eventPipeline.mjs`) so every future scan tags automatically.
-  - [x] App: added `themes?: string[]` to `FamilyEvent`; "Browse by interest" chip band in the filter sidebar (`eventThemes.ts` display metadata, since the app can't import the `.mjs` under `allowJs:false`), filtering `mapEvents` + wired into reset/active-filter-count. Verified: STEM filters 1234→38 events.
-  - [x] SEO: replaced the 3 hard-coded editorial buckets in `generate-seo-pages.mjs` with taxonomy-driven "Browse by interest" sections (sorted by count), reading `event.themes` with a render-time classify fallback.
-  - [ ] Build + validate + screenshot; deploy data feed (`deploy:data`) then both apps. _(build + 213 tests + validate green; screenshot sent; deploy pending)_
+_Nothing in flight. Pull the top of **Next** when ready._
 
 ## Next
 _Committed, not yet started. Ordered by priority. Aim for ≤5 items._
@@ -26,6 +18,7 @@ _Committed, not yet started. Ordered by priority. Aim for ≤5 items._
 _Candidates and ideas. Unordered. No commitment._
 
 - **Weekend reminder push (Fri-AM "your weekend is set")** — retention play that pairs sign-in (`1d3ae14`) with Hop-me-now; depends on PWA shipping first. _Effort: M (after PWA)._
+- **Interest-theme grouping — Phase 2 (personalization)** — Phase 1 shipped the theme taxonomy + "Browse by interest" filter/sections. Phase 2: let users pick interests (persisted in localStorage / their sign-in), then reorder/highlight a "for you" view. Possible polish from Phase 1: lower the ~30% no-theme rate, add a "Sports & active" data source (thin today), and window the app chip counts to the visible set so a count can be shown without the metro-wide vs near-term mismatch. _Effort: M._
 - **NightHop content/parity audit** — `deploy:adults` and the `audiences` arrays exist, but it's unclear how much adult-specific surface there is vs. just filtered kid data. _Effort: S audit → L close gaps._
 - **Repo cleanup: root-level screenshots + tracked drift** — ~35 PNG screenshots at repo root, plus ~50 files of routine event-data drift in the working tree. _Effort: XS._
 - **Newsletter: activate live sends** — code is shipped; needs Resend account creation, DNS verification of `famhop.com`, `RESEND_API_KEY` + `NEWSLETTER_ADMIN_TOKEN` wrangler secrets, then a real test send to an operator address with Gmail + Apple Mail QA. Pure ops work, not a code task — promote back to Now only once the human has completed the external setup.
@@ -33,6 +26,7 @@ _Candidates and ideas. Unordered. No commitment._
 ## Done
 _Recently shipped (last ~10 items). Older items live in [CHANGELOG.md](CHANGELOG.md)._
 
+- 2026-05-29 · **Interest-theme grouping for weekend events (Phase 1)** — 8-theme rule-based classifier (`scripts/eventThemes.mjs`) over category+title+description, wired into `buildEventsDataset` so every scan tags; backfilled `themes[]` into 13,721 events across all metros. App: "Browse by interest" chip band in the filter sidebar (filters the event list). SEO: `this-weekend/` pages get taxonomy-driven "Browse by interest" sections replacing the 3 hard-coded buckets. Splits the venue-type `category` skew (77% "Library") into interest entry points. Shipped to data feed + both apps; verified live on famhop.com. Phase 2 (personalization) in Later.
 - 2026-05-28 · **PWA: install + offline weekend cache** — ADR 05; `vite-plugin-pwa` SW with runtime caching (events/featured-plans SWR 6h, spots SWR 30d, tiles/imagery CacheFirst 30d) + SPA shell fallback; mobile install banner (`InstallBanner.tsx` + `installPrompt.ts`) with native prompt on Android/desktop and iOS A2HS tutorial, per-origin gating; QA checklist in `docs/pwa-qa-checklist.md`. Deployed to both apps. (`offline.html` for unvisited metros + NightHop-branded icons deferred.)
 - 2026-05-26 · **Event detail pages (shareable, SEO-indexed)** — ADR 04 (slug strategy + ended-event noindex stubs), stable `slug` field on event records w/ CI audit, `EventDetailView` at `#/event/<metro>/<slug>`, JSON-LD `Event` + OG meta on the SPA hash route, sitemap inclusion + slug-history aliases, and "View details" links from event cards across weekend guide + plan-share surfaces (`92f30f6`).
 - 2026-05-25 · **Analytics dashboard for funnel metrics** — `/ops/analytics` route (ADR 03 scope/storage/auth), `src/ops/loadAnalytics.ts` + worker `/metrics` `byMetro` aggregation, top funnel summary cards w/ 7-day delta, per-metro app-opens breakdown table linking to metro guides, and a 30-day inline-SVG sparkline for the headline metric with sessionStorage caching for <500ms loads (`45a7b06`).
