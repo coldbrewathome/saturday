@@ -100,6 +100,7 @@ import {
   type MetroConfig,
 } from "./metros";
 import EventDetailView from "./EventDetailView";
+import InstallBanner from "./InstallBanner";
 
 type Category =
   | "Outdoors"
@@ -4348,7 +4349,7 @@ function App({ metro }: AppProps) {
         </div>
 
         {/* ── Weekend-guide hook (top-center) ──────────────────────── */}
-        {weekendGuideStats && (
+        {weekendGuideStats && eventDateFilter === "all" && (
           <a
             className="weekend-guide-banner"
             href={weekendGuideHref}
@@ -5615,6 +5616,8 @@ function App({ metro }: AppProps) {
         </section>
       </main>
       )}
+
+      <InstallBanner />
 
       <button
         className={`hop-now-fab${hopNowSeen ? " is-seen" : ""}`}

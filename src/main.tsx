@@ -6,11 +6,16 @@ import { metroFromPath } from "./metros";
 import OpsAlertsView from "./ops/OpsAlertsView";
 import OpsAnalyticsView from "./ops/OpsAnalyticsView";
 import PollView from "./PollView";
+import { recordVisit } from "./installPrompt";
 import "./styles.css";
 
 // Stamp the audience on the document root so audience-specific CSS variable
 // overrides (e.g. a violet accent for the adults app) can hang off it.
 document.documentElement.setAttribute("data-app-audience", APP_AUDIENCE);
+
+// Count this load toward the install-banner visit gate (ADR 05 §c). The
+// beforeinstallprompt listener is attached as a side effect of this import.
+recordVisit();
 
 type PollRoute = { pollId: string; embed: boolean } | null;
 
