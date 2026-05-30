@@ -101,7 +101,7 @@ import {
 } from "./metros";
 import EventDetailView from "./EventDetailView";
 import InstallBanner from "./InstallBanner";
-import { EVENT_THEMES } from "./eventThemes";
+import { EVENT_THEMES, isValidThemeId } from "./eventThemes";
 
 type Category =
   | "Outdoors"
@@ -632,6 +632,10 @@ import {
 void APP_AUDIENCE; // surface APP_AUDIENCE for downstream debugging if needed
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID ?? "";
 const GOOGLE_CONFIGURED = GOOGLE_CLIENT_ID.length > 0;
+
+// Saved interest themes for the "For you" view (Phase 2). Cross-metro and
+// per-origin, so a plain global key rather than metroStorageKey.
+const INTERESTS_STORAGE_KEY = "famhop:interests";
 
 const unsplash = (id: string) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1200&q=80`;
@@ -1359,6 +1363,24 @@ function App({ metro }: AppProps) {
 
   const [query, setQuery] = useState("");
   const [activeTheme, setActiveTheme] = useState<string | null>(null);
+  // Phase 2 personalization: saved interests (cross-metro, so a global key,
+  // not metroStorageKey) + a "For you" view that filters to them.
+  const [preferredThemes, setPreferredThemes] = useState<ReadonlySet<string>>(
+    () => {
+      try {
+        const raw = window.localStorage.getItem(INTERESTS_STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw) as string[];
+          return new Set(parsed.filter(isValidThemeId));
+        }
+      } catch {
+        // fall through to empty
+      }
+      return new Set<string>();
+    },
+  );
+  const [forYou, setForYou] = useState(false);
+  const [showInterestsPicker, setShowInterestsPicker] = useState(false);
   const [ageBand, setAgeBand] = useState<AgeBand | "any">("any");
   const [vibe, setVibe] = useState<PlannerVibe>("balanced");
   const [selectedCategories, setSelectedCategories] = useState<ReadonlySet<Category>>(
@@ -1730,6 +1752,17 @@ function App({ metro }: AppProps) {
       JSON.stringify(Array.from(selectedCategories)),
     );
   }, [selectedCategories, storageKeys.selectedCategories]);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(
+        INTERESTS_STORAGE_KEY,
+        JSON.stringify(Array.from(preferredThemes)),
+      );
+    } catch {
+      // best-effort; non-fatal in private mode
+    }
+  }, [preferredThemes]);
 
   useEffect(() => {
     window.localStorage.setItem(
@@ -2493,6 +2526,9 @@ function App({ metro }: AppProps) {
     return events.filter((event) => {
       if (ageBand !== "any" && !event.ageBands.includes(ageBand)) return false;
       if (activeTheme && !(event.themes || []).includes(activeTheme)) return false;
+      if (forYou && preferredThemes.size > 0) {
+        if (!(event.themes || []).some((t) => preferredThemes.has(t))) return false;
+      }
       if (normalizedQuery) {
         const haystack = [
           event.title,
@@ -2532,7 +2568,7 @@ function App({ metro }: AppProps) {
       // Recurring without a specific date — keep weekend recurrences.
       return event.daysOfWeek.some((d) => d === 0 || d === 6);
     });
-  }, [events, ageBand, eventDateFilter, query, activeTheme]);
+  }, [events, ageBand, eventDateFilter, query, activeTheme, forYou, preferredThemes]);
 
   // Interest themes present in this metro, in taxonomy order. Drives the
   // "Browse by interest" chip band; themes with no events here are hidden.
@@ -2637,8 +2673,9 @@ function App({ metro }: AppProps) {
     if (cost !== "All") n += 1;
     if (eventDateFilter !== "all") n += 1;
     if (activeTheme) n += 1;
+    if (forYou) n += 1;
     return n;
-  }, [query, ageBand, selectedCategories, city, cost, eventDateFilter, activeTheme]);
+  }, [query, ageBand, selectedCategories, city, cost, eventDateFilter, activeTheme, forYou]);
 
   const activePlan = useMemo(
     () => plans.find((plan) => plan.id === activePlanId) ?? null,
@@ -3721,9 +3758,28 @@ function App({ metro }: AppProps) {
     );
   }
 
+  function toggleInterest(id: string) {
+    setPreferredThemes((current) => {
+      const next = new Set(current);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function handleForYouClick() {
+    if (preferredThemes.size === 0) {
+      setShowInterestsPicker(true);
+      return;
+    }
+    setActiveTheme(null);
+    setForYou((v) => !v);
+  }
+
   function resetFilters() {
     setQuery("");
     setActiveTheme(null);
+    setForYou(false);
     setAgeBand("any");
     setVibe("balanced");
     setSelectedCategories(
@@ -4471,12 +4527,35 @@ function App({ metro }: AppProps) {
 
           {themeOptions.length > 0 && (
             <div className="filter-group">
-              <span className="filter-label">Browse by interest</span>
+              <div className="filter-label-row">
+                <span className="filter-label">Browse by interest</span>
+                {preferredThemes.size > 0 && (
+                  <button
+                    type="button"
+                    className="filter-label-action"
+                    onClick={() => setShowInterestsPicker(true)}
+                  >
+                    Edit interests
+                  </button>
+                )}
+              </div>
               <div className="theme-chips">
                 <button
                   type="button"
-                  className={`theme-chip${activeTheme === null ? " active" : ""}`}
-                  onClick={() => setActiveTheme(null)}
+                  className={`theme-chip theme-chip-foryou${forYou ? " active" : ""}`}
+                  title="See events matching your saved interests"
+                  aria-pressed={forYou}
+                  onClick={handleForYouClick}
+                >
+                  ✨ For you
+                </button>
+                <button
+                  type="button"
+                  className={`theme-chip${!forYou && activeTheme === null ? " active" : ""}`}
+                  onClick={() => {
+                    setForYou(false);
+                    setActiveTheme(null);
+                  }}
                 >
                   All
                 </button>
@@ -4484,14 +4563,15 @@ function App({ metro }: AppProps) {
                   <button
                     key={theme.id}
                     type="button"
-                    className={`theme-chip${activeTheme === theme.id ? " active" : ""}`}
+                    className={`theme-chip${!forYou && activeTheme === theme.id ? " active" : ""}`}
                     title={theme.blurb}
-                    aria-pressed={activeTheme === theme.id}
-                    onClick={() =>
+                    aria-pressed={!forYou && activeTheme === theme.id}
+                    onClick={() => {
+                      setForYou(false);
                       setActiveTheme((current) =>
                         current === theme.id ? null : theme.id,
-                      )
-                    }
+                      );
+                    }}
                   >
                     {theme.label}
                   </button>
@@ -5667,6 +5747,75 @@ function App({ metro }: AppProps) {
       )}
 
       <InstallBanner />
+
+      {showInterestsPicker && (
+        <div
+          className="modal-backdrop interests-backdrop"
+          role="presentation"
+          onClick={() => setShowInterestsPicker(false)}
+        >
+          <div
+            className="interests-card"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="interests-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="icon-button interests-close"
+              title="Close"
+              aria-label="Close"
+              onClick={() => setShowInterestsPicker(false)}
+            >
+              <X aria-hidden="true" />
+            </button>
+            <p className="eyebrow">Personalize</p>
+            <h2 id="interests-title">Pick your interests</h2>
+            <p className="interests-sub">
+              Choose what your family loves. "✨ For you" shows weekend events
+              that match — saved on this device.
+            </p>
+            <div className="interests-options">
+              {EVENT_THEMES.map((theme) => {
+                const checked = preferredThemes.has(theme.id);
+                return (
+                  <button
+                    key={theme.id}
+                    type="button"
+                    className={`interests-option${checked ? " checked" : ""}`}
+                    aria-pressed={checked}
+                    onClick={() => toggleInterest(theme.id)}
+                  >
+                    <span className="interests-option-check" aria-hidden="true">
+                      {checked ? <Check /> : null}
+                    </span>
+                    <span className="interests-option-text">
+                      <strong>{theme.label}</strong>
+                      <small>{theme.blurb}</small>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+            <div className="interests-actions">
+              <button
+                type="button"
+                className="interests-done"
+                onClick={() => {
+                  setShowInterestsPicker(false);
+                  setForYou(preferredThemes.size > 0);
+                  if (preferredThemes.size > 0) setActiveTheme(null);
+                }}
+              >
+                {preferredThemes.size > 0
+                  ? `Show my ${preferredThemes.size} ${preferredThemes.size === 1 ? "interest" : "interests"}`
+                  : "Done"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <button
         className={`hop-now-fab${hopNowSeen ? " is-seen" : ""}`}

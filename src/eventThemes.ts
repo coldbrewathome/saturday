@@ -56,3 +56,9 @@ export const EVENT_THEMES: EventTheme[] = [
 export const EVENT_THEME_LABELS: Record<string, string> = Object.fromEntries(
   EVENT_THEMES.map((t) => [t.id, t.label]),
 );
+
+const EVENT_THEME_IDS = new Set(EVENT_THEMES.map((t) => t.id));
+
+export function isValidThemeId(id: string): boolean {
+  return EVENT_THEME_IDS.has(id);
+}
