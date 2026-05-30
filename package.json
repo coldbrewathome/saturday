@@ -31,7 +31,7 @@
     "validate:events:all": "node scripts/validate-events.mjs --all && node scripts/audit-event-slugs.mjs --all",
     "test": "npm run test:unit && npm run test:planner",
     "test:unit": "node --test tests/*.test.mjs",
-    "test:planner": "vitest run tests/*.test.ts",
+    "test:planner": "vitest run",
     "ci:worker": "npm --prefix worker run typecheck",
     "seo:i18n-check": "node scripts/validate-i18n-seo.mjs",
     "seo:audit": "node scripts/validate-all-seo.mjs",
@@ -45,10 +45,14 @@
     "react-dom": "^19.2.5"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
+    "jsdom": "^29.1.1",
     "playwright": "^1.59.1",
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",

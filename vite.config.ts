@@ -1,4 +1,6 @@
-import { defineConfig, loadEnv, type Plugin } from "vite";
+import { loadEnv, type Plugin } from "vite";
+// vitest/config re-exports vite's defineConfig with the `test` field typed.
+import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
@@ -244,5 +246,14 @@ export default defineConfig(({ mode }) => {
         },
       }),
     ],
+    // Vitest: component/logic tests only (.ts/.tsx). The .mjs pipeline tests
+    // run separately under `node --test` (test:unit). jsdom so the component +
+    // localStorage/navigator tests have a DOM; the pure planner tests don't
+    // care which environment they run in.
+    test: {
+      include: ["tests/**/*.test.{ts,tsx}"],
+      environment: "jsdom",
+      setupFiles: ["tests/setup.ts"],
+    },
   };
 });

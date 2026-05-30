@@ -10,10 +10,6 @@ _Nothing in flight. Pull the top of **Next** when ready._
 ## Next
 _Committed, not yet started. Ordered by priority. Aim for ≤5 items._
 
-### UI/component tests
-- **Why:** `tests/` covers pipeline + planner, but nothing exercises `App.tsx`, `auth.ts`, or the plans view; React refactors are unsafe.
-- **Effort:** M
-
 ## Later
 _Candidates and ideas. Unordered. No commitment._
 
@@ -26,6 +22,7 @@ _Candidates and ideas. Unordered. No commitment._
 ## Done
 _Recently shipped (last ~10 items). Older items live in [CHANGELOG.md](CHANGELOG.md)._
 
+- 2026-05-29 · **UI/component test foundation** — stood up React component testing (`jsdom` + `@testing-library/react`/`jest-dom`, vitest `test` config in `vite.config.ts` + `tests/setup.ts` localStorage shim for the Node-22/jsdom Web Storage clash). +29 tests (242 total): `eventThemes.mjs` classifier, `installPrompt.ts` gating, `auth.ts` sessions, `InstallBanner.tsx` (RTL), and a taxonomy drift guard (`eventThemes.ts` ↔ `.mjs`). **Caught a real bug:** the classifier's `/\b(…)\b/` patterns defeated word-start stemming, so "musical"/"birding"/"painting" were missed and the `scien` stem matched nothing (STEM under-counted). Fixed → no-theme rate 30%→24% (Bay Area), re-backfilled all metros, redeployed.
 - 2026-05-29 · **Interest-theme personalization (Phase 2)** — saved interests (cross-metro, `localStorage` `famhop:interests`) + a "✨ For you" view that filters the weekend to events matching the user's chosen interests. First "For you" tap opens an interests picker; thereafter it toggles the filter directly, with an "Edit interests" affordance. Verified: pick → persist across reload → filter (1234→134). App-only (personalization can't apply to static SEO pages). Remaining polish (cross-device sync, re-sort, classifier tuning) tracked in Later.
 - 2026-05-29 · **Interest-theme grouping for weekend events (Phase 1)** — 8-theme rule-based classifier (`scripts/eventThemes.mjs`) over category+title+description, wired into `buildEventsDataset` so every scan tags; backfilled `themes[]` into 13,721 events across all metros. App: "Browse by interest" chip band in the filter sidebar (filters the event list). SEO: `this-weekend/` pages get taxonomy-driven "Browse by interest" sections replacing the 3 hard-coded buckets. Splits the venue-type `category` skew (77% "Library") into interest entry points. Shipped to data feed + both apps; verified live on famhop.com. Phase 2 (personalization) in Later.
 - 2026-05-28 · **PWA: install + offline weekend cache** — ADR 05; `vite-plugin-pwa` SW with runtime caching (events/featured-plans SWR 6h, spots SWR 30d, tiles/imagery CacheFirst 30d) + SPA shell fallback; mobile install banner (`InstallBanner.tsx` + `installPrompt.ts`) with native prompt on Android/desktop and iOS A2HS tutorial, per-origin gating; QA checklist in `docs/pwa-qa-checklist.md`. Deployed to both apps. (`offline.html` for unvisited metros + NightHop-branded icons deferred.)
