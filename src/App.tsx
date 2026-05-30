@@ -637,6 +637,19 @@ const GOOGLE_CONFIGURED = GOOGLE_CLIENT_ID.length > 0;
 // per-origin, so a plain global key rather than metroStorageKey.
 const INTERESTS_STORAGE_KEY = "famhop:interests";
 
+function readStoredInterests(): Set<string> {
+  try {
+    const raw = window.localStorage.getItem(INTERESTS_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw) as string[];
+      return new Set(parsed.filter(isValidThemeId));
+    }
+  } catch {
+    // fall through to empty
+  }
+  return new Set<string>();
+}
+
 const unsplash = (id: string) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1200&q=80`;
 
@@ -1365,21 +1378,12 @@ function App({ metro }: AppProps) {
   const [activeTheme, setActiveTheme] = useState<string | null>(null);
   // Phase 2 personalization: saved interests (cross-metro, so a global key,
   // not metroStorageKey) + a "For you" view that filters to them.
-  const [preferredThemes, setPreferredThemes] = useState<ReadonlySet<string>>(
-    () => {
-      try {
-        const raw = window.localStorage.getItem(INTERESTS_STORAGE_KEY);
-        if (raw) {
-          const parsed = JSON.parse(raw) as string[];
-          return new Set(parsed.filter(isValidThemeId));
-        }
-      } catch {
-        // fall through to empty
-      }
-      return new Set<string>();
-    },
-  );
-  const [forYou, setForYou] = useState(false);
+  const [preferredThemes, setPreferredThemes] =
+    useState<ReadonlySet<string>>(readStoredInterests);
+  // Returning users who've saved interests land in their personalized view
+  // automatically; the "All" chip reverts it in one tap. New users start at
+  // "All" (no interests → the forYou filter is a no-op anyway).
+  const [forYou, setForYou] = useState(() => readStoredInterests().size > 0);
   const [showInterestsPicker, setShowInterestsPicker] = useState(false);
   const [ageBand, setAgeBand] = useState<AgeBand | "any">("any");
   const [vibe, setVibe] = useState<PlannerVibe>("balanced");
