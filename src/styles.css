@@ -904,6 +904,39 @@ h3 {
   font-weight: 600;
 }
 
+/* Event-detail "Add to plan" CTA — converts detail-view discovery into a plan. */
+.event-detail-actions {
+  margin: 18px 0 4px;
+}
+
+.event-detail-plan-cta {
+  align-items: center;
+  background: var(--accent);
+  border: 0;
+  border-radius: 999px;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  font: 700 0.95rem/1 var(--font-ui);
+  gap: 8px;
+  padding: 12px 20px;
+}
+
+.event-detail-plan-cta:hover {
+  filter: brightness(0.95);
+}
+
+.event-detail-plan-cta.is-added {
+  background: var(--surface-strong);
+  border: 1px solid var(--accent);
+  color: var(--accent-strong, var(--accent));
+}
+
+.event-detail-plan-cta svg {
+  height: 18px;
+  width: 18px;
+}
+
 /* "For you" chip — distinct accent so personalization reads as special. */
 .theme-chip-foryou {
   border-color: var(--accent);

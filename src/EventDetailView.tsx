@@ -9,7 +9,7 @@
 // crawlers; this effect is the cosmetic + JS-aware-share-bot fallback.
 
 import { useEffect } from "react";
-import { ChevronLeft } from "lucide-react";
+import { Check, ChevronLeft, Plus } from "lucide-react";
 import type { FamilyEvent } from "./App";
 import type { MetroConfig } from "./metros";
 import { APP_BRAND } from "./appConfig";
@@ -19,6 +19,12 @@ type Props = {
   slug: string | null;
   metro: MetroConfig;
   onBack: () => void;
+  /** Name of the active plan, or null when none is active. */
+  activePlanName: string | null;
+  /** Event ids already in the active plan (for the "in plan" state). */
+  planEventIds: string[];
+  /** Add this event to the active plan, or seed a new plan with it. */
+  onAddToPlan: (eventId: string) => void;
 };
 
 function formatStart(value?: string | null): string | null {
@@ -167,8 +173,17 @@ function restoreLink(selector: string, prev: string | null) {
   else el.setAttribute("href", prev);
 }
 
-export default function EventDetailView({ events, slug, metro, onBack }: Props) {
+export default function EventDetailView({
+  events,
+  slug,
+  metro,
+  onBack,
+  activePlanName,
+  planEventIds,
+  onAddToPlan,
+}: Props) {
   const event = slug ? events.find((e) => e.slug === slug) : null;
+  const inPlan = event ? planEventIds.includes(event.id) : false;
 
   useEffect(() => {
     if (!event || !slug) return;
@@ -239,6 +254,27 @@ export default function EventDetailView({ events, slug, metro, onBack }: Props) 
           {event.description && (
             <p className="event-detail-description">{event.description}</p>
           )}
+
+          <div className="event-detail-actions">
+            <button
+              type="button"
+              className={`event-detail-plan-cta${inPlan ? " is-added" : ""}`}
+              onClick={() => onAddToPlan(event.id)}
+            >
+              {inPlan ? (
+                <>
+                  <Check aria-hidden="true" /> In your plan — view
+                </>
+              ) : (
+                <>
+                  <Plus aria-hidden="true" />{" "}
+                  {activePlanName
+                    ? `Add to "${activePlanName}"`
+                    : "Add to a plan"}
+                </>
+              )}
+            </button>
+          </div>
 
           {event.url && (
             <p className="event-detail-source">

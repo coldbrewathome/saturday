@@ -2952,6 +2952,37 @@ function App({ metro }: AppProps) {
     );
   }
 
+  // Add an event to the active plan, or seed a fresh plan with it when none is
+  // active — so discovery surfaces (event detail, map sheet) always have a path
+  // into planning, not only when a plan already exists.
+  function addEventToPlanOrCreate(eventId: string) {
+    if (activePlan) {
+      addEventToPlan(activePlan.id, eventId);
+      return;
+    }
+    // No active plan: if a plan already holds this event, just make it active
+    // (avoids spawning duplicate single-event plans on revisits); else seed one.
+    const existing = plans.find((plan) =>
+      (plan.eventIds ?? []).includes(eventId),
+    );
+    if (existing) {
+      setActivePlanId(existing.id);
+      return;
+    }
+    const id = createPlanId(plans);
+    const title = events.find((e) => e.id === eventId)?.title;
+    const next: Plan = {
+      id,
+      name: title ? `Plan: ${title}`.slice(0, 60) : "New plan",
+      stopIds: [],
+      eventIds: [eventId],
+      itemOrder: [{ kind: "event" as const, id: eventId }],
+      createdAt: new Date().toISOString(),
+    };
+    setPlans((current) => [...current, next]);
+    setActivePlanId(id);
+  }
+
   function removeEventFromPlan(planId: string, eventId: string) {
     setPlans((current) =>
       current.map((plan) =>
@@ -4101,30 +4132,33 @@ function App({ metro }: AppProps) {
                       <Bookmark aria-hidden="true" />
                       {eventSaved ? "Saved" : "Save event"}
                     </button>
-                    {activePlan &&
-                      (() => {
-                        const inPlan = (activePlan.eventIds ?? []).includes(
-                          event.id,
-                        );
-                        return (
-                          <button
-                            className={`sheet-action ${inPlan ? "is-active" : ""}`}
-                            onClick={() =>
-                              inPlan
-                                ? removeEventFromPlan(activePlan.id, event.id)
-                                : addEventToPlan(activePlan.id, event.id)
+                    {(() => {
+                      const inPlan = activePlan
+                        ? (activePlan.eventIds ?? []).includes(event.id)
+                        : false;
+                      return (
+                        <button
+                          className={`sheet-action ${inPlan ? "is-active" : ""}`}
+                          onClick={() => {
+                            if (inPlan && activePlan) {
+                              removeEventFromPlan(activePlan.id, event.id);
+                            } else {
+                              addEventToPlanOrCreate(event.id);
                             }
-                            title={
-                              inPlan
-                                ? `Remove from "${activePlan.name || "active plan"}"`
-                                : `Add to "${activePlan.name || "active plan"}"`
-                            }
-                          >
-                            <List aria-hidden="true" />
-                            {inPlan ? "In plan" : "Add to plan"}
-                          </button>
-                        );
-                      })()}
+                          }}
+                          title={
+                            inPlan && activePlan
+                              ? `Remove from "${activePlan.name || "active plan"}"`
+                              : activePlan
+                                ? `Add to "${activePlan.name || "active plan"}"`
+                                : "Start a plan with this event"
+                          }
+                        >
+                          <List aria-hidden="true" />
+                          {inPlan ? "In plan" : "Add to plan"}
+                        </button>
+                      );
+                    })()}
                     {event.slug && (
                       <a
                         className="sheet-action"
@@ -4401,6 +4435,12 @@ function App({ metro }: AppProps) {
         onBack={() => {
           setActiveEventSlug(null);
           setView("browse");
+        }}
+        activePlanName={activePlan?.name ?? null}
+        planEventIds={activePlan?.eventIds ?? []}
+        onAddToPlan={(eventId) => {
+          addEventToPlanOrCreate(eventId);
+          setView("plans");
         }}
       />
       ) : (
