@@ -198,11 +198,15 @@ export default defineConfig(({ mode }) => {
         workbox: {
           cleanupOutdatedCaches: true,
           globPatterns: ["**/*.{js,css,html,svg,png,ico,webmanifest}"],
-          // SPA shell fallback: a hard-reload of an already-visited route
-          // serves the precached index.html offline, which then hydrates
-          // from the cached JSON below. /ops needs live data, so exclude it.
+          // SPA shell fallback for the app's own routes (root + single-segment
+          // metro paths like /bay-area/; the SPA routes via hash within those).
+          // CRITICAL: deny any deeper path — the prerendered SEO pages
+          // (/<metro>/this-weekend/, /<metro>/events/<slug>/, /<metro>/spot/…,
+          // city/category pages) must fetch their real HTML, not the shell.
+          // Without this denylist the SW served index.html for "Guide" et al.,
+          // bouncing the user into the SPA browse view (regression fix).
           navigateFallback: `${base}index.html`,
-          navigateFallbackDenylist: [/^\/ops\//, /^\/api\//],
+          navigateFallbackDenylist: [/^\/[^/]+\/.+/, /^\/api\//],
           runtimeCaching: [
             {
               // Per-metro weekend feed (kids + adults). Rotates ~weekly, so
