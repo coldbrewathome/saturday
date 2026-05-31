@@ -31,6 +31,7 @@ import {
   loadAnalytics,
   readCachedAnalytics,
 } from "./loadAnalytics";
+import { type CoverageSummary, loadCoverage } from "./loadCoverage";
 
 /** Headline metric the sparkline tracks (matches the top numeric card). */
 export const SPARKLINE_METRIC: MetricName = "app_open";
@@ -309,6 +310,80 @@ function Sparkline({
   );
 }
 
+function coverageStatusLabel(s: CoverageSummary["metros"][number]["status"]): string {
+  return s === "below"
+    ? "Below threshold"
+    : s === "fragile"
+      ? "Fragile"
+      : "Healthy";
+}
+
+/**
+ * Cross-metro event coverage health. Public data (no auth), so it renders
+ * regardless of the analytics auth state — a starved metro (Honolulu below its
+ * minEvents) or one running on ≤2 sources (Austin) is visible at a glance.
+ */
+function CoverageHealth({ coverage }: { coverage: CoverageSummary | null }) {
+  if (!coverage) return null;
+  const below = coverage.metros.filter((m) => m.status === "below").length;
+  const fragile = coverage.metros.filter((m) => m.status === "fragile").length;
+  return (
+    <section className="ops-coverage" aria-label="Metro event coverage health">
+      <h2 className="ops-analytics-section-h">Metro coverage health</h2>
+      <p className="ops-alerts-sub">
+        {below > 0 ? `${below} below threshold · ` : ""}
+        {fragile > 0 ? `${fragile} fragile · ` : ""}
+        events vs each metro&rsquo;s minimum, with source health. Worst first.
+      </p>
+      <table className="ops-alerts-table ops-coverage-table">
+        <thead>
+          <tr>
+            <th scope="col">Metro</th>
+            <th scope="col">Status</th>
+            <th scope="col">Events</th>
+            <th scope="col">Healthy sources</th>
+          </tr>
+        </thead>
+        <tbody>
+          {coverage.metros.map((m) => (
+            <tr key={m.id} className={`ops-coverage-row is-${m.status}`}>
+              <td>{m.label}</td>
+              <td>
+                <span className={`ops-coverage-badge is-${m.status}`}>
+                  {coverageStatusLabel(m.status)}
+                </span>
+              </td>
+              <td>
+                {m.eventCount}
+                <span className="ops-coverage-min"> / {m.minEvents} min</span>
+              </td>
+              <td>
+                {m.healthySources}
+                <span className="ops-coverage-min">
+                  {" "}
+                  / {m.healthySources + m.brokenSources}
+                </span>
+                {m.concentrated && (
+                  <span
+                    className="ops-coverage-flag"
+                    title="Volume concentrated in ≤2 sources — one outage could gut this metro"
+                  >
+                    {" "}
+                    ⚠ concentrated
+                  </span>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p className="ops-coverage-generated">
+        Snapshot: {coverage.generatedAt.slice(0, 10)}
+      </p>
+    </section>
+  );
+}
+
 /**
  * Window the loader requests. 30 days = the sparkline window, which fully
  * subsumes the 14 days the WoW cards need.
@@ -325,6 +400,17 @@ export default function OpsAnalyticsView() {
   const [status, setStatus] = useState<Status>(cached ? "ok" : "loading");
   const [data, setData] = useState<AnalyticsData | null>(cached);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [coverage, setCoverage] = useState<CoverageSummary | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    loadCoverage().then((c) => {
+      if (active) setCoverage(c);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -379,6 +465,8 @@ export default function OpsAnalyticsView() {
           sign-in nudge. Per ADR 03.
         </p>
       </header>
+
+      <CoverageHealth coverage={coverage} />
 
       {status === "loading" && (
         <p className="ops-alerts-state">Loading analytics…</p>

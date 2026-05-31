@@ -5996,6 +5996,59 @@ h3 {
   border-bottom: none;
 }
 
+/* ── Metro coverage health (ops dashboard) ───────────────────────── */
+.ops-coverage {
+  margin: 12px 0 28px;
+}
+
+.ops-coverage-row.is-below {
+  background: color-mix(in srgb, var(--coral, #e05a5a) 9%, transparent);
+}
+
+.ops-coverage-row.is-fragile {
+  background: color-mix(in srgb, #d98a2b 9%, transparent);
+}
+
+.ops-coverage-badge {
+  border-radius: 999px;
+  display: inline-block;
+  font: 700 0.72rem/1 var(--font-ui);
+  padding: 3px 9px;
+}
+
+.ops-coverage-badge.is-below {
+  background: var(--coral, #e05a5a);
+  color: #ffffff;
+}
+
+.ops-coverage-badge.is-fragile {
+  background: #d98a2b;
+  color: #ffffff;
+}
+
+.ops-coverage-badge.is-ok {
+  background: color-mix(in srgb, #2f9e6f 16%, transparent);
+  color: #1f7a54;
+}
+
+.ops-coverage-min {
+  color: var(--muted);
+  font-size: 0.8em;
+}
+
+.ops-coverage-flag {
+  color: #b3711a;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ops-coverage-generated {
+  color: var(--muted);
+  font-size: 0.76rem;
+  margin: 6px 0 0;
+}
+
 .ops-alerts-sev {
   display: inline-block;
   padding: 2px 8px;
