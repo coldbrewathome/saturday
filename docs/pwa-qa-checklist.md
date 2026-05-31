@@ -77,6 +77,21 @@ Safari (after the ≥2-visit gate) and the CTA is **Show me how**.
       "couldn't load events" inline state (no dedicated offline.html — that's
       a deferred follow-up; see ADR 05 §d case 2).
 
+## 4b. Prerendered SEO pages with the SW active (regression guard)
+
+The `navigateFallback` must serve the SPA shell **only** for the root +
+single-segment metro paths — never for deeper prerendered pages. (A too-broad
+fallback once hijacked these into the SPA browse view; fixed via the
+2-segment `navigateFallbackDenylist`.)
+
+- [ ] With the SW active (2nd+ visit), click **Guide** → lands on
+      `/<metro>/this-weekend/` showing the *prerendered* page (title contains
+      "weekend guide"), **not** the app bouncing to `#/browse`.
+- [ ] Open a prerendered event page `/<metro>/events/<slug>/` and a spot/city
+      page directly → real HTML loads (correct `<title>`), no `#/browse` bounce.
+- [ ] App root + metro root (`/`, `/<metro>/`) still load the SPA (so the
+      offline shell fallback is intact).
+
 ## 5. Update / staleness
 
 - [ ] After a new deploy, reloading an open tab picks up the new build
