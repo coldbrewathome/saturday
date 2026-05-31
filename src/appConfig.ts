@@ -53,13 +53,6 @@ export const APP_VIBE_BLURBS: Record<PlannerVibe, string> =
 export const APP_BRAND: string = import.meta.env.VITE_APP_BRAND || "FamHop";
 export const APP_TAGLINE: string =
   import.meta.env.VITE_APP_TAGLINE || "Plan · Hop · Repeat.";
-export const APP_HERO_TITLE: string =
-  import.meta.env.VITE_APP_HERO_TITLE || "Plan the weekend — together.";
-export const APP_HERO_SUB: string =
-  import.meta.env.VITE_APP_HERO_SUB ||
-  "Pick the kids' age, interests, constraints, then a vibe. Get 3 family stops. Share with co-parents to vote.";
-export const APP_PARTNERS_LABEL: string =
-  import.meta.env.VITE_APP_PARTNERS_LABEL || "co-parents";
 export const APP_GROUP_LABEL: string =
   import.meta.env.VITE_APP_GROUP_LABEL || "the family";
 export const APP_PLAN_NOUN: string =

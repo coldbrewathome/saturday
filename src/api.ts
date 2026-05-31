@@ -31,18 +31,6 @@ export type EventSummary = {
 
 export type ItemOrderRef = { kind: "spot" | "event"; id: string };
 
-export type AiBriefResponse = {
-  brief: {
-    title: string;
-    summary: string;
-    rationale: string[];
-    cautions: string[];
-  };
-  picks: Array<{ id: string; reason: string }>;
-  model: string;
-  generatedAt: string;
-};
-
 export type Tallies = Record<string, { up: number; down: number; meh: number }>;
 
 export type PollSnapshot = {
@@ -106,41 +94,6 @@ export async function postVote(
   });
   if (!response.ok) {
     throw new Error(`Vote failed (${response.status})`);
-  }
-  return response.json();
-}
-
-export async function createAiBrief(
-  body: {
-    vibe: string;
-    spots: StopSummary[];
-    audience?: string;
-    ageBand?: string;
-    date?: string;
-    dayOfWeek?: string;
-    weather?: WeatherForecast | null;
-    preferences?: string[];
-    profile?: Record<string, string>;
-  },
-  sessionToken: string,
-): Promise<AiBriefResponse> {
-  const response = await fetch(`${requireApi()}/ai/brief`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      authorization: `Bearer ${sessionToken}`,
-    },
-    body: JSON.stringify(body),
-  });
-  if (!response.ok) {
-    let detail = "";
-    try {
-      const data = (await response.json()) as { error?: string };
-      detail = data?.error ? `: ${data.error}` : "";
-    } catch {
-      // ignore
-    }
-    throw new Error(`AI brief failed (${response.status})${detail}`);
   }
   return response.json();
 }
@@ -235,42 +188,6 @@ export function trackMetric(name: string, metroId?: string): void {
   }
 }
 
-export async function createAiSwap(
-  body: {
-    vibe: string;
-    ageBand?: string;
-    date?: string;
-    dayOfWeek?: string;
-    replaceStopId: string;
-    currentPicks: StopSummary[];
-    candidates: StopSummary[];
-    weather?: WeatherForecast | null;
-    preferences?: string[];
-    profile?: Record<string, string>;
-  },
-  sessionToken: string,
-): Promise<{ pick: { id: string; reason: string }; model: string }> {
-  const response = await fetch(`${requireApi()}/ai/swap`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      authorization: `Bearer ${sessionToken}`,
-    },
-    body: JSON.stringify(body),
-  });
-  if (!response.ok) {
-    let detail = "";
-    try {
-      const data = (await response.json()) as { error?: string };
-      detail = data?.error ? `: ${data.error}` : "";
-    } catch {
-      // ignore
-    }
-    throw new Error(`Swap failed (${response.status})${detail}`);
-  }
-  return response.json();
-}
-
 export async function subscribeNewsletter(body: {
   email: string;
   metroId?: string;
@@ -310,6 +227,7 @@ export type SyncedState = {
   customSpots: unknown[];
   plans: unknown[];
   deletedPlanIds?: string[];
+  interests?: string[];
   updatedAt?: string;
 };
 

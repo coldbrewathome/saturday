@@ -1419,7 +1419,6 @@ h3 {
   margin-top: 18px;
 }
 
-
 .filter-label,
 .select-field span,
 .switch-row span,
@@ -3628,141 +3627,6 @@ h3 {
   color: var(--coral);
 }
 
-.home-screen {
-  display: grid;
-  gap: 28px;
-  margin: 0 auto;
-  max-width: 880px;
-  padding: 8px 0 48px;
-}
-
-.home-hero h1 {
-  font-size: clamp(2rem, 4vw, 3rem);
-  line-height: 1.05;
-  margin: 8px 0 14px;
-}
-
-.home-sub {
-  color: var(--muted);
-  font-size: 1.05rem;
-  line-height: 1.5;
-  margin: 0;
-}
-
-.home-hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 18px;
-}
-
-.home-guide-cta {
-  align-items: center;
-  background: var(--ink);
-  border: 1px solid var(--ink);
-  border-radius: 8px;
-  color: #ffffff;
-  display: inline-flex;
-  gap: 10px;
-  min-height: 48px;
-  padding: 8px 14px;
-  text-decoration: none;
-  transition:
-    background 0.15s ease,
-    border-color 0.15s ease,
-    transform 0.06s ease;
-}
-
-.home-guide-cta:hover {
-  background: var(--accent-strong);
-  border-color: var(--accent-strong);
-  transform: translateY(-1px);
-}
-
-.home-guide-cta > svg {
-  flex: 0 0 auto;
-  height: 18px;
-  width: 18px;
-}
-
-.home-guide-cta span {
-  display: grid;
-  gap: 2px;
-  min-width: 0;
-}
-
-.home-guide-cta strong {
-  font-size: 0.9rem;
-  line-height: 1.1;
-}
-
-.home-guide-cta small {
-  color: rgba(255, 255, 255, 0.76);
-  font-size: 0.76rem;
-  font-weight: 800;
-  line-height: 1.2;
-}
-
-.home-vibes {
-  display: grid;
-  gap: 12px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.home-vibe-card {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(31, 48, 39, 0.06);
-  display: grid;
-  gap: 6px;
-  min-height: 96px;
-  padding: 16px 18px;
-  text-align: left;
-  transition: transform 0.06s ease, border-color 0.12s ease;
-}
-
-.home-vibe-card:hover:not(:disabled) {
-  border-color: var(--accent);
-  transform: translateY(-1px);
-}
-
-.home-vibe-card:disabled {
-  cursor: progress;
-  opacity: 0.7;
-}
-
-.home-vibe-card strong {
-  color: var(--ink);
-  font-size: 1.1rem;
-}
-
-.home-vibe-card span {
-  color: var(--muted);
-  font-size: 0.86rem;
-  font-weight: 800;
-}
-
-.home-status {
-  color: var(--muted);
-  font-size: 0.92rem;
-  font-weight: 800;
-  text-align: center;
-}
-
-.home-status.error {
-  color: var(--coral);
-}
-
-.home-escape {
-  text-align: center;
-}
-
-.home-date {
-  display: grid;
-  gap: 6px;
-}
-
 .date-row {
   align-items: center;
   display: flex;
@@ -3806,25 +3670,6 @@ h3 {
   font-weight: 800;
 }
 
-.home-base,
-.home-profile {
-  display: grid;
-  gap: 8px;
-}
-
-.home-base-row {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.home-base-status {
-  color: var(--muted);
-  font-size: 0.84rem;
-  font-weight: 800;
-}
-
 .profile-grid {
   display: grid;
   gap: 8px;
@@ -3856,13 +3701,6 @@ h3 {
   width: 100%;
 }
 
-.home-weather {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: -8px 0 4px;
-}
-
 .weather-pill {
   background: #ffffff;
   border: 1px solid var(--line);
@@ -3892,11 +3730,6 @@ h3 {
 .weather-pill.weather-mixed {
   background: var(--surface-strong);
   color: var(--muted);
-}
-
-.home-prefs {
-  display: grid;
-  gap: 6px;
 }
 
 .pref-chips {
@@ -3937,83 +3770,6 @@ h3 {
 
 .browse-near-events .home-events-head p {
   font-size: 0.82rem;
-}
-
-.home-events {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(31, 48, 39, 0.06);
-  display: grid;
-  gap: 12px;
-  padding: 18px 20px;
-}
-
-.home-events-head h2 {
-  font-size: 1.2rem;
-  margin-bottom: 4px;
-}
-
-.home-events-head p {
-  color: var(--muted);
-  font-size: 0.86rem;
-  font-weight: 800;
-  margin: 0;
-}
-
-.home-events-guide-link {
-  color: var(--accent-strong);
-  display: inline-flex;
-  font-size: 0.84rem;
-  font-weight: 900;
-  margin-top: 8px;
-  text-decoration: none;
-}
-
-.home-events-guide-link:hover {
-  text-decoration: underline;
-}
-
-.home-events-list {
-  display: grid;
-  gap: 8px;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.home-event-card {
-  background: var(--surface-strong);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 0;
-}
-
-.home-event-card a {
-  color: var(--ink);
-  display: grid;
-  gap: 4px;
-  padding: 12px 14px;
-  text-decoration: none;
-}
-
-.home-event-card a:hover {
-  background: #fdece7;
-}
-
-.home-event-details {
-  display: block;
-  padding: 6px 14px 10px;
-  color: var(--accent-strong);
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-decoration: none;
-  border-top: 1px solid var(--line);
-}
-
-.home-event-details:hover {
-  text-decoration: underline;
 }
 
 /* Plan-detail "While you're nearby" — horizontally scrolling rail of cards */
@@ -4187,22 +3943,6 @@ h3 {
   height: 14px;
 }
 
-.home-event-card strong {
-  font-size: 0.94rem;
-}
-
-.home-event-meta {
-  color: var(--blue);
-  font-size: 0.78rem;
-  font-weight: 900;
-}
-
-.home-event-venue {
-  color: var(--muted);
-  font-size: 0.78rem;
-  font-weight: 800;
-}
-
 .event-cat-chip {
   background: #ffffff;
   border: 1px solid var(--line);
@@ -4214,25 +3954,6 @@ h3 {
   padding: 2px 8px;
   text-transform: uppercase;
   width: fit-content;
-}
-
-.home-event-card.cat-library .event-cat-chip {
-  background: #eef3f7;
-  border-color: #d7e3ed;
-  color: var(--blue);
-}
-
-.home-event-card.cat-museum .event-cat-chip {
-  background: #f3e9d7;
-  border-color: #e0d2b3;
-  color: #8a5a1d;
-}
-
-.home-event-card.cat-zoo .event-cat-chip,
-.home-event-card.cat-park .event-cat-chip {
-  background: #fdece7;
-  border-color: var(--accent);
-  color: var(--accent-strong);
 }
 
 .plan-events {
@@ -4263,16 +3984,7 @@ h3 {
   padding: 0;
 }
 
-.home-event-card.cat-farm .event-cat-chip {
-  background: #fdecea;
-  border-color: #f4c2bc;
-  color: var(--coral);
-}
-
 @media (max-width: 720px) {
-  .home-vibes {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 
   .profile-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -4280,9 +3992,6 @@ h3 {
 }
 
 @media (max-width: 460px) {
-  .home-vibes {
-    grid-template-columns: 1fr;
-  }
 
   .profile-grid {
     grid-template-columns: 1fr;

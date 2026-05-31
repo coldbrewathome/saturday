@@ -582,6 +582,7 @@ async function putUserState(
     customSpots?: unknown;
     plans?: unknown;
     deletedPlanIds?: unknown;
+    interests?: unknown;
   };
   const stringArr = (value: unknown, max: number): string[] =>
     Array.isArray(value)
@@ -598,6 +599,7 @@ async function putUserState(
     customSpots: objectArr(data.customSpots, 100),
     plans: objectArr(data.plans, 50),
     deletedPlanIds: stringArr(data.deletedPlanIds, 500),
+    interests: stringArr(data.interests, 50),
     updatedAt: new Date().toISOString(),
   };
   const serialized = JSON.stringify(state);

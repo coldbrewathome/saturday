@@ -41,8 +41,6 @@ import {
 import type { MapSelection, PlanMapItem, SpotMapHandle } from "./MapViews";
 import {
   API_CONFIGURED,
-  createAiBrief,
-  createAiSwap,
   createPoll,
   fetchAdminEvents,
   fetchGeo,
@@ -346,14 +344,6 @@ const eventDateFilters: Array<{ id: EventDateFilter; label: string }> = [
   { id: "tomorrow", label: "Tomorrow" },
   { id: "weekend", label: "Weekend" },
 ];
-const vibeOptions = Object.entries(APP_VIBE_LABELS) as Array<
-  [PlannerVibe, string]
->;
-
-function vibeBlurb(vibe: PlannerVibe): string {
-  return APP_VIBE_BLURBS[vibe];
-}
-
 function optionLabel<T extends string>(
   options: Array<{ id: T; label: string }>,
   id: T,
@@ -619,11 +609,7 @@ const rootDataUrl = (file: string) => dataUrl(file);
 import {
   APP_AUDIENCE,
   APP_BRAND,
-  APP_HERO_SUB,
-  APP_HERO_TITLE,
-  APP_PARTNERS_LABEL,
   APP_TAGLINE,
-  APP_VIBE_BLURBS,
   APP_VIBE_LABELS,
   SHOW_AGE_BAND_UI,
   audienceVisible,
@@ -1111,7 +1097,7 @@ type FeaturedPlan = {
 };
 
 type AppRoute = {
-  view: "home" | "browse" | "plans" | "event";
+  view: "browse" | "plans" | "event";
   planId: string | null;
   eventSlug: string | null;
 };
@@ -1440,12 +1426,10 @@ function App({ metro }: AppProps) {
     readStoredArray(storageKeys.deletedPlanIds, []),
   );
   const initialRoute = readAppRoute();
-  const [view, setView] = useState<"home" | "browse" | "plans" | "event">(
+  const [view, setView] = useState<"browse" | "plans" | "event">(
     initialRoute.view,
   );
   const [inferredGeo, setInferredGeo] = useState<{ city: string | null; lat: number | null; lon: number | null } | null>(null);
-  const [homeBusy, setHomeBusy] = useState(false);
-  const [homeError, setHomeError] = useState<string | null>(null);
   const [activePlanId, setActivePlanId] = useState<string | null>(
     initialRoute.planId,
   );
@@ -1472,10 +1456,6 @@ function App({ metro }: AppProps) {
   const [shareState, setShareState] = useState<{
     status: "idle" | "sharing" | "shared" | "error";
     url?: string;
-    error?: string;
-  }>({ status: "idle" });
-  const [aiState, setAiState] = useState<{
-    status: "idle" | "loading" | "error";
     error?: string;
   }>({ status: "idle" });
   const [session, setSession] = useState<SessionState | null>(() => readSession());
@@ -1995,6 +1975,9 @@ function App({ metro }: AppProps) {
                 (v) => typeof v === "string",
               )
             : [];
+          const incomingInterests: string[] = Array.isArray(serverState.interests)
+            ? (serverState.interests as string[]).filter(isValidThemeId)
+            : [];
           setSavedIds((local) =>
             Array.from(new Set<string>([...incomingSaved, ...local])),
           );
@@ -2012,6 +1995,11 @@ function App({ metro }: AppProps) {
           });
           setDeletedPlanIds((local) =>
             Array.from(new Set<string>([...local, ...incomingDeletedPlanIds])),
+          );
+          // Interests merge as a union (mirrors savedIds); next load's
+          // auto-enable picks up server interests via the persisted localStorage.
+          setPreferredThemes(
+            (local) => new Set<string>([...incomingInterests, ...local]),
           );
           setPlans((local) => {
             const tombstones = new Set<string>([
@@ -2050,6 +2038,7 @@ function App({ metro }: AppProps) {
         customSpots,
         plans,
         deletedPlanIds,
+        interests: Array.from(preferredThemes),
       })
         .then(() => setSyncStatus("synced"))
         .catch(() => setSyncStatus("error"));
@@ -2064,6 +2053,7 @@ function App({ metro }: AppProps) {
     customSpots,
     plans,
     deletedPlanIds,
+    preferredThemes,
   ]);
 
   useEffect(() => {
@@ -2163,22 +2153,6 @@ function App({ metro }: AppProps) {
       }
     }
   }
-
-  useEffect(() => {
-    setAiState({ status: "idle" });
-  }, [
-    selectedCategories,
-    city,
-    ageBand,
-    cost,
-    onlyOpen,
-    plannerProfile,
-    preferences,
-    query,
-    savedIds,
-    targetDate,
-    vibe,
-  ]);
 
   useEffect(() => {
     setPage(1);
@@ -2600,35 +2574,6 @@ function App({ metro }: AppProps) {
     }
     return ids;
   }, [mapEvents]);
-
-  const weekendEvents = useMemo(() => {
-    if (events.length === 0) return [] as FamilyEvent[];
-    const matching = events.filter((event) => {
-      if (!event.daysOfWeek.includes(targetDayOfWeek)) return false;
-      if (ageBand !== "any" && !event.ageBands.includes(ageBand)) return false;
-      return true;
-    });
-    if (!plannerAnchor) return matching;
-    const here = plannerAnchor;
-    return matching
-      .map((event) => ({
-        event,
-        dist: ((lat: number, lon: number) => {
-          const toRad = (deg: number) => (deg * Math.PI) / 180;
-          const R = 3958.8;
-          const dLat = toRad(lat - here.lat);
-          const dLon = toRad(lon - here.lon);
-          const lat1 = toRad(here.lat);
-          const lat2 = toRad(lat);
-          const x =
-            Math.sin(dLat / 2) ** 2 +
-            Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
-          return 2 * R * Math.asin(Math.sqrt(x));
-        })(event.lat, event.lon),
-      }))
-      .sort((a, b) => a.dist - b.dist)
-      .map((entry) => entry.event);
-  }, [events, ageBand, plannerAnchor, targetDayOfWeek]);
 
   // Dynamic teaser for the weekend-guide entry point on the browse view: how
   // much is actually happening this weekend, so the link feels promising
@@ -3162,429 +3107,6 @@ function App({ metro }: AppProps) {
     }
   }
 
-  const [swapBusyStopId, setSwapBusyStopId] = useState<string | null>(null);
-  const [swapError, setSwapError] = useState<string | null>(null);
-
-  async function swapStopWithAi(planId: string, stopId: string) {
-    if (!session) {
-      setSwapError("Sign in to use AI swap.");
-      return;
-    }
-    const plan = plans.find((p) => p.id === planId);
-    if (!plan || !plan.vibe) {
-      setSwapError("Only AI plans can be swapped.");
-      return;
-    }
-    const stopsById = new Map(planningSpots.map((s) => [s.id, s] as const));
-    const currentStops = plan.stopIds
-      .map((id) => stopsById.get(id))
-      .filter((s): s is Spot => Boolean(s));
-    const currentPicks: StopSummary[] = currentStops.map((spot) => ({
-      id: spot.id,
-      name: spot.name,
-      neighborhood: spot.neighborhood,
-      category: spot.category,
-      cost: spot.cost,
-      transitMinutes: spot.transitMinutes,
-    }));
-    const usedIds = new Set(plan.stopIds);
-    const remainingStops = currentStops.filter((s) => s.id !== stopId);
-    const swapAnchor =
-      planCentroid(remainingStops) ??
-      planCentroid(currentStops) ??
-      plannerAnchor ??
-      { lat: 37.7749, lon: -122.4194 };
-    const localPool = clusterAround(
-      planningSpots.filter((s) => !usedIds.has(s.id)),
-      swapAnchor,
-      6,
-      18,
-    );
-    const sortedAll = rankForVibe(
-      localPool,
-      plan.vibe,
-      scoringOptions,
-    ) as unknown as Spot[];
-    const candidatesPool = sampleCandidates(sortedAll, 12);
-    const candidates: StopSummary[] = candidatesPool.map((spot) => ({
-      id: spot.id,
-      name: spot.name,
-      neighborhood: spot.neighborhood,
-      category: spot.category,
-      cost: spot.cost,
-      transitMinutes: spot.transitMinutes,
-      friendScore: scoreSpotForVibe(
-        spot,
-        plan.vibe!,
-        scoringOptions,
-      ),
-    }));
-    if (candidates.length === 0) {
-      setSwapError("No alternative spots available.");
-      return;
-    }
-
-    setSwapBusyStopId(stopId);
-    setSwapError(null);
-    try {
-      const swapDate = targetDateObj;
-      const result = await createAiSwap(
-        {
-          vibe: plan.vibe,
-          ageBand: ageBand === "any" ? undefined : ageBand,
-          date: targetDate,
-          dayOfWeek: swapDate.toLocaleDateString("en-US", { weekday: "long" }),
-          replaceStopId: stopId,
-          currentPicks,
-          candidates,
-          weather,
-          preferences,
-          profile: plannerProfile,
-        },
-        session.token,
-      );
-      setPlans((current) =>
-        current.map((p) => {
-          if (p.id !== planId) return p;
-          const newStopIds = p.stopIds.map((id) =>
-            id === stopId ? result.pick.id : id,
-          );
-          const existingPicks = p.picks ?? [];
-          const newPicks = newStopIds.map((id, idx) => {
-            if (id === result.pick.id) {
-              return { id, reason: result.pick.reason };
-            }
-            return existingPicks[idx] ?? { id, reason: "" };
-          });
-          return { ...p, stopIds: newStopIds, picks: newPicks };
-        }),
-      );
-    } catch (error) {
-      setSwapError((error as Error).message);
-    } finally {
-      setSwapBusyStopId(null);
-    }
-  }
-
-  function applyLocalBias(
-    spots: Spot[],
-    forecast: WeatherForecast | null,
-    prefs: PlannerPreferenceId[],
-  ): Spot[] {
-    let working = spots;
-    if (prefs.includes("free-only")) {
-      working = working.filter((s) => s.cost === "Free" || s.cost === "$");
-    }
-    if (prefs.includes("near-only")) {
-      working = working.filter((s) => s.transitMinutes <= 30);
-    }
-    if (prefs.includes("loves-animals")) {
-      working = [...working].sort((a, b) => {
-        const score = (s: Spot) => {
-          const t = `${s.name} ${s.category} ${s.tags.join(" ")}`.toLowerCase();
-          if (/zoo|aquarium|farm|wildlife|animal/.test(t)) return 1;
-          return 0;
-        };
-        return score(b) - score(a);
-      });
-    }
-    if (prefs.includes("parks-nature")) {
-      working = [...working].sort((a, b) => {
-        const score = (s: Spot) =>
-          s.category === "Outdoors" || /park|garden|trail|beach|nature/i.test(`${s.name} ${s.tags.join(" ")}`)
-            ? 1
-            : 0;
-        return score(b) - score(a);
-      });
-    }
-    if (prefs.includes("libraries-museums")) {
-      working = [...working].sort((a, b) => {
-        const score = (s: Spot) =>
-          s.category === "Culture" || /library|museum|science|story/i.test(`${s.name} ${s.tags.join(" ")}`)
-            ? 1
-            : 0;
-        return score(b) - score(a);
-      });
-    }
-    const wet =
-      (forecast?.saturday?.precipChance ?? 0) >= 50 ||
-      forecast?.saturday?.label === "Rainy" ||
-      forecast?.saturday?.label === "Stormy" ||
-      forecast?.saturday?.label === "Showers" ||
-      (prefs.includes("indoor-when-rainy") &&
-        (forecast?.saturday?.precipChance ?? 0) >= 30);
-    if (wet) {
-      working = [...working].sort((a, b) => {
-        const indoor = (s: Spot) =>
-          s.category === "Culture" || s.category === "Wellness" ? 1 : 0;
-        return indoor(b) - indoor(a);
-      });
-    }
-    return working;
-  }
-
-  function sampleCandidates<T extends { category?: string; id?: string }>(
-    sorted: T[],
-    size: number,
-    poolSize = 36,
-  ): T[] {
-    const pool = sorted.slice(0, poolSize);
-    if (pool.length <= size) return pool;
-    const byCategory = interleaveByCategory(pool as unknown as Spot[]) as unknown as T[];
-    const seeded = byCategory.slice(0, Math.min(byCategory.length, size * 2));
-    const shuffled = [...seeded];
-    for (let i = shuffled.length - 1; i > 0; i -= 1) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    const picked: T[] = [];
-    const seen = new Set<string>();
-    for (const item of shuffled) {
-      const key = item.id || `${item.category || "item"}-${picked.length}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      picked.push(item);
-      if (picked.length >= size) return picked;
-    }
-    for (const item of byCategory) {
-      const key = item.id || `${item.category || "item"}-${picked.length}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      picked.push(item);
-      if (picked.length >= size) break;
-    }
-    return picked;
-  }
-
-  async function selectVibeFromHome(nextVibe: PlannerVibe) {
-    setVibe(nextVibe);
-    setHomeError(null);
-    setHomeBusy(true);
-
-    const anchor = plannerAnchor ?? { lat: 37.7749, lon: -122.4194 };
-    const candidatePool = clusterAround(planningSpots, anchor, 8, 24);
-
-    if (candidatePool.length === 0) {
-      setHomeBusy(false);
-      setHomeError("Spots are still loading. Try again in a moment.");
-      return;
-    }
-
-    if (session && API_CONFIGURED) {
-      const rankedCandidates = applyLocalBias(
-        rankForVibe(
-          candidatePool,
-          nextVibe,
-          scoringOptions,
-        ) as unknown as Spot[],
-        weather,
-        preferences,
-      );
-      const stopPayload: StopSummary[] = sampleCandidates(rankedCandidates, 12).map((spot) => ({
-        id: spot.id,
-        name: spot.name,
-        neighborhood: spot.neighborhood,
-        category: spot.category,
-        imageUrl: spot.imageUrl,
-        cost: spot.cost,
-        transitMinutes: spot.transitMinutes,
-        mood: spot.mood,
-        groupSize: spot.groupSize,
-        planning: spot.planning,
-        openNow: spot.openNow,
-        website: spot.website,
-        sourceUrl: spot.sourceUrl,
-        friendScore: scoreSpotForVibe(
-          spot,
-          nextVibe,
-          scoringOptions,
-        ),
-      }));
-      try {
-        const planDate = targetDateObj;
-        const result = await createAiBrief(
-          {
-            vibe: nextVibe,
-            spots: stopPayload,
-            audience: APP_AUDIENCE,
-            ageBand: ageBand === "any" ? undefined : ageBand,
-            date: targetDate,
-            dayOfWeek: planDate.toLocaleDateString("en-US", { weekday: "long" }),
-            weather,
-            preferences,
-            profile: plannerProfile,
-          },
-          session.token,
-        );
-        const stopIds =
-          result.picks.length > 0
-            ? result.picks.map((p) => p.id)
-            : stopPayload.slice(0, 3).map((s) => s.id);
-        const id = createPlanId(plans);
-        const plan: Plan = {
-          id,
-          name: result.brief.title || `${APP_VIBE_LABELS[nextVibe]} plan`,
-          stopIds,
-          createdAt: new Date().toISOString(),
-          source: "ai",
-          vibe: nextVibe,
-          summary: result.brief.summary,
-          rationale: result.brief.rationale,
-          cautions: result.brief.cautions,
-          picks: result.picks,
-          aiModel: result.model,
-          profile: plannerProfile,
-        };
-        setPlans((current) => [...current, plan]);
-        setActivePlanId(id);
-        setView("plans");
-        setHomeBusy(false);
-        return;
-      } catch (error) {
-        // fall through to local rank below
-        setHomeError(
-          `AI is unavailable (${(error as Error).message}). Using a quick local pick instead.`,
-        );
-      }
-    }
-
-    // Local deterministic fallback (no auth required)
-    const ranked = applyLocalBias(
-      rankForVibe(
-        candidatePool,
-        nextVibe,
-        scoringOptions,
-      ) as unknown as Spot[],
-      weather,
-      preferences,
-    ).slice(0, 3);
-    if (ranked.length === 0) {
-      setHomeBusy(false);
-      setHomeError("No matching spots for that vibe.");
-      return;
-    }
-    const id = createPlanId(plans);
-    const plan: Plan = {
-      id,
-      name: `${APP_VIBE_LABELS[nextVibe]} plan`,
-      stopIds: ranked.map((s) => s.id),
-      createdAt: new Date().toISOString(),
-      source: "manual",
-      vibe: nextVibe,
-      summary: session
-        ? `Picked locally for: ${plannerProfileSummary}.`
-        : `Picked locally for: ${plannerProfileSummary}. Sign in with Google to use AI for richer suggestions and to save plans across devices.`,
-      picks: ranked.map((spot) => ({
-        id: spot.id,
-        reason: `Matched because ${describePlannerMatch(spot, scoringOptions).join(", ")}.`,
-      })),
-      profile: plannerProfile,
-    };
-    setPlans((current) => [...current, plan]);
-    setActivePlanId(id);
-    setView("plans");
-    setHomeBusy(false);
-  }
-
-  async function createAiPlan() {
-    if (!session) {
-      setAiState({
-        status: "error",
-        error: "Sign in with Google to use AI suggest.",
-      });
-      return;
-    }
-    const baseSource = savedSpots.length > 0
-      ? savedSpots
-      : [...filteredSpots, ...eventActivitySpots, ...boaActivitySpots];
-    if (baseSource.length === 0) {
-      setAiState({
-        status: "error",
-        error: "Save spots or adjust filters so the AI has candidates.",
-      });
-      return;
-    }
-    const anchor =
-      planCentroid(savedSpots) ??
-      plannerAnchor ??
-      { lat: 37.7749, lon: -122.4194 };
-    const source =
-      savedSpots.length > 0 ? baseSource : clusterAround(baseSource, anchor, 8, 24);
-    const rankedSource = applyLocalBias(
-      rankForVibe(
-        source,
-        vibe,
-        scoringOptions,
-      ) as unknown as Spot[],
-      weather,
-      preferences,
-    );
-    const spots: StopSummary[] = sampleCandidates(rankedSource, 12).map((spot) => ({
-      id: spot.id,
-      name: spot.name,
-      neighborhood: spot.neighborhood,
-      category: spot.category,
-      imageUrl: spot.imageUrl,
-      cost: spot.cost,
-      transitMinutes: spot.transitMinutes,
-      mood: spot.mood,
-      groupSize: spot.groupSize,
-      planning: spot.planning,
-      openNow: spot.openNow,
-      website: spot.website,
-      sourceUrl: spot.sourceUrl,
-      friendScore: scoreSpotForVibe(
-        spot,
-        vibe,
-        scoringOptions,
-      ),
-    }));
-
-    setAiState({ status: "loading" });
-    try {
-      const planDate = targetDateObj;
-      const result = await createAiBrief(
-        {
-          vibe,
-          spots,
-          audience: APP_AUDIENCE,
-          ageBand: ageBand === "any" ? undefined : ageBand,
-          date: targetDate,
-          dayOfWeek: planDate.toLocaleDateString("en-US", { weekday: "long" }),
-          weather,
-          preferences,
-          profile: plannerProfile,
-        },
-        session.token,
-      );
-      const stopIds =
-        result.picks.length > 0
-          ? result.picks.map((p) => p.id)
-          : spots.slice(0, 3).map((s) => s.id);
-      const id = createPlanId(plans);
-      const plan: Plan = {
-        id,
-        name: result.brief.title || `${APP_VIBE_LABELS[vibe]} plan`,
-        stopIds,
-        createdAt: new Date().toISOString(),
-        source: "ai",
-        vibe,
-        summary: result.brief.summary,
-        rationale: result.brief.rationale,
-        cautions: result.brief.cautions,
-        picks: result.picks,
-        aiModel: result.model,
-        profile: plannerProfile,
-      };
-      setPlans((current) => [...current, plan]);
-      setActivePlanId(id);
-      setView("plans");
-      setAiState({ status: "idle" });
-    } catch (error) {
-      setAiState({ status: "error", error: (error as Error).message });
-    }
-  }
-
   function moveStop(planId: string, stopId: string, direction: -1 | 1) {
     setPlans((current) =>
       current.map((plan) => {
@@ -4034,348 +3556,7 @@ function App({ metro }: AppProps) {
         </div>
       )}
 
-      {view === "home" ? (
-      <main className="home-screen" aria-label={APP_HERO_TITLE}>
-        <div className="home-hero">
-          <p className="eyebrow">{APP_TAGLINE}</p>
-          <h1>{APP_HERO_TITLE}</h1>
-          <p className="home-sub">
-            {APP_HERO_SUB}
-            {inferredGeo?.city ? ` Tuned for ${inferredGeo.city}.` : ""}
-          </p>
-          <div className="home-hero-actions">
-            <a className="home-guide-cta" href={weekendGuideHref}>
-              <Clock3 aria-hidden="true" />
-              <span>
-                <strong>Weekend guide</strong>
-                <small>{metro.label} events ordered by time</small>
-              </span>
-              <ChevronRight aria-hidden="true" />
-            </a>
-          </div>
-        </div>
-
-        <div className="home-date" role="group" aria-label="Plan date">
-          <span className="filter-label">When</span>
-          <div className="date-row">
-            <input
-              type="date"
-              value={targetDate}
-              min={isoDate(new Date())}
-              onChange={(event) => setTargetDate(event.target.value)}
-            />
-            <div className="date-quick">
-              <button
-                type="button"
-                onClick={() => setTargetDate(isoDate(thisOrNextDayOfWeek(6)))}
-              >
-                This Sat
-              </button>
-              <button
-                type="button"
-                onClick={() => setTargetDate(isoDate(thisOrNextDayOfWeek(0)))}
-              >
-                This Sun
-              </button>
-              <button
-                type="button"
-                onClick={() => setTargetDate(isoDate(nextDayOfWeek(6)))}
-              >
-                Next Sat
-              </button>
-            </div>
-            <span className="date-label">
-              {targetDateObj.toLocaleDateString("en-US", {
-                weekday: "long",
-                month: "short",
-                day: "numeric",
-              })}
-            </span>
-          </div>
-        </div>
-
-        {SHOW_AGE_BAND_UI && (
-          <div className="home-age" role="group" aria-label="Kids' age">
-            <span className="filter-label">Kids' age</span>
-            <div className="segmented compact">
-              <button
-                className={ageBand === "any" ? "active" : ""}
-                onClick={() => setAgeBand("any")}
-              >
-                Mixed / any
-              </button>
-              {ageBandOptions.map(([value, label]) => (
-                <button
-                  key={value}
-                  className={ageBand === value ? "active" : ""}
-                  onClick={() => setAgeBand(value)}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <div className="home-base" role="group" aria-label="Home base">
-          <span className="filter-label">Home base</span>
-          <div className="home-base-row">
-            {userLocation ? (
-              <button
-                className="geo-button active"
-                type="button"
-                onClick={clearUserLocation}
-                title={`Using your location (${userLocation.lat.toFixed(2)}, ${userLocation.lon.toFixed(2)})`}
-              >
-                <MapPin aria-hidden="true" />
-                Using my location
-              </button>
-            ) : (
-              <button
-                className="geo-button"
-                type="button"
-                disabled={geoState === "requesting"}
-                onClick={requestUserLocation}
-              >
-                <MapPin aria-hidden="true" />
-                {geoState === "requesting" ? "Locating…" : "Use my location"}
-              </button>
-            )}
-            <span className="home-base-status">
-              {userLocation
-                ? "Distance sorted from you"
-                : inferredGeo?.city
-                  ? `Using ${inferredGeo.city}`
-                  : "Using SF baseline"}
-            </span>
-          </div>
-          {geoState === "denied" && (
-            <p className="geo-status error">
-              Location permission denied. Enable it in your browser settings to sort by distance from you.
-            </p>
-          )}
-        </div>
-
-        <div className="home-profile" role="group" aria-label="Plan details">
-          <span className="filter-label">Plan details</span>
-          <div className="profile-grid">
-            <label className="profile-field">
-              <span>Time</span>
-              <select
-                value={plannerProfile.planLength}
-                onChange={(event) =>
-                  updatePlannerProfile(
-                    "planLength",
-                    event.target.value as PlannerProfile["planLength"],
-                  )
-                }
-              >
-                {plannerPlanLengthOptions.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="profile-field">
-              <span>Budget</span>
-              <select
-                value={plannerProfile.budget}
-                onChange={(event) =>
-                  updatePlannerProfile(
-                    "budget",
-                    event.target.value as PlannerProfile["budget"],
-                  )
-                }
-              >
-                {plannerBudgetOptions.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="profile-field">
-              <span>Travel</span>
-              <select
-                value={plannerProfile.transportMode}
-                onChange={(event) =>
-                  updatePlannerProfile(
-                    "transportMode",
-                    event.target.value as PlannerProfile["transportMode"],
-                  )
-                }
-              >
-                {plannerTransportOptions.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="profile-field">
-              <span>Crowds</span>
-              <select
-                value={plannerProfile.crowdTolerance}
-                onChange={(event) =>
-                  updatePlannerProfile(
-                    "crowdTolerance",
-                    event.target.value as PlannerProfile["crowdTolerance"],
-                  )
-                }
-              >
-                {plannerCrowdOptions.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="profile-field">
-              <span>Setting</span>
-              <select
-                value={plannerProfile.setting}
-                onChange={(event) =>
-                  updatePlannerProfile(
-                    "setting",
-                    event.target.value as PlannerProfile["setting"],
-                  )
-                }
-              >
-                {plannerSettingOptions.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-        </div>
-
-        {(weather?.saturday || weather?.sunday) && (
-          <div className="home-weather" aria-label="Weekend weather">
-            {weather.saturday && (
-              <span className={`weather-pill weather-${weatherTone(weather.saturday.label)}`}>
-                <strong>Sat</strong> {weather.saturday.label} · {weather.saturday.tempMaxF}°
-                {weather.saturday.precipChance >= 30
-                  ? ` · ${weather.saturday.precipChance}% rain`
-                  : ""}
-              </span>
-            )}
-            {weather.sunday && (
-              <span className={`weather-pill weather-${weatherTone(weather.sunday.label)}`}>
-                <strong>Sun</strong> {weather.sunday.label} · {weather.sunday.tempMaxF}°
-                {weather.sunday.precipChance >= 30
-                  ? ` · ${weather.sunday.precipChance}% rain`
-                  : ""}
-              </span>
-            )}
-          </div>
-        )}
-
-        <div className="home-prefs" role="group" aria-label="Family preferences">
-          <span className="filter-label">Interests + constraints</span>
-          <div className="pref-chips">
-            {plannerPreferenceOptions.map((option) => {
-              const active = preferences.includes(option.id);
-              return (
-                <button
-                  key={option.id}
-                  className={active ? "pref-chip active" : "pref-chip"}
-                  title={option.hint}
-                  onClick={() =>
-                    setPreferences((current) =>
-                      active
-                        ? current.filter((p) => p !== option.id)
-                        : [...current, option.id],
-                    )
-                  }
-                >
-                  {active ? "✓ " : ""}
-                  {option.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="home-vibes" role="group" aria-label="Pick a vibe">
-          {vibeOptions.map(([value, label]) => (
-            <button
-              key={value}
-              className="home-vibe-card"
-              disabled={homeBusy}
-              onClick={() => selectVibeFromHome(value)}
-            >
-              <strong>{label}</strong>
-              <span>{vibeBlurb(value)}</span>
-            </button>
-          ))}
-        </div>
-
-        {homeBusy && (
-          <p className="home-status">Building your plan…</p>
-        )}
-        {homeError && (
-          <p className="home-status error">{homeError}</p>
-        )}
-
-        {weekendEvents.length > 0 && (
-          <section className="home-events" aria-label="Weekend events">
-            <div className="home-events-head">
-              <h2>This weekend</h2>
-              <p>
-                {weekendEvents.length} family program
-                {weekendEvents.length === 1 ? "" : "s"}
-                {ageBand !== "any" ? ` for ${ageBandLabels[ageBand].toLowerCase()}` : ""}
-                {inferredGeo?.city ? ` near ${inferredGeo.city}` : ""}
-                . Times vary by venue — tap through to confirm.
-              </p>
-              <a className="home-events-guide-link" href={weekendGuideHref}>
-                Read the weekend guide
-              </a>
-            </div>
-            <ul className="home-events-list">
-              {weekendEvents.slice(0, 6).map((event) => (
-                <li
-                  key={event.id}
-                  className={`home-event-card cat-${event.category.toLowerCase()}`}
-                >
-                  <a href={event.url} target="_blank" rel="noreferrer">
-                    <span className="event-cat-chip">{event.category}</span>
-                    <strong>{event.title}</strong>
-                    <span className="home-event-meta">
-                      {eventWhenLabel(event)}
-                      {" · "}
-                      {event.ageBands
-                        .map((b) => ageBandLabels[b].split(" ")[0])
-                        .join(", ")}
-                    </span>
-                    <span className="home-event-venue">
-                      {event.venue} · {event.city}
-                    </span>
-                  </a>
-                  {event.slug && (
-                    <a
-                      className="home-event-details"
-                      href={buildAppHash("event", null, event.slug)}
-                    >
-                      View details →
-                    </a>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-
-        <div className="home-escape">
-          <button className="text-button" onClick={() => setView("browse")}>
-            Browse all spots →
-          </button>
-        </div>
-      </main>
-      ) : view === "browse" ? (
+      {view === "browse" ? (
       <main className="browse-viewport">
         {/* ── Full-bleed map (background layer) ─────────────────────── */}
         <div className="map-shell">
@@ -5328,14 +4509,6 @@ function App({ metro }: AppProps) {
 
               {activePlan.summary && (
                 <p className="plan-ai-summary">{activePlan.summary}</p>
-              )}
-              {swapBusyStopId && (
-                <p className="plan-ai-summary">Swapping with AI…</p>
-              )}
-              {swapError && !swapBusyStopId && (
-                <p className="plan-ai-summary" style={{ borderLeftColor: "var(--coral)" }}>
-                  {swapError}
-                </p>
               )}
               {activePlan.rationale && activePlan.rationale.length > 0 && (
                 <ul className="plan-rationale">
