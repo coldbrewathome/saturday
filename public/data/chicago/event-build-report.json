@@ -1,43 +1,18 @@
 {
   "schemaVersion": 1,
   "metroId": "chicago",
-  "generatedAt": "2026-05-28T02:55:55.312Z",
+  "generatedAt": "2026-06-02T03:29:12.199Z",
   "registryPath": "data/event-sources-chicago.json",
   "outputPath": "public/data/chicago/events.json",
-  "eventCount": 87,
-  "adultsEventCount": 32,
+  "eventCount": 189,
+  "adultsEventCount": 130,
   "sourceCount": 15,
-  "liveEventCount": 87,
+  "liveEventCount": 189,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 10,
+  "operatorAlertCount": 9,
   "errors": [],
   "operatorAlerts": [
-    {
-      "severity": "critical",
-      "metroId": "chicago",
-      "sourceId": "ticketmaster-chicago-family",
-      "sourceName": "Ticketmaster Chicago Family Events",
-      "sourceType": "ticketmaster",
-      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-28T02:55:55.312Z",
-      "fetches": [
-        {
-          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
-        }
-      ]
-    },
     {
       "severity": "critical",
       "metroId": "chicago",
@@ -53,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-28T02:55:55.312Z",
+      "fetchedAt": "2026-06-02T03:29:12.199Z",
       "fetches": [
         {
           "url": "https://lcfair.com/",
@@ -78,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-28T02:55:55.312Z",
+      "fetchedAt": "2026-06-02T03:29:12.199Z",
       "fetches": [
         {
           "url": "https://metrochicago.com/shows/",
@@ -103,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-28T02:55:55.312Z",
+      "fetchedAt": "2026-06-02T03:29:12.199Z",
       "fetches": [
         {
           "url": "https://www.emptybottle.com/events/",
@@ -128,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-28T02:55:55.312Z",
+      "fetchedAt": "2026-06-02T03:29:12.199Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
@@ -153,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-28T02:55:55.312Z",
+      "fetchedAt": "2026-06-02T03:29:12.199Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
@@ -178,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-28T02:55:55.312Z",
+      "fetchedAt": "2026-06-02T03:29:12.199Z",
       "fetches": [
         {
           "url": "https://www.thaliahallchicago.com/events",
@@ -203,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-28T02:55:55.312Z",
+      "fetchedAt": "2026-06-02T03:29:12.199Z",
       "fetches": [
         {
           "url": "https://www.secondcity.com/shows/chicago",
@@ -228,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-28T02:55:55.312Z",
+      "fetchedAt": "2026-06-02T03:29:12.199Z",
       "fetches": [
         {
           "url": "https://chicago.zanies.com/events",
@@ -253,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-28T02:55:55.312Z",
+      "fetchedAt": "2026-06-02T03:29:12.199Z",
       "fetches": [
         {
           "url": "https://www.hideoutchicago.com/events",
@@ -301,9 +276,9 @@
       "metroId": "chicago",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 31,
+      "liveEvents": 35,
       "fallbackEvents": 0,
-      "eventCount": 31,
+      "eventCount": 35,
       "fetches": [
         {
           "url": "https://www.chicagoparkdistrict.com/events?field_event_category_target_id=766&field_location_target_id=All&field_community_area_target_id=All&field_zip_code_target_id=All&title=&field_date_value=&field_age_range_target_id=All",
@@ -350,7 +325,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 24,
+      "rejectedLiveEvents": 20,
       "extractedEvents": 55,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -364,9 +339,9 @@
       "metroId": "chicago",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 36,
+      "liveEvents": 34,
       "fallbackEvents": 0,
-      "eventCount": 36,
+      "eventCount": 34,
       "fetches": [
         {
           "url": "https://www.fieldmuseum.org/our-events",
@@ -377,8 +352,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; charset=utf-8",
-      "rejectedLiveEvents": 40,
-      "extractedEvents": 76,
+      "rejectedLiveEvents": 41,
+      "extractedEvents": 75,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -418,21 +393,21 @@
       "metroId": "chicago",
       "category": "Ticketed",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 100,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 100,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
+          "contentType": "application/json; source=ticketmaster; events=100; queries=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=ticketmaster; events=0; queries=1",
+      "contentType": "application/json; source=ticketmaster; events=100; queries=1",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "extractedEvents": 100,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

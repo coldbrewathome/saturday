@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "dallas-fort-worth",
-  "generatedAt": "2026-05-28T02:57:18.599Z",
+  "generatedAt": "2026-06-02T03:30:34.875Z",
   "registryPath": "data/event-sources-dallas-fort-worth.json",
   "outputPath": "public/data/dallas-fort-worth/events.json",
-  "eventCount": 63,
-  "adultsEventCount": 7,
+  "eventCount": 171,
+  "adultsEventCount": 102,
   "sourceCount": 12,
-  "liveEventCount": 64,
+  "liveEventCount": 172,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
   "operatorAlertCount": 7,
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-28T02:57:18.599Z",
+      "fetchedAt": "2026-06-02T03:30:34.875Z",
       "fetches": [
         {
           "url": "https://bigtex.com/",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-28T02:57:18.599Z",
+      "fetchedAt": "2026-06-02T03:30:34.875Z",
       "fetches": [
         {
           "url": "https://www.treesdallas.com/events",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-28T02:57:18.599Z",
+      "fetchedAt": "2026-06-02T03:30:34.875Z",
       "fetches": [
         {
           "url": "https://www.thefactoryindeepellum.com/events",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-28T02:57:18.599Z",
+      "fetchedAt": "2026-06-02T03:30:34.875Z",
       "fetches": [
         {
           "url": "https://www.daboredada.com/events",
@@ -127,7 +127,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-28T02:57:18.599Z",
+      "fetchedAt": "2026-06-02T03:30:34.875Z",
       "fetches": [
         {
           "url": "https://www.tulipsftw.com/events",
@@ -152,7 +152,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-28T02:57:18.599Z",
+      "fetchedAt": "2026-06-02T03:30:34.875Z",
       "fetches": [
         {
           "url": "https://dallascomedyclub.com/shows/",
@@ -176,7 +176,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-05-28T02:57:18.599Z",
+      "fetchedAt": "2026-06-02T03:30:34.875Z",
       "fetches": [
         {
           "url": "https://www.hyenascomedynightclub.com/calendar",
@@ -224,9 +224,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 7,
+      "liveEvents": 8,
       "fallbackEvents": 0,
-      "eventCount": 7,
+      "eventCount": 8,
       "fetches": [
         {
           "url": "https://www.dallasparks.org/RSSFeed.aspx?ModID=58&CID=Main-Calendar-14",
@@ -238,7 +238,7 @@
       "httpStatus": 200,
       "contentType": "text/xml; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 7,
+      "extractedEvents": 8,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -278,21 +278,21 @@
       "metroId": "dallas-fort-worth",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 43,
+      "liveEvents": 55,
       "fallbackEvents": 0,
-      "eventCount": 43,
+      "eventCount": 55,
       "fetches": [
         {
           "url": "https://www.dallaszoo.com/dallas-zoo-events/calendar/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; source=dallas-zoo-ajax; pages=6"
+          "contentType": "text/html; source=dallas-zoo-ajax; pages=7"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; source=dallas-zoo-ajax; pages=6",
-      "rejectedLiveEvents": 8,
-      "extractedEvents": 51,
+      "contentType": "text/html; source=dallas-zoo-ajax; pages=7",
+      "rejectedLiveEvents": 9,
+      "extractedEvents": 64,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -305,21 +305,21 @@
       "metroId": "dallas-fort-worth",
       "category": "Ticketed",
       "status": "ok",
-      "liveEvents": 5,
+      "liveEvents": 100,
       "fallbackEvents": 0,
-      "eventCount": 5,
+      "eventCount": 100,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=5; queries=1"
+          "contentType": "application/json; source=ticketmaster; events=100; queries=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=ticketmaster; events=5; queries=1",
+      "contentType": "application/json; source=ticketmaster; events=100; queries=1",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 5,
+      "extractedEvents": 100,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
