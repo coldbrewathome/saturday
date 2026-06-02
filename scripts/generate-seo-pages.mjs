@@ -54,6 +54,21 @@ const OG_IMAGE = envValue("VITE_APP_OG_IMAGE", `${SITE}/og-image.png`);
 const POLLS_API = envValue("VITE_POLLS_API").replace(/\/$/, "");
 const GOOGLE_CLIENT_ID = envValue("VITE_GOOGLE_CLIENT_ID");
 const MAX_SPOT_PAGES_PER_METRO = Number(process.env.SEO_MAX_SPOT_PAGES_PER_METRO || 600);
+// Cloudflare Pages caps a deployment at 20k files. As the event dataset grows
+// (big metros have thousands of mostly-recurring instances in the 45-day
+// window), uncapped event pages blow that. Keep the soonest-N upcoming events
+// per metro. Capped-out *current* events keep their in-app #/event/<slug>
+// route (served by the SPA shell); they just lack a prerendered page and are
+// excluded from the sitemap — they are NOT mislabeled as "ended" (see caller).
+const MAX_EVENT_PAGES_PER_METRO = Number(process.env.SEO_MAX_EVENT_PAGES_PER_METRO || 800);
+
+function capEventsForPages(events) {
+  if (events.length <= MAX_EVENT_PAGES_PER_METRO) return events;
+  const FAR = "9999"; // undated (recurring) events sort last → dropped first
+  return [...events]
+    .sort((a, b) => (a.startDateTime || FAR).localeCompare(b.startDateTime || FAR))
+    .slice(0, MAX_EVENT_PAGES_PER_METRO);
+}
 const SEO_PINNED_PATHS = readJson(path.join(ROOT, "data", "seo-pinned-paths.json")) || {};
 const FREE_CATEGORIES = new Set(["Library", "Park"]);
 function eventLikelyFree(event) {
@@ -492,7 +507,14 @@ for (const metro of metroConfig.metros) {
   const citySlugsPre = getGeneratedCitySlugs(spots, events);
 
   const spotSlugs = generateSpotPages(spots, spotSlugLookup, citySlugsPre);
-  const eventSlugs = generateEventPages(events, eventsDoc?.generatedAt, eventSlugLookup, citySlugsPre);
+  // Full set of current-dataset slugs — used to suppress "ended" stubs so a
+  // capped-out *live* event isn't falsely stubbed (it just has no page).
+  const allCurrentEventSlugs = new Set();
+  for (const ev of events) {
+    const s = eventSlugLookup.get(ev);
+    if (s) allCurrentEventSlugs.add(s);
+  }
+  const eventSlugs = generateEventPages(capEventsForPages(events), eventsDoc?.generatedAt, eventSlugLookup, citySlugsPre);
   const citySlugs = generateCityPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs);
   const categorySlugs = generateCategoryPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs);
   const wroteThisWeekend = generateThisWeekendPage(events, eventSlugLookup);
@@ -500,7 +522,7 @@ for (const metro of metroConfig.metros) {
   generateMetroAppShellPage(metro, categorySlugs);
 
   const slugHistory = readEventSlugHistory(metro);
-  totalEndedEventStubs += generateEndedEventStubs(slugHistory, eventSlugs);
+  totalEndedEventStubs += generateEndedEventStubs(slugHistory, allCurrentEventSlugs);
 
   totalSpotPages += spotSlugs.size;
   totalEventPages += eventSlugs.size;
