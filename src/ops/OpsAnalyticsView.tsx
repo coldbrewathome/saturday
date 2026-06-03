@@ -53,9 +53,11 @@ export type CardSpec = {
  */
 export const CARD_SPECS: readonly CardSpec[] = [
   { metric: "app_open", label: "App opens" },
+  { metric: "plan_created", label: "Plans created" },
   { metric: "plan_shared", label: "Plans shared" },
   { metric: "poll_viewed", label: "Plans viewed" },
   { metric: "vote_cast", label: "Votes cast" },
+  { metric: "signin_success", label: "Sign-ins" },
   { metric: "hop_now_opened", label: "Hop-me-now opens" },
 ];
 

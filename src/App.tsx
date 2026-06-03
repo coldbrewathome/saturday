@@ -1719,6 +1719,7 @@ function App({ metro }: AppProps) {
       ],
     };
     setPlans((current) => [...current, next]);
+    trackMetric("plan_created", metro.id);
     setActivePlanId(id);
     setView("plans");
   }, [events, metro.label, plans]);
@@ -2076,6 +2077,7 @@ function App({ metro }: AppProps) {
               writeSession(next);
               setSession(next);
               setSignInError(null);
+              trackMetric("signin_success", metro.id);
             } catch (error) {
               setSignInError((error as Error).message);
             }
@@ -2824,6 +2826,7 @@ function App({ metro }: AppProps) {
       createdAt: new Date().toISOString(),
     };
     setPlans((current) => [...current, next]);
+    trackMetric("plan_created", metro.id);
     setActivePlanId(id);
     setView("plans");
   }
@@ -2849,6 +2852,7 @@ function App({ metro }: AppProps) {
       source: "manual",
     };
     setPlans((current) => [...current, next]);
+    trackMetric("plan_created", metro.id);
     setActivePlanId(id);
     setView("plans");
   }
@@ -2894,6 +2898,7 @@ function App({ metro }: AppProps) {
       summary: "Built from Hop me now suggestions.",
     };
     setPlans((current) => [...current, next]);
+    trackMetric("plan_created", metro.id);
     setActivePlanId(id);
   }
 
@@ -2929,6 +2934,7 @@ function App({ metro }: AppProps) {
       source: "manual",
     };
     setPlans((current) => [...current, next]);
+    trackMetric("plan_created", metro.id);
     setActivePlanId(id);
     setView("plans");
   }
@@ -2980,6 +2986,7 @@ function App({ metro }: AppProps) {
       createdAt: new Date().toISOString(),
     };
     setPlans((current) => [...current, next]);
+    trackMetric("plan_created", metro.id);
     setActivePlanId(id);
   }
 

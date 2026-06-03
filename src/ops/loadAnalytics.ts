@@ -22,23 +22,27 @@
 export type MetricName =
   | "app_open"
   | "hop_now_opened"
+  | "plan_created"
   | "plan_shared"
   | "poll_viewed"
   | "vote_cast"
   | "weekend_guide_click"
   | "signin_prompt_shown"
   | "signin_prompt_clicked"
+  | "signin_success"
   | "newsletter_subscribed";
 
 export const METRIC_NAMES: readonly MetricName[] = [
   "app_open",
   "hop_now_opened",
+  "plan_created",
   "plan_shared",
   "poll_viewed",
   "vote_cast",
   "weekend_guide_click",
   "signin_prompt_shown",
   "signin_prompt_clicked",
+  "signin_success",
   "newsletter_subscribed",
 ];
 

@@ -1314,12 +1314,14 @@ async function sendNewsletter(
 const METRIC_NAMES = new Set([
   "app_open",
   "hop_now_opened",
+  "plan_created",
   "plan_shared",
   "poll_viewed",
   "vote_cast",
   "weekend_guide_click",
   "signin_prompt_shown",
   "signin_prompt_clicked",
+  "signin_success",
   "newsletter_subscribed",
 ]);
 const METRIC_TTL_SECONDS = 60 * 60 * 24 * 120; // ~120 days
