@@ -24,6 +24,7 @@ export type MetricName =
   | "hop_now_opened"
   | "plan_created"
   | "plan_shared"
+  | "item_shared"
   | "poll_viewed"
   | "vote_cast"
   | "weekend_guide_click"
@@ -37,6 +38,7 @@ export const METRIC_NAMES: readonly MetricName[] = [
   "hop_now_opened",
   "plan_created",
   "plan_shared",
+  "item_shared",
   "poll_viewed",
   "vote_cast",
   "weekend_guide_click",

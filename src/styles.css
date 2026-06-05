@@ -906,7 +906,34 @@ h3 {
 
 /* Event-detail "Add to plan" CTA — converts detail-view discovery into a plan. */
 .event-detail-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
   margin: 18px 0 4px;
+}
+
+.event-detail-share-cta {
+  align-items: center;
+  background: var(--surface-strong);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  cursor: pointer;
+  display: inline-flex;
+  font: 700 0.95rem/1 var(--font-ui);
+  gap: 8px;
+  padding: 12px 18px;
+}
+
+.event-detail-share-cta:hover {
+  border-color: var(--accent);
+  color: var(--accent-strong, var(--accent));
+}
+
+.event-detail-share-cta svg {
+  height: 18px;
+  width: 18px;
 }
 
 .event-detail-plan-cta {

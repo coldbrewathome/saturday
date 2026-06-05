@@ -1316,6 +1316,7 @@ const METRIC_NAMES = new Set([
   "hop_now_opened",
   "plan_created",
   "plan_shared",
+  "item_shared",
   "poll_viewed",
   "vote_cast",
   "weekend_guide_click",

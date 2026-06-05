@@ -1362,6 +1362,8 @@ function App({ metro }: AppProps) {
 
   const [query, setQuery] = useState("");
   const [activeTheme, setActiveTheme] = useState<string | null>(null);
+  // Transient "Copied!" feedback for the one-tap event share (desktop fallback).
+  const [shareCopiedUrl, setShareCopiedUrl] = useState<string | null>(null);
   // Phase 2 personalization: saved interests (cross-metro, so a global key,
   // not metroStorageKey) + a "For you" view that filters to them.
   const [preferredThemes, setPreferredThemes] =
@@ -3086,6 +3088,33 @@ function App({ metro }: AppProps) {
     );
   }
 
+  // In-app deep link to an event (always resolves, unlike the prerendered
+  // page which the event-page cap may omit). EventDetailView mirrors OG meta.
+  const eventShareUrl = (slug: string) => `${shareBaseUrl}/#/event/${slug}`;
+
+  // One-tap share: native share sheet on mobile, clipboard copy elsewhere.
+  async function shareItem(title: string, url: string) {
+    trackMetric("item_shared", metro.id);
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({ title: `${title} — ${APP_BRAND}`, url });
+        return;
+      } catch (err) {
+        if ((err as Error)?.name === "AbortError") return;
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      setShareCopiedUrl(url);
+      window.setTimeout(
+        () => setShareCopiedUrl((current) => (current === url ? null : current)),
+        2000,
+      );
+    } catch {
+      // clipboard blocked — non-fatal
+    }
+  }
+
   async function sharePlan() {
     if (
       !activePlan ||
@@ -4167,6 +4196,19 @@ function App({ metro }: AppProps) {
                       );
                     })()}
                     {event.slug && (
+                      <button
+                        className="sheet-action"
+                        onClick={() =>
+                          shareItem(event.title, eventShareUrl(event.slug!))
+                        }
+                      >
+                        <Share2 aria-hidden="true" />
+                        {shareCopiedUrl === eventShareUrl(event.slug)
+                          ? "Copied!"
+                          : "Share"}
+                      </button>
+                    )}
+                    {event.slug && (
                       <a
                         className="sheet-action"
                         href={buildAppHash("event", null, event.slug)}
@@ -4449,6 +4491,9 @@ function App({ metro }: AppProps) {
           addEventToPlanOrCreate(eventId);
           setView("plans");
         }}
+        onShare={(title, slug) => shareItem(title, eventShareUrl(slug))}
+        shareCopiedUrl={shareCopiedUrl}
+        shareUrlFor={eventShareUrl}
       />
       ) : (
       <main className="plans-workspace" aria-label="Plans">

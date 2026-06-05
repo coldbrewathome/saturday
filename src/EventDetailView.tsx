@@ -9,7 +9,7 @@
 // crawlers; this effect is the cosmetic + JS-aware-share-bot fallback.
 
 import { useEffect } from "react";
-import { Check, ChevronLeft, Plus } from "lucide-react";
+import { Check, ChevronLeft, Plus, Share2 } from "lucide-react";
 import type { FamilyEvent } from "./App";
 import type { MetroConfig } from "./metros";
 import { APP_BRAND } from "./appConfig";
@@ -25,6 +25,12 @@ type Props = {
   planEventIds: string[];
   /** Add this event to the active plan, or seed a new plan with it. */
   onAddToPlan: (eventId: string) => void;
+  /** One-tap share (native share sheet / clipboard) for this event. */
+  onShare: (title: string, slug: string) => void;
+  /** URL most recently copied, so the button can flash "Copied!". */
+  shareCopiedUrl: string | null;
+  /** Builds the share URL for a slug (to match against shareCopiedUrl). */
+  shareUrlFor: (slug: string) => string;
 };
 
 function formatStart(value?: string | null): string | null {
@@ -181,9 +187,15 @@ export default function EventDetailView({
   activePlanName,
   planEventIds,
   onAddToPlan,
+  onShare,
+  shareCopiedUrl,
+  shareUrlFor,
 }: Props) {
   const event = slug ? events.find((e) => e.slug === slug) : null;
   const inPlan = event ? planEventIds.includes(event.id) : false;
+  const shareCopied = Boolean(
+    event?.slug && shareCopiedUrl === shareUrlFor(event.slug),
+  );
 
   useEffect(() => {
     if (!event || !slug) return;
@@ -274,6 +286,15 @@ export default function EventDetailView({
                 </>
               )}
             </button>
+            {event.slug && (
+              <button
+                type="button"
+                className="event-detail-share-cta"
+                onClick={() => onShare(event.title, event.slug!)}
+              >
+                <Share2 aria-hidden="true" /> {shareCopied ? "Copied!" : "Share"}
+              </button>
+            )}
           </div>
 
           {event.url && (
