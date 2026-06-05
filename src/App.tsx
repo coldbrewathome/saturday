@@ -1100,17 +1100,25 @@ type AppRoute = {
   view: "browse" | "plans" | "event";
   planId: string | null;
   eventSlug: string | null;
+  /** Spot to open on the map (from a shared `#/spot/<id>` deep link). */
+  focusSpotId: string | null;
 };
 
 function readAppRoute(): AppRoute {
+  const browse: AppRoute = {
+    view: "browse",
+    planId: null,
+    eventSlug: null,
+    focusSpotId: null,
+  };
   if (typeof window === "undefined") {
-    return { view: "browse", planId: null, eventSlug: null };
+    return browse;
   }
   const hash = window.location.hash;
   if (hash.startsWith("#/p/")) {
     // Poll route — main.tsx handles rendering. App still mounts when the user
     // navigates back, so default to browse.
-    return { view: "browse", planId: null, eventSlug: null };
+    return browse;
   }
   // Per ADR-04: the SPA hash route is `#/event/<slug>`. The prerendered SEO
   // path `/<metro>/events/<slug>/` is a sibling surface, not handled here.
@@ -1120,7 +1128,15 @@ function readAppRoute(): AppRoute {
       view: "event",
       planId: null,
       eventSlug: decodeURIComponent(eventMatch[1]),
+      focusSpotId: null,
     };
+  }
+  // Shareable spot deep link: opens the spot's map sheet (one-shot — the hash
+  // then normalizes to #/browse). Uses the stable spot id, so it resolves for
+  // any spot regardless of the prerendered spot-page cap.
+  const spotMatch = hash.match(/^#\/spot\/(.+)$/);
+  if (spotMatch) {
+    return { ...browse, focusSpotId: decodeURIComponent(spotMatch[1]) };
   }
   const planMatch = hash.match(/^#\/plans\/(.+)$/);
   if (planMatch) {
@@ -1128,15 +1144,13 @@ function readAppRoute(): AppRoute {
       view: "plans",
       planId: decodeURIComponent(planMatch[1]),
       eventSlug: null,
+      focusSpotId: null,
     };
   }
   if (hash === "#/plans") {
-    return { view: "plans", planId: null, eventSlug: null };
+    return { ...browse, view: "plans" };
   }
-  if (hash === "#/browse" || hash === "" || hash === "#/" || hash === "#") {
-    return { view: "browse", planId: null, eventSlug: null };
-  }
-  return { view: "browse", planId: null, eventSlug: null };
+  return browse;
 }
 
 function buildAppHash(
@@ -1437,6 +1451,10 @@ function App({ metro }: AppProps) {
   );
   const [activeEventSlug, setActiveEventSlug] = useState<string | null>(
     initialRoute.eventSlug,
+  );
+  // Spot id from a `#/spot/<id>` deep link, consumed once spots have loaded.
+  const [pendingSpotFocusId, setPendingSpotFocusId] = useState<string | null>(
+    initialRoute.focusSpotId,
   );
   const [addStopChoice, setAddStopChoice] = useState<string>("");
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -1860,6 +1878,7 @@ function App({ metro }: AppProps) {
       setView(route.view);
       setActivePlanId(route.planId);
       setActiveEventSlug(route.eventSlug);
+      if (route.focusSpotId) setPendingSpotFocusId(route.focusSpotId);
     }
     window.addEventListener("popstate", onPop);
     window.addEventListener("hashchange", onPop);
@@ -2166,6 +2185,17 @@ function App({ metro }: AppProps) {
     () => [...remoteSpots, ...curatedSpots, ...customSpots],
     [customSpots, curatedSpots, remoteSpots],
   );
+
+  // Consume a `#/spot/<id>` deep link once the spot has loaded: open its map
+  // sheet. One-shot — clears so later interactions aren't overridden.
+  useEffect(() => {
+    if (!pendingSpotFocusId) return;
+    const spot = allSpots.find((s) => s.id === pendingSpotFocusId);
+    if (!spot) return; // spots still loading
+    setMapSelection({ kind: "spot", id: spot.id });
+    setView("browse");
+    setPendingSpotFocusId(null);
+  }, [pendingSpotFocusId, allSpots]);
 
   const targetDateObj = useMemo(() => parseIsoDate(targetDate), [targetDate]);
   const targetDayOfWeek = targetDateObj.getDay();
@@ -3091,6 +3121,10 @@ function App({ metro }: AppProps) {
   // In-app deep link to an event (always resolves, unlike the prerendered
   // page which the event-page cap may omit). EventDetailView mirrors OG meta.
   const eventShareUrl = (slug: string) => `${shareBaseUrl}/#/event/${slug}`;
+  // Spot deep link by stable id — always resolves (opens the map sheet),
+  // unlike the prerendered /spot/<slug>/ page which the spot-page cap may omit.
+  const spotShareUrl = (id: string) =>
+    `${shareBaseUrl}/#/spot/${encodeURIComponent(id)}`;
 
   // One-tap share: native share sheet on mobile, clipboard copy elsewhere.
   async function shareItem(title: string, url: string) {
@@ -4112,6 +4146,17 @@ function App({ metro }: AppProps) {
                         >
                           <Check aria-hidden="true" />
                           {visited ? "Visited" : "Mark visited"}
+                        </button>
+                        <button
+                          className="sheet-action"
+                          onClick={() =>
+                            shareItem(spot.name, spotShareUrl(spot.id))
+                          }
+                        >
+                          <Share2 aria-hidden="true" />
+                          {shareCopiedUrl === spotShareUrl(spot.id)
+                            ? "Copied!"
+                            : "Share"}
                         </button>
                         {spot.website && (
                           <a
