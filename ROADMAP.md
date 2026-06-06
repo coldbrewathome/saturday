@@ -1,6 +1,6 @@
 # Roadmap
 
-_Last updated: 2026-05-29_ (tick 33)
+_Last updated: 2026-06-06_ (tick 34)
 
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
@@ -23,6 +23,8 @@ _Candidates and ideas. Unordered. No commitment._
 ## Done
 _Recently shipped (last ~10 items). Older items live in [CHANGELOG.md](CHANGELOG.md)._
 
+- 2026-06-06 · **Mosey gets its own Google sign-in (per-brand OAuth client)** — the shared Worker (`saturday-polls`) verifies sign-in for both apps but enforced a single `aud`, so Mosey reused FamHop's OAuth client and showed FamHop branding on the consent popup. Gave Mosey its own GCP project + Web client (`1023251555604-…`); `googleAuth()` now accepts either audience via a new `GOOGLE_CLIENT_ID_ADULTS` var, and the adults build mints tokens with its own `VITE_GOOGLE_CLIENT_ID`. Worker + Mosey app deployed; verified live on trymosey.com (`gsi/button` 200 with the new client, 0 origin errors). FamHop untouched. Design + setup runbook in `docs/decisions/06-google-oauth-dual-client.md`. _(Consent screen is Mosey-branded only because the client lives in a separate project — per-client wouldn't suffice.)_
+- 2026-06-06 · **Weekend event refresh (all 16 metros)** — daily-scan re-ingest + featured plans + coverage; Honolulu kept prior events (live fetch below min-5), Austin fragile but above threshold. Data feed + both apps deployed. _(Noted: `ingest:events:all` aborts the whole loop on one metro's validation failure — Honolulu's error skipped Austin + coverage until re-run individually. Candidate for a tolerant-continue fix.)_
 - 2026-06-04 · **Shareable spots (#/spot/<id> deep link) + LA/NYC plan links** — minted 4 real `#/p/` links for the LA/NYC curated plans (7 total now). Made spots one-tap shareable via a reliable in-app `#/spot/<id>` route (opens the map sheet; chosen over `/spot/<slug>/` which would 404 past the 600-spot cap) + a Share button on the spot sheet (reuses `item_shared`). Verified live. App-only.
 - 2026-06-04 · **Growth seeding: share links, LA/NYC plans, one-tap event share** — (a) minted 3 real `#/p/` poll links for the curated Bay Area plans (ready to post). (b) Hand-curated LA + NYC editor's-pick plans from verified iconic spots (Exposition Park triple-museum, Griffith/Kidspace; AMNH+Central Park, Brooklyn Children's+Prospect Park Zoo) — quality-gated against generic OSM venues. (c) **One-tap event share** (the #1 funnel gap: 0 shares) — Share button on the event sheet + detail view (native share / clipboard), sharing the always-resolving in-app deep link; new `item_shared` metric + "Events shared" ops card. Spots deferred (need slugs in data). Deployed worker + data + both apps; verified live.
 - 2026-06-02 · **Funnel metrics: plan_created + signin_success** — investigation of live counters showed the conversion funnel dies somewhere between opens and `plan_shared` (0 shares / votes / signups over 14 days) but couldn't say *where*: no "plan created" or "actually signed in" events existed. Added `plan_created` (all 6 new-plan paths) + `signin_success` (sign-in completion) to the worker allowlist, client `MetricName`, and the `/ops/analytics` cards (Plans created, Sign-ins). Now the funnel shows whether people build-but-don't-share vs never build. Deployed worker + both apps.
