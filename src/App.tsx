@@ -1150,6 +1150,19 @@ function readAppRoute(): AppRoute {
   if (hash === "#/plans") {
     return { ...browse, view: "plans" };
   }
+  // Prerendered event SEO pages are path-based (/<metro>/event/<slug>/). A human
+  // with JS who lands there from search or a shared link should open the in-app
+  // event detail, not bounce to browse. The path slug equals event.slug, and the
+  // metro is resolved from the same path, so EventDetailView finds the event.
+  const eventPathMatch = window.location.pathname.match(/\/event\/([^/]+)\/?$/);
+  if (eventPathMatch) {
+    return {
+      view: "event",
+      planId: null,
+      eventSlug: decodeURIComponent(eventPathMatch[1]),
+      focusSpotId: null,
+    };
+  }
   return browse;
 }
 
