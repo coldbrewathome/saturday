@@ -627,9 +627,16 @@ for (const metro of metroConfig.metros) {
   const spotsDoc = readJson(metroDataPath(metro, "spots"));
   const eventsDoc = readJson(metroDataPath(metro, "events"));
 
-  const spots = (Array.isArray(spotsDoc?.spots) ? spotsDoc.spots : []).filter(
-    audienceVisible,
-  );
+  // Merge the enrichment sidecar (Google ratings, etc.) by spot id — same as the
+  // runtime app — so spot pages can emit aggregateRating rich snippets.
+  const enrichmentDoc = readJson(metroDataPath(metro, "enrichment"));
+  const enrichmentEntries = enrichmentDoc?.entries ?? {};
+  const spots = (Array.isArray(spotsDoc?.spots) ? spotsDoc.spots : [])
+    .filter(audienceVisible)
+    .map((spot) => {
+      const extra = enrichmentEntries[spot.id];
+      return extra ? { ...spot, ...extra } : spot;
+    });
   const events = (Array.isArray(eventsDoc?.events) ? eventsDoc.events : []).filter(
     audienceVisible,
   );
@@ -1534,6 +1541,18 @@ function buildSpotJsonLd(spot, canonical) {
     };
   }
   if (spot.openingHours) node.openingHours = spot.openingHours;
+  // Google rating → aggregateRating rich snippet. Require ≥25 reviews (same
+  // trust threshold the planner uses) so we only surface stable ratings.
+  if (
+    typeof spot.googleRating === "number" &&
+    (spot.googleRatingCount ?? 0) >= 25
+  ) {
+    node.aggregateRating = {
+      "@type": "AggregateRating",
+      ratingValue: Number(spot.googleRating.toFixed(1)),
+      reviewCount: spot.googleRatingCount,
+    };
+  }
   if (spot.website) node.sameAs = [spot.website];
   if (spot.wikidataId) {
     node.sameAs = [...(node.sameAs ?? []), `https://www.wikidata.org/entity/${spot.wikidataId}`];
