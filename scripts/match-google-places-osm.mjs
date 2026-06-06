@@ -39,12 +39,30 @@ import {
   metroDataFile,
   selectedMetroFromArgs,
 } from "./metroConfig.mjs";
+import {
+  createUsageMeter,
+  printUsage,
+  FREE_CAPS,
+} from "./lib/places-usage.mjs";
+
+// Load GOOGLE_PLACES_API_KEY from .env.local if not already in the environment
+// (gitignored; keeps the key out of the shell history / git).
+if (!process.env.GOOGLE_PLACES_API_KEY && existsSync(".env.local")) {
+  for (const line of readFileSync(".env.local", "utf8").split(/\r?\n/)) {
+    const m = line.match(/^GOOGLE_PLACES_API_KEY=(.*)$/);
+    if (m) process.env.GOOGLE_PLACES_API_KEY = m[1].trim().replace(/^["']|["']$/g, "");
+  }
+}
 
 const apiKey = process.env.GOOGLE_PLACES_API_KEY;
 if (!apiKey) {
   console.error("Missing GOOGLE_PLACES_API_KEY env var.");
   process.exit(1);
 }
+
+// Free-tier spend guard. The meter records every billable call to
+// data/places-usage.json and refuses to exceed the monthly free caps.
+const meter = createUsageMeter();
 
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
@@ -98,14 +116,34 @@ const candidates = spots
   .filter((spot) => !merge || !sidecar.entries[spot.id])
   .sort((left, right) => (right.friendScore ?? 0) - (left.friendScore ?? 0));
 
-const toProcess = candidates.slice(0, Math.max(0, top));
+// Cap this run to the remaining monthly free budget so we never spend. Worst
+// case a spot costs up to 3 Text Search + 1 Place Details; Place Details
+// (1,000/mo) is the binding SKU.
+const remDetails = meter.remaining("placeDetails");
+const remSearch = meter.remaining("textSearch");
+const safeBatch = Math.max(
+  0,
+  Math.min(Math.max(0, top), remDetails, Math.floor(remSearch / 3)),
+);
+if (safeBatch < top) {
+  console.log(
+    `  Capping to ${safeBatch} spots to stay free ` +
+      `(${remDetails}/${FREE_CAPS.placeDetails} Place Details + ${remSearch}/${FREE_CAPS.textSearch} Text Search left this month).`,
+  );
+}
+const toProcess = candidates.slice(0, safeBatch);
+if (toProcess.length === 0) {
+  console.log("  Free-tier budget exhausted for this month — nothing to do.");
+  printUsage(meter.month);
+  return;
+}
 
 console.log(
   `Matching ${toProcess.length} of ${candidates.length} candidate spots ` +
     `(dataset: ${spots.length}, top=${top}, includeAll=${includeAll}, merge=${merge}).`,
 );
 
-const client = createPlacesClient(apiKey);
+const client = createPlacesClient(apiKey, meter);
 
 const report = {
   generatedAt: new Date().toISOString(),
@@ -133,6 +171,8 @@ for (let i = 0; i < toProcess.length; i += 1) {
     );
     if (!match || !match.id) {
       report.unmatched += 1;
+      // Mark as checked so --merge skips it next run (no re-spending search).
+      sidecar.entries[spot.id] = { googlePlaceId: null, noMatch: true };
       report.entries.push({ id: spot.id, query, status: "no-match" });
       console.log(`[${i + 1}/${toProcess.length}] ✗ no match  ${spot.id}`);
       continue;
@@ -179,6 +219,10 @@ for (let i = 0; i < toProcess.length; i += 1) {
       `[${i + 1}/${toProcess.length}] ✓ ${spot.id}  →  ${match.displayName?.text || match.id}`,
     );
   } catch (error) {
+    if (error.isBudget) {
+      console.warn(`  ${error.message} Stopping run and saving progress.`);
+      break;
+    }
     report.errors += 1;
     report.entries.push({
       id: spot.id,
@@ -203,6 +247,7 @@ if (!dryRun) {
 
   writeFileSync(reportPath, JSON.stringify(report, null, 2) + "\n");
   console.log(`Report written to ${reportPath}`);
+  printUsage(meter.month);
   console.log(
     `Summary: ${report.matched} matched, ${report.unmatched} unmatched, ${report.closed} closed, ${report.errors} errors`,
   );

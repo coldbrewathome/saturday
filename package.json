@@ -24,6 +24,7 @@
     "build:adults": "vite build --mode adults && SEO_MAX_ENDED_STUBS=0 node scripts/generate-seo-pages.mjs --mode adults",
     "deploy:adults": "npm run build:adults && npx wrangler pages deploy dist --project-name=nighthop --branch=main --commit-dirty=true",
     "match:places": "node scripts/match-google-places.mjs",
+    "places:usage": "node scripts/places-usage.mjs",
     "match:places:osm": "node scripts/match-google-places-osm.mjs",
     "validate:data": "node scripts/validate-data.mjs",
     "validate:data:all": "node scripts/validate-data.mjs --all",

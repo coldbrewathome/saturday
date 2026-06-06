@@ -186,7 +186,11 @@ const DETAIL_FIELDS = [
   "photos",
 ].join(",");
 
-export function createPlacesClient(apiKey) {
+export function createPlacesClient(apiKey, meter) {
+  // meter (optional): a places-usage meter. record(sku) is called before every
+  // billable request and throws BudgetError if it would exceed the free cap, so
+  // the client physically cannot make a call that costs money.
+  const charge = (sku) => meter?.record(sku);
   if (!apiKey) throw new Error("createPlacesClient requires apiKey");
 
   async function searchTextOnce(query, biasCenter, opts = {}) {
@@ -211,6 +215,7 @@ export function createPlacesClient(apiKey) {
         },
       };
     }
+    charge("textSearch");
     const response = await fetch(TEXT_SEARCH_URL, {
       method: "POST",
       headers: {
@@ -248,6 +253,7 @@ export function createPlacesClient(apiKey) {
   }
 
   async function placeDetails(placeId) {
+    charge("placeDetails");
     const response = await fetch(PLACE_DETAILS_URL(placeId), {
       method: "GET",
       headers: {
@@ -275,6 +281,7 @@ export function createPlacesClient(apiKey) {
       skipHttpRedirect: "true",
     });
     const url = `https://places.googleapis.com/v1/${photo.name}/media?${params}`;
+    charge("photos");
     const response = await fetch(url, {
       headers: { "X-Goog-Api-Key": apiKey },
     });
