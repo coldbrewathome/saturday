@@ -1272,10 +1272,10 @@ function App({ metro }: AppProps) {
   const shareBaseUrl = useMemo(() => metroShareBase(metro), [metro]);
   useEffect(() => {
     const title = APP_AUDIENCE === "adults"
-      ? `${APP_BRAND} — ${metro.label} Nightlife, Bars & Live Music`
+      ? `${APP_BRAND} — Things to do in ${metro.label}`
       : `${APP_BRAND} — ${metro.label} Family Events & Kid-Friendly Spots`;
     const description = APP_AUDIENCE === "adults"
-      ? `${APP_BRAND} helps you find ${metro.label} bars, live music, comedy clubs, and late-night spots. Pick a vibe, get a 3-stop night out, and share with the crew to vote.`
+      ? `${APP_BRAND} helps you find good places to hang out in ${metro.label} — cafes, bars, parks, music, and local events. Pick a vibe, get a 3-stop hangout, and share with friends to vote.`
       : `${APP_BRAND} helps families find ${metro.label} kid-friendly spots, family events, parks, libraries, museums, and weekend plans.`;
     const canonicalUrl = new URL(metro.canonicalPath, window.location.origin)
       .toString();
