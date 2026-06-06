@@ -17,6 +17,7 @@ import {
   metroDataFile,
 } from "./metroConfig.mjs";
 import { THEMES, classifyEventThemes } from "./eventThemes.mjs";
+import { schemaTypeForGoogleType } from "./lib/placeSchemaType.mjs";
 import {
   defaultLocale,
   supportedLocales,
@@ -357,6 +358,7 @@ a:hover{text-decoration:underline}
 .card-list li a{color:var(--ink);}
 .card-list li a:hover strong{color:var(--brand);}
 .card-list li p{margin:6px 0 0;color:var(--muted);font-size:14px;}
+.cat-rating{display:inline-block;margin-top:4px;color:var(--brand-strong,var(--brand));font-weight:700;font-size:13px;}
 .guide-summary{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin:20px 0 24px;box-shadow:0 12px 30px rgba(34,34,31,.05);}
 .guide-summary h2,.guide-day h2{font-size:22px;line-height:1.25;margin:0 0 10px;}
 .guide-summary p{margin:0 0 12px;color:var(--muted);}
@@ -1515,7 +1517,9 @@ function buildSpotDetailRows(spot) {
 }
 
 function buildSpotJsonLd(spot, canonical) {
-  const placeType = mapPlaceType(spot.category);
+  // Prefer Google's precise place type (e.g. Restaurant, BarOrPub, Museum) when
+  // the spot was enriched; fall back to the coarse category map otherwise.
+  const placeType = schemaTypeForGoogleType(spot.googleType) ?? mapPlaceType(spot.category);
   const node = {
     "@context": "https://schema.org",
     "@type": placeType,
@@ -1972,10 +1976,26 @@ function generateCityPages(spotItems, eventItems, spotSlugLookup, eventSlugLooku
 function generateCategoryPages(spotItems, eventItems, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs) {
   const slugs = new Set();
 
+  // Only trust a Google rating with enough reviews to be stable (matches the
+  // planner's threshold). Drives the "best-rated" sort + the star badge.
+  const stableRating = (s) =>
+    typeof s.googleRating === "number" && (s.googleRatingCount ?? 0) >= 25;
+  const ratingBadge = (s) =>
+    stableRating(s)
+      ? ` <span class="cat-rating">★ ${s.googleRating.toFixed(1)} (${s.googleRatingCount})</span>`
+      : "";
+
   for (const cat of CATEGORY_PAGES) {
     const matchingSpots = spotItems
       .filter((s) => cat.spotMatch(s))
-      .sort((a, b) => (b.friendScore || 0) - (a.friendScore || 0))
+      .sort((a, b) => {
+        // Top-rated first (so the page reads as "best {category}"), then by
+        // friendScore for unrated venues.
+        const ra = stableRating(a) ? a.googleRating : -1;
+        const rb = stableRating(b) ? b.googleRating : -1;
+        if (rb !== ra) return rb - ra;
+        return (b.friendScore || 0) - (a.friendScore || 0);
+      })
       .slice(0, 30);
     const matchingEvents = eventItems
       .filter((e) => cat.eventMatch(e))
@@ -1985,6 +2005,8 @@ function generateCategoryPages(spotItems, eventItems, spotSlugLookup, eventSlugL
     if (matchingSpots.length + matchingEvents.length === 0) continue;
 
     const canonical = metroUrl(`category/${cat.slug}/`);
+    // High-intent, rating-led title ("best bars in {metro}" queries).
+    const pageName = `Best ${cat.label.toLowerCase()} in ${metroLabel()}`;
     const description =
       `${metroText(cat.blurb)} Browse ${matchingSpots.length} ${A.friendlyAdj}spots and ${matchingEvents.length} upcoming events on ${BRAND}.`.slice(
         0,
@@ -1992,14 +2014,14 @@ function generateCategoryPages(spotItems, eventItems, spotSlugLookup, eventSlugL
       );
 
     const spotsList = matchingSpots.length
-      ? `<section><h2>${esc(cat.label)} spots</h2><ul class="card-list">${matchingSpots
+      ? `<section><h2>Top-rated ${esc(cat.label.toLowerCase())}</h2><ul class="card-list">${matchingSpots
           .map((s) => {
             const sslug = spotSlugLookup.get(s);
             if (!sslug) return "";
             if (!spotSlugs.has(sslug)) {
-              return `<li><strong>${esc(s.name)}</strong>${s.neighborhood ? `<span> · ${esc(s.neighborhood)}</span>` : ""}</li>`;
+              return `<li><strong>${esc(s.name)}</strong>${s.neighborhood ? `<span> · ${esc(s.neighborhood)}</span>` : ""}${ratingBadge(s)}</li>`;
             }
-            return `<li><a href="${metroPath(`spot/${sslug}/`)}"><strong>${esc(s.name)}</strong>${s.neighborhood ? `<span> · ${esc(s.neighborhood)}</span>` : ""}</a>${s.note ? `<p>${esc(s.note)}</p>` : ""}</li>`;
+            return `<li><a href="${metroPath(`spot/${sslug}/`)}"><strong>${esc(s.name)}</strong>${s.neighborhood ? `<span> · ${esc(s.neighborhood)}</span>` : ""}${ratingBadge(s)}</a>${s.note ? `<p>${esc(s.note)}</p>` : ""}</li>`;
           })
           .join("")}</ul></section>`
       : "";
@@ -2030,7 +2052,7 @@ function generateCategoryPages(spotItems, eventItems, spotSlugLookup, eventSlugL
       "@type": "CollectionPage",
       "@id": `${canonical}#page`,
       url: canonical,
-      name: metroText(cat.title),
+      name: pageName,
       description,
       isPartOf: { "@id": `${metroUrl("")}#website` },
       about: {
@@ -2040,7 +2062,7 @@ function generateCategoryPages(spotItems, eventItems, spotSlugLookup, eventSlugL
     };
 
     const html = renderShell({
-      title: `${metroText(cat.title)} — ${BRAND}`,
+      title: `${pageName} — ${BRAND}`,
       description,
       canonical,
       ogImage: OG_IMAGE,
@@ -2049,7 +2071,7 @@ function generateCategoryPages(spotItems, eventItems, spotSlugLookup, eventSlugL
         { name: BRAND, url: metroUrl("") },
         { name: cat.label, url: canonical },
       ],
-      h1: metroText(cat.title),
+      h1: pageName,
       eyebrow: metroTag(),
       body,
     });

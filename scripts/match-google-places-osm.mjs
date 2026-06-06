@@ -69,6 +69,12 @@ const dryRun = args.includes("--dry-run");
 const skipPhotos = args.includes("--no-photos");
 const includeAll = args.includes("--include-all");
 const merge = args.includes("--merge");
+// Enrich the adults (Mosey) dataset (spots-adults.json) — needed for adult-only
+// venues like bars that aren't in the shared base spots. Sidecar stays shared
+// (keyed by spot id), so ratings apply to whichever app loads that spot.
+const adultsSpots = args.includes("--adults") || args.includes("--audience=adults");
+// Limit to one category (e.g. --category=Nightlife) to spend budget precisely.
+const categoryArg = args.find((a) => a.startsWith("--category="))?.split("=")[1] || null;
 const topArg = args.find((a) => a.startsWith("--top="));
 const top = topArg ? Number(topArg.split("=")[1]) : 300;
 
@@ -79,7 +85,9 @@ const metros = selection.all
   : [selection.metro || metroConfig.defaultMetro];
 
 for (const metro of metros) {
-  const inputPath = legacyMetroDataFile(metro, "spots") || metroDataFile(metro, "spots");
+  const inputPath = adultsSpots
+    ? `public/data/${metro.dataDir || metro.id}/spots-adults.json`
+    : legacyMetroDataFile(metro, "spots") || metroDataFile(metro, "spots");
   const sidecarPath = legacyMetroDataFile(metro, "enrichment") || metroDataFile(metro, "enrichment");
   const reportPath = sidecarPath.replace(/\.json$/, "-report.json");
   console.log(`[${metro.id}] enriching ${inputPath} → ${sidecarPath}`);
@@ -113,6 +121,7 @@ const candidates = spots
     if (includeAll) return true;
     return !spot.imageSource || spot.imageSource === "Category fallback";
   })
+  .filter((spot) => !categoryArg || spot.category === categoryArg)
   .filter((spot) => !merge || !sidecar.entries[spot.id])
   .sort((left, right) => (right.friendScore ?? 0) - (left.friendScore ?? 0));
 
