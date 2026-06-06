@@ -7,23 +7,23 @@ _In flight — actively being worked on. Keep this to 1–3 items._
 
 ### Adult venue ratings & reviews enrichment
 - **Why:** 0/1,500 adult spots have a Google rating — the Mosey planner ranks adult venues blind, users can't trust picks, and we can't emit rich-result schema or "top-rated" marketing. Foundational: SEO rich results, venue schema, and content all depend on it.
-- **Effort:** M (gated on a Places-class API key/quota — first task is a spike)
-- **Status:** starting
+- **Effort:** M
+- **Status:** **BLOCKED — needs a Google Places API key.** Scoping done: script `scripts/match-google-places-osm.mjs` reads `GOOGLE_PLACES_API_KEY` (not set anywhere); ~$50–60 for 1,500 Bay-Area spots via `npm run match:places:osm --metro=bay-area --merge --no-photos`. Planner already consumes `googleRating`/`googleRatingCount`; UI already renders them (App.tsx spot card + sheet). Only missing: the key, the run, and `aggregateRating` in spot JSON-LD (`generate-seo-pages.mjs`).
 - **Tasks:**
-  - [ ] Spike: confirm an API key + quota (reuse the kids `match:places` setup?) or pick an alternate ratings source
-  - [ ] Run rating/review enrichment for adult spots, per metro
-  - [ ] Thread `googleRating`/`googleRatingCount` into adult planner scoring (already supported in `planner.ts`)
-  - [ ] Surface ratings on spot cards/sheets + venue SEO pages
+  - [x] Spike: confirm key/source + integration path (done — needs key)
+  - [ ] User provides `GOOGLE_PLACES_API_KEY` (Places API enabled, ~$60 budget)
+  - [ ] Run enrichment per metro → `*-enrichment.json` sidecar
+  - [ ] Add `aggregateRating` to spot JSON-LD; rebuild + deploy
 
 ### Adult-fit planner (date-night / with-friends / solo / tonight)
 - **Why:** The vibes (balanced/active/culture) are generic; the 20–35 audience plans date nights, friend hangs, and solo outings — often "tonight." Make the core loop actually fit them.
 - **Effort:** M
-- **Status:** starting
+- **Status:** v1 shipped 2026-06-06 (Going-out mode + reframed adult vibes). "Tonight" time filter + persistence remain.
 - **Tasks:**
-  - [ ] Adult vibe labels/modes (date night, with friends, solo) in `appConfig` adult copy
+  - [x] Adult vibe labels/blurbs reframed off nightlife → all-day hangout (`appConfig`)
+  - [x] "Going out" mode (solo / with friends / date) — audience-gated control + `planner.ts` scoring (FamHop untouched; tested)
   - [ ] "Tonight / this weekend" time-aware filtering for open + scheduled
-  - [ ] Solo vs group toggle feeding group-size scoring
-  - [ ] Verify scoring + copy live on trymosey.com
+  - [ ] Persist Going-out mode across sessions
 
 ## Next
 _Committed, not yet started. Ordered by priority. Aim for ≤5 items._
@@ -57,6 +57,8 @@ _Candidates and ideas. Unordered. No commitment._
 
 ## Done
 _Recently shipped (last ~10 items). Older items live in [CHANGELOG.md](CHANGELOG.md)._
+
+- 2026-06-06 · **Mosey adult-fit planner (v1) + reframed vibes** — audience-gated "Going out" mode (solo / with friends / date) in the filter sidebar, wired into `planner.ts` scoring (solo→cafes/culture, date→intimate food/culture, friends→bars/active); adult vibe labels/blurbs reframed off nightlife-only "night" toward all-day hangout; adults browse title/desc broadened to "Things to do in {metro}". Deployed to Mosey only; verified live (trymosey.com shows the control, famhop.com unchanged); 176 tests incl. a "kids ignores groupMode" guard. _(Remaining: "tonight" time filter, persistence.)_
 
 - 2026-06-06 · **Mosey gets its own Google sign-in (per-brand OAuth client)** — the shared Worker (`saturday-polls`) verifies sign-in for both apps but enforced a single `aud`, so Mosey reused FamHop's OAuth client and showed FamHop branding on the consent popup. Gave Mosey its own GCP project + Web client (`1023251555604-…`); `googleAuth()` now accepts either audience via a new `GOOGLE_CLIENT_ID_ADULTS` var, and the adults build mints tokens with its own `VITE_GOOGLE_CLIENT_ID`. Worker + Mosey app deployed; verified live on trymosey.com (`gsi/button` 200 with the new client, 0 origin errors). FamHop untouched. Design + setup runbook in `docs/decisions/06-google-oauth-dual-client.md`. _(Consent screen is Mosey-branded only because the client lives in a separate project — per-client wouldn't suffice.)_
 - 2026-06-06 · **Weekend event refresh (all 16 metros)** — daily-scan re-ingest + featured plans + coverage; Honolulu kept prior events (live fetch below min-5), Austin fragile but above threshold. Data feed + both apps deployed. _(Noted: `ingest:events:all` aborts the whole loop on one metro's validation failure — Honolulu's error skipped Austin + coverage until re-run individually. Candidate for a tolerant-continue fix.)_
