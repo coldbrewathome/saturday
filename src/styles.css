@@ -568,6 +568,39 @@ h3 {
   .is-browse .topbar-add {
     display: none;
   }
+
+  /* Narrow desktop: keep the topbar within bounds when signed in. The chip
+     collapses to avatar-only (the full name is what pushes it out of bounds),
+     gaps tighten, and the metro select is capped so nothing overflows. */
+  .topbar {
+    column-gap: 8px;
+  }
+
+  .topbar-auth .user-chip span,
+  .topbar-auth .user-chip .sync-pill,
+  .topbar-auth .user-chip .text-button {
+    display: none;
+  }
+
+  .topbar-auth .user-chip {
+    background: transparent;
+    border: 0;
+    gap: 0;
+    padding: 0;
+  }
+
+  .topbar-metro {
+    max-width: 150px;
+    min-width: 0;
+  }
+
+  .topbar-metro select {
+    max-width: 140px;
+  }
+
+  .topbar-tabs {
+    min-width: 0;
+  }
 }
 
 @media (max-width: 820px) {
@@ -1978,6 +2011,9 @@ h3 {
   color: var(--muted);
   font-size: 0.82rem;
   font-weight: 500;
+  /* Desktop has no pull-up/collapse affordance — the hint only applies to the
+     mobile bottom-sheet (re-shown in the max-width: 820px block). */
+  display: none;
 }
 
 .featured-rail-list {
@@ -5326,6 +5362,7 @@ h3 {
   }
 
   .browse-viewport .featured-rail-sub {
+    display: block;
     font-size: 0.68rem;
   }
 
