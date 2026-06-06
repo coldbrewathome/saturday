@@ -64,6 +64,7 @@ interface Env {
   OPENAI_API_KEY?: string;
   OPENAI_MODEL?: string;
   GOOGLE_CLIENT_ID?: string;
+  GOOGLE_CLIENT_ID_ADULTS?: string;
   AI_DAILY_LIMIT_PER_IP?: string;
   POLLS_DAILY_LIMIT_PER_IP?: string;
   ADMIN_EMAILS?: string;
@@ -313,7 +314,12 @@ async function googleAuth(
   env: Env,
   cors: Record<string, string>,
 ): Promise<Response> {
-  if (!env.GOOGLE_CLIENT_ID) {
+  // FamHop (kids) and Mosey (adults) each ship with their own Google OAuth
+  // client so the consent screen shows the right brand, so accept either
+  // audience here.
+  const allowedAudiences = [env.GOOGLE_CLIENT_ID, env.GOOGLE_CLIENT_ID_ADULTS]
+    .filter((id): id is string => Boolean(id));
+  if (allowedAudiences.length === 0) {
     return json({ error: "GOOGLE_CLIENT_ID is not configured" }, { status: 501 }, cors);
   }
 
@@ -345,7 +351,7 @@ async function googleAuth(
     iss?: string;
   };
 
-  if (claims.aud !== env.GOOGLE_CLIENT_ID) {
+  if (!claims.aud || !allowedAudiences.includes(claims.aud)) {
     return json({ error: "audience mismatch" }, { status: 401 }, cors);
   }
   if (claims.iss !== "accounts.google.com" && claims.iss !== "https://accounts.google.com") {
