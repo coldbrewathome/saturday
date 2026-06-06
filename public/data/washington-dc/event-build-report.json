@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "washington-dc",
-  "generatedAt": "2026-06-02T03:31:25.228Z",
+  "generatedAt": "2026-06-06T16:08:56.011Z",
   "registryPath": "data/event-sources-washington-dc.json",
   "outputPath": "public/data/washington-dc/events.json",
-  "eventCount": 377,
-  "adultsEventCount": 2,
+  "eventCount": 354,
+  "adultsEventCount": 1,
   "sourceCount": 13,
-  "liveEventCount": 363,
-  "lastKnownGoodEventCount": 3,
+  "liveEventCount": 342,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 12,
-  "operatorAlertCount": 11,
+  "operatorAlertCount": 10,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:31:25.228Z",
+      "fetchedAt": "2026-06-06T16:08:56.011Z",
       "fetches": [
         {
           "url": "https://dpr.dc.gov/events",
@@ -53,37 +53,13 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:31:25.228Z",
+      "fetchedAt": "2026-06-06T16:08:56.011Z",
       "fetches": [
         {
           "url": "https://naturalhistory.si.edu/events/family-programs",
           "status": "http-error",
           "httpStatus": 403,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "washington-dc",
-      "sourceId": "washington-dc-zoo-family",
-      "sourceName": "National Zoo Events",
-      "sourceType": "nationalZooJsonApi",
-      "url": "https://nationalzoo.si.edu/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 2,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 2,
-      "fetchedAt": "2026-06-02T03:31:25.228Z",
-      "fetches": [
-        {
-          "url": "https://nationalzoo.si.edu/events",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
         }
       ]
     },
@@ -102,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:31:25.228Z",
+      "fetchedAt": "2026-06-06T16:08:56.011Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -127,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:31:25.228Z",
+      "fetchedAt": "2026-06-06T16:08:56.011Z",
       "fetches": [
         {
           "url": "https://marylandstatefair.com/",
@@ -152,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:31:25.228Z",
+      "fetchedAt": "2026-06-06T16:08:56.011Z",
       "fetches": [
         {
           "url": "https://www.930.com/events",
@@ -177,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:31:25.228Z",
+      "fetchedAt": "2026-06-06T16:08:56.011Z",
       "fetches": [
         {
           "url": "https://www.theanthemdc.com/events",
@@ -202,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:31:25.228Z",
+      "fetchedAt": "2026-06-06T16:08:56.011Z",
       "fetches": [
         {
           "url": "https://www.blackcatdc.com/schedule.html",
@@ -227,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:31:25.228Z",
+      "fetchedAt": "2026-06-06T16:08:56.011Z",
       "fetches": [
         {
           "url": "https://www.dcimprov.com/shows",
@@ -252,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:31:25.228Z",
+      "fetchedAt": "2026-06-06T16:08:56.011Z",
       "fetches": [
         {
           "url": "https://www.unionstage.com/events",
@@ -268,15 +244,15 @@
       "sourceName": "Songbyrd Music House",
       "sourceType": "html",
       "url": "https://www.songbyrddc.com/events",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "issueType": "zero-in-window",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-06-02T03:31:25.228Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-06T16:08:56.011Z",
       "fetches": [
         {
           "url": "https://www.songbyrddc.com/events",
@@ -297,21 +273,21 @@
       "metroId": "washington-dc",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 362,
+      "liveEvents": 339,
       "fallbackEvents": 0,
-      "eventCount": 362,
+      "eventCount": 339,
       "fetches": [
         {
           "url": "https://dclibrary.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=1417; locations=27"
+          "contentType": "application/json; source=communico-events; events=1365; locations=27"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=1417; locations=27",
-      "rejectedLiveEvents": 6,
-      "extractedEvents": 368,
+      "contentType": "application/json; source=communico-events; events=1365; locations=27",
+      "rejectedLiveEvents": 11,
+      "extractedEvents": 350,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -376,21 +352,24 @@
       "city": "Washington",
       "metroId": "washington-dc",
       "category": "Zoo",
-      "status": "fetch-error",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 2,
       "fallbackEvents": 0,
       "eventCount": 2,
       "fetches": [
         {
           "url": "https://nationalzoo.si.edu/events",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/vnd.api+json; source=national-zoo-jsonapi; events=32"
         }
       ],
-      "reason": "This operation was aborted",
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 2,
-      "recoveryMode": "last-known-good"
+      "httpStatus": 200,
+      "contentType": "application/vnd.api+json; source=national-zoo-jsonapi; events=32",
+      "rejectedLiveEvents": 284,
+      "extractedEvents": 286,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "ticketmaster-washington-dc-family",
@@ -611,10 +590,10 @@
       "city": "Washington",
       "metroId": "washington-dc",
       "category": "Music",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.songbyrddc.com/events",
@@ -627,9 +606,8 @@
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 2,
       "extractedEvents": 2,
-      "lastKnownGoodEvents": 1,
-      "recoveryMode": "last-known-good",
-      "reason": "source produced no live events; using last-known-good future events"
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     }
   ]
 }

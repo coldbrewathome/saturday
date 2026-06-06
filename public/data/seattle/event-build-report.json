@@ -1,18 +1,43 @@
 {
   "schemaVersion": 1,
   "metroId": "seattle",
-  "generatedAt": "2026-06-02T03:28:52.603Z",
+  "generatedAt": "2026-06-06T16:06:27.873Z",
   "registryPath": "data/event-sources-seattle.json",
   "outputPath": "public/data/seattle/events.json",
-  "eventCount": 258,
-  "adultsEventCount": 58,
+  "eventCount": 265,
+  "adultsEventCount": 56,
   "sourceCount": 17,
-  "liveEventCount": 259,
-  "lastKnownGoodEventCount": 0,
+  "liveEventCount": 255,
+  "lastKnownGoodEventCount": 11,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 13,
+  "operatorAlertCount": 14,
   "errors": [],
   "operatorAlerts": [
+    {
+      "severity": "warning",
+      "metroId": "seattle",
+      "sourceId": "woodland-park-zoo-family",
+      "sourceName": "Woodland Park Zoo Family/Public Events",
+      "sourceType": "eventList",
+      "url": "https://www.zoo.org/events?cgid=1",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 11,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 11,
+      "fetchedAt": "2026-06-06T16:06:27.873Z",
+      "fetches": [
+        {
+          "url": "https://www.zoo.org/events?cgid=1",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ]
+    },
     {
       "severity": "critical",
       "metroId": "seattle",
@@ -28,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:28:52.603Z",
+      "fetchedAt": "2026-06-06T16:06:27.873Z",
       "fetches": [
         {
           "url": "https://www.burkemuseum.org/events",
@@ -53,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:28:52.603Z",
+      "fetchedAt": "2026-06-06T16:06:27.873Z",
       "fetches": [
         {
           "url": "https://pacificsciencecenter.org/events/",
@@ -78,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:28:52.603Z",
+      "fetchedAt": "2026-06-06T16:06:27.873Z",
       "fetches": [
         {
           "url": "https://www.seattleaquarium.org/explore-the-aquarium/programs/toddler-time/",
@@ -103,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:28:52.603Z",
+      "fetchedAt": "2026-06-06T16:06:27.873Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -128,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:28:52.603Z",
+      "fetchedAt": "2026-06-06T16:06:27.873Z",
       "fetches": [
         {
           "url": "https://www.thefair.com/",
@@ -153,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:28:52.603Z",
+      "fetchedAt": "2026-06-06T16:06:27.873Z",
       "fetches": [
         {
           "url": "https://www.evergreenfair.org/",
@@ -178,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:28:52.603Z",
+      "fetchedAt": "2026-06-06T16:06:27.873Z",
       "fetches": [
         {
           "url": "https://www.neumos.com/events",
@@ -203,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:28:52.603Z",
+      "fetchedAt": "2026-06-06T16:06:27.873Z",
       "fetches": [
         {
           "url": "https://www.thecrocodile.com/events",
@@ -228,7 +253,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:28:52.603Z",
+      "fetchedAt": "2026-06-06T16:06:27.873Z",
       "fetches": [
         {
           "url": "https://www.showboxpresents.com/events",
@@ -253,7 +278,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:28:52.603Z",
+      "fetchedAt": "2026-06-06T16:06:27.873Z",
       "fetches": [
         {
           "url": "https://www.tractortavern.com/events",
@@ -278,7 +303,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:28:52.603Z",
+      "fetchedAt": "2026-06-06T16:06:27.873Z",
       "fetches": [
         {
           "url": "https://www.sunsettavern.com/events",
@@ -303,7 +328,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:28:52.603Z",
+      "fetchedAt": "2026-06-06T16:06:27.873Z",
       "fetches": [
         {
           "url": "https://www.unexpectedproductions.org/shows",
@@ -328,7 +353,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:28:52.603Z",
+      "fetchedAt": "2026-06-06T16:06:27.873Z",
       "fetches": [
         {
           "url": "https://www.comedyunderground.com/calendar",
@@ -376,9 +401,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 146,
+      "liveEvents": 157,
       "fallbackEvents": 0,
-      "eventCount": 146,
+      "eventCount": 157,
       "fetches": [
         {
           "url": "https://www.trumba.com/calendars/kalendaro.json?filterview=SeriesStoryTime",
@@ -389,8 +414,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=UTF-8",
-      "rejectedLiveEvents": 51,
-      "extractedEvents": 197,
+      "rejectedLiveEvents": 38,
+      "extractedEvents": 195,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -403,9 +428,9 @@
       "metroId": "seattle",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 85,
+      "liveEvents": 82,
       "fallbackEvents": 0,
-      "eventCount": 85,
+      "eventCount": 82,
       "fetches": [
         {
           "url": "https://seattlechildrensmuseum.org/calendar/",
@@ -416,8 +441,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 6,
-      "extractedEvents": 91,
+      "rejectedLiveEvents": 15,
+      "extractedEvents": 97,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -429,24 +454,23 @@
       "city": "Seattle",
       "metroId": "seattle",
       "category": "Zoo",
-      "status": "ok",
-      "liveEvents": 12,
+      "status": "http-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 12,
+      "eventCount": 11,
       "fetches": [
         {
           "url": "https://www.zoo.org/events?cgid=1",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 12,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "httpStatus": 403,
+      "contentType": "text/html",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 11,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "burke-museum-events",

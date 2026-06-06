@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "austin",
-  "generatedAt": "2026-06-02T03:33:51.635Z",
+  "generatedAt": "2026-06-06T16:15:05.340Z",
   "registryPath": "data/event-sources-austin.json",
   "outputPath": "public/data/austin/events.json",
-  "eventCount": 16,
-  "adultsEventCount": 15,
+  "eventCount": 14,
+  "adultsEventCount": 14,
   "sourceCount": 14,
-  "liveEventCount": 16,
+  "liveEventCount": 14,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 12,
+  "operatorAlertCount": 13,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:33:51.635Z",
+      "fetchedAt": "2026-06-06T16:15:05.340Z",
       "fetches": [
         {
           "url": "https://library.austintexas.gov/events",
@@ -54,7 +54,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:33:51.635Z",
+      "fetchedAt": "2026-06-06T16:15:05.340Z",
       "fetches": [
         {
           "url": "https://thinkeryaustin.org/events/",
@@ -79,10 +79,35 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:33:51.635Z",
+      "fetchedAt": "2026-06-06T16:15:05.340Z",
       "fetches": [
         {
           "url": "https://www.thestoryoftexas.com/visit/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "austin",
+      "sourceId": "lbj-library",
+      "sourceName": "LBJ Presidential Library",
+      "sourceType": "html",
+      "url": "https://www.lbjlibrary.org/events",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-06T16:15:05.340Z",
+      "fetches": [
+        {
+          "url": "https://www.lbjlibrary.org/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -104,7 +129,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:33:51.635Z",
+      "fetchedAt": "2026-06-06T16:15:05.340Z",
       "fetches": [
         {
           "url": "https://blantonmuseum.org/events/",
@@ -129,7 +154,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:33:51.635Z",
+      "fetchedAt": "2026-06-06T16:15:05.340Z",
       "fetches": [
         {
           "url": "https://www.umlaufsculpture.org/events",
@@ -154,7 +179,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:33:51.635Z",
+      "fetchedAt": "2026-06-06T16:15:05.340Z",
       "fetches": [
         {
           "url": "https://stubbsaustin.com/concert-calendar/",
@@ -179,7 +204,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:33:51.635Z",
+      "fetchedAt": "2026-06-06T16:15:05.340Z",
       "fetches": [
         {
           "url": "https://mohawkaustin.com/calendar",
@@ -204,7 +229,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:33:51.635Z",
+      "fetchedAt": "2026-06-06T16:15:05.340Z",
       "fetches": [
         {
           "url": "https://continentalclub.com/austin-tx/",
@@ -229,7 +254,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:33:51.635Z",
+      "fetchedAt": "2026-06-06T16:15:05.340Z",
       "fetches": [
         {
           "url": "https://antonesnightclub.com/calendar/",
@@ -254,7 +279,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:33:51.635Z",
+      "fetchedAt": "2026-06-06T16:15:05.340Z",
       "fetches": [
         {
           "url": "https://acl-live.com/calendar/",
@@ -279,7 +304,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:33:51.635Z",
+      "fetchedAt": "2026-06-06T16:15:05.340Z",
       "fetches": [
         {
           "url": "https://drafthouse.com/austin/calendar",
@@ -304,7 +329,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-02T03:33:51.635Z",
+      "fetchedAt": "2026-06-06T16:15:05.340Z",
       "fetches": [
         {
           "url": "https://www.capcitycomedy.com/calendar",
@@ -406,9 +431,9 @@
       "metroId": "austin",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.lbjlibrary.org/events",
@@ -419,7 +444,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -460,9 +485,9 @@
       "metroId": "austin",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 15,
+      "liveEvents": 14,
       "fallbackEvents": 0,
-      "eventCount": 15,
+      "eventCount": 14,
       "fetches": [
         {
           "url": "https://zilkergarden.org/events/",
@@ -473,7 +498,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 15,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
