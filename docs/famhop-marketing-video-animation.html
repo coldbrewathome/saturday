@@ -1,0 +1,1022 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="../public/favicon.svg">
+  <title>FamHop Marketing Video Animation</title>
+  <style>
+    :root {
+      --paper: #fff9ed;
+      --paper-2: #f4efe2;
+      --ink: #18211d;
+      --muted: #66736b;
+      --green: #2f6b4f;
+      --green-soft: #d8eadc;
+      --orange: #e97933;
+      --orange-soft: #ffe0c5;
+      --blue: #3477a8;
+      --blue-soft: #d9ecf7;
+      --yellow: #f4bd3d;
+      --line: rgba(24, 33, 29, 0.12);
+      --shadow: 0 20px 60px rgba(24, 33, 29, 0.18);
+      --duration: 30s;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #1b241f;
+      color: var(--ink);
+    }
+
+    .stage {
+      position: relative;
+      width: min(100vw, 540px);
+      height: min(100vh, 960px);
+      aspect-ratio: 9 / 16;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 249, 237, 0.82)),
+        repeating-linear-gradient(90deg, rgba(47, 107, 79, 0.08) 0 1px, transparent 1px 84px),
+        repeating-linear-gradient(0deg, rgba(52, 119, 168, 0.08) 0 1px, transparent 1px 84px),
+        var(--paper);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+
+    .stage::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(140deg, transparent 0 44%, rgba(216, 234, 220, 0.8) 44% 55%, transparent 55% 100%),
+        linear-gradient(35deg, transparent 0 60%, rgba(255, 224, 197, 0.72) 60% 68%, transparent 68% 100%);
+      opacity: 0.75;
+      z-index: -2;
+    }
+
+    .brand {
+      position: absolute;
+      top: 34px;
+      left: 34px;
+      right: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 20;
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      font-size: 21px;
+      letter-spacing: 0;
+    }
+
+    .brand-lockup img {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(24, 33, 29, 0.18);
+    }
+
+    .brand-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 13px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(24, 33, 29, 0.09);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .scene {
+      position: absolute;
+      inset: 0;
+      padding: 92px 34px 34px;
+      opacity: 0;
+      transform: translateY(18px);
+      pointer-events: none;
+      transition: opacity 380ms ease, transform 380ms ease;
+    }
+
+    .scene.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .headline {
+      margin: 0;
+      max-width: 430px;
+      font-size: clamp(38px, 8.6vw, 56px);
+      line-height: 0.96;
+      letter-spacing: 0;
+      font-weight: 950;
+    }
+
+    .headline span {
+      color: var(--green);
+    }
+
+    .subline {
+      margin: 14px 0 0;
+      max-width: 430px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.35;
+      font-weight: 680;
+    }
+
+    .phone-wrap {
+      position: absolute;
+      left: 50%;
+      bottom: 52px;
+      width: min(64%, 330px);
+      transform: translateX(-50%);
+      filter: drop-shadow(0 22px 34px rgba(24, 33, 29, 0.22));
+    }
+
+    .phone {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 9 / 18.5;
+      border-radius: 38px;
+      padding: 14px;
+      background: #141a17;
+      overflow: hidden;
+    }
+
+    .phone-screen {
+      position: relative;
+      height: 100%;
+      border-radius: 28px;
+      background: #fffdf7;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .phone-bar {
+      position: absolute;
+      top: 11px;
+      left: 50%;
+      width: 92px;
+      height: 5px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, 0.28);
+      transform: translateX(-50%);
+      z-index: 8;
+    }
+
+    .chat {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 54px 20px 0;
+    }
+
+    .bubble {
+      max-width: 86%;
+      padding: 13px 15px;
+      border-radius: 18px;
+      background: var(--paper-2);
+      color: var(--ink);
+      font-size: 17px;
+      line-height: 1.18;
+      font-weight: 750;
+      box-shadow: 0 8px 22px rgba(24, 33, 29, 0.08);
+      opacity: 0;
+    }
+
+    .bubble:nth-child(2n) {
+      align-self: flex-end;
+      background: var(--blue-soft);
+    }
+
+    .scene.active .bubble {
+      animation: bubbleIn 4.8s ease both;
+    }
+
+    .scene.active .bubble:nth-child(1) { animation-delay: 0.25s; }
+    .scene.active .bubble:nth-child(2) { animation-delay: 0.65s; }
+    .scene.active .bubble:nth-child(3) { animation-delay: 1.05s; }
+    .scene.active .bubble:nth-child(4) { animation-delay: 1.45s; }
+    .scene.active .bubble:nth-child(5) { animation-delay: 1.85s; }
+
+    @keyframes bubbleIn {
+      0% {
+        opacity: 0;
+        transform: translateY(16px) scale(0.96);
+      }
+      18%, 88% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+
+    .app-home {
+      padding: 54px 18px 0;
+    }
+
+    .app-title {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.02;
+      font-weight: 950;
+      letter-spacing: 0;
+    }
+
+    .chip-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 18px;
+    }
+
+    .chip {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      font-size: 12px;
+      font-weight: 850;
+      color: var(--ink);
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    .scene.active .chip {
+      animation: chipPop 4.8s ease both;
+    }
+
+    .scene.active .chip:nth-child(1) { animation-delay: 0.25s; }
+    .scene.active .chip:nth-child(2) { animation-delay: 0.45s; }
+    .scene.active .chip:nth-child(3) { animation-delay: 0.65s; }
+    .scene.active .chip:nth-child(4) { animation-delay: 0.85s; }
+    .scene.active .chip:nth-child(5) { animation-delay: 1.05s; }
+    .scene.active .chip:nth-child(6) { animation-delay: 1.25s; }
+
+    .chip.active {
+      color: #fff;
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    @keyframes chipPop {
+      0% {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      14%, 100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .vibe-card {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 22px;
+      background: var(--orange-soft);
+      border: 1px solid rgba(233, 121, 51, 0.18);
+      transform: scale(0.96);
+      opacity: 0;
+    }
+
+    .scene.active .vibe-card {
+      animation: vibePulse 4.2s ease both;
+      animation-delay: 1.7s;
+    }
+
+    .vibe-card strong {
+      display: block;
+      font-size: 25px;
+      line-height: 1;
+      margin-bottom: 8px;
+      color: #7a3e18;
+    }
+
+    .vibe-card p {
+      margin: 0;
+      color: #80512f;
+      font-size: 14px;
+      line-height: 1.3;
+      font-weight: 750;
+    }
+
+    @keyframes vibePulse {
+      0% {
+        opacity: 0;
+        transform: scale(0.96);
+      }
+      22%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .map-ui {
+      position: relative;
+      height: 100%;
+      background:
+        linear-gradient(90deg, transparent 0 48%, rgba(52, 119, 168, 0.18) 48% 52%, transparent 52% 100%),
+        linear-gradient(0deg, transparent 0 38%, rgba(47, 107, 79, 0.12) 38% 42%, transparent 42% 100%),
+        repeating-linear-gradient(35deg, rgba(24, 33, 29, 0.07) 0 3px, transparent 3px 58px),
+        #eef5eb;
+      overflow: hidden;
+    }
+
+    .route {
+      position: absolute;
+      left: 23%;
+      top: 34%;
+      width: 56%;
+      height: 34%;
+      border-left: 5px solid var(--orange);
+      border-bottom: 5px solid var(--orange);
+      border-radius: 0 0 0 38px;
+      transform-origin: top left;
+      transform: scaleX(0) scaleY(0);
+    }
+
+    .scene.active .route {
+      animation: routeDraw 5.2s ease both;
+      animation-delay: 0.55s;
+    }
+
+    @keyframes routeDraw {
+      0% {
+        transform: scaleX(0) scaleY(0);
+      }
+      35%, 100% {
+        transform: scaleX(1) scaleY(1);
+      }
+    }
+
+    .pin {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px 16px 16px 4px;
+      background: #fff;
+      border: 3px solid var(--green);
+      color: var(--green);
+      font-size: 19px;
+      font-weight: 950;
+      transform: rotate(-45deg) scale(0.7);
+      opacity: 0;
+      box-shadow: 0 14px 24px rgba(24, 33, 29, 0.2);
+    }
+
+    .pin span {
+      transform: rotate(45deg);
+    }
+
+    .pin-1 { left: 16%; top: 25%; }
+    .pin-2 { right: 17%; top: 43%; border-color: var(--blue); color: var(--blue); }
+    .pin-3 { left: 33%; bottom: 17%; border-color: var(--orange); color: var(--orange); }
+
+    .scene.active .pin {
+      animation: pinDrop 4.8s ease both;
+    }
+
+    .scene.active .pin-1 { animation-delay: 0.45s; }
+    .scene.active .pin-2 { animation-delay: 0.85s; }
+    .scene.active .pin-3 { animation-delay: 1.25s; }
+
+    @keyframes pinDrop {
+      0% {
+        opacity: 0;
+        transform: rotate(-45deg) translateY(-18px) scale(0.7);
+      }
+      18%, 100% {
+        opacity: 1;
+        transform: rotate(-45deg) translateY(0) scale(1);
+      }
+    }
+
+    .itinerary {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 18px;
+      display: grid;
+      gap: 9px;
+    }
+
+    .stop-card {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      gap: 11px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 24px rgba(24, 33, 29, 0.1);
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    .scene.active .stop-card {
+      animation: stopSlide 4.2s ease both;
+    }
+
+    .scene.active .stop-card:nth-child(1) { animation-delay: 1.65s; }
+    .scene.active .stop-card:nth-child(2) { animation-delay: 1.9s; }
+    .scene.active .stop-card:nth-child(3) { animation-delay: 2.15s; }
+
+    .stop-icon {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      background: var(--green-soft);
+      color: var(--green);
+      font-weight: 950;
+    }
+
+    .stop-copy b {
+      display: block;
+      font-size: 14px;
+      line-height: 1.1;
+    }
+
+    .stop-copy span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 760;
+    }
+
+    @keyframes stopSlide {
+      0% {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      18%, 100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .filter-panel {
+      padding: 54px 18px 0;
+    }
+
+    .filter-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      min-height: 54px;
+      padding: 0 13px;
+      margin-bottom: 10px;
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 9px 20px rgba(24, 33, 29, 0.07);
+      opacity: 0;
+      transform: translateX(-18px);
+    }
+
+    .scene.active .filter-row {
+      animation: filterIn 4.8s ease both;
+    }
+
+    .scene.active .filter-row:nth-child(1) { animation-delay: 0.25s; }
+    .scene.active .filter-row:nth-child(2) { animation-delay: 0.5s; }
+    .scene.active .filter-row:nth-child(3) { animation-delay: 0.75s; }
+    .scene.active .filter-row:nth-child(4) { animation-delay: 1s; }
+
+    .filter-row b {
+      font-size: 15px;
+      line-height: 1.1;
+    }
+
+    .toggle {
+      width: 52px;
+      height: 30px;
+      border-radius: 999px;
+      background: var(--green);
+      position: relative;
+    }
+
+    .toggle::after {
+      content: "";
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(24, 33, 29, 0.2);
+    }
+
+    @keyframes filterIn {
+      0% {
+        opacity: 0;
+        transform: translateX(-18px);
+      }
+      16%, 100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .swap-card {
+      margin-top: 15px;
+      padding: 16px;
+      border-radius: 22px;
+      background: var(--blue-soft);
+      border: 1px solid rgba(52, 119, 168, 0.16);
+      opacity: 0;
+      transform: translateY(18px);
+    }
+
+    .scene.active .swap-card {
+      animation: swapIn 3.4s ease both;
+      animation-delay: 1.65s;
+    }
+
+    .swap-card b {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 6px;
+      color: #1c4c6a;
+    }
+
+    .swap-card span {
+      display: block;
+      color: #355f78;
+      font-size: 14px;
+      line-height: 1.25;
+      font-weight: 760;
+    }
+
+    @keyframes swapIn {
+      0% {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      24%, 100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .share-ui {
+      padding: 54px 18px 0;
+    }
+
+    .share-card {
+      padding: 16px;
+      border-radius: 24px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 30px rgba(24, 33, 29, 0.1);
+      opacity: 0;
+      transform: scale(0.96);
+    }
+
+    .scene.active .share-card {
+      animation: shareIn 5.6s ease both;
+      animation-delay: 0.2s;
+    }
+
+    .share-card h3 {
+      margin: 0 0 12px;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .vote {
+      display: grid;
+      gap: 10px;
+    }
+
+    .vote-row {
+      display: grid;
+      grid-template-columns: 1fr 52px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .vote-label {
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .vote-track {
+      height: 14px;
+      border-radius: 999px;
+      background: var(--paper-2);
+      overflow: hidden;
+    }
+
+    .vote-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--green);
+      animation: none;
+    }
+
+    .vote-row:nth-child(2) .vote-fill {
+      background: var(--orange);
+    }
+
+    .vote-row:nth-child(3) .vote-fill {
+      background: var(--blue);
+    }
+
+    .scene.active .vote-row:nth-child(1) .vote-fill {
+      animation: voteFill 3.8s ease both;
+      animation-delay: 1.15s;
+    }
+
+    .scene.active .vote-row:nth-child(2) .vote-fill {
+      animation: voteFillSmall 3.8s ease both;
+      animation-delay: 1.35s;
+    }
+
+    .scene.active .vote-row:nth-child(3) .vote-fill {
+      animation: voteFillTiny 3.8s ease both;
+      animation-delay: 1.55s;
+    }
+
+    @keyframes shareIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.96);
+      }
+      14%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes voteFill {
+      0% { width: 0; }
+      42%, 100% { width: 86%; }
+    }
+
+    @keyframes voteFillSmall {
+      0% { width: 0; }
+      42%, 100% { width: 42%; }
+    }
+
+    @keyframes voteFillTiny {
+      0% { width: 0; }
+      42%, 100% { width: 24%; }
+    }
+
+    .send-pill {
+      margin-top: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      width: 100%;
+      border-radius: 16px;
+      background: var(--green);
+      color: #fff;
+      font-weight: 900;
+      box-shadow: 0 12px 24px rgba(47, 107, 79, 0.22);
+    }
+
+    .final-card {
+      position: absolute;
+      left: 34px;
+      right: 34px;
+      bottom: 46px;
+      padding: 24px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(24, 33, 29, 0.1);
+      box-shadow: 0 20px 48px rgba(24, 33, 29, 0.14);
+      opacity: 0;
+      transform: translateY(22px);
+    }
+
+    .scene.active .final-card {
+      animation: finalIn 5.6s ease both;
+      animation-delay: 0.3s;
+    }
+
+    .final-card img {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      box-shadow: 0 10px 24px rgba(24, 33, 29, 0.14);
+      margin-bottom: 14px;
+    }
+
+    .final-card h2 {
+      margin: 0;
+      font-size: 42px;
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .final-card p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+      font-weight: 780;
+      line-height: 1.3;
+    }
+
+    @keyframes finalIn {
+      0%, 58% {
+        opacity: 0;
+        transform: translateY(22px);
+      }
+      72%, 100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .progress {
+      position: absolute;
+      left: 34px;
+      right: 34px;
+      bottom: 22px;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(24, 33, 29, 0.1);
+      overflow: hidden;
+      z-index: 22;
+    }
+
+    .progress::after {
+      content: "";
+      display: block;
+      height: 100%;
+      width: 100%;
+      border-radius: inherit;
+      background: var(--orange);
+      transform-origin: left;
+      animation: progress var(--duration) linear infinite;
+    }
+
+    @keyframes progress {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    @media (max-width: 420px) {
+      .stage {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+      }
+
+      .brand,
+      .final-card {
+        left: 22px;
+        right: 22px;
+      }
+
+      .scene {
+        padding-left: 22px;
+        padding-right: 22px;
+      }
+
+      .headline {
+        font-size: clamp(34px, 9.8vw, 39px);
+        line-height: 1;
+      }
+
+      .subline {
+        font-size: 16px;
+      }
+
+      .phone-wrap {
+        bottom: 42px;
+        width: min(66%, 270px);
+      }
+
+      .brand-pill {
+        display: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+
+      .scene {
+        transition: none;
+      }
+
+      .scene-1 {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="stage" aria-label="FamHop marketing animation">
+    <header class="brand">
+      <div class="brand-lockup">
+        <img src="../public/icon-512.png" alt="">
+        <span>FamHop</span>
+      </div>
+      <div class="brand-pill">Plan · Hop · Repeat</div>
+    </header>
+
+    <section class="scene scene-1 active">
+      <h1 class="headline">Weekend plans, <span>without</span> the group-chat spiral.</h1>
+      <p class="subline">Turn scattered ideas into a kid-ready day everyone can agree on.</p>
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone-bar"></div>
+          <div class="phone-screen">
+            <div class="chat" aria-hidden="true">
+              <div class="bubble">Park?</div>
+              <div class="bubble">Museum?</div>
+              <div class="bubble">Too far with nap time.</div>
+              <div class="bubble">Anything indoors?</div>
+              <div class="bubble">Can we decide?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene scene-2">
+      <h2 class="headline">Pick the kids, interests, and <span>vibe</span>.</h2>
+      <p class="subline">Low-effort morning, active day, museum hop, food stop, or a little of everything.</p>
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone-bar"></div>
+          <div class="phone-screen">
+            <div class="app-home">
+              <h3 class="app-title">Plan the weekend together.</h3>
+              <div class="chip-grid" aria-hidden="true">
+                <span class="chip active">Ages 3-5</span>
+                <span class="chip">Open now</span>
+                <span class="chip active">Libraries</span>
+                <span class="chip">Parks</span>
+                <span class="chip active">Low-effort day</span>
+                <span class="chip">Near me</span>
+              </div>
+              <div class="vibe-card">
+                <strong>Low-effort day</strong>
+                <p>Easy stops, less driving, more room for snack breaks.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene scene-3">
+      <h2 class="headline">Get a real <span>three-stop</span> family plan.</h2>
+      <p class="subline">Events, food, parks, libraries, and museums arranged into one easy outing.</p>
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone-bar"></div>
+          <div class="phone-screen">
+            <div class="map-ui" aria-hidden="true">
+              <div class="route"></div>
+              <div class="pin pin-1"><span>1</span></div>
+              <div class="pin pin-2"><span>2</span></div>
+              <div class="pin pin-3"><span>3</span></div>
+              <div class="itinerary">
+                <div class="stop-card">
+                  <div class="stop-icon">1</div>
+                  <div class="stop-copy"><b>Morning event</b><span>Kid-friendly and nearby</span></div>
+                </div>
+                <div class="stop-card">
+                  <div class="stop-icon">2</div>
+                  <div class="stop-copy"><b>Lunch stop</b><span>Easy table, short drive</span></div>
+                </div>
+                <div class="stop-card">
+                  <div class="stop-icon">3</div>
+                  <div class="stop-copy"><b>Park or museum</b><span>Right-sized for the afternoon</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene scene-4">
+      <h2 class="headline">Make it fit <span>real life</span>.</h2>
+      <p class="subline">Tune the plan around distance, timing, accessibility, and age fit.</p>
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone-bar"></div>
+          <div class="phone-screen">
+            <div class="filter-panel" aria-hidden="true">
+              <div class="filter-row"><b>Open now</b><span class="toggle"></span></div>
+              <div class="filter-row"><b>Closer to home</b><span class="toggle"></span></div>
+              <div class="filter-row"><b>Stroller-friendly</b><span class="toggle"></span></div>
+              <div class="filter-row"><b>Best for ages 3-5</b><span class="toggle"></span></div>
+              <div class="swap-card">
+                <b>Better backup found</b>
+                <span>Swap in a calmer afternoon stop without rebuilding the whole day.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene scene-5">
+      <h2 class="headline"><span>Share.</span> Vote. Go.</h2>
+      <p class="subline">Send the plan to co-parents and pick the day everyone is ready for.</p>
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone-bar"></div>
+          <div class="phone-screen">
+            <div class="share-ui" aria-hidden="true">
+              <div class="share-card">
+                <h3>Saturday plan vote</h3>
+                <div class="vote">
+                  <div class="vote-row">
+                    <span class="vote-label">Library + lunch + park</span>
+                    <span class="vote-track"><span class="vote-fill"></span></span>
+                  </div>
+                  <div class="vote-row">
+                    <span class="vote-label">Museum + noodles</span>
+                    <span class="vote-track"><span class="vote-fill"></span></span>
+                  </div>
+                  <div class="vote-row">
+                    <span class="vote-label">Playground loop</span>
+                    <span class="vote-track"><span class="vote-fill"></span></span>
+                  </div>
+                </div>
+                <div class="send-pill">Winning plan ready</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="final-card">
+        <img src="../public/icon-512.png" alt="">
+        <h2>FamHop</h2>
+        <p>Plan · Hop · Repeat.<br>Plan the weekend together at famhop.com</p>
+      </div>
+    </section>
+
+    <div class="progress" aria-hidden="true"></div>
+  </main>
+  <script>
+    (() => {
+      const scenes = Array.from(document.querySelectorAll(".scene"));
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      let index = 0;
+
+      const showScene = (nextIndex) => {
+        scenes.forEach((scene, sceneIndex) => {
+          scene.classList.toggle("active", sceneIndex === nextIndex);
+        });
+      };
+
+      showScene(index);
+
+      if (!reducedMotion) {
+        window.setInterval(() => {
+          index = (index + 1) % scenes.length;
+          showScene(index);
+        }, 6000);
+      }
+    })();
+  </script>
+</body>
+</html>

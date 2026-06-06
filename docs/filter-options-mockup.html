@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FamHop Filter Redesign — Options</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #faf5eb;
+    --surface: #ffffff;
+    --surface-strong: #f2ead9;
+    --line: #e8dfca;
+    --line-soft: #f0e8d4;
+    --ink: #1b1916;
+    --ink-soft: #4a453f;
+    --ink-mute: #8a8278;
+    --muted: #6b7280;
+    --accent: #dd6a1a;
+    --accent-soft: #fbe9d6;
+    --forest: #2d5043;
+    --forest-soft: #dde7dc;
+    --blue: #5a7896;
+    --blue-soft: #dce5ec;
+    --berry: #b25368;
+    --berry-soft: #f2dde2;
+    --sun: #e8b547;
+    --sun-soft: #faedc9;
+    --font-ui: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Bricolage Grotesque", "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-ui);
+    padding: 32px 24px 80px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .page-subtitle {
+    color: var(--ink-mute);
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 48px;
+    max-width: 640px;
+  }
+
+  /* ── Current state callout ── */
+  .current-state {
+    background: #fff3e0;
+    border: 1px solid #f5c77e;
+    border-radius: 12px;
+    margin-bottom: 48px;
+    padding: 20px 24px;
+    max-width: 640px;
+  }
+  .current-state h2 {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--accent);
+  }
+  .current-state p { font-size: 13px; line-height: 1.6; color: var(--ink-soft); }
+  .current-state table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 12px; }
+  .current-state th { text-align: left; color: var(--ink-mute); font-weight: 600; padding: 4px 8px 4px 0; text-transform: uppercase; letter-spacing: 0.06em; font-size: 10px; }
+  .current-state td { padding: 3px 8px 3px 0; color: var(--ink-soft); }
+  .current-state .yes { color: var(--forest); font-weight: 600; }
+  .current-state .no { color: var(--berry); font-weight: 600; }
+
+  /* ── Options layout ── */
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 32px;
+    max-width: 1200px;
+  }
+
+  .option-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(31, 48, 39, 0.06);
+    overflow: hidden;
+  }
+
+  .option-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .option-label {
+    background: var(--accent);
+    border-radius: 999px;
+    color: #fff;
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+    padding: 3px 10px;
+    text-transform: uppercase;
+  }
+  .option-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .option-desc {
+    color: var(--ink-mute);
+    font-size: 12.5px;
+    line-height: 1.55;
+    margin-top: 6px;
+  }
+
+  .option-pros-cons {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--line-soft);
+    display: flex;
+    gap: 24px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .option-pros-cons div { flex: 1; }
+  .option-pros-cons strong { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-mute); margin-bottom: 4px; }
+  .option-pros-cons ul { list-style: none; padding: 0; }
+  .option-pros-cons li { color: var(--ink-soft); padding: 2px 0; }
+  .option-pros-cons li::before { content: "•"; margin-right: 6px; }
+  .pro li::before { color: var(--forest); }
+  .con li::before { color: var(--berry); }
+
+  /* ── Mockup panel (mimics the real filter panel) ── */
+  .mockup-wrap {
+    padding: 24px;
+    background: var(--bg);
+  }
+  .mockup-label {
+    color: var(--ink-mute);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(31, 48, 39, 0.06);
+    padding: 16px;
+  }
+
+  /* Filter elements */
+  .filter-group { margin-top: 16px; }
+  .filter-label {
+    color: var(--ink-mute);
+    display: block;
+    font: 600 10px/1 var(--font-ui);
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .search-box {
+    align-items: center;
+    background: var(--surface-strong);
+    border: 1px solid transparent;
+    border-radius: 8px;
+    display: flex;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 12px;
+  }
+  .search-box svg { color: var(--ink-mute); flex-shrink: 0; }
+  .search-box span { color: var(--ink-mute); font-size: 13px; }
+
+  .segmented {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .segmented button {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--ink-soft);
+    font: 500 11px/1 var(--font-ui);
+    padding: 5px 9px;
+    cursor: default;
+  }
+  .segmented button.active {
+    background: var(--surface-strong);
+    border-color: var(--ink);
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .cat-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .cat-row {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: 6px;
+    display: flex;
+    gap: 7px;
+    padding: 5px 7px;
+    font-size: 12px;
+    color: var(--ink);
+    cursor: default;
+  }
+  .cat-swatch {
+    border-radius: 4px;
+    height: 15px;
+    width: 15px;
+    flex-shrink: 0;
+  }
+  .cat-count {
+    color: var(--ink-mute);
+    font-size: 11px;
+    margin-left: auto;
+  }
+
+  .cost-seg {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 9px;
+    display: flex;
+    gap: 0;
+    padding: 3px;
+  }
+  .cost-seg button {
+    background: transparent;
+    border: 0;
+    border-radius: 7px;
+    color: var(--ink-soft);
+    flex: 1;
+    font: 500 11px/1 var(--font-ui);
+    padding: 5px 0;
+    cursor: default;
+  }
+  .cost-seg button.active {
+    background: var(--surface);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .switch-row {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .switch-row .dot {
+    width: 14px; height: 14px; border-radius: 3px; background: var(--accent); opacity: 0.5;
+  }
+
+  .select-mock {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--ink-soft);
+    font: 500 12px/1 var(--font-ui);
+    min-height: 36px;
+    padding: 0 10px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+  }
+  .select-mock .sel-label {
+    color: var(--ink-mute);
+    font: 600 10px/1 var(--font-ui);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  /* ── Section dividers for Option B ── */
+  .section-divider {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+    margin-top: 18px;
+    margin-bottom: 2px;
+  }
+  .section-divider span {
+    font: 700 10px/1 var(--font-ui);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .section-divider::after {
+    content: "";
+    display: block;
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  .section-spots span { color: var(--forest); }
+  .section-events span { color: var(--accent); }
+  .section-shared span { color: var(--blue); }
+
+  /* ── Type toggle for Option A & C ── */
+  .type-toggle {
+    display: flex;
+    background: rgba(0,0,0,0.05);
+    border-radius: 10px;
+    padding: 3px;
+    margin-bottom: 14px;
+  }
+  .type-toggle button {
+    border: 0;
+    border-radius: 8px;
+    flex: 1;
+    font: 600 12px/1 var(--font-ui);
+    padding: 8px 0;
+    cursor: default;
+    background: transparent;
+    color: var(--ink-mute);
+  }
+  .type-toggle button.active {
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  /* ── Showing toggle for Option C ── */
+  .showing-toggle {
+    display: flex;
+    background: rgba(0,0,0,0.05);
+    border-radius: 10px;
+    padding: 3px;
+    margin-bottom: 14px;
+  }
+  .showing-toggle button {
+    border: 0;
+    border-radius: 8px;
+    flex: 1;
+    font: 600 11px/1 var(--font-ui);
+    padding: 7px 0;
+    cursor: default;
+    background: transparent;
+    color: var(--ink-mute);
+    position: relative;
+  }
+  .showing-toggle button.active {
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .showing-toggle .count-badge {
+    font-size: 9px;
+    font-weight: 700;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: 999px;
+    padding: 1px 5px;
+    margin-left: 4px;
+  }
+
+  /* ── Dimmed / collapsed section ── */
+  .collapsed-hint {
+    color: var(--ink-mute);
+    font-size: 11px;
+    font-style: italic;
+    margin-top: 14px;
+    padding: 10px 12px;
+    background: var(--surface-strong);
+    border-radius: 8px;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  /* ── Annotation callout ── */
+  .annotation {
+    background: #e8f4fd;
+    border-left: 3px solid var(--blue);
+    border-radius: 0 6px 6px 0;
+    color: var(--ink-soft);
+    font-size: 11px;
+    line-height: 1.5;
+    margin-top: 12px;
+    padding: 8px 10px;
+  }
+  .annotation.warn {
+    background: #fef3e0;
+    border-left-color: var(--sun);
+  }
+
+  /* search icon */
+  .search-icon { width: 14px; height: 14px; color: var(--ink-mute); }
+</style>
+</head>
+<body>
+
+<h1>Filter Redesign Options</h1>
+<p class="page-subtitle">
+  The browse view searches and filters both spots and events, but the current UI doesn't make that clear.
+  Here are three approaches to fix the ambiguity.
+</p>
+
+<!-- ── Current state ── -->
+<div class="current-state">
+  <h2>Current Problem</h2>
+  <p>
+    The filter panel mixes spot-only and event-only filters with no visual separation.
+    Users may think all filters apply to everything. The search placeholder says "Search spots" but also searches events.
+  </p>
+  <table>
+    <tr><th>Filter</th><th>Spots</th><th>Events</th></tr>
+    <tr><td>Search</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+    <tr><td>Age group</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+    <tr><td>Category</td><td class="yes">Yes</td><td class="no">Ignored</td></tr>
+    <tr><td>Area</td><td class="yes">Yes</td><td class="no">Ignored</td></tr>
+    <tr><td>Cost</td><td class="yes">Yes</td><td class="no">Ignored</td></tr>
+    <tr><td>Open now</td><td class="yes">Yes</td><td class="no">Ignored</td></tr>
+    <tr><td>When</td><td class="no">Ignored</td><td class="yes">Yes</td></tr>
+    <tr><td>Sort</td><td class="yes">Yes</td><td class="no">Ignored</td></tr>
+  </table>
+</div>
+
+<!-- ── Options grid ── -->
+<div class="options-grid">
+
+  <!-- ════════════ OPTION A ════════════ -->
+  <div class="option-card">
+    <div class="option-header">
+      <span class="option-label">Option A</span>
+      <div class="option-title">Tabbed Filter Panels</div>
+      <p class="option-desc">
+        A <strong>Spots / Events</strong> toggle at the top of the panel. Each tab shows only
+        the filters that apply to that type. Map and list update to show only the selected type.
+      </p>
+    </div>
+    <div class="option-pros-cons">
+      <div class="pro">
+        <strong>Pros</strong>
+        <ul>
+          <li>Zero ambiguity — every filter works</li>
+          <li>Cleaner, shorter panel per tab</li>
+          <li>Easy to add type-specific filters later</li>
+        </ul>
+      </div>
+      <div class="con">
+        <strong>Cons</strong>
+        <ul>
+          <li>Can't see both types at once</li>
+          <li>Extra tap to switch contexts</li>
+          <li>Users may miss events (or spots)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mockup-wrap">
+      <div class="mockup-label">Mockup — "Spots" tab selected</div>
+      <div class="panel">
+        <div class="type-toggle">
+          <button class="active">Spots</button>
+          <button>Events</button>
+        </div>
+
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Search spots</span>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Age group</span>
+          <div class="segmented">
+            <button class="active">Any</button><button>0–2</button><button>3–5</button><button>6–10</button><button>10+</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Category · legend</span>
+          <div class="cat-legend">
+            <div class="cat-row"><span class="cat-swatch" style="background:var(--ink-mute)"></span>All categories<span class="cat-count">124</span></div>
+            <div class="cat-row"><span class="cat-swatch" style="background:var(--forest)"></span>Outdoors<span class="cat-count">38</span></div>
+            <div class="cat-row"><span class="cat-swatch" style="background:var(--blue)"></span>Culture<span class="cat-count">31</span></div>
+            <div class="cat-row"><span class="cat-swatch" style="background:var(--sun)"></span>Food<span class="cat-count">28</span></div>
+            <div class="cat-row"><span class="cat-swatch" style="background:var(--berry)"></span>Wellness<span class="cat-count">15</span></div>
+            <div class="cat-row"><span class="cat-swatch" style="background:var(--accent)"></span>Shopping<span class="cat-count">12</span></div>
+          </div>
+        </div>
+
+        <div class="filter-group" style="margin-top:16px">
+          <span class="filter-label">Area</span>
+          <div class="select-mock">All (124)</div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Cost</span>
+          <div class="cost-seg">
+            <button class="active">Any</button><button>Free</button><button>$</button><button>$$</button><button>$$$</button>
+          </div>
+        </div>
+
+        <div class="switch-row">
+          <div class="dot"></div>
+          Open now
+        </div>
+
+        <div class="filter-group" style="margin-top:16px">
+          <span class="filter-label">Sort</span>
+          <div class="select-mock">Best fit</div>
+        </div>
+      </div>
+
+      <div style="height:20px"></div>
+      <div class="mockup-label">Mockup — "Events" tab selected</div>
+      <div class="panel">
+        <div class="type-toggle">
+          <button>Spots</button>
+          <button class="active">Events</button>
+        </div>
+
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Search events</span>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Age group</span>
+          <div class="segmented">
+            <button class="active">Any</button><button>0–2</button><button>3–5</button><button>6–10</button><button>10+</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">When</span>
+          <div class="segmented">
+            <button class="active">All</button><button>Today</button><button>Tomorrow</button><button>Weekend</button>
+          </div>
+        </div>
+
+        <div class="annotation">
+          Shorter panel — only the filters that actually affect events are shown.
+          Category, Area, Cost, Open now, and Sort are hidden.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ OPTION B ════════════ -->
+  <div class="option-card">
+    <div class="option-header">
+      <span class="option-label">Option B</span>
+      <div class="option-title">Grouped Sections</div>
+      <p class="option-desc">
+        One unified panel with labeled sections: <strong>Shared</strong> filters on top,
+        then <strong>Spots</strong> and <strong>Events</strong> sections below. Both types always
+        visible on the map.
+      </p>
+    </div>
+    <div class="option-pros-cons">
+      <div class="pro">
+        <strong>Pros</strong>
+        <ul>
+          <li>Everything visible at once</li>
+          <li>Clear which filters affect what</li>
+          <li>No mode switching needed</li>
+        </ul>
+      </div>
+      <div class="con">
+        <strong>Cons</strong>
+        <ul>
+          <li>Panel is longer / more visual clutter</li>
+          <li>Sections may feel bureaucratic</li>
+          <li>May overwhelm casual users</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mockup-wrap">
+      <div class="mockup-label">Mockup — single unified panel</div>
+      <div class="panel">
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Search spots & events</span>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Age group</span>
+          <div class="segmented">
+            <button class="active">Any</button><button>0–2</button><button>3–5</button><button>6–10</button><button>10+</button>
+          </div>
+        </div>
+
+        <!-- Spots section -->
+        <div class="section-divider section-spots"><span>Spots</span></div>
+
+        <div class="filter-group" style="margin-top:10px">
+          <span class="filter-label">Category · legend</span>
+          <div class="cat-legend">
+            <div class="cat-row"><span class="cat-swatch" style="background:var(--ink-mute)"></span>All categories<span class="cat-count">124</span></div>
+            <div class="cat-row"><span class="cat-swatch" style="background:var(--forest)"></span>Outdoors<span class="cat-count">38</span></div>
+            <div class="cat-row"><span class="cat-swatch" style="background:var(--blue)"></span>Culture<span class="cat-count">31</span></div>
+            <div class="cat-row"><span class="cat-swatch" style="background:var(--sun)"></span>Food<span class="cat-count">28</span></div>
+            <div class="cat-row"><span class="cat-swatch" style="background:var(--berry)"></span>Wellness<span class="cat-count">15</span></div>
+            <div class="cat-row"><span class="cat-swatch" style="background:var(--accent)"></span>Shopping<span class="cat-count">12</span></div>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Area</span>
+          <div class="select-mock">All (124)</div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Cost</span>
+          <div class="cost-seg">
+            <button class="active">Any</button><button>Free</button><button>$</button><button>$$</button><button>$$$</button>
+          </div>
+        </div>
+
+        <div class="switch-row">
+          <div class="dot"></div>
+          Open now
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Sort</span>
+          <div class="select-mock">Best fit</div>
+        </div>
+
+        <!-- Events section -->
+        <div class="section-divider section-events"><span>Events</span></div>
+
+        <div class="filter-group" style="margin-top:10px">
+          <span class="filter-label">When</span>
+          <div class="segmented">
+            <button class="active">All</button><button>Today</button><button>Tomorrow</button><button>Weekend</button>
+          </div>
+        </div>
+
+        <div class="annotation">
+          Both spots and events always show on the map. Each section's filters only affect its own type.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ OPTION C ════════════ -->
+  <div class="option-card">
+    <div class="option-header">
+      <span class="option-label">Option C</span>
+      <div class="option-title">Progressive Disclosure</div>
+      <p class="option-desc">
+        A <strong>All / Spots / Events</strong> segmented control. "All" shows only shared filters.
+        Picking a type reveals type-specific filters and scopes the map.
+      </p>
+    </div>
+    <div class="option-pros-cons">
+      <div class="pro">
+        <strong>Pros</strong>
+        <ul>
+          <li>Clean default with minimal filters</li>
+          <li>Progressive disclosure — simple → detailed</li>
+          <li>Placeholder text stays accurate</li>
+        </ul>
+      </div>
+      <div class="con">
+        <strong>Cons</strong>
+        <ul>
+          <li>"All" mode has fewer filter options</li>
+          <li>May feel limited until users discover tabs</li>
+          <li>Three states to maintain</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mockup-wrap">
+      <div class="mockup-label">Mockup — "All" selected (default)</div>
+      <div class="panel">
+        <div class="showing-toggle">
+          <button class="active">All<span class="count-badge">156</span></button>
+          <button>Spots<span class="count-badge">124</span></button>
+          <button>Events<span class="count-badge">32</span></button>
+        </div>
+
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Search spots & events</span>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Age group</span>
+          <div class="segmented">
+            <button class="active">Any</button><button>0–2</button><button>3–5</button><button>6–10</button><button>10+</button>
+          </div>
+        </div>
+
+        <div class="collapsed-hint">
+          Select "Spots" or "Events" above for more filters
+        </div>
+      </div>
+
+      <div style="height:20px"></div>
+      <div class="mockup-label">Mockup — "Spots" selected</div>
+      <div class="panel">
+        <div class="showing-toggle">
+          <button>All<span class="count-badge">156</span></button>
+          <button class="active">Spots<span class="count-badge">124</span></button>
+          <button>Events<span class="count-badge">32</span></button>
+        </div>
+
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Search spots</span>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Age group</span>
+          <div class="segmented">
+            <button class="active">Any</button><button>0–2</button><button>3–5</button><button>6–10</button><button>10+</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Category · legend</span>
+          <div class="cat-legend">
+            <div class="cat-row"><span class="cat-swatch" style="background:var(--ink-mute)"></span>All categories<span class="cat-count">124</span></div>
+            <div class="cat-row"><span class="cat-swatch" style="background:var(--forest)"></span>Outdoors<span class="cat-count">38</span></div>
+            <div class="cat-row"><span class="cat-swatch" style="background:var(--blue)"></span>Culture<span class="cat-count">31</span></div>
+            <div class="cat-row"><span class="cat-swatch" style="background:var(--sun)"></span>Food<span class="cat-count">28</span></div>
+            <div class="cat-row"><span class="cat-swatch" style="background:var(--berry)"></span>Wellness<span class="cat-count">15</span></div>
+            <div class="cat-row"><span class="cat-swatch" style="background:var(--accent)"></span>Shopping<span class="cat-count">12</span></div>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Area</span>
+          <div class="select-mock">All (124)</div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Cost</span>
+          <div class="cost-seg">
+            <button class="active">Any</button><button>Free</button><button>$</button><button>$$</button><button>$$$</button>
+          </div>
+        </div>
+
+        <div class="switch-row">
+          <div class="dot"></div>
+          Open now
+        </div>
+
+        <div class="filter-group" style="margin-top:16px">
+          <span class="filter-label">Sort</span>
+          <div class="select-mock">Best fit</div>
+        </div>
+
+        <div class="annotation warn">
+          Events are hidden from the map in this mode. Switch to "All" or "Events" to see them.
+        </div>
+      </div>
+
+      <div style="height:20px"></div>
+      <div class="mockup-label">Mockup — "Events" selected</div>
+      <div class="panel">
+        <div class="showing-toggle">
+          <button>All<span class="count-badge">156</span></button>
+          <button>Spots<span class="count-badge">124</span></button>
+          <button class="active">Events<span class="count-badge">32</span></button>
+        </div>
+
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Search events</span>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Age group</span>
+          <div class="segmented">
+            <button class="active">Any</button><button>0–2</button><button>3–5</button><button>6–10</button><button>10+</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">When</span>
+          <div class="segmented">
+            <button class="active">All</button><button>Today</button><button>Tomorrow</button><button>Weekend</button>
+          </div>
+        </div>
+
+        <div class="annotation warn">
+          Spots are hidden from the map in this mode. Switch to "All" or "Spots" to see them.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
