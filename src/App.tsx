@@ -1389,6 +1389,10 @@ function App({ metro }: AppProps) {
   const [showInterestsPicker, setShowInterestsPicker] = useState(false);
   const [ageBand, setAgeBand] = useState<AgeBand | "any">("any");
   const [vibe, setVibe] = useState<PlannerVibe>("balanced");
+  // Adults (Mosey) only: who you're heading out as — nudges planner scoring.
+  const [goingOutMode, setGoingOutMode] = useState<"solo" | "friends" | "date">(
+    "friends",
+  );
   const [selectedCategories, setSelectedCategories] = useState<ReadonlySet<Category>>(
     () => {
       try {
@@ -2224,8 +2228,9 @@ function App({ metro }: AppProps) {
       preferences,
       profile: plannerProfile,
       weather: plannerWeather,
+      groupMode: APP_AUDIENCE === "adults" ? goingOutMode : undefined,
     }),
-    [ageBand, plannerProfile, plannerWeather, preferences],
+    [ageBand, plannerProfile, plannerWeather, preferences, goingOutMode],
   );
   const plannerProfileSummary = useMemo(
     () =>
@@ -3890,6 +3895,27 @@ function App({ metro }: AppProps) {
                     key={value}
                     className={ageBand === value ? "active" : ""}
                     onClick={() => setAgeBand(value)}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {APP_AUDIENCE === "adults" && (
+            <div className="filter-group">
+              <span className="filter-label">Going out</span>
+              <div className="segmented compact">
+                {([
+                  ["friends", "With friends"],
+                  ["solo", "Solo"],
+                  ["date", "Date"],
+                ] as const).map(([value, label]) => (
+                  <button
+                    key={value}
+                    className={goingOutMode === value ? "active" : ""}
+                    onClick={() => setGoingOutMode(value)}
                   >
                     {label}
                   </button>

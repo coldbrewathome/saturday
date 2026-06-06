@@ -22,6 +22,36 @@ const baseSpot: PlannerSpot = {
   friendScore: 80,
 };
 
+describe("adult group mode", () => {
+  const bar = { ...baseSpot, id: "bar", category: "Nightlife", mood: "Cocktails" };
+  const cafe = { ...baseSpot, id: "cafe", category: "Wellness", mood: "Quiet cafe" };
+  const opts = (groupMode: "solo" | "friends" | "date") =>
+    ({ audience: "adults" as const, groupMode });
+
+  it("solo demotes nightlife below a quiet spot", () => {
+    expect(
+      scoreSpotForVibe(cafe, "balanced", opts("solo")) >
+        scoreSpotForVibe(bar, "balanced", opts("solo")),
+    ).toBe(true);
+  });
+
+  it("friends boosts nightlife above the same quiet spot", () => {
+    expect(
+      scoreSpotForVibe(bar, "balanced", opts("friends")) >
+        scoreSpotForVibe(bar, "balanced", opts("solo")),
+    ).toBe(true);
+  });
+
+  it("is ignored for the kids audience", () => {
+    const kidsWith = scoreSpotForVibe(bar, "balanced", {
+      audience: "kids",
+      groupMode: "friends",
+    });
+    const kidsWithout = scoreSpotForVibe(bar, "balanced", { audience: "kids" });
+    expect(kidsWith).toBe(kidsWithout);
+  });
+});
+
 describe("planner scoring", () => {
   it("boosts active plans toward outdoors and wellness", () => {
     const activeSpot = {

@@ -50,6 +50,10 @@ export type PlannerScoringOptions = {
   // /api reusing this scorer) pass it explicitly so one bundle can score for
   // either app.
   audience?: "kids" | "adults" | "all";
+  // Adults only: who you're heading out as. Nudges category/group-size scoring
+  // (solo leans cafes/culture, date leans intimate food/culture, friends leans
+  // bars/active). Ignored for the kids app.
+  groupMode?: "solo" | "friends" | "date";
 };
 
 export type PlannerSpot = {
@@ -474,6 +478,26 @@ export function scoreSpotForVibe(
       if (spot.category === "Wellness") score += 6;
       if (spot.category === "Food") score += 4;
       if (spot.category === "Shopping") score += 4;
+    }
+  }
+
+  // Adults only: tune by who you're heading out as.
+  if (options.audience === "adults" && options.groupMode) {
+    if (options.groupMode === "solo") {
+      if (spot.category === "Culture") score += 10;
+      if (spot.category === "Wellness") score += 8;
+      if (spot.category === "Food") score += 4;
+      if (spot.category === "Nightlife") score -= 8;
+    } else if (options.groupMode === "date") {
+      if (spot.category === "Food") score += 10;
+      if (spot.category === "Culture") score += 8;
+      if (spot.category === "Wellness") score += 6;
+      if (spot.category === "Outdoors") score += 4;
+      if (/\b(2|two)\b/.test(spot.groupSize || "")) score += 4;
+    } else if (options.groupMode === "friends") {
+      if (spot.category === "Nightlife") score += 10;
+      if (spot.category === "Food") score += 6;
+      if (spot.category === "Outdoors") score += 4;
     }
   }
 

@@ -32,10 +32,10 @@ const KIDS_VIBE_LABELS: Record<PlannerVibe, string> = {
   culture: "Museum / library day",
 };
 const ADULTS_VIBE_LABELS: Record<PlannerVibe, string> = {
-  balanced: "Balanced night",
-  "low-effort": "Chill night",
-  active: "Active night",
-  "food-first": "Food crawl",
+  balanced: "Balanced",
+  "low-effort": "Chill",
+  active: "Active",
+  "food-first": "Food & drink",
   culture: "Music & culture",
 };
 const KIDS_VIBE_BLURBS: Record<PlannerVibe, string> = {
@@ -47,10 +47,10 @@ const KIDS_VIBE_BLURBS: Record<PlannerVibe, string> = {
 };
 const ADULTS_VIBE_BLURBS: Record<PlannerVibe, string> = {
   balanced: "A bit of everything",
-  "low-effort": "Cocktail bars, low key",
-  active: "Bowling, axe, escape rooms",
-  "food-first": "Restaurants & breweries",
-  culture: "Live music, comedy, art walks",
+  "low-effort": "Cafes, bars, low-key spots",
+  active: "Bowling, climbing, escape rooms",
+  "food-first": "Restaurants, cafes & breweries",
+  culture: "Live music, comedy, art",
 };
 
 export const APP_VIBE_LABELS: Record<PlannerVibe, string> =
