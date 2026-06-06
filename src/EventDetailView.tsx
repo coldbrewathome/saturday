@@ -244,10 +244,18 @@ export default function EventDetailView({
 
       {!event ? (
         <section className="event-detail-empty">
-          <h1>Event not found</h1>
+          <h1>This event has ended</h1>
           <p>
-            We couldn't find this event in the current {metro.label} listings.
-            It may have ended or been re-slugged in a recent refresh.
+            This one's no longer in the current {metro.label} listings — it has
+            likely already happened. Here's what's coming up instead.
+          </p>
+          <p className="event-detail-empty-actions">
+            <a
+              className="primary-button"
+              href={`${metro.canonicalPath.replace(/\/+$/, "")}/this-weekend/`}
+            >
+              See what's on this weekend in {metro.label}
+            </a>
           </p>
         </section>
       ) : (
