@@ -1,6 +1,6 @@
 # Roadmap
 
-_Last updated: 2026-06-06_ (tick 34)
+_Last updated: 2026-06-06_ (tick 35)
 
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
@@ -8,12 +8,13 @@ _In flight — actively being worked on. Keep this to 1–3 items._
 ### Adult venue ratings & reviews enrichment
 - **Why:** venues had 0 ratings — the planner ranked blind, users couldn't trust picks, no rich-result schema or "top-rated" marketing.
 - **Effort:** M
-- **Status:** **Bay Area shipped ($0, free tier)** — 846 venues rated, live in the feed + UI (★ 4.6 · 16k). A metered spend guard (`scripts/lib/places-usage.mjs`, `npm run places:usage`) caps every run to the monthly free tier. Remaining: other 15 metros via rolling monthly free batches (106 Place Details left this month; cap resets monthly), and `aggregateRating` in spot JSON-LD for rich snippets.
+- **Status:** **Bay Area shipped ($0, free tier)** — 846 venues rated, live in the feed + UI (★ 4.6 · 16k) and now in spot-page JSON-LD as `aggregateRating` on precise venue types (Restaurant/BarOrPub/CafeOrCoffeeShop/Museum/…). A metered spend guard (`scripts/lib/places-usage.mjs`, `npm run places:usage`) caps every run to the monthly free tier. Only remaining work: enrich the other 15 metros via rolling monthly free batches (cap resets monthly).
 - **Tasks:**
   - [x] Metered enrichment + free-tier spend guard
   - [x] Bay Area enriched (846 venues, $0) + deployed
+  - [x] `aggregateRating` in spot JSON-LD (`generate-seo-pages.mjs`) for rich snippets
+  - [x] Precise venue typing — `googleType` → schema.org (`scripts/lib/placeSchemaType.mjs`, 10 tests)
   - [ ] Remaining metros (≤~950/month free, rolling)
-  - [ ] `aggregateRating` in spot JSON-LD (`generate-seo-pages.mjs`) for rich snippets
 
 ### Adult-fit planner (date-night / with-friends / solo / tonight)
 - **Why:** The vibes (balanced/active/culture) are generic; the 20–35 audience plans date nights, friend hangs, and solo outings — often "tonight." Make the core loop actually fit them.
@@ -32,11 +33,6 @@ _Committed, not yet started. Ordered by priority. Aim for ≤5 items._
 - **Why:** Mosey's SEO foundation shipped but trymosey.com isn't indexed yet; "best bars in {neighborhood}" / "things to do tonight in {city}" are high-volume 20–35 queries.
 - **Effort:** M
 - **Depends on:** ratings enrichment (quality + aggregateRating in page content)
-
-### Venue schema.org (Bar/Restaurant + aggregateRating)
-- **Why:** Rich results for adult venue pages once ratings land — spot pages currently lack venue-type schema.
-- **Effort:** S
-- **Depends on:** ratings enrichment
 
 ### Viral-loop polish (share → vote) for adults
 - **Why:** The share-plan/vote loop is the cheapest growth channel; instrument the Mosey funnel and cut friction to first share.
@@ -58,6 +54,7 @@ _Candidates and ideas. Unordered. No commitment._
 ## Done
 _Recently shipped (last ~10 items). Older items live in [CHANGELOG.md](CHANGELOG.md)._
 
+- 2026-06-06 · **Venue schema.org (precise types) on spot pages** — closes the "Venue schema.org (Bar/Restaurant + aggregateRating)" item. Spot JSON-LD now maps Google's own `googleType` (Italian Restaurant, Wine Bar, Coffee Shop, Museum, …) to a precise schema.org `@type` (`Restaurant`/`BarOrPub`/`NightClub`/`CafeOrCoffeeShop`/`Bakery`/`Museum`/`ArtGallery`/`Park`/`TouristAttraction`/…) via a new tested pure module (`scripts/lib/placeSchemaType.mjs`, 10 tests; ordered so "Oyster Bar Restaurant"→Restaurant, "Ice Cream Shop"→FoodEstablishment, unmatched/data-noise→category fallback, no regression). Bay Area: 735 spot pages now emit precise types (444 Restaurant, 69 Cafe, 50 Park, 6 BarOrPub, 7 Museum…), with the shipped `aggregateRating` now sitting on rich-result-eligible LocalBusiness subtypes (444 pages). aggregateRating itself shipped earlier in `1478cd3`. Build + 269 tests + seo:audit (0 errors) green; affects both apps (Mosey benefits most for nightlife).
 - 2026-06-06 · **Mosey venue ratings (Bay Area) + free-tier spend guard** — enriched 846 Bay-Area venues with Google ratings for **$0** (894/1,000 free Place Details). New metered guard (`scripts/lib/places-usage.mjs` + `npm run places:usage`) records every billable call to a gitignored monthly ledger and throws before exceeding the free cap (verified it blocks + won't increment at cap). Ratings live in the feed + UI (★ 4.6 · 16k). Key in gitignored `.env.local`. Remaining metros run as rolling monthly free batches.
 - 2026-06-06 · **Mosey brand icons + friendly expired-event state + event-link routing fix** — (a) Mosey purple "hop-arc + pin" icon set (favicon/apple-touch/192/512/og-image + "Mosey" manifest), swapped in by `build:adults` (FamHop coral icons untouched). (b) `readAppRoute` now opens path-based event SEO/share links (`/<metro>/event/<slug>/`) in the in-app event detail instead of bouncing to `#/browse`. (c) Expired/missing events show "This event has ended → See what's on this weekend" linking the metro guide, not a bare "Event not found". Deployed to both apps; verified live.
 - 2026-06-06 · **Mosey adult-fit planner (v1) + reframed vibes** — audience-gated "Going out" mode (solo / with friends / date) in the filter sidebar, wired into `planner.ts` scoring (solo→cafes/culture, date→intimate food/culture, friends→bars/active); adult vibe labels/blurbs reframed off nightlife-only "night" toward all-day hangout; adults browse title/desc broadened to "Things to do in {metro}". Deployed to Mosey only; verified live (trymosey.com shows the control, famhop.com unchanged); 176 tests incl. a "kids ignores groupMode" guard. _(Remaining: "tonight" time filter, persistence.)_
