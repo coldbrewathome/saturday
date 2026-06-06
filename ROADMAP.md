@@ -5,10 +5,42 @@ _Last updated: 2026-06-06_ (tick 34)
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
 
-_Nothing in flight. Pull the top of **Next** when ready._
+### Adult venue ratings & reviews enrichment
+- **Why:** 0/1,500 adult spots have a Google rating — the Mosey planner ranks adult venues blind, users can't trust picks, and we can't emit rich-result schema or "top-rated" marketing. Foundational: SEO rich results, venue schema, and content all depend on it.
+- **Effort:** M (gated on a Places-class API key/quota — first task is a spike)
+- **Status:** starting
+- **Tasks:**
+  - [ ] Spike: confirm an API key + quota (reuse the kids `match:places` setup?) or pick an alternate ratings source
+  - [ ] Run rating/review enrichment for adult spots, per metro
+  - [ ] Thread `googleRating`/`googleRatingCount` into adult planner scoring (already supported in `planner.ts`)
+  - [ ] Surface ratings on spot cards/sheets + venue SEO pages
+
+### Adult-fit planner (date-night / with-friends / solo / tonight)
+- **Why:** The vibes (balanced/active/culture) are generic; the 20–35 audience plans date nights, friend hangs, and solo outings — often "tonight." Make the core loop actually fit them.
+- **Effort:** M
+- **Status:** starting
+- **Tasks:**
+  - [ ] Adult vibe labels/modes (date night, with friends, solo) in `appConfig` adult copy
+  - [ ] "Tonight / this weekend" time-aware filtering for open + scheduled
+  - [ ] Solo vs group toggle feeding group-size scoring
+  - [ ] Verify scoring + copy live on trymosey.com
 
 ## Next
 _Committed, not yet started. Ordered by priority. Aim for ≤5 items._
+
+### High-intent adult SEO pages + Search Console
+- **Why:** Mosey's SEO foundation shipped but trymosey.com isn't indexed yet; "best bars in {neighborhood}" / "things to do tonight in {city}" are high-volume 20–35 queries.
+- **Effort:** M
+- **Depends on:** ratings enrichment (quality + aggregateRating in page content)
+
+### Venue schema.org (Bar/Restaurant + aggregateRating)
+- **Why:** Rich results for adult venue pages once ratings land — spot pages currently lack venue-type schema.
+- **Effort:** S
+- **Depends on:** ratings enrichment
+
+### Viral-loop polish (share → vote) for adults
+- **Why:** The share-plan/vote loop is the cheapest growth channel; instrument the Mosey funnel and cut friction to first share.
+- **Effort:** S
 
 ## Later
 _Candidates and ideas. Unordered. No commitment._
@@ -16,7 +48,10 @@ _Candidates and ideas. Unordered. No commitment._
 - **Weekend reminder push (Fri-AM "your weekend is set")** — retention play that pairs sign-in (`1d3ae14`) with Hop-me-now; depends on PWA shipping first. _Effort: M (after PWA)._
 - **Interest-theme polish (post Phase 2)** — core + auto-personalized default + cross-device sync shipped. Remaining nice-to-haves: lower the ~24% no-theme classifier rate; add a real "Sports & active" data source (thin today); window the chip counts to the visible set; optionally auto-enable "For you" mid-session when synced interests arrive (today it waits for next load). _Effort: S–M._
 - **Thin-metro source repair (re-ingest + selectors + aggregators)** — per `docs/data-source-triage-2026-05.md`: run `ingest:events:all` to activate the 5 applied URL fixes + verify extraction on the coverage panel; then per-page selector work for JS-rendered calendars (Mohawk, Continental Club, Alamo), try Antone's→Ticketmaster (structured), remove no-feed venues (zoo/ranch/comedy), and add a structured metro aggregator (Do512 / Eventbrite-org / Ticketmaster) — the durable fix for Honolulu/Austin starvation. _Effort: M (mostly manual/per-venue + a re-ingest)._
-- **NightHop content/parity audit** — `deploy:adults` and the `audiences` arrays exist, but it's unclear how much adult-specific surface there is vs. just filtered kid data. _Effort: S audit → L close gaps._
+- **Mosey adult-data tagging cleanup** — the NightHop→Mosey rename + adult-focused content/SEO shipped (2026-06-06: adult data drives SEO, adult category set, audience-aware copy). Residual: ~a handful of all-audience kids events (storytimes, Discovery Museum) still surface in the adult feed because they're tagged `audiences:"all"`. Tighten the adult audience filter (or re-tag at ingest) to drop clearly kids-only events. _Effort: S._
+- **Adult event breadth (NYC 31, Seattle 56 vs Bay 631)** — thicken Mosey nightlife/music/food events outside the Bay Area via the `event-sources-adults-*` registries + a structured metro aggregator. _Effort: M–L._
+- **"Mosey picks" content engine** — turn the 67–90 curated adult plans into shareable IG/TikTok carousels + a `/best-of` index (SEO + social). _Effort: M._
+- **Mosey launch distribution (Reddit city subs, Product Hunt, AEO)** — genuinely-helpful curated answers linking Mosey plans; lean on the shipped `llms.txt` + `/api` AI-citability. _Effort: S, ongoing._
 - **Repo cleanup: root screenshots, tracked drift, residual dead CSS** — ~44 PNG screenshots at repo root (untracked, ~21 MB local) + routine event-data drift. Dead `view==="home"` branch + dead AI-plan code already removed (2026-05-30). Residual harmless dead CSS noted: `.browse-near-events*` (pre-existing, never rendered) and `.profile-grid`/`.profile-field` + their two `@media` blocks (orphaned by the home-view removal); left in place because they interleave with possibly-live rules and removing precisely is fiddly. _Effort: XS._
 - **Newsletter: activate live sends** — code is shipped; needs Resend account creation, DNS verification of `famhop.com`, `RESEND_API_KEY` + `NEWSLETTER_ADMIN_TOKEN` wrangler secrets, then a real test send to an operator address with Gmail + Apple Mail QA. Pure ops work, not a code task — promote back to Now only once the human has completed the external setup.
 
