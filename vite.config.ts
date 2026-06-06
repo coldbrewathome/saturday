@@ -26,15 +26,15 @@ const kidsMetroNames = [
 ];
 
 // Swap the home-page JSON-LD block based on the audience the build is for.
-// Kids gets the FamHop FAQ + WebApp graph; adults gets a NightHop-flavored
+// Kids gets the FamHop FAQ + WebApp graph; adults gets a Mosey-flavored
 // version so structured data and FAQ rich results match the visible brand.
 function audienceJsonLdPlugin(env: Record<string, string>): Plugin {
   const audience = env.VITE_APP_AUDIENCE || "kids";
   const isAdults = audience === "adults";
-  const brand = env.VITE_APP_BRAND || (isAdults ? "NightHop" : "FamHop");
+  const brand = env.VITE_APP_BRAND || (isAdults ? "Mosey" : "FamHop");
   const siteUrl =
     (env.VITE_APP_SITE_URL || (isAdults
-      ? "https://nighthop.pages.dev/"
+      ? "https://trymosey.com/"
       : "https://famhop.com/")).replace(/\/?$/, "/");
   const logo = isAdults
     ? `${siteUrl}icon-512.png`
@@ -45,7 +45,7 @@ function audienceJsonLdPlugin(env: Record<string, string>): Plugin {
     ? [
         {
           q: `What is ${brand}?`,
-          a: `${brand} is a free Bay Area night-out planner for adults. Pick a vibe (chill night, foodie crawl, music & culture, etc.) and ${brand} builds a 3-stop plan combining bars, breweries, restaurants, music venues, and comedy clubs. Share a link with friends so the crew can vote on each stop.`,
+          a: `${brand} is a free planner for adults looking for good places to hang out — solo or with friends. Pick a vibe (chill, foodie, active, music & culture, etc.) and ${brand} builds a 3-stop hangout combining cafes, bars, parks, bookstores, music venues, and local events. Share a link so friends can vote on each stop.`,
         },
         {
           q: `Is ${brand} free to use?`,
@@ -53,11 +53,11 @@ function audienceJsonLdPlugin(env: Record<string, string>): Plugin {
         },
         {
           q: `How does the share-and-vote feature work?`,
-          a: `After you build a plan, tap Share to mint a vote link. Anyone you send it to can vote Yes / Maybe / Skip on each stop without signing up. The crew sees the running tally to settle on the night.`,
+          a: `After you build a plan, tap Share to mint a vote link. Anyone you send it to can vote Yes / Maybe / Skip on each stop without signing up. The crew sees the running tally to settle on the plan.`,
         },
         {
           q: `Where does ${brand} pull events from?`,
-          a: `Events are pulled from the official calendars of Bay Area music venues, comedy clubs, breweries, and 21+ festivals using their published JSON-LD, iCal, RSS, and structured-HTML feeds.`,
+          a: `Events are pulled from the official calendars of music venues, breweries, comedy clubs, and 21+ festivals using their published JSON-LD, iCal, RSS, and structured-HTML feeds.`,
         },
         {
           q: `Where does ${brand} cover?`,
@@ -92,15 +92,15 @@ function audienceJsonLdPlugin(env: Record<string, string>): Plugin {
       ];
 
   const alternateName = isAdults
-    ? [`${brand} night-out planner`, "Bay Area nightlife", "nighthop.pages.dev"]
+    ? [`${brand} hangout planner`, "places to hang out", "things to do", "trymosey.com"]
     : [`${brand} weekend planner`, "family events", "family activities", "major metro family planner", "famhop.com"];
   const featureList = isAdults
     ? [
-        "Pick-a-vibe 3-stop night-out plan in one tap",
-        "Bay Area bars, breweries, music and comedy venues",
-        "Live nightlife events by city and category",
+        "Pick-a-vibe 3-stop hangout in one tap",
+        "Cafes, bars, parks, music and local venues",
+        "Live events by city and category",
         "Share a vote link with friends",
-        "Find me on the map and sort venues by distance",
+        "Find me on the map and sort spots by distance",
       ]
     : [
         "Pick-a-vibe 3-stop family plan in one tap",

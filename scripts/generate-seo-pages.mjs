@@ -47,9 +47,62 @@ const APP_AUDIENCE = envValue("VITE_APP_AUDIENCE", "kids");
 const IS_ADULTS = APP_AUDIENCE === "adults";
 
 const SITE = envValue("VITE_APP_SITE_URL").replace(/\/$/, "") ||
-  (IS_ADULTS ? "https://nighthop.pages.dev" : "https://famhop.com");
-const BRAND = envValue("VITE_APP_BRAND", IS_ADULTS ? "NightHop" : "FamHop");
-const BRAND_TAG = IS_ADULTS ? "night-out planner" : "family weekend planner";
+  (IS_ADULTS ? "https://trymosey.com" : "https://famhop.com");
+const BRAND = envValue("VITE_APP_BRAND", IS_ADULTS ? "Mosey" : "FamHop");
+const BRAND_TAG = IS_ADULTS ? "hangout planner" : "family weekend planner";
+
+// Audience-aware copy for the canonical homepage + metro landing pages. The
+// long-tail per-spot/event/city templates below still use kids phrasing —
+// de-kid-ifying those is the tracked "content/parity audit" follow-up.
+const SHELL_TITLE = IS_ADULTS
+  ? `${BRAND} hangout planner by metro`
+  : `${BRAND} family weekend planner by metro`;
+const SHELL_DESC = IS_ADULTS
+  ? `${BRAND} helps adults find good places to hang out — cafes, bars, parks, music, and local events — solo or with friends, across major U.S. metros.`
+  : `${BRAND} helps families find kid-friendly spots, family events, and ready-made weekend plans across major U.S. metros.`;
+const metroSeoTitle = (label) =>
+  IS_ADULTS ? `${label} hangout planner | ${BRAND}` : `${label} family weekend planner | ${BRAND}`;
+const metroSeoDesc = (label) =>
+  IS_ADULTS
+    ? `Find good places to hang out in ${label} — cafes, bars, parks, music, and local events — plus ready-made plans with ${BRAND}.`
+    : `Find family-friendly parks, libraries, museums, events, and ready-made weekend plans in ${label} with ${BRAND}.`;
+const metroCardBlurb = (label) =>
+  IS_ADULTS
+    ? `Browse things to do and good places to hang out in ${label}.`
+    : `Browse family activities, events, and kid-friendly places in ${label}.`;
+const siteAltNames = IS_ADULTS
+  ? [`${BRAND} hangout planner`, "places to hang out", "things to do near me"]
+  : [`${BRAND} weekend planner`, "family events near me", "things to do with kids this weekend"];
+
+// Audience-aware copy fragments reused across the per-spot/event/city/category
+// page templates so the adults (Mosey) build reads as adult hangout content,
+// not kids/family. `friendlyAdj` is the adjective prefix ("family-friendly " vs
+// none); the rest are whole phrases.
+const A = IS_ADULTS
+  ? {
+      friendlyAdj: "",
+      spotLabel: "spot",
+      thingsToDoIn: (c) => `Things to do in ${c}`,
+      thingsToDoLower: "things to do",
+      placesAndEvents: "places and events",
+      cityActivities: "things to do",
+      eventsAdj: "",
+      voters: "friends",
+      planNoun: "hangout",
+      withWhom: "with friends",
+    }
+  : {
+      friendlyAdj: "family-friendly ",
+      spotLabel: "family-friendly spot",
+      thingsToDoIn: (c) => `Things to do with kids in ${c}`,
+      thingsToDoLower: "things to do with kids",
+      placesAndEvents: "family-friendly places and events",
+      cityActivities: "family activities",
+      eventsAdj: "family ",
+      voters: "co-parents and friends",
+      planNoun: "weekend plan",
+      withWhom: "with the kids",
+    };
 const OG_IMAGE = envValue("VITE_APP_OG_IMAGE", `${SITE}/og-image.png`);
 const POLLS_API = envValue("VITE_POLLS_API").replace(/\/$/, "");
 const GOOGLE_CLIENT_ID = envValue("VITE_GOOGLE_CLIENT_ID");
@@ -61,6 +114,22 @@ const MAX_SPOT_PAGES_PER_METRO = Number(process.env.SEO_MAX_SPOT_PAGES_PER_METRO
 // route (served by the SPA shell); they just lack a prerendered page and are
 // excluded from the sitemap — they are NOT mislabeled as "ended" (see caller).
 const MAX_EVENT_PAGES_PER_METRO = Number(process.env.SEO_MAX_EVENT_PAGES_PER_METRO || 800);
+// Also bounded by the 20k-file Pages limit. Ended-event stubs are noindex
+// bounce pages (lowest SEO value), so when a dataset has a large recently-
+// expired tail they are the first thing to cap. Default uncapped (preserves
+// kids behavior); the adults build sets this since its dataset overflows 20k.
+const MAX_ENDED_STUBS = Number(process.env.SEO_MAX_ENDED_STUBS || Infinity);
+// The shared metroDataFile() only knows the kids filenames. For the adults
+// (Mosey) build, metroDataPath() reads these audience-specific files so SEO
+// pages are built from adult spots/events (bars, music, etc.), not kids data.
+const ADULTS_DATA_FILES = {
+  spots: "spots-adults.json",
+  events: "events-adults.json",
+  featuredPlans: "featured-plans-adults.json",
+};
+// Global budget across ALL metros (not per-metro), so it reliably bounds the
+// total deployment file count regardless of how stubs distribute by metro.
+let endedStubBudget = MAX_ENDED_STUBS;
 
 function capEventsForPages(events) {
   if (events.length <= MAX_EVENT_PAGES_PER_METRO) return events;
@@ -91,7 +160,7 @@ function audienceVisible(item) {
 
 // Defined inline because generateCategoryPages references it during the
 // top-level execution. Keep ordering stable.
-const CATEGORY_PAGES = [
+const KIDS_CATEGORY_PAGES = [
   {
     slug: "library",
     label: "Library events",
@@ -156,6 +225,69 @@ const CATEGORY_PAGES = [
     eventMatch: (e) => e.category === "Community",
   },
 ];
+
+// Adult (Mosey) category landing pages — built from the adult dataset's real
+// categories (bars, food, music, museums, outdoors, festivals) rather than the
+// kids taxonomy (zoos, farms, library storytimes).
+const ADULT_CATEGORY_PAGES = [
+  {
+    slug: "bars",
+    label: "Bars & nightlife",
+    title: "Bay Area bars & nightlife",
+    blurb:
+      "Cocktail bars, breweries, wine bars, and late-night spots across the San Francisco Bay Area — solo or with friends.",
+    spotMatch: (s) => s.category === "Nightlife",
+    eventMatch: () => false,
+  },
+  {
+    slug: "food",
+    label: "Food & drink",
+    title: "Bay Area restaurants & food spots",
+    blurb:
+      "Restaurants, cafes, food halls, and standout bites across the San Francisco Bay Area for a meal out or a casual hang.",
+    spotMatch: (s) => s.category === "Food",
+    eventMatch: (e) => e.category === "Market",
+  },
+  {
+    slug: "music",
+    label: "Live music",
+    title: "Bay Area live music & shows",
+    blurb:
+      "Live music, concerts, and gigs across the San Francisco Bay Area, pulled from official venue calendars.",
+    spotMatch: () => false,
+    eventMatch: (e) => e.category === "Music",
+  },
+  {
+    slug: "museum",
+    label: "Museums & galleries",
+    title: "Bay Area museums & galleries",
+    blurb:
+      "Museums, galleries, and exhibitions across the San Francisco Bay Area — current shows, late nights, and member events.",
+    spotMatch: (s) =>
+      s.category === "Culture" || /museum|gallery/i.test(`${s.name} ${s.tags?.join(" ") || ""}`),
+    eventMatch: (e) => e.category === "Museum" || e.category === "Culture",
+  },
+  {
+    slug: "outdoors",
+    label: "Parks & outdoors",
+    title: "Bay Area parks & outdoor spots",
+    blurb:
+      "Parks, trails, gardens, and outdoor hangs across San Francisco, the Peninsula, the East Bay, and the South Bay.",
+    spotMatch: (s) => s.category === "Outdoors" || s.category === "Wellness",
+    eventMatch: () => false,
+  },
+  {
+    slug: "festival",
+    label: "Festivals & events",
+    title: "Bay Area festivals & events",
+    blurb:
+      "Festivals, street fairs, markets, and cultural events across the San Francisco Bay Area.",
+    spotMatch: () => false,
+    eventMatch: (e) => e.category === "Festival" || e.category === "Community",
+  },
+];
+
+const CATEGORY_PAGES = IS_ADULTS ? ADULT_CATEGORY_PAGES : KIDS_CATEGORY_PAGES;
 
 const PAGE_CSS = `
 @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap");
@@ -534,12 +666,81 @@ for (const metro of metroConfig.metros) {
 const totalLocalizedPages = IS_ADULTS ? 0 : generateLocalizedWeekendPages();
 
 writeSitemap(sitemapEntries);
+writeRobotsAndLlms();
 
 console.log(
   `[seo] wrote ${totalSpotPages} spot pages, ${totalEventPages} event pages, ${totalEndedEventStubs} ended-event stubs, ${totalCityPages} city pages, ${totalCategoryPages} category pages, ${totalWeekendPages} this-weekend pages, ${totalLocalizedPages} localized i18n pages, sitemap with ${sitemapEntries.length} URLs.`,
 );
 
+// Keep robots.txt pointed at this build's own sitemap (the static public/
+// robots.txt hardcodes famhop.com), and give the adults build its own
+// Mosey-branded llms.txt instead of the shared FamHop one.
+function writeRobotsAndLlms() {
+  fs.writeFileSync(
+    path.join(DIST, "robots.txt"),
+    `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`,
+  );
+  if (!IS_ADULTS) return;
+  const metroLines = metroConfig.metros
+    .map((m) => `- ${m.seoName || m.label || m.id}: ${SITE}${String(m.canonicalPath || "").replace(/\/?$/, "/")}`)
+    .join("\n");
+  const metroSlugs = metroConfig.metros.map((m) => m.id).join("`, `");
+  const llms = `# ${BRAND}
+
+> ${BRAND} helps adults find good places to hang out — solo or with friends — across major U.S. metros. Visitors pick a metro and a vibe, and ${BRAND} builds a 3-stop hangout from cafes, bars, restaurants, parks, music, and local events.
+
+${BRAND} is a JavaScript single-page app at ${SITE}. Static SEO pages and machine-readable data are published per metro so crawlers can read the coverage without executing JavaScript.
+
+## Coverage
+
+${metroLines}
+
+## URL Schema
+
+- Metro home: \`${SITE}/{metro}/\`
+- This weekend: \`${SITE}/{metro}/this-weekend/\`
+- Place pages: \`${SITE}/{metro}/spot/{slug}/\`
+- Event pages: \`${SITE}/{metro}/event/{slug}/\`
+- City pages: \`${SITE}/{metro}/city/{slug}/\`
+- Category pages: \`${SITE}/{metro}/category/{bars|food|music|museum|outdoors|festival}/\`
+
+Supported metro slugs: \`${metroSlugs}\`.
+
+## API
+
+${BRAND} exposes a small, CORS-enabled, read-only JSON API so assistants and agents can build real plans from the live data. Both accept GET (query string) or POST (JSON body).
+
+### ${SITE}/api/plan
+Builds a short adults itinerary. Params: \`metro\` (required), \`vibe\` (balanced | low-effort | active | food-first | culture), \`audience\` (defaults to adults on this host), \`events\` (false to exclude), \`limit\` (1-5). Example: \`${SITE}/api/plan?metro=bay-area&vibe=food-first\`
+
+### ${SITE}/api/search
+Keyword lookup over places and events. Params: \`metro\` (required), \`q\` (required), \`type\` (places | events | all), \`limit\` (1-50). Example: \`${SITE}/api/search?metro=bay-area&q=cocktail\`
+
+## Data Sources
+
+Place data is from OpenStreetMap (ODbL). Events are pulled from official venue calendars and public feeds for bars, breweries, music venues, museums, and festivals. Every record carries an \`audiences\` array (\`adults\`, \`kids\`, or \`all\`); ${BRAND} shows records tagged for adults or all audiences.
+
+## Brand
+
+- Product name: ${BRAND}
+- Tagline: Find your spot.
+- Domain: ${SITE.replace(/^https?:\/\//, "")}
+- Sitemap: ${SITE}/sitemap.xml
+`;
+  fs.writeFileSync(path.join(DIST, "llms.txt"), llms);
+}
+
 function metroDataPath(metro, key) {
+  if (IS_ADULTS && ADULTS_DATA_FILES[key]) {
+    const adultPath = path.join(
+      ROOT,
+      "public",
+      "data",
+      metro.dataDir || metro.id,
+      ADULTS_DATA_FILES[key],
+    );
+    if (fs.existsSync(adultPath)) return adultPath;
+  }
   const primary = path.join(ROOT, metroDataFile(metro, key));
   if (fs.existsSync(primary)) return primary;
   const legacy = legacyMetroDataFile(metro, key);
@@ -930,12 +1131,8 @@ function generateMetroAppShellPage(metro, categorySlugs = null) {
   const shellPath = path.join(DIST, "index.html");
   if (!fs.existsSync(shellPath)) return;
   const canonical = metroUrl("");
-  const title = `${metroLabel()} family weekend planner | ${BRAND}`;
-  const description =
-    `Find family-friendly parks, libraries, museums, events, and ready-made weekend plans in ${metroLabel()} with ${BRAND}.`.slice(
-      0,
-      300,
-    );
+  const title = metroSeoTitle(metroLabel());
+  const description = metroSeoDesc(metroLabel()).slice(0, 300);
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -1006,15 +1203,14 @@ function generateMetroAppShellPage(metro, categorySlugs = null) {
 function generateRootAppShellPage() {
   const shellPath = path.join(DIST, "index.html");
   if (!fs.existsSync(shellPath)) return;
-  const title = `${BRAND} family weekend planner by metro`;
-  const description =
-    `${BRAND} helps families find kid-friendly spots, family events, and ready-made weekend plans across major U.S. metros.`;
+  const title = SHELL_TITLE;
+  const description = SHELL_DESC;
   const canonical = `${SITE}/`;
   const metroCards = metroConfig.metros
     .map((metro) => {
       const label = metro.seoName || metro.label || metro.id;
       const href = `${String(metro.canonicalPath || "").replace(/\/+$/, "")}/`;
-      return `<li><a href="${esc(href)}"><strong>${esc(label)}</strong><p>Browse family activities, events, and kid-friendly places in ${esc(label)}.</p></a></li>`;
+      return `<li><a href="${esc(href)}"><strong>${esc(label)}</strong><p>${esc(metroCardBlurb(label))}</p></a></li>`;
     })
     .join("");
   const noscript = `
@@ -1037,11 +1233,7 @@ function generateRootAppShellPage() {
         "@id": `${SITE}/#website`,
         url: `${SITE}/`,
         name: BRAND,
-        alternateName: [
-          `${BRAND} weekend planner`,
-          "family events near me",
-          "things to do with kids this weekend",
-        ],
+        alternateName: siteAltNames,
         description,
         inLanguage: "en-US",
         publisher: { "@id": `${SITE}/#org` },
@@ -1091,12 +1283,20 @@ function replaceMetroShellCopy(html, title, description, categorySlugs = null) {
   const area = metroLabel();
   
   const categoriesList = [];
-  const allowedCats = [
-    { slug: "library", label: "library events" },
-    { slug: "museum", label: "museums" },
-    { slug: "park", label: "parks and outdoors" },
-    { slug: "festival", label: "family festivals" }
-  ];
+  const allowedCats = IS_ADULTS
+    ? [
+        { slug: "bars", label: "bars & nightlife" },
+        { slug: "food", label: "food & drink" },
+        { slug: "music", label: "live music" },
+        { slug: "museum", label: "museums" },
+        { slug: "outdoors", label: "parks & outdoors" },
+      ]
+    : [
+        { slug: "library", label: "library events" },
+        { slug: "museum", label: "museums" },
+        { slug: "park", label: "parks and outdoors" },
+        { slug: "festival", label: "family festivals" },
+      ];
   for (const c of allowedCats) {
     if (!categorySlugs || categorySlugs.has(c.slug)) {
       categoriesList.push(`<a href="${metroPath(`category/${c.slug}/`)}">${esc(c.label)}</a>`);
@@ -1107,15 +1307,15 @@ function replaceMetroShellCopy(html, title, description, categorySlugs = null) {
       <noscript>
         <header>
           <h1>${esc(title)}</h1>
-          <p>${esc(description)} Search 1,500+ kid-friendly spots and upcoming family events, then build a shareable weekend plan.</p>
+          <p>${esc(description)} Search ${IS_ADULTS ? "good spots and upcoming events" : "1,500+ kid-friendly spots and upcoming family events"}, then build a shareable ${A.planNoun}.</p>
         </header>
         <section>
           <h2>What you can do on ${esc(BRAND)}</h2>
           <ul>
-            <li>Browse family-friendly ${esc(area)} spots: parks, libraries, museums, playgrounds, zoos and family farms.</li>
-            <li>See upcoming family events from official calendars.</li>
-            <li>Filter by age band: toddler, preschool, school-age and tween.</li>
-            <li>Build a 3-stop plan and share a link so co-parents and friends can vote.</li>
+            <li>Browse ${A.friendlyAdj}${esc(area)} spots: ${IS_ADULTS ? "cafes, bars, restaurants, parks, music and culture" : "parks, libraries, museums, playgrounds, zoos and family farms"}.</li>
+            <li>See upcoming ${A.eventsAdj}events from official calendars.</li>
+            ${IS_ADULTS ? "<li>Filter by vibe: chill, foodie, active, music &amp; culture.</li>" : "<li>Filter by age band: toddler, preschool, school-age and tween.</li>"}
+            <li>Build a 3-stop plan and share a link so ${A.voters} can vote.</li>
           </ul>
         </section>
         <section>
@@ -1131,11 +1331,11 @@ function replaceMetroShellCopy(html, title, description, categorySlugs = null) {
     .replace(/<noscript>[\s\S]*?<\/noscript>/, noscript)
     .replace(
       /Events are pulled directly from public source pages \(libraries like SFPL, SJPL, Oakland; parks; museums; family festivals\) using their official event calendars in JSON-LD, iCal, RSS, LibCal, and dated HTML formats\./g,
-      `Events are pulled directly from public source pages for ${area} libraries, parks, museums, and family venues.`,
+      `Events are pulled directly from public source pages for ${area} ${IS_ADULTS ? "music venues, museums, breweries, and festivals" : "libraries, parks, museums, and family venues"}.`,
     )
     .replace(
       /FamHop covers (?:the )?[^.:]+: San Francisco, the Peninsula, the East Bay, the South Bay, and the North Bay\./g,
-      `FamHop covers ${area} and nearby family-friendly places and events.`,
+      `${BRAND} covers ${area} and nearby ${A.placesAndEvents}.`,
     );
 }
 
@@ -1192,7 +1392,7 @@ function generateSpotPages(items, spotSlugLookup, generatedCitySlugs) {
     const cityName = (spot.neighborhood || metroLabel()).trim();
     const citySlug = cityName ? slugify(cityName) : "";
     const showCityLink = citySlug && generatedCitySlugs && generatedCitySlugs.has(citySlug);
-    const title = `${spot.name} — ${cityName} family-friendly spot | ${BRAND}`;
+    const title = `${spot.name} — ${cityName} ${A.spotLabel} | ${BRAND}`;
     const description = buildSpotDescription(spot);
 
     const heroImage = spot.imageUrl;
@@ -1208,7 +1408,7 @@ function generateSpotPages(items, spotSlugLookup, generatedCitySlugs) {
         <a class="cta" href="${metroPath("")}">Plan a day with ${BRAND}</a>
         ${spot.website ? `<a class="cta-secondary" rel="noopener nofollow" href="${esc(spot.website)}">Visit official website</a>` : ""}
       </p>
-      ${showCityLink ? `<p class="see-also">See more <a href="${metroPath(`city/${citySlug}/`)}">family activities in ${esc(cityName)}</a>.</p>` : ""}
+      ${showCityLink ? `<p class="see-also">See more <a href="${metroPath(`city/${citySlug}/`)}">${A.cityActivities} in ${esc(cityName)}</a>.</p>` : ""}
     `;
 
     const jsonLd = buildSpotJsonLd(spot, canonical);
@@ -1243,7 +1443,7 @@ function generateSpotPages(items, spotSlugLookup, generatedCitySlugs) {
 function writeSpotAliasPage(oldSlug, baseSlug, spot) {
   const canonical = metroUrl(`spot/${baseSlug}/`);
   const cityName = (spot.neighborhood || metroLabel()).trim();
-  const title = `${spot.name} — ${cityName} family-friendly spot | ${BRAND}`;
+  const title = `${spot.name} — ${cityName} ${A.spotLabel} | ${BRAND}`;
   const description = `${spot.name} in ${cityName} has moved to a new ${BRAND} page.`;
   const html = `<!doctype html>
 <html lang="en">
@@ -1276,13 +1476,13 @@ function pinnedCitySlugsForMetro(metroId) {
 
 function buildSpotDescription(spot) {
   const city = spot.neighborhood || metroLabel();
-  const tier = spot.category ? spot.category.toLowerCase() : "family";
+  const tier = spot.category ? spot.category.toLowerCase() : IS_ADULTS ? "go-to" : "family";
   const tagsBit = Array.isArray(spot.tags) && spot.tags.length
     ? ` Tagged: ${spot.tags.slice(0, 4).join(", ")}.`
     : "";
   const opening = spot.openingHours ? ` Hours: ${spot.openingHours}.` : "";
   const cost = spot.cost ? ` Cost: ${spot.cost}.` : "";
-  return `${spot.name} is a ${tier} stop in ${city} for a ${metroLabel()} weekend with the kids.${cost}${opening}${tagsBit}`.trim().slice(0, 280);
+  return `${spot.name} is a ${tier} stop in ${city} for a ${metroLabel()} ${IS_ADULTS ? "day or night out" : "weekend with the kids"}.${cost}${opening}${tagsBit}`.trim().slice(0, 280);
 }
 
 function buildSpotDetailRows(spot) {
@@ -1385,7 +1585,7 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
         <a class="cta" href="${metroPath("")}">Plan a day with ${BRAND}</a>
         ${event.url ? `<a class="cta-secondary" rel="noopener nofollow" href="${esc(event.url)}">Event details</a>` : ""}
       </p>
-      ${showCityLink ? `<p class="see-also">More <a href="${metroPath(`city/${citySlug}/`)}">kid-friendly things to do in ${esc(cityName)}</a>.</p>` : ""}
+      ${showCityLink ? `<p class="see-also">More <a href="${metroPath(`city/${citySlug}/`)}">${A.thingsToDoLower} in ${esc(cityName)}</a>.</p>` : ""}
     `;
 
     const jsonLd = buildEventJsonLd(event, canonical);
@@ -1429,16 +1629,24 @@ function generateEndedEventStubs(history, liveSlugs, now = new Date()) {
   const cutoff = new Date(now);
   cutoff.setUTCDate(cutoff.getUTCDate() - stubDays);
   const cutoffMs = cutoff.getTime();
-  let count = 0;
+  const eligible = [];
   for (const [slug, entry] of Object.entries(history?.slugs || {})) {
     if (!slug || liveSlugs.has(slug)) continue;
     if (entry?.isRecurring) continue;
     const ts = entry?.lastSeenAt ? Date.parse(entry.lastSeenAt) : NaN;
     if (!Number.isFinite(ts) || ts < cutoffMs) continue;
-    writeEndedEventStub(slug);
-    count += 1;
+    eligible.push({ slug, ts });
   }
-  return count;
+  // When capped, keep the most recently-seen stubs (closest to still-live),
+  // drawing from a global budget shared across every metro.
+  eligible.sort((a, b) => b.ts - a.ts);
+  const take = Number.isFinite(endedStubBudget)
+    ? Math.max(0, Math.min(eligible.length, endedStubBudget))
+    : eligible.length;
+  const capped = eligible.slice(0, take);
+  if (Number.isFinite(endedStubBudget)) endedStubBudget -= capped.length;
+  for (const { slug } of capped) writeEndedEventStub(slug);
+  return capped.length;
 }
 
 function writeEndedEventStub(slug) {
@@ -1475,7 +1683,7 @@ function buildEventDescription(event, dateStr) {
   const when = dateStr ? ` on ${dateStr}` : "";
   const cat = event.category ? ` (${event.category})` : "";
   const cost = event.cost && event.cost !== "Unknown" ? ` Cost: ${event.cost}.` : "";
-  const ages = Array.isArray(event.ageBands) && event.ageBands.length
+  const ages = !IS_ADULTS && Array.isArray(event.ageBands) && event.ageBands.length
     ? ` Best for: ${event.ageBands.join(", ")}.`
     : "";
   const desc = (event.description || "").replace(/\s+/g, " ").trim();
@@ -1490,7 +1698,7 @@ function buildEventDetailRows(event, dateStr) {
   if (event.city) rows.push({ label: "City", html: esc(event.city) });
   if (event.category) rows.push({ label: "Category", html: esc(event.category) });
   if (event.cost && event.cost !== "Unknown") rows.push({ label: "Cost", html: esc(event.cost) });
-  if (Array.isArray(event.ageBands) && event.ageBands.length) {
+  if (!IS_ADULTS && Array.isArray(event.ageBands) && event.ageBands.length) {
     rows.push({ label: "Age bands", html: esc(event.ageBands.join(", ")) });
   }
   if (event.url) {
@@ -1573,7 +1781,7 @@ function buildEventJsonLd(event, canonical) {
       };
     }
   }
-  if (Array.isArray(event.ageBands) && event.ageBands.length) {
+  if (!IS_ADULTS && Array.isArray(event.ageBands) && event.ageBands.length) {
     node.audience = {
       "@type": "PeopleAudience",
       audienceType: event.ageBands.join(", "),
@@ -1650,8 +1858,10 @@ function generateCityPages(spotItems, eventItems, spotSlugLookup, eventSlugLooku
     const slug = slugify(city.name);
     if (!slug) continue;
     const canonical = metroUrl(`city/${slug}/`);
-    const title = `Things to do with kids in ${city.name} — ${BRAND}`;
-    const description = `Family-friendly things to do in ${city.name}: ${city.spots.length} parks, museums and venues plus ${city.events.length} weekend events for kids. Plan a day in seconds with ${BRAND}.`;
+    const title = `${A.thingsToDoIn(city.name)} — ${BRAND}`;
+    const description = IS_ADULTS
+      ? `Good places to hang out in ${city.name}: ${city.spots.length} bars, cafes, restaurants and venues plus ${city.events.length} upcoming events. Plan a day or night in seconds with ${BRAND}.`
+      : `Family-friendly things to do in ${city.name}: ${city.spots.length} parks, museums and venues plus ${city.events.length} weekend events for kids. Plan a day in seconds with ${BRAND}.`;
 
     const topSpots = city.spots.slice().sort((a, b) => (b.friendScore || 0) - (a.friendScore || 0)).slice(0, 24);
     const upcomingEvents = city.events
@@ -1660,7 +1870,7 @@ function generateCityPages(spotItems, eventItems, spotSlugLookup, eventSlugLooku
       .slice(0, 24);
 
     const spotsList = topSpots.length
-      ? `<section><h2>Family-friendly spots in ${esc(city.name)}</h2><ul class="card-list">${topSpots.map((s) => {
+      ? `<section><h2>${IS_ADULTS ? "Spots" : "Family-friendly spots"} in ${esc(city.name)}</h2><ul class="card-list">${topSpots.map((s) => {
           const sslug = spotSlugLookup.get(s);
           if (!sslug) return "";
           if (!spotSlugs.has(sslug)) {
@@ -1671,7 +1881,7 @@ function generateCityPages(spotItems, eventItems, spotSlugLookup, eventSlugLooku
       : "";
 
     const eventsList = upcomingEvents.length
-      ? `<section><h2>Upcoming family events in ${esc(city.name)}</h2><ul class="card-list">${upcomingEvents.map((e) => {
+      ? `<section><h2>Upcoming ${A.eventsAdj}events in ${esc(city.name)}</h2><ul class="card-list">${upcomingEvents.map((e) => {
           const eslug = eventSlugLookup.get(e);
           if (!eslug) return "";
           const dateStr = formatEventDate(e);
@@ -1694,7 +1904,7 @@ function generateCityPages(spotItems, eventItems, spotSlugLookup, eventSlugLooku
       "@type": "CollectionPage",
       "@id": `${canonical}#page`,
       url: canonical,
-      name: `Things to do with kids in ${city.name}`,
+      name: A.thingsToDoIn(city.name),
       description,
       about: {
         "@type": "Place",
@@ -1718,7 +1928,7 @@ function generateCityPages(spotItems, eventItems, spotSlugLookup, eventSlugLooku
         { name: BRAND, url: metroUrl("") },
         { name: city.name, url: canonical },
       ],
-      h1: `Things to do with kids in ${city.name}`,
+      h1: A.thingsToDoIn(city.name),
       eyebrow: metroTag(),
       body,
     });
@@ -1757,7 +1967,7 @@ function generateCategoryPages(spotItems, eventItems, spotSlugLookup, eventSlugL
 
     const canonical = metroUrl(`category/${cat.slug}/`);
     const description =
-      `${metroText(cat.blurb)} Browse ${matchingSpots.length} family-friendly spots and ${matchingEvents.length} upcoming events on ${BRAND}.`.slice(
+      `${metroText(cat.blurb)} Browse ${matchingSpots.length} ${A.friendlyAdj}spots and ${matchingEvents.length} upcoming events on ${BRAND}.`.slice(
         0,
         300,
       );
@@ -1860,8 +2070,8 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
 
   if (upcoming.length === 0) {
     const canonical = metroUrl("this-weekend/");
-    const title = `${metroLabel()} weekend guide: family events — ${BRAND}`;
-    const description = `A weekend guide to family-friendly events in ${metroLabel()}. No events are scheduled for this weekend. Plan a customized day out with ${BRAND}.`;
+    const title = `${metroLabel()} weekend guide: ${IS_ADULTS ? "things to do" : "family events"} — ${BRAND}`;
+    const description = `A weekend guide to ${IS_ADULTS ? "things to do" : "family-friendly events"} in ${metroLabel()}. No events are scheduled for this weekend. Plan a customized ${IS_ADULTS ? "outing" : "day out"} with ${BRAND}.`;
 
     const body = `
       <p class="lede">${esc(description)}</p>
@@ -1904,7 +2114,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
         { name: BRAND, url: metroUrl("") },
         { name: "Weekend guide", url: canonical },
       ],
-      h1: `${metroLabel()} weekend guide for families`,
+      h1: `${metroLabel()} weekend guide${IS_ADULTS ? "" : " for families"}`,
       eyebrow: metroTag(),
       body,
       hreflangLinks,
@@ -1936,8 +2146,8 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     day: "numeric",
     timeZone: activeMetro.timezone || "America/Los_Angeles",
   });
-  const title = `${metroLabel()} weekend guide: family events for ${weekendLabel} — ${BRAND}`;
-  const description = `A timeline weekend guide to family-friendly events in ${metroLabel()} from ${weekendLabel} through ${sundayLabel}: ${upcoming.length} events with times, venues, details, and official links. Build a 3-stop plan with ${BRAND}.`.slice(
+  const title = `${metroLabel()} weekend guide: ${IS_ADULTS ? "things to do" : "family events"} for ${weekendLabel} — ${BRAND}`;
+  const description = `A timeline weekend guide to ${IS_ADULTS ? "things to do" : "family-friendly events"} in ${metroLabel()} from ${weekendLabel} through ${sundayLabel}: ${upcoming.length} events with times, venues, details, and official links. Build a 3-stop plan with ${BRAND}.`.slice(
     0,
     300,
   );
@@ -1974,7 +2184,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
       <h2>Weekend snapshot</h2>
       <p>${esc(buildWeekendGuideSummary(upcoming, topCategories, topCities, weekendLabel, sundayLabel))}</p>
       <div class="guide-facts">
-        <div class="guide-fact"><strong>${upcoming.length}</strong><span>dated family events</span></div>
+        <div class="guide-fact"><strong>${upcoming.length}</strong><span>dated ${A.eventsAdj}events</span></div>
         <div class="guide-fact"><strong>${freeCount}</strong><span>likely free options</span></div>
         <div class="guide-fact"><strong>${qualityCount}</strong><span>strong-detail listings</span></div>
         <div class="guide-fact"><strong>${cityCounts.size}</strong><span>metro cities represented</span></div>
@@ -2021,7 +2231,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
       {
         "@type": "ItemList",
         "@id": `${canonical}#timeline`,
-        name: `${metroLabel()} family events this weekend`,
+        name: `${metroLabel()} ${A.eventsAdj}events this weekend`,
         itemListElement: upcoming.slice(0, 30).map((event, index) => {
           const slug = lookup.get(event);
           const eventUrl = slug ? metroUrl(`event/${slug}/`) : event.url || canonical;
@@ -2059,7 +2269,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
       { name: BRAND, url: metroUrl("") },
       { name: "Weekend guide", url: canonical },
     ],
-    h1: `${metroLabel()} weekend guide for families`,
+    h1: `${metroLabel()} weekend guide${IS_ADULTS ? "" : " for families"}`,
     eyebrow: metroTag(),
     body,
     hreflangLinks,
@@ -2172,7 +2382,7 @@ function buildWeekendGuideSummary(events, topCategories, topCities, saturdayLabe
   const cityText = topCities.length
     ? topCities.map((item) => item.label).join(", ")
     : metroLabel();
-  return `From ${saturdayLabel} through ${sundayLabel}, ${BRAND} found ${events.length} dated family events across ${metroLabel()}. The biggest clusters are ${categoryText}, with options in ${cityText}. Use the timeline below to compare times, venues, costs, age fit, and official event links before building a plan.`;
+  return `From ${saturdayLabel} through ${sundayLabel}, ${BRAND} found ${events.length} dated ${A.eventsAdj}events across ${metroLabel()}. The biggest clusters are ${categoryText}, with options in ${cityText}. Use the timeline below to compare times, venues, costs${IS_ADULTS ? "" : ", age fit"}, and official event links before building a plan.`;
 }
 
 function eventQualityScore(event) {
@@ -2219,23 +2429,40 @@ function buildWeekendPlanPresets(events, eventSlugLookup) {
 
   addPreset(
     "free-family-day",
-    "Free family day",
-    "No-ticket or likely-free events that work well as the anchor for a low-cost weekend plan.",
+    IS_ADULTS ? "Free this weekend" : "Free family day",
+    IS_ADULTS
+      ? "No-ticket or likely-free events to anchor a low-cost weekend out."
+      : "No-ticket or likely-free events that work well as the anchor for a low-cost weekend plan.",
     source.filter(eventLikelyFree),
   );
-  addPreset(
-    "little-kids",
-    "Toddler and preschool picks",
-    "Shorter, earlier programs with age signals that are easier for little kids.",
-    source.filter((event) =>
-      eventHasAge(event, ["toddler", "preschool"]) ||
-      /storytime|toddler|preschool|music and movement/i.test(`${event.title} ${event.description}`),
-    ),
-  );
+  if (IS_ADULTS) {
+    addPreset(
+      "live-music",
+      "Live music & shows",
+      "Concerts and gigs pulled from official venue calendars this weekend.",
+      source.filter(
+        (event) =>
+          event.category === "Music" ||
+          /concert|live music|\bdj\b|\bband\b|gig/i.test(`${event.title} ${event.description}`),
+      ),
+    );
+  } else {
+    addPreset(
+      "little-kids",
+      "Toddler and preschool picks",
+      "Shorter, earlier programs with age signals that are easier for little kids.",
+      source.filter((event) =>
+        eventHasAge(event, ["toddler", "preschool"]) ||
+        /storytime|toddler|preschool|music and movement/i.test(`${event.title} ${event.description}`),
+      ),
+    );
+  }
   addPreset(
     "indoor-backup",
     "Indoor backup plan",
-    "Libraries, museums, makerspaces, and indoor culture picks for weather or low-energy days.",
+    IS_ADULTS
+      ? "Museums, galleries, and indoor culture picks for weather or low-energy days."
+      : "Libraries, museums, makerspaces, and indoor culture picks for weather or low-energy days.",
     source.filter(isIndoorEvent),
   );
 
@@ -2747,7 +2974,7 @@ function formatTimelineMeta(event) {
   if (event.venue) parts.push(event.venue);
   if (event.city) parts.push(event.city);
   if (event.cost && event.cost !== "Unknown") parts.push(event.cost);
-  if (Array.isArray(event.ageBands) && event.ageBands.length) {
+  if (!IS_ADULTS && Array.isArray(event.ageBands) && event.ageBands.length) {
     parts.push(`Ages: ${event.ageBands.join(", ")}`);
   }
   return parts.join(" · ");
@@ -2757,7 +2984,7 @@ function buildTimelineDescription(event) {
   const desc = String(event.description || "").replace(/\s+/g, " ").trim();
   if (desc) return desc.length > 210 ? `${desc.slice(0, 207)}…` : desc;
   const where = [event.venue, event.city].filter(Boolean).join(" in ");
-  const cat = event.category ? `${event.category.toLowerCase()} event` : "family event";
+  const cat = event.category ? `${event.category.toLowerCase()} event` : IS_ADULTS ? "event" : "family event";
   return `${event.title} is a ${cat}${where ? ` at ${where}` : ""}. Confirm registration, cost, and age fit on the official listing.`;
 }
 
@@ -3217,7 +3444,14 @@ function readJson(p) {
 
 function readBuildEnv() {
   const result = {};
-  for (const filename of [".env", ".env.local"]) {
+  // Mirror Vite's env loading: base files first, then mode-specific files
+  // (.env.<mode>) which override. Without this, `build:adults` would run this
+  // script with kids defaults and overwrite the adults-branded homepage/SEO.
+  const modeIdx = process.argv.indexOf("--mode");
+  const mode = modeIdx !== -1 ? process.argv[modeIdx + 1] : process.env.APP_MODE || "";
+  const files = [".env", ".env.local"];
+  if (mode) files.push(`.env.${mode}`, `.env.${mode}.local`);
+  for (const filename of files) {
     const file = path.join(ROOT, filename);
     if (!fs.existsSync(file)) continue;
     const text = fs.readFileSync(file, "utf8");

@@ -21,7 +21,7 @@
     "build:data-site": "node scripts/build-data-site.mjs",
     "deploy:data": "npm run build:data-site && npx wrangler pages deploy data-site/dist --project-name=famhop-data --branch=main --commit-dirty=true",
     "deploy:kids": "npm run build && npx wrangler pages deploy dist --project-name=saturday-spots --branch=main --commit-dirty=true",
-    "build:adults": "vite build --mode adults && node scripts/generate-seo-pages.mjs",
+    "build:adults": "vite build --mode adults && SEO_MAX_ENDED_STUBS=0 node scripts/generate-seo-pages.mjs --mode adults",
     "deploy:adults": "npm run build:adults && npx wrangler pages deploy dist --project-name=nighthop --branch=main --commit-dirty=true",
     "match:places": "node scripts/match-google-places.mjs",
     "match:places:osm": "node scripts/match-google-places-osm.mjs",

@@ -56,6 +56,43 @@ Legacy Bay Area files remain available for compatibility:
 - https://famhop.com/data/events.json
 - https://famhop.com/data/event-build-report.json
 
+## API
+
+FamHop exposes a small, CORS-enabled, read-only JSON API so assistants and agents can build real plans from the live data instead of guessing. Both endpoints accept GET (query string) or POST (JSON body). Responses carry `X-Robots-Tag: noindex`.
+
+### POST/GET https://famhop.com/api/plan
+
+Builds a short itinerary with the same scorer the app uses.
+
+Parameters:
+
+- `metro` (required) — a supported metro slug, e.g. `bay-area`, `los-angeles`.
+- `vibe` (optional) — one of `balanced` (default), `low-effort`, `active`, `food-first`, `culture`.
+- `ageBand` (optional) — one of `toddler`, `preschool`, `school-age`, `tween`.
+- `audience` (optional) — `kids` (default on famhop.com) or `adults`.
+- `events` (optional) — `false` to exclude scheduled events.
+- `limit` (optional) — number of stops, 1-5 (default 3).
+
+Example: `https://famhop.com/api/plan?metro=bay-area&vibe=culture&ageBand=preschool`
+
+Returns `{ metro, vibe, vibeLabel, audience, ageBand, stops[], brief, counts }`, where each stop has `{ id, kind: "place" | "event", name, category, neighborhood, cost, mood, when, note, url }` and `brief` carries `{ title, summary, rationale[], cautions[] }`.
+
+### POST/GET https://famhop.com/api/search
+
+Keyword lookup over places and events for a metro.
+
+Parameters:
+
+- `metro` (required) — metro slug.
+- `q` (required) — search text.
+- `type` (optional) — `places`, `events`, or `all` (default).
+- `audience` (optional) — `kids` (default) or `adults`.
+- `limit` (optional) — max hits, 1-50 (default 20).
+
+Example: `https://famhop.com/api/search?metro=bay-area&q=museum`
+
+Returns `{ metro, query, count, hits[] }`, where each hit has `{ id, kind, name, category, neighborhood, cost, url, when }`.
+
 ## Data Sources
 
 Place data is sourced from OpenStreetMap (ODbL), with imagery and attribution from Wikimedia Commons and Wikidata where available. Events are pulled from official calendars and public feeds for libraries, parks, museums, zoos, theaters, family festivals, and selected ticketed sources.

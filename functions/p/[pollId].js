@@ -7,10 +7,11 @@
 
 const WORKER_API = "https://saturday-polls.santaclararental2016.workers.dev";
 
-// This Function deploys to both the kids (FamHop) and adults (NightHop) Pages
-// projects, so brand from the request host rather than hardcoding.
+// This Function deploys to both the kids (FamHop) and adults (Mosey) Pages
+// projects, so brand from the request host rather than hardcoding. The adults
+// project serves trymosey.com (and still nighthop.pages.dev as its fallback).
 function brandForHost(host) {
-  return /nighthop/i.test(host || "") ? "NightHop" : "FamHop";
+  return /trymosey|mosey|nighthop/i.test(host || "") ? "Mosey" : "FamHop";
 }
 
 function esc(value) {

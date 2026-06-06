@@ -9,8 +9,16 @@
 import type { Audience } from "./App";
 import type { PlannerVibe } from "./planner";
 
+// `import.meta.env` is injected by Vite at build time. When this module is
+// bundled into a non-Vite context (e.g. a Cloudflare Pages Function reusing the
+// shared planner/metros logic), `import.meta.env` is undefined — guard so the
+// module still loads and falls back to the kids/FamHop defaults.
+const ENV: Record<string, string | undefined> =
+  (import.meta as unknown as { env?: Record<string, string | undefined> }).env ??
+  {};
+
 export const APP_AUDIENCE: Audience =
-  ((import.meta.env.VITE_APP_AUDIENCE as Audience) || "kids");
+  ((ENV.VITE_APP_AUDIENCE as Audience) || "kids");
 
 // Per-audience vibe label and blurb overrides. The vibe enum itself stays
 // the same across apps so the planner scoring code is untouched — but the
@@ -50,13 +58,13 @@ export const APP_VIBE_LABELS: Record<PlannerVibe, string> =
 export const APP_VIBE_BLURBS: Record<PlannerVibe, string> =
   APP_AUDIENCE === "adults" ? ADULTS_VIBE_BLURBS : KIDS_VIBE_BLURBS;
 
-export const APP_BRAND: string = import.meta.env.VITE_APP_BRAND || "FamHop";
+export const APP_BRAND: string = ENV.VITE_APP_BRAND || "FamHop";
 export const APP_TAGLINE: string =
-  import.meta.env.VITE_APP_TAGLINE || "Plan · Hop · Repeat.";
+  ENV.VITE_APP_TAGLINE || "Plan · Hop · Repeat.";
 export const APP_GROUP_LABEL: string =
-  import.meta.env.VITE_APP_GROUP_LABEL || "the family";
+  ENV.VITE_APP_GROUP_LABEL || "the family";
 export const APP_PLAN_NOUN: string =
-  import.meta.env.VITE_APP_PLAN_NOUN || "family plan";
+  ENV.VITE_APP_PLAN_NOUN || "family plan";
 
 export function audienceVisible(
   item: { audiences?: Audience[] } | null | undefined,

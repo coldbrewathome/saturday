@@ -46,6 +46,10 @@ export type PlannerScoringOptions = {
   preferences?: PlannerPreferenceId[];
   weather?: PlannerWeatherTone;
   profile?: Partial<PlannerProfile> | null;
+  // Defaults to the build-time APP_AUDIENCE. Server-side callers (the public
+  // /api reusing this scorer) pass it explicitly so one bundle can score for
+  // either app.
+  audience?: "kids" | "adults" | "all";
 };
 
 export type PlannerSpot = {
@@ -255,11 +259,11 @@ export function normalizePlannerProfile(
 function normalizeScoringOptions(
   input?: AgeBand | PlannerScoringOptions,
 ): PlannerScoringOptions {
-  if (!input) return {};
+  if (!input) return { audience: APP_AUDIENCE };
   if (typeof input === "string") {
-    return { ageBand: input };
+    return { ageBand: input, audience: APP_AUDIENCE };
   }
-  return input;
+  return { ...input, audience: input.audience ?? APP_AUDIENCE };
 }
 
 function textForSpot(spot: PlannerSpot): string {
@@ -397,7 +401,7 @@ export function scoreSpotForVibe(
   if (spot.transitMinutes > 45) score -= 8;
   if (spot.planning.toLowerCase().includes("book")) score -= 2;
 
-  if (APP_AUDIENCE === "kids") {
+  if (options.audience === "kids") {
     if (spot.kidsFriendly === true) score += 12;
     if (spot.kidsFriendly === false) score -= 25;
     if (spot.cost === "Free") score += 4;
@@ -450,7 +454,7 @@ export function scoreSpotForVibe(
     if (spot.category === "Shopping") score += 4;
   }
 
-  if (APP_AUDIENCE === "kids") {
+  if (options.audience === "kids") {
     if (ageBand === "toddler") {
       if (spot.category === "Outdoors") score += 8;
       if (spot.category === "Culture") score += 4;

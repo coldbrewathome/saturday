@@ -1449,6 +1449,9 @@ function App({ metro }: AppProps) {
   const [activePlanId, setActivePlanId] = useState<string | null>(
     initialRoute.planId,
   );
+  const [confirmDeletePlanId, setConfirmDeletePlanId] = useState<string | null>(
+    null,
+  );
   const [activeEventSlug, setActiveEventSlug] = useState<string | null>(
     initialRoute.eventSlug,
   );
@@ -3491,6 +3494,7 @@ function App({ metro }: AppProps) {
             aria-label="Choose metro area"
             value={metro.id}
             onChange={(event) => switchMetro(event.target.value)}
+            style={{ width: `${Math.min(160, metro.label.length * 9 + 16)}px` }}
           >
             {METROS.map((item) => (
               <option key={item.id} value={item.id}>
@@ -4561,38 +4565,63 @@ function App({ metro }: AppProps) {
             <div className="plan-list">
               {plans.map((plan) => {
                 const isActive = plan.id === activePlanId;
+                const isConfirming = plan.id === confirmDeletePlanId;
                 return (
                   <div
                     key={plan.id}
-                    className={`plan-list-item ${isActive ? "active" : ""}`}
+                    className={`plan-list-item ${isActive ? "active" : ""} ${
+                      isConfirming ? "confirming" : ""
+                    }`}
                   >
-                    <button
-                      className="plan-list-item-open"
-                      onClick={() => setActivePlanId(plan.id)}
-                    >
-                      <strong>{plan.name || "Untitled plan"}</strong>
-                      <span>
-                        {plan.stopIds.length} stop
-                        {plan.stopIds.length === 1 ? "" : "s"}
-                      </span>
-                    </button>
-                    <button
-                      className="plan-list-item-delete"
-                      title="Delete plan"
-                      aria-label={`Delete ${plan.name || "untitled plan"}`}
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        if (
-                          window.confirm(
-                            `Delete "${plan.name || "Untitled plan"}"? This can't be undone.`,
-                          )
-                        ) {
-                          deletePlan(plan.id);
-                        }
-                      }}
-                    >
-                      <Trash2 aria-hidden="true" />
-                    </button>
+                    {isConfirming ? (
+                      <div className="plan-list-item-confirm" role="alertdialog" aria-label="Confirm delete plan">
+                        <p className="plan-list-item-confirm-text">
+                          Delete <strong>{plan.name || "Untitled plan"}</strong>?
+                          This can't be undone.
+                        </p>
+                        <div className="plan-list-item-confirm-actions">
+                          <button
+                            className="secondary-button"
+                            onClick={() => setConfirmDeletePlanId(null)}
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            className="danger-button"
+                            onClick={() => {
+                              deletePlan(plan.id);
+                              setConfirmDeletePlanId(null);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <button
+                          className="plan-list-item-open"
+                          onClick={() => setActivePlanId(plan.id)}
+                        >
+                          <strong>{plan.name || "Untitled plan"}</strong>
+                          <span>
+                            {plan.stopIds.length} stop
+                            {plan.stopIds.length === 1 ? "" : "s"}
+                          </span>
+                        </button>
+                        <button
+                          className="plan-list-item-delete"
+                          title="Delete plan"
+                          aria-label={`Delete ${plan.name || "untitled plan"}`}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            setConfirmDeletePlanId(plan.id);
+                          }}
+                        >
+                          <Trash2 aria-hidden="true" />
+                        </button>
+                      </>
+                    )}
                   </div>
                 );
               })}
@@ -5428,7 +5457,7 @@ function NewsletterCard({
       <p className="eyebrow">
         <Mail aria-hidden="true" /> Friday digest
       </p>
-      <h3>5 family ideas for {metroLabel} this weekend</h3>
+      <h3>5 {APP_AUDIENCE === "adults" ? "" : "family "}ideas for {metroLabel} this weekend</h3>
       <p className="newsletter-sub">
         A short email every Friday morning. Free. Unsubscribe anytime.
       </p>
@@ -6360,10 +6389,20 @@ function drawPlanShareCard(
 
   ctx.fillStyle = "#1b1916";
   ctx.font = "800 30px Arial, sans-serif";
-  ctx.fillText("Vote on the plan at famhop.com", 112, 1210);
+  ctx.fillText(
+    `Vote on the plan at ${APP_AUDIENCE === "adults" ? "trymosey.com" : "famhop.com"}`,
+    112,
+    1210,
+  );
   ctx.fillStyle = "#6b7280";
   ctx.font = "700 22px Arial, sans-serif";
-  ctx.fillText("Family-friendly events and plans, ordered by real timing.", 112, 1248);
+  ctx.fillText(
+    APP_AUDIENCE === "adults"
+      ? "Good spots and plans, ordered by real timing."
+      : "Family-friendly events and plans, ordered by real timing.",
+    112,
+    1248,
+  );
 }
 
 function drawRoundedRect(

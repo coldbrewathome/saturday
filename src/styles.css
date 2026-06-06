@@ -3337,6 +3337,52 @@ h3 {
   font-weight: 500;
 }
 
+.plan-list-item.confirming {
+  grid-template-columns: 1fr;
+  border-color: var(--coral);
+  background: var(--coral-soft);
+}
+
+.plan-list-item-confirm {
+  display: grid;
+  gap: 10px;
+  padding: 8px 6px;
+}
+
+.plan-list-item-confirm-text {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.plan-list-item-confirm-text strong {
+  font-weight: 700;
+}
+
+.plan-list-item-confirm-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.plan-list-item-confirm-actions .secondary-button,
+.plan-list-item-confirm-actions .danger-button {
+  flex: 1;
+  min-height: 36px;
+  justify-content: center;
+}
+
+.plan-list-item-confirm-actions .danger-button {
+  background: var(--coral);
+  border-color: var(--coral);
+  color: #ffffff;
+}
+
+.plan-list-item-confirm-actions .danger-button:hover {
+  filter: brightness(0.95);
+}
+
 .plan-detail-area {
   max-height: none;
   overflow-y: visible;
@@ -4896,9 +4942,9 @@ h3 {
     word-break: break-word;
   }
 
-  /* Mobile topbar: brand stays visible, metro flexes, tabs/auth stay right. */
+  /* Tablet topbar: adjust spacing, keep desktop fonts, hide refresh/add. */
   .topbar {
-    column-gap: 5px;
+    column-gap: 8px;
     flex-wrap: nowrap;
     left: 12px;
     padding: 8px;
@@ -4906,22 +4952,30 @@ h3 {
     row-gap: 0;
   }
 
-  .topbar-brand { flex: 0 0 auto; gap: 5px; margin-right: 0; min-width: 0; order: 1; }
-  .topbar-mark svg { height: 20px; width: 20px; }
-  .topbar-wordmark { display: block; font-size: 0.9rem; letter-spacing: 0; max-width: none; overflow: visible; white-space: nowrap; }
-  .topbar-metro { flex: 1 1 72px; max-width: none; min-width: 72px; order: 2; padding: 5px 6px 5px 7px; }
-  .topbar-metro select { font-family: var(--font-ui); font-size: 0.76rem; max-width: none; min-width: 0; overflow: hidden; padding-right: 11px; text-overflow: ellipsis; width: 100%; }
-  .topbar-metro-prefix { display: none; }
-  .topbar-tabs { flex: 0 0 88px; margin-left: 0; order: 3; width: 88px; }
-  .topbar-tabs button,
-  .topbar-tabs a { font-size: 0; gap: 0; padding: 5px 6px; }
-  .topbar-tabs button svg,
-  .topbar-tabs a svg { height: 14px; width: 14px; }
-  .topbar-tabs .tab-count { display: none; }
-  .topbar-spacer { display: none; }
   .topbar-refresh { display: none; }
   .topbar-add { display: none; }
-  .topbar-auth { flex: 0 0 40px; justify-content: flex-end; margin-left: 0; order: 4; width: 40px; }
+
+  @media (max-width: 640px) {
+    /* Mobile topbar: brand stays visible, metro flexes, tabs/auth stay right. */
+    .topbar {
+      column-gap: 5px;
+    }
+    .topbar-brand { flex: 0 0 auto; gap: 5px; margin-right: 0; min-width: 0; order: 1; }
+    .topbar-mark svg { height: 20px; width: 20px; }
+    .topbar-wordmark { display: block; font-size: 0.9rem; letter-spacing: 0; max-width: none; overflow: visible; white-space: nowrap; }
+    .topbar-metro { flex: 0 1 auto; max-width: 160px; min-width: 72px; order: 2; padding: 5px 6px 5px 7px; margin-right: auto; }
+    .topbar-metro select { font-family: var(--font-ui); font-size: 0.76rem; max-width: none; min-width: 0; overflow: hidden; padding-right: 11px; text-overflow: ellipsis; width: 100%; }
+    .is-browse .topbar-metro select { max-width: none; }
+    .topbar-metro-prefix { display: none; }
+    .topbar-tabs { flex: 0 0 88px; margin-left: 0; order: 3; width: 88px; }
+    .topbar-tabs button,
+    .topbar-tabs a { font-size: 0; gap: 0; padding: 5px 6px; }
+    .topbar-tabs button svg,
+    .topbar-tabs a svg { height: 14px; width: 14px; }
+    .topbar-tabs .tab-count { display: none; }
+    .topbar-spacer { display: none; }
+    .topbar-auth { flex: 0 0 40px; justify-content: flex-end; margin-left: 0; order: 4; width: 40px; }
+  }
 
   .section-heading {
     align-items: stretch;
