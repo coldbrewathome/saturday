@@ -3534,14 +3534,29 @@ function App({ metro }: AppProps) {
       <header className="topbar">
         <div className="topbar-brand">
           <span className="topbar-mark" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 64 64">
-              <rect width="64" height="64" rx="14" fill="var(--accent)" />
-              <path d="M 14 46 Q 32 18 50 46" stroke="#fff" strokeWidth="3" strokeDasharray="3 4" strokeLinecap="round" fill="none" />
-              <circle cx="14" cy="46" r="3.5" fill="#fff" />
-              <circle cx="50" cy="46" r="3.5" fill="#fff" />
-              <circle cx="32" cy="24" r="9" fill="#fff" />
-              <circle cx="29.5" cy="21.5" r="2.4" fill="var(--accent)" opacity="0.55" />
-            </svg>
+            {APP_AUDIENCE === "adults" ? (
+              // Mosey: "stroll-to-pin" — matches the new app icon/favicon.
+              <svg width="22" height="22" viewBox="0 0 64 64">
+                <rect width="64" height="64" rx="14" fill="var(--accent)" />
+                <g transform="scale(0.125)" fill="#fff">
+                  <circle cx="162" cy="372" r="17" />
+                  <circle cx="200" cy="344" r="14.5" />
+                  <circle cx="224" cy="306" r="12" />
+                  <circle cx="246" cy="272" r="10" />
+                  <path d="M300 150 C 256 150 221 185 221 228 C 221 289 300 360 300 360 C 300 360 379 289 379 228 C 379 185 344 150 300 150 Z" />
+                </g>
+                <circle cx="37.5" cy="28.25" r="3.75" fill="var(--accent)" />
+              </svg>
+            ) : (
+              <svg width="22" height="22" viewBox="0 0 64 64">
+                <rect width="64" height="64" rx="14" fill="var(--accent)" />
+                <path d="M 14 46 Q 32 18 50 46" stroke="#fff" strokeWidth="3" strokeDasharray="3 4" strokeLinecap="round" fill="none" />
+                <circle cx="14" cy="46" r="3.5" fill="#fff" />
+                <circle cx="50" cy="46" r="3.5" fill="#fff" />
+                <circle cx="32" cy="24" r="9" fill="#fff" />
+                <circle cx="29.5" cy="21.5" r="2.4" fill="var(--accent)" opacity="0.55" />
+              </svg>
+            )}
           </span>
           <h1 className="topbar-wordmark">{APP_BRAND}</h1>
         </div>
