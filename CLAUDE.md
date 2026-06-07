@@ -75,3 +75,7 @@ When the user says "deploy", it means **deploy to Cloudflare Pages directly via 
 - `npm run deploy:data` → famhop-data
 
 If the user says "deploy" without specifying, default to both kids and adults (the shared `App.tsx` means a change usually ships to both). Run `npm run test` + `npm run validate:data` + `npm run validate:events` first to match what CI would check.
+
+## Shared Skills
+
+- For local event discovery, source repair, Bay Area feed repopulation, or missing-event audits, read and follow `skills/grounded-event-discovery/SKILL.md`. It defines the official-source search workflow and verification gates shared with Codex.
