@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "tsc -b && vite build && node scripts/generate-seo-pages.mjs",
+    "build": "tsc -b && vite build && SEO_MAX_ENDED_STUBS=0 SEO_MAX_EVENT_PAGES_PER_METRO=600 node scripts/generate-seo-pages.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "ingest:bay-area": "node scripts/ingest-bay-area.mjs",
     "ingest:events": "node scripts/ingest-events.mjs && node scripts/generate-featured-plans.mjs && node scripts/build-coverage-summary.mjs",
