@@ -167,6 +167,13 @@ export const SpotMap = forwardRef<SpotMapHandle, {
     let disposed = false;
 
     const stored = loadStoredMapView(mapViewStorageKey);
+    // A stored view (returning visitor, or after a metro switch into a metro
+    // they've used before) counts as a user view, so the auto-fit step below
+    // leaves it alone. Switching to a metro with no stored view resets this so
+    // that metro gets its all-points framing. Set here (not at ref init) so it
+    // re-evaluates whenever mapViewStorageKey changes.
+    hasUserViewRef.current = stored !== null;
+    initialFitDoneRef.current = false;
     const map = L.map(containerRef.current, {
       center: stored ? [stored.lat, stored.lon] : defaultCenter,
       zoom: stored ? stored.zoom : 10,
