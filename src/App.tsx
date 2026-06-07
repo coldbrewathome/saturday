@@ -328,7 +328,7 @@ function cleanGuidePlanTitle(value: string | null): string {
     : "Weekend guide plan";
 }
 
-type EventDateFilter = "all" | "today" | "tomorrow" | "weekend";
+type EventDateFilter = "all" | "tonight" | "today" | "tomorrow" | "weekend";
 
 const categories: Category[] =
   APP_AUDIENCE === "adults"
@@ -340,6 +340,11 @@ const ageBandOptions = Object.entries(ageBandLabels) as Array<[AgeBand, string]>
 const costs: Cost[] = ["Free", "$", "$$", "$$$", "Unknown"];
 const eventDateFilters: Array<{ id: EventDateFilter; label: string }> = [
   { id: "all", label: "All" },
+  // "Tonight" is an adults (Mosey) affordance — the 20–35 audience plans evenings;
+  // families browse by day, so kids keep Today/Tomorrow/Weekend only.
+  ...(APP_AUDIENCE === "adults"
+    ? [{ id: "tonight" as const, label: "Tonight" }]
+    : []),
   { id: "today", label: "Today" },
   { id: "tomorrow", label: "Tomorrow" },
   { id: "weekend", label: "Weekend" },
@@ -634,6 +639,20 @@ function readStoredInterests(): Set<string> {
     // fall through to empty
   }
   return new Set<string>();
+}
+
+// Adults (Mosey) only: persist "who you're heading out as" across sessions, like
+// interests — it's a personal preference, not metro-specific, so it uses a global key.
+const GOING_OUT_STORAGE_KEY = "famhop:goingOutMode";
+
+function readStoredGoingOutMode(): "solo" | "friends" | "date" {
+  try {
+    const raw = window.localStorage.getItem(GOING_OUT_STORAGE_KEY);
+    if (raw === "solo" || raw === "friends" || raw === "date") return raw;
+  } catch {
+    // fall through to default
+  }
+  return "friends";
 }
 
 const unsplash = (id: string) =>
@@ -1404,7 +1423,7 @@ function App({ metro }: AppProps) {
   const [vibe, setVibe] = useState<PlannerVibe>("balanced");
   // Adults (Mosey) only: who you're heading out as — nudges planner scoring.
   const [goingOutMode, setGoingOutMode] = useState<"solo" | "friends" | "date">(
-    "friends",
+    readStoredGoingOutMode,
   );
   const [selectedCategories, setSelectedCategories] = useState<ReadonlySet<Category>>(
     () => {
@@ -1788,6 +1807,15 @@ function App({ metro }: AppProps) {
       // best-effort; non-fatal in private mode
     }
   }, [preferredThemes]);
+
+  useEffect(() => {
+    if (APP_AUDIENCE !== "adults") return;
+    try {
+      window.localStorage.setItem(GOING_OUT_STORAGE_KEY, goingOutMode);
+    } catch {
+      // best-effort; non-fatal in private mode
+    }
+  }, [goingOutMode]);
 
   useEffect(() => {
     window.localStorage.setItem(
@@ -2582,6 +2610,11 @@ function App({ metro }: AppProps) {
         const t = date.getTime();
         if (!Number.isFinite(t)) return false;
         if (t < now - 12 * 60 * 60 * 1000 || t > horizon) return false;
+        if (eventDateFilter === "tonight") {
+          // Tonight = today, starting in the evening (5pm+).
+          if (!sameLocalDate(date, today)) return false;
+          if (date.getHours() < 17) return false;
+        }
         if (eventDateFilter === "today" && !sameLocalDate(date, today)) return false;
         if (eventDateFilter === "tomorrow" && !sameLocalDate(date, tomorrow)) return false;
         if (eventDateFilter === "weekend") {
@@ -2592,6 +2625,13 @@ function App({ metro }: AppProps) {
         return true;
       }
 
+      if (eventDateFilter === "tonight") {
+        // Recurring series with no clock time: keep today's evening windows.
+        return (
+          event.daysOfWeek.includes(today.getDay()) &&
+          /evening|night|sunset/i.test(event.timeWindow || "")
+        );
+      }
       if (eventDateFilter === "today") {
         return event.daysOfWeek.includes(today.getDay());
       }
