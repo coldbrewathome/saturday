@@ -3571,6 +3571,8 @@ export function extractDrupalCardEvents(html, source = {}, options = {}) {
     const text = stripUnsafeText(block, 1200);
     const signalText = `${title} ${text} ${audienceText}`;
     if (/cancel(?:ed|led)/i.test(signalText) || hasAdultOnlySignal(signalText)) continue;
+    if (source.includePattern && !patternMatches(signalText, source.includePattern)) continue;
+    if (source.excludePattern && patternMatches(signalText, source.excludePattern)) continue;
 
     const location = block.match(/teaser__tag[^>]*teaser__tag--related-park[^>]*>([\s\S]*?)<\/span>\s*,?\s*([^<\n]+)/i);
     const venue = stripUnsafeText(location?.[1] || source.name, 100);

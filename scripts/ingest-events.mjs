@@ -1331,19 +1331,59 @@ function fallbackTemplates(source, templates, registry, now) {
   });
 }
 
-function filterToPlanningWindow(events, generatedAt, windowDays) {
+function zonedDateParts(date, timeZone) {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(date);
+  const value = (type) => parts.find((part) => part.type === type)?.value;
+  return {
+    year: Number(value("year")),
+    month: Number(value("month")),
+    day: Number(value("day")),
+    hour: Number(value("hour")),
+    minute: Number(value("minute")),
+    second: Number(value("second")),
+  };
+}
+
+function timeZoneOffsetMinutes(date, timeZone) {
+  const parts = zonedDateParts(date, timeZone);
+  const asUtc = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second);
+  return (asUtc - date.getTime()) / 60000;
+}
+
+function startOfZonedDay(date, timeZone) {
+  if (!timeZone) {
+    return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+  }
+  const parts = zonedDateParts(date, timeZone);
+  const localMidnight = Date.UTC(parts.year, parts.month - 1, parts.day, 0, 0, 0);
+  let utcMillis = localMidnight;
+  for (let i = 0; i < 3; i += 1) {
+    const offset = timeZoneOffsetMinutes(new Date(utcMillis), timeZone);
+    utcMillis = localMidnight - offset * 60000;
+  }
+  return new Date(utcMillis);
+}
+
+function filterToPlanningWindow(events, generatedAt, windowDays, timeZone = activeMetro.timezone) {
   const generated = new Date(generatedAt);
-  const start = new Date(Date.UTC(
-    generated.getUTCFullYear(),
-    generated.getUTCMonth(),
-    generated.getUTCDate(),
-  ));
+  const start = startOfZonedDay(generated, timeZone);
   const end = new Date(start.getTime() + Number(windowDays || 45) * 86400000);
   return events.filter((event) => {
     if (!event.startDateTime) return false;
-    const date = new Date(event.startDateTime);
-    if (!Number.isFinite(date.getTime())) return false;
-    return date >= start && date <= end;
+    const startDate = new Date(event.startDateTime);
+    if (!Number.isFinite(startDate.getTime())) return false;
+    const endDate = event.endDateTime ? new Date(event.endDateTime) : null;
+    const effectiveEnd = endDate && Number.isFinite(endDate.getTime()) ? endDate : startDate;
+    return effectiveEnd >= start && startDate <= end;
   });
 }
 
