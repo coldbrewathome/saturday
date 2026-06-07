@@ -1,6 +1,6 @@
 # Roadmap
 
-_Last updated: 2026-06-06_ (tick 35)
+_Last updated: 2026-06-07_ (tick 36)
 
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
@@ -19,12 +19,13 @@ _In flight — actively being worked on. Keep this to 1–3 items._
 ### Adult-fit planner (date-night / with-friends / solo / tonight)
 - **Why:** The vibes (balanced/active/culture) are generic; the 20–35 audience plans date nights, friend hangs, and solo outings — often "tonight." Make the core loop actually fit them.
 - **Effort:** M
-- **Status:** v1 shipped 2026-06-06 (Going-out mode + reframed adult vibes). "Tonight" time filter + persistence remain.
+- **Status:** v1 shipped 2026-06-06. v2 committed 2026-06-07 (`a335874`, branch merged to main) — Going-out mode now persists + adults get a "Tonight" event chip. **Deploy held** pending a concurrent session's in-flight all-metro event re-ingest (don't ship mixed mid-flight data). Verified live in the adults dev build.
 - **Tasks:**
   - [x] Adult vibe labels/blurbs reframed off nightlife → all-day hangout (`appConfig`)
   - [x] "Going out" mode (solo / with friends / date) — audience-gated control + `planner.ts` scoring (FamHop untouched; tested)
-  - [ ] "Tonight / this weekend" time-aware filtering for open + scheduled
-  - [ ] Persist Going-out mode across sessions
+  - [x] "Tonight" event filter — adults-only chip; dated events today 5pm+ + recurring evening series (`weekend` chip already covered "this weekend")
+  - [x] Persist Going-out mode across sessions (`famhop:goingOutMode`, mirrors interests)
+  - [ ] _(nice-to-have)_ extend "Tonight" to venue open-hours, not just scheduled events
 
 ## Next
 _Committed, not yet started. Ordered by priority. Aim for ≤5 items._
