@@ -3,7 +3,9 @@
   "note": "Adult-audience event sources for Houston — music venues, comedy, nightlife.",
   "defaults": {
     "windowDays": 30,
-    "audiences": ["adults"],
+    "audiences": [
+      "adults"
+    ],
     "userAgent": "nighthop/0.1 event-ingest"
   },
   "coverage": {
@@ -76,6 +78,34 @@
       "trust": "official",
       "lat": 29.7821,
       "lon": -95.5614
+    },
+    {
+      "id": "numbers-nightclub-houston",
+      "name": "Numbers Nightclub",
+      "url": "https://www.numbersnightclub.com/events/",
+      "city": "Houston",
+      "neighborhood": "Montrose",
+      "category": "Music",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 29.7433,
+      "lon": -95.3927,
+      "perPage": 100,
+      "maxPages": 4
+    },
+    {
+      "id": "eureka-heights-brewery",
+      "name": "Eureka Heights Brewery",
+      "url": "https://www.eurekaheights.com/events/",
+      "city": "Houston",
+      "neighborhood": "Heights",
+      "category": "Festival",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 29.7975,
+      "lon": -95.4072,
+      "perPage": 100,
+      "maxPages": 4
     }
   ]
 }

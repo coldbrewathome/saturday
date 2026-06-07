@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "philadelphia",
-  "generatedAt": "2026-06-07T14:08:00.533Z",
-  "alertCount": 10,
+  "generatedAt": "2026-06-07T14:57:09.858Z",
+  "alertCount": 13,
   "alerts": [
     {
       "severity": "warning",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:08:00.533Z",
+      "fetchedAt": "2026-06-07T14:57:09.858Z",
       "fetches": [
         {
           "url": "https://freelibraryfoundation.org/events/",
@@ -44,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:08:00.533Z",
+      "fetchedAt": "2026-06-07T14:57:09.858Z",
       "fetches": [
         {
           "url": "https://www.phila.gov/departments/philadelphia-parks-recreation/#calendar",
@@ -69,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:08:00.533Z",
+      "fetchedAt": "2026-06-07T14:57:09.858Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -94,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:08:00.533Z",
+      "fetchedAt": "2026-06-07T14:57:09.858Z",
       "fetches": [
         {
           "url": "https://middletowngrangefair.org/",
@@ -119,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:08:00.533Z",
+      "fetchedAt": "2026-06-07T14:57:09.858Z",
       "fetches": [
         {
           "url": "https://www.utphilly.com/events",
@@ -144,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:08:00.533Z",
+      "fetchedAt": "2026-06-07T14:57:09.858Z",
       "fetches": [
         {
           "url": "https://www.thefillmorephilly.com/events",
@@ -169,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:08:00.533Z",
+      "fetchedAt": "2026-06-07T14:57:09.858Z",
       "fetches": [
         {
           "url": "https://www.johnnybrendas.com/events",
@@ -194,7 +194,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:08:00.533Z",
+      "fetchedAt": "2026-06-07T14:57:09.858Z",
       "fetches": [
         {
           "url": "https://www.thefoundryphilly.com/events",
@@ -218,7 +218,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:08:00.533Z",
+      "fetchedAt": "2026-06-07T14:57:09.858Z",
       "fetches": [
         {
           "url": "https://philadelphia.heliumcomedy.com/events",
@@ -243,13 +243,88 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:08:00.533Z",
+      "fetchedAt": "2026-06-07T14:57:09.858Z",
       "fetches": [
         {
           "url": "https://www.punchlinephilly.com/shows",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "xponential-music-festival-2026",
+      "sourceName": "XPoNential Music Festival 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://xpn.org/xpnfest/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T14:57:09.858Z",
+      "fetches": [
+        {
+          "url": "https://xpn.org/xpnfest/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "philadelphia-fringe-festival-2026",
+      "sourceName": "Philadelphia Fringe Festival 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://phillyfringe.org/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T14:57:09.858Z",
+      "fetches": [
+        {
+          "url": "https://phillyfringe.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "philadelphia",
+      "sourceId": "philadelphia-folk-festival-2026",
+      "sourceName": "Philadelphia Folk Festival 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://folkfest.org/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T14:57:09.858Z",
+      "fetches": [
+        {
+          "url": "https://folkfest.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     }

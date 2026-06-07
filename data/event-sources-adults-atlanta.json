@@ -3,7 +3,9 @@
   "note": "Adult-audience event sources for Atlanta — music venues, comedy, nightlife.",
   "defaults": {
     "windowDays": 30,
-    "audiences": ["adults"],
+    "audiences": [
+      "adults"
+    ],
     "userAgent": "nighthop/0.1 event-ingest"
   },
   "coverage": {
@@ -89,6 +91,138 @@
       "trust": "official",
       "lat": 33.7612,
       "lon": -84.3598
+    },
+    {
+      "id": "punchline-comedy-atl",
+      "name": "The Punchline Comedy Club",
+      "url": "https://www.punchline.com/events/",
+      "city": "Sandy Springs",
+      "neighborhood": "Sandy Springs",
+      "category": "Comedy",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 33.9151,
+      "lon": -84.3782,
+      "perPage": 100,
+      "maxPages": 4
+    },
+    {
+      "id": "ponce-city-market-atl",
+      "name": "Ponce City Market Events",
+      "url": "https://www.poncecitymarket.com/events/",
+      "city": "Atlanta",
+      "neighborhood": "Old Fourth Ward",
+      "category": "Market",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 33.7726,
+      "lon": -84.3656,
+      "perPage": 100,
+      "maxPages": 4
+    },
+    {
+      "id": "shaky-knees-2026",
+      "name": "Shaky Knees Festival 2026",
+      "url": "https://www.shakykneesfestival.com/",
+      "city": "Atlanta",
+      "neighborhood": "Midtown",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 33.7851,
+      "lon": -84.3739,
+      "officialTextEvents": [
+        {
+          "id": "shaky-knees-2026",
+          "title": "Shaky Knees Festival",
+          "description": "Atlanta's premier rock and indie music festival returning to Piedmont Park for three days of live performances.",
+          "venue": "Piedmont Park",
+          "neighborhood": "Midtown",
+          "startDateTime": "2026-09-18T12:00:00-04:00",
+          "endDateTime": "2026-09-20T23:00:00-04:00",
+          "audiences": [
+            "adults"
+          ],
+          "ageBands": [],
+          "cost": "Ticketed",
+          "url": "https://www.shakykneesfestival.com/",
+          "requiredText": [
+            "Shaky Knees Festival",
+            "SEPT 18-20, 2026",
+            "PIEDMONT PARK",
+            "ATLANTA, GA"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atl-food-wine-fest-2026",
+      "name": "Atlanta Food & Wine Festival 2026",
+      "url": "https://atlfoodandwinefestival.com/",
+      "city": "Atlanta",
+      "neighborhood": "Vine City",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 33.7573,
+      "lon": -84.4007,
+      "officialTextEvents": [
+        {
+          "id": "atl-food-wine-fest-2026",
+          "title": "Atlanta Food & Wine Festival",
+          "description": "Multi-day food and wine festival featuring chefs, tastings, and culinary experiences at The Home Depot Backyard.",
+          "venue": "The Home Depot Backyard",
+          "neighborhood": "Vine City",
+          "startDateTime": "2026-09-11T12:00:00-04:00",
+          "endDateTime": "2026-09-14T22:00:00-04:00",
+          "audiences": [
+            "adults"
+          ],
+          "ageBands": [],
+          "cost": "Ticketed",
+          "url": "https://atlfoodandwinefestival.com/",
+          "requiredText": [
+            "Atlanta Food & Wine Festival",
+            "Sept. 11",
+            "See you in September 2026",
+            "The Home Depot Backyard"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dragon-con-2026",
+      "name": "Dragon Con 2026",
+      "url": "https://www.dragoncon.org/",
+      "city": "Atlanta",
+      "neighborhood": "Downtown",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 33.7607,
+      "lon": -84.3878,
+      "officialTextEvents": [
+        {
+          "id": "dragon-con-2026",
+          "title": "Dragon Con",
+          "description": "Atlanta's largest multi-genre and pop culture convention spanning downtown host hotels over Labor Day weekend.",
+          "venue": "Downtown Atlanta Host Hotels",
+          "neighborhood": "Downtown",
+          "startDateTime": "2026-09-03T10:00:00-04:00",
+          "endDateTime": "2026-09-07T20:00:00-04:00",
+          "audiences": [
+            "adults"
+          ],
+          "ageBands": [],
+          "cost": "Ticketed",
+          "url": "https://www.dragoncon.org/",
+          "requiredText": [
+            "Dragon Con",
+            "Sep. 3 – Sep. 7, 2026",
+            "Atlanta, GA"
+          ]
+        }
+      ]
     }
   ]
 }

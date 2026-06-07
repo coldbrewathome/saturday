@@ -3,7 +3,9 @@
   "note": "Adult-audience event sources for Philadelphia — music venues, comedy, nightlife.",
   "defaults": {
     "windowDays": 30,
-    "audiences": ["adults"],
+    "audiences": [
+      "adults"
+    ],
     "userAgent": "nighthop/0.1 event-ingest"
   },
   "coverage": {
@@ -88,6 +90,186 @@
       "trust": "official",
       "lat": 39.9683,
       "lon": -75.1307
+    },
+    {
+      "id": "ardmore-music-hall",
+      "name": "Ardmore Music Hall",
+      "url": "https://ardmoremusichall.com/all-events/",
+      "city": "Ardmore",
+      "neighborhood": "Main Line",
+      "category": "Live Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 40.0068,
+      "lon": -75.2855
+    },
+    {
+      "id": "xponential-music-festival-2026",
+      "name": "XPoNential Music Festival 2026",
+      "url": "https://xpn.org/xpnfest/",
+      "city": "Camden",
+      "neighborhood": "Camden Waterfront",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 39.943,
+      "lon": -75.131,
+      "officialTextEvents": [
+        {
+          "id": "xponential-music-festival-2026",
+          "title": "XPoNential Music Festival 2026",
+          "description": "WXPN's annual three-day music festival on the Camden Waterfront, headlined by Dawes, Portugal. The Man, and Little Feat, with St. Paul & The Broken Bones and many more.",
+          "venue": "Camden Waterfront (Wiggins Waterfront Park)",
+          "neighborhood": "Camden Waterfront",
+          "startDateTime": "2026-09-18T17:00:00-04:00",
+          "endDateTime": "2026-09-20T23:00:00-04:00",
+          "audiences": [
+            "adults"
+          ],
+          "ageBands": [],
+          "cost": "Ticketed",
+          "url": "https://xpn.org/xpnfest/",
+          "requiredText": [
+            "Sept 18-20, 2026",
+            "Camden Waterfront",
+            "Portugal. The Man",
+            "Little Feat"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "manayunk-arts-festival-2026",
+      "name": "Manayunk Arts Festival 2026",
+      "url": "https://manayunk.com/mnyk-events/manayunk-art-festival/",
+      "city": "Philadelphia",
+      "neighborhood": "Manayunk",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 40.0254,
+      "lon": -75.2229,
+      "officialTextEvents": [
+        {
+          "id": "manayunk-arts-festival-2026",
+          "title": "Manayunk Arts Festival",
+          "description": "The largest outdoor juried arts festival in the Philadelphia area, a two-day closed-street event along Main Street in Manayunk with hundreds of artists, food, and live entertainment.",
+          "venue": "Main Street Manayunk",
+          "neighborhood": "Manayunk",
+          "startDateTime": "2026-06-27T11:00:00-04:00",
+          "endDateTime": "2026-06-28T17:00:00-04:00",
+          "audiences": [
+            "adults"
+          ],
+          "cost": "Free",
+          "url": "https://manayunk.com/mnyk-events/manayunk-art-festival/",
+          "requiredText": [
+            "Manayunk Art Festival",
+            "Saturday, June 27, 2026",
+            "Sunday, June 28, 2026",
+            "11AM - 7PM"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "philadelphia-fringe-festival-2026",
+      "name": "Philadelphia Fringe Festival 2026",
+      "url": "https://phillyfringe.org/",
+      "city": "Philadelphia",
+      "neighborhood": "Old City",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 39.9531,
+      "lon": -75.14,
+      "officialTextEvents": [
+        {
+          "id": "philadelphia-fringe-festival-2026",
+          "title": "Philadelphia Fringe Festival 2026",
+          "description": "FringeArts' citywide three-week festival of independent contemporary performance, theater, dance, and art across Philadelphia.",
+          "venue": "FringeArts and venues citywide",
+          "neighborhood": "Old City",
+          "startDateTime": "2026-09-08T18:00:00-04:00",
+          "endDateTime": "2026-09-27T23:00:00-04:00",
+          "audiences": [
+            "adults"
+          ],
+          "cost": "Ticketed",
+          "url": "https://phillyfringe.org/",
+          "requiredText": [
+            "Philadelphia Fringe Festival",
+            "September 8-27, 2026",
+            "FringeArts"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "philadelphia-folk-festival-2026",
+      "name": "Philadelphia Folk Festival 2026",
+      "url": "https://folkfest.org/",
+      "city": "Philadelphia",
+      "neighborhood": "Upper Salford Township",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 40.255,
+      "lon": -75.46,
+      "officialTextEvents": [
+        {
+          "id": "philadelphia-folk-festival-2026",
+          "title": "63rd Philadelphia Folk Festival",
+          "description": "One of the oldest continuously running outdoor music festivals in North America, presented by the Philadelphia Folksong Society at Old Pool Farm with camping, workshops, and concerts.",
+          "venue": "Old Pool Farm, Upper Salford Township",
+          "neighborhood": "Upper Salford Township",
+          "startDateTime": "2026-08-14T16:00:00-04:00",
+          "endDateTime": "2026-08-16T23:00:00-04:00",
+          "audiences": [
+            "adults"
+          ],
+          "cost": "Ticketed",
+          "url": "https://folkfest.org/",
+          "requiredText": [
+            "Philadelphia Folk Festival",
+            "August 14-16, 2026",
+            "Old Pool Farm"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wawa-welcome-america-2026",
+      "name": "Wawa Welcome America 2026",
+      "url": "https://july4thphilly.com/events/",
+      "city": "Philadelphia",
+      "neighborhood": "Benjamin Franklin Parkway",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 39.9656,
+      "lon": -75.181,
+      "officialTextEvents": [
+        {
+          "id": "wawa-welcome-america-2026",
+          "title": "Wawa Welcome America 2026",
+          "description": "Philadelphia's signature multi-day free festival of concerts, block parties, and fireworks running through Independence Day on the Benjamin Franklin Parkway.",
+          "venue": "Benjamin Franklin Parkway and venues citywide",
+          "neighborhood": "Benjamin Franklin Parkway",
+          "startDateTime": "2026-06-19T12:00:00-04:00",
+          "endDateTime": "2026-07-04T23:00:00-04:00",
+          "audiences": [
+            "adults"
+          ],
+          "cost": "Free",
+          "url": "https://july4thphilly.com/events/",
+          "requiredText": [
+            "Wawa Welcome America",
+            "June 19, 2026",
+            "July 4, 2026"
+          ]
+        }
+      ]
     }
   ]
 }

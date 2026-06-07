@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "miami",
-  "generatedAt": "2026-06-07T14:08:25.235Z",
+  "generatedAt": "2026-06-07T14:57:40.032Z",
   "registryPath": "data/event-sources-miami.json",
   "outputPath": "public/data/miami/events.json",
-  "eventCount": 1717,
-  "adultsEventCount": 376,
+  "eventCount": 1753,
+  "adultsEventCount": 384,
   "sourceCount": 20,
-  "liveEventCount": 1752,
+  "liveEventCount": 1787,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 8,
-  "operatorAlertCount": 10,
+  "operatorAlertCount": 9,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:08:25.235Z",
+      "fetchedAt": "2026-06-07T14:57:40.032Z",
       "fetches": [
         {
           "url": "https://mdpls.libnet.info/events",
@@ -52,7 +52,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:08:25.235Z",
+      "fetchedAt": "2026-06-07T14:57:40.032Z",
       "fetches": [
         {
           "url": "https://www.fairexpo.com/",
@@ -77,37 +77,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:08:25.235Z",
+      "fetchedAt": "2026-06-07T14:57:40.032Z",
       "fetches": [
         {
           "url": "https://www.southfloridafair.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "miami",
-      "sourceId": "miami-coral-gables-museum",
-      "sourceName": "Coral Gables Museum Events",
-      "sourceType": "tribeEvents",
-      "url": "http://coralgablesmuseum.org/events/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:08:25.235Z",
-      "fetches": [
-        {
-          "url": "http://coralgablesmuseum.org/events/",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
         }
       ]
     },
@@ -126,7 +102,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:08:25.235Z",
+      "fetchedAt": "2026-06-07T14:57:40.032Z",
       "fetches": [
         {
           "url": "https://clubspace.com/events",
@@ -151,7 +127,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:08:25.235Z",
+      "fetchedAt": "2026-06-07T14:57:40.032Z",
       "fetches": [
         {
           "url": "https://thegroundmiami.com/events",
@@ -176,7 +152,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:08:25.235Z",
+      "fetchedAt": "2026-06-07T14:57:40.032Z",
       "fetches": [
         {
           "url": "https://www.grframps.com/calendar",
@@ -200,7 +176,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:08:25.235Z",
+      "fetchedAt": "2026-06-07T14:57:40.032Z",
       "fetches": [
         {
           "url": "https://www.oasiswynwood.com/events",
@@ -225,7 +201,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:08:25.235Z",
+      "fetchedAt": "2026-06-07T14:57:40.032Z",
       "fetches": [
         {
           "url": "https://www.lasrosasbar.com/events",
@@ -250,7 +226,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:08:25.235Z",
+      "fetchedAt": "2026-06-07T14:57:40.032Z",
       "fetches": [
         {
           "url": "https://www.miamiimprov.com/calendar",
@@ -510,19 +486,22 @@
       "city": "Coral Gables",
       "metroId": "miami",
       "category": "Museum",
-      "status": "fetch-error",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 36,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 36,
       "fetches": [
         {
           "url": "http://coralgablesmuseum.org/events/",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=54; pages=2"
         }
       ],
-      "reason": "This operation was aborted",
-      "extractedEvents": 0,
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=54; pages=2",
+      "rejectedLiveEvents": 18,
+      "extractedEvents": 54,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -622,9 +601,9 @@
       "metroId": "miami",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 43,
+      "liveEvents": 42,
       "fallbackEvents": 0,
-      "eventCount": 43,
+      "eventCount": 42,
       "fetches": [
         {
           "url": "https://11miami.com/events",
@@ -635,7 +614,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 57,
+      "rejectedLiveEvents": 58,
       "extractedEvents": 100,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null

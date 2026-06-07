@@ -3,7 +3,9 @@
   "note": "Adult-audience event sources for Los Angeles — music venues, comedy clubs, nightlife.",
   "defaults": {
     "windowDays": 30,
-    "audiences": ["adults"],
+    "audiences": [
+      "adults"
+    ],
     "userAgent": "nighthop/0.1 event-ingest"
   },
   "coverage": {
@@ -140,6 +142,34 @@
       "trust": "official",
       "lat": 34.0476,
       "lon": -118.2536
+    },
+    {
+      "id": "boomtown-brewery-dtla",
+      "name": "Boomtown Brewery",
+      "url": "https://www.boomtownbrew.com/events/",
+      "city": "Los Angeles",
+      "neighborhood": "Arts District",
+      "category": "Music",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 34.0419,
+      "lon": -118.2349,
+      "perPage": 100,
+      "maxPages": 4
+    },
+    {
+      "id": "arts-council-long-beach",
+      "name": "Arts Council for Long Beach",
+      "url": "https://artslb.org/calendar/",
+      "city": "Long Beach",
+      "neighborhood": "Downtown Long Beach",
+      "category": "Culture",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 33.7701,
+      "lon": -118.1937,
+      "perPage": 100,
+      "maxPages": 6
     }
   ]
 }

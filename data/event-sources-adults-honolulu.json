@@ -3,7 +3,9 @@
   "note": "Adult-audience event sources for Honolulu — music venues, bars, comedy.",
   "defaults": {
     "windowDays": 30,
-    "audiences": ["adults"],
+    "audiences": [
+      "adults"
+    ],
     "userAgent": "nighthop/0.1 event-ingest"
   },
   "coverage": {
@@ -29,30 +31,6 @@
       "lon": -157.8597
     },
     {
-      "id": "blue-note-hawaii",
-      "name": "Blue Note Hawaii",
-      "url": "https://www.bluenotejazz.com/hawaii/shows/",
-      "city": "Honolulu",
-      "neighborhood": "Waikiki",
-      "category": "Music",
-      "sourceType": "html",
-      "trust": "official",
-      "lat": 21.2866,
-      "lon": -157.8358
-    },
-    {
-      "id": "hawaii-theatre",
-      "name": "Hawaii Theatre Center",
-      "url": "https://www.hawaiitheatre.com/upcoming-events/",
-      "city": "Honolulu",
-      "neighborhood": "Chinatown",
-      "category": "Music",
-      "sourceType": "html",
-      "trust": "official",
-      "lat": 21.3107,
-      "lon": -157.8631
-    },
-    {
       "id": "aloha-comedy",
       "name": "Aloha Comedy Club",
       "url": "https://www.alohacomedyclub.com/calendar",
@@ -63,6 +41,34 @@
       "trust": "official",
       "lat": 21.2793,
       "lon": -157.8292
+    },
+    {
+      "id": "blaisdell-center",
+      "name": "Neal S. Blaisdell Center",
+      "url": "https://blaisdellcenter.com/events/",
+      "city": "Honolulu",
+      "neighborhood": "Ala Moana",
+      "category": "Theater",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 21.2967,
+      "lon": -157.8489,
+      "perPage": 100,
+      "maxPages": 4
+    },
+    {
+      "id": "improv-hawaii",
+      "name": "Improv Hawaii (The Tiny Stage)",
+      "url": "https://improvhi.com/events/",
+      "city": "Honolulu",
+      "neighborhood": "Kakaako",
+      "category": "Comedy",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 21.2975,
+      "lon": -157.8585,
+      "perPage": 100,
+      "maxPages": 2
     }
   ]
 }

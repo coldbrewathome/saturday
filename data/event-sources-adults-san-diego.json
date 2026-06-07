@@ -3,7 +3,9 @@
   "note": "Adult-audience event sources for San Diego — music venues, comedy, nightlife.",
   "defaults": {
     "windowDays": 30,
-    "audiences": ["adults"],
+    "audiences": [
+      "adults"
+    ],
     "userAgent": "nighthop/0.1 event-ingest"
   },
   "coverage": {
@@ -88,6 +90,77 @@
       "trust": "official",
       "lat": 32.8468,
       "lon": -117.2713
+    },
+    {
+      "id": "balboa-park-events",
+      "name": "Balboa Park Events",
+      "url": "https://www.balboapark.org/events/",
+      "city": "San Diego",
+      "neighborhood": "Balboa Park",
+      "category": "Culture",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 32.7341,
+      "lon": -117.1446,
+      "perPage": 100,
+      "maxPages": 4
+    },
+    {
+      "id": "sd-pride-festival-2026",
+      "name": "San Diego Pride Festival 2026",
+      "url": "https://sdpride.org/festival/",
+      "city": "San Diego",
+      "neighborhood": "Balboa Park",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 32.728,
+      "lon": -117.156,
+      "officialTextEvents": [
+        {
+          "id": "sd-pride-festival-2026-07-18",
+          "title": "San Diego Pride Festival",
+          "description": "San Diego Pride Festival at Marston Point in Balboa Park, the largest annual celebration of the LGBTQIA+ community in the region.",
+          "venue": "Marston Point, Balboa Park",
+          "neighborhood": "Balboa Park",
+          "startDateTime": "2026-07-18T12:00:00-07:00",
+          "endDateTime": "2026-07-18T22:00:00-07:00",
+          "audiences": [
+            "adults"
+          ],
+          "ageBands": [],
+          "cost": "Ticketed",
+          "url": "https://sdpride.org/festival/",
+          "requiredText": [
+            "Pride Festival",
+            "Saturday, July 18, 2026",
+            "12 PM",
+            "Marston Point",
+            "Balboa Park"
+          ]
+        },
+        {
+          "id": "sd-pride-festival-2026-07-19",
+          "title": "San Diego Pride Festival",
+          "description": "Day two of the San Diego Pride Festival at Marston Point in Balboa Park.",
+          "venue": "Marston Point, Balboa Park",
+          "neighborhood": "Balboa Park",
+          "startDateTime": "2026-07-19T12:00:00-07:00",
+          "endDateTime": "2026-07-19T21:00:00-07:00",
+          "audiences": [
+            "adults"
+          ],
+          "ageBands": [],
+          "cost": "Ticketed",
+          "url": "https://sdpride.org/festival/",
+          "requiredText": [
+            "Pride Festival",
+            "Sunday, July 19, 2026",
+            "Marston Point",
+            "Balboa Park"
+          ]
+        }
+      ]
     }
   ]
 }

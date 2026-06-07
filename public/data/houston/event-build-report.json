@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "houston",
-  "generatedAt": "2026-06-07T13:52:29.066Z",
+  "generatedAt": "2026-06-07T14:55:43.128Z",
   "registryPath": "data/event-sources-houston.json",
   "outputPath": "public/data/houston/events.json",
   "eventCount": 706,
-  "adultsEventCount": 62,
-  "sourceCount": 16,
-  "liveEventCount": 706,
+  "adultsEventCount": 92,
+  "sourceCount": 18,
+  "liveEventCount": 736,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
   "operatorAlertCount": 7,
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T13:52:29.066Z",
+      "fetchedAt": "2026-06-07T14:55:43.128Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T13:52:29.066Z",
+      "fetchedAt": "2026-06-07T14:55:43.128Z",
       "fetches": [
         {
           "url": "https://www.fortbendcountyfair.com/",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T13:52:29.066Z",
+      "fetchedAt": "2026-06-07T14:55:43.128Z",
       "fetches": [
         {
           "url": "https://www.whiteoakmusichall.com/events",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T13:52:29.066Z",
+      "fetchedAt": "2026-06-07T14:55:43.128Z",
       "fetches": [
         {
           "url": "https://www.warehouselive.com/events",
@@ -127,7 +127,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T13:52:29.066Z",
+      "fetchedAt": "2026-06-07T14:55:43.128Z",
       "fetches": [
         {
           "url": "https://continentalclub.com/houston",
@@ -152,7 +152,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T13:52:29.066Z",
+      "fetchedAt": "2026-06-07T14:55:43.128Z",
       "fetches": [
         {
           "url": "https://www.thesecretgrouphtx.com/calendar",
@@ -177,7 +177,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T13:52:29.066Z",
+      "fetchedAt": "2026-06-07T14:55:43.128Z",
       "fetches": [
         {
           "url": "https://improv.com/houston/calendar/",
@@ -619,6 +619,60 @@
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "numbers-nightclub-houston",
+      "name": "Numbers Nightclub",
+      "url": "https://www.numbersnightclub.com/events/",
+      "sourceType": "tribeEvents",
+      "city": "Houston",
+      "metroId": "houston",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 9,
+      "fallbackEvents": 0,
+      "eventCount": 9,
+      "fetches": [
+        {
+          "url": "https://www.numbersnightclub.com/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=37; pages=1"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=37; pages=1",
+      "rejectedLiveEvents": 27,
+      "extractedEvents": 36,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "eureka-heights-brewery",
+      "name": "Eureka Heights Brewery",
+      "url": "https://www.eurekaheights.com/events/",
+      "sourceType": "tribeEvents",
+      "city": "Houston",
+      "metroId": "houston",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 21,
+      "fallbackEvents": 0,
+      "eventCount": 21,
+      "fetches": [
+        {
+          "url": "https://www.eurekaheights.com/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=31; pages=1"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=31; pages=1",
+      "rejectedLiveEvents": 8,
+      "extractedEvents": 29,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     }

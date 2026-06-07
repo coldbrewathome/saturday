@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "atlanta",
-  "generatedAt": "2026-06-07T13:53:36.357Z",
-  "alertCount": 11,
+  "generatedAt": "2026-06-07T14:56:39.213Z",
+  "alertCount": 14,
   "alerts": [
     {
       "severity": "warning",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T13:53:36.357Z",
+      "fetchedAt": "2026-06-07T14:56:39.213Z",
       "fetches": [
         {
           "url": "https://www.atlantaga.gov/government/departments/parks-recreation/events",
@@ -44,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T13:53:36.357Z",
+      "fetchedAt": "2026-06-07T14:56:39.213Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -69,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T13:53:36.357Z",
+      "fetchedAt": "2026-06-07T14:56:39.213Z",
       "fetches": [
         {
           "url": "https://www.northgeorgiastatefair.com/",
@@ -94,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T13:53:36.357Z",
+      "fetchedAt": "2026-06-07T14:56:39.213Z",
       "fetches": [
         {
           "url": "https://www.gwinnettcountyfair.com/",
@@ -119,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T13:53:36.357Z",
+      "fetchedAt": "2026-06-07T14:56:39.213Z",
       "fetches": [
         {
           "url": "https://beltline.org/art/lantern-parade/",
@@ -144,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T13:53:36.357Z",
+      "fetchedAt": "2026-06-07T14:56:39.213Z",
       "fetches": [
         {
           "url": "https://www.mariettaga.gov/194/Fourth-of-July-Celebration",
@@ -169,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T13:53:36.357Z",
+      "fetchedAt": "2026-06-07T14:56:39.213Z",
       "fetches": [
         {
           "url": "https://www.terminalwestatl.com/events",
@@ -194,7 +194,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T13:53:36.357Z",
+      "fetchedAt": "2026-06-07T14:56:39.213Z",
       "fetches": [
         {
           "url": "https://www.varietyplayhouse.com/events",
@@ -219,7 +219,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T13:53:36.357Z",
+      "fetchedAt": "2026-06-07T14:56:39.213Z",
       "fetches": [
         {
           "url": "https://www.badearl.com/calendar",
@@ -244,7 +244,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T13:53:36.357Z",
+      "fetchedAt": "2026-06-07T14:56:39.213Z",
       "fetches": [
         {
           "url": "https://laughingskulllounge.com/calendar",
@@ -269,13 +269,88 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T13:53:36.357Z",
+      "fetchedAt": "2026-06-07T14:56:39.213Z",
       "fetches": [
         {
           "url": "https://www.dadsgarage.com/calendar",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "atlanta",
+      "sourceId": "shaky-knees-2026",
+      "sourceName": "Shaky Knees Festival 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.shakykneesfestival.com/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T14:56:39.213Z",
+      "fetches": [
+        {
+          "url": "https://www.shakykneesfestival.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "atlanta",
+      "sourceId": "atl-food-wine-fest-2026",
+      "sourceName": "Atlanta Food & Wine Festival 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://atlfoodandwinefestival.com/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T14:56:39.213Z",
+      "fetches": [
+        {
+          "url": "https://atlfoodandwinefestival.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "atlanta",
+      "sourceId": "dragon-con-2026",
+      "sourceName": "Dragon Con 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.dragoncon.org/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T14:56:39.213Z",
+      "fetches": [
+        {
+          "url": "https://www.dragoncon.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     }

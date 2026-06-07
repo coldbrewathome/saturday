@@ -3,7 +3,9 @@
   "note": "Adult-audience event sources for Seattle — music venues, comedy clubs, nightlife.",
   "defaults": {
     "windowDays": 30,
-    "audiences": ["adults"],
+    "audiences": [
+      "adults"
+    ],
     "userAgent": "nighthop/0.1 event-ingest"
   },
   "coverage": {
@@ -102,6 +104,124 @@
       "trust": "official",
       "lat": 47.5992,
       "lon": -122.3321
+    },
+    {
+      "id": "nectar-lounge-shows",
+      "name": "Nectar Lounge Shows",
+      "url": "https://www.nectarlounge.com/",
+      "city": "Seattle",
+      "neighborhood": "Fremont",
+      "category": "Live Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 47.6512,
+      "lon": -122.35
+    },
+    {
+      "id": "bumbershoot-2026",
+      "name": "Bumbershoot 2026",
+      "url": "https://bumbershoot.com/",
+      "city": "Seattle",
+      "neighborhood": "Seattle Center",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 47.6225,
+      "lon": -122.3512,
+      "officialTextEvents": [
+        {
+          "id": "bumbershoot-2026",
+          "title": "Bumbershoot 2026",
+          "description": "Seattle's iconic music and arts festival returns to Seattle Center over Labor Day Weekend, with music, comedy, short films, fashion and visual art across the grounds. Lineup includes Death Cab for Cutie, Turnstile, Japanese Breakfast and dozens more.",
+          "venue": "Seattle Center",
+          "neighborhood": "Seattle Center",
+          "startDateTime": "2026-09-05T12:00:00-07:00",
+          "endDateTime": "2026-09-06T22:00:00-07:00",
+          "audiences": [
+            "adults"
+          ],
+          "ageBands": [],
+          "cost": "Ticketed",
+          "url": "https://bumbershoot.com/",
+          "requiredText": [
+            "Bumbershoot",
+            "Sept 5 & 6",
+            "Seattle Center",
+            "Labor Day Weekend",
+            "2026"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "capitol-hill-block-party-2026",
+      "name": "Capitol Hill Block Party 2026",
+      "url": "https://www.capitolhillblockparty.com/",
+      "city": "Seattle",
+      "neighborhood": "Capitol Hill",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 47.6145,
+      "lon": -122.319,
+      "officialTextEvents": [
+        {
+          "id": "capitol-hill-block-party-2026",
+          "title": "Capitol Hill Block Party 2026",
+          "description": "Seattle's flagship 21+ urban music festival takes over the streets of Capitol Hill for three days, with headliners including Wet Leg, MUNA and Disco Lines plus a deep roster of local bands.",
+          "venue": "Capitol Hill",
+          "neighborhood": "Capitol Hill",
+          "startDateTime": "2026-08-07T16:00:00-07:00",
+          "endDateTime": "2026-08-09T23:00:00-07:00",
+          "audiences": [
+            "adults"
+          ],
+          "ageBands": [],
+          "cost": "Ticketed",
+          "url": "https://www.capitolhillblockparty.com/",
+          "requiredText": [
+            "CAPITOL HILL BLOCK PARTY",
+            "AUG 7-9, 2026",
+            "SEATTLE, WA",
+            "Welcome to Seattle's Biggest Party"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "timber-music-fest-2026",
+      "name": "Timber! Outdoor Music Festival 2026",
+      "url": "https://timbermusicfest.com/",
+      "city": "Seattle",
+      "neighborhood": "Carnation",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 47.6489,
+      "lon": -121.9223,
+      "officialTextEvents": [
+        {
+          "id": "timber-music-fest-2026",
+          "title": "Timber! Outdoor Music Festival 2026",
+          "description": "A three-day outdoor music and camping festival at Tolt-MacDonald Park in Carnation, in the Seattle metro foothills. Lineup includes Frankie and the Witch Fingers, Reyna Tropical and Kassa Overall.",
+          "venue": "Tolt-MacDonald Park",
+          "neighborhood": "Carnation",
+          "startDateTime": "2026-07-23T15:00:00-07:00",
+          "endDateTime": "2026-07-25T23:00:00-07:00",
+          "audiences": [
+            "adults"
+          ],
+          "ageBands": [],
+          "cost": "Ticketed",
+          "url": "https://timbermusicfest.com/",
+          "requiredText": [
+            "Timber! Outdoor Music Festival",
+            "July 23-25, 2026",
+            "Tolt-MacDonald Park",
+            "Carnation, Washington"
+          ]
+        }
+      ]
     }
   ]
 }

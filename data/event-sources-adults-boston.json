@@ -3,7 +3,9 @@
   "note": "Adult-audience event sources for Boston — music venues, comedy, nightlife.",
   "defaults": {
     "windowDays": 30,
-    "audiences": ["adults"],
+    "audiences": [
+      "adults"
+    ],
     "userAgent": "nighthop/0.1 event-ingest"
   },
   "coverage": {
@@ -54,18 +56,6 @@
       "lon": -71.1189
     },
     {
-      "id": "crystal-ballroom-somerville",
-      "name": "Crystal Ballroom",
-      "url": "https://www.crystalballroomboston.com/events",
-      "city": "Somerville",
-      "neighborhood": "Davis Square",
-      "category": "Music",
-      "sourceType": "html",
-      "trust": "official",
-      "lat": 42.3966,
-      "lon": -71.1225
-    },
-    {
       "id": "nick-comedy-stop",
       "name": "Nick's Comedy Stop",
       "url": "https://www.nickscomedystop.com/calendar",
@@ -88,6 +78,20 @@
       "trust": "official",
       "lat": 42.3477,
       "lon": -71.0434
+    },
+    {
+      "id": "harpoon-brewery-boston",
+      "name": "Harpoon Brewery (Boston Beer Hall)",
+      "url": "https://www.harpoonbrewery.com/events/",
+      "city": "Boston",
+      "neighborhood": "Seaport",
+      "category": "Festival",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 42.3477,
+      "lon": -71.0383,
+      "perPage": 100,
+      "maxPages": 4
     }
   ]
 }

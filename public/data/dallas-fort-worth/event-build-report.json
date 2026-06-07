@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "dallas-fort-worth",
-  "generatedAt": "2026-06-07T14:11:31.469Z",
+  "generatedAt": "2026-06-07T14:54:49.435Z",
   "registryPath": "data/event-sources-dallas-fort-worth.json",
   "outputPath": "public/data/dallas-fort-worth/events.json",
   "eventCount": 1166,
-  "adultsEventCount": 112,
-  "sourceCount": 22,
-  "liveEventCount": 1165,
+  "adultsEventCount": 126,
+  "sourceCount": 26,
+  "liveEventCount": 1179,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 4,
-  "operatorAlertCount": 8,
+  "operatorAlertCount": 9,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:11:31.469Z",
+      "fetchedAt": "2026-06-07T14:54:49.435Z",
       "fetches": [
         {
           "url": "https://www.perotmuseum.org/events/",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:11:31.469Z",
+      "fetchedAt": "2026-06-07T14:54:49.435Z",
       "fetches": [
         {
           "url": "https://www.fairparkdallas.com/events/detail/2026-state-fair-of-texas",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:11:31.469Z",
+      "fetchedAt": "2026-06-07T14:54:49.435Z",
       "fetches": [
         {
           "url": "https://www.treesdallas.com/events",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:11:31.469Z",
+      "fetchedAt": "2026-06-07T14:54:49.435Z",
       "fetches": [
         {
           "url": "https://www.thefactoryindeepellum.com/events",
@@ -128,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:11:31.469Z",
+      "fetchedAt": "2026-06-07T14:54:49.435Z",
       "fetches": [
         {
           "url": "https://www.daboredada.com/events",
@@ -152,7 +152,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:11:31.469Z",
+      "fetchedAt": "2026-06-07T14:54:49.435Z",
       "fetches": [
         {
           "url": "https://www.tulipsftw.com/events",
@@ -177,7 +177,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:11:31.469Z",
+      "fetchedAt": "2026-06-07T14:54:49.435Z",
       "fetches": [
         {
           "url": "https://dallascomedyclub.com/shows/",
@@ -201,13 +201,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:11:31.469Z",
+      "fetchedAt": "2026-06-07T14:54:49.435Z",
       "fetches": [
         {
           "url": "https://www.hyenascomedynightclub.com/calendar",
           "status": "http-error",
           "httpStatus": 404,
           "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dfw-kesha-dos-equis-2026",
+      "sourceName": "Kesha at Dos Equis Pavilion",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.fairparkdallas.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T14:54:49.435Z",
+      "fetches": [
+        {
+          "url": "https://www.fairparkdallas.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     }
@@ -800,6 +825,114 @@
       ],
       "httpStatus": 404,
       "contentType": "text/html; charset=utf-8",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "dfw-tupps-brewery-tribe",
+      "name": "TUPPS Brewery Events",
+      "url": "https://tuppsbrewery.com/events/",
+      "sourceType": "tribeEvents",
+      "city": "McKinney",
+      "metroId": "dallas-fort-worth",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 3,
+      "fallbackEvents": 0,
+      "eventCount": 3,
+      "fetches": [
+        {
+          "url": "https://tuppsbrewery.com/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=11; pages=1"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=11; pages=1",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 3,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "dfw-peticolas-brewing-tribe",
+      "name": "Peticolas Brewing Company Events",
+      "url": "https://www.peticolasbrewing.com/events/",
+      "sourceType": "tribeEvents",
+      "city": "Dallas",
+      "metroId": "dallas-fort-worth",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 3,
+      "fallbackEvents": 0,
+      "eventCount": 3,
+      "fetches": [
+        {
+          "url": "https://www.peticolasbrewing.com/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=13; pages=1"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=13; pages=1",
+      "rejectedLiveEvents": 10,
+      "extractedEvents": 13,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "dfw-lakewood-brewing-tribe",
+      "name": "Lakewood Brewing Company Events",
+      "url": "https://lakewoodbrewing.com/events/",
+      "sourceType": "tribeEvents",
+      "city": "Garland",
+      "metroId": "dallas-fort-worth",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 8,
+      "fallbackEvents": 0,
+      "eventCount": 8,
+      "fetches": [
+        {
+          "url": "https://lakewoodbrewing.com/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=21; pages=1"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=21; pages=1",
+      "rejectedLiveEvents": 4,
+      "extractedEvents": 12,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "dfw-kesha-dos-equis-2026",
+      "name": "Kesha at Dos Equis Pavilion",
+      "url": "https://www.fairparkdallas.com/events",
+      "sourceType": "officialTextEvents",
+      "city": "Dallas",
+      "metroId": "dallas-fort-worth",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.fairparkdallas.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
       "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null

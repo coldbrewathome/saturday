@@ -3,7 +3,9 @@
   "note": "Adult-audience event sources for Dallas-Fort Worth — music venues, comedy, nightlife.",
   "defaults": {
     "windowDays": 30,
-    "audiences": ["adults"],
+    "audiences": [
+      "adults"
+    ],
     "userAgent": "nighthop/0.1 event-ingest"
   },
   "coverage": {
@@ -88,6 +90,83 @@
       "trust": "official",
       "lat": 32.8383,
       "lon": -96.7733
+    },
+    {
+      "id": "dfw-tupps-brewery-tribe",
+      "name": "TUPPS Brewery Events",
+      "url": "https://tuppsbrewery.com/events/",
+      "city": "McKinney",
+      "neighborhood": "Downtown McKinney",
+      "category": "Music",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 33.1976,
+      "lon": -96.6153,
+      "perPage": 100,
+      "maxPages": 4
+    },
+    {
+      "id": "dfw-peticolas-brewing-tribe",
+      "name": "Peticolas Brewing Company Events",
+      "url": "https://www.peticolasbrewing.com/events/",
+      "city": "Dallas",
+      "neighborhood": "Design District",
+      "category": "Music",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 32.7935,
+      "lon": -96.8205,
+      "perPage": 100,
+      "maxPages": 3
+    },
+    {
+      "id": "dfw-lakewood-brewing-tribe",
+      "name": "Lakewood Brewing Company Events",
+      "url": "https://lakewoodbrewing.com/events/",
+      "city": "Garland",
+      "neighborhood": "Garland",
+      "category": "Music",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 32.8868,
+      "lon": -96.6447,
+      "perPage": 100,
+      "maxPages": 4
+    },
+    {
+      "id": "dfw-kesha-dos-equis-2026",
+      "name": "Kesha at Dos Equis Pavilion",
+      "url": "https://www.fairparkdallas.com/events",
+      "city": "Dallas",
+      "neighborhood": "Fair Park",
+      "category": "Music",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 32.779,
+      "lon": -96.76,
+      "officialTextEvents": [
+        {
+          "id": "dfw-kesha-dos-equis-2026-08-07",
+          "title": "Kesha",
+          "description": "Kesha live in concert at Dos Equis Pavilion in Fair Park, Dallas.",
+          "venue": "Dos Equis Pavilion",
+          "neighborhood": "Fair Park",
+          "startDateTime": "2026-08-07T19:00:00-05:00",
+          "endDateTime": "2026-08-07T22:30:00-05:00",
+          "audiences": [
+            "adults"
+          ],
+          "ageBands": [],
+          "cost": "Ticketed",
+          "url": "https://www.fairparkdallas.com/events",
+          "requiredText": [
+            "Kesha",
+            "Aug 7, 2026",
+            "Event Starts 7:00 PM",
+            "Dos Equis Pavilion"
+          ]
+        }
+      ]
     }
   ]
 }

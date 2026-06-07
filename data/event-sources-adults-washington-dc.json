@@ -3,7 +3,9 @@
   "note": "Adult-audience event sources for Washington DC — music venues, comedy, nightlife.",
   "defaults": {
     "windowDays": 30,
-    "audiences": ["adults"],
+    "audiences": [
+      "adults"
+    ],
     "userAgent": "nighthop/0.1 event-ingest"
   },
   "coverage": {
@@ -30,30 +32,6 @@
       "trust": "official",
       "lat": 38.9177,
       "lon": -77.0242
-    },
-    {
-      "id": "the-anthem-dc",
-      "name": "The Anthem",
-      "url": "https://www.theanthemdc.com/events",
-      "city": "Washington",
-      "neighborhood": "The Wharf",
-      "category": "Music",
-      "sourceType": "html",
-      "trust": "official",
-      "lat": 38.8778,
-      "lon": -77.0236
-    },
-    {
-      "id": "black-cat-dc",
-      "name": "Black Cat",
-      "url": "https://www.blackcatdc.com/schedule.html",
-      "city": "Washington",
-      "neighborhood": "U Street",
-      "category": "Music",
-      "sourceType": "html",
-      "trust": "official",
-      "lat": 38.9146,
-      "lon": -77.0293
     },
     {
       "id": "dc-improv",
@@ -90,6 +68,41 @@
       "trust": "official",
       "lat": 38.9216,
       "lon": -77.0421
+    },
+    {
+      "id": "dc-jazzfest-wharf-2026",
+      "name": "DC JazzFest at The Wharf 2026",
+      "url": "https://www.dcjazzfest.org/event-details/dcjazzfest2026",
+      "city": "Washington",
+      "neighborhood": "The Wharf",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 38.8785,
+      "lon": -77.0228,
+      "officialTextEvents": [
+        {
+          "id": "dc-jazzfest-wharf-2026",
+          "title": "DC JazzFest at The Wharf",
+          "description": "The flagship weekend of the DC Jazz Festival on the waterfront at The Wharf, featuring national and local jazz artists across multiple stages.",
+          "venue": "The Wharf",
+          "neighborhood": "The Wharf",
+          "startDateTime": "2026-09-05T14:00:00-04:00",
+          "endDateTime": "2026-09-05T22:00:00-04:00",
+          "audiences": [
+            "adults"
+          ],
+          "ageBands": [],
+          "cost": "Ticketed",
+          "url": "https://www.dcjazzfest.org/event-details/dcjazzfest2026",
+          "requiredText": [
+            "DC JazzFest at The Wharf",
+            "September 5-6",
+            "2:00 PM - 10:00 PM",
+            "The Wharf"
+          ]
+        }
+      ]
     }
   ]
 }
