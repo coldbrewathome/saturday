@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "houston",
-  "generatedAt": "2026-06-06T16:08:49.183Z",
+  "generatedAt": "2026-06-07T13:52:29.066Z",
   "registryPath": "data/event-sources-houston.json",
   "outputPath": "public/data/houston/events.json",
-  "eventCount": 299,
-  "adultsEventCount": 31,
-  "sourceCount": 11,
-  "liveEventCount": 299,
+  "eventCount": 706,
+  "adultsEventCount": 62,
+  "sourceCount": 16,
+  "liveEventCount": 706,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
   "operatorAlertCount": 7,
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:08:49.183Z",
+      "fetchedAt": "2026-06-07T13:52:29.066Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:08:49.183Z",
+      "fetchedAt": "2026-06-07T13:52:29.066Z",
       "fetches": [
         {
           "url": "https://www.fortbendcountyfair.com/",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:08:49.183Z",
+      "fetchedAt": "2026-06-07T13:52:29.066Z",
       "fetches": [
         {
           "url": "https://www.whiteoakmusichall.com/events",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:08:49.183Z",
+      "fetchedAt": "2026-06-07T13:52:29.066Z",
       "fetches": [
         {
           "url": "https://www.warehouselive.com/events",
@@ -127,7 +127,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:08:49.183Z",
+      "fetchedAt": "2026-06-07T13:52:29.066Z",
       "fetches": [
         {
           "url": "https://continentalclub.com/houston",
@@ -152,7 +152,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:08:49.183Z",
+      "fetchedAt": "2026-06-07T13:52:29.066Z",
       "fetches": [
         {
           "url": "https://www.thesecretgrouphtx.com/calendar",
@@ -177,7 +177,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:08:49.183Z",
+      "fetchedAt": "2026-06-07T13:52:29.066Z",
       "fetches": [
         {
           "url": "https://improv.com/houston/calendar/",
@@ -198,9 +198,9 @@
       "metroId": "houston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 254,
+      "liveEvents": 242,
       "fallbackEvents": 0,
-      "eventCount": 254,
+      "eventCount": 242,
       "fetches": [
         {
           "url": "https://calendar.houstonlibrary.org/calendar/events?cal=-1&cid=-1&d=0000-00-00&inc=0",
@@ -211,8 +211,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 36,
-      "extractedEvents": 290,
+      "rejectedLiveEvents": 16,
+      "extractedEvents": 258,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -252,9 +252,9 @@
       "metroId": "houston",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 39,
+      "liveEvents": 37,
       "fallbackEvents": 0,
-      "eventCount": 39,
+      "eventCount": 37,
       "fetches": [
         {
           "url": "https://www.cmhouston.org/events",
@@ -266,7 +266,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 7,
-      "extractedEvents": 46,
+      "extractedEvents": 44,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -279,9 +279,9 @@
       "metroId": "houston",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 4,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://www.houstonzoo.org/plan-your-visit/calendar/",
@@ -293,7 +293,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 1,
-      "extractedEvents": 5,
+      "extractedEvents": 3,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -348,6 +348,147 @@
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "harris-county-pl-bibliocommons",
+      "name": "Harris County Public Library",
+      "url": "https://hcpl.bibliocommons.com/v2/events",
+      "sourceType": "biblioevents",
+      "city": "Houston",
+      "metroId": "houston",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 14,
+      "fallbackEvents": 0,
+      "eventCount": 14,
+      "fetches": [
+        {
+          "url": "https://hcpl.bibliocommons.com/v2/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 14,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "houston-arboretum-tribe",
+      "name": "Houston Arboretum & Nature Center",
+      "url": "https://houstonarboretum.org/events/",
+      "sourceType": "tribeEvents",
+      "city": "Houston",
+      "metroId": "houston",
+      "category": "Outdoors",
+      "status": "ok",
+      "liveEvents": 32,
+      "fallbackEvents": 0,
+      "eventCount": 32,
+      "fetches": [
+        {
+          "url": "https://houstonarboretum.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=110; pages=3"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=110; pages=3",
+      "rejectedLiveEvents": 63,
+      "extractedEvents": 95,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "brazoria-county-library-system",
+      "name": "Brazoria County Library System",
+      "url": "https://www.mybcls.org/calendar.aspx?view=list",
+      "sourceType": "civicpluscal",
+      "city": "Pearland",
+      "metroId": "houston",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 375,
+      "fallbackEvents": 0,
+      "eventCount": 375,
+      "fetches": [
+        {
+          "url": "https://www.mybcls.org/calendar.aspx?view=list",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        },
+        {
+          "url": "https://www.mybcls.org/calendar.aspx?view=list&month=7&year=2026&CID=0",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 88,
+      "extractedEvents": 463,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "freedom-over-texas-2026",
+      "name": "Freedom Over Texas 2026 (City of Houston July 4)",
+      "url": "https://www.houstontx.gov/july4/",
+      "sourceType": "officialTextEvents",
+      "city": "Houston",
+      "metroId": "houston",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://www.houstontx.gov/july4/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "hmns-second-saturday-shark-week-2026",
+      "name": "HMNS Second Saturday: Shark Week",
+      "url": "https://www.hmns.org/visit/events/",
+      "sourceType": "officialTextEvents",
+      "city": "Houston",
+      "metroId": "houston",
+      "category": "Museum",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://www.hmns.org/visit/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

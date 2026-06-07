@@ -11,7 +11,9 @@
       "Irving",
       "Frisco",
       "Garland",
-      "Grand Prairie"
+      "Grand Prairie",
+      "McKinney",
+      "Denton"
     ]
   },
   "defaults": {
@@ -77,7 +79,11 @@
       "sourceType": "ticketureEvents",
       "trust": "official",
       "requiresBrowserHeaders": true,
-      "ticketureCategories": ["Family", "Events", "Programs"],
+      "ticketureCategories": [
+        "Family",
+        "Events",
+        "Programs"
+      ],
       "lat": 32.7767,
       "lon": -96.797,
       "defaultAudienceText": "children family kids museum science art workshop",
@@ -130,15 +136,190 @@
     },
     {
       "id": "state-fair-of-texas",
-      "name": "State Fair of Texas",
-      "url": "https://bigtex.com/",
+      "name": "State Fair of Texas (2026)",
+      "url": "https://www.fairparkdallas.com/events/detail/2026-state-fair-of-texas",
       "city": "Dallas",
       "neighborhood": "Fair Park",
       "category": "Festival",
-      "sourceType": "html",
+      "sourceType": "officialTextEvents",
       "trust": "official",
       "lat": 32.7801,
-      "lon": -96.7617
+      "lon": -96.7617,
+      "officialTextEvents": [
+        {
+          "id": "state-fair-of-texas-2026",
+          "title": "State Fair of Texas",
+          "description": "The 2026 State Fair of Texas at Fair Park in Dallas: 100+ free attractions, 70 Midway rides, livestock, food, and family activities. Sundays-Thursdays 10am-9pm, Fridays-Saturdays 10am-10pm.",
+          "venue": "Fair Park",
+          "neighborhood": "Fair Park",
+          "startDateTime": "2026-09-25T10:00:00-05:00",
+          "endDateTime": "2026-10-18T21:00:00-05:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Ticketed",
+          "url": "https://www.fairparkdallas.com/events/detail/2026-state-fair-of-texas",
+          "requiredText": [
+            "State Fair of Texas",
+            "Sep 25 - Oct 18, 2026",
+            "Fair Park",
+            "September 25"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dfw-plano-library-communico",
+      "name": "Plano Public Library Events",
+      "url": "https://plano.libnet.info/events",
+      "city": "Plano",
+      "category": "Library",
+      "sourceType": "communicoEvents",
+      "trust": "official",
+      "lat": 33.0198,
+      "lon": -96.6989,
+      "communicoClient": "plano",
+      "communicoApiServer": "https://api.communico.co"
+    },
+    {
+      "id": "dfw-frisco-library-biblio",
+      "name": "Frisco Public Library Events",
+      "url": "https://friscolibrary.bibliocommons.com/v2/events",
+      "city": "Frisco",
+      "category": "Library",
+      "sourceType": "biblioevents",
+      "trust": "official",
+      "lat": 33.1507,
+      "lon": -96.8236
+    },
+    {
+      "id": "dfw-denton-library-biblio",
+      "name": "Denton Public Library Events",
+      "url": "https://denton.bibliocommons.com/v2/events",
+      "city": "Denton",
+      "category": "Library",
+      "sourceType": "biblioevents",
+      "trust": "official",
+      "lat": 33.2148,
+      "lon": -97.1331
+    },
+    {
+      "id": "dfw-fort-worth-library-libcal",
+      "name": "Fort Worth Public Library Events",
+      "url": "https://fortworthtexas.libcal.com/calendar",
+      "city": "Fort Worth",
+      "category": "Library",
+      "sourceType": "libcal",
+      "trust": "official",
+      "lat": 32.7555,
+      "lon": -97.3308,
+      "libcalCalendarId": -1
+    },
+    {
+      "id": "dfw-arlington-library-libcal",
+      "name": "Arlington Public Library Events",
+      "url": "https://arlingtontx.libcal.com/calendar",
+      "city": "Arlington",
+      "category": "Library",
+      "sourceType": "libcal",
+      "trust": "official",
+      "lat": 32.7357,
+      "lon": -97.1081,
+      "libcalCalendarId": -1
+    },
+    {
+      "id": "dfw-irving-library-libcal",
+      "name": "Irving Public Library Events",
+      "url": "https://irvinglibrary.libcal.com/calendar",
+      "city": "Irving",
+      "category": "Library",
+      "sourceType": "libcal",
+      "trust": "official",
+      "lat": 32.814,
+      "lon": -96.9489,
+      "libcalCalendarId": -1
+    },
+    {
+      "id": "dfw-mckinney-library-libcal",
+      "name": "McKinney Public Library Events",
+      "url": "https://mckinneytexas.libcal.com/calendar",
+      "city": "McKinney",
+      "category": "Library",
+      "sourceType": "libcal",
+      "trust": "official",
+      "lat": 33.1972,
+      "lon": -96.6398,
+      "libcalCalendarId": -1
+    },
+    {
+      "id": "dfw-garland-library-civicplus",
+      "name": "Garland Library Calendar",
+      "url": "https://www.garlandtx.gov/calendar.aspx?CID=24&view=list&showPastEvents=false",
+      "city": "Garland",
+      "category": "Library",
+      "sourceType": "civicpluscal",
+      "trust": "official",
+      "lat": 32.9126,
+      "lon": -96.6389
+    },
+    {
+      "id": "dfw-texas-discovery-gardens-tribe",
+      "name": "Texas Discovery Gardens Events",
+      "url": "https://txdg.org/events/",
+      "city": "Dallas",
+      "neighborhood": "Fair Park",
+      "category": "Outdoors",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 32.7787,
+      "lon": -96.76,
+      "perPage": 100,
+      "maxPages": 4
+    },
+    {
+      "id": "dfw-fort-worths-fourth-2026",
+      "name": "Fort Worth's Fourth (July 4, 2026)",
+      "url": "https://fortworthsfourth.com/",
+      "city": "Fort Worth",
+      "neighborhood": "Panther Island",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 32.7762,
+      "lon": -97.3382,
+      "officialTextEvents": [
+        {
+          "id": "fort-worths-fourth-2026",
+          "title": "Fort Worth's Fourth",
+          "description": "Fort Worth's largest Fourth of July celebration: festival food, cold drinks, kids' activities, live music, and fireworks along the Trinity River at Panther Island Pavilion. Gates open 5:00pm, fireworks at 9:30pm.",
+          "venue": "Panther Island Pavilion",
+          "neighborhood": "Panther Island",
+          "startDateTime": "2026-07-04T17:00:00-05:00",
+          "endDateTime": "2026-07-04T22:00:00-05:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Free",
+          "url": "https://fortworthsfourth.com/",
+          "requiredText": [
+            "Fort Worth's Fourth",
+            "Saturday, July 4, 2026",
+            "Panther Island Pavilion"
+          ]
+        }
+      ]
     }
   ]
 }

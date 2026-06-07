@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "atlanta",
-  "generatedAt": "2026-06-06T16:09:26.721Z",
+  "generatedAt": "2026-06-07T13:53:36.357Z",
   "registryPath": "data/event-sources-atlanta.json",
   "outputPath": "public/data/atlanta/events.json",
-  "eventCount": 138,
-  "adultsEventCount": 123,
-  "sourceCount": 13,
-  "liveEventCount": 131,
+  "eventCount": 1101,
+  "adultsEventCount": 470,
+  "sourceCount": 23,
+  "liveEventCount": 1095,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 8,
-  "operatorAlertCount": 9,
+  "operatorAlertCount": 11,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:09:26.721Z",
+      "fetchedAt": "2026-06-07T13:53:36.357Z",
       "fetches": [
         {
           "url": "https://www.atlantaga.gov/government/departments/parks-recreation/events",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:09:26.721Z",
+      "fetchedAt": "2026-06-07T13:53:36.357Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:09:26.721Z",
+      "fetchedAt": "2026-06-07T13:53:36.357Z",
       "fetches": [
         {
           "url": "https://www.northgeorgiastatefair.com/",
@@ -103,10 +103,60 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:09:26.721Z",
+      "fetchedAt": "2026-06-07T13:53:36.357Z",
       "fetches": [
         {
           "url": "https://www.gwinnettcountyfair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "atlanta",
+      "sourceId": "atlanta-beltline-lantern-parade-2026",
+      "sourceName": "Atlanta BeltLine Lantern Parade 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://beltline.org/art/lantern-parade/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T13:53:36.357Z",
+      "fetches": [
+        {
+          "url": "https://beltline.org/art/lantern-parade/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "atlanta",
+      "sourceId": "marietta-4th-in-the-park-2026",
+      "sourceName": "Marietta 4th In The Park Celebration 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.mariettaga.gov/194/Fourth-of-July-Celebration",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T13:53:36.357Z",
+      "fetches": [
+        {
+          "url": "https://www.mariettaga.gov/194/Fourth-of-July-Celebration",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -128,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:09:26.721Z",
+      "fetchedAt": "2026-06-07T13:53:36.357Z",
       "fetches": [
         {
           "url": "https://www.terminalwestatl.com/events",
@@ -153,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:09:26.721Z",
+      "fetchedAt": "2026-06-07T13:53:36.357Z",
       "fetches": [
         {
           "url": "https://www.varietyplayhouse.com/events",
@@ -178,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:09:26.721Z",
+      "fetchedAt": "2026-06-07T13:53:36.357Z",
       "fetches": [
         {
           "url": "https://www.badearl.com/calendar",
@@ -203,7 +253,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:09:26.721Z",
+      "fetchedAt": "2026-06-07T13:53:36.357Z",
       "fetches": [
         {
           "url": "https://laughingskulllounge.com/calendar",
@@ -228,7 +278,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:09:26.721Z",
+      "fetchedAt": "2026-06-07T13:53:36.357Z",
       "fetches": [
         {
           "url": "https://www.dadsgarage.com/calendar",
@@ -249,9 +299,9 @@
       "metroId": "atlanta",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 6,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 6,
       "fetches": [
         {
           "url": "https://fulcolibrary.bibliocommons.com/v2/events",
@@ -263,7 +313,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 3,
+      "extractedEvents": 6,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -302,9 +352,9 @@
       "metroId": "atlanta",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 125,
+      "liveEvents": 120,
       "fallbackEvents": 0,
-      "eventCount": 125,
+      "eventCount": 120,
       "fetches": [
         {
           "url": "https://childrensmuseumatlanta.org/program-calendar/",
@@ -316,7 +366,7 @@
       "httpStatus": 200,
       "contentType": "application/json; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 125,
+      "extractedEvents": 120,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -425,6 +475,276 @@
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "dekalb-library-family",
+      "name": "DeKalb County Public Library Events",
+      "url": "https://dekalb.libnet.info/events",
+      "sourceType": "communicoEvents",
+      "city": "Decatur",
+      "metroId": "atlanta",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 560,
+      "fallbackEvents": 0,
+      "eventCount": 560,
+      "fetches": [
+        {
+          "url": "https://dekalb.libnet.info/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=communico-events; events=907; locations=25"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=communico-events; events=907; locations=25",
+      "rejectedLiveEvents": 15,
+      "extractedEvents": 575,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "gwinnett-library-family",
+      "name": "Gwinnett County Public Library Events",
+      "url": "https://gwinnettpl.libnet.info/events",
+      "sourceType": "communicoEvents",
+      "city": "Lawrenceville",
+      "metroId": "atlanta",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 25,
+      "fallbackEvents": 0,
+      "eventCount": 25,
+      "fetches": [
+        {
+          "url": "https://gwinnettpl.libnet.info/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=communico-events; events=782; locations=17"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=communico-events; events=782; locations=17",
+      "rejectedLiveEvents": 2,
+      "extractedEvents": 27,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "atlanta-botanical-garden",
+      "name": "Atlanta Botanical Garden Events",
+      "url": "https://atlantabg.org/",
+      "sourceType": "tribeEvents",
+      "city": "Atlanta",
+      "metroId": "atlanta",
+      "category": "Outdoors",
+      "status": "ok",
+      "liveEvents": 78,
+      "fallbackEvents": 0,
+      "eventCount": 78,
+      "fetches": [
+        {
+          "url": "https://atlantabg.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=200; pages=4"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=200; pages=4",
+      "rejectedLiveEvents": 104,
+      "extractedEvents": 182,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "visit-marietta-events",
+      "name": "Visit Marietta Events Calendar",
+      "url": "https://www.visitmariettaga.com/events/",
+      "sourceType": "tribeEvents",
+      "city": "Marietta",
+      "metroId": "atlanta",
+      "category": "Community",
+      "status": "ok",
+      "liveEvents": 195,
+      "fallbackEvents": 0,
+      "eventCount": 195,
+      "fetches": [
+        {
+          "url": "https://www.visitmariettaga.com/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=200; pages=4"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=200; pages=4",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 195,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "awesome-alpharetta-family",
+      "name": "Awesome Alpharetta Family Fun Events",
+      "url": "https://www.awesomealpharetta.com/calendar/",
+      "sourceType": "tribeEvents",
+      "city": "Alpharetta",
+      "metroId": "atlanta",
+      "category": "Community",
+      "status": "ok",
+      "liveEvents": 73,
+      "fallbackEvents": 0,
+      "eventCount": 73,
+      "fetches": [
+        {
+          "url": "https://www.awesomealpharetta.com/calendar/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=138; pages=3"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=138; pages=3",
+      "rejectedLiveEvents": 65,
+      "extractedEvents": 138,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "piedmont-park-conservancy",
+      "name": "Piedmont Park Conservancy Events",
+      "url": "https://piedmontpark.org/",
+      "sourceType": "tribeEvents",
+      "city": "Atlanta",
+      "metroId": "atlanta",
+      "category": "Park",
+      "status": "ok",
+      "liveEvents": 20,
+      "fallbackEvents": 0,
+      "eventCount": 20,
+      "fetches": [
+        {
+          "url": "https://piedmontpark.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=60; pages=2"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=60; pages=2",
+      "rejectedLiveEvents": 39,
+      "extractedEvents": 59,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "atlanta-history-center-events",
+      "name": "Atlanta History Center Events",
+      "url": "https://www.atlantahistorycenter.com/events/",
+      "sourceType": "tribeEvents",
+      "city": "Atlanta",
+      "metroId": "atlanta",
+      "category": "Museum",
+      "status": "ok",
+      "liveEvents": 14,
+      "fallbackEvents": 0,
+      "eventCount": 14,
+      "fetches": [
+        {
+          "url": "https://www.atlantahistorycenter.com/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=18; pages=1"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=18; pages=1",
+      "rejectedLiveEvents": 3,
+      "extractedEvents": 17,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "atlanta-beltline-lantern-parade-2026",
+      "name": "Atlanta BeltLine Lantern Parade 2026",
+      "url": "https://beltline.org/art/lantern-parade/",
+      "sourceType": "officialTextEvents",
+      "city": "Atlanta",
+      "metroId": "atlanta",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://beltline.org/art/lantern-parade/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "marietta-4th-in-the-park-2026",
+      "name": "Marietta 4th In The Park Celebration 2026",
+      "url": "https://www.mariettaga.gov/194/Fourth-of-July-Celebration",
+      "sourceType": "officialTextEvents",
+      "city": "Marietta",
+      "metroId": "atlanta",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.mariettaga.gov/194/Fourth-of-July-Celebration",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "stone-mountain-fantastic-fourth-2026",
+      "name": "Stone Mountain Fantastic Fourth Celebration 2026",
+      "url": "https://stonemountainpark.com/activities/events/atlanta-4th-of-july-fireworks-at-stone-mountain-park/",
+      "sourceType": "officialTextEvents",
+      "city": "Stone Mountain",
+      "metroId": "atlanta",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://stonemountainpark.com/activities/events/atlanta-4th-of-july-fireworks-at-stone-mountain-park/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

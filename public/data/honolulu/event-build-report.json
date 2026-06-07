@@ -1,19 +1,17 @@
 {
   "schemaVersion": 1,
   "metroId": "honolulu",
-  "generatedAt": "2026-06-06T16:11:06.524Z",
+  "generatedAt": "2026-06-07T13:57:08.460Z",
   "registryPath": "data/event-sources-honolulu.json",
   "outputPath": "public/data/honolulu/events.json",
-  "eventCount": 3,
+  "eventCount": 394,
   "adultsEventCount": 0,
   "sourceCount": 13,
-  "liveEventCount": 3,
+  "liveEventCount": 394,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
   "operatorAlertCount": 11,
-  "errors": [
-    "Dataset has 3 events, expected at least 5."
-  ],
+  "errors": [],
   "operatorAlerts": [
     {
       "severity": "critical",
@@ -30,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:11:06.524Z",
+      "fetchedAt": "2026-06-07T13:57:08.460Z",
       "fetches": [
         {
           "url": "https://www.bishopmuseum.org/events/",
@@ -56,7 +54,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:11:06.524Z",
+      "fetchedAt": "2026-06-07T13:57:08.460Z",
       "fetches": [
         {
           "url": "https://honolulumuseum.org/events/",
@@ -81,7 +79,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:11:06.524Z",
+      "fetchedAt": "2026-06-07T13:57:08.460Z",
       "fetches": [
         {
           "url": "https://www.honoluluzoo.org/experiences-events/",
@@ -106,7 +104,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:11:06.524Z",
+      "fetchedAt": "2026-06-07T13:57:08.460Z",
       "fetches": [
         {
           "url": "https://discoverycenterhawaii.org/events/",
@@ -131,7 +129,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:11:06.524Z",
+      "fetchedAt": "2026-06-07T13:57:08.460Z",
       "fetches": [
         {
           "url": "https://www.waikikiaquarium.org/experience/events/",
@@ -156,7 +154,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:11:06.524Z",
+      "fetchedAt": "2026-06-07T13:57:08.460Z",
       "fetches": [
         {
           "url": "https://www.iolanipalace.org/events/",
@@ -181,7 +179,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:11:06.524Z",
+      "fetchedAt": "2026-06-07T13:57:08.460Z",
       "fetches": [
         {
           "url": "https://www.kualoa.com/activities/",
@@ -206,7 +204,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:11:06.524Z",
+      "fetchedAt": "2026-06-07T13:57:08.460Z",
       "fetches": [
         {
           "url": "https://jointherepublik.com/upcoming-events/",
@@ -231,7 +229,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:11:06.524Z",
+      "fetchedAt": "2026-06-07T13:57:08.460Z",
       "fetches": [
         {
           "url": "https://www.bluenotejazz.com/hawaii/shows/",
@@ -256,7 +254,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:11:06.524Z",
+      "fetchedAt": "2026-06-07T13:57:08.460Z",
       "fetches": [
         {
           "url": "https://www.hawaiitheatre.com/upcoming-events/",
@@ -281,7 +279,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:11:06.524Z",
+      "fetchedAt": "2026-06-07T13:57:08.460Z",
       "fetches": [
         {
           "url": "https://www.alohacomedyclub.com/calendar",
@@ -309,27 +307,27 @@
     {
       "id": "hawaii-state-library",
       "name": "Hawaii State Public Library System",
-      "url": "https://www.librarieshawaii.org/events",
-      "sourceType": "html",
+      "url": "https://www.librarieshawaii.org/events/",
+      "sourceType": "tribeEvents",
       "city": "Honolulu",
       "metroId": "honolulu",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 394,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 394,
       "fetches": [
         {
-          "url": "https://www.librarieshawaii.org/events",
+          "url": "https://www.librarieshawaii.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "application/json; source=tribe-events; events=400; pages=8"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 3,
+      "contentType": "application/json; source=tribe-events; events=400; pages=8",
+      "rejectedLiveEvents": 5,
+      "extractedEvents": 399,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

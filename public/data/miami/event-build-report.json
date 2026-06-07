@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "miami",
-  "generatedAt": "2026-06-06T16:09:57.676Z",
+  "generatedAt": "2026-06-07T14:08:25.235Z",
   "registryPath": "data/event-sources-miami.json",
   "outputPath": "public/data/miami/events.json",
-  "eventCount": 142,
-  "adultsEventCount": 163,
-  "sourceCount": 14,
-  "liveEventCount": 176,
+  "eventCount": 1717,
+  "adultsEventCount": 376,
+  "sourceCount": 20,
+  "liveEventCount": 1752,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 8,
-  "operatorAlertCount": 9,
+  "operatorAlertCount": 10,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:09:57.676Z",
+      "fetchedAt": "2026-06-07T14:08:25.235Z",
       "fetches": [
         {
           "url": "https://mdpls.libnet.info/events",
@@ -52,7 +52,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:09:57.676Z",
+      "fetchedAt": "2026-06-07T14:08:25.235Z",
       "fetches": [
         {
           "url": "https://www.fairexpo.com/",
@@ -77,13 +77,37 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:09:57.676Z",
+      "fetchedAt": "2026-06-07T14:08:25.235Z",
       "fetches": [
         {
           "url": "https://www.southfloridafair.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "miami",
+      "sourceId": "miami-coral-gables-museum",
+      "sourceName": "Coral Gables Museum Events",
+      "sourceType": "tribeEvents",
+      "url": "http://coralgablesmuseum.org/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T14:08:25.235Z",
+      "fetches": [
+        {
+          "url": "http://coralgablesmuseum.org/events/",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ]
     },
@@ -102,7 +126,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:09:57.676Z",
+      "fetchedAt": "2026-06-07T14:08:25.235Z",
       "fetches": [
         {
           "url": "https://clubspace.com/events",
@@ -127,7 +151,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:09:57.676Z",
+      "fetchedAt": "2026-06-07T14:08:25.235Z",
       "fetches": [
         {
           "url": "https://thegroundmiami.com/events",
@@ -152,7 +176,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:09:57.676Z",
+      "fetchedAt": "2026-06-07T14:08:25.235Z",
       "fetches": [
         {
           "url": "https://www.grframps.com/calendar",
@@ -176,7 +200,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:09:57.676Z",
+      "fetchedAt": "2026-06-07T14:08:25.235Z",
       "fetches": [
         {
           "url": "https://www.oasiswynwood.com/events",
@@ -201,7 +225,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:09:57.676Z",
+      "fetchedAt": "2026-06-07T14:08:25.235Z",
       "fetches": [
         {
           "url": "https://www.lasrosasbar.com/events",
@@ -226,7 +250,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:09:57.676Z",
+      "fetchedAt": "2026-06-07T14:08:25.235Z",
       "fetches": [
         {
           "url": "https://www.miamiimprov.com/calendar",
@@ -298,21 +322,21 @@
       "metroId": "miami",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 21,
+      "liveEvents": 20,
       "fallbackEvents": 0,
-      "eventCount": 21,
+      "eventCount": 20,
       "fetches": [
         {
           "url": "https://www.frostscience.org/calendar-events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=30; pages=1"
+          "contentType": "application/json; source=tribe-events; events=29; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=30; pages=1",
+      "contentType": "application/json; source=tribe-events; events=29; pages=1",
       "rejectedLiveEvents": 9,
-      "extractedEvents": 30,
+      "extractedEvents": 29,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -325,9 +349,9 @@
       "metroId": "miami",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 5,
+      "liveEvents": 4,
       "fallbackEvents": 0,
-      "eventCount": 5,
+      "eventCount": 4,
       "fetches": [
         {
           "url": "https://www.zoomiami.org/",
@@ -339,7 +363,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 5,
-      "extractedEvents": 10,
+      "extractedEvents": 9,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -425,6 +449,171 @@
       "recoveryMode": null
     },
     {
+      "id": "miami-broward-library-communico",
+      "name": "Broward County Library Events",
+      "url": "https://broward.libnet.info/events",
+      "sourceType": "communicoEvents",
+      "city": "Fort Lauderdale",
+      "metroId": "miami",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 1362,
+      "fallbackEvents": 0,
+      "eventCount": 1362,
+      "fetches": [
+        {
+          "url": "https://broward.libnet.info/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=communico-events; events=2518; locations=40"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=communico-events; events=2518; locations=40",
+      "rejectedLiveEvents": 34,
+      "extractedEvents": 1396,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "miami-beach-city-events",
+      "name": "City of Miami Beach Events",
+      "url": "https://events.miamibeachfl.gov/",
+      "sourceType": "tribeEvents",
+      "city": "Miami Beach",
+      "metroId": "miami",
+      "category": "Community",
+      "status": "ok",
+      "liveEvents": 196,
+      "fallbackEvents": 0,
+      "eventCount": 196,
+      "fetches": [
+        {
+          "url": "https://events.miamibeachfl.gov/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=200; pages=4"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=200; pages=4",
+      "rejectedLiveEvents": 4,
+      "extractedEvents": 200,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "miami-coral-gables-museum",
+      "name": "Coral Gables Museum Events",
+      "url": "http://coralgablesmuseum.org/events/",
+      "sourceType": "tribeEvents",
+      "city": "Coral Gables",
+      "metroId": "miami",
+      "category": "Museum",
+      "status": "fetch-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "http://coralgablesmuseum.org/events/",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
+        }
+      ],
+      "reason": "This operation was aborted",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "miami-beach-bandshell",
+      "name": "Miami Beach Bandshell Events",
+      "url": "https://miamibeachbandshell.com/events/",
+      "sourceType": "tribeEvents",
+      "city": "Miami Beach",
+      "metroId": "miami",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 15,
+      "fallbackEvents": 0,
+      "eventCount": 15,
+      "fetches": [
+        {
+          "url": "https://miamibeachbandshell.com/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=26; pages=1"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=26; pages=1",
+      "rejectedLiveEvents": 10,
+      "extractedEvents": 25,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "miami-north-miami-beach-civic",
+      "name": "North Miami Beach City Calendar",
+      "url": "https://www.citynmb.com/calendar.aspx?view=list&CID=14",
+      "sourceType": "civicpluscal",
+      "city": "North Miami Beach",
+      "metroId": "miami",
+      "category": "Community",
+      "status": "ok",
+      "liveEvents": 3,
+      "fallbackEvents": 0,
+      "eventCount": 3,
+      "fetches": [
+        {
+          "url": "https://www.citynmb.com/calendar.aspx?view=list&CID=14",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        },
+        {
+          "url": "https://www.citynmb.com/calendar.aspx?view=list&CID=14&month=7&year=2026",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 3,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "miami-dade-july4-tropical-park",
+      "name": "Miami-Dade July 4th Spectacular at Tropical Park",
+      "url": "https://www.miamidade.gov/global/news-item.page?Mduid_news=news1749487408016784",
+      "sourceType": "officialTextEvents",
+      "city": "Miami",
+      "metroId": "miami",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://www.miamidade.gov/global/news-item.page?Mduid_news=news1749487408016784",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html;charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
       "id": "e11even-miami",
       "name": "E11EVEN Miami",
       "url": "https://11miami.com/events",
@@ -433,9 +622,9 @@
       "metroId": "miami",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 42,
+      "liveEvents": 43,
       "fallbackEvents": 0,
-      "eventCount": 42,
+      "eventCount": 43,
       "fetches": [
         {
           "url": "https://11miami.com/events",
@@ -446,7 +635,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 58,
+      "rejectedLiveEvents": 57,
       "extractedEvents": 100,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null

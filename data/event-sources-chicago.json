@@ -13,7 +13,11 @@
       "Naperville",
       "Schaumburg",
       "Wheaton",
-      "Grayslake"
+      "Grayslake",
+      "Northbrook",
+      "Barrington Hills",
+      "Elgin",
+      "Palatine"
     ]
   },
   "defaults": {
@@ -154,6 +158,132 @@
       "trust": "official",
       "lat": 42.3439,
       "lon": -88.0459
+    },
+    {
+      "id": "evanston-library-family",
+      "name": "Evanston Public Library Events",
+      "url": "https://evanstonlibrary.bibliocommons.com/v2/events",
+      "city": "Evanston",
+      "neighborhood": "Downtown Evanston",
+      "category": "Library",
+      "sourceType": "biblioevents",
+      "trust": "official",
+      "lat": 42.0451,
+      "lon": -87.6877
+    },
+    {
+      "id": "schaumburg-library-family",
+      "name": "Schaumburg Township District Library Events",
+      "url": "https://schaumburg.libnet.info/events",
+      "city": "Schaumburg",
+      "category": "Library",
+      "sourceType": "communicoEvents",
+      "trust": "official",
+      "lat": 42.0334,
+      "lon": -88.0834,
+      "communicoClient": "schaumburg",
+      "communicoApiServer": "https://api.communico.co"
+    },
+    {
+      "id": "downers-grove-library-family",
+      "name": "Downers Grove Public Library Events",
+      "url": "https://downersgrove.libnet.info/events",
+      "city": "Downers Grove",
+      "category": "Library",
+      "sourceType": "communicoEvents",
+      "trust": "official",
+      "lat": 41.8089,
+      "lon": -88.0112,
+      "communicoClient": "downersgrove",
+      "communicoApiServer": "https://api.communico.co"
+    },
+    {
+      "id": "elk-grove-village-library-family",
+      "name": "Elk Grove Village Public Library Events",
+      "url": "https://egvpl.libnet.info/events",
+      "city": "Elk Grove Village",
+      "category": "Library",
+      "sourceType": "communicoEvents",
+      "trust": "official",
+      "lat": 42.0072,
+      "lon": -87.9706,
+      "communicoClient": "egvpl",
+      "communicoApiServer": "https://api.communico.co"
+    },
+    {
+      "id": "oak-park-library-family",
+      "name": "Oak Park Public Library Events",
+      "url": "https://oakpark.librarycalendar.com/events/month",
+      "city": "Oak Park",
+      "category": "Library",
+      "sourceType": "librarycalendar",
+      "trust": "official",
+      "lat": 41.8872,
+      "lon": -87.7889
+    },
+    {
+      "id": "naperville-library-family",
+      "name": "Naperville Public Library Events",
+      "url": "https://napervillepl.librarycalendar.com/events/month",
+      "city": "Naperville",
+      "category": "Library",
+      "sourceType": "librarycalendar",
+      "trust": "official",
+      "lat": 41.7508,
+      "lon": -88.1535
+    },
+    {
+      "id": "forest-preserves-cook-county-family",
+      "name": "Forest Preserves of Cook County Events",
+      "url": "https://fpdcc.com/events/",
+      "city": "Chicago",
+      "category": "Outdoors",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 41.8781,
+      "lon": -87.6298,
+      "perPage": 100,
+      "maxPages": 4
+    },
+    {
+      "id": "morton-arboretum-arbor-evenings-2026",
+      "name": "Morton Arboretum Arbor Evenings Summer Concerts",
+      "url": "https://mortonarb.org/explore/activities/events/arbor-evenings/",
+      "city": "Naperville",
+      "neighborhood": "Lisle",
+      "category": "Music",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 41.8156,
+      "lon": -88.0717,
+      "officialTextEvents": [
+        {
+          "id": "morton-arbor-evenings-2026-07-01",
+          "title": "Arbor Evenings Summer Concert",
+          "description": "Outdoor summer concert series on Frost Hill near the Children's Garden. Dance, enjoy food and drinks, play lawn games with family and friends.",
+          "venue": "The Morton Arboretum",
+          "neighborhood": "Lisle",
+          "startDateTime": "2026-07-01T18:00:00-05:00",
+          "endDateTime": "2026-07-01T20:00:00-05:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Adult (18 and older): $15 / Child (4 through 17): $5 / Infant (3 and younger): Free",
+          "url": "https://mortonarb.org/explore/activities/events/arbor-evenings/",
+          "requiredText": [
+            "Arbor Evenings",
+            "Wednesday, July 1",
+            "6:00 to 8:00 p.m.",
+            "Frost Hill near the Children's Garden"
+          ]
+        }
+      ]
     }
   ]
 }

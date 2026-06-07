@@ -1,42 +1,18 @@
 {
   "schemaVersion": 1,
   "metroId": "boston",
-  "generatedAt": "2026-06-06T16:10:29.763Z",
+  "generatedAt": "2026-06-07T13:55:21.261Z",
   "registryPath": "data/event-sources-boston.json",
   "outputPath": "public/data/boston/events.json",
-  "eventCount": 103,
-  "adultsEventCount": 71,
-  "sourceCount": 13,
-  "liveEventCount": 95,
+  "eventCount": 410,
+  "adultsEventCount": 65,
+  "sourceCount": 20,
+  "liveEventCount": 410,
   "lastKnownGoodEventCount": 0,
-  "fallbackEventCount": 8,
-  "operatorAlertCount": 10,
+  "fallbackEventCount": 0,
+  "operatorAlertCount": 12,
   "errors": [],
   "operatorAlerts": [
-    {
-      "severity": "warning",
-      "metroId": "boston",
-      "sourceId": "boston-library-family",
-      "sourceName": "Boston Public Library Family Programs",
-      "sourceType": "biblioevents",
-      "url": "https://bpl.bibliocommons.com/v2/events?audiences=57f66113863736755f79b0ca",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
-      "recoveredBy": "recurring-template",
-      "recoveredEvents": 8,
-      "liveEvents": 0,
-      "fallbackEvents": 8,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:29.763Z",
-      "fetches": [
-        {
-          "url": "https://bpl.bibliocommons.com/v2/events?audiences=57f66113863736755f79b0ca",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
-        }
-      ]
-    },
     {
       "severity": "critical",
       "metroId": "boston",
@@ -52,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:29.763Z",
+      "fetchedAt": "2026-06-07T13:55:21.261Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -77,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:29.763Z",
+      "fetchedAt": "2026-06-07T13:55:21.261Z",
       "fetches": [
         {
           "url": "https://www.easternstatesexposition.com/",
@@ -102,13 +78,88 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:29.763Z",
+      "fetchedAt": "2026-06-07T13:55:21.261Z",
       "fetches": [
         {
           "url": "https://marshfieldfair.org/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "boston",
+      "sourceId": "boston-harborfest-2026",
+      "sourceName": "Boston Harborfest 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.bostonharborfest.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T13:55:21.261Z",
+      "fetches": [
+        {
+          "url": "https://www.bostonharborfest.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "boston",
+      "sourceId": "salem-heritage-days-2026",
+      "sourceName": "Salem 400+ Heritage Days Parade 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.salemma.gov/CivicAlerts.aspx?AID=235",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T13:55:21.261Z",
+      "fetches": [
+        {
+          "url": "https://www.salemma.gov/CivicAlerts.aspx?AID=235",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "boston",
+      "sourceId": "cambridge-carnival-2026",
+      "sourceName": "Cambridge Carnival 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.cambridgecarnival.org/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T13:55:21.261Z",
+      "fetches": [
+        {
+          "url": "https://www.cambridgecarnival.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
         }
       ]
     },
@@ -127,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:29.763Z",
+      "fetchedAt": "2026-06-07T13:55:21.261Z",
       "fetches": [
         {
           "url": "https://www.crossroadspresents.com/paradise-rock-club",
@@ -152,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:29.763Z",
+      "fetchedAt": "2026-06-07T13:55:21.261Z",
       "fetches": [
         {
           "url": "https://www.crossroadspresents.com/brighton-music-hall",
@@ -177,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:29.763Z",
+      "fetchedAt": "2026-06-07T13:55:21.261Z",
       "fetches": [
         {
           "url": "https://www.sinclaircambridge.com/events",
@@ -202,7 +253,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:29.763Z",
+      "fetchedAt": "2026-06-07T13:55:21.261Z",
       "fetches": [
         {
           "url": "https://www.crystalballroomboston.com/events",
@@ -227,7 +278,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:29.763Z",
+      "fetchedAt": "2026-06-07T13:55:21.261Z",
       "fetches": [
         {
           "url": "https://www.nickscomedystop.com/calendar",
@@ -252,7 +303,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:29.763Z",
+      "fetchedAt": "2026-06-07T13:55:21.261Z",
       "fetches": [
         {
           "url": "https://www.laughboston.com/calendar",
@@ -272,21 +323,24 @@
       "city": "Boston",
       "metroId": "boston",
       "category": "Library",
-      "status": "fetch-error",
-      "liveEvents": 0,
-      "fallbackEvents": 8,
-      "eventCount": 8,
+      "status": "ok",
+      "liveEvents": 14,
+      "fallbackEvents": 0,
+      "eventCount": 14,
       "fetches": [
         {
           "url": "https://bpl.bibliocommons.com/v2/events?audiences=57f66113863736755f79b0ca",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ],
-      "reason": "This operation was aborted",
-      "extractedEvents": 0,
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 14,
       "lastKnownGoodEvents": 0,
-      "recoveryMode": "recurring-template"
+      "recoveryMode": null
     },
     {
       "id": "boston-parks-family",
@@ -297,9 +351,9 @@
       "metroId": "boston",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://www.boston.gov/rss/events",
@@ -310,7 +364,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/rss+xml; charset=utf-8",
-      "rejectedLiveEvents": 21,
+      "rejectedLiveEvents": 22,
       "extractedEvents": 24,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -324,9 +378,9 @@
       "metroId": "boston",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 89,
+      "liveEvents": 83,
       "fallbackEvents": 0,
-      "eventCount": 89,
+      "eventCount": 83,
       "fetches": [
         {
           "url": "https://bostonchildrensmuseum.org/Calendar/",
@@ -337,7 +391,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=eventon-events; events=105",
-      "rejectedLiveEvents": 11,
+      "rejectedLiveEvents": 17,
       "extractedEvents": 100,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -351,9 +405,9 @@
       "metroId": "boston",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://www.zoonewengland.org/discover/program-calendar/",
@@ -364,7 +418,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 2,
       "extractedEvents": 4,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -447,6 +501,195 @@
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "cambridge-library-libcal",
+      "name": "Cambridge Public Library Events",
+      "url": "https://cambridgepl.libcal.com/calendar/publicevents?cid=7052&cal=7052",
+      "sourceType": "libcal",
+      "city": "Cambridge",
+      "metroId": "boston",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 108,
+      "fallbackEvents": 0,
+      "eventCount": 108,
+      "fetches": [
+        {
+          "url": "https://cambridgepl.libcal.com/calendar/publicevents?cid=7052&cal=7052",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 108,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "newton-free-library-libcal",
+      "name": "Newton Free Library Events",
+      "url": "https://newtonfreelibrary.libcal.com/calendar?cid=3836&cal=3836",
+      "sourceType": "libcal",
+      "city": "Newton",
+      "metroId": "boston",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 76,
+      "fallbackEvents": 0,
+      "eventCount": 76,
+      "fetches": [
+        {
+          "url": "https://newtonfreelibrary.libcal.com/calendar?cid=3836&cal=3836",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json",
+      "rejectedLiveEvents": 36,
+      "extractedEvents": 112,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "brookline-library-libcal",
+      "name": "Public Library of Brookline Events",
+      "url": "https://brooklinelibrary.libcal.com/calendar/events?cid=20102&cal=20102",
+      "sourceType": "libcal",
+      "city": "Brookline",
+      "metroId": "boston",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 74,
+      "fallbackEvents": 0,
+      "eventCount": 74,
+      "fetches": [
+        {
+          "url": "https://brooklinelibrary.libcal.com/calendar/events?cid=20102&cal=20102",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json",
+      "rejectedLiveEvents": 37,
+      "extractedEvents": 111,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "somerville-library-assabet",
+      "name": "Somerville Public Library Events",
+      "url": "https://somervillepubliclibrary.assabetinteractive.com/calendar/",
+      "sourceType": "html",
+      "city": "Somerville",
+      "metroId": "boston",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 51,
+      "fallbackEvents": 0,
+      "eventCount": 51,
+      "fetches": [
+        {
+          "url": "https://somervillepubliclibrary.assabetinteractive.com/calendar/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 24,
+      "extractedEvents": 75,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "boston-harborfest-2026",
+      "name": "Boston Harborfest 2026",
+      "url": "https://www.bostonharborfest.com/",
+      "sourceType": "officialTextEvents",
+      "city": "Boston",
+      "metroId": "boston",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.bostonharborfest.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "salem-heritage-days-2026",
+      "name": "Salem 400+ Heritage Days Parade 2026",
+      "url": "https://www.salemma.gov/CivicAlerts.aspx?AID=235",
+      "sourceType": "officialTextEvents",
+      "city": "Salem",
+      "metroId": "boston",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.salemma.gov/CivicAlerts.aspx?AID=235",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "cambridge-carnival-2026",
+      "name": "Cambridge Carnival 2026",
+      "url": "https://www.cambridgecarnival.org/",
+      "sourceType": "officialTextEvents",
+      "city": "Cambridge",
+      "metroId": "boston",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.cambridgecarnival.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html;charset=utf-8",
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

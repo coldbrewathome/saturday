@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "san-diego",
-  "generatedAt": "2026-06-06T16:10:59.084Z",
+  "generatedAt": "2026-06-07T14:09:11.154Z",
   "registryPath": "data/event-sources-san-diego.json",
   "outputPath": "public/data/san-diego/events.json",
-  "eventCount": 194,
-  "adultsEventCount": 2,
-  "sourceCount": 12,
-  "liveEventCount": 194,
+  "eventCount": 387,
+  "adultsEventCount": 155,
+  "sourceCount": 15,
+  "liveEventCount": 387,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
   "operatorAlertCount": 8,
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:59.084Z",
+      "fetchedAt": "2026-06-07T14:09:11.154Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:59.084Z",
+      "fetchedAt": "2026-06-07T14:09:11.154Z",
       "fetches": [
         {
           "url": "https://www.sdfair.com/",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:59.084Z",
+      "fetchedAt": "2026-06-07T14:09:11.154Z",
       "fetches": [
         {
           "url": "https://www.casbahmusic.com/events",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:59.084Z",
+      "fetchedAt": "2026-06-07T14:09:11.154Z",
       "fetches": [
         {
           "url": "https://www.bellyup.com/events",
@@ -128,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:59.084Z",
+      "fetchedAt": "2026-06-07T14:09:11.154Z",
       "fetches": [
         {
           "url": "https://www.musicboxsd.com/events",
@@ -153,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:59.084Z",
+      "fetchedAt": "2026-06-07T14:09:11.154Z",
       "fetches": [
         {
           "url": "https://www.observatorysd.com/events",
@@ -178,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:59.084Z",
+      "fetchedAt": "2026-06-07T14:09:11.154Z",
       "fetches": [
         {
           "url": "https://www.americancomedyco.com/calendar",
@@ -203,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:59.084Z",
+      "fetchedAt": "2026-06-07T14:09:11.154Z",
       "fetches": [
         {
           "url": "https://thecomedystore.com/la-jolla/",
@@ -224,9 +224,9 @@
       "metroId": "san-diego",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 4,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 4,
       "fetches": [
         {
           "url": "https://sdcl.bibliocommons.com/v2/events",
@@ -238,7 +238,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 1,
-      "extractedEvents": 2,
+      "extractedEvents": 5,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -251,9 +251,9 @@
       "metroId": "san-diego",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 54,
+      "liveEvents": 44,
       "fallbackEvents": 0,
-      "eventCount": 54,
+      "eventCount": 44,
       "fetches": [
         {
           "url": "https://www.sandiego.gov/park-and-recreation/event-calendar",
@@ -264,35 +264,35 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; source=san-diego-drupal-page-only",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 10,
       "extractedEvents": 54,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
     {
       "id": "san-diego-museum-family",
-      "name": "The New Children's Museum Calendar",
-      "url": "https://thinkplaycreate.org/visit/",
-      "sourceType": "eventList",
+      "name": "The New Children's Museum",
+      "url": "https://thinkplaycreate.org/events/",
+      "sourceType": "tribeEvents",
       "city": "San Diego",
       "metroId": "san-diego",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 4,
+      "liveEvents": 85,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 85,
       "fetches": [
         {
-          "url": "https://thinkplaycreate.org/visit/",
+          "url": "https://thinkplaycreate.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "application/json; source=tribe-events; events=200; pages=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 4,
+      "contentType": "application/json; source=tribe-events; events=200; pages=4",
+      "rejectedLiveEvents": 115,
+      "extractedEvents": 200,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -374,6 +374,87 @@
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "balboa-park-events",
+      "name": "Balboa Park Events Calendar",
+      "url": "https://www.balboapark.org/events/",
+      "sourceType": "tribeEvents",
+      "city": "San Diego",
+      "metroId": "san-diego",
+      "category": "Culture",
+      "status": "ok",
+      "liveEvents": 109,
+      "fallbackEvents": 0,
+      "eventCount": 109,
+      "fetches": [
+        {
+          "url": "https://www.balboapark.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=200; pages=4"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=200; pages=4",
+      "rejectedLiveEvents": 91,
+      "extractedEvents": 200,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "oceanside-library-events",
+      "name": "Oceanside Public Library Events",
+      "url": "https://oceansidepl.librarycalendar.com/events/month",
+      "sourceType": "librarycalendar",
+      "city": "Oceanside",
+      "metroId": "san-diego",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 9,
+      "fallbackEvents": 0,
+      "eventCount": 9,
+      "fetches": [
+        {
+          "url": "https://oceansidepl.librarycalendar.com/events/month",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 9,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "balboa-park-twilight-concerts",
+      "name": "Twilight in the Park Free Summer Concerts",
+      "url": "https://balboapark.org/twilight-concerts/",
+      "sourceType": "officialTextEvents",
+      "city": "San Diego",
+      "metroId": "san-diego",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://balboapark.org/twilight-concerts/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

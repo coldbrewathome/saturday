@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "austin",
-  "generatedAt": "2026-06-06T16:15:05.340Z",
-  "alertCount": 13,
+  "generatedAt": "2026-06-07T13:56:34.469Z",
+  "alertCount": 14,
   "alerts": [
     {
       "severity": "critical",
@@ -10,7 +10,7 @@
       "sourceId": "austin-public-library",
       "sourceName": "Austin Public Library",
       "sourceType": "html",
-      "url": "https://library.austintexas.gov/events",
+      "url": "https://library.austintexas.gov/events/calendar",
       "status": "blocked",
       "issueType": "fetch-failed",
       "reason": "challenge page returned instead of event content",
@@ -19,10 +19,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:15:05.340Z",
+      "fetchedAt": "2026-06-07T13:56:34.469Z",
       "fetches": [
         {
-          "url": "https://library.austintexas.gov/events",
+          "url": "https://library.austintexas.gov/events/calendar",
           "status": "blocked",
           "reason": "challenge page returned instead of event content",
           "httpStatus": 200,
@@ -36,21 +36,21 @@
       "sourceId": "thinkery",
       "sourceName": "Thinkery (Children's Museum)",
       "sourceType": "html",
-      "url": "https://thinkeryaustin.org/events/",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
+      "url": "https://thinkeryaustin.org/visit-us/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:15:05.340Z",
+      "fetchedAt": "2026-06-07T13:56:34.469Z",
       "fetches": [
         {
-          "url": "https://thinkeryaustin.org/events/",
-          "status": "http-error",
-          "httpStatus": 404,
+          "url": "https://thinkeryaustin.org/visit-us/",
+          "status": "ok",
+          "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ]
@@ -70,7 +70,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:15:05.340Z",
+      "fetchedAt": "2026-06-07T13:56:34.469Z",
       "fetches": [
         {
           "url": "https://www.thestoryoftexas.com/visit/calendar",
@@ -95,7 +95,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:15:05.340Z",
+      "fetchedAt": "2026-06-07T13:56:34.469Z",
       "fetches": [
         {
           "url": "https://www.lbjlibrary.org/events",
@@ -120,7 +120,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:15:05.340Z",
+      "fetchedAt": "2026-06-07T13:56:34.469Z",
       "fetches": [
         {
           "url": "https://blantonmuseum.org/events/",
@@ -145,10 +145,35 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:15:05.340Z",
+      "fetchedAt": "2026-06-07T13:56:34.469Z",
       "fetches": [
         {
           "url": "https://www.umlaufsculpture.org/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "austin",
+      "sourceId": "hot-summer-nights-2026",
+      "sourceName": "Hot Summer Nights 2026 (Red River Cultural District)",
+      "sourceType": "officialTextEvents",
+      "url": "https://redriverculturaldistrict.org/hot-summer-nights/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T13:56:34.469Z",
+      "fetches": [
+        {
+          "url": "https://redriverculturaldistrict.org/hot-summer-nights/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -170,7 +195,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:15:05.340Z",
+      "fetchedAt": "2026-06-07T13:56:34.469Z",
       "fetches": [
         {
           "url": "https://stubbsaustin.com/concert-calendar/",
@@ -195,7 +220,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:15:05.340Z",
+      "fetchedAt": "2026-06-07T13:56:34.469Z",
       "fetches": [
         {
           "url": "https://mohawkaustin.com/calendar",
@@ -220,7 +245,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:15:05.340Z",
+      "fetchedAt": "2026-06-07T13:56:34.469Z",
       "fetches": [
         {
           "url": "https://continentalclub.com/austin-tx/",
@@ -245,7 +270,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:15:05.340Z",
+      "fetchedAt": "2026-06-07T13:56:34.469Z",
       "fetches": [
         {
           "url": "https://antonesnightclub.com/calendar/",
@@ -270,7 +295,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:15:05.340Z",
+      "fetchedAt": "2026-06-07T13:56:34.469Z",
       "fetches": [
         {
           "url": "https://acl-live.com/calendar/",
@@ -295,7 +320,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:15:05.340Z",
+      "fetchedAt": "2026-06-07T13:56:34.469Z",
       "fetches": [
         {
           "url": "https://drafthouse.com/austin/calendar",
@@ -320,7 +345,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:15:05.340Z",
+      "fetchedAt": "2026-06-07T13:56:34.469Z",
       "fetches": [
         {
           "url": "https://www.capcitycomedy.com/calendar",

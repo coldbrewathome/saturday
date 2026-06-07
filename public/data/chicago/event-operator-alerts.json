@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "chicago",
-  "generatedAt": "2026-06-06T16:06:41.503Z",
-  "alertCount": 10,
+  "generatedAt": "2026-06-07T14:06:01.818Z",
+  "alertCount": 13,
   "alerts": [
     {
       "severity": "warning",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:41.503Z",
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
       "fetches": [
         {
           "url": "https://dupagecountyfair.org/",
@@ -44,13 +44,88 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:41.503Z",
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
       "fetches": [
         {
           "url": "https://lcfair.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "oak-park-library-family",
+      "sourceName": "Oak Park Public Library Events",
+      "sourceType": "librarycalendar",
+      "url": "https://oakpark.librarycalendar.com/events/month",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
+      "fetches": [
+        {
+          "url": "https://oakpark.librarycalendar.com/events/month",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "naperville-library-family",
+      "sourceName": "Naperville Public Library Events",
+      "sourceType": "librarycalendar",
+      "url": "https://napervillepl.librarycalendar.com/events/month",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
+      "fetches": [
+        {
+          "url": "https://napervillepl.librarycalendar.com/events/month",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "morton-arboretum-arbor-evenings-2026",
+      "sourceName": "Morton Arboretum Arbor Evenings Summer Concerts",
+      "sourceType": "officialTextEvents",
+      "url": "https://mortonarb.org/explore/activities/events/arbor-evenings/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
+      "fetches": [
+        {
+          "url": "https://mortonarb.org/explore/activities/events/arbor-evenings/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -69,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:41.503Z",
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
       "fetches": [
         {
           "url": "https://metrochicago.com/shows/",
@@ -94,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:41.503Z",
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
       "fetches": [
         {
           "url": "https://www.emptybottle.com/events/",
@@ -119,7 +194,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:41.503Z",
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
@@ -144,7 +219,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:41.503Z",
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
@@ -169,7 +244,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:41.503Z",
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
       "fetches": [
         {
           "url": "https://www.thaliahallchicago.com/events",
@@ -194,7 +269,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:41.503Z",
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
       "fetches": [
         {
           "url": "https://www.secondcity.com/shows/chicago",
@@ -219,7 +294,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:41.503Z",
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
       "fetches": [
         {
           "url": "https://chicago.zanies.com/events",
@@ -244,7 +319,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:41.503Z",
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
       "fetches": [
         {
           "url": "https://www.hideoutchicago.com/events",

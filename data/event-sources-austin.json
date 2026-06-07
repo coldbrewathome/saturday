@@ -26,7 +26,7 @@
     {
       "id": "austin-public-library",
       "name": "Austin Public Library",
-      "url": "https://library.austintexas.gov/events",
+      "url": "https://library.austintexas.gov/events/calendar",
       "city": "Austin",
       "neighborhood": "Downtown",
       "category": "Library",
@@ -38,14 +38,14 @@
     {
       "id": "thinkery",
       "name": "Thinkery (Children's Museum)",
-      "url": "https://thinkeryaustin.org/events/",
+      "url": "https://thinkeryaustin.org/visit-us/",
       "city": "Austin",
       "neighborhood": "Mueller",
       "category": "Museum",
       "sourceType": "html",
       "trust": "official",
-      "lat": 30.2876,
-      "lon": -97.7062
+      "lat": 30.2989,
+      "lon": -97.7036
     },
     {
       "id": "bullock-museum",
@@ -69,7 +69,7 @@
       "sourceType": "html",
       "trust": "official",
       "lat": 30.2855,
-      "lon": -97.7290
+      "lon": -97.729
     },
     {
       "id": "blanton-museum",
@@ -90,10 +90,12 @@
       "city": "Austin",
       "neighborhood": "Zilker",
       "category": "Outdoors",
-      "sourceType": "html",
+      "sourceType": "tribeEvents",
       "trust": "official",
-      "lat": 30.2670,
-      "lon": -97.7720
+      "lat": 30.2701,
+      "lon": -97.7713,
+      "perPage": 100,
+      "maxPages": 4
     },
     {
       "id": "umlauf-sculpture-garden",
@@ -106,6 +108,135 @@
       "trust": "official",
       "lat": 30.2592,
       "lon": -97.7707
+    },
+    {
+      "id": "cedar-park-library",
+      "name": "Cedar Park Public Library",
+      "url": "https://cedarparkpl.librarycalendar.com/events/month",
+      "city": "Cedar Park",
+      "neighborhood": "Cedar Park",
+      "category": "Library",
+      "sourceType": "librarycalendar",
+      "trust": "official",
+      "lat": 30.5052,
+      "lon": -97.8203
+    },
+    {
+      "id": "pflugerville-library",
+      "name": "Pflugerville Public Library",
+      "url": "https://pflugerville.librarycalendar.com/events/month",
+      "city": "Pflugerville",
+      "neighborhood": "Pflugerville",
+      "category": "Library",
+      "sourceType": "librarycalendar",
+      "trust": "official",
+      "lat": 30.4394,
+      "lon": -97.62
+    },
+    {
+      "id": "hays-public-library",
+      "name": "Hays Public Library",
+      "url": "https://hays.librarycalendar.com/events/month",
+      "city": "Kyle",
+      "neighborhood": "Kyle",
+      "category": "Library",
+      "sourceType": "librarycalendar",
+      "trust": "official",
+      "lat": 29.9893,
+      "lon": -97.8773
+    },
+    {
+      "id": "round-rock-library-libcal",
+      "name": "Round Rock Public Library",
+      "url": "https://roundrocktexas.libcal.com/calendar/libraryevents?cid=19825&cal=19825",
+      "city": "Round Rock",
+      "neighborhood": "Round Rock",
+      "category": "Library",
+      "sourceType": "libcal",
+      "trust": "official",
+      "lat": 30.5083,
+      "lon": -97.6789,
+      "libcalCalendarId": 19825
+    },
+    {
+      "id": "hot-summer-nights-2026",
+      "name": "Hot Summer Nights 2026 (Red River Cultural District)",
+      "url": "https://redriverculturaldistrict.org/hot-summer-nights/",
+      "city": "Austin",
+      "neighborhood": "Red River Cultural District",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 30.2687,
+      "lon": -97.7365,
+      "officialTextEvents": [
+        {
+          "id": "hot-summer-nights-2026-day1",
+          "title": "Hot Summer Nights 2026",
+          "description": "FREE annual three-day district-wide music and arts festival held in the Red River Cultural District in downtown Austin. Three days of live concerts across the district's venues.",
+          "venue": "Red River Cultural District",
+          "neighborhood": "Red River Cultural District",
+          "startDateTime": "2026-07-16T17:00:00-05:00",
+          "endDateTime": "2026-07-18T23:59:00-05:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Free",
+          "url": "https://redriverculturaldistrict.org/hot-summer-nights/",
+          "requiredText": [
+            "Hot Summer Nights",
+            "July 16th, 17th, and 18th, 2026",
+            "Red River Cultural District",
+            "FREE"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "austin-symphony-july4-2026",
+      "name": "Austin Symphony Orchestra July 4th Concert and Fireworks (H-E-B)",
+      "url": "https://www.starspangledfest.com/july-4",
+      "city": "Austin",
+      "neighborhood": "Vic Mathias (Auditorium) Shores",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 30.2615,
+      "lon": -97.7522,
+      "officialTextEvents": [
+        {
+          "id": "austin-symphony-july4-2026-evt",
+          "title": "Austin Symphony Orchestra July 4th Concert and Fireworks presented by H-E-B",
+          "description": "Austin's largest Independence Day celebration: patriotic music by the Austin Symphony Orchestra at Vic Mathias (Auditorium) Shores with a fireworks finale over Lady Bird Lake. Gates open 4:30PM; the majority of the grounds is free and open to the public.",
+          "venue": "Vic Mathias Shores (Auditorium Shores)",
+          "neighborhood": "Downtown / Lady Bird Lake",
+          "startDateTime": "2026-07-04T16:30:00-05:00",
+          "endDateTime": "2026-07-04T22:00:00-05:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Free (general admission); VIP options available",
+          "url": "https://www.starspangledfest.com/july-4",
+          "requiredText": [
+            "Austin Symphony Orchestra July 4th Concert and Fireworks presented by H-E-B",
+            "JULY 4TH | AUDITORIUM SHORES",
+            "4:30PM",
+            "Vic Mathias Shores"
+          ]
+        }
+      ]
     }
   ]
 }

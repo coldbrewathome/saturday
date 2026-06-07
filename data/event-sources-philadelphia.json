@@ -23,22 +23,15 @@
   "sources": [
     {
       "id": "philadelphia-library-family",
-      "name": "Free Library of Philadelphia Events",
-      "url": "https://libwww.freelibrary.org/calendar/",
+      "name": "Free Library of Philadelphia Foundation Events",
+      "url": "https://freelibraryfoundation.org/events/",
       "city": "Philadelphia",
+      "neighborhood": "Center City",
       "category": "Library",
-      "sourceType": "eventList",
+      "sourceType": "html",
       "trust": "official",
-      "requiresBrowserHeaders": true,
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "defaultAudienceText": "children family kids storytime library free",
-      "eventList": {
-        "venue": "Free Library of Philadelphia Events",
-        "city": "Philadelphia",
-        "requireFamilySignal": false,
-        "defaultDurationMinutes": 60
-      },
+      "lat": 39.9606,
+      "lon": -75.1716,
       "fallbackEventIds": [
         "philadelphia-family-storytime",
         "philadelphia-kids-steam"
@@ -138,6 +131,187 @@
       "trust": "official",
       "lat": 40.2327,
       "lon": -74.9365
+    },
+    {
+      "id": "burlington-county-library-biblio",
+      "name": "Burlington County Library System Events",
+      "url": "https://bclsnj.bibliocommons.com/v2/events",
+      "city": "Cherry Hill",
+      "neighborhood": "Burlington County",
+      "category": "Library",
+      "sourceType": "biblioevents",
+      "trust": "official",
+      "lat": 39.9871,
+      "lon": -74.9046
+    },
+    {
+      "id": "montgomery-norristown-library-libcal",
+      "name": "Montgomery County-Norristown Public Library Events",
+      "url": "https://mnl.libcal.com/calendar?cid=19360&cal=19360",
+      "city": "Norristown",
+      "neighborhood": "Montgomery County",
+      "category": "Library",
+      "sourceType": "libcal",
+      "trust": "official",
+      "lat": 40.1209,
+      "lon": -75.3402,
+      "libcalCalendarId": 19360
+    },
+    {
+      "id": "delaware-county-pa-library-libcal",
+      "name": "Delaware County Library System Events",
+      "url": "https://delcolibraries.libcal.com/calendar?cid=10206&cal=10206",
+      "city": "Media",
+      "neighborhood": "Delaware County",
+      "category": "Library",
+      "sourceType": "libcal",
+      "trust": "official",
+      "lat": 39.9168,
+      "lon": -75.3877,
+      "libcalCalendarId": 10206
+    },
+    {
+      "id": "bucks-county-free-library-libcal",
+      "name": "Bucks County Free Library Events",
+      "url": "https://calendar.buckslib.org/calendar?cid=3891&cal=3891",
+      "city": "Bensalem",
+      "neighborhood": "Bucks County",
+      "category": "Library",
+      "sourceType": "libcal",
+      "trust": "official",
+      "lat": 40.1046,
+      "lon": -74.9513,
+      "libcalCalendarId": 3891
+    },
+    {
+      "id": "academy-natural-sciences-events",
+      "name": "Academy of Natural Sciences of Drexel University Events",
+      "url": "https://ansp.org/programs-and-events/events/",
+      "city": "Philadelphia",
+      "neighborhood": "Logan Square / Parkway",
+      "category": "Museum",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 39.9576,
+      "lon": -75.1709
+    },
+    {
+      "id": "wawa-welcome-america-2026",
+      "name": "Wawa Welcome America 2026 (Philadelphia July 4 / America250)",
+      "url": "https://july4thphilly.com/events/",
+      "city": "Philadelphia",
+      "neighborhood": "Independence Mall / Parkway",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 39.9496,
+      "lon": -75.1503,
+      "officialTextEvents": [
+        {
+          "id": "wwa-kidchella-2026-06-26",
+          "title": "Kidchella Music Festival",
+          "description": "Free kids' music festival at Smith Memorial Playground, presented as part of Wawa Welcome America, in partnership with Smith Memorial Playground & Playhouse.",
+          "venue": "Smith Memorial Playground",
+          "neighborhood": "East Fairmount Park",
+          "startDateTime": "2026-06-26T16:00:00-04:00",
+          "endDateTime": "2026-06-26T21:00:00-04:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Free",
+          "url": "https://july4thphilly.com/event/kidchella-music-festival/",
+          "requiredText": [
+            "Kidchella Music Festival",
+            "June 26, 2026",
+            "4:00 pm",
+            "Smith Memorial Playground"
+          ]
+        },
+        {
+          "id": "wwa-celebration-of-freedom-2026-07-04",
+          "title": "Celebration of Freedom Ceremony",
+          "description": "Wawa Welcome America Independence Day morning ceremony at Independence Mall (599 Market Street).",
+          "venue": "Independence Mall",
+          "neighborhood": "Old City / Independence Mall",
+          "startDateTime": "2026-07-04T10:00:00-04:00",
+          "endDateTime": "2026-07-04T11:00:00-04:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Free",
+          "url": "https://july4thphilly.com/event/celebration-of-freedom-ceremony/",
+          "requiredText": [
+            "Celebration of Freedom Ceremony",
+            "July 4, 2026",
+            "10:00 am",
+            "Independence Mall"
+          ]
+        },
+        {
+          "id": "wwa-hoagie-day-2026-07-01",
+          "title": "Wawa Hoagie Day",
+          "description": "Free hoagies and entertainment at Independence Mall as part of Wawa Welcome America.",
+          "venue": "Independence Mall",
+          "neighborhood": "Old City / Independence Mall",
+          "startDateTime": "2026-07-01T12:00:00-04:00",
+          "endDateTime": "2026-07-01T14:00:00-04:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Free",
+          "url": "https://july4thphilly.com/event/wawa-hoagie-day/",
+          "requiredText": [
+            "Wawa Hoagie Day",
+            "July 1, 2026",
+            "12:00 pm",
+            "Independence Mall"
+          ]
+        },
+        {
+          "id": "wwa-philly-fair-250-2026-06-20",
+          "title": "Philly Fair 250 - Day 1",
+          "description": "Free family fair in the Centennial District with culture, cuisine, music, food trucks, performances, trapeze, and hot air balloon rides, part of Wawa Welcome America America250.",
+          "venue": "Centennial District",
+          "neighborhood": "West Fairmount Park / Centennial District",
+          "startDateTime": "2026-06-20T14:00:00-04:00",
+          "endDateTime": "2026-06-20T21:30:00-04:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Free",
+          "url": "https://july4thphilly.com/event/philly-fair-250/",
+          "requiredText": [
+            "Philly Fair 250",
+            "June 20, 2026",
+            "2:00 pm",
+            "Centennial District"
+          ]
+        }
+      ]
     }
   ]
 }

@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "seattle",
-  "generatedAt": "2026-06-06T16:06:27.873Z",
+  "generatedAt": "2026-06-07T14:05:45.446Z",
   "registryPath": "data/event-sources-seattle.json",
   "outputPath": "public/data/seattle/events.json",
-  "eventCount": 265,
-  "adultsEventCount": 56,
-  "sourceCount": 17,
-  "liveEventCount": 255,
-  "lastKnownGoodEventCount": 11,
+  "eventCount": 500,
+  "adultsEventCount": 271,
+  "sourceCount": 26,
+  "liveEventCount": 491,
+  "lastKnownGoodEventCount": 10,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 14,
+  "operatorAlertCount": 18,
   "errors": [],
   "operatorAlerts": [
     {
@@ -24,11 +24,11 @@
       "issueType": "fetch-failed",
       "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 11,
+      "recoveredEvents": 10,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 11,
-      "fetchedAt": "2026-06-06T16:06:27.873Z",
+      "lastKnownGoodEvents": 10,
+      "fetchedAt": "2026-06-07T14:05:45.446Z",
       "fetches": [
         {
           "url": "https://www.zoo.org/events?cgid=1",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:27.873Z",
+      "fetchedAt": "2026-06-07T14:05:45.446Z",
       "fetches": [
         {
           "url": "https://www.burkemuseum.org/events",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:27.873Z",
+      "fetchedAt": "2026-06-07T14:05:45.446Z",
       "fetches": [
         {
           "url": "https://pacificsciencecenter.org/events/",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:27.873Z",
+      "fetchedAt": "2026-06-07T14:05:45.446Z",
       "fetches": [
         {
           "url": "https://www.seattleaquarium.org/explore-the-aquarium/programs/toddler-time/",
@@ -128,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:27.873Z",
+      "fetchedAt": "2026-06-07T14:05:45.446Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -153,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:27.873Z",
+      "fetchedAt": "2026-06-07T14:05:45.446Z",
       "fetches": [
         {
           "url": "https://www.thefair.com/",
@@ -178,10 +178,110 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:27.873Z",
+      "fetchedAt": "2026-06-07T14:05:45.446Z",
       "fetches": [
         {
           "url": "https://www.evergreenfair.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "seattle",
+      "sourceId": "festal-tibet-fest-2026",
+      "sourceName": "Festál: Tibet Fest",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.seattlecenter.com/events/featured-events/festal/tibet-fest",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T14:05:45.446Z",
+      "fetches": [
+        {
+          "url": "https://www.seattlecenter.com/events/featured-events/festal/tibet-fest",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "seattle",
+      "sourceId": "festal-brasilfest-2026",
+      "sourceName": "Festál: BrasilFest",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.seattlecenter.com/events/featured-events/festal/brasilfest",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T14:05:45.446Z",
+      "fetches": [
+        {
+          "url": "https://www.seattlecenter.com/events/featured-events/festal/brasilfest",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "seattle",
+      "sourceId": "festal-live-aloha-hawaiian-2026",
+      "sourceName": "Festál: Live Aloha Hawaiian Cultural Festival",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.seattlecenter.com/events/featured-events/festal/live-aloha-hawaiian-cultural-festival",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T14:05:45.446Z",
+      "fetches": [
+        {
+          "url": "https://www.seattlecenter.com/events/featured-events/festal/live-aloha-hawaiian-cultural-festival",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "seattle",
+      "sourceId": "festal-croatiafest-2026",
+      "sourceName": "Festál: CroatiaFest",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.seattlecenter.com/events/featured-events/festal/croatiafest",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T14:05:45.446Z",
+      "fetches": [
+        {
+          "url": "https://www.seattlecenter.com/events/featured-events/festal/croatiafest",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -203,7 +303,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:27.873Z",
+      "fetchedAt": "2026-06-07T14:05:45.446Z",
       "fetches": [
         {
           "url": "https://www.neumos.com/events",
@@ -228,7 +328,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:27.873Z",
+      "fetchedAt": "2026-06-07T14:05:45.446Z",
       "fetches": [
         {
           "url": "https://www.thecrocodile.com/events",
@@ -253,7 +353,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:27.873Z",
+      "fetchedAt": "2026-06-07T14:05:45.446Z",
       "fetches": [
         {
           "url": "https://www.showboxpresents.com/events",
@@ -278,7 +378,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:27.873Z",
+      "fetchedAt": "2026-06-07T14:05:45.446Z",
       "fetches": [
         {
           "url": "https://www.tractortavern.com/events",
@@ -303,7 +403,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:27.873Z",
+      "fetchedAt": "2026-06-07T14:05:45.446Z",
       "fetches": [
         {
           "url": "https://www.sunsettavern.com/events",
@@ -328,7 +428,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:27.873Z",
+      "fetchedAt": "2026-06-07T14:05:45.446Z",
       "fetches": [
         {
           "url": "https://www.unexpectedproductions.org/shows",
@@ -353,7 +453,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:27.873Z",
+      "fetchedAt": "2026-06-07T14:05:45.446Z",
       "fetches": [
         {
           "url": "https://www.comedyunderground.com/calendar",
@@ -374,9 +474,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 16,
+      "liveEvents": 14,
       "fallbackEvents": 0,
-      "eventCount": 16,
+      "eventCount": 14,
       "fetches": [
         {
           "url": "https://kcls.bibliocommons.com/v2/events?programs=6092fc2d8910133a0055a335",
@@ -388,7 +488,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 16,
+      "extractedEvents": 14,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -401,9 +501,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 157,
+      "liveEvents": 160,
       "fallbackEvents": 0,
-      "eventCount": 157,
+      "eventCount": 160,
       "fetches": [
         {
           "url": "https://www.trumba.com/calendars/kalendaro.json?filterview=SeriesStoryTime",
@@ -414,7 +514,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=UTF-8",
-      "rejectedLiveEvents": 38,
+      "rejectedLiveEvents": 35,
       "extractedEvents": 195,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -428,9 +528,9 @@
       "metroId": "seattle",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 82,
+      "liveEvents": 79,
       "fallbackEvents": 0,
-      "eventCount": 82,
+      "eventCount": 79,
       "fetches": [
         {
           "url": "https://seattlechildrensmuseum.org/calendar/",
@@ -441,7 +541,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 15,
+      "rejectedLiveEvents": 18,
       "extractedEvents": 97,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -457,7 +557,7 @@
       "status": "http-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 11,
+      "eventCount": 10,
       "fetches": [
         {
           "url": "https://www.zoo.org/events?cgid=1",
@@ -469,7 +569,7 @@
       "httpStatus": 403,
       "contentType": "text/html",
       "extractedEvents": 0,
-      "lastKnownGoodEvents": 11,
+      "lastKnownGoodEvents": 10,
       "recoveryMode": "last-known-good"
     },
     {
@@ -631,6 +731,249 @@
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "kcls-all-events",
+      "name": "King County Library System Events",
+      "url": "https://kcls.bibliocommons.com/v2/events",
+      "sourceType": "biblioevents",
+      "city": "Bellevue",
+      "metroId": "seattle",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 4,
+      "fallbackEvents": 0,
+      "eventCount": 4,
+      "fetches": [
+        {
+          "url": "https://kcls.bibliocommons.com/v2/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 4,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "sno-isle-all-events",
+      "name": "Sno-Isle Libraries Events",
+      "url": "https://sno-isle.bibliocommons.com/v2/events",
+      "sourceType": "biblioevents",
+      "city": "Bothell",
+      "metroId": "seattle",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 13,
+      "fallbackEvents": 0,
+      "eventCount": 13,
+      "fetches": [
+        {
+          "url": "https://sno-isle.bibliocommons.com/v2/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 13,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "bellevue-botanical-garden-events",
+      "name": "Bellevue Botanical Garden Events",
+      "url": "https://bellevuebotanical.org/events/",
+      "sourceType": "tribeEvents",
+      "city": "Bellevue",
+      "metroId": "seattle",
+      "category": "Outdoors",
+      "status": "ok",
+      "liveEvents": 22,
+      "fallbackEvents": 0,
+      "eventCount": 22,
+      "fetches": [
+        {
+          "url": "https://bellevuebotanical.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=89; pages=1"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=89; pages=1",
+      "rejectedLiveEvents": 66,
+      "extractedEvents": 88,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "uw-seattle-campus-events",
+      "name": "University of Washington Seattle Campus Events",
+      "url": "https://www.trumba.com/calendars/sea_campus.json",
+      "sourceType": "json",
+      "city": "Seattle",
+      "metroId": "seattle",
+      "category": "Culture",
+      "status": "ok",
+      "liveEvents": 198,
+      "fallbackEvents": 0,
+      "eventCount": 198,
+      "fetches": [
+        {
+          "url": "https://www.trumba.com/calendars/sea_campus.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json;charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 198,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "festal-indigenous-people-festival-2026",
+      "name": "Festál: Indigenous People Festival",
+      "url": "https://www.seattlecenter.com/events/featured-events/festal/indigenous-people-festival",
+      "sourceType": "officialTextEvents",
+      "city": "Seattle",
+      "metroId": "seattle",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://www.seattlecenter.com/events/featured-events/festal/indigenous-people-festival",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "festal-tibet-fest-2026",
+      "name": "Festál: Tibet Fest",
+      "url": "https://www.seattlecenter.com/events/featured-events/festal/tibet-fest",
+      "sourceType": "officialTextEvents",
+      "city": "Seattle",
+      "metroId": "seattle",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.seattlecenter.com/events/featured-events/festal/tibet-fest",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "festal-brasilfest-2026",
+      "name": "Festál: BrasilFest",
+      "url": "https://www.seattlecenter.com/events/featured-events/festal/brasilfest",
+      "sourceType": "officialTextEvents",
+      "city": "Seattle",
+      "metroId": "seattle",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.seattlecenter.com/events/featured-events/festal/brasilfest",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "festal-live-aloha-hawaiian-2026",
+      "name": "Festál: Live Aloha Hawaiian Cultural Festival",
+      "url": "https://www.seattlecenter.com/events/featured-events/festal/live-aloha-hawaiian-cultural-festival",
+      "sourceType": "officialTextEvents",
+      "city": "Seattle",
+      "metroId": "seattle",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.seattlecenter.com/events/featured-events/festal/live-aloha-hawaiian-cultural-festival",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "festal-croatiafest-2026",
+      "name": "Festál: CroatiaFest",
+      "url": "https://www.seattlecenter.com/events/featured-events/festal/croatiafest",
+      "sourceType": "officialTextEvents",
+      "city": "Seattle",
+      "metroId": "seattle",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.seattlecenter.com/events/featured-events/festal/croatiafest",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

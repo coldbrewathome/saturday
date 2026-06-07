@@ -104,20 +104,15 @@
     },
     {
       "id": "lapl-kids",
-      "name": "Los Angeles Public Library Kids Events",
-      "url": "https://www.lapl.org/whats-on/calendar?field_event_audience_tid=232&field_event_family_event_value=All&items_per_page=25",
+      "name": "Los Angeles Public Library Events",
+      "url": "https://www.lapl.org/rss/events",
       "city": "Los Angeles",
+      "neighborhood": "Downtown",
       "category": "Library",
-      "sourceType": "eventList",
+      "sourceType": "rss",
       "trust": "official",
-      "lat": 34.0505,
-      "lon": -118.2551,
-      "defaultAudienceText": "kids babies toddlers family storytime library free",
-      "eventList": {
-        "city": "Los Angeles",
-        "cost": "Free",
-        "requireFamilySignal": false
-      }
+      "lat": 34.0537,
+      "lon": -118.2557
     },
     {
       "id": "santa-monica-library",
@@ -260,14 +255,16 @@
     {
       "id": "kidspace-childrens-museum",
       "name": "Kidspace Children's Museum",
-      "url": "https://kidspacemuseum.org/calendar/",
+      "url": "https://kidspacemuseum.org/events/",
       "city": "Pasadena",
+      "neighborhood": "Brookside Park",
       "category": "Museum",
-      "sourceType": "html",
+      "sourceType": "tribeEvents",
       "trust": "official",
-      "lat": 34.1487,
-      "lon": -118.143,
-      "defaultAudienceText": "kids toddlers preschool family children's museum"
+      "lat": 34.1383,
+      "lon": -118.1657,
+      "perPage": 100,
+      "maxPages": 3
     },
     {
       "id": "discovery-cube-la",
@@ -487,6 +484,60 @@
       "trust": "official",
       "lat": 34.271,
       "lon": -119.2765
+    },
+    {
+      "id": "wende-museum-culver-city",
+      "name": "The Wende Museum",
+      "url": "https://wendemuseum.org/events/",
+      "city": "Culver City",
+      "neighborhood": "Culver City",
+      "category": "Culture",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 34.0226,
+      "lon": -118.3927,
+      "perPage": 100,
+      "maxPages": 2
+    },
+    {
+      "id": "grand-park-block-party-2026",
+      "name": "Gloria Molina Grand Park's Summer Block Party (July 4)",
+      "url": "https://grandparkla.org/blockparty/",
+      "city": "Los Angeles",
+      "neighborhood": "Downtown",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 34.0561,
+      "lon": -118.2455,
+      "officialTextEvents": [
+        {
+          "id": "grand-park-block-party-2026-07-04",
+          "title": "Gloria Molina Grand Park's Summer Block Party",
+          "description": "LA County's largest free Fourth of July celebration: a free block party with global beats, live arts, food trucks, the Grand Park Ferris Wheel, and a spectacular drone light show finale in the heart of downtown LA. All ages, pets welcome.",
+          "venue": "Gloria Molina Grand Park",
+          "neighborhood": "Downtown",
+          "startDateTime": "2026-07-04T16:00:00-07:00",
+          "endDateTime": "2026-07-04T21:30:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Free",
+          "url": "https://grandparkla.org/blockparty/",
+          "requiredText": [
+            "Summer Block Party",
+            "4:00 p.m. - 9:30 p.m.",
+            "July 4th",
+            "200 N Grand Ave"
+          ]
+        }
+      ]
     }
   ]
 }

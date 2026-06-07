@@ -11,7 +11,9 @@
       "Aventura",
       "Hollywood",
       "Fort Lauderdale",
-      "Hialeah"
+      "Hialeah",
+      "Coral Springs",
+      "Deerfield Beach"
     ]
   },
   "defaults": {
@@ -152,6 +154,110 @@
       "trust": "official",
       "lat": 26.6816,
       "lon": -80.1509
+    },
+    {
+      "id": "miami-broward-library-communico",
+      "name": "Broward County Library Events",
+      "url": "https://broward.libnet.info/events",
+      "city": "Fort Lauderdale",
+      "category": "Library",
+      "sourceType": "communicoEvents",
+      "trust": "official",
+      "lat": 26.1224,
+      "lon": -80.1373,
+      "communicoClient": "broward",
+      "communicoApiServer": "https://api.communico.co"
+    },
+    {
+      "id": "miami-beach-city-events",
+      "name": "City of Miami Beach Events",
+      "url": "https://events.miamibeachfl.gov/",
+      "city": "Miami Beach",
+      "category": "Community",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 25.7907,
+      "lon": -80.13,
+      "perPage": 100,
+      "maxPages": 4
+    },
+    {
+      "id": "miami-coral-gables-museum",
+      "name": "Coral Gables Museum Events",
+      "url": "http://coralgablesmuseum.org/events/",
+      "city": "Coral Gables",
+      "category": "Museum",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 25.7215,
+      "lon": -80.2684,
+      "perPage": 100,
+      "maxPages": 4
+    },
+    {
+      "id": "miami-beach-bandshell",
+      "name": "Miami Beach Bandshell Events",
+      "url": "https://miamibeachbandshell.com/events/",
+      "city": "Miami Beach",
+      "category": "Music",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 25.8527,
+      "lon": -80.1207,
+      "perPage": 100,
+      "maxPages": 2
+    },
+    {
+      "id": "miami-north-miami-beach-civic",
+      "name": "North Miami Beach City Calendar",
+      "url": "https://www.citynmb.com/calendar.aspx?view=list&CID=14",
+      "city": "North Miami Beach",
+      "category": "Community",
+      "sourceType": "civicpluscal",
+      "trust": "official",
+      "lat": 25.9331,
+      "lon": -80.1625
+    },
+    {
+      "id": "miami-dade-july4-tropical-park",
+      "name": "Miami-Dade July 4th Spectacular at Tropical Park",
+      "url": "https://www.miamidade.gov/global/news-item.page?Mduid_news=news1749487408016784",
+      "city": "Miami",
+      "neighborhood": "Westchester",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 25.7341,
+      "lon": -80.3324,
+      "officialTextEvents": [
+        {
+          "id": "miami-dade-july4-spectacular-2026",
+          "title": "July 4th Spectacular at Tropical Park",
+          "description": "Miami-Dade County's largest County-supported Fourth of July celebration, presented in partnership with Univision: live musical performances, DJs, food vendors, family-friendly activities, patriotic fun, and an evening fireworks show.",
+          "venue": "Tropical Park",
+          "neighborhood": "Westchester",
+          "startDateTime": "2026-07-04T15:00:00-04:00",
+          "endDateTime": "2026-07-04T21:00:00-04:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Free",
+          "url": "https://www.miamidade.gov/global/news-item.page?Mduid_news=news1749487408016784",
+          "requiredText": [
+            "July 4th Spectacular",
+            "Tropical Park",
+            "Saturday, July 4",
+            "3 p.m.",
+            "7900 SW 40th Street"
+          ]
+        }
+      ]
     }
   ]
 }

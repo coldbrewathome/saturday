@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "chicago",
-  "generatedAt": "2026-06-06T16:06:41.503Z",
+  "generatedAt": "2026-06-07T14:06:01.818Z",
   "registryPath": "data/event-sources-chicago.json",
   "outputPath": "public/data/chicago/events.json",
-  "eventCount": 189,
-  "adultsEventCount": 133,
-  "sourceCount": 15,
-  "liveEventCount": 189,
+  "eventCount": 1164,
+  "adultsEventCount": 316,
+  "sourceCount": 23,
+  "liveEventCount": 1164,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 10,
+  "operatorAlertCount": 13,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:41.503Z",
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
       "fetches": [
         {
           "url": "https://dupagecountyfair.org/",
@@ -53,13 +53,88 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:41.503Z",
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
       "fetches": [
         {
           "url": "https://lcfair.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "oak-park-library-family",
+      "sourceName": "Oak Park Public Library Events",
+      "sourceType": "librarycalendar",
+      "url": "https://oakpark.librarycalendar.com/events/month",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
+      "fetches": [
+        {
+          "url": "https://oakpark.librarycalendar.com/events/month",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "naperville-library-family",
+      "sourceName": "Naperville Public Library Events",
+      "sourceType": "librarycalendar",
+      "url": "https://napervillepl.librarycalendar.com/events/month",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
+      "fetches": [
+        {
+          "url": "https://napervillepl.librarycalendar.com/events/month",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "morton-arboretum-arbor-evenings-2026",
+      "sourceName": "Morton Arboretum Arbor Evenings Summer Concerts",
+      "sourceType": "officialTextEvents",
+      "url": "https://mortonarb.org/explore/activities/events/arbor-evenings/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
+      "fetches": [
+        {
+          "url": "https://mortonarb.org/explore/activities/events/arbor-evenings/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -78,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:41.503Z",
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
       "fetches": [
         {
           "url": "https://metrochicago.com/shows/",
@@ -103,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:41.503Z",
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
       "fetches": [
         {
           "url": "https://www.emptybottle.com/events/",
@@ -128,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:41.503Z",
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
@@ -153,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:41.503Z",
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
@@ -178,7 +253,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:41.503Z",
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
       "fetches": [
         {
           "url": "https://www.thaliahallchicago.com/events",
@@ -203,7 +278,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:41.503Z",
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
       "fetches": [
         {
           "url": "https://www.secondcity.com/shows/chicago",
@@ -228,7 +303,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:41.503Z",
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
       "fetches": [
         {
           "url": "https://chicago.zanies.com/events",
@@ -253,7 +328,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:06:41.503Z",
+      "fetchedAt": "2026-06-07T14:06:01.818Z",
       "fetches": [
         {
           "url": "https://www.hideoutchicago.com/events",
@@ -274,9 +349,9 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 18,
+      "liveEvents": 20,
       "fallbackEvents": 0,
-      "eventCount": 18,
+      "eventCount": 20,
       "fetches": [
         {
           "url": "https://chipublib.bibliocommons.com/v2/events?audiences=53f250153860d10000000010",
@@ -288,7 +363,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 18,
+      "extractedEvents": 20,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -301,9 +376,9 @@
       "metroId": "chicago",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 31,
+      "liveEvents": 32,
       "fallbackEvents": 0,
-      "eventCount": 31,
+      "eventCount": 32,
       "fetches": [
         {
           "url": "https://www.chicagoparkdistrict.com/events?field_event_category_target_id=766&field_location_target_id=All&field_community_area_target_id=All&field_zip_code_target_id=All&title=&field_date_value=&field_age_range_target_id=All",
@@ -350,7 +425,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 19,
+      "rejectedLiveEvents": 18,
       "extractedEvents": 50,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -485,6 +560,222 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html;charset=utf-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "evanston-library-family",
+      "name": "Evanston Public Library Events",
+      "url": "https://evanstonlibrary.bibliocommons.com/v2/events",
+      "sourceType": "biblioevents",
+      "city": "Evanston",
+      "metroId": "chicago",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 8,
+      "fallbackEvents": 0,
+      "eventCount": 8,
+      "fetches": [
+        {
+          "url": "https://evanstonlibrary.bibliocommons.com/v2/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 8,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "schaumburg-library-family",
+      "name": "Schaumburg Township District Library Events",
+      "url": "https://schaumburg.libnet.info/events",
+      "sourceType": "communicoEvents",
+      "city": "Schaumburg",
+      "metroId": "chicago",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 284,
+      "fallbackEvents": 0,
+      "eventCount": 284,
+      "fetches": [
+        {
+          "url": "https://schaumburg.libnet.info/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=communico-events; events=450; locations=4"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=communico-events; events=450; locations=4",
+      "rejectedLiveEvents": 12,
+      "extractedEvents": 296,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "downers-grove-library-family",
+      "name": "Downers Grove Public Library Events",
+      "url": "https://downersgrove.libnet.info/events",
+      "sourceType": "communicoEvents",
+      "city": "Downers Grove",
+      "metroId": "chicago",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 139,
+      "fallbackEvents": 0,
+      "eventCount": 139,
+      "fetches": [
+        {
+          "url": "https://downersgrove.libnet.info/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=communico-events; events=190; locations=1"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=communico-events; events=190; locations=1",
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 140,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "elk-grove-village-library-family",
+      "name": "Elk Grove Village Public Library Events",
+      "url": "https://egvpl.libnet.info/events",
+      "sourceType": "communicoEvents",
+      "city": "Elk Grove Village",
+      "metroId": "chicago",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 345,
+      "fallbackEvents": 0,
+      "eventCount": 345,
+      "fetches": [
+        {
+          "url": "https://egvpl.libnet.info/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=communico-events; events=449; locations=3"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=communico-events; events=449; locations=3",
+      "rejectedLiveEvents": 7,
+      "extractedEvents": 352,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "oak-park-library-family",
+      "name": "Oak Park Public Library Events",
+      "url": "https://oakpark.librarycalendar.com/events/month",
+      "sourceType": "librarycalendar",
+      "city": "Oak Park",
+      "metroId": "chicago",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://oakpark.librarycalendar.com/events/month",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "naperville-library-family",
+      "name": "Naperville Public Library Events",
+      "url": "https://napervillepl.librarycalendar.com/events/month",
+      "sourceType": "librarycalendar",
+      "city": "Naperville",
+      "metroId": "chicago",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://napervillepl.librarycalendar.com/events/month",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "forest-preserves-cook-county-family",
+      "name": "Forest Preserves of Cook County Events",
+      "url": "https://fpdcc.com/events/",
+      "sourceType": "tribeEvents",
+      "city": "Chicago",
+      "metroId": "chicago",
+      "category": "Outdoors",
+      "status": "ok",
+      "liveEvents": 196,
+      "fallbackEvents": 0,
+      "eventCount": 196,
+      "fetches": [
+        {
+          "url": "https://fpdcc.com/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=200; pages=4"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=200; pages=4",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 196,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "morton-arboretum-arbor-evenings-2026",
+      "name": "Morton Arboretum Arbor Evenings Summer Concerts",
+      "url": "https://mortonarb.org/explore/activities/events/arbor-evenings/",
+      "sourceType": "officialTextEvents",
+      "city": "Naperville",
+      "metroId": "chicago",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://mortonarb.org/explore/activities/events/arbor-evenings/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 0,
       "lastKnownGoodEvents": 0,

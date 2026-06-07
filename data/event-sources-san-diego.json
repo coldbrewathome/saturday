@@ -12,7 +12,8 @@
       "Coronado",
       "Encinitas",
       "Carlsbad",
-      "Del Mar"
+      "Del Mar",
+      "Oceanside"
     ]
   },
   "defaults": {
@@ -70,22 +71,17 @@
     },
     {
       "id": "san-diego-museum-family",
-      "name": "The New Children's Museum Calendar",
-      "url": "https://thinkplaycreate.org/visit/",
+      "name": "The New Children's Museum",
+      "url": "https://thinkplaycreate.org/events/",
       "city": "San Diego",
+      "neighborhood": "Marina / Downtown",
       "category": "Museum",
-      "sourceType": "eventList",
+      "sourceType": "tribeEvents",
       "trust": "official",
-      "requiresBrowserHeaders": true,
-      "lat": 32.7157,
-      "lon": -117.1611,
-      "defaultAudienceText": "children family kids museum science art workshop",
-      "eventList": {
-        "venue": "The New Children's Museum Events",
-        "city": "San Diego",
-        "requireFamilySignal": false,
-        "defaultDurationMinutes": 90
-      },
+      "lat": 32.7113,
+      "lon": -117.1622,
+      "perPage": 100,
+      "maxPages": 4,
       "fallbackEventIds": [
         "san-diego-museum-family-day"
       ]
@@ -175,6 +171,72 @@
       "trust": "official",
       "lat": 32.9742,
       "lon": -117.253
+    },
+    {
+      "id": "balboa-park-events",
+      "name": "Balboa Park Events Calendar",
+      "url": "https://www.balboapark.org/events/",
+      "city": "San Diego",
+      "neighborhood": "Balboa Park",
+      "category": "Culture",
+      "sourceType": "tribeEvents",
+      "trust": "official",
+      "lat": 32.7341,
+      "lon": -117.1446,
+      "perPage": 100,
+      "maxPages": 4
+    },
+    {
+      "id": "oceanside-library-events",
+      "name": "Oceanside Public Library Events",
+      "url": "https://oceansidepl.librarycalendar.com/events/month",
+      "city": "Oceanside",
+      "neighborhood": "Civic Center",
+      "category": "Library",
+      "sourceType": "librarycalendar",
+      "trust": "official",
+      "lat": 33.1959,
+      "lon": -117.3795
+    },
+    {
+      "id": "balboa-park-twilight-concerts",
+      "name": "Twilight in the Park Free Summer Concerts",
+      "url": "https://balboapark.org/twilight-concerts/",
+      "city": "San Diego",
+      "neighborhood": "Balboa Park",
+      "category": "Music",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 32.729,
+      "lon": -117.149,
+      "officialTextEvents": [
+        {
+          "id": "twilight-in-the-park-2026",
+          "title": "Twilight in the Park Concert",
+          "description": "Free outdoor summer concert series at the Spreckels Organ Pavilion in Balboa Park, every Tuesday, Wednesday and Thursday evening from June 16 through August 27, 2026. Bring family, friends and a picnic; dogs welcome.",
+          "venue": "Spreckels Organ Pavilion",
+          "neighborhood": "Balboa Park",
+          "startDateTime": "2026-06-16T18:30:00-07:00",
+          "endDateTime": "2026-06-16T19:30:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Free",
+          "url": "https://balboapark.org/twilight-concerts/",
+          "requiredText": [
+            "Twilight in the Park Concert",
+            "June 16 – Aug. 27, 2026",
+            "6:30 – 7:30 p.m.",
+            "Spreckels Organ Pavilion"
+          ]
+        }
+      ]
     }
   ]
 }

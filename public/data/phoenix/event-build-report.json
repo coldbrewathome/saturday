@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "phoenix",
-  "generatedAt": "2026-06-06T16:10:19.413Z",
+  "generatedAt": "2026-06-07T13:56:48.953Z",
   "registryPath": "data/event-sources-phoenix.json",
   "outputPath": "public/data/phoenix/events.json",
-  "eventCount": 376,
-  "adultsEventCount": 131,
-  "sourceCount": 12,
-  "liveEventCount": 380,
+  "eventCount": 545,
+  "adultsEventCount": 266,
+  "sourceCount": 13,
+  "liveEventCount": 548,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
   "operatorAlertCount": 7,
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:19.413Z",
+      "fetchedAt": "2026-06-07T13:56:48.953Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:19.413Z",
+      "fetchedAt": "2026-06-07T13:56:48.953Z",
       "fetches": [
         {
           "url": "https://azstatefair.com/",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:19.413Z",
+      "fetchedAt": "2026-06-07T13:56:48.953Z",
       "fetches": [
         {
           "url": "https://www.crescentphx.com/events",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:19.413Z",
+      "fetchedAt": "2026-06-07T13:56:48.953Z",
       "fetches": [
         {
           "url": "https://www.thevanburenphx.com/events",
@@ -128,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:19.413Z",
+      "fetchedAt": "2026-06-07T13:56:48.953Z",
       "fetches": [
         {
           "url": "https://www.luckymanonline.com/marquee-theatre",
@@ -153,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:19.413Z",
+      "fetchedAt": "2026-06-07T13:56:48.953Z",
       "fetches": [
         {
           "url": "https://phoenix.standuplive.com/events",
@@ -178,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-06T16:10:19.413Z",
+      "fetchedAt": "2026-06-07T13:56:48.953Z",
       "fetches": [
         {
           "url": "https://houseofcomedy.net/scottsdale",
@@ -199,9 +199,9 @@
       "metroId": "phoenix",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 230,
+      "liveEvents": 262,
       "fallbackEvents": 0,
-      "eventCount": 230,
+      "eventCount": 262,
       "fetches": [
         {
           "url": "https://calendar.phoenixpubliclibrary.org/calendar/",
@@ -213,7 +213,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 230,
+      "extractedEvents": 262,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -253,21 +253,21 @@
       "metroId": "phoenix",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 134,
+      "liveEvents": 131,
       "fallbackEvents": 0,
-      "eventCount": 134,
+      "eventCount": 131,
       "fetches": [
         {
           "url": "https://childrensmuseumofphoenix.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=195; pages=4"
+          "contentType": "application/json; source=tribe-events; events=191; pages=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=195; pages=4",
-      "rejectedLiveEvents": 61,
-      "extractedEvents": 195,
+      "contentType": "application/json; source=tribe-events; events=191; pages=4",
+      "rejectedLiveEvents": 60,
+      "extractedEvents": 191,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -349,6 +349,33 @@
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "desert-botanical-garden",
+      "name": "Desert Botanical Garden",
+      "url": "https://dbg.org/events/",
+      "sourceType": "tribeEvents",
+      "city": "Phoenix",
+      "metroId": "phoenix",
+      "category": "Outdoors",
+      "status": "ok",
+      "liveEvents": 139,
+      "fallbackEvents": 0,
+      "eventCount": 139,
+      "fetches": [
+        {
+          "url": "https://dbg.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=200; pages=4"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=200; pages=4",
+      "rejectedLiveEvents": 58,
+      "extractedEvents": 197,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
