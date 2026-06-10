@@ -13,6 +13,7 @@ import {
   CARD_SPECS,
   buildSparklinePath,
   buildSparklineSeries,
+  computeBrandSplit,
   computeCardData,
   computeMetroRows,
   deltaClass,
@@ -20,6 +21,7 @@ import {
   isoDay,
   sumWindow,
 } from "../src/ops/OpsAnalyticsView";
+import { API_BASE } from "../src/api";
 
 describe("normalizeMetricsResponse", () => {
   it("returns zeroed totals + empty maps for a totally empty response", () => {
@@ -95,6 +97,33 @@ describe("normalizeMetricsResponse", () => {
     expect(data.totals.app_open).toBe(100);
   });
 
+  it("filters byBrand to known metrics and drops all-zero buckets", () => {
+    const data = normalizeMetricsResponse({
+      byBrand: {
+        app_open: { famhop: 12, mosey: 3 },
+        vote_cast: { famhop: 0, mosey: 0 },
+        unknown_metric: { famhop: 7, mosey: 7 },
+      },
+    });
+    expect(Object.keys(data.byBrand)).toEqual(["app_open"]);
+    expect(data.byBrand.app_open).toEqual({ famhop: 12, mosey: 3 });
+  });
+
+  it("zero-fills a missing brand inside a byBrand bucket", () => {
+    const data = normalizeMetricsResponse({
+      byBrand: { app_open: { famhop: 9 } },
+    });
+    expect(data.byBrand.app_open).toEqual({ famhop: 9, mosey: 0 });
+  });
+
+  it("handles a missing byBrand field (backwards compat with older worker)", () => {
+    const data = normalizeMetricsResponse({
+      days: 30,
+      totals: { app_open: 100 },
+    });
+    expect(data.byBrand).toEqual({});
+  });
+
   it("ignores non-finite numeric values defensively", () => {
     const data = normalizeMetricsResponse({
       totals: {
@@ -138,16 +167,45 @@ describe("loadAnalytics", () => {
     expect(result.data.byMetro.atlanta).toEqual({ app_open: 60 });
   });
 
-  it("requests `/metrics?days=N` with credentials so the admin cookie is sent", async () => {
+  it("requests `/metrics?days=N` with an Authorization: Bearer header", async () => {
     const fetchImpl = mockFetch({
       status: 200,
       jsonBody: {} satisfies MetricsResponse,
     });
-    await loadAnalytics({ fetchImpl, days: 14 });
+    await loadAnalytics({ fetchImpl, days: 14, baseUrl: "", sessionToken: "tok-1" });
     expect(fetchImpl).toHaveBeenCalledTimes(1);
     const [url, opts] = fetchImpl.mock.calls[0]!;
     expect(url).toBe("/metrics?days=14");
-    expect((opts as RequestInit | undefined)?.credentials).toBe("include");
+    expect((opts as RequestInit | undefined)?.headers).toEqual({
+      authorization: "Bearer tok-1",
+    });
+  });
+
+  it("defaults the token to the stored Google session (same as /me/state)", async () => {
+    window.localStorage.setItem(
+      "saturday.session",
+      JSON.stringify({ token: "stored-tok", user: { email: "a@b.c", name: "A" } }),
+    );
+    const fetchImpl = mockFetch({ status: 200, jsonBody: {} });
+    await loadAnalytics({ fetchImpl, baseUrl: "" });
+    const [, opts] = fetchImpl.mock.calls[0]!;
+    expect((opts as RequestInit | undefined)?.headers).toEqual({
+      authorization: "Bearer stored-tok",
+    });
+  });
+
+  it("sends no Authorization header when there is no session", async () => {
+    const fetchImpl = mockFetch({ status: 200, jsonBody: {} });
+    await loadAnalytics({ fetchImpl, baseUrl: "" });
+    const [, opts] = fetchImpl.mock.calls[0]!;
+    expect(opts).toBeUndefined();
+  });
+
+  it("defaults baseUrl to the worker origin the rest of the app uses", async () => {
+    const fetchImpl = mockFetch({ status: 200, jsonBody: {} });
+    await loadAnalytics({ fetchImpl });
+    const [url] = fetchImpl.mock.calls[0]!;
+    expect(url).toBe(`${API_BASE}/metrics?days=30`);
   });
 
   it("honors baseUrl and trims trailing slash", async () => {
@@ -159,9 +217,9 @@ describe("loadAnalytics", () => {
 
   it("clamps days to the 1–90 range the worker accepts", async () => {
     const fetchImpl = mockFetch({ status: 200, jsonBody: {} });
-    await loadAnalytics({ fetchImpl, days: 9999 });
+    await loadAnalytics({ fetchImpl, days: 9999, baseUrl: "" });
     expect(fetchImpl.mock.calls[0]![0]).toBe("/metrics?days=90");
-    await loadAnalytics({ fetchImpl, days: 0 });
+    await loadAnalytics({ fetchImpl, days: 0, baseUrl: "" });
     expect(fetchImpl.mock.calls[1]![0]).toBe("/metrics?days=1");
   });
 
@@ -406,6 +464,32 @@ describe("computeMetroRows", () => {
     });
     const rows = computeMetroRows(data, "vote_cast");
     expect(rows.map((r) => r.metroId)).toEqual(["atlanta", "boston"]);
+  });
+});
+
+describe("computeBrandSplit", () => {
+  it("returns null when the response has no byBrand section (older worker)", () => {
+    const data = normalizeMetricsResponse({});
+    expect(computeBrandSplit(data, "app_open")).toBeNull();
+  });
+
+  it("returns famhop/mosey totals for the metric", () => {
+    const data = normalizeMetricsResponse({
+      byBrand: {
+        app_open: { famhop: 12, mosey: 5 },
+        vote_cast: { famhop: 3, mosey: 0 },
+      },
+    });
+    expect(computeBrandSplit(data, "app_open")).toEqual({ famhop: 12, mosey: 5 });
+    expect(computeBrandSplit(data, "vote_cast")).toEqual({ famhop: 3, mosey: 0 });
+  });
+
+  it("zero-fills a metric absent from byBrand when other metrics have data", () => {
+    const data = normalizeMetricsResponse({
+      byBrand: { app_open: { famhop: 9 } },
+    });
+    expect(computeBrandSplit(data, "vote_cast")).toEqual({ famhop: 0, mosey: 0 });
+    expect(computeBrandSplit(data, "app_open")).toEqual({ famhop: 9, mosey: 0 });
   });
 });
 

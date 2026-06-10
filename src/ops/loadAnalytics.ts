@@ -2,13 +2,15 @@
 // `GET /metrics` endpoint (extended per ADR 03 to include a `byMetro` map)
 // into a normalized shape the dashboard can render directly.
 //
-// Auth: the endpoint requires an admin session cookie. We send
-// `credentials: "include"` so the existing Google sign-in cookie flows
-// through. 401/403 → `{ status: "unauthorized" }` empty state so the UI can
-// render a sign-in CTA instead of crashing. Any other failure (network,
-// 5xx, malformed JSON) → `{ status: "error" }`. A successful but empty KV
-// (fresh deploy, before the first metric fires) → `{ status: "ok" }` with
-// zeroed maps so the dashboard renders "0" cards rather than blank space.
+// Auth: the endpoint requires an admin session — the worker's `getSession`
+// only reads `Authorization: Bearer <token>` (no cookies), so we send the
+// Google sign-in session token from `readSession()` the same way the other
+// authed calls (`/me/state`) do. 401/403 → `{ status: "unauthorized" }`
+// empty state so the UI can render a sign-in CTA instead of crashing. Any
+// other failure (network, 5xx, malformed JSON) → `{ status: "error" }`. A
+// successful but empty KV (fresh deploy, before the first metric fires) →
+// `{ status: "ok" }` with zeroed maps so the dashboard renders "0" cards
+// rather than blank space.
 //
 // `normalizeMetricsResponse` is the pure core (easy to unit-test).
 // `loadAnalytics` is the browser-side wrapper.
@@ -19,8 +21,12 @@
 // in sync is a one-line manual step; cross-importing would couple the
 // worker bundle to the frontend.
 
+import { API_BASE } from "../api";
+import { readSession } from "../auth";
+
 export type MetricName =
   | "app_open"
+  | "app_open_return"
   | "hop_now_opened"
   | "plan_created"
   | "plan_shared"
@@ -35,6 +41,7 @@ export type MetricName =
 
 export const METRIC_NAMES: readonly MetricName[] = [
   "app_open",
+  "app_open_return",
   "hop_now_opened",
   "plan_created",
   "plan_shared",
@@ -56,7 +63,11 @@ export type MetricsResponse = {
   totals?: Record<string, number>;
   byDay?: Record<string, Record<string, number>>;
   byMetro?: Record<string, Record<string, number>>;
+  byBrand?: Record<string, { famhop?: number; mosey?: number }>;
 };
+
+/** FamHop vs Mosey counts for one metric over the loaded window. */
+export type BrandCounts = { famhop: number; mosey: number };
 
 export type AnalyticsData = {
   /** Window size in days (echoed from the request; defaults to 30). */
@@ -67,6 +78,12 @@ export type AnalyticsData = {
   byDay: Record<string, MetricTotals>;
   /** Per-metro per-metric counts. Metros with no events are omitted. */
   byMetro: Record<string, MetricTotals>;
+  /**
+   * Per-metric FamHop vs Mosey counts (the worker keys `byBrand` by metric
+   * name). Metrics with no per-brand events are omitted; empty for older
+   * workers that don't emit the section.
+   */
+  byBrand: Partial<Record<MetricName, BrandCounts>>;
 };
 
 export type LoadAnalyticsResult =
@@ -133,14 +150,33 @@ export function normalizeMetricsResponse(
     }
   }
 
-  return { days, totals, byDay, byMetro };
+  const byBrand: Partial<Record<MetricName, BrandCounts>> = {};
+  if (response?.byBrand && typeof response.byBrand === "object") {
+    for (const name of METRIC_NAMES) {
+      const counts = response.byBrand[name];
+      if (!counts || typeof counts !== "object") continue;
+      const famhop =
+        typeof counts.famhop === "number" && Number.isFinite(counts.famhop)
+          ? counts.famhop
+          : 0;
+      const mosey =
+        typeof counts.mosey === "number" && Number.isFinite(counts.mosey)
+          ? counts.mosey
+          : 0;
+      if (famhop > 0 || mosey > 0) byBrand[name] = { famhop, mosey };
+    }
+  }
+
+  return { days, totals, byDay, byMetro, byBrand };
 }
 
 export type LoadAnalyticsOptions = {
   /** Window size in days (1–90). Defaults to 30. */
   days?: number;
-  /** Base URL for the worker. Defaults to "" (same-origin). */
+  /** Base URL for the worker. Defaults to the app's polls API origin. */
   baseUrl?: string;
+  /** Session token for the Authorization header. Defaults to the stored Google session. */
+  sessionToken?: string;
   /** Override fetch (for tests). Defaults to global fetch. */
   fetchImpl?: typeof fetch;
 };
@@ -150,7 +186,7 @@ export type LoadAnalyticsOptions = {
  * lets us invalidate cleanly if the cached shape changes; `days` is part of
  * the key so different window sizes don't collide.
  */
-export const CACHE_KEY_PREFIX = "famhop.opsAnalytics.cache:v1";
+export const CACHE_KEY_PREFIX = "famhop.opsAnalytics.cache:v2";
 /** Cache TTL in ms. 5 min keeps reloads instant without serving badly stale data. */
 export const CACHE_TTL_MS = 5 * 60 * 1000;
 
@@ -217,9 +253,10 @@ export function writeCachedAnalytics(
 }
 
 /**
- * Fetch `/metrics?days=N` from the worker with the admin session cookie.
- * Normalizes the response into `AnalyticsData`. Returns a discriminated
- * union so the caller can render the right empty state.
+ * Fetch `/metrics?days=N` from the worker with the admin session token as
+ * `Authorization: Bearer`. Normalizes the response into `AnalyticsData`.
+ * Returns a discriminated union so the caller can render the right empty
+ * state.
  *
  * Successful results are written to the sessionStorage cache so subsequent
  * dashboard mounts in the same tab can render synchronously; the cache is
@@ -230,13 +267,19 @@ export async function loadAnalytics(
   opts: LoadAnalyticsOptions = {},
 ): Promise<LoadAnalyticsResult> {
   const days = Math.min(90, Math.max(1, opts.days ?? 30));
-  const baseUrl = (opts.baseUrl ?? "").replace(/\/$/, "");
+  const baseUrl = (opts.baseUrl ?? API_BASE).replace(/\/$/, "");
   const fetchImpl = opts.fetchImpl ?? fetch;
   const url = `${baseUrl}/metrics?days=${days}`;
+  const token =
+    opts.sessionToken ??
+    (typeof window !== "undefined" ? readSession()?.token : undefined);
 
   let response: Response;
   try {
-    response = await fetchImpl(url, { credentials: "include" });
+    response = await fetchImpl(
+      url,
+      token ? { headers: { authorization: `Bearer ${token}` } } : undefined,
+    );
   } catch (err) {
     return {
       status: "error",

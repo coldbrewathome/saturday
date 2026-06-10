@@ -44,6 +44,7 @@ import {
   createPoll,
   fetchAdminEvents,
   fetchGeo,
+  getPoll,
   subscribeNewsletter,
   trackMetric,
   fetchWeather,
@@ -55,6 +56,7 @@ import {
   StopSummary,
   type EventSummary,
   type ItemOrderRef,
+  type PollSnapshot,
 } from "./api";
 import {
   clearSession,
@@ -100,6 +102,7 @@ import {
 import EventDetailView from "./EventDetailView";
 import InstallBanner from "./InstallBanner";
 import { EVENT_THEMES, isValidThemeId } from "./eventThemes";
+import { isUpcomingEvent, isWeekendWindowDate } from "./eventFreshness";
 
 type Category =
   | "Outdoors"
@@ -347,7 +350,7 @@ const eventDateFilters: Array<{ id: EventDateFilter; label: string }> = [
     : []),
   { id: "today", label: "Today" },
   { id: "tomorrow", label: "Tomorrow" },
-  { id: "weekend", label: "Weekend" },
+  { id: "weekend", label: "Weekend (Fri–Sun)" },
 ];
 function optionLabel<T extends string>(
   options: Array<{ id: T; label: string }>,
@@ -550,6 +553,7 @@ function isActualPlanningEvent(
 ): boolean {
   if (!event.verified || event.sourceMode === "recurring-template") return false;
   if (!event.startDateTime) return false;
+  if (!isUpcomingEvent(event, now)) return false;
   const start = new Date(event.startDateTime);
   if (Number.isNaN(start.getTime())) return false;
   const today = new Date(now);
@@ -614,9 +618,12 @@ const rootDataUrl = (file: string) => dataUrl(file);
 import {
   APP_AUDIENCE,
   APP_BRAND,
+  APP_DIGEST_CTA,
+  APP_DOMAIN,
   APP_TAGLINE,
   APP_VIBE_LABELS,
   SHOW_AGE_BAND_UI,
+  heroTitleForAudience,
   audienceVisible,
 } from "./appConfig";
 
@@ -1100,7 +1107,7 @@ function PlanMap(props: ComponentProps<typeof LazyPlanMap>) {
   );
 }
 
-type FeaturedPlan = {
+export type FeaturedPlan = {
   id: string;
   name: string;
   summary: string;
@@ -1114,6 +1121,116 @@ type FeaturedPlan = {
   generated?: boolean;
   themed?: string;
 };
+
+// ── Plan-first hero (browse view) ────────────────────────────────────
+// The hero card fulfills the advertised "pick a vibe, get a 3-stop plan in
+// seconds" promise with the strongest already-loaded editor's pick — no
+// backend call. Dismissal persists ~7 days.
+const HERO_DISMISS_KEY = "saturday.heroDismissedAt";
+const HERO_DISMISS_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+const HERO_VIBES: PlannerVibe[] = [
+  "low-effort",
+  "active",
+  "food-first",
+  "culture",
+];
+
+export type HeroPick = {
+  featured: FeaturedPlan;
+  stops: Spot[];
+  events: FamilyEvent[];
+};
+
+// Pick the hero suggestion from the already-loaded featured plans. Plans
+// whose referenced items are all missing/ended are skipped (freshness gate:
+// only upcoming events count). Without a vibe the editorial rail order wins;
+// with a vibe, plans are re-ranked client-side by scoring their resolved
+// stops with the shared planner scorer. Exported for tests.
+export function pickHeroFeatured(
+  plans: FeaturedPlan[],
+  spots: Spot[],
+  events: FamilyEvent[],
+  vibe: PlannerVibe | null,
+  scoringOptions?: PlannerScoringOptions,
+  now: Date = new Date(),
+): HeroPick | null {
+  const spotById = new Map(spots.map((s) => [s.id, s] as const));
+  const eventById = new Map(events.map((e) => [e.id, e] as const));
+  const candidates: HeroPick[] = [];
+  for (const featured of plans) {
+    const resolvedStops = featured.stopIds
+      .map((id) => spotById.get(id))
+      .filter((s): s is Spot => Boolean(s));
+    const upcoming = (featured.eventIds ?? [])
+      .map((id) => eventById.get(id))
+      .filter((e): e is FamilyEvent => Boolean(e && isUpcomingEvent(e, now)));
+    if (resolvedStops.length === 0 && upcoming.length === 0) continue;
+    candidates.push({ featured, stops: resolvedStops, events: upcoming });
+  }
+  if (candidates.length === 0) return null;
+  if (!vibe || vibe === "balanced") return candidates[0];
+  const scored = candidates.map((pick, index) => ({
+    pick,
+    index,
+    score:
+      pick.stops.length > 0
+        ? pick.stops.reduce(
+            (sum, stop) => sum + scoreSpotForVibe(stop, vibe, scoringOptions),
+            0,
+          ) / pick.stops.length
+        : Number.NEGATIVE_INFINITY,
+  }));
+  scored.sort((a, b) => b.score - a.score || a.index - b.index);
+  return scored[0].pick;
+}
+
+// Aggregate a poll snapshot into the owner-facing tally summary shown in the
+// plan detail ("2 friends voted · 5 yes votes" + per-stop yes counts).
+// Exported for tests.
+export function summarizePollTallies(poll: PollSnapshot): {
+  voterCount: number;
+  totalYes: number;
+  perItem: Array<{ id: string; label: string; yes: number }>;
+} {
+  const labelById = new Map<string, string>();
+  for (const stop of poll.stops) labelById.set(stop.id, stop.name);
+  for (const event of poll.events ?? []) labelById.set(event.id, event.title);
+  const order: string[] = [];
+  const seen = new Set<string>();
+  for (const ref of poll.itemOrder ?? []) {
+    if (!seen.has(ref.id) && labelById.has(ref.id)) {
+      seen.add(ref.id);
+      order.push(ref.id);
+    }
+  }
+  for (const id of labelById.keys()) {
+    if (!seen.has(id)) {
+      seen.add(id);
+      order.push(id);
+    }
+  }
+  let totalYes = 0;
+  const perItem = order.map((id) => {
+    const yes = poll.tallies[id]?.up ?? 0;
+    totalYes += yes;
+    return { id, label: labelById.get(id) ?? id, yes };
+  });
+  return { voterCount: poll.voterCount, totalYes, perItem };
+}
+
+// Hostname for the "Verified · {host}" trust line on event stops. Returns
+// null when the URL can't be parsed (callers then skip the verified framing).
+// Exported for PollView + tests.
+export function sourceHostname(url: string): string | null {
+  try {
+    const host = new URL(url).hostname.replace(/^www\./, "");
+    return host || null;
+  } catch {
+    return null;
+  }
+}
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type AppRoute = {
   view: "browse" | "plans" | "event";
@@ -1516,6 +1633,8 @@ function App({ metro }: AppProps) {
     status: "idle" | "sharing" | "shared" | "error";
     url?: string;
     error?: string;
+    /** True only when the clipboard write actually resolved. */
+    copied?: boolean;
   }>({ status: "idle" });
   const [session, setSession] = useState<SessionState | null>(() => readSession());
   const [signInError, setSignInError] = useState<string | null>(null);
@@ -1581,22 +1700,43 @@ function App({ metro }: AppProps) {
   });
   const [isAdding, setIsAdding] = useState(false);
   const [isHopNowOpen, setIsHopNowOpen] = useState(false);
-  const [showSignInPrompt, setShowSignInPrompt] = useState(false);
-  function dismissSignInPrompt() {
-    setShowSignInPrompt(false);
+  // Visit-3 engaged-visitor ask: the Friday digest (replaced the old Google
+  // sign-in modal, which converted ~0 — sign-in stays in the topbar).
+  const [showDigestPrompt, setShowDigestPrompt] = useState(false);
+  function dismissDigestPrompt() {
+    setShowDigestPrompt(false);
     try {
-      window.localStorage.setItem("saturday.signInPromptDismissed", "1");
+      window.localStorage.setItem("saturday.digestPromptDismissed", "1");
     } catch {
       // ignore
     }
   }
-  function clickSignInFromPrompt() {
-    trackMetric("signin_prompt_clicked", metro.id);
-    const btn = signInButtonRef.current?.querySelector<HTMLElement>(
-      '[role="button"], iframe, div[tabindex]',
-    );
-    btn?.click();
-  }
+  // Plan-first hero (browse view). "Not now" hides it for ~7 days.
+  const [heroDismissed, setHeroDismissed] = useState<boolean>(() => {
+    try {
+      const raw = window.localStorage.getItem(HERO_DISMISS_KEY);
+      return raw ? Date.now() - Number(raw) < HERO_DISMISS_TTL_MS : false;
+    } catch {
+      return false;
+    }
+  });
+  const [heroVibe, setHeroVibe] = useState<PlannerVibe | null>(null);
+  // ≤820px the hero collapses to a pill so the map stays usable.
+  const [heroExpanded, setHeroExpanded] = useState(false);
+  const [heroForkedPlanId, setHeroForkedPlanId] = useState<string | null>(null);
+  // Owner-side vote payoff: tally snapshot for the active shared plan, plus a
+  // one-shot "votes are in" check across shared plans for the Plans tab dot.
+  const [activePollTally, setActivePollTally] = useState<PollSnapshot | null>(
+    null,
+  );
+  const [pollTallyStatus, setPollTallyStatus] = useState<
+    "idle" | "loading" | "error"
+  >("idle");
+  const [tallyRefreshNonce, setTallyRefreshNonce] = useState(0);
+  const [votesIn, setVotesIn] = useState(false);
+  const votesCheckedRef = useRef(false);
+  // Optional "email me when friends vote" — passed to createPoll at share time.
+  const [notifyEmail, setNotifyEmail] = useState("");
   const [hopNowSeen, setHopNowSeenState] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
     try {
@@ -1740,9 +1880,14 @@ function App({ metro }: AppProps) {
 
     guidePlanConsumedRef.current = true;
     const byId = new Map(events.map((event) => [event.id, event] as const));
+    const handoffNow = new Date();
     const selectedEvents = eventIds
       .map((id) => byId.get(id))
-      .filter((event): event is FamilyEvent => Boolean(event));
+      .filter((event): event is FamilyEvent =>
+        // Freshness gate: a stale guide link must not seed a plan with
+        // events that have already happened.
+        Boolean(event && isUpcomingEvent(event, handoffNow)),
+      );
 
     params.delete("guidePlan");
     params.delete("guideTitle");
@@ -1979,17 +2124,20 @@ function App({ metro }: AppProps) {
 
   useEffect(() => {
     trackMetric("app_open", metro.id);
-    // Increment per-browser visit counter so we can prompt engaged-but-not-
-    // signed-in users to sign in after they've come back a few times.
+    // Increment per-browser visit counter so we can make the Friday-digest
+    // ask to engaged visitors on their third visit (same cadence the old
+    // sign-in modal used — no new modal frequency).
     try {
       const prev = Number(window.localStorage.getItem("saturday.visitCount") || "0") || 0;
       const next = prev + 1;
       window.localStorage.setItem("saturday.visitCount", String(next));
       const dismissed =
-        window.localStorage.getItem("saturday.signInPromptDismissed") === "1";
-      if (next >= 3 && !dismissed && !session && API_CONFIGURED) {
-        setShowSignInPrompt(true);
-        trackMetric("signin_prompt_shown", metro.id);
+        window.localStorage.getItem("saturday.digestPromptDismissed") === "1";
+      const subscribed =
+        window.localStorage.getItem("saturday.newsletterSubscribed") === "1";
+      if (next >= 3 && !dismissed && !subscribed && API_CONFIGURED) {
+        setShowDigestPrompt(true);
+        trackMetric("digest_prompt_shown", metro.id);
       }
     } catch {
       // ignore
@@ -2004,9 +2152,52 @@ function App({ metro }: AppProps) {
     };
   }, []);
 
+  // Owner-side tally: when a shared plan is open, pull its poll once. The
+  // Refresh button bumps the nonce to re-pull — no polling loop.
+  const activePollId = activePlanId
+    ? plans.find((plan) => plan.id === activePlanId)?.pollId ?? null
+    : null;
   useEffect(() => {
-    if (session) setShowSignInPrompt(false);
-  }, [session]);
+    setActivePollTally(null);
+    setPollTallyStatus("idle");
+    if (!activePollId || !API_CONFIGURED || view !== "plans") return;
+    let cancelled = false;
+    setPollTallyStatus("loading");
+    getPoll(activePollId)
+      .then((snapshot) => {
+        if (cancelled) return;
+        setActivePollTally(snapshot);
+        setPollTallyStatus("idle");
+      })
+      .catch(() => {
+        if (!cancelled) setPollTallyStatus("error");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [activePollId, view, tallyRefreshNonce]);
+
+  // One-shot on load: do any shared plans already have votes? Drives the
+  // subtle "votes are in" dot on the Plans tab. Checked once per session
+  // (most recent 5 shared plans), never re-polled.
+  useEffect(() => {
+    if (votesCheckedRef.current || !API_CONFIGURED) return;
+    const shared = plans.filter((plan) => plan.pollId).slice(-5);
+    if (shared.length === 0) return;
+    votesCheckedRef.current = true;
+    let cancelled = false;
+    Promise.all(
+      shared.map((plan) => getPoll(plan.pollId as string).catch(() => null)),
+    ).then((snapshots) => {
+      if (cancelled) return;
+      if (snapshots.some((snap) => snap && snap.voterCount > 0)) {
+        setVotesIn(true);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [plans]);
 
   useEffect(() => {
     if (!session || !API_CONFIGURED) {
@@ -2571,6 +2762,40 @@ function App({ metro }: AppProps) {
     ];
   }, [featuredPlans, mapCenter, userLocation, inferredGeo]);
 
+  // Plan-first hero pick: top of the rail order, or vibe-re-ranked
+  // client-side when a hero vibe chip is active. No backend calls.
+  const heroPick = useMemo(
+    () =>
+      pickHeroFeatured(
+        nearbyFeaturedPlans,
+        allSpots,
+        events,
+        heroVibe,
+        scoringOptions,
+      ),
+    [nearbyFeaturedPlans, allSpots, events, heroVibe, scoringOptions],
+  );
+  const heroLine = useMemo(() => {
+    if (!heroPick) return null;
+    const names = [
+      ...heroPick.stops.map((s) => s.name),
+      ...heroPick.events.map((e) => e.title),
+    ].slice(0, 3);
+    const city =
+      heroPick.featured.city || heroPick.stops[0]?.neighborhood || null;
+    return { names, city };
+  }, [heroPick]);
+  // Hide alongside the date strip (same top-center slot as the weekend
+  // banner, which yields to the hero while it's visible).
+  const heroVisible =
+    !heroDismissed && heroPick !== null && eventDateFilter === "all";
+  // Day-aware headline: Thu–Sun sells the imminent weekend, Mon–Wed the
+  // head start. Recomputed per render — it only changes at midnight.
+  const heroTitle = heroTitleForAudience(APP_AUDIENCE, new Date().getDay());
+  const heroForkedPlan = heroForkedPlanId
+    ? plans.find((plan) => plan.id === heroForkedPlanId) ?? null
+    : null;
+
   const mapEvents = useMemo(() => {
     if (events.length === 0) return [] as FamilyEvent[];
     const nowDate = new Date();
@@ -2609,7 +2834,9 @@ function App({ metro }: AppProps) {
         if (!date) return false;
         const t = date.getTime();
         if (!Number.isFinite(t)) return false;
-        if (t < now - 12 * 60 * 60 * 1000 || t > horizon) return false;
+        // Freshness gate: ended events never render as browsable suggestions.
+        if (!isUpcomingEvent(event, nowDate)) return false;
+        if (t > horizon) return false;
         if (eventDateFilter === "tonight") {
           // Tonight = today, starting in the evening (5pm+).
           if (!sameLocalDate(date, today)) return false;
@@ -2618,8 +2845,8 @@ function App({ metro }: AppProps) {
         if (eventDateFilter === "today" && !sameLocalDate(date, today)) return false;
         if (eventDateFilter === "tomorrow" && !sameLocalDate(date, tomorrow)) return false;
         if (eventDateFilter === "weekend") {
-          const dow = date.getDay();
-          if (dow !== 0 && dow !== 6) return false;
+          // Fri 5pm+ counts as the weekend — see the "Weekend (Fri–Sun)" chip.
+          if (!isWeekendWindowDate(date)) return false;
           if (t > weekendHorizon) return false;
         }
         return true;
@@ -2638,8 +2865,13 @@ function App({ metro }: AppProps) {
       if (eventDateFilter === "tomorrow") {
         return event.daysOfWeek.includes(tomorrow.getDay());
       }
-      // Recurring without a specific date — keep weekend recurrences.
-      return event.daysOfWeek.some((d) => d === 0 || d === 6);
+      // Recurring without a specific date — keep weekend recurrences,
+      // including Friday-evening series (the chip covers Fri 5pm+).
+      return (
+        event.daysOfWeek.some((d) => d === 0 || d === 6) ||
+        (event.daysOfWeek.includes(5) &&
+          /evening|night|sunset/i.test(event.timeWindow || ""))
+      );
     });
   }, [events, ageBand, eventDateFilter, query, activeTheme, forYou, preferredThemes]);
 
@@ -2694,6 +2926,9 @@ function App({ metro }: AppProps) {
     const sunKey = keyOf(sun);
     const inWeekend = events.filter((e) => {
       if (!e.startDateTime) return false;
+      // Freshness gate: don't count events that already ended (e.g. Saturday
+      // events when it's already Sunday) — an inflated number reads as stale.
+      if (!isUpcomingEvent(e, now)) return false;
       const d = new Date(e.startDateTime);
       if (!Number.isFinite(d.getTime())) return false;
       const k = keyOf(d);
@@ -2724,6 +2959,11 @@ function App({ metro }: AppProps) {
   const activePlan = useMemo(
     () => plans.find((plan) => plan.id === activePlanId) ?? null,
     [plans, activePlanId],
+  );
+
+  const activePollSummary = useMemo(
+    () => (activePollTally ? summarizePollTallies(activePollTally) : null),
+    [activePollTally],
   );
 
   const activePlanStops = useMemo(() => {
@@ -2852,7 +3092,8 @@ function App({ metro }: AppProps) {
     const useAgeBand = ageBand;
     const NEAR_RADIUS = 4;
     const alreadyInPlan = new Set(activePlan.eventIds ?? []);
-    const now = Date.now();
+    const nowDate = new Date();
+    const now = nowDate.getTime();
     const sevenDays = now + 7 * 24 * 60 * 60 * 1000;
     const seen = new Set<string>();
     const matches: Array<{ event: FamilyEvent; dist: number }> = [];
@@ -2863,8 +3104,10 @@ function App({ metro }: AppProps) {
       // specific startDateTime, check the timestamp; for recurring events,
       // require that they hit Sat or Sun (the upcoming weekend).
       if (event.startDateTime) {
+        // Freshness gate: never suggest an event that already ended.
+        if (!isUpcomingEvent(event, nowDate)) continue;
         const t = new Date(event.startDateTime).getTime();
-        if (!Number.isFinite(t) || t < now - 12 * 60 * 60 * 1000 || t > sevenDays) {
+        if (!Number.isFinite(t) || t > sevenDays) {
           continue;
         }
       } else if (!event.daysOfWeek.some((d) => d === 0 || d === 6)) {
@@ -2995,23 +3238,27 @@ function App({ metro }: AppProps) {
     setActivePlanId(id);
   }
 
-  function forkFeaturedPlan(featured: FeaturedPlan) {
+  function forkFeaturedPlan(featured: FeaturedPlan): string | null {
     // Resolve refs against current data; silently skip missing items rather
     // than block the fork — featured-plans.json may reference ids that aren't
     // in this build of the dataset.
     const validStops = new Set(allSpots.map((s) => s.id));
-    const validEvents = new Set(events.map((e) => e.id));
+    const eventById = new Map(events.map((e) => [e.id, e] as const));
+    const forkNow = new Date();
     const stopIds = featured.stopIds.filter((id) => validStops.has(id));
-    const eventIds = (featured.eventIds ?? []).filter((id) =>
-      validEvents.has(id),
-    );
+    // Freshness gate: featured plans can reference events that have since
+    // happened — never fork a past event into a new plan.
+    const eventIds = (featured.eventIds ?? []).filter((id) => {
+      const event = eventById.get(id);
+      return Boolean(event && isUpcomingEvent(event, forkNow));
+    });
     if (stopIds.length === 0 && eventIds.length === 0) {
       // Nothing to fork — let the user know via console; the rail UI also
       // disables the button when this is the case.
       console.warn(
         `Featured plan ${featured.id} references no items present in the current dataset.`,
       );
-      return;
+      return null;
     }
     const id = createPlanId(plans);
     const next: Plan = {
@@ -3030,6 +3277,25 @@ function App({ metro }: AppProps) {
     trackMetric("plan_created", metro.id);
     setActivePlanId(id);
     setView("plans");
+    return id;
+  }
+
+  // Hero "Make it mine": same fork path as the editor's-picks rail, plus the
+  // hero-specific funnel metric (fired alongside the generic plan_created).
+  function createHeroPlan(featured: FeaturedPlan) {
+    const id = forkFeaturedPlan(featured);
+    if (!id) return;
+    setHeroForkedPlanId(id);
+    trackMetric("hero_plan_created", metro.id);
+  }
+
+  function dismissHero() {
+    setHeroDismissed(true);
+    try {
+      window.localStorage.setItem(HERO_DISMISS_KEY, String(Date.now()));
+    } catch {
+      // ignore
+    }
   }
 
   function addEventToPlan(planId: string, eventId: string) {
@@ -3217,6 +3483,16 @@ function App({ metro }: AppProps) {
     ) {
       return;
     }
+    // Optional vote-updates email: reject obvious typos up front rather than
+    // silently dropping the address the user expected updates at.
+    const voteEmail = notifyEmail.trim();
+    if (voteEmail && !EMAIL_RE.test(voteEmail)) {
+      setShareState({
+        status: "error",
+        error: "That vote-updates email doesn't look right — fix or clear it.",
+      });
+      return;
+    }
     setShareState({ status: "sharing" });
     const stopPayload: StopSummary[] = activePlanStops.map((spot) => ({
       id: spot.id,
@@ -3250,19 +3526,38 @@ function App({ metro }: AppProps) {
         stops: stopPayload,
         events: eventPayload,
         itemOrder: itemOrderPayload,
+        notifyEmail: voteEmail || undefined,
       });
       const url = pollShareUrl(result.pollId);
       updatePlan(activePlan.id, {
         pollId: result.pollId,
         ownerToken: result.ownerToken,
       });
+      // Prefer the native share sheet (same pattern as shareItem). Clipboard
+      // is the fallback — and only claims "copied" when the write actually
+      // resolved: iOS Safari routinely rejects clipboard writes after the
+      // awaited createPoll, and a false "copied" made users think they had
+      // shared when nothing was sent.
       const shareText = buildPlanShareMessage(planTitle, url);
-      try {
-        await navigator.clipboard.writeText(shareText);
-      } catch {
-        // ignore clipboard failures
+      let copied = false;
+      if (typeof navigator !== "undefined" && navigator.share) {
+        try {
+          await navigator.share({
+            title: buildPlanShareSubject(planTitle),
+            text: buildPlanShareMessage(planTitle),
+            url,
+          });
+        } catch (err) {
+          // AbortError = user closed the sheet; anything else (e.g. lost
+          // user activation) falls back to the clipboard attempt.
+          if ((err as Error)?.name !== "AbortError") {
+            copied = await copyTextToClipboard(shareText);
+          }
+        }
+      } else {
+        copied = await copyTextToClipboard(shareText);
       }
-      setShareState({ status: "shared", url });
+      setShareState({ status: "shared", url, copied });
       trackMetric("plan_shared", metro.id);
     } catch (error) {
       setShareState({ status: "error", error: (error as Error).message });
@@ -3596,6 +3891,13 @@ function App({ metro }: AppProps) {
             <List aria-hidden="true" />
             Plans
             <em className="tab-count">{plans.length}</em>
+            {votesIn && (
+              <span
+                className="tab-vote-dot"
+                title="Votes are in"
+                aria-label="Votes are in on a shared plan"
+              />
+            )}
           </button>
         </nav>
 
@@ -3785,8 +4087,94 @@ function App({ metro }: AppProps) {
           </div>
         </div>
 
+        {/* ── Plan-first hero (top-center): the advertised "3-stop plan in
+            seconds" promise, fulfilled with the top editor's pick. The
+            weekend banner yields this slot while the hero is visible. ── */}
+        {heroVisible && heroPick && heroLine && (
+          <section
+            className={`hero-plan${heroExpanded ? " is-open" : ""}`}
+            aria-label="Ready-made plan"
+          >
+            <button
+              type="button"
+              className="hero-plan-toggle"
+              onClick={() => setHeroExpanded((v) => !v)}
+              aria-expanded={heroExpanded}
+            >
+              <Sparkles aria-hidden="true" />
+              <span>{heroTitle}</span>
+              <ChevronDown aria-hidden="true" />
+            </button>
+            <div className="hero-plan-body">
+              <div className="hero-plan-head">
+                <p className="hero-plan-eyebrow">{heroTitle}</p>
+                <button
+                  type="button"
+                  className="hero-plan-dismiss"
+                  onClick={dismissHero}
+                >
+                  Not now
+                </button>
+              </div>
+              <strong className="hero-plan-name">
+                {heroPick.featured.name}
+              </strong>
+              <span className="hero-plan-stops">
+                {heroLine.names.join(" → ")}
+                {heroLine.city ? ` · ${heroLine.city}` : ""}
+              </span>
+              <span className="hero-plan-why">{heroPick.featured.summary}</span>
+              <div className="hero-plan-vibes" role="group" aria-label="Pick a vibe">
+                {HERO_VIBES.map((v) => (
+                  <button
+                    key={v}
+                    type="button"
+                    className={`hero-vibe-chip${heroVibe === v ? " active" : ""}`}
+                    aria-pressed={heroVibe === v}
+                    onClick={() =>
+                      setHeroVibe((current) => (current === v ? null : v))
+                    }
+                  >
+                    {APP_VIBE_LABELS[v]}
+                  </button>
+                ))}
+              </div>
+              <div className="hero-plan-actions">
+                <button
+                  type="button"
+                  className="primary-button"
+                  onClick={() => createHeroPlan(heroPick.featured)}
+                >
+                  <Plus aria-hidden="true" />
+                  Make it mine
+                </button>
+                {heroForkedPlan && (
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    title="Open your plan to share a vote link"
+                    onClick={() => {
+                      setActivePlanId(heroForkedPlan.id);
+                      setView("plans");
+                    }}
+                  >
+                    <Share2 aria-hidden="true" />
+                    Share it
+                  </button>
+                )}
+              </div>
+              <NewsletterCard
+                metroId={metro.id}
+                metroLabel={metro.label}
+                source="app-browse"
+                collapsedLabel={APP_DIGEST_CTA}
+              />
+            </div>
+          </section>
+        )}
+
         {/* ── Weekend-guide hook (top-center) ──────────────────────── */}
-        {weekendGuideStats && eventDateFilter === "all" && (
+        {!heroVisible && weekendGuideStats && eventDateFilter === "all" && (
           <a
             className="weekend-guide-banner"
             href={weekendGuideHref}
@@ -3798,7 +4186,8 @@ function App({ metro }: AppProps) {
             <span className="weekend-guide-banner-text">
               <strong>This weekend in {metro.label}</strong>
               <small>
-                {weekendGuideStats.count} family events
+                {weekendGuideStats.count}{" "}
+                {APP_AUDIENCE === "adults" ? "events" : "family events"}
                 {weekendGuideStats.free > 0
                   ? ` · ${weekendGuideStats.free} free`
                   : ""}
@@ -4120,7 +4509,12 @@ function App({ metro }: AppProps) {
                   .map((sid) => allSpots.find((s) => s.id === sid))
                   .find((s): s is Spot => Boolean(s));
                 const stopCount = featured.stopIds.length;
-                const eventCount = featured.eventIds?.length ?? 0;
+                // Count only events that haven't ended, matching what
+                // forkFeaturedPlan will actually put in the plan.
+                const eventCount = (featured.eventIds ?? []).filter((id) => {
+                  const event = events.find((e) => e.id === id);
+                  return Boolean(event && isUpcomingEvent(event));
+                }).length;
                 return (
                   <li
                     key={featured.id}
@@ -4509,14 +4903,14 @@ function App({ metro }: AppProps) {
                   <X aria-hidden="true" />
                 </button>
               </div>
-              {savedSpots.length > 0 && (
+              {totalSaved > 0 && (
                 <button
                   className="primary-button wide"
                   onClick={() => { createPlanFromSaved(); setCartExpanded(false); }}
-                  title="Create a plan with all saved places in order"
+                  title="Create a plan with all saved places and events in order"
                 >
                   <Sparkles aria-hidden="true" />
-                  Plan from places ({savedSpots.length})
+                  Plan from saved ({totalSaved})
                 </button>
               )}
               {savedSpots.length > 0 && (
@@ -4894,9 +5288,12 @@ function App({ metro }: AppProps) {
                     const date = event.startDateTime
                       ? new Date(event.startDateTime)
                       : null;
+                    // Saved plans keep their history, but an event that has
+                    // ended is marked instead of silently staying actionable.
+                    const ended = !isUpcomingEvent(event);
                     return (
                       <li
-                        className="plan-stop plan-stop-event"
+                        className={`plan-stop plan-stop-event${ended ? " is-ended" : ""}`}
                         key={`event:${event.id}`}
                       >
                         <span className="plan-stop-index plan-stop-index-event">
@@ -4905,6 +5302,7 @@ function App({ metro }: AppProps) {
                         <div className="plan-stop-info">
                           <strong>
                             <span className="plan-event-tag">EVENT</span>{" "}
+                            {ended && <span className="past-pill">Ended</span>}
                             {event.title}
                           </strong>
                           <span>
@@ -4924,6 +5322,30 @@ function App({ metro }: AppProps) {
                             · {event.venue}
                             {event.cost ? ` · ${event.cost}` : ""}
                           </span>
+                          {/* Quiet trust line: the event's official page.
+                              Only for verified events with a parseable URL. */}
+                          {event.verified &&
+                            event.url &&
+                            (() => {
+                              const host = sourceHostname(event.url);
+                              if (!host) return null;
+                              return (
+                                <a
+                                  className="verified-source"
+                                  href={event.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  Verified · {host}
+                                  {date
+                                    ? ` · ${date.toLocaleDateString(undefined, {
+                                        month: "short",
+                                        day: "numeric",
+                                      })}`
+                                    : ""}
+                                </a>
+                              );
+                            })()}
                         </div>
                         <div className="plan-stop-actions">
                           <a
@@ -5028,6 +5450,27 @@ function App({ metro }: AppProps) {
                 </select>
               </div>
 
+              {/* Optional vote-updates email, sent with the poll at share
+                  time. The worker emails the plan owner when friends vote. */}
+              {API_CONFIGURED && (
+                <div className="share-notify">
+                  <label htmlFor="plan-notify-email">
+                    Email me when friends vote <em>(optional)</em>
+                  </label>
+                  <input
+                    id="plan-notify-email"
+                    type="email"
+                    value={notifyEmail}
+                    onChange={(event) => setNotifyEmail(event.target.value)}
+                    placeholder="you@example.com"
+                    autoComplete="email"
+                  />
+                  <p className="share-notify-note">
+                    Only used for vote updates — nothing else.
+                  </p>
+                </div>
+              )}
+
               <div className="plan-actions">
                 <button
                   className="primary-button"
@@ -5063,14 +5506,76 @@ function App({ metro }: AppProps) {
                 </button>
               </div>
 
-              {shareState.status === "shared" && shareState.url && (
-                <div className="share-banner">
-                  <strong>Share message copied.</strong>
-                  <a href={shareState.url}>{shareState.url}</a>
+              {/* Quick share targets ride directly with the primary share
+                  action so Messages/WhatsApp/native are one tap away, not
+                  buried below the banner panels. */}
+              {(() => {
+                const sharedUrl =
+                  shareState.status === "shared" && shareState.url
+                    ? shareState.url
+                    : activePlan.pollId && shareState.status === "idle"
+                      ? pollShareUrl(activePlan.pollId)
+                      : null;
+                if (!sharedUrl) return null;
+                return (
                   <ShareQuickLinks
-                    url={shareState.url}
+                    url={sharedUrl}
                     title={activePlan.name || "Untitled plan"}
                   />
+                );
+              })()}
+
+              {/* Vote payoff: live tally for the shared plan. Loaded once
+                  when the plan opens; Refresh re-pulls on demand. */}
+              {activePlan.pollId && API_CONFIGURED && (
+                <div className="poll-tally" aria-label="Votes on this plan">
+                  <div className="poll-tally-head">
+                    <strong>
+                      {pollTallyStatus === "loading"
+                        ? "Checking votes…"
+                        : pollTallyStatus === "error"
+                          ? "Couldn't load votes."
+                          : activePollSummary
+                            ? activePollSummary.voterCount === 0
+                              ? "No votes yet — send the link to get the first one."
+                              : `${activePollSummary.voterCount} friend${
+                                  activePollSummary.voterCount === 1 ? "" : "s"
+                                } voted · ${activePollSummary.totalYes} yes vote${
+                                  activePollSummary.totalYes === 1 ? "" : "s"
+                                }`
+                            : "Votes show up here."}
+                    </strong>
+                    <button
+                      type="button"
+                      className="text-button"
+                      onClick={() => setTallyRefreshNonce((n) => n + 1)}
+                      disabled={pollTallyStatus === "loading"}
+                    >
+                      <RotateCcw aria-hidden="true" />
+                      Refresh
+                    </button>
+                  </div>
+                  {activePollSummary && activePollSummary.voterCount > 0 && (
+                    <ul className="poll-tally-items">
+                      {activePollSummary.perItem.map((item) => (
+                        <li key={item.id}>
+                          <span>{item.label}</span>
+                          <em>{item.yes} yes</em>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )}
+
+              {shareState.status === "shared" && shareState.url && (
+                <div className="share-banner">
+                  <strong>
+                    {shareState.copied
+                      ? "Share message copied."
+                      : "Share link ready — copy or send it with a button above."}
+                  </strong>
+                  <a href={shareState.url}>{shareState.url}</a>
                   <ShareEmbedPanel
                     url={shareState.url}
                     title={activePlan.name || "Untitled plan"}
@@ -5094,10 +5599,6 @@ function App({ metro }: AppProps) {
                   <a href={pollShareUrl(activePlan.pollId)}>
                     {pollShareUrl(activePlan.pollId)}
                   </a>
-                  <ShareQuickLinks
-                    url={pollShareUrl(activePlan.pollId)}
-                    title={activePlan.name || "Untitled plan"}
-                  />
                   <ShareEmbedPanel
                     url={pollShareUrl(activePlan.pollId)}
                     title={activePlan.name || "Untitled plan"}
@@ -5114,7 +5615,8 @@ function App({ metro }: AppProps) {
                 <section className="plan-nearby" aria-label="Events near this plan">
                   <h3>While you're nearby this weekend</h3>
                   <p className="plan-events-sub">
-                    {planNearbyEvents.length} family program
+                    {planNearbyEvents.length}{" "}
+                    {APP_AUDIENCE === "adults" ? "event" : "family program"}
                     {planNearbyEvents.length === 1 ? "" : "s"} within 4 mi of a
                     plan stop, in the next 7 days. Scroll for more →
                   </p>
@@ -5210,8 +5712,9 @@ function App({ metro }: AppProps) {
             <p className="eyebrow">Personalize</p>
             <h2 id="interests-title">Pick your interests</h2>
             <p className="interests-sub">
-              Choose what your family loves. "✨ For you" shows weekend events
-              that match — saved on this device.
+              Choose what {APP_AUDIENCE === "adults" ? "you love" : "your family loves"}.
+              "✨ For you" shows weekend events that match — saved on this
+              device.
             </p>
             <div className="interests-options">
               {EVENT_THEMES.map((theme) => {
@@ -5281,44 +5784,42 @@ function App({ metro }: AppProps) {
         </div>
       )}
 
-      {showSignInPrompt && !session && (
+      {/* Visit-3 engaged-visitor ask: the Friday digest. Replaces the old
+          Google sign-in modal (same trigger cadence; sign-in stays in the
+          topbar). Reuses the prompt-card styles. */}
+      {showDigestPrompt && (
         <div className="modal-backdrop signin-prompt-backdrop" role="presentation">
           <div
             className="signin-prompt-card"
             role="dialog"
             aria-modal="true"
-            aria-labelledby="signin-prompt-title"
+            aria-labelledby="digest-prompt-title"
           >
             <button
               type="button"
               className="icon-button signin-prompt-close"
               title="Not now"
-              onClick={dismissSignInPrompt}
+              onClick={dismissDigestPrompt}
             >
               <X aria-hidden="true" />
             </button>
-            <p className="eyebrow">Welcome back</p>
-            <h2 id="signin-prompt-title">Save your plans across devices</h2>
+            <p className="eyebrow">Free Friday digest</p>
+            <h2 id="digest-prompt-title">{APP_DIGEST_CTA}</h2>
             <p className="signin-prompt-sub">
-              Sign in (free) and your saved spots, events, and plans follow you
-              everywhere — phone, laptop, kitchen tablet.
+              {APP_AUDIENCE === "adults"
+                ? `One short email each Friday with the best ${metro.label} hangs for the weekend. No spam, unsubscribe anytime.`
+                : `One short email each Friday with the best ${metro.label} family outings for the weekend. No spam, unsubscribe anytime.`}
             </p>
-            <ul className="signin-prompt-benefits">
-              <li>Plan on your laptop, open on your phone</li>
-              <li>Saved spots + events stay in sync</li>
-              <li>Your weekend plans persist forever</li>
-            </ul>
-            <button
-              type="button"
-              className="primary-button wide"
-              onClick={clickSignInFromPrompt}
-            >
-              Continue with Google
-            </button>
+            <NewsletterCard
+              metroId={metro.id}
+              metroLabel={metro.label}
+              source="visit-prompt"
+              bare
+            />
             <button
               type="button"
               className="text-button signin-prompt-skip"
-              onClick={dismissSignInPrompt}
+              onClick={dismissDigestPrompt}
             >
               Not now
             </button>
@@ -5474,23 +5975,45 @@ function App({ metro }: AppProps) {
   );
 }
 
-function NewsletterCard({
+// Friday-digest signup. Mounted on the Plans tab, inside the browse hero
+// (collapsed one-liner via collapsedLabel), the visit-3 digest modal (bare),
+// and the poll page after a vote (heading override). Success is explicit and
+// persists for the session — the card never silently unmounts on subscribe.
+// Exported so PollView (rendered standalone by main.tsx) can reuse it.
+export function NewsletterCard({
   metroId,
   metroLabel,
+  source = "app-plans",
+  heading,
+  collapsedLabel,
+  bare = false,
 }: {
-  metroId: string;
-  metroLabel: string;
+  metroId?: string;
+  metroLabel?: string;
+  source?: string;
+  /** Override the metro-framed heading (e.g. poll-page digest framing). */
+  heading?: string;
+  /** Render as a tappable one-liner until opened (browse hero). */
+  collapsedLabel?: string;
+  /** Form-only — no card chrome, heading, or close (digest modal). */
+  bare?: boolean;
 }) {
-  type Status = "idle" | "submitting" | "done" | "dismissed" | "error";
+  type Status = "idle" | "submitting" | "done" | "hidden";
   const [email, setEmail] = useState("");
+  const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<Status>(() => {
     if (typeof window === "undefined") return "idle";
     try {
       if (window.localStorage.getItem("saturday.newsletterSubscribed") === "1") {
-        return "done";
+        return "hidden";
       }
-      if (window.localStorage.getItem("saturday.newsletterDismissed") === "1") {
-        return "dismissed";
+      // The bare (modal) variant ignores the card dismissal — the modal has
+      // its own dismissal key and its trigger already checks subscription.
+      if (
+        !bare &&
+        window.localStorage.getItem("saturday.newsletterDismissed") === "1"
+      ) {
+        return "hidden";
       }
     } catch {
       // ignore
@@ -5499,10 +6022,10 @@ function NewsletterCard({
   });
   const [error, setError] = useState<string | null>(null);
 
-  if (status === "done" || status === "dismissed") return null;
+  if (status === "hidden") return null;
 
   function dismiss() {
-    setStatus("dismissed");
+    setStatus("hidden");
     try {
       window.localStorage.setItem("saturday.newsletterDismissed", "1");
     } catch {
@@ -5513,7 +6036,7 @@ function NewsletterCard({
   async function submit(event: React.FormEvent) {
     event.preventDefault();
     const trimmed = email.trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+    if (!EMAIL_RE.test(trimmed)) {
       setError("Enter a valid email.");
       return;
     }
@@ -5523,7 +6046,7 @@ function NewsletterCard({
       await subscribeNewsletter({
         email: trimmed,
         metroId,
-        source: "app-plans",
+        source,
       });
       setStatus("done");
       try {
@@ -5538,23 +6061,50 @@ function NewsletterCard({
     }
   }
 
-  return (
-    <section className="newsletter-card" aria-label="Friday weekend digest">
-      <button
-        type="button"
-        className="icon-button newsletter-card-close"
-        title="Hide"
-        onClick={dismiss}
-      >
-        <X aria-hidden="true" />
-      </button>
-      <p className="eyebrow">
-        <Mail aria-hidden="true" /> Friday digest
+  // Explicit, persistent success — never silently vanish after subscribing.
+  if (status === "done") {
+    const successLine = "You're in — first email lands Friday.";
+    return bare ? (
+      <p className="newsletter-success" role="status">
+        {successLine}
       </p>
-      <h3>5 {APP_AUDIENCE === "adults" ? "" : "family "}ideas for {metroLabel} this weekend</h3>
-      <p className="newsletter-sub">
-        A short email every Friday morning. Free. Unsubscribe anytime.
-      </p>
+    ) : (
+      <section className="newsletter-card is-done" aria-label="Friday digest">
+        <p className="newsletter-success" role="status">
+          <Check aria-hidden="true" /> {successLine}
+        </p>
+      </section>
+    );
+  }
+
+  // Collapsed one-liner (browse hero): expands to the form on tap; the X
+  // persists the same dismissal as the full card.
+  if (collapsedLabel && !open) {
+    return (
+      <div className="newsletter-inline">
+        <button
+          type="button"
+          className="newsletter-inline-open"
+          onClick={() => setOpen(true)}
+        >
+          <Mail aria-hidden="true" />
+          {collapsedLabel}
+        </button>
+        <button
+          type="button"
+          className="icon-button newsletter-inline-dismiss"
+          title="Hide"
+          aria-label="Hide digest signup"
+          onClick={dismiss}
+        >
+          <X aria-hidden="true" />
+        </button>
+      </div>
+    );
+  }
+
+  const formBlock = (
+    <>
       <form onSubmit={submit} className="newsletter-form">
         <input
           type="email"
@@ -5573,6 +6123,36 @@ function NewsletterCard({
         </button>
       </form>
       {error && <p className="newsletter-error">{error}</p>}
+    </>
+  );
+
+  if (bare) {
+    return <div className="newsletter-bare">{formBlock}</div>;
+  }
+
+  return (
+    <section className="newsletter-card" aria-label="Friday weekend digest">
+      <button
+        type="button"
+        className="icon-button newsletter-card-close"
+        title="Hide"
+        onClick={dismiss}
+      >
+        <X aria-hidden="true" />
+      </button>
+      <p className="eyebrow">
+        <Mail aria-hidden="true" /> Friday digest
+      </p>
+      <h3>
+        {heading ??
+          `5 ${APP_AUDIENCE === "adults" ? "" : "family "}ideas for ${
+            metroLabel ?? "your metro"
+          } this weekend`}
+      </h3>
+      <p className="newsletter-sub">
+        A short email every Friday morning. Free. Unsubscribe anytime.
+      </p>
+      {formBlock}
     </section>
   );
 }
@@ -5606,6 +6186,7 @@ function spotToHopNow(spot: Spot): HopNowSpot {
     schedule: spot.schedule ?? null,
     cost: spot.cost,
     kidsFriendly: spot.kidsFriendly ?? null,
+    audiences: spot.audiences,
     friendScore: spot.friendScore,
     googleRating: spot.googleRating,
     googleRatingCount: spot.googleRatingCount,
@@ -5663,12 +6244,16 @@ function HopNowPanel({
   );
 
   const result: HopNowResult = useMemo(() => {
+    const now = new Date();
     const hopSpots = spots.map(spotToHopNow);
+    // Freshness gate: hopNowPicks re-checks timing, but never hand it an
+    // event that already ended.
     const hopEvents = events
+      .filter((event) => isUpcomingEvent(event, now))
       .map(eventToHopNow)
       .filter((e): e is HopNowEvent => e !== null);
     return hopNowPicks(hopSpots, hopEvents, {
-      now: new Date(),
+      now,
       audience,
       userLocation,
       shuffleSeed: seed,
@@ -6062,7 +6647,7 @@ function GeoErrorModal({
                     <strong>Allow</strong>.
                   </li>
                   <li>
-                    Reload famhop.com — Safari will prompt again on the next tap.
+                    Reload {APP_DOMAIN} — Safari will prompt again on the next tap.
                   </li>
                 </ol>
               </>
@@ -6091,7 +6676,7 @@ function GeoErrorModal({
                 <ol>
                   <li>
                     Click the <strong>lock icon</strong> in the address bar at{" "}
-                    <code>famhop.com</code>.
+                    <code>{APP_DOMAIN}</code>.
                   </li>
                   <li>
                     Find <strong>Location</strong> and switch it to{" "}
@@ -6263,7 +6848,7 @@ function ShareEmbedPanel({ url, title }: { url: string; title: string }) {
           </a>
         </div>
         <div className="share-embed-preview" aria-label="Embed preview">
-          <iframe title={`FamHop embed preview: ${cleanShareTitle(title)}`} src={embedUrl} />
+          <iframe title={`${APP_BRAND} embed preview: ${cleanShareTitle(title)}`} src={embedUrl} />
         </div>
       </div>
     </details>
@@ -6305,7 +6890,7 @@ function ShareCardPanel({
       const href = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = href;
-      link.download = `${slugifyDownloadName(title || "famhop-plan")}-story.png`;
+      link.download = `${slugifyDownloadName(title || `${APP_BRAND.toLowerCase()}-plan`)}-story.png`;
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -6341,6 +6926,17 @@ function ShareCardPanel({
       </div>
     </details>
   );
+}
+
+// Clipboard write that reports whether it actually landed, so callers can
+// show honest "copied" feedback instead of assuming success.
+async function copyTextToClipboard(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 // External share links use the /p/{id} path form (a Pages Function serves rich
@@ -6380,12 +6976,12 @@ function escapeHtmlAttr(value: string) {
 
 function buildPlanEmbedCode(url: string, title: string) {
   const escapedUrl = escapeHtmlAttr(url);
-  const escapedTitle = escapeHtmlAttr(`FamHop plan: ${cleanShareTitle(title)}`);
+  const escapedTitle = escapeHtmlAttr(`${APP_BRAND} plan: ${cleanShareTitle(title)}`);
   return `<iframe title="${escapedTitle}" src="${escapedUrl}" width="420" height="640" style="border:0;border-radius:12px;width:100%;max-width:420px;min-height:640px;" loading="lazy"></iframe>`;
 }
 
 function cleanShareTitle(title: string) {
-  return title.trim() || "this FamHop plan";
+  return title.trim() || `this ${APP_BRAND} plan`;
 }
 
 function buildPlanShareSubject(title: string) {
@@ -6394,7 +6990,7 @@ function buildPlanShareSubject(title: string) {
 
 function buildPlanShareMessage(title: string, url?: string) {
   const lines = [
-    `I put together a FamHop plan: ${cleanShareTitle(title)}.`,
+    `I put together a ${APP_BRAND} plan: ${cleanShareTitle(title)}.`,
     "Can you take a quick look and vote on the stops that work for you?",
   ];
   if (url) lines.push(url);
@@ -6437,14 +7033,20 @@ function drawPlanShareCard(
   ctx.fill();
   ctx.fillStyle = "#ffffff";
   ctx.font = "700 44px Arial, sans-serif";
-  ctx.fillText("F", 141, 177);
+  ctx.fillText(APP_BRAND.charAt(0) || "F", 141, 177);
 
   ctx.fillStyle = "#1b1916";
   ctx.font = "800 42px Arial, sans-serif";
-  ctx.fillText("FamHop", 224, 153);
+  ctx.fillText(APP_BRAND, 224, 153);
   ctx.fillStyle = "#6b7280";
   ctx.font = "700 25px Arial, sans-serif";
-  ctx.fillText(`${metroLabel} weekend plan`, 224, 190);
+  ctx.fillText(
+    APP_AUDIENCE === "adults"
+      ? `${metroLabel} hangout plan`
+      : `${metroLabel} weekend plan`,
+    224,
+    190,
+  );
 
   let y = 298;
   ctx.fillStyle = "#1b1916";
@@ -6483,11 +7085,7 @@ function drawPlanShareCard(
 
   ctx.fillStyle = "#1b1916";
   ctx.font = "800 30px Arial, sans-serif";
-  ctx.fillText(
-    `Vote on the plan at ${APP_AUDIENCE === "adults" ? "trymosey.com" : "famhop.com"}`,
-    112,
-    1210,
-  );
+  ctx.fillText(`Vote on the plan at ${APP_DOMAIN}`, 112, 1210);
   ctx.fillStyle = "#6b7280";
   ctx.font = "700 22px Arial, sans-serif";
   ctx.fillText(
@@ -6573,7 +7171,7 @@ function slugifyDownloadName(value: string) {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .slice(0, 60);
-  return cleaned || "famhop-plan";
+  return cleaned || `${APP_BRAND.toLowerCase()}-plan`;
 }
 
 export default App;

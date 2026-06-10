@@ -66,6 +66,53 @@ export const APP_GROUP_LABEL: string =
 export const APP_PLAN_NOUN: string =
   ENV.VITE_APP_PLAN_NOUN || "family plan";
 
+// Pure per-audience derivations (exported for tests — the build-time
+// APP_AUDIENCE constant can't be stubbed per test file).
+export function domainForAudience(audience: Audience): string {
+  return audience === "adults" ? "trymosey.com" : "famhop.com";
+}
+
+export function pollCtaForAudience(audience: Audience): string {
+  return audience === "adults"
+    ? 'Pick a vibe, get a 3-stop hangout in seconds, then share a vote link of your own — no endless "where should we go" group-chat debate.'
+    : 'Pick a vibe, get a 3-stop family Saturday in seconds, then share a vote link of your own — no 11am "what are we doing today" debate.';
+}
+
+// Browse-hero headline. Day-aware (Thu–Sun sells the imminent weekend,
+// Mon–Wed sells planning ahead) and audience-toned. dayOfWeek follows
+// Date#getDay (0 = Sunday).
+export function heroTitleForAudience(
+  audience: Audience,
+  dayOfWeek: number,
+): string {
+  const nearWeekend = dayOfWeek === 0 || dayOfWeek >= 4;
+  if (audience === "adults") {
+    return nearWeekend
+      ? "This weekend's hangout, ready to go"
+      : "Get a head start on the weekend hang";
+  }
+  return nearWeekend
+    ? "This weekend's plan, ready to go"
+    : "Get a head start on the weekend";
+}
+
+// One-line Friday-digest ask (browse hero one-liner, poll-page signup,
+// visit-3 digest prompt).
+export function digestCtaForAudience(audience: Audience): string {
+  return audience === "adults"
+    ? "Get 5 things to do every Friday"
+    : "Get 5 family things to do every Friday";
+}
+
+export const APP_DIGEST_CTA: string = digestCtaForAudience(APP_AUDIENCE);
+
+// Public domain for user-facing copy (geo-permission help, share cards).
+export const APP_DOMAIN: string = domainForAudience(APP_AUDIENCE);
+
+// Poll-page CTA body — a viral surface seen by invitees who may have never
+// opened the app, so the framing must match the brand's audience.
+export const APP_POLL_CTA: string = pollCtaForAudience(APP_AUDIENCE);
+
 export function audienceVisible(
   item: { audiences?: Audience[] } | null | undefined,
 ): boolean {

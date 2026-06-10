@@ -31,6 +31,7 @@ export type HopNowSpot = {
   schedule?: HopNowSchedule | null;
   cost?: string;
   kidsFriendly?: boolean | null;
+  audiences?: ("kids" | "adults" | "all")[];
   friendScore?: number;
   googleRating?: number;
   googleRatingCount?: number;
@@ -134,6 +135,43 @@ const TIER_BUDGET_PARKS = 2;
 const TIER_BUDGET_MUSEUMS = 2;
 // 25 mph average urban driving — rough but fine for "within ~20 min" gating.
 const AVG_DRIVE_MPH = 25;
+
+// Kids build: Hop Now targets daytime activities only (8am–7pm). A parent
+// opening the panel at 8:30pm should see "nothing right now", not 9pm cinema.
+const KIDS_DAY_START_MINUTES = 8 * 60;
+const KIDS_DAY_END_MINUTES = 19 * 60;
+
+// Kids build: venue types that should never be suggested to families even when
+// the dataset leaves them kid-neutral (audit: Anytime Fitness, Movement
+// climbing gym, bars). Matched against name + category + mood + tags.
+const KIDS_BLOCKED_VENUE =
+  /\b(gym|fitness|climbing gym|rock climbing|bouldering|crossfit|bar|pub|brewery|taproom|winery|distillery|nightclub|night club|cocktail|casino|hookah|cigar|dispensary)\b/i;
+
+function isKidAppropriateSpot(spot: HopNowSpot): boolean {
+  if (spot.kidsFriendly === false) return false;
+  if (spot.category === "Nightlife") return false;
+  if (
+    Array.isArray(spot.audiences) &&
+    spot.audiences.length > 0 &&
+    !spot.audiences.some((a) => a === "kids" || a === "all")
+  ) {
+    return false;
+  }
+  const text = `${spot.name} ${spot.category} ${spot.mood ?? ""} ${(spot.tags ?? []).join(" ")}`;
+  return !KIDS_BLOCKED_VENUE.test(text);
+}
+
+// Kids build: a bare OpenStreetMap node URL is not a useful "website" for a
+// family deciding where to go — show no link instead. Adults unchanged.
+const OSM_URL = /\/\/([^/]+\.)?openstreetmap\.org([/?#]|$)/i;
+
+function pickSpotUrl(spot: HopNowSpot, audience: HopNowAudience): string | null {
+  if (audience !== "kids") return spot.website ?? spot.sourceUrl ?? null;
+  for (const candidate of [spot.website, spot.sourceUrl]) {
+    if (candidate && !OSM_URL.test(candidate)) return candidate;
+  }
+  return null;
+}
 
 function haversineMiles(a: HopNowLocation, b: HopNowLocation): number {
   const toRad = (deg: number) => (deg * Math.PI) / 180;
@@ -490,20 +528,43 @@ export function hopNowPicks(
     ? events.filter((e) => !excludeIds.has(e.id))
     : events;
 
-  const spotCtx = gatherSpotCandidates(visibleSpots, {
-    now: options.now,
-    userLocation,
-    maxDriveMinutes,
-    maxDistanceMiles,
-    minOpenWindowMinutes,
-  });
-  const eventCtx = gatherEventCandidates(visibleEvents, {
+  // Kids build gates: content filter + the 8am–7pm daytime window. Outside
+  // the window kids get no spot picks; events must also start inside it.
+  const minutesNow = options.now.getHours() * 60 + options.now.getMinutes();
+  const kidsDaytime =
+    options.audience !== "kids" ||
+    (minutesNow >= KIDS_DAY_START_MINUTES && minutesNow < KIDS_DAY_END_MINUTES);
+  const audienceSpots =
+    options.audience === "kids"
+      ? visibleSpots.filter(isKidAppropriateSpot)
+      : visibleSpots;
+
+  const spotCtx = kidsDaytime
+    ? gatherSpotCandidates(audienceSpots, {
+        now: options.now,
+        userLocation,
+        maxDriveMinutes,
+        maxDistanceMiles,
+        minOpenWindowMinutes,
+      })
+    : [];
+  let eventCtx = gatherEventCandidates(visibleEvents, {
     now: options.now,
     userLocation,
     maxDriveMinutes,
     maxDistanceMiles,
     eventLookaheadMinutes,
   });
+  if (options.audience === "kids") {
+    eventCtx = eventCtx.filter((c) => {
+      const start = new Date(c.event.startDateTime);
+      const startMinutes = start.getHours() * 60 + start.getMinutes();
+      return (
+        startMinutes >= KIDS_DAY_START_MINUTES &&
+        startMinutes < KIDS_DAY_END_MINUTES
+      );
+    });
+  }
 
   const scoredSpots: Scored<SpotContext>[] = spotCtx.map((c) => ({
     item: c,
@@ -566,7 +627,7 @@ export function hopNowPicks(
       alwaysOpen: c.open.kind === "always",
       whyNow: whyNowForSpot(c, { weather: options.weather }),
       mapsQuery: mapsQueryFromSpot(c.spot),
-      url: c.spot.website ?? c.spot.sourceUrl ?? null,
+      url: pickSpotUrl(c.spot, options.audience),
     };
   }
 

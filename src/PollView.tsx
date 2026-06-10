@@ -1,6 +1,6 @@
 import { ArrowLeft, ExternalLink, Frown, Meh, Smile, ThumbsUp } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { APP_BRAND } from "./appConfig";
+import { APP_BRAND, APP_DIGEST_CTA, APP_POLL_CTA } from "./appConfig";
 import {
   EventSummary,
   PollSnapshot,
@@ -11,6 +11,9 @@ import {
   postVote,
   trackMetric,
 } from "./api";
+// Same bundle as App (main.tsx imports both eagerly), so reusing the digest
+// card + trust-line helper from App.tsx costs nothing.
+import { NewsletterCard, sourceHostname } from "./App";
 
 type Status = "loading" | "ready" | "error";
 
@@ -313,17 +316,38 @@ export default function PollView({
                     {event.venue ? ` · ${event.venue}` : ""}
                     {event.cost ? ` · ${event.cost}` : ""}
                   </span>
-                  {event.url && (
-                    <a
-                      className="poll-event-link"
-                      href={event.url}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <ExternalLink aria-hidden="true" />
-                      Event page
-                    </a>
-                  )}
+                  {event.url &&
+                    (() => {
+                      // Trust line: the event's official page. Falls back to
+                      // the plain "Event page" label when the URL can't be
+                      // parsed for a hostname.
+                      const host = sourceHostname(event.url);
+                      const when = event.startDateTime
+                        ? new Date(event.startDateTime)
+                        : null;
+                      const validWhen =
+                        when && Number.isFinite(when.getTime()) ? when : null;
+                      return (
+                        <a
+                          className="poll-event-link verified-source"
+                          href={event.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <ExternalLink aria-hidden="true" />
+                          {host
+                            ? `Verified · ${host}${
+                                validWhen
+                                  ? ` · ${validWhen.toLocaleDateString(undefined, {
+                                      month: "short",
+                                      day: "numeric",
+                                    })}`
+                                  : ""
+                              }`
+                            : "Event page"}
+                        </a>
+                      );
+                    })()}
                 </div>
               </div>
               <div className="poll-vote-row">
@@ -349,6 +373,18 @@ export default function PollView({
         })}
       </ol>
 
+      {/* Email capture at the moment of engagement: a voter who just weighed
+          in is the warmest possible digest lead. */}
+      {!embed && Object.keys(myVotes).length > 0 && (
+        <section className="poll-digest" aria-label="Friday digest signup">
+          <NewsletterCard
+            metroId={poll.metroId}
+            heading={APP_DIGEST_CTA}
+            source="poll-vote"
+          />
+        </section>
+      )}
+
       {embed ? (
         <footer className="poll-embed-footer">
           <span>{APP_BRAND}</span>
@@ -359,10 +395,7 @@ export default function PollView({
       ) : (
         <section className="poll-cta" aria-label="Make your own plan">
           <h2>Like this kind of plan?</h2>
-          <p>
-            Pick a vibe, get a 3-stop family Saturday in seconds, then share a vote
-            link of your own — no 11am "what are we doing today" debate.
-          </p>
+          <p>{APP_POLL_CTA}</p>
           <button
             type="button"
             className="primary-button wide"

@@ -465,3 +465,175 @@ describe("hopNowPicks", () => {
     expect(result.picks.map((p) => p.id)).toEqual(["ev1", "park", "cafe"]);
   });
 });
+
+describe("kids appropriateness gates", () => {
+  function eventAt(start: Date, overrides: Partial<HopNowEvent> = {}): HopNowEvent {
+    return {
+      id: "ev",
+      title: "Event",
+      venue: "Venue",
+      neighborhood: "Mission",
+      category: "Culture",
+      lat: 37.76,
+      lon: -122.43,
+      startDateTime: start.toISOString(),
+      url: "https://example.com",
+      ...overrides,
+    };
+  }
+
+  it("excludes gyms/fitness spots for kids but keeps them for adults", () => {
+    const gym = spot({
+      id: "gym",
+      name: "Anytime Fitness",
+      category: "Wellness",
+      tags: ["gym", "fitness"],
+      kidsFriendly: null,
+    });
+    const park = spot({ id: "park" });
+
+    const kids = hopNowPicks([gym, park], [], {
+      now: NOW,
+      audience: "kids",
+      userLocation: USER,
+    });
+    expect(kids.picks.map((p) => p.id)).not.toContain("gym");
+    expect(kids.picks.map((p) => p.id)).toContain("park");
+
+    const adults = hopNowPicks([gym, park], [], {
+      now: NOW,
+      audience: "adults",
+      userLocation: USER,
+    });
+    expect(adults.picks.map((p) => p.id)).toContain("gym");
+  });
+
+  it("excludes climbing gyms and bars for kids", () => {
+    const climbing = spot({
+      id: "climbing",
+      name: "Movement",
+      category: "Wellness",
+      mood: "Climbing gym sessions",
+      kidsFriendly: null,
+    });
+    const bar = spot({
+      id: "bar",
+      name: "Royal Cuckoo",
+      category: "Nightlife",
+      kidsFriendly: null,
+    });
+    const result = hopNowPicks([climbing, bar], [], {
+      now: NOW,
+      audience: "kids",
+      userLocation: USER,
+    });
+    expect(result.picks).toHaveLength(0);
+  });
+
+  it("excludes adults-only tagged spots for kids", () => {
+    const adultsOnly = spot({
+      id: "adults-only",
+      audiences: ["adults"],
+      kidsFriendly: null,
+    });
+    const open = spot({ id: "open", audiences: ["all"] });
+    const result = hopNowPicks([adultsOnly, open], [], {
+      now: NOW,
+      audience: "kids",
+      userLocation: USER,
+    });
+    const ids = result.picks.map((p) => p.id);
+    expect(ids).not.toContain("adults-only");
+    expect(ids).toContain("open");
+  });
+
+  it("suggests no spots to kids outside the 8am-7pm daytime window", () => {
+    const eveningNow = new Date("2026-05-17T20:00:00-07:00"); // 8 PM
+    const lateSpot = spot({
+      id: "late",
+      schedule: schedule(9 * 60, 23 * 60), // open until 11 PM
+    });
+    const kids = hopNowPicks([lateSpot], [], {
+      now: eveningNow,
+      audience: "kids",
+      userLocation: USER,
+    });
+    expect(kids.picks).toHaveLength(0);
+
+    const adults = hopNowPicks([lateSpot], [], {
+      now: eveningNow,
+      audience: "adults",
+      userLocation: USER,
+    });
+    expect(adults.picks.map((p) => p.id)).toContain("late");
+  });
+
+  it("excludes events that start after 7pm for kids but not adults", () => {
+    const lateAfternoon = new Date("2026-05-17T17:00:00-07:00"); // 5 PM
+    const ninePmShow = eventAt(
+      new Date("2026-05-17T20:00:00-07:00"), // 8 PM start, within lookahead
+      { id: "nine-pm" },
+    );
+    const kids = hopNowPicks([], [ninePmShow], {
+      now: lateAfternoon,
+      audience: "kids",
+      userLocation: USER,
+    });
+    expect(kids.picks.map((p) => p.id)).not.toContain("nine-pm");
+
+    const adults = hopNowPicks([], [ninePmShow], {
+      now: lateAfternoon,
+      audience: "adults",
+      userLocation: USER,
+    });
+    expect(adults.picks.map((p) => p.id)).toContain("nine-pm");
+  });
+
+  it("drops bare openstreetmap.org links for kids (no link instead)", () => {
+    const osmSpot = spot({
+      id: "osm",
+      website: "https://www.openstreetmap.org/node/123456",
+    });
+    const kids = hopNowPicks([osmSpot], [], {
+      now: NOW,
+      audience: "kids",
+      userLocation: USER,
+    });
+    const kidsPick = kids.picks.find((p) => p.id === "osm");
+    expect(kidsPick?.kind === "spot" && kidsPick.url).toBeNull();
+
+    const adults = hopNowPicks([osmSpot], [], {
+      now: NOW,
+      audience: "adults",
+      userLocation: USER,
+    });
+    const adultsPick = adults.picks.find((p) => p.id === "osm");
+    expect(adultsPick?.kind === "spot" ? adultsPick.url : null).toBe(
+      "https://www.openstreetmap.org/node/123456",
+    );
+  });
+
+  it("keeps a real website for kids when only the sourceUrl is OSM", () => {
+    const mixed = spot({
+      id: "mixed",
+      website: null,
+      sourceUrl: "https://www.openstreetmap.org/node/9",
+    });
+    const real = spot({
+      id: "real",
+      website: "https://www.exploratorium.edu",
+      sourceUrl: "https://www.openstreetmap.org/node/10",
+    });
+    const result = hopNowPicks([mixed, real], [], {
+      now: NOW,
+      audience: "kids",
+      userLocation: USER,
+    });
+    const mixedPick = result.picks.find((p) => p.id === "mixed");
+    const realPick = result.picks.find((p) => p.id === "real");
+    expect(mixedPick?.kind === "spot" && mixedPick.url).toBeNull();
+    expect(realPick?.kind === "spot" ? realPick.url : null).toBe(
+      "https://www.exploratorium.edu",
+    );
+  });
+});

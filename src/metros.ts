@@ -25,7 +25,22 @@ export type DataKey =
   | "featuredPlans"
   | "curatedSpots";
 
-export const METROS: MetroConfig[] = metrosDoc.metros as MetroConfig[];
+const ALL_METROS: MetroConfig[] = metrosDoc.metros as MetroConfig[];
+
+// Mosey is a Bay Area-only beta: the adults build exposes just bay-area while
+// FamHop keeps the full list. metroBySlug's DEFAULT_METRO fallback plus the
+// alias redirect in main.tsx make direct loads of other metro paths
+// (e.g. /seattle/) land gracefully on /bay-area/. Exported for tests — the
+// build-time audience constant can't be stubbed per test file.
+export function metrosForAudience(
+  audience: "kids" | "adults" | "all",
+): MetroConfig[] {
+  return audience === "adults"
+    ? ALL_METROS.filter((metro) => metro.id === "bay-area")
+    : ALL_METROS;
+}
+
+export const METROS: MetroConfig[] = metrosForAudience(APP_AUDIENCE);
 
 export const DEFAULT_METRO = METROS[0];
 

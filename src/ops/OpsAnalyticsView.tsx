@@ -26,6 +26,7 @@ import { useEffect, useState } from "react";
 import { METROS } from "../metros";
 import {
   type AnalyticsData,
+  type BrandCounts,
   type LoadAnalyticsResult,
   type MetricName,
   loadAnalytics,
@@ -53,6 +54,7 @@ export type CardSpec = {
  */
 export const CARD_SPECS: readonly CardSpec[] = [
   { metric: "app_open", label: "App opens" },
+  { metric: "app_open_return", label: "Returning opens" },
   { metric: "item_shared", label: "Events shared" },
   { metric: "plan_created", label: "Plans created" },
   { metric: "plan_shared", label: "Plans shared" },
@@ -193,6 +195,22 @@ export function computeMetroRows(
     return a.label.localeCompare(b.label);
   });
   return rows;
+}
+
+/**
+ * FamHop vs Mosey totals for `metric` over the loaded window (`byBrand` is
+ * a window total, not per-day, so this is the full `days`-day count rather
+ * than the 7-day card window). Returns `null` when the response carries no
+ * `byBrand` section at all (older worker / no brand-tagged traffic yet) so
+ * the cards can omit the split line instead of rendering a misleading 0 / 0.
+ */
+export function computeBrandSplit(
+  data: AnalyticsData,
+  metric: MetricName,
+): BrandCounts | null {
+  const byBrand = data.byBrand ?? {};
+  if (Object.keys(byBrand).length === 0) return null;
+  return byBrand[metric] ?? { famhop: 0, mosey: 0 };
 }
 
 export type SparklinePoint = {
@@ -490,23 +508,36 @@ export default function OpsAnalyticsView() {
       {status === "ok" && data && (
         <>
           <dl className="ops-alerts-summary" aria-label="Funnel summary">
-            {cards.map((card) => (
-              <div
-                key={card.metric}
-                className="ops-alerts-summary-item ops-analytics-card"
-              >
-                <dt>{card.label}</dt>
-                <dd>
-                  {card.current.toLocaleString()}
-                  <span
-                    className={`ops-analytics-delta ${deltaClass(card)}`.trim()}
-                    aria-label={`7-day delta: ${formatDelta(card)}`}
-                  >
-                    {formatDelta(card)}
-                  </span>
-                </dd>
-              </div>
-            ))}
+            {cards.map((card) => {
+              const split = computeBrandSplit(data, card.metric);
+              return (
+                <div
+                  key={card.metric}
+                  className="ops-alerts-summary-item ops-analytics-card"
+                >
+                  <dt>{card.label}</dt>
+                  <dd>
+                    {card.current.toLocaleString()}
+                    <span
+                      className={`ops-analytics-delta ${deltaClass(card)}`.trim()}
+                      aria-label={`7-day delta: ${formatDelta(card)}`}
+                    >
+                      {formatDelta(card)}
+                    </span>
+                    {split && (
+                      <small
+                        className="ops-analytics-brand-split"
+                        style={{ display: "block" }}
+                        title={`${data.days}-day totals by brand`}
+                      >
+                        FamHop {split.famhop.toLocaleString()} · Mosey{" "}
+                        {split.mosey.toLocaleString()}
+                      </small>
+                    )}
+                  </dd>
+                </div>
+              );
+            })}
           </dl>
 
           <h2 className="ops-analytics-section-h">

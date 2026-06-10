@@ -1,3 +1,5 @@
+import { APP_AUDIENCE } from "./appConfig";
+
 export type Vote = "up" | "down" | "meh";
 
 export type StopSummary = {
@@ -45,7 +47,7 @@ export type PollSnapshot = {
   createdAt: string;
 };
 
-const API_BASE = (import.meta.env.VITE_POLLS_API ?? "").replace(/\/$/, "");
+export const API_BASE = (import.meta.env.VITE_POLLS_API ?? "").replace(/\/$/, "");
 
 export const API_CONFIGURED = API_BASE.length > 0;
 
@@ -62,6 +64,7 @@ export async function createPoll(body: {
   stops: StopSummary[];
   events?: EventSummary[];
   itemOrder?: ItemOrderRef[];
+  notifyEmail?: string;
 }): Promise<{ pollId: string; ownerToken: string }> {
   const response = await fetch(`${requireApi()}/polls`, {
     method: "POST",
@@ -169,19 +172,55 @@ export async function fetchGeo(): Promise<GeoInfo | null> {
   }
 }
 
+// Brand dimension reported with every metric so GET /metrics can split
+// FamHop vs Mosey traffic. Derived from the same build-time audience that
+// drives appConfig — no per-call-site changes needed.
+const METRIC_BRAND = APP_AUDIENCE === "adults" ? "mosey" : "famhop";
+
+// First calendar day this browser opened the app; drives app_open_return.
+const FIRST_SEEN_KEY = "famhop:firstSeen";
+
+// Local (not UTC) YYYY-MM-DD so "came back the next day" follows the
+// user's clock.
+function localDay(date = new Date()): string {
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${date.getFullYear()}-${month}-${day}`;
+}
+
+function sendMetric(name: string, metroId?: string): void {
+  const qs = `name=${encodeURIComponent(name)}${
+    metroId ? `&metro=${encodeURIComponent(metroId)}` : ""
+  }`;
+  const url = `${API_BASE}/metric?${qs}`;
+  // The worker reads `brand` from the JSON request body (not the query
+  // string). A plain string body keeps the content type CORS-safelisted
+  // (text/plain), so neither path triggers a preflight.
+  const body = JSON.stringify({ brand: METRIC_BRAND });
+  if (navigator.sendBeacon) {
+    navigator.sendBeacon(url, body);
+  } else {
+    void fetch(url, { method: "POST", keepalive: true, mode: "no-cors", body });
+  }
+}
+
 // Fire-and-forget aggregate funnel metric (no PII). Used to measure the
 // share loop + feature engagement. Safe to call anywhere; no-ops without API.
 export function trackMetric(name: string, metroId?: string): void {
   if (!API_BASE || typeof navigator === "undefined") return;
   try {
-    const qs = `name=${encodeURIComponent(name)}${
-      metroId ? `&metro=${encodeURIComponent(metroId)}` : ""
-    }`;
-    const url = `${API_BASE}/metric?${qs}`;
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon(url);
-    } else {
-      void fetch(url, { method: "POST", keepalive: true, mode: "no-cors" });
+    sendMetric(name, metroId);
+    // Returning-visitor signal: remember the first calendar day we saw this
+    // browser; any app_open on a later day also counts as app_open_return so
+    // the dashboard can split new vs returning traffic.
+    if (name === "app_open") {
+      const today = localDay();
+      const firstSeen = window.localStorage.getItem(FIRST_SEEN_KEY);
+      if (!firstSeen) {
+        window.localStorage.setItem(FIRST_SEEN_KEY, today);
+      } else if (firstSeen < today) {
+        sendMetric("app_open_return", metroId);
+      }
     }
   } catch {
     /* ignore */

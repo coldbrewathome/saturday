@@ -292,6 +292,18 @@ button {
   color: var(--accent-strong);
 }
 
+/* "Votes are in" affordance on the Plans tab — a quiet accent dot shown
+   when any shared plan has received votes (computed once on load). */
+.tab-vote-dot {
+  background: var(--accent);
+  border-radius: 999px;
+  display: inline-block;
+  flex: 0 0 auto;
+  height: 7px;
+  margin-left: 4px;
+  width: 7px;
+}
+
 .topbar-spacer {
   flex: 1 1 auto;
 }
@@ -815,6 +827,235 @@ h3 {
   }
   .is-browse .summary-chip {
     top: 134px;
+  }
+}
+
+/* ── Plan-first hero (browse map, top-center) ─────────────────────── */
+/* Floats over the full-bleed map in the weekend banner's slot (the banner
+   yields while the hero is visible), so it never pushes the map down. */
+.hero-plan {
+  display: flex;
+  flex-direction: column;
+  left: 50%;
+  position: absolute;
+  top: 84px;
+  transform: translateX(-50%);
+  width: min(460px, calc(100vw - 32px));
+  z-index: 470;
+}
+
+/* Collapsed pill — mobile only. */
+.hero-plan-toggle {
+  display: none;
+}
+
+.hero-plan-body {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--glass-radius);
+  box-shadow: var(--glass-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px 12px;
+}
+
+.hero-plan-head {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.hero-plan-eyebrow {
+  color: var(--accent);
+  font: 800 0.7rem/1.2 var(--font-ui);
+  letter-spacing: 0.05em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.hero-plan-dismiss {
+  background: none;
+  border: 0;
+  color: var(--muted);
+  cursor: pointer;
+  flex: 0 0 auto;
+  font: 700 0.74rem/1 var(--font-ui);
+  padding: 4px 2px;
+}
+
+.hero-plan-dismiss:hover {
+  color: var(--ink);
+}
+
+.hero-plan-name {
+  color: var(--ink);
+  font: 800 1.02rem/1.25 var(--font-display);
+}
+
+.hero-plan-stops {
+  color: var(--ink-soft);
+  font: 600 0.8rem/1.35 var(--font-ui);
+}
+
+.hero-plan-why {
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--muted);
+  display: -webkit-box;
+  font: 500 0.78rem/1.4 var(--font-ui);
+  overflow: hidden;
+}
+
+.hero-plan-vibes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.hero-vibe-chip {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  display: inline-flex;
+  font: 600 12px/1 var(--font-ui);
+  padding: 6px 11px;
+}
+
+.hero-vibe-chip:hover:not(.active) {
+  background: var(--surface-strong);
+  color: var(--ink);
+}
+
+.hero-vibe-chip.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.hero-plan-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.hero-plan-actions .primary-button,
+.hero-plan-actions .secondary-button {
+  font-size: 0.84rem;
+  padding: 8px 14px;
+}
+
+/* Digest one-liner riding below the hero content. */
+.newsletter-inline {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.newsletter-inline-open {
+  align-items: center;
+  background: none;
+  border: 0;
+  color: var(--muted);
+  cursor: pointer;
+  display: inline-flex;
+  font: 700 0.76rem/1.2 var(--font-ui);
+  gap: 6px;
+  padding: 2px 0;
+  text-align: left;
+  text-decoration: underline;
+}
+
+.newsletter-inline-open:hover {
+  color: var(--ink);
+}
+
+.newsletter-inline-open svg {
+  flex: 0 0 auto;
+  height: 13px;
+  width: 13px;
+}
+
+.newsletter-inline-dismiss svg {
+  height: 12px;
+  width: 12px;
+}
+
+.hero-plan .newsletter-card {
+  margin: 8px 0 0;
+  padding: 12px;
+}
+
+@media (max-width: 820px) {
+  /* Compact: a pill in the weekend banner's mobile slot; tapping it drops
+     the full card down over the map (user-initiated, so covering part of
+     the map is fine). The map itself never moves. */
+  .hero-plan {
+    align-items: flex-end;
+    left: auto;
+    max-width: calc(100vw - 150px);
+    right: 8px;
+    top: 82px;
+    transform: none;
+    width: auto;
+  }
+
+  .hero-plan.is-open {
+    max-width: calc(100vw - 16px);
+  }
+
+  .hero-plan-toggle {
+    align-items: center;
+    background: var(--accent);
+    border: 0;
+    border-radius: 999px;
+    box-shadow: var(--glass-shadow);
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-flex;
+    font: 800 0.76rem/1.15 var(--font-ui);
+    gap: 7px;
+    max-width: 100%;
+    padding: 8px 12px;
+  }
+
+  .hero-plan-toggle span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .hero-plan-toggle svg {
+    flex: 0 0 auto;
+    height: 15px;
+    width: 15px;
+  }
+
+  .hero-plan-toggle svg:last-child {
+    transition: transform 0.15s ease;
+  }
+
+  .hero-plan.is-open .hero-plan-toggle svg:last-child {
+    transform: rotate(180deg);
+  }
+
+  .hero-plan-body {
+    display: none;
+  }
+
+  .hero-plan.is-open .hero-plan-body {
+    display: flex;
+    margin-top: 8px;
+    width: min(340px, calc(100vw - 16px));
   }
 }
 
@@ -4440,6 +4681,97 @@ h3 {
   color: var(--coral);
 }
 
+/* ── Vote payoff: owner-side tally for a shared plan ──────────────── */
+.poll-tally {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 12px 14px;
+}
+
+.poll-tally-head {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.poll-tally-head strong {
+  color: var(--ink);
+  font-size: 0.88rem;
+}
+
+.poll-tally-head .text-button svg {
+  height: 13px;
+  width: 13px;
+}
+
+.poll-tally-items {
+  display: grid;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.poll-tally-items li {
+  align-items: baseline;
+  color: var(--ink-soft);
+  display: flex;
+  font-size: 0.8rem;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.poll-tally-items li em {
+  color: var(--accent-strong);
+  font-style: normal;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* ── Optional vote-updates email (share section) ──────────────────── */
+.share-notify {
+  display: grid;
+  gap: 5px;
+  margin-top: 12px;
+}
+
+.share-notify label {
+  color: var(--ink);
+  font: 700 0.8rem/1.2 var(--font-ui);
+}
+
+.share-notify label em {
+  color: var(--muted);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.share-notify input {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  font: 600 0.84rem/1 var(--font-ui);
+  max-width: 320px;
+  padding: 8px 10px;
+}
+
+.share-notify input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.share-notify-note {
+  color: var(--muted);
+  font-size: 0.72rem;
+  margin: 0;
+}
+
 .share-quick-links {
   display: flex;
   flex-wrap: wrap;
@@ -4686,6 +5018,39 @@ h3 {
 }
 
 .plan-stop-event { border-left: 4px solid var(--coral); padding-left: 8px; }
+
+/* Event stops whose date has passed: keep them in the saved plan, but mark
+   them visually instead of presenting them as still actionable. */
+.plan-stop-event.is-ended {
+  border-left-color: var(--line);
+  opacity: 0.72;
+}
+
+.plan-stop-event.is-ended .plan-stop-info strong,
+.plan-stop-event.is-ended .plan-stop-info span {
+  color: var(--muted);
+}
+
+/* Quiet trust line on event stops: "Verified · {host} · {date}" linking the
+   official event page. Shared by the plan detail and PollView stop cards. */
+.verified-source {
+  color: var(--muted);
+  font: 600 0.72rem/1.3 var(--font-ui);
+  text-decoration: none;
+  width: fit-content;
+}
+
+.verified-source:hover {
+  color: var(--ink-soft);
+  text-decoration: underline;
+}
+
+/* PollView reuses .poll-event-link for spacing/icon sizing — the combined
+   class keeps that placement but mutes the link into a trust line. */
+.poll-event-link.verified-source {
+  color: var(--muted);
+  font-weight: 600;
+}
 
 .plan-stop-index-event {
   background: var(--coral) !important;
@@ -5964,6 +6329,36 @@ h3 {
   position: absolute;
   right: 8px;
   top: 8px;
+}
+
+/* Explicit subscribe success — replaces the old silent unmount. */
+.newsletter-success {
+  align-items: center;
+  color: var(--ink);
+  display: inline-flex;
+  font: 700 0.84rem/1.3 var(--font-ui);
+  gap: 6px;
+  margin: 0;
+}
+
+.newsletter-success svg {
+  color: var(--accent);
+  flex: 0 0 auto;
+  height: 15px;
+  width: 15px;
+}
+
+/* Form-only variant inside the visit-3 digest modal. */
+.newsletter-bare {
+  display: grid;
+  gap: 8px;
+}
+
+/* Digest signup on the poll page, mounted after a vote is cast. */
+.poll-digest {
+  margin: 18px auto 0;
+  max-width: 560px;
+  width: 100%;
 }
 
 /* Operator-alerts triage UI — internal route at #/ops/alerts.
