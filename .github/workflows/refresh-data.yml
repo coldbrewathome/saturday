@@ -11,6 +11,14 @@ permissions:
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    env:
+      # The event pipeline uses local-time math (parseIcsDate hard-codes -07:00,
+      # inferTimeWindowFromDate calls Date#getHours). Pin the runner to Pacific
+      # so tests and validators behave the same as developer machines.
+      # (The missing TZ pin is why every scheduled run failed 2026-05-09 →
+      # 2026-06-10: tests/eventPipeline.test.mjs bucketed a 14:00 ICS start as
+      # "Evening" under UTC. deploy-pages.yml already carried this fix.)
+      TZ: America/Los_Angeles
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -18,7 +26,14 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run ingest:bay-area
+      - name: Ingest Bay Area spots (retry on Overpass 5xx)
+        run: |
+          for attempt in 1 2 3; do
+            npm run ingest:bay-area && exit 0
+            echo "Overpass attempt ${attempt} failed; retrying in 60s..."
+            sleep 60
+          done
+          exit 1
       - run: npm run ingest:events
       - run: npm run test
       - run: npm run validate:data
@@ -26,22 +41,36 @@ jobs:
       - run: npm run build
       - name: Commit refreshed data
         run: |
-          if git diff --quiet -- public/data/bay-area-spots.json public/data/events.json public/data/event-build-report.json; then
+          # status --porcelain (not diff) so new per-metro files count too; the
+          # old explicit-path list predated the public/data/<metro>/ layout and
+          # silently dropped bay-area/events.json, coverage + featured plans.
+          if [ -z "$(git status --porcelain -- public/data)" ]; then
             echo "No data changes."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/data/bay-area-spots.json public/data/events.json public/data/event-build-report.json
+          git add public/data
           git commit -m "Refresh Bay Area data"
-          git push
+          # Concurrent local sessions commit to main; rebase + retry so a push
+          # that lands mid-run doesn't reject ours.
+          for attempt in 1 2 3; do
+            git pull --rebase origin main && git push && exit 0
+            git rebase --abort 2>/dev/null || true
+            echo "Push attempt ${attempt} failed; retrying in 15s..."
+            sleep 15
+          done
+          exit 1
 
       # Push the freshly scanned JSON to the standalone famhop-data Pages
       # project so the kids and (future) adults frontends always read the
       # latest tagged dataset without redeploying themselves. Skipped silently
       # if Cloudflare credentials aren't configured on the repo.
+      # Note: the condition must read the secrets context — a step's own env
+      # block is not populated when its `if` is evaluated, so the previous
+      # `env.CLOUDFLARE_API_TOKEN != ''` check always skipped this step.
       - name: Deploy shared data feed to Cloudflare Pages
-        if: ${{ env.CLOUDFLARE_API_TOKEN != '' }}
+        if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
