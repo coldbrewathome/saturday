@@ -7,7 +7,6 @@
 import {
   renderWeekendDigest,
   type DigestEvent,
-  type DigestOutput,
   type DigestPlan,
 } from "./newsletter-template";
 
@@ -28,6 +27,11 @@ export type SendWeekendDigestResult = {
 interface NewsletterEnv {
   NEWSLETTER_ENABLED?: string;
   RESEND_API_KEY?: string;
+  // HMAC key for per-recipient unsubscribe tokens. Falls back to
+  // NEWSLETTER_ADMIN_TOKEN so unsubscribe links work before the dedicated
+  // secret is provisioned.
+  UNSUBSCRIBE_SECRET?: string;
+  NEWSLETTER_ADMIN_TOKEN?: string;
   // Override the data origin (defaults to famhop-data.pages.dev). Useful
   // for staging/test sends against a non-prod data bucket.
   NEWSLETTER_DATA_ORIGIN?: string;
@@ -77,6 +81,10 @@ export async function sendWeekendDigest(
   env: NewsletterEnv,
   recipients: NewsletterRecipient[],
   fetchImpl: FetchLike = fetch,
+  // Origin (e.g. the worker's own URL) used to build per-recipient
+  // unsubscribe links. When unset, footers fall back to "reply to opt out"
+  // and no List-Unsubscribe headers are sent.
+  unsubscribeBaseUrl?: string,
 ): Promise<SendWeekendDigestResult> {
   if (env.NEWSLETTER_ENABLED !== "true") {
     console.log("[newsletter] send skipped (NEWSLETTER_ENABLED!=true)", {
@@ -142,11 +150,26 @@ export async function sendWeekendDigest(
     byMetro.set(metroId, list);
   }
 
+  const unsubscribeSecret = env.UNSUBSCRIBE_SECRET || env.NEWSLETTER_ADMIN_TOKEN;
+
   let sent = 0;
   for (const [metroId, metroRecipients] of byMetro) {
-    let digest: DigestOutput;
+    const meta = METROS[metroId];
+    let plans: DigestPlan[];
+    let events: DigestEvent[];
     try {
-      digest = await buildMetroDigest(metroId, dataOrigin, siteOrigin, fetchImpl);
+      [plans, events] = await Promise.all([
+        fetchJsonArray<DigestPlan>(
+          `${dataOrigin}/data/${metroId}/featured-plans.json`,
+          "plans",
+          fetchImpl,
+        ),
+        fetchJsonArray<DigestEvent>(
+          `${dataOrigin}/data/${metroId}/events.json`,
+          "events",
+          fetchImpl,
+        ),
+      ]);
     } catch (err) {
       const message =
         err instanceof Error ? err.message : String(err).slice(0, 200);
@@ -157,6 +180,25 @@ export async function sendWeekendDigest(
     }
 
     for (const recipient of metroRecipients) {
+      // Per-recipient render: the unsubscribe link carries an HMAC of the
+      // recipient's email, so the footer differs for every recipient.
+      const unsubscribeUrl =
+        unsubscribeBaseUrl && unsubscribeSecret
+          ? await buildUnsubscribeUrl(
+              unsubscribeBaseUrl,
+              recipient.email,
+              unsubscribeSecret,
+            )
+          : undefined;
+      const digest = renderWeekendDigest({
+        metroId,
+        metroLabel: meta.label,
+        timezone: meta.timezone,
+        plans,
+        events,
+        siteBaseUrl: siteOrigin,
+        unsubscribeUrl,
+      });
       const res = await fetchImpl(RESEND_ENDPOINT, {
         method: "POST",
         headers: {
@@ -170,6 +212,14 @@ export async function sendWeekendDigest(
           subject: digest.subject,
           html: digest.html,
           text: digest.text,
+          ...(unsubscribeUrl
+            ? {
+                headers: {
+                  "List-Unsubscribe": `<${unsubscribeUrl}>`,
+                  "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+                },
+              }
+            : {}),
         }),
       });
       if (res.ok) {
@@ -198,33 +248,40 @@ export async function sendWeekendDigest(
   return { ok: true, count: sent };
 }
 
-async function buildMetroDigest(
-  metroId: string,
-  dataOrigin: string,
-  siteOrigin: string,
-  fetchImpl: FetchLike,
-): Promise<DigestOutput> {
-  const meta = METROS[metroId];
-  const [plans, events] = await Promise.all([
-    fetchJsonArray<DigestPlan>(
-      `${dataOrigin}/data/${metroId}/featured-plans.json`,
-      "plans",
-      fetchImpl,
-    ),
-    fetchJsonArray<DigestEvent>(
-      `${dataOrigin}/data/${metroId}/events.json`,
-      "events",
-      fetchImpl,
-    ),
-  ]);
-  return renderWeekendDigest({
-    metroId,
-    metroLabel: meta.label,
-    timezone: meta.timezone,
-    plans,
-    events,
-    siteBaseUrl: siteOrigin,
-  });
+// HMAC-SHA256 (hex) of the lowercased email. The unsubscribe endpoint in
+// worker/src/index.ts recomputes this to verify the link wasn't forged.
+export async function unsubscribeToken(
+  email: string,
+  secret: string,
+): Promise<string> {
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+  const signature = await crypto.subtle.sign(
+    "HMAC",
+    key,
+    encoder.encode(email.trim().toLowerCase()),
+  );
+  return Array.from(new Uint8Array(signature))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+// Builds the GET /newsletter/unsubscribe link embedded in digest footers
+// and List-Unsubscribe headers.
+export async function buildUnsubscribeUrl(
+  baseUrl: string,
+  email: string,
+  secret: string,
+): Promise<string> {
+  const normalized = email.trim().toLowerCase();
+  const token = await unsubscribeToken(normalized, secret);
+  return `${baseUrl.replace(/\/$/, "")}/newsletter/unsubscribe?email=${encodeURIComponent(normalized)}&token=${token}`;
 }
 
 // Exported for unit tests. Returns null when the env var is unset

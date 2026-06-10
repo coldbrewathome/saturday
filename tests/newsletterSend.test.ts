@@ -1,7 +1,10 @@
+import { createHmac } from "node:crypto";
 import { describe, expect, it } from "vitest";
 import {
+  buildUnsubscribeUrl,
   parseAllowlist,
   sendWeekendDigest,
+  unsubscribeToken,
   type NewsletterRecipient,
 } from "../worker/src/newsletter";
 
@@ -34,6 +37,7 @@ describe("sendWeekendDigest allowlist gate", () => {
   // for assertions on who got sent to.
   function makeStubFetch() {
     const sentTo: string[] = [];
+    const sentBodies: Array<Record<string, unknown>> = [];
     const fetchImpl = async (input: RequestInfo | URL): Promise<Response> => {
       const url = typeof input === "string" ? input : input.toString();
       if (url.includes("/data/atlanta/featured-plans.json")) {
@@ -55,6 +59,7 @@ describe("sendWeekendDigest allowlist gate", () => {
         try {
           const body = JSON.parse(String(init.body));
           if (Array.isArray(body.to)) sentTo.push(...body.to);
+          sentBodies.push(body);
         } catch {
           // ignore
         }
@@ -62,7 +67,7 @@ describe("sendWeekendDigest allowlist gate", () => {
       }
       return fetchImpl(input);
     };
-    return { fetch: wrapped, sentTo };
+    return { fetch: wrapped, sentTo, sentBodies };
   }
 
   it("filters recipients not on NEWSLETTER_TEST_ALLOWLIST and attributes the drop", async () => {
@@ -119,5 +124,69 @@ describe("sendWeekendDigest allowlist gate", () => {
     );
     expect(result.count).toBe(1);
     expect(sentTo).toEqual(["anyone@example.com"]);
+  });
+
+  it("adds per-recipient unsubscribe footer + List-Unsubscribe headers when a base URL and secret are set", async () => {
+    const { fetch: stubFetch, sentBodies } = makeStubFetch();
+    const result = await sendWeekendDigest(
+      {
+        NEWSLETTER_ENABLED: "true",
+        RESEND_API_KEY: "stub-key",
+        // No UNSUBSCRIBE_SECRET — falls back to the admin token as HMAC key.
+        NEWSLETTER_ADMIN_TOKEN: "admin-token",
+      },
+      [{ email: "ops@famhop.com", metroId: "atlanta" }],
+      stubFetch,
+      "https://saturday-polls.example.workers.dev",
+    );
+    expect(result.count).toBe(1);
+    const expectedUrl = await buildUnsubscribeUrl(
+      "https://saturday-polls.example.workers.dev",
+      "ops@famhop.com",
+      "admin-token",
+    );
+    const body = sentBodies[0];
+    expect(body.headers).toEqual({
+      "List-Unsubscribe": `<${expectedUrl}>`,
+      "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+    });
+    expect(String(body.text)).toContain(`Unsubscribe: ${expectedUrl}`);
+    expect(String(body.html)).toContain("Unsubscribe with one click");
+  });
+
+  it("omits List-Unsubscribe headers when no unsubscribe base URL is passed", async () => {
+    const { fetch: stubFetch, sentBodies } = makeStubFetch();
+    await sendWeekendDigest(
+      {
+        NEWSLETTER_ENABLED: "true",
+        RESEND_API_KEY: "stub-key",
+        NEWSLETTER_ADMIN_TOKEN: "admin-token",
+      },
+      [{ email: "ops@famhop.com", metroId: "atlanta" }],
+      stubFetch,
+    );
+    expect(sentBodies[0].headers).toBeUndefined();
+  });
+});
+
+describe("unsubscribe link helpers", () => {
+  it("unsubscribeToken is the hex HMAC-SHA256 of the lowercased email", async () => {
+    const expected = createHmac("sha256", "s3cret")
+      .update("ops@famhop.com")
+      .digest("hex");
+    expect(await unsubscribeToken("OPS@Famhop.com", "s3cret")).toBe(expected);
+    expect(await unsubscribeToken("ops@famhop.com", "s3cret")).toBe(expected);
+  });
+
+  it("buildUnsubscribeUrl encodes the email and strips a trailing slash", async () => {
+    const token = await unsubscribeToken("ops@famhop.com", "s3cret");
+    const url = await buildUnsubscribeUrl(
+      "https://polls.example.com/",
+      "Ops@Famhop.com",
+      "s3cret",
+    );
+    expect(url).toBe(
+      `https://polls.example.com/newsletter/unsubscribe?email=ops%40famhop.com&token=${token}`,
+    );
   });
 });

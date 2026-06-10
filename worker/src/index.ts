@@ -1,4 +1,8 @@
-import { sendWeekendDigest, type NewsletterRecipient } from "./newsletter";
+import {
+  sendWeekendDigest,
+  unsubscribeToken,
+  type NewsletterRecipient,
+} from "./newsletter";
 
 type Vote = "up" | "down" | "meh";
 
@@ -42,6 +46,9 @@ type PollRecord = {
   itemOrder?: ItemOrderRef[];
   ownerToken: string;
   createdAt: string;
+  // Owner's email for vote notifications. Privacy: never returned by any
+  // GET/read response — only used server-side to send the notify email.
+  notifyEmail?: string;
 };
 
 type NewsletterRecord = {
@@ -72,6 +79,7 @@ interface Env {
   NEWSLETTER_ENABLED?: string;
   RESEND_API_KEY?: string;
   NEWSLETTER_TEST_ALLOWLIST?: string;
+  UNSUBSCRIBE_SECRET?: string;
 }
 
 type SessionData = {
@@ -1093,8 +1101,10 @@ async function createPoll(
     stops?: unknown;
     events?: unknown;
     itemOrder?: unknown;
+    notifyEmail?: unknown;
   };
   const title = typeof data.title === "string" ? data.title.slice(0, 200) : "Untitled plan";
+  const notifyEmail = cleanEmail(data.notifyEmail);
   const rawMetroId = typeof data.metroId === "string" ? data.metroId : "bay-area";
   const metroId = normalizeMetroId(rawMetroId) || "bay-area";
   const stopsInput = Array.isArray(data.stops) ? data.stops : [];
@@ -1122,6 +1132,7 @@ async function createPoll(
     itemOrder: itemOrder.length > 0 ? itemOrder : undefined,
     ownerToken,
     createdAt: new Date().toISOString(),
+    notifyEmail: notifyEmail || undefined,
   };
   await env.POLLS.put(`poll:${pollId}`, JSON.stringify(record), {
     expirationTtl: 60 * 60 * 24 * 30,
@@ -1160,10 +1171,62 @@ async function getPoll(
   );
 }
 
+// Throttle window for "friends voted on your plan" owner emails.
+const VOTE_NOTIFY_THROTTLE_SECONDS = 30 * 60;
+
+function siteOriginForRequest(env: Env, request: Request): string {
+  const origin = request.headers.get("origin");
+  const allowed = env.ALLOWED_ORIGINS.split(",").map((s) => s.trim());
+  return origin && allowed.includes(origin) ? origin : "https://famhop.com";
+}
+
+// Fire-and-forget (via ctx.waitUntil) email to the plan owner when a vote
+// lands. Throttled to one email per poll per 30 minutes via a KV timestamp.
+// Never throws — a notify failure must not affect the vote itself.
+async function sendVoteNotification(
+  env: Env,
+  record: PollRecord,
+  voterCount: number,
+  siteOrigin: string,
+): Promise<void> {
+  try {
+    const throttleKey = `pollnotify:${record.pollId}`;
+    const recent = await env.POLLS.get(throttleKey);
+    if (recent) return;
+    await env.POLLS.put(throttleKey, new Date().toISOString(), {
+      expirationTtl: VOTE_NOTIFY_THROTTLE_SECONDS,
+    });
+    const pollUrl = `${siteOrigin}/#/p/${record.pollId}`;
+    const friends =
+      voterCount === 1 ? "1 friend has" : `${voterCount} friends have`;
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${env.RESEND_API_KEY}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "FamHop <weekly@famhop.com>",
+        to: [record.notifyEmail],
+        subject: `${friends} voted on your plan`,
+        text: `${friends} voted on your plan — see results: ${pollUrl}`,
+      }),
+    });
+    if (!res.ok) {
+      console.log("[poll-notify] resend failed", { status: res.status });
+    }
+  } catch (err) {
+    console.log("[poll-notify] error", {
+      message: err instanceof Error ? err.message : String(err).slice(0, 200),
+    });
+  }
+}
+
 async function recordVote(
   pollId: string,
   request: Request,
   env: Env,
+  ctx: ExecutionContext,
   cors: Record<string, string>,
 ): Promise<Response> {
   const raw = await env.POLLS.get(`poll:${pollId}`);
@@ -1200,10 +1263,25 @@ async function recordVote(
   await env.POLLS.put(`votes:${pollId}`, JSON.stringify(votes), {
     expirationTtl: 60 * 60 * 24 * 30,
   });
+  const voterCount = Object.keys(votes).length;
+  if (
+    record.notifyEmail &&
+    env.RESEND_API_KEY &&
+    env.NEWSLETTER_ENABLED === "true"
+  ) {
+    ctx.waitUntil(
+      sendVoteNotification(
+        env,
+        record,
+        voterCount,
+        siteOriginForRequest(env, request),
+      ),
+    );
+  }
   return json(
     {
       tallies: tally(record.stops, record.events ?? [], votes),
-      voterCount: Object.keys(votes).length,
+      voterCount,
     },
     { status: 200 },
     cors,
@@ -1265,6 +1343,56 @@ async function subscribeNewsletter(
   return json({ ok: true }, { status: 200 }, cors);
 }
 
+const UNSUBSCRIBED_PAGE = `<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Unsubscribed</title></head>
+<body style="margin:0;padding:48px 24px;background:#f7f5f1;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#222;text-align:center;">
+<h1 style="font-size:24px;margin:0 0 8px;">You're unsubscribed.</h1>
+<p style="color:#666;margin:0;">You won't get the weekly digest anymore. Changed your mind? Sign up again any time on the site.</p>
+</body>
+</html>`;
+
+// GET/POST /newsletter/unsubscribe?email=...&token=... where token is the
+// hex HMAC-SHA256 of the lowercased email (see unsubscribeToken). POST is
+// the RFC 8058 one-click path used by mail clients via List-Unsubscribe-Post.
+async function unsubscribeNewsletter(
+  request: Request,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  const url = new URL(request.url);
+  const email = cleanEmail(url.searchParams.get("email"));
+  const token = cleanText(url.searchParams.get("token"), 128);
+  const secret = env.UNSUBSCRIBE_SECRET || env.NEWSLETTER_ADMIN_TOKEN;
+  if (!email || !token || !secret) {
+    return json({ error: "invalid unsubscribe link" }, { status: 400 }, cors);
+  }
+  const expected = await unsubscribeToken(email, secret);
+  if (token !== expected) {
+    return json({ error: "invalid unsubscribe link" }, { status: 400 }, cors);
+  }
+  // Subscriber records are keyed newsletter:{metro}:{email} and the link
+  // only carries the email, so remove the address from every metro list.
+  const suffix = `:${safeKvSegment(email)}`;
+  let cursor: string | undefined;
+  do {
+    const list = await env.POLLS.list({ prefix: "newsletter:", cursor });
+    for (const k of list.keys) {
+      if (k.name.endsWith(suffix)) {
+        await env.POLLS.delete(k.name);
+      }
+    }
+    cursor = list.list_complete ? undefined : list.cursor;
+  } while (cursor);
+  if (request.method === "POST") {
+    return new Response(null, { status: 200, headers: cors });
+  }
+  return new Response(UNSUBSCRIBED_PAGE, {
+    status: 200,
+    headers: { "content-type": "text/html; charset=utf-8", ...cors },
+  });
+}
+
 async function sendNewsletter(
   request: Request,
   env: Env,
@@ -1309,7 +1437,13 @@ async function sendNewsletter(
     });
   }
 
-  const result = await sendWeekendDigest(env, recipients);
+  // Unsubscribe links point back at this worker's own origin.
+  const result = await sendWeekendDigest(
+    env,
+    recipients,
+    fetch,
+    new URL(request.url).origin,
+  );
   return json(result, { status: 200 }, cors);
 }
 
@@ -1319,6 +1453,8 @@ async function sendNewsletter(
 // trackers or cookies (the site is family-facing, so we avoid GA4/PII).
 const METRIC_NAMES = new Set([
   "app_open",
+  "app_open_return",
+  "hero_plan_created",
   "hop_now_opened",
   "plan_created",
   "plan_shared",
@@ -1330,7 +1466,9 @@ const METRIC_NAMES = new Set([
   "signin_prompt_clicked",
   "signin_success",
   "newsletter_subscribed",
+  "digest_prompt_shown",
 ]);
+const METRIC_BRANDS = new Set(["famhop", "mosey"]);
 const METRIC_TTL_SECONDS = 60 * 60 * 24 * 120; // ~120 days
 
 async function recordMetric(
@@ -1348,10 +1486,26 @@ async function recordMetric(
   }
   const metroRaw = cleanText(url.searchParams.get("metro") || "all", 40) || "all";
   const metro = safeKvSegment(metroRaw);
+  // Optional JSON body field `brand` ("famhop" | "mosey") adds a per-brand
+  // counter under metricb:{name}:{brand}:{day}. Anything else is ignored.
+  let brand = "";
+  try {
+    const body = (await request.json()) as { brand?: unknown };
+    if (
+      body &&
+      typeof body.brand === "string" &&
+      METRIC_BRANDS.has(body.brand)
+    ) {
+      brand = body.brand;
+    }
+  } catch {
+    // no body / invalid json — brand stays unset
+  }
   const day = new Date().toISOString().slice(0, 10);
   for (const key of [
     `metric:${name}:all:${day}`,
     `metric:${name}:${metro}:${day}`,
+    ...(brand ? [`metricb:${name}:${brand}:${day}`] : []),
   ]) {
     const raw = await env.POLLS.get(key);
     const count = raw ? Number(raw) : 0;
@@ -1403,11 +1557,34 @@ async function readMetrics(
     }
     cursor = list.list_complete ? undefined : list.cursor;
   } while (cursor);
-  return json({ days, totals, byDay, byMetro }, { status: 200 }, cors);
+  // Per-brand rollup from the metricb: prefix (additive — existing response
+  // fields are unchanged). name -> { famhop, mosey } over the same window.
+  const byBrand: Record<string, { famhop: number; mosey: number }> = {};
+  let brandCursor: string | undefined;
+  do {
+    const list = await env.POLLS.list({ prefix: "metricb:", cursor: brandCursor });
+    for (const k of list.keys) {
+      const parts = k.name.split(":");
+      if (parts.length !== 4) continue;
+      const [, name, brand, date] = parts;
+      if (date < cutoff) continue;
+      if (brand !== "famhop" && brand !== "mosey") continue;
+      const raw = await env.POLLS.get(k.name);
+      const count = raw ? Number(raw) : 0;
+      byBrand[name] = byBrand[name] || { famhop: 0, mosey: 0 };
+      byBrand[name][brand] += count;
+    }
+    brandCursor = list.list_complete ? undefined : list.cursor;
+  } while (brandCursor);
+  return json({ days, totals, byDay, byMetro, byBrand }, { status: 200 }, cors);
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(
+    request: Request,
+    env: Env,
+    ctx: ExecutionContext,
+  ): Promise<Response> {
     const cors = corsHeaders(env, request.headers.get("origin"));
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: cors });
@@ -1438,6 +1615,13 @@ export default {
 
     if (path === "/newsletter/send" && request.method === "POST") {
       return sendNewsletter(request, env, cors);
+    }
+
+    if (
+      path === "/newsletter/unsubscribe" &&
+      (request.method === "GET" || request.method === "POST")
+    ) {
+      return unsubscribeNewsletter(request, env, cors);
     }
 
     if (path === "/metric") {
@@ -1517,7 +1701,7 @@ export default {
 
     const voteMatch = path.match(/^\/polls\/([A-Za-z0-9-]+)\/votes$/);
     if (voteMatch && request.method === "POST") {
-      return recordVote(voteMatch[1], request, env, cors);
+      return recordVote(voteMatch[1], request, env, ctx, cors);
     }
 
     return json({ error: "not found" }, { status: 404 }, cors);

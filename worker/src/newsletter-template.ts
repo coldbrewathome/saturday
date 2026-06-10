@@ -34,6 +34,9 @@ export type DigestInput = {
   now?: Date;
   // Site base used for plan deep-links; defaults to https://famhop.com.
   siteBaseUrl?: string;
+  // Per-recipient unsubscribe link (built by the send pipeline). When set,
+  // the footer renders a one-click unsubscribe link in both HTML and text.
+  unsubscribeUrl?: string;
 };
 
 export type DigestOutput = {
@@ -65,6 +68,7 @@ export function renderWeekendDigest(input: DigestInput): DigestOutput {
     plans,
     events,
     siteBase,
+    unsubscribeUrl: input.unsubscribeUrl,
   });
   const text = renderText({
     metroId: input.metroId,
@@ -73,6 +77,7 @@ export function renderWeekendDigest(input: DigestInput): DigestOutput {
     plans,
     events,
     siteBase,
+    unsubscribeUrl: input.unsubscribeUrl,
   });
 
   return {
@@ -262,6 +267,7 @@ type RenderContext = {
   plans: DigestPlan[];
   events: DigestEvent[];
   siteBase: string;
+  unsubscribeUrl?: string;
 };
 
 function renderHtml(ctx: RenderContext): string {
@@ -314,7 +320,11 @@ ${planLinks}
 <h2 style="font-size:18px;margin:0 0 12px;">5 things happening</h2>
 ${eventLinks}
 
-<p style="font-size:13px;color:#888;margin:24px 0 0;">You're on this list because you signed up at <a href="${esc(ctx.siteBase)}/${ctx.metroId}" style="color:#888;">famhop.com/${esc(ctx.metroId)}</a>. Reply to this email if you want off — we'll take care of it.</p>
+<p style="font-size:13px;color:#888;margin:24px 0 0;">You're on this list because you signed up at <a href="${esc(ctx.siteBase)}/${ctx.metroId}" style="color:#888;">famhop.com/${esc(ctx.metroId)}</a>. ${
+    ctx.unsubscribeUrl
+      ? `<a href="${esc(ctx.unsubscribeUrl)}" style="color:#888;">Unsubscribe with one click</a>.`
+      : `Reply to this email if you want off — we'll take care of it.`
+  }</p>
 </td></tr>
 </table>
 </body>
@@ -355,7 +365,9 @@ function renderText(ctx: RenderContext): string {
   }
   lines.push("");
   lines.push(
-    `You're on this list because you signed up at ${ctx.siteBase}/${ctx.metroId}. Reply to opt out.`,
+    ctx.unsubscribeUrl
+      ? `You're on this list because you signed up at ${ctx.siteBase}/${ctx.metroId}. Unsubscribe: ${ctx.unsubscribeUrl}`
+      : `You're on this list because you signed up at ${ctx.siteBase}/${ctx.metroId}. Reply to opt out.`,
   );
   return lines.join("\n");
 }

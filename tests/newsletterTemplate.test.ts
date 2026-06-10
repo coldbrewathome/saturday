@@ -183,6 +183,41 @@ describe("renderWeekendDigest", () => {
     expect(out.html).toContain("Tom &amp; Jerry");
   });
 
+  it("renders the unsubscribe link in both bodies when unsubscribeUrl is set", () => {
+    const url =
+      "https://polls.example.com/newsletter/unsubscribe?email=a%40b.com&token=abc123";
+    const out = renderWeekendDigest({
+      metroId: "atlanta",
+      metroLabel: "Atlanta",
+      timezone: "America/New_York",
+      plans: [],
+      events: [],
+      now: NOW,
+      unsubscribeUrl: url,
+    });
+    // href is HTML-escaped (& -> &amp;)
+    expect(out.html).toContain(
+      'href="https://polls.example.com/newsletter/unsubscribe?email=a%40b.com&amp;token=abc123"',
+    );
+    expect(out.html).toContain("Unsubscribe with one click");
+    expect(out.html).not.toContain("Reply to this email if you want off");
+    expect(out.text).toContain(`Unsubscribe: ${url}`);
+  });
+
+  it("falls back to reply-to-opt-out copy without an unsubscribeUrl", () => {
+    const out = renderWeekendDigest({
+      metroId: "atlanta",
+      metroLabel: "Atlanta",
+      timezone: "America/New_York",
+      plans: [],
+      events: [],
+      now: NOW,
+    });
+    expect(out.html).toContain("Reply to this email if you want off");
+    expect(out.text).toContain("Reply to opt out.");
+    expect(out.text).not.toContain("Unsubscribe:");
+  });
+
   it("handles a Saturday 'today' (weekend is today + tomorrow)", () => {
     const sat = new Date("2026-05-23T10:00:00-04:00");
     const out = renderWeekendDigest({

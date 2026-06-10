@@ -25,3 +25,6 @@ ADMIN_EMAILS = "kaining.usc@gmail.com"
 # Secrets (set via `wrangler secret put <NAME>`, never commit values):
 #   NEWSLETTER_ADMIN_TOKEN — bearer token required by POST /newsletter/send
 #   RESEND_API_KEY — Resend API key used by sendWeekendDigest (worker/src/newsletter.ts)
+#   UNSUBSCRIBE_SECRET — optional HMAC key for /newsletter/unsubscribe link
+#     tokens; falls back to NEWSLETTER_ADMIN_TOKEN when unset so unsubscribe
+#     links work day one.
