@@ -47,6 +47,13 @@ function envValue(name, fallback = "") {
 const APP_AUDIENCE = envValue("VITE_APP_AUDIENCE", "kids");
 const IS_ADULTS = APP_AUDIENCE === "adults";
 
+// Mosey (adults) is a Bay Area-only product for now: the adults build
+// generates pages and the sitemap for bay-area alone so trymosey.com never
+// indexes thin pages for metros the client app does not offer.
+if (IS_ADULTS) {
+  metroConfig.metros = metroConfig.metros.filter((m) => m.id === "bay-area");
+}
+
 const SITE = envValue("VITE_APP_SITE_URL").replace(/\/$/, "") ||
   (IS_ADULTS ? "https://trymosey.com" : "https://famhop.com");
 const BRAND = envValue("VITE_APP_BRAND", IS_ADULTS ? "Mosey" : "FamHop");
@@ -107,7 +114,21 @@ const A = IS_ADULTS
 const OG_IMAGE = envValue("VITE_APP_OG_IMAGE", `${SITE}/og-image.png`);
 const POLLS_API = envValue("VITE_POLLS_API").replace(/\/$/, "");
 const GOOGLE_CLIENT_ID = envValue("VITE_GOOGLE_CLIENT_ID");
-const MAX_SPOT_PAGES_PER_METRO = Number(process.env.SEO_MAX_SPOT_PAGES_PER_METRO || 600);
+// Google Search Console ownership verification. Optional: set
+// GSC_VERIFICATION_FAMHOP (kids) / GSC_VERIFICATION_MOSEY (adults) at build
+// time to emit the google-site-verification meta tag into the SPA shells and
+// every prerendered page. Unset = no tag (no-op).
+const GSC_VERIFICATION = envValue(
+  IS_ADULTS ? "GSC_VERIFICATION_MOSEY" : "GSC_VERIFICATION_FAMHOP",
+);
+// Build timestamp surfaced as `verifiedAt` in Event JSON-LD so crawlers and
+// assistants can tell how fresh each listing is.
+const BUILD_VERIFIED_AT = new Date().toISOString();
+// Spot pages are the bulk of the deployment (Cloudflare Pages caps a deploy
+// at 20k files). 300/metro × 16 metros plus capped event pages keeps the kids
+// build comfortably under ~19k even as event datasets grow; the quality gate
+// in generateSpotPages decides *which* spots make the cut.
+const MAX_SPOT_PAGES_PER_METRO = Number(process.env.SEO_MAX_SPOT_PAGES_PER_METRO || 300);
 // Cloudflare Pages caps a deployment at 20k files. As the event dataset grows
 // (big metros have thousands of mostly-recurring instances in the 45-day
 // window), uncapped event pages blow that. Keep the soonest-N upcoming events
@@ -147,6 +168,20 @@ function eventLikelyFree(event) {
   return FREE_CATEGORIES.has(event.category);
 }
 let activeMetro = metroConfig.defaultMetro;
+// Event-page slugs actually written per metro (set in main()); the localized
+// weekend guides run after the main loop and reuse it to avoid linking to
+// capped-out event pages.
+const generatedEventSlugsByMetro = new Map();
+// Restrict an event→slug lookup to events whose pages were generated. Every
+// consumer (timeline renderer, highlights, JSON-LD ItemList) already falls
+// back to the official event URL when the lookup misses.
+function lookupOfGenerated(lookup, generatedSlugs) {
+  const filtered = new Map();
+  for (const [event, slug] of lookup) {
+    if (generatedSlugs.has(slug)) filtered.set(event, slug);
+  }
+  return filtered;
+}
 let sitemapEntries = [
   { loc: `${SITE}/`, lastmod: today(), changefreq: "daily", priority: 1.0 },
 ];
@@ -609,77 +644,105 @@ a:hover{text-decoration:underline}
 }
 `;
 
-if (!fs.existsSync(DIST)) {
-  console.error(`[seo] dist/ not found at ${DIST} — run \`vite build\` first.`);
-  process.exit(1);
-}
+// Guarded so tests can import the exported helpers (spotPassesQualityGate,
+// formatWeekendRange) without generating pages. The call itself lives at the
+// bottom of the file: main() runs during module evaluation, so it must come
+// after every top-level const it depends on (e.g. JUNK_CHAIN_NAME_RE) — only
+// function declarations hoist.
+const isDirectRun =
+  process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
-generateRootAppShellPage();
-
-let totalSpotPages = 0;
-let totalEventPages = 0;
-let totalCityPages = 0;
-let totalCategoryPages = 0;
-let totalWeekendPages = 0;
-let totalEndedEventStubs = 0;
-
-for (const metro of metroConfig.metros) {
-  activeMetro = metro;
-
-  const spotsDoc = readJson(metroDataPath(metro, "spots"));
-  const eventsDoc = readJson(metroDataPath(metro, "events"));
-
-  // Merge the enrichment sidecar (Google ratings, etc.) by spot id — same as the
-  // runtime app — so spot pages can emit aggregateRating rich snippets.
-  const enrichmentDoc = readJson(metroDataPath(metro, "enrichment"));
-  const enrichmentEntries = enrichmentDoc?.entries ?? {};
-  const spots = (Array.isArray(spotsDoc?.spots) ? spotsDoc.spots : [])
-    .filter(audienceVisible)
-    .map((spot) => {
-      const extra = enrichmentEntries[spot.id];
-      return extra ? { ...spot, ...extra } : spot;
-    });
-  const events = (Array.isArray(eventsDoc?.events) ? eventsDoc.events : []).filter(
-    audienceVisible,
-  );
-
-  const spotSlugLookup = buildSpotSlugLookup(spots);
-  const eventSlugLookup = buildEventSlugLookup(events);
-  const citySlugsPre = getGeneratedCitySlugs(spots, events);
-
-  const spotSlugs = generateSpotPages(spots, spotSlugLookup, citySlugsPre);
-  // Full set of current-dataset slugs — used to suppress "ended" stubs so a
-  // capped-out *live* event isn't falsely stubbed (it just has no page).
-  const allCurrentEventSlugs = new Set();
-  for (const ev of events) {
-    const s = eventSlugLookup.get(ev);
-    if (s) allCurrentEventSlugs.add(s);
+function main() {
+  if (!fs.existsSync(DIST)) {
+    console.error(`[seo] dist/ not found at ${DIST} — run \`vite build\` first.`);
+    process.exit(1);
   }
-  const eventSlugs = generateEventPages(capEventsForPages(events), eventsDoc?.generatedAt, eventSlugLookup, citySlugsPre);
-  const citySlugs = generateCityPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs);
-  const categorySlugs = generateCategoryPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs);
-  const wroteThisWeekend = generateThisWeekendPage(events, eventSlugLookup);
 
-  generateMetroAppShellPage(metro, categorySlugs);
+  generateRootAppShellPage();
 
-  const slugHistory = readEventSlugHistory(metro);
-  totalEndedEventStubs += generateEndedEventStubs(slugHistory, allCurrentEventSlugs);
+  let totalSpotPages = 0;
+  let totalEventPages = 0;
+  let totalCityPages = 0;
+  let totalCategoryPages = 0;
+  let totalWeekendPages = 0;
+  let totalWeekendSubPages = 0;
+  let totalEndedEventStubs = 0;
 
-  totalSpotPages += spotSlugs.size;
-  totalEventPages += eventSlugs.size;
-  totalCityPages += citySlugs.size;
-  totalCategoryPages += categorySlugs.size;
-  totalWeekendPages += wroteThisWeekend ? 1 : 0;
+  for (const metro of metroConfig.metros) {
+    activeMetro = metro;
+
+    const spotsDoc = readJson(metroDataPath(metro, "spots"));
+    const eventsDoc = readJson(metroDataPath(metro, "events"));
+
+    // Merge the enrichment sidecar (Google ratings, etc.) by spot id — same as the
+    // runtime app — so spot pages can emit aggregateRating rich snippets.
+    const enrichmentDoc = readJson(metroDataPath(metro, "enrichment"));
+    const enrichmentEntries = enrichmentDoc?.entries ?? {};
+    const spots = (Array.isArray(spotsDoc?.spots) ? spotsDoc.spots : [])
+      .filter(audienceVisible)
+      .map((spot) => {
+        const extra = enrichmentEntries[spot.id];
+        return extra ? { ...spot, ...extra } : spot;
+      });
+    const events = (Array.isArray(eventsDoc?.events) ? eventsDoc.events : []).filter(
+      audienceVisible,
+    );
+
+    // Spots referenced by editor's picks / featured plans pass the spot-page
+    // quality gate even without rating data.
+    const featuredPlansDoc = readJson(metroDataPath(metro, "featuredPlans"));
+    const featuredSpotIds = new Set(
+      (Array.isArray(featuredPlansDoc?.plans) ? featuredPlansDoc.plans : [])
+        .filter(audienceVisible)
+        .flatMap((plan) => (Array.isArray(plan.stopIds) ? plan.stopIds : [])),
+    );
+
+    const spotSlugLookup = buildSpotSlugLookup(spots);
+    const eventSlugLookup = buildEventSlugLookup(events);
+    const citySlugsPre = getGeneratedCitySlugs(spots, events);
+
+    const spotSlugs = generateSpotPages(spots, spotSlugLookup, citySlugsPre, featuredSpotIds);
+    // Full set of current-dataset slugs — used to suppress "ended" stubs so a
+    // capped-out *live* event isn't falsely stubbed (it just has no page).
+    const allCurrentEventSlugs = new Set();
+    for (const ev of events) {
+      const s = eventSlugLookup.get(ev);
+      if (s) allCurrentEventSlugs.add(s);
+    }
+    const eventSlugs = generateEventPages(capEventsForPages(events), eventsDoc?.generatedAt, eventSlugLookup, citySlugsPre);
+    generatedEventSlugsByMetro.set(metro.id, eventSlugs);
+    const citySlugs = generateCityPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs);
+    const categorySlugs = generateCategoryPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs);
+    // Weekend guides link events through this lookup; restrict it to events
+    // whose pages were actually written so capped-out events fall back to
+    // their official link instead of a broken internal one.
+    const weekendEventLookup = lookupOfGenerated(eventSlugLookup, eventSlugs);
+    const wroteThisWeekend = generateThisWeekendPage(events, weekendEventLookup);
+    totalWeekendSubPages +=
+      generateCityWeekendPages(events, weekendEventLookup) +
+      generateFreeThisWeekendPage(events, weekendEventLookup);
+
+    generateMetroAppShellPage(metro, categorySlugs);
+
+    const slugHistory = readEventSlugHistory(metro);
+    totalEndedEventStubs += generateEndedEventStubs(slugHistory, allCurrentEventSlugs);
+
+    totalSpotPages += spotSlugs.size;
+    totalEventPages += eventSlugs.size;
+    totalCityPages += citySlugs.size;
+    totalCategoryPages += categorySlugs.size;
+    totalWeekendPages += wroteThisWeekend ? 1 : 0;
+  }
+
+  const totalLocalizedPages = IS_ADULTS ? 0 : generateLocalizedWeekendPages();
+
+  writeSitemap(sitemapEntries);
+  writeRobotsAndLlms();
+
+  console.log(
+    `[seo] wrote ${totalSpotPages} spot pages, ${totalEventPages} event pages, ${totalEndedEventStubs} ended-event stubs, ${totalCityPages} city pages, ${totalCategoryPages} category pages, ${totalWeekendPages} this-weekend pages, ${totalWeekendSubPages} city/free weekend pages, ${totalLocalizedPages} localized i18n pages, sitemap with ${sitemapEntries.length} URLs.`,
+  );
 }
-
-const totalLocalizedPages = IS_ADULTS ? 0 : generateLocalizedWeekendPages();
-
-writeSitemap(sitemapEntries);
-writeRobotsAndLlms();
-
-console.log(
-  `[seo] wrote ${totalSpotPages} spot pages, ${totalEventPages} event pages, ${totalEndedEventStubs} ended-event stubs, ${totalCityPages} city pages, ${totalCategoryPages} category pages, ${totalWeekendPages} this-weekend pages, ${totalLocalizedPages} localized i18n pages, sitemap with ${sitemapEntries.length} URLs.`,
-);
 
 // Keep robots.txt pointed at this build's own sitemap (the static public/
 // robots.txt hardcodes famhop.com), and give the adults build its own
@@ -689,14 +752,22 @@ function writeRobotsAndLlms() {
     path.join(DIST, "robots.txt"),
     `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`,
   );
-  if (!IS_ADULTS) return;
+  if (!IS_ADULTS) {
+    patchKidsLlmsCoverage();
+    return;
+  }
   const metroLines = metroConfig.metros
     .map((m) => `- ${m.seoName || m.label || m.id}: ${SITE}${String(m.canonicalPath || "").replace(/\/?$/, "/")}`)
     .join("\n");
   const metroSlugs = metroConfig.metros.map((m) => m.id).join("`, `");
+  // Mosey is a Bay Area-only beta (metroConfig.metros is filtered above), so
+  // describe the actual coverage instead of claiming "major U.S. metros".
+  const regionPhrase = metroConfig.metros.length === 1
+    ? `in the ${metroConfig.metros[0].seoName || metroConfig.metros[0].label || metroConfig.metros[0].id}`
+    : "across major U.S. metros";
   const llms = `# ${BRAND}
 
-> ${BRAND} helps adults find good places to hang out — solo or with friends — across major U.S. metros. Visitors pick a metro and a vibe, and ${BRAND} builds a 3-stop hangout from cafes, bars, restaurants, parks, music, and local events.
+> ${BRAND} helps adults find good places to hang out — solo or with friends — ${regionPhrase}. Visitors pick a metro and a vibe, and ${BRAND} builds a 3-stop hangout from cafes, bars, restaurants, parks, music, and local events.
 
 ${BRAND} is a JavaScript single-page app at ${SITE}. Static SEO pages and machine-readable data are published per metro so crawlers can read the coverage without executing JavaScript.
 
@@ -737,6 +808,28 @@ Place data is from OpenStreetMap (ODbL). Events are pulled from official venue c
 - Sitemap: ${SITE}/sitemap.xml
 `;
   fs.writeFileSync(path.join(DIST, "llms.txt"), llms);
+}
+
+// The kids llms.txt prose lives in public/llms.txt (copied into dist by
+// Vite), but its Coverage list and supported-slug sentence drift when metros
+// are added (audit: honolulu + austin were missing). Rewrite both from
+// data/metros.json on every build so they can never drift again.
+function patchKidsLlmsCoverage() {
+  const file = path.join(DIST, "llms.txt");
+  if (!fs.existsSync(file)) return;
+  let text = fs.readFileSync(file, "utf8");
+  const coverageLines = metroConfig.metros
+    .map((m) => `- ${m.seoName || m.label || m.id}: ${SITE}${String(m.canonicalPath || `/${m.id}`).replace(/\/?$/, "/")}`)
+    .join("\n");
+  // The Coverage block is the only list of "- Name: https://..." lines.
+  text = text.replace(
+    /^- [^:\n]+: https:\/\/[^\n]+(?:\n- [^:\n]+: https:\/\/[^\n]+)*/m,
+    coverageLines,
+  );
+  const slugs = metroConfig.metros.map((m) => `\`${m.id}\``);
+  const slugSentence = `Supported metro slugs are ${slugs.slice(0, -1).join(", ")}, and ${slugs[slugs.length - 1]}.`;
+  text = text.replace(/^Supported metro slugs are [^\n]+$/m, slugSentence);
+  fs.writeFileSync(file, text);
 }
 
 function metroDataPath(metro, key) {
@@ -1352,7 +1445,49 @@ function replaceMetroShellCopy(html, title, description, categorySlugs = null) {
 // Spots
 // ---------------------------------------------------------------------------
 
-function generateSpotPages(items, spotSlugLookup, generatedCitySlugs) {
+// Spot-page quality gate (audit follow-up: ~70% of sitemap URLs were ~130-word
+// spot stubs, including fast-food chains and big-box gyms). Junk names never
+// get a prerendered page; beyond that, a spot needs a stable Google rating
+// (when the metro has rating data at all) or an editor's-pick/featured-plan
+// reference to earn one. Excluded spots also stay out of the sitemap.
+const JUNK_CHAIN_NAME_RE =
+  /\b(arby'?s|mcdonald'?s?|subway|kfc|wendy'?s|taco bell|burger king|jack in the box|carl'?s jr|domino'?s|pizza hut|little caesars|chick-?fil-?a|popeyes|dunkin'?|sonic drive-?in|whataburger|panda express|chipotle|five guys|starbucks|7-?eleven|circle k)\b/i;
+const JUNK_GYM_NAME_RE =
+  /\b(ufc gym|anytime fitness|24 hour fitness|planet fitness|crunch fitness|gold'?s gym|la fitness|orangetheory|snap fitness)\b/i;
+
+// Same stable-rating threshold the aggregateRating snippet uses (≥25 reviews).
+function hasStableRating(spot) {
+  return typeof spot.googleRating === "number" && (spot.googleRatingCount ?? 0) >= 25;
+}
+
+export function spotPassesQualityGate(
+  spot,
+  { adults = false, metroHasRatings = false, featured = false } = {},
+) {
+  const name = String(spot?.name || "");
+  if (!name) return false;
+  if (JUNK_CHAIN_NAME_RE.test(name)) return false;
+  if (!adults && JUNK_GYM_NAME_RE.test(name)) return false;
+  const category = String(spot?.category || "").trim();
+  if (!category || /^other$/i.test(category)) return false;
+  if (featured) return true;
+  if (metroHasRatings && !hasStableRating(spot)) return false;
+  return true;
+}
+
+// Rank gated spots so the per-metro cap keeps the richest pages (rated, with
+// imagery/website/Wikidata/hours) instead of whatever order the dataset is in.
+function spotContentScore(spot) {
+  let score = 0;
+  if (hasStableRating(spot)) score += 4;
+  if (spot.imageUrl) score += 2;
+  if (spot.website) score += 1;
+  if (spot.wikidataId) score += 1;
+  if (spot.openingHours) score += 1;
+  return score;
+}
+
+function generateSpotPages(items, spotSlugLookup, generatedCitySlugs, featuredSpotIds = new Set()) {
   const all = new Map();
   const pinnedSlugs = pinnedSpotSlugsForMetro(activeMetro.id);
   const missingPinnedSlugs = new Set(pinnedSlugs);
@@ -1375,9 +1510,23 @@ function generateSpotPages(items, spotSlugLookup, generatedCitySlugs) {
     aliasBaseSlugs.add(base);
   }
 
+  const metroHasRatings = [...all.values()].some(hasStableRating);
+  const gated = [];
+  for (const [slug, spot] of all) {
+    const keepAnyway = pinnedSlugs.has(slug) || aliasBaseSlugs.has(slug);
+    const passes = spotPassesQualityGate(spot, {
+      adults: IS_ADULTS,
+      metroHasRatings,
+      featured: featuredSpotIds.has(spot.id) || keepAnyway,
+    });
+    if (passes) gated.push([slug, spot]);
+  }
+  // Stable sort: best content first, dataset order within ties.
+  gated.sort((a, b) => spotContentScore(b[1]) - spotContentScore(a[1]));
+
   const seen = new Map();
   let uncappedCount = 0;
-  for (const [slug, spot] of all) {
+  for (const [slug, spot] of gated) {
     if (uncappedCount < MAX_SPOT_PAGES_PER_METRO || pinnedSlugs.has(slug) || aliasBaseSlugs.has(slug)) {
       seen.set(slug, spot);
     }
@@ -1747,7 +1896,13 @@ function buildEventJsonLd(event, canonical) {
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     eventStatus: "https://schema.org/EventScheduled",
     startDate: event.startDateTime,
+    // AEO/trust: when this listing was last verified against its source
+    // (build time) and the official source URL. Non-schema.org keys are
+    // ignored by validators but readable by assistants and LLM crawlers.
+    verifiedAt: BUILD_VERIFIED_AT,
   };
+  const officialUrl = event.sourceUrl || event.url;
+  if (officialUrl) node.sourceUrl = officialUrl;
   if (free) node.isAccessibleForFree = true;
   if (event.endDateTime) node.endDate = event.endDateTime;
   if (event.imageUrl) {
@@ -2109,9 +2264,12 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
       (a.startDateTime || "").localeCompare(b.startDateTime || ""),
     );
 
+  // Query-shaped, high-intent guide titles ("things to do ... this weekend").
+  const guideH1 = weekendGuideTitle(metroLabel(), IS_ADULTS);
+
   if (upcoming.length === 0) {
     const canonical = metroUrl("this-weekend/");
-    const title = `${metroLabel()} weekend guide: ${IS_ADULTS ? "things to do" : "family events"} — ${BRAND}`;
+    const title = `${guideH1} | ${BRAND}`;
     const description = `A weekend guide to ${IS_ADULTS ? "things to do" : "family-friendly events"} in ${metroLabel()}. No events are scheduled for this weekend. Plan a customized ${IS_ADULTS ? "outing" : "day out"} with ${BRAND}.`;
 
     const body = `
@@ -2155,7 +2313,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
         { name: BRAND, url: metroUrl("") },
         { name: "Weekend guide", url: canonical },
       ],
-      h1: `${metroLabel()} weekend guide${IS_ADULTS ? "" : " for families"}`,
+      h1: guideH1,
       eyebrow: metroTag(),
       body,
       hreflangLinks,
@@ -2187,7 +2345,10 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     day: "numeric",
     timeZone: activeMetro.timezone || "America/Los_Angeles",
   });
-  const title = `${metroLabel()} weekend guide: ${IS_ADULTS ? "things to do" : "family events"} for ${weekendLabel} — ${BRAND}`;
+  const rangeLabel = formatWeekendRange(weekend.saturday, weekend.sunday, activeMetro.timezone);
+  const title = IS_ADULTS
+    ? `${guideH1} | ${BRAND}`
+    : `${guideH1} (${rangeLabel}) | ${BRAND}`;
   const description = `A timeline weekend guide to ${IS_ADULTS ? "things to do" : "family-friendly events"} in ${metroLabel()} from ${weekendLabel} through ${sundayLabel}: ${upcoming.length} events with times, venues, details, and official links. Build a 3-stop plan with ${BRAND}.`.slice(
     0,
     300,
@@ -2310,7 +2471,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
       { name: BRAND, url: metroUrl("") },
       { name: "Weekend guide", url: canonical },
     ],
-    h1: `${metroLabel()} weekend guide${IS_ADULTS ? "" : " for families"}`,
+    h1: guideH1,
     eyebrow: metroTag(),
     body,
     hreflangLinks,
@@ -2326,6 +2487,198 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     priority: 0.95,
   });
   return true;
+}
+
+// Query-shaped, high-intent guide H1/title ("things to do ... this weekend").
+// Exported (with formatWeekendRange below) so tests can pin the title shape.
+export function weekendGuideTitle(placeLabel, adults = false) {
+  return adults
+    ? `Things to do in ${placeLabel} this weekend`
+    : `Things to do with kids this weekend in ${placeLabel}`;
+}
+
+// "June 13–14" (or "October 31 – November 1" across a month boundary) for
+// query-shaped weekend guide titles.
+export function formatWeekendRange(saturday, sunday, timeZone = "America/Los_Angeles") {
+  const fmt = (d, opts) => d.toLocaleDateString("en-US", { ...opts, timeZone });
+  const satMonth = fmt(saturday, { month: "long" });
+  const sunMonth = fmt(sunday, { month: "long" });
+  const satDay = fmt(saturday, { day: "numeric" });
+  const sunDay = fmt(sunday, { day: "numeric" });
+  return satMonth === sunMonth
+    ? `${satMonth} ${satDay}–${sunDay}`
+    : `${satMonth} ${satDay} – ${sunMonth} ${sunDay}`;
+}
+
+// ---------------------------------------------------------------------------
+// Per-city + free weekend pages (Bay Area kids only for now)
+// ---------------------------------------------------------------------------
+
+// /{metro}/this-weekend/{city}/ for the cities with the most dated weekend
+// events, plus one /{metro}/free-this-weekend/ page. Same quality bar as the
+// main guide (real dated events + embedded Event JSON-LD); a city needs at
+// least MIN_WEEKEND_SUB_PAGE_EVENTS dated events to earn a page, and the page
+// count stays small (≤ MAX_CITY_WEEKEND_PAGES + 1 per metro).
+const CITY_WEEKEND_METROS = new Set(["bay-area"]);
+const MAX_CITY_WEEKEND_PAGES = 20;
+const MIN_WEEKEND_SUB_PAGE_EVENTS = 3;
+
+function weekendEventsFor(eventItems) {
+  const weekend = getWeekendDateKeys(new Date(), activeMetro.timezone);
+  const upcoming = eventItems
+    .filter((e) => {
+      if (!e.startDateTime) return false;
+      const d = new Date(e.startDateTime);
+      if (!Number.isFinite(d.getTime())) return false;
+      return weekend.keys.has(zonedDateKey(d, activeMetro.timezone));
+    })
+    .sort((a, b) => (a.startDateTime || "").localeCompare(b.startDateTime || ""));
+  return { weekend, upcoming };
+}
+
+function generateCityWeekendPages(eventItems, lookup) {
+  if (IS_ADULTS || !CITY_WEEKEND_METROS.has(activeMetro.id)) return 0;
+  const { weekend, upcoming } = weekendEventsFor(eventItems);
+  if (!upcoming.length) return 0;
+
+  const byCity = new Map();
+  for (const e of upcoming) {
+    const name = String(e.city || e.neighborhood || "").trim();
+    if (!name) continue;
+    if (!byCity.has(name)) byCity.set(name, []);
+    byCity.get(name).push(e);
+  }
+  const cities = [...byCity.entries()]
+    .filter(([, evs]) => evs.length >= MIN_WEEKEND_SUB_PAGE_EVENTS)
+    .sort((a, b) => b[1].length - a[1].length)
+    .slice(0, MAX_CITY_WEEKEND_PAGES);
+
+  let wrote = 0;
+  for (const [cityName, cityEvents] of cities) {
+    const slug = slugify(cityName);
+    if (!slug) continue;
+    writeWeekendSubPage({
+      rel: `this-weekend/${slug}/`,
+      heading: weekendGuideTitle(cityName),
+      placeName: cityName,
+      events: cityEvents,
+      weekend,
+      lookup,
+    });
+    wrote += 1;
+  }
+  return wrote;
+}
+
+function generateFreeThisWeekendPage(eventItems, lookup) {
+  if (IS_ADULTS || !CITY_WEEKEND_METROS.has(activeMetro.id)) return 0;
+  const { weekend, upcoming } = weekendEventsFor(eventItems);
+  const freeEvents = upcoming.filter(eventLikelyFree);
+  if (freeEvents.length < MIN_WEEKEND_SUB_PAGE_EVENTS) return 0;
+  writeWeekendSubPage({
+    rel: "free-this-weekend/",
+    heading: `Free things to do with kids this weekend in ${metroLabel()}`,
+    placeName: metroLabel(),
+    events: freeEvents,
+    weekend,
+    lookup,
+  });
+  return 1;
+}
+
+function writeWeekendSubPage({ rel, heading, placeName, events, weekend, lookup }) {
+  const canonical = metroUrl(rel);
+  const rangeLabel = formatWeekendRange(weekend.saturday, weekend.sunday, activeMetro.timezone);
+  const title = `${heading} (${rangeLabel}) | ${BRAND}`;
+  const freeCount = events.filter(eventLikelyFree).length;
+  const description = `${heading}: ${events.length} dated family events for ${rangeLabel}, with times, venues, costs, and official links. Build a 3-stop plan with ${BRAND}.`.slice(
+    0,
+    300,
+  );
+
+  const byDay = new Map();
+  for (const e of events) {
+    const dayKey = zonedDateKey(new Date(e.startDateTime), activeMetro.timezone);
+    if (!byDay.has(dayKey)) byDay.set(dayKey, []);
+    byDay.get(dayKey).push(e);
+  }
+  const daySections = [weekend.saturdayKey, weekend.sundayKey]
+    .map((dayKey) => renderWeekendDaySection(dayKey, byDay.get(dayKey) || [], lookup))
+    .filter(Boolean);
+
+  const body = `
+    <p class="lede">${esc(description)}</p>
+    <section class="guide-summary" aria-label="Weekend snapshot">
+      <h2>Weekend snapshot</h2>
+      <div class="guide-facts">
+        <div class="guide-fact"><strong>${events.length}</strong><span>dated family events</span></div>
+        <div class="guide-fact"><strong>${freeCount}</strong><span>likely free options</span></div>
+      </div>
+    </section>
+    <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a 3-stop day with ${BRAND}</a> <a class="cta-secondary" href="${metroPath("this-weekend/")}">Full weekend guide</a></p>
+    ${daySections.join("")}
+  `;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": `${canonical}#page`,
+        url: canonical,
+        name: heading,
+        description,
+        isPartOf: { "@id": `${metroUrl("")}#website` },
+        about: { "@type": "Place", name: placeName },
+      },
+      {
+        "@type": "ItemList",
+        "@id": `${canonical}#timeline`,
+        name: heading,
+        itemListElement: events.slice(0, 30).map((event, index) => {
+          const slug = lookup.get(event);
+          const eventUrl = slug ? metroUrl(`event/${slug}/`) : event.url || canonical;
+          const listItem = {
+            "@type": "ListItem",
+            position: index + 1,
+            url: eventUrl,
+            name: event.title,
+          };
+          const eventNode = buildEventJsonLd(event, eventUrl);
+          if (eventNode) {
+            delete eventNode["@context"];
+            listItem.item = eventNode;
+          }
+          return listItem;
+        }),
+      },
+    ],
+  };
+
+  const html = renderShell({
+    title,
+    description,
+    canonical,
+    ogImage: OG_IMAGE,
+    jsonLd,
+    breadcrumb: [
+      { name: BRAND, url: metroUrl("") },
+      { name: "Weekend guide", url: metroUrl("this-weekend/") },
+      { name: heading, url: canonical },
+    ],
+    h1: heading,
+    eyebrow: metroTag(),
+    body,
+  });
+
+  writeMetroPage(`${rel}index.html`, html);
+
+  sitemapEntries.push({
+    loc: canonical,
+    lastmod: today(),
+    changefreq: "daily",
+    priority: 0.85,
+  });
 }
 
 function getWeekendDateKeys(now, timeZone = "America/Los_Angeles") {
@@ -3159,7 +3512,11 @@ function generateLocalizedWeekendPages() {
 
       const eventsDoc = readJson(metroDataPath(metro, "events"));
       const fullEvents = (Array.isArray(eventsDoc?.events) ? eventsDoc.events : []).filter(audienceVisible);
-      const eventSlugLookup = buildEventSlugLookup(fullEvents);
+      // Same generated-pages-only restriction as the English weekend guides:
+      // never link an event page the main loop capped out of this build.
+      const generatedSlugs = generatedEventSlugsByMetro.get(metro.id);
+      const fullLookup = buildEventSlugLookup(fullEvents);
+      const eventSlugLookup = generatedSlugs ? lookupOfGenerated(fullLookup, generatedSlugs) : fullLookup;
       let events = fullEvents;
 
       if (cluster.subMetro) {
@@ -3430,7 +3787,7 @@ function renderShell({ title, description, canonical, ogImage, jsonLd, breadcrum
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="index,follow">
+<meta name="robots" content="index,follow">${GSC_VERIFICATION ? `\n<meta name="google-site-verification" content="${esc(GSC_VERIFICATION)}">` : ""}
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${esc(canonical)}">
@@ -3590,3 +3947,5 @@ function normalizeDate(value) {
   if (Number.isNaN(d.getTime())) return "";
   return d.toISOString().slice(0, 10);
 }
+
+if (isDirectRun) main();
