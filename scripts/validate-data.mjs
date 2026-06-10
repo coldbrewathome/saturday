@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs/promises";
 import { validateDataset } from "./spotPipeline.mjs";
+import { brandSafetyViolation } from "./lib/brandSafety.mjs";
 import {
   legacyMetroDataFile,
   loadMetroConfig,
@@ -24,6 +25,15 @@ async function validateMetro(metro) {
     boxes: metro.spotCoverage?.boxes,
     coverageName: metro.spotCoverage?.name || metro.label,
   });
+
+  // Kids spots must never contain brand-unsafe venues (weapons, cannabis,
+  // adult entertainment). Hard-fail so a bad ingest can't ship.
+  for (const spot of dataset.spots || []) {
+    const violation = brandSafetyViolation(spot);
+    if (violation) {
+      errors.push(`spot "${spot.name}" (${spot.id}) is blocklisted for kids: ${violation}.`);
+    }
+  }
 
   if (errors.length > 0) {
     console.error(`[${metro.id}] ${errors.join(`\n[${metro.id}] `)}`);

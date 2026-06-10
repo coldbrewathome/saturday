@@ -8,10 +8,31 @@
 
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import path from "node:path";
+import { isVirtualEvent } from "./lib/adultAudience.mjs";
 
 const ROOT = process.cwd();
 const DATA = path.join(ROOT, "public", "data");
 const TREND_DAYS = 90;
+const NOW = Date.now();
+
+// Brand health is about what a visitor can actually attend: future-dated
+// (not yet ended), in-person events only. The raw report eventCount includes
+// past and virtual events, which is how Washington DC looked "ok" for Mosey
+// while serving ~4 real adult events.
+function countUpcomingInPerson(filePath) {
+  if (!existsSync(filePath)) return 0;
+  let doc;
+  try {
+    doc = JSON.parse(readFileSync(filePath, "utf8"));
+  } catch {
+    return 0;
+  }
+  const events = Array.isArray(doc.events) ? doc.events : [];
+  return events.filter((event) => {
+    const end = Date.parse(event.endDateTime || event.startDateTime || "");
+    return Number.isFinite(end) && end >= NOW && !isVirtualEvent(event);
+  }).length;
+}
 
 const metros = JSON.parse(
   readFileSync(path.join(ROOT, "data", "metros.json"), "utf8"),
@@ -38,6 +59,18 @@ for (const metro of metros) {
     (s) => (s.liveEvents || 0) === 0 && s.name !== "Manual entries",
   ).length;
   const minEvents = metro.minEvents ?? 15;
+  // Per-brand counts from the actual feed files (additive fields — the
+  // existing eventCount/status columns keep their meaning for the dashboard).
+  const metroDir = path.join(DATA, metro.dataDir);
+  const kidsEvents = countUpcomingInPerson(path.join(metroDir, "events.json"));
+  const adultsEvents = countUpcomingInPerson(path.join(metroDir, "events-adults.json"));
+  // Top-source concentration: share of live events carried by the single
+  // biggest source (100% = one outage empties the metro).
+  const totalLive = sources.reduce((sum, s) => sum + (s.liveEvents || 0), 0);
+  const topSource = sources.reduce(
+    (top, s) => ((s.liveEvents || 0) > (top?.liveEvents || 0) ? s : top),
+    null,
+  );
   rows.push({
     id: metro.id,
     label: metro.label,
@@ -52,6 +85,12 @@ for (const metro of metros) {
     // Concentration risk: producing real volume but on ≤2 healthy sources.
     concentrated: healthySources <= 2 && (r.eventCount ?? 0) >= minEvents,
     status: classify(r.eventCount ?? 0, minEvents),
+    kidsEvents,
+    adultsEvents,
+    topSourceId: topSource?.id ?? null,
+    topSourcePct: totalLive > 0 ? Math.round(((topSource?.liveEvents || 0) / totalLive) * 100) : null,
+    kidsStatus: classify(kidsEvents, minEvents),
+    adultsStatus: classify(adultsEvents, metro.minAdultEvents ?? minEvents),
   });
 }
 
@@ -100,5 +139,11 @@ console.log(
 for (const r of [...below, ...fragile]) {
   console.log(
     `  ${r.status.toUpperCase().padEnd(7)} ${r.label}: ${r.eventCount}/${r.minEvents} events, ${r.healthySources} healthy / ${r.brokenSources} broken sources`,
+  );
+}
+const adultsBelow = rows.filter((r) => r.adultsStatus === "below");
+if (adultsBelow.length > 0) {
+  console.log(
+    `Mosey (adults) below threshold: ${adultsBelow.map((r) => `${r.label} (${r.adultsEvents})`).join(", ")}`,
   );
 }

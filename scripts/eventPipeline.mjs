@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { classifyEventThemes } from "./eventThemes.mjs";
+import { qualifiesForAdultFeed } from "./lib/adultAudience.mjs";
 
 export const DEFAULT_TIMEZONE = "America/Los_Angeles";
 export const DEFAULT_TIMEZONE_OFFSET = "-07:00";
@@ -361,15 +362,44 @@ function patternMatches(text, pattern) {
   return new RegExp(pattern, "i").test(text);
 }
 
+// schema.org Event subtypes worth ingesting. Real venue calendars rarely use
+// the bare "Event" type — The Fillmore's /shows page is all MusicEvent blocks
+// and Live Nation club pages (Punch Line, Cobb's) subtype everything.
+const JSONLD_EVENT_TYPES = new Set([
+  "event",
+  "musicevent",
+  "comedyevent",
+  "theaterevent",
+  "theatreevent",
+  "danceevent",
+  "festival",
+  "socialevent",
+  "foodevent",
+  "visualartsevent",
+  "screeningevent",
+  "exhibitionevent",
+  "educationevent",
+  "childrensevent",
+]);
+
+// Subtypes that pin a pipeline category when the source registry doesn't.
+const JSONLD_TYPE_CATEGORY = {
+  musicevent: "Music",
+  comedyevent: "Comedy",
+  festival: "Festival",
+};
+
+function jsonLdTypes(value) {
+  return maybeArray(value?.["@type"]).map((item) => String(item).toLowerCase());
+}
+
 function walkJsonLd(value, out = []) {
   if (!value || typeof value !== "object") return out;
   if (Array.isArray(value)) {
     for (const item of value) walkJsonLd(item, out);
     return out;
   }
-  const type = value["@type"];
-  const types = maybeArray(type).map((item) => String(item).toLowerCase());
-  if (types.includes("event")) {
+  if (jsonLdTypes(value).some((type) => JSONLD_EVENT_TYPES.has(type))) {
     out.push(value);
   }
   for (const key of ["@graph", "itemListElement", "events", "mainEntity"]) {
@@ -388,6 +418,8 @@ export function extractJsonLdEvents(html, source = {}) {
       const parsed = JSON.parse(raw);
       for (const item of walkJsonLd(parsed)) {
         const signalText = `${item.name || ""} ${item.description || ""} ${sourceAudienceText(source)}`;
+        const types = jsonLdTypes(item);
+        const subtypeCategory = types.map((type) => JSONLD_TYPE_CATEGORY[type]).find(Boolean);
         events.push(normalizeRawEvent({
           title: item.name,
           description: item.description,
@@ -395,7 +427,11 @@ export function extractJsonLdEvents(html, source = {}) {
           city: item.location?.address?.addressLocality || source.city,
           lat: item.location?.geo?.latitude,
           lon: item.location?.geo?.longitude,
-          category: source.category || inferCategory(signalText),
+          category: source.category || subtypeCategory || inferCategory(signalText),
+          // ChildrensEvent is an explicit audience signal. Other subtypes
+          // still flow through resolveAudiences, so a MusicEvent at a bar is
+          // gated by the adult-feed rules like any other event.
+          audiences: types.includes("childrensevent") ? ["kids"] : undefined,
           startDateTime: item.startDate,
           endDateTime: item.endDate,
           ageBands: inferAgeBands(signalText),
@@ -2052,7 +2088,7 @@ export function normalizeDateTime(value, timezoneOffset = DEFAULT_TIMEZONE_OFFSE
 export function normalizeRawEvent(raw, source = {}) {
   const timezoneOffset = raw.timezoneOffset || source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
   const title = cleanEventTitle(raw.title);
-  const description = stripUnsafeText(raw.description, 360);
+  const description = normalizeScrapedDescription(raw.description, title);
   const combined = `${title} ${description}`;
   if (!title) return null;
   // Adult-only signal in the text is only a rejection if the source/event
@@ -2116,6 +2152,10 @@ const VALID_AUDIENCES = new Set(["kids", "adults", "all"]);
 //   2. source.audiences array (whole feed serves one audience).
 //   3. Heuristics on the title+description text (e.g., "21+", "kids only").
 //   4. Default: ["all"] — usable by both apps.
+// An "all" result is then gated: it only stays "all" (and thus reaches the
+// adults feed) when the event would qualify for the adult feed — otherwise
+// it is downgraded to ["kids"] so children's-museum/library/virtual content
+// stops polluting events-adults.json.
 //
 // Exporting so the spot ingest script can reuse the same rules.
 export function resolveAudiences(raw = {}, source = {}, combinedText = "") {
@@ -2126,10 +2166,22 @@ export function resolveAudiences(raw = {}, source = {}, combinedText = "") {
       .filter((v) => VALID_AUDIENCES.has(v));
     return filtered.length > 0 ? Array.from(new Set(filtered)) : null;
   }
+  function gateAll(audiences) {
+    if (!audiences.includes("all") || audiences.includes("adults")) return audiences;
+    const probe = {
+      title: stripUnsafeText(raw.title, 200),
+      description: stripUnsafeText(raw.description, 500),
+      venue: stripUnsafeText(raw.venue || source.venue || source.name, 120),
+      sourceName: stripUnsafeText(raw.sourceName || source.name, 120),
+      category: raw.category || source.category || "",
+      audiences,
+    };
+    return qualifiesForAdultFeed(probe) ? audiences : ["kids"];
+  }
   const fromRaw = clean(raw.audiences);
-  if (fromRaw) return fromRaw;
+  if (fromRaw) return gateAll(fromRaw);
   const fromSource = clean(source.audiences);
-  if (fromSource) return fromSource;
+  if (fromSource) return gateAll(fromSource);
   const text = String(combinedText || "");
   if (/\b21\s*\+|\bover 21\b|\bages? 21\b|\badults? only\b|\bbrewery\b|\bwhiskey\b|\bcocktail\b/i.test(text)) {
     return ["adults"];
@@ -2137,11 +2189,73 @@ export function resolveAudiences(raw = {}, source = {}, combinedText = "") {
   if (/\bkids? only\b|\bchildren only\b|\bunder 18\b|\bages? 0\s*[-–]\s*\d+\b|\bstorytime\b|\btoddler\b|\bpreschool\b/i.test(text)) {
     return ["kids"];
   }
-  return ["all"];
+  return gateAll(["all"]);
+}
+
+// Scrape-copy sanitation. Calendar scrapes leak presentation chrome into
+// copy: leading time-ranges duplicated into titles ("10:00 am - 4:30 pm
+// BubbleFest June 13 @ 10:00 am - 4:30 pm BubbleFest $24 ..."), "Image " /
+// "Registration Required" prefixes, the title duplicated inside the
+// description, and truncated leading garbage ("oin us for ...").
+const TITLE_CLOCK = "\\d{1,2}(?::\\d{2})?\\s*(?:am|pm)";
+const LEADING_TIME_RANGE_RE = new RegExp(`^\\s*${TITLE_CLOCK}\\s*[-–]\\s*${TITLE_CLOCK}\\s+`, "i");
+const ONLY_TIMES_RE = new RegExp(
+  `^\\s*(?:${TITLE_CLOCK}|\\d{1,2}:\\d{2})(?:\\s*[-–]?\\s*(?:${TITLE_CLOCK}|\\d{1,2}:\\d{2}))*\\s*$`,
+  "i",
+);
+const EMBEDDED_DATE_TIME_RE = new RegExp(
+  `\\s+(?:${MONTH_PATTERN})\\s+\\d{1,2}(?:,\\s*20\\d{2})?\\s*@\\s*${TITLE_CLOCK}(?:\\s*[-–]\\s*${TITLE_CLOCK})?\\s*`,
+  "i",
+);
+const LEADING_DATE_PRELUDE_RE = new RegExp(
+  `^(?:(?:${MONTH_PATTERN})\\s+\\d{1,2}(?:,\\s*20\\d{2})?\\s*@\\s*)?${TITLE_CLOCK}(?:\\s*[-–]\\s*${TITLE_CLOCK})?\\s*`,
+  "i",
+);
+
+export function normalizeScrapedTitle(value) {
+  let title = stripUnsafeText(value, 220)
+    .replace(/^\d{4}-\d{2}-\d{2}\s+/, "")
+    .replace(/^image\b[:\s]+/i, "")
+    .replace(/^registration required\b[:\s]*/i, "");
+  if (ONLY_TIMES_RE.test(title)) return "";
+  title = title.replace(LEADING_TIME_RANGE_RE, "");
+  // "BubbleFest June 13 @ 10:00 am - 4:30 pm BubbleFest $24 ..." — drop the
+  // embedded date chunk; when the tail repeats the head (often truncated),
+  // keep the head only.
+  const embedded = title.match(EMBEDDED_DATE_TIME_RE);
+  if (embedded && embedded.index > 0) {
+    const head = title.slice(0, embedded.index).trim();
+    const tail = title.slice(embedded.index + embedded[0].length).trim();
+    if (!tail || head.toLowerCase().startsWith(tail.toLowerCase()) || tail.toLowerCase().startsWith(head.toLowerCase())) {
+      title = head;
+    } else {
+      title = `${head} ${tail}`;
+    }
+  }
+  return stripUnsafeText(title, 140);
+}
+
+export function normalizeScrapedDescription(value, title = "") {
+  let description = stripUnsafeText(value, 420)
+    .replace(/^image\b[:\s]+/i, "")
+    .replace(/^registration required\b[:\s]*/i, "");
+  for (let pass = 0; pass < 3; pass += 1) {
+    const next = description.replace(LEADING_DATE_PRELUDE_RE, "").trim();
+    if (next === description) break;
+    description = next;
+  }
+  const cleanTitle = stripUnsafeText(title, 140);
+  if (cleanTitle && description.toLowerCase().startsWith(cleanTitle.toLowerCase())) {
+    description = description.slice(cleanTitle.length).replace(/^[\s:–—•|-]+/, "");
+  }
+  description = description
+    .replace(/^oin us\b/, "Join us")
+    .replace(/^elcome\b/i, "Welcome");
+  return stripUnsafeText(description, 360);
 }
 
 function cleanEventTitle(value) {
-  const title = stripUnsafeText(value, 140).replace(/^\d{4}-\d{2}-\d{2}\s+/, "");
+  const title = normalizeScrapedTitle(value);
   const featured = title.match(/^(.+?)\s+Featured Event\.\s+(.+)$/i);
   if (featured && featured[2].toLowerCase().startsWith(featured[1].toLowerCase())) {
     return stripUnsafeText(featured[1], 140);

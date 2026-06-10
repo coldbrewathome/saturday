@@ -11,6 +11,12 @@ import {
   metroDataFile,
   selectedMetroFromArgs,
 } from "./metroConfig.mjs";
+import {
+  MAX_PLAN_RADIUS_MILES,
+  coherentPicks,
+  eventStartsAtOrAfter,
+  milesBetween,
+} from "./lib/planQuality.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -80,7 +86,7 @@ function groupUpcomingEventsByCity(events) {
     if (!Number.isFinite(event.lat) || !Number.isFinite(event.lon)) continue;
     if (!event.startDateTime) continue;
     const t = new Date(event.startDateTime).getTime();
-    if (!Number.isFinite(t) || t < now - 6 * 60 * 60 * 1000 || t > futureLimit) continue;
+    if (!eventStartsAtOrAfter(event, now) || t > futureLimit) continue;
     if (!map.has(city)) map.set(city, []);
     map.get(city).push(event);
   }
@@ -105,19 +111,35 @@ function pickTopSpots(spots, count) {
     preferred.length >= count
       ? preferred
       : [...preferred, ...spots.filter((spot) => !preferred.includes(spot))];
-  return pool
-    .sort((a, b) => (b.friendScore || 0) - (a.friendScore || 0))
-    .slice(0, count);
+  // Geo-coherence over raw score: a plan whose stops chain Dixon -> Aptos ->
+  // Vacaville (~150mi) is worse than a shorter plan, so keep only mutually
+  // close picks and let callers drop plans that end up too small.
+  return coherentPicks(
+    pool.sort((a, b) => (b.friendScore || 0) - (a.friendScore || 0)),
+    count,
+  );
 }
 
 function pickNextEvents(list, count) {
-  return [...list]
-    .sort(
+  return coherentPicks(
+    [...list].sort(
       (a, b) =>
         new Date(a.startDateTime).getTime() -
         new Date(b.startDateTime).getTime(),
-    )
-    .slice(0, count);
+    ),
+    count,
+  );
+}
+
+// Anchor-spot candidates that sit within the plan radius of every event pick,
+// so a plan never pads events with a far-away stop.
+function spotsNearItems(spots, items) {
+  return spots.filter(
+    (spot) =>
+      Number.isFinite(spot.lat) &&
+      Number.isFinite(spot.lon) &&
+      items.every((item) => milesBetween(spot, item) <= MAX_PLAN_RADIUS_MILES),
+  );
 }
 
 function centroid(items) {
@@ -184,9 +206,12 @@ function holidayDedupeKey(event) {
 
 function buildHolidayWeekendPlans(spots, events, audienceTag) {
   const generated = [];
+  const now = Date.now();
   const spotsByCity = groupSpotsByCity(spots);
   for (const holiday of HOLIDAY_WEEKENDS) {
-    const matched = events.filter((e) => eventMatchesHoliday(e, holiday));
+    const matched = events.filter(
+      (e) => eventStartsAtOrAfter(e, now) && eventMatchesHoliday(e, holiday),
+    );
     if (matched.length === 0) continue;
     const byCity = new Map();
     for (const e of matched) {
@@ -201,18 +226,22 @@ function buildHolidayWeekendPlans(spots, events, audienceTag) {
       );
       const seenIds = new Set();
       const seenTitleKeys = new Set();
-      const eventPicks = [];
+      const deduped = [];
       for (const e of cityEvents) {
         if (seenIds.has(e.id)) continue;
         const titleKey = holidayDedupeKey(e);
         if (seenTitleKeys.has(titleKey)) continue;
         seenIds.add(e.id);
         seenTitleKeys.add(titleKey);
-        eventPicks.push(e);
-        if (eventPicks.length >= 3) break;
+        deduped.push(e);
       }
+      const eventPicks = coherentPicks(deduped, 3);
+      if (eventPicks.length === 0) continue;
       const citySpots = spotsByCity.get(city) || [];
-      const cityAnchorSpots = citySpots.filter(isPlanAnchorSpot);
+      const cityAnchorSpots = spotsNearItems(
+        citySpots.filter(isPlanAnchorSpot),
+        eventPicks,
+      );
       const spotPick =
         cityAnchorSpots.length > 0 ? pickTopSpots(cityAnchorSpots, 1) : [];
       const items = [...spotPick, ...eventPicks];
@@ -259,42 +288,48 @@ function buildKidsPlans(spots, events) {
 
     if (cityAnchorSpots.length >= 2) {
       const picks = pickTopSpots(cityAnchorSpots, Math.min(3, cityAnchorSpots.length));
-      const center = centroid(picks);
-      const summary = `${picks.length} stops in ${city} - ${picks.map((p) => p.name.split(",")[0]).join(", ")}.`;
-      generated.push({
-        id: `gen-day-${slug}`,
-        name: `Day out in ${city}`,
-        summary: summary.slice(0, 220),
-        accent: inferAccent(picks),
-        stopIds: picks.map((p) => p.id),
-        eventIds: [],
-        audiences: ["all"],
-        city,
-        lat: center?.lat ?? null,
-        lon: center?.lon ?? null,
-        generated: true,
-      });
+      // Drop the plan when geo-coherence leaves fewer than 2 stops — better
+      // no plan than one padded with far-flung stops.
+      if (picks.length >= 2) {
+        const center = centroid(picks);
+        const summary = `${picks.length} stops in ${city} - ${picks.map((p) => p.name.split(",")[0]).join(", ")}.`;
+        generated.push({
+          id: `gen-day-${slug}`,
+          name: `Day out in ${city}`,
+          summary: summary.slice(0, 220),
+          accent: inferAccent(picks),
+          stopIds: picks.map((p) => p.id),
+          eventIds: [],
+          audiences: ["all"],
+          city,
+          lat: center?.lat ?? null,
+          lon: center?.lon ?? null,
+          generated: true,
+        });
+      }
     }
 
     if (cityEvents.length >= 2 && cityAnchorSpots.length >= 1) {
       const eventPicks = pickNextEvents(cityEvents, 2);
-      const spotPick = pickTopSpots(cityAnchorSpots, 1);
-      const items = [...spotPick, ...eventPicks];
-      const center = centroid(items);
-      const summary = `Two upcoming events in ${city} plus a nearby stop - ${eventPicks.map((e) => e.title.slice(0, 60)).join(" | ")}.`;
-      generated.push({
-        id: `gen-events-${slug}`,
-        name: `${city} events`,
-        summary: summary.slice(0, 240),
-        accent: "festival",
-        stopIds: spotPick.map((s) => s.id),
-        eventIds: eventPicks.map((e) => e.id),
-        audiences: ["all"],
-        city,
-        lat: center?.lat ?? null,
-        lon: center?.lon ?? null,
-        generated: true,
-      });
+      const spotPick = pickTopSpots(spotsNearItems(cityAnchorSpots, eventPicks), 1);
+      if (eventPicks.length >= 2 && spotPick.length === 1) {
+        const items = [...spotPick, ...eventPicks];
+        const center = centroid(items);
+        const summary = `Two upcoming events in ${city} plus a nearby stop - ${eventPicks.map((e) => e.title.slice(0, 60)).join(" | ")}.`;
+        generated.push({
+          id: `gen-events-${slug}`,
+          name: `${city} events`,
+          summary: summary.slice(0, 240),
+          accent: "festival",
+          stopIds: spotPick.map((s) => s.id),
+          eventIds: eventPicks.map((e) => e.id),
+          audiences: ["all"],
+          city,
+          lat: center?.lat ?? null,
+          lon: center?.lon ?? null,
+          generated: true,
+        });
+      }
     }
   }
   return { generated, cityCount: cities.length };
@@ -352,29 +387,31 @@ function buildAdultsPlans(spots, events) {
 
     if (goingOutSpots.length >= 2) {
       const picks = pickTopSpots(goingOutSpots, Math.min(3, goingOutSpots.length));
-      const center = centroid(picks);
-      const name = adultsPlanName(picks);
-      const summary = `${picks.length} stops in ${city} - ${picks.map((p) => p.name.split(",")[0]).join(", ")}.`;
-      generated.push({
-        id: `gen-night-${slug}`,
-        name: `${name} in ${city}`,
-        summary: summary.slice(0, 220),
-        accent: adultsPlanAccent(picks),
-        stopIds: picks.map((p) => p.id),
-        eventIds: [],
-        audiences: ["adults"],
-        city,
-        lat: center?.lat ?? null,
-        lon: center?.lon ?? null,
-        generated: true,
-      });
+      if (picks.length >= 2) {
+        const center = centroid(picks);
+        const name = adultsPlanName(picks);
+        const summary = `${picks.length} stops in ${city} - ${picks.map((p) => p.name.split(",")[0]).join(", ")}.`;
+        generated.push({
+          id: `gen-night-${slug}`,
+          name: `${name} in ${city}`,
+          summary: summary.slice(0, 220),
+          accent: adultsPlanAccent(picks),
+          stopIds: picks.map((p) => p.id),
+          eventIds: [],
+          audiences: ["adults"],
+          city,
+          lat: center?.lat ?? null,
+          lon: center?.lon ?? null,
+          generated: true,
+        });
+      }
     }
 
     if (nonNightlife.length >= 2) {
       const picks = pickTopSpots(nonNightlife, Math.min(3, nonNightlife.length));
       const center = centroid(picks);
       const name = adultsPlanName(picks);
-      if (name !== (generated[generated.length - 1]?.name?.replace(` in ${city}`, "") || "")) {
+      if (picks.length >= 2 && name !== (generated[generated.length - 1]?.name?.replace(` in ${city}`, "") || "")) {
         const summary = `${picks.length} stops in ${city} - ${picks.map((p) => p.name.split(",")[0]).join(", ")}.`;
         generated.push({
           id: `gen-day-${slug}`,
@@ -394,23 +431,26 @@ function buildAdultsPlans(spots, events) {
 
     if (cityEvents.length >= 2 && citySpots.length >= 1) {
       const eventPicks = pickNextEvents(cityEvents, 2);
-      const spotPick = pickTopSpots(nightlifeSpots.length > 0 ? nightlifeSpots : goingOutSpots.length > 0 ? goingOutSpots : citySpots, 1);
-      const items = [...spotPick, ...eventPicks];
-      const center = centroid(items);
-      const summary = `Upcoming in ${city} - ${eventPicks.map((e) => e.title.slice(0, 60)).join(" | ")}.`;
-      generated.push({
-        id: `gen-events-${slug}`,
-        name: `${city} tonight`,
-        summary: summary.slice(0, 240),
-        accent: "festival",
-        stopIds: spotPick.map((s) => s.id),
-        eventIds: eventPicks.map((e) => e.id),
-        audiences: ["adults"],
-        city,
-        lat: center?.lat ?? null,
-        lon: center?.lon ?? null,
-        generated: true,
-      });
+      const spotPool = nightlifeSpots.length > 0 ? nightlifeSpots : goingOutSpots.length > 0 ? goingOutSpots : citySpots;
+      const spotPick = pickTopSpots(spotsNearItems(spotPool, eventPicks), 1);
+      if (eventPicks.length >= 2 && spotPick.length === 1) {
+        const items = [...spotPick, ...eventPicks];
+        const center = centroid(items);
+        const summary = `Upcoming in ${city} - ${eventPicks.map((e) => e.title.slice(0, 60)).join(" | ")}.`;
+        generated.push({
+          id: `gen-events-${slug}`,
+          name: `${city} tonight`,
+          summary: summary.slice(0, 240),
+          accent: "festival",
+          stopIds: spotPick.map((s) => s.id),
+          eventIds: eventPicks.map((e) => e.id),
+          audiences: ["adults"],
+          city,
+          lat: center?.lat ?? null,
+          lon: center?.lon ?? null,
+          generated: true,
+        });
+      }
     }
   }
   return { generated, cityCount: cities.length };

@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import { isBrandSafeForAdults, isBrandSafeForKids } from "./lib/brandSafety.mjs";
 
 export const BAY_AREA_BBOX = {
   south: 36.85,
@@ -900,7 +901,10 @@ export function buildDataset(elements, options = {}) {
       cityCenters,
       coverageName,
     }))
-    .filter(Boolean);
+    .filter(Boolean)
+    // buildDataset feeds the kids (FamHop) spots file — apply the full
+    // brand-safety blocklist (weapons, cannabis, adult entertainment).
+    .filter(isBrandSafeForKids);
 
   const spots = dedupeAndRank(allNormalized, limit);
 
@@ -945,10 +949,10 @@ export function buildSplitDatasets(elements, options = {}) {
 
   const kidsSpots = allNormalized.filter(
     (s) => s.category !== "Nightlife" && (!s.audiences || !s.audiences.includes("adults") || s.audiences.includes("all")),
-  );
+  ).filter(isBrandSafeForKids);
   const adultsSpots = allNormalized.filter(
     (s) => !s.audiences || !s.audiences.includes("kids"),
-  );
+  ).filter(isBrandSafeForAdults);
 
   const meta = {
     schemaVersion: 1,
