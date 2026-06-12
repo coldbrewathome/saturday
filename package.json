@@ -10,7 +10,7 @@
     "ingest:bay-area": "node scripts/ingest-bay-area.mjs",
     "ingest:events": "node scripts/ingest-events.mjs && node scripts/generate-featured-plans.mjs && node scripts/build-coverage-summary.mjs",
     "ingest:spots:all": "node scripts/ingest-bay-area.mjs --all",
-    "ingest:events:all": "node scripts/ingest-events-all.mjs && node scripts/build-coverage-summary.mjs",
+    "ingest:events:all": "node scripts/ingest-events-all.mjs; rc=$?; node scripts/build-coverage-summary.mjs; exit $rc",
     "ingest:metros": "npm run ingest:spots:all && npm run ingest:events:all",
     "ingest:plans": "node scripts/generate-featured-plans.mjs",
     "ops:events": "node scripts/event-ops-agent.mjs",

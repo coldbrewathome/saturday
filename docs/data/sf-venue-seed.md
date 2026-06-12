@@ -60,6 +60,27 @@ URL repairs to existing entries:
 - Rejected: **~50** — subtype-blocked JSON-LD 4, no machine-readable calendar ~30, bot-blocked 8, unreachable/no-calendar/other 8.
 - New verified upcoming events at add time: **~220** (121 + 15 + 67 + 8 + 5 + 2), heavily weighted to Thu–Sat nights; a Friday "Tonight" view drawing DNA Lounge (3–5/Fri), YBG (2–3/Fri), OMCA (1/Fri), Verdi (1–2/Fri) plus existing feed clears 15+ once the integrator runs `npm run ingest:events -- --metro=bay-area`.
 
+## 2026-06-11 follow-up pass (subtype fix landed; zero-extracted repairs)
+
+The `walkJsonLd` subtype fix from follow-up #1 has landed (`JSONLD_EVENT_TYPES` now matches `MusicEvent`, `ComedyEvent`, etc). Punch Line (34 live) and Cobb's now extract in the build report. All fetches below used the exact ingest headers (`user-agent: nighthop/0.1 event-ingest`, Node fetch) and the unmodified `extractJsonLdEvents`. Note: ticketweb.com serves different payloads to curl vs Node fetch — verify with Node.
+
+### Repairs
+
+- **`the-independent-sf` (was zero-extracted): FIXED via TicketWeb venue page.** theindependentsf.com remains unextractable: `/calendar` is a JS FullCalendar (TicketWeb WP plugin), the homepage list view is server-rendered but uses numeric `6.11`-style date lines (`parseMonthDay`/`parseDateTimeRange` need month names or `M/D/YYYY`), the `tm-event` post type is not exposed in WP REST (`/wp-json/wp/v2/types` lists no event type), `/feed/` is an empty blog feed, and `/tm-event/<slug>/` pages carry only Yoast WebPage ld. The venue's own ticketing page **https://www.ticketweb.com/venue/the-independent-san-francisco-ca/16302** returns 200 to the ingest UA with 2 static `ld+json` blocks → 20 `MusicEvent` extracted (Mr Tout Le Monde 2026-06-11 8pm PT, Rave Jesus 6/12, Elujay 6/13), pipeline blocked-regex clean. Caveat: appending `?pl=independentsf` to the venue URL returned a 404 shell — keep the URL param-free.
+- **`the-uc-theatre` (still zero-extracted): NO supported format — left registered as-is.** The site moved from APE to a self-managed Webflow + Opendate stack. `/events` (200) server-renders 26 shows but in Webflow CMS markup (`shows-collection-item`, date split across `<h1>Jun</h1><h1>16</h1>` headings) that no existing extractor parses — `webflowEvents` expects `event-calendar-item`/`h4-name`/`dateType` classes, and the line-based extractors can't join the split date lines. Per-show pages (e.g. `/shows/j-boog-16-jun`) build MusicEvent JSON-LD **at runtime via `document.createElement('script')`** — not present as a static `ld+json` tag. No RSS (`/events/rss.xml`, `/rss.xml`, `/feed.xml` all 404). Ticketing is Opendate (`app.opendate.io/confirms/<id>/web_orders/new` — 12KB JS shell, 0 ld; no public venue listing page found). Would need either a small Webflow-CMS extractor or an Opendate API integration.
+
+### Rejected-candidate re-verification (5 probed)
+
+| Venue | URL | 2026-06-11 result |
+|---|---|---|
+| SF Masonic | sfmasonic.com/shows | **NOW VERIFIES — added as `sf-masonic`.** 36 ld blocks, 36 MusicEvent extracted (Belle & Sebastian 6/11). Was subtype-blocked. |
+| The Regency Ballroom | theregencyballroom.com/shows/ | Still 0 `ld+json` blocks (200, 146KB). Subtype fix doesn't help — there is no Event ld on the page. Not added. |
+| Bimbo's 365 Club | bimbos365club.com/shows/ | Venue site still Yoast-only ld, but shows link to TicketWeb → venue page **ticketweb.com/venue/bimbo-s-365-club-san-francisco-ca/10052** extracts 18 MusicEvent (Naomi Scott 6/11). **Added as `bimbos-365-club`.** |
+| The Chapel | thechapelsf.com/music/ | Still Yoast-only ld on venue site; ticketing is SeeTickets white-label and wl.seetickets.us/TheChapel still **403**s the ingest UA. Not added. |
+| Rickshaw Stop | rickshawstop.com | Still 0 ld; SeeTickets white-label (wl.seetickets.us/RickshawStop) **403**. Not added. |
+
+Pattern worth remembering: for venues whose own sites have no structured data, check the venue's **TicketWeb venue page** (`ticketweb.com/venue/...`) — it serves ~20 static MusicEvent ld entries to the plain ingest UA and passes the pipeline blocked-regex. SeeTickets white-labels remain hard-403.
+
 ## Follow-ups for the integrator
 
 1. **Highest-leverage pipeline fix:** extend `walkJsonLd` in `scripts/eventPipeline.mjs` to match schema.org Event subtypes (`MusicEvent`, `ComedyEvent`, …). Instantly unlocks Punch Line, Cobb's, The Fillmore (URL already repointed to `/shows`), and lets SF Masonic / Regency be added.

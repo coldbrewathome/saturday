@@ -37,14 +37,15 @@
     {
       "id": "the-independent-sf",
       "name": "The Independent",
-      "url": "https://www.theindependentsf.com/calendar",
+      "url": "https://www.ticketweb.com/venue/the-independent-san-francisco-ca/16302",
       "city": "San Francisco",
       "neighborhood": "Western Addition",
       "category": "Music",
       "sourceType": "html",
       "trust": "official",
       "lat": 37.7755,
-      "lon": -122.4373
+      "lon": -122.4373,
+      "notes": "theindependentsf.com renders its list via the TicketWeb WP plugin with numeric '6.11'-style dates no extractor parses, and has no Event JSON-LD or feeds. This TicketWeb venue page is the venue's own primary ticketing (every show on theindependentsf.com links to it, pl=independentsf) and serves static MusicEvent JSON-LD. Verified 2026-06-11: 20 extracted (Mr Tout Le Monde 6/11, Rave Jesus 6/12, Elujay 6/13). Do not append query params: '?pl=independentsf' returned 404."
     },
     {
       "id": "great-american-music-hall",
@@ -105,6 +106,32 @@
       "trust": "official",
       "lat": 37.7842,
       "lon": -122.4327
+    },
+    {
+      "id": "sf-masonic",
+      "name": "The Masonic",
+      "url": "https://www.sfmasonic.com/shows",
+      "city": "San Francisco",
+      "neighborhood": "Nob Hill",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 37.7912,
+      "lon": -122.4127,
+      "notes": "Live Nation venue site with static MusicEvent JSON-LD. Previously rejected for the walkJsonLd subtype gap; re-verified 2026-06-11 after the subtype fix: 36 extracted (Belle & Sebastian 6/11, etc)."
+    },
+    {
+      "id": "bimbos-365-club",
+      "name": "Bimbo's 365 Club",
+      "url": "https://www.ticketweb.com/venue/bimbo-s-365-club-san-francisco-ca/10052",
+      "city": "San Francisco",
+      "neighborhood": "North Beach",
+      "category": "Music",
+      "sourceType": "html",
+      "trust": "official",
+      "lat": 37.8044,
+      "lon": -122.4161,
+      "notes": "bimbos365club.com/shows/ has no Event JSON-LD (WP/Yoast page metadata only); every show links to TicketWeb, the venue's primary ticketing. This TicketWeb venue page serves static MusicEvent JSON-LD. Verified 2026-06-11: 18 extracted (Naomi Scott 6/11, Tiny Desk Contest On the Road 6/12, Sistas Who Kill 6/13)."
     },
     {
       "id": "east-bay-parks-bird-butterfly-adults",
