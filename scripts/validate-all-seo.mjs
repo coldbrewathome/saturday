@@ -33,7 +33,9 @@ function walkDir(dir, fileList = []) {
         walkDir(filePath, fileList);
       }
     } else if (file.endsWith(".html")) {
-      fileList.push(filePath);
+      if (file !== "intro.html") {
+        fileList.push(filePath);
+      }
     }
   }
   return fileList;

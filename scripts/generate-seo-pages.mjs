@@ -334,14 +334,14 @@ body{margin:0;font:16px/1.55 var(--font-ui);background:var(--bg);color:var(--ink
 button,input,select,textarea{font:inherit}
 a{color:var(--brand);text-decoration:none}
 a:hover{text-decoration:underline}
-.famhop-topbar{align-items:center;background:var(--glass-bg);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border:var(--glass-border);border-radius:var(--glass-radius);box-shadow:0 1px 0 rgba(255,255,255,.6) inset,var(--glass-shadow);column-gap:12px;display:flex;flex-wrap:nowrap;left:var(--overlay-gap);margin:0 auto 16px;max-width:1500px;min-height:62px;padding:8px 12px;position:fixed;right:var(--overlay-gap);row-gap:0;top:var(--overlay-gap);z-index:500;}
+.famhop-topbar{align-items:center;background:var(--glass-bg);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border:var(--glass-border);border-radius:var(--glass-radius);box-shadow:0 1px 0 rgba(255,255,255,.6) inset,var(--glass-shadow);column-gap:12px;display:flex;flex-wrap:nowrap;left:var(--overlay-gap);margin:0;max-width:none;min-height:62px;padding:8px 12px;position:fixed;right:var(--overlay-gap);row-gap:0;top:var(--overlay-gap);z-index:500;}
 .famhop-brand{align-items:center;color:var(--ink);display:flex;flex:0 0 auto;font-weight:800;gap:8px;margin-right:4px;}
 .famhop-brand:hover{text-decoration:none;}
 .famhop-mark{align-items:center;display:inline-flex;flex:0 0 auto;justify-content:center;}
 .famhop-wordmark{color:var(--ink);font-family:var(--font-display);font-size:1.15rem;font-weight:700;letter-spacing:-.02em;line-height:1;margin:0;}
 .famhop-metro{align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;display:inline-flex;flex:0 0 auto;gap:6px;padding:7px 10px 7px 12px;}
 .famhop-metro-prefix{color:var(--muted);font-size:.78rem;font-weight:500;line-height:normal;}
-.famhop-metro select{appearance:none;-webkit-appearance:none;background-color:transparent;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='%236b7280' d='M0 0h10L5 6z'/></svg>");background-position:right 0 center;background-repeat:no-repeat;border:0;color:var(--ink);cursor:pointer;font:inherit;font-family:var(--font-display);font-size:.88rem;font-weight:700;letter-spacing:-.01em;line-height:normal;outline:0;padding:0 16px 0 0;}
+.famhop-metro select{appearance:none;-webkit-appearance:none;background-color:transparent;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='%236b7280' d='M0 0h10L5 6z'/></svg>");background-position:right 0 center;background-repeat:no-repeat;border:0;color:var(--ink);cursor:pointer;font:inherit;font-family:var(--font-display);font-size:.88rem;font-weight:700;letter-spacing:-.01em;line-height:normal;outline:0;overflow:hidden;padding:0 16px 0 0;width:140px;min-width:140px;max-width:140px;text-overflow:ellipsis;white-space:nowrap;}
 .famhop-tabs{align-items:center;background:var(--surface-strong);border-radius:999px;display:inline-flex;flex:0 0 auto;gap:2px;padding:3px;}
 .famhop-tabs a{align-items:center;background:transparent;border:0;border-radius:999px;color:var(--muted);display:inline-flex;font:600 .78rem/1 var(--font-ui);gap:5px;padding:6px 12px;text-decoration:none;transition:background .15s ease,color .15s ease;}
 .famhop-tabs a:hover{color:var(--ink);text-decoration:none;}
@@ -727,6 +727,7 @@ function main() {
 
     const slugHistory = readEventSlugHistory(metro);
     totalEndedEventStubs += generateEndedEventStubs(slugHistory, allCurrentEventSlugs);
+    writeEventSeoManifest(metro, events, eventSlugLookup, allCurrentEventSlugs, eventSlugs, slugHistory);
 
     totalSpotPages += spotSlugs.size;
     totalEventPages += eventSlugs.size;
@@ -1822,6 +1823,41 @@ function generateEndedEventStubs(history, liveSlugs, now = new Date()) {
   return capped.length;
 }
 
+// Edge classification manifest consumed by functions/[[path]].ts. For event
+// detail URLs with no prerendered page the function reads this to return the
+// right status: 410 for ended slugs, 404 for slugs the catalog never recorded,
+// noindex-shell for live-but-capped events. Without it every miss is a 200
+// soft-404. Written next to the metro's data so env.ASSETS can serve it.
+//   live:     every slug in the current dataset (live, possibly capped-out)
+//   ended:    slugs in the rolling 90-day history that are no longer live
+//   upcoming: soonest prerendered events, for soft-landing links on 410/404
+function writeEventSeoManifest(metro, events, eventSlugLookup, liveSlugs, prerenderedSlugs, slugHistory) {
+  const ended = [];
+  for (const slug of Object.keys(slugHistory?.slugs || {})) {
+    if (slug && !liveSlugs.has(slug)) ended.push(slug);
+  }
+  const upcoming = events
+    .map((ev) => ({ ev, slug: eventSlugLookup.get(ev) }))
+    .filter(({ slug }) => slug && prerenderedSlugs.has(slug))
+    .sort((a, b) => (a.ev.startDateTime || "").localeCompare(b.ev.startDateTime || ""))
+    .slice(0, 10)
+    .map(({ ev, slug }) => ({ slug, title: String(ev.title || "").slice(0, 90) }));
+  const manifest = {
+    schemaVersion: 1,
+    metroId: metro.id,
+    generatedAt: new Date().toISOString(),
+    live: [...liveSlugs],
+    ended,
+    upcoming,
+  };
+  const dir = path.join(DIST, "data", metro.id);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(
+    path.join(dir, "event-seo-manifest.json"),
+    `${JSON.stringify(manifest)}\n`,
+  );
+}
+
 function writeEndedEventStub(slug) {
   const canonical = metroUrl(`event/${slug}/`);
   const metroHomeUrl = metroUrl("");
@@ -2037,16 +2073,24 @@ function generateCityPages(spotItems, eventItems, spotSlugLookup, eventSlugLooku
     const slug = slugify(city.name);
     if (!slug) continue;
     const canonical = metroUrl(`city/${slug}/`);
-    const title = `${A.thingsToDoIn(city.name)} — ${BRAND}`;
-    const description = IS_ADULTS
-      ? `Good places to hang out in ${city.name}: ${city.spots.length} bars, cafes, restaurants and venues plus ${city.events.length} upcoming events. Plan a day or night in seconds with ${BRAND}.`
-      : `Family-friendly things to do in ${city.name}: ${city.spots.length} parks, museums and venues plus ${city.events.length} weekend events for kids. Plan a day in seconds with ${BRAND}.`;
-
     const topSpots = city.spots.slice().sort((a, b) => (b.friendScore || 0) - (a.friendScore || 0)).slice(0, 24);
     const upcomingEvents = city.events
       .slice()
       .sort((a, b) => (a.startDateTime || "").localeCompare(b.startDateTime || ""))
       .slice(0, 24);
+
+    // P3/CTR: lead the title + snippet with the query intent — place first,
+    // "family events", and the current year for freshness — and surface a real
+    // upcoming date so the SERP snippet reads as current, not evergreen.
+    const cityYear = new Date().getUTCFullYear();
+    const nextDateStr = upcomingEvents.map((e) => formatEventDate(e)).find(Boolean);
+    const freshness = nextDateStr ? ` Next up: ${nextDateStr}.` : "";
+    const title = IS_ADULTS
+      ? `${city.name} Events & Things to Do (${cityYear}) — ${BRAND}`
+      : `${city.name} Family Events & Things to Do (${cityYear}) — ${BRAND}`;
+    const description = IS_ADULTS
+      ? `Things to do in ${city.name} in ${cityYear}: ${city.events.length} upcoming events plus ${city.spots.length} bars, cafes and venues.${freshness} Plan a day or night with ${BRAND}.`
+      : `Family-friendly things to do in ${city.name} in ${cityYear}: ${city.events.length} kid-friendly events plus ${city.spots.length} parks, museums and venues.${freshness} Plan a weekend with ${BRAND}.`;
 
     const spotsList = topSpots.length
       ? `<section><h2>${IS_ADULTS ? "Spots" : "Family-friendly spots"} in ${esc(city.name)}</h2><ul class="card-list">${topSpots.map((s) => {
@@ -2218,7 +2262,8 @@ function generateCategoryPages(spotItems, eventItems, spotSlugLookup, eventSlugL
     };
 
     const html = renderShell({
-      title: `${pageName} — ${BRAND}`,
+      // Year in the <title> only (not the H1/JSON-LD name) for SERP freshness.
+      title: `${pageName} (${new Date().getUTCFullYear()}) — ${BRAND}`,
       description,
       canonical,
       ogImage: OG_IMAGE,
@@ -2301,8 +2346,8 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     };
 
     const weekendRouteKey = findRouteKey("en", metroPath("this-weekend/"));
-    const hreflangLinks = weekendRouteKey ? getAlternateLinks(weekendRouteKey, SITE) : [];
-    const langSwitcherHtml = weekendRouteKey ? renderLangSwitcher(weekendRouteKey, "en") : "";
+    const hreflangLinks = (!IS_ADULTS && weekendRouteKey) ? getAlternateLinks(weekendRouteKey, SITE) : [];
+    const langSwitcherHtml = (!IS_ADULTS && weekendRouteKey) ? renderLangSwitcher(weekendRouteKey, "en") : "";
 
     const html = renderShell({
       title,
@@ -2459,8 +2504,8 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
   };
 
   const weekendRouteKey = findRouteKey("en", metroPath("this-weekend/"));
-  const hreflangLinks = weekendRouteKey ? getAlternateLinks(weekendRouteKey, SITE) : [];
-  const langSwitcherHtml = weekendRouteKey ? renderLangSwitcher(weekendRouteKey, "en") : "";
+  const hreflangLinks = (!IS_ADULTS && weekendRouteKey) ? getAlternateLinks(weekendRouteKey, SITE) : [];
+  const langSwitcherHtml = (!IS_ADULTS && weekendRouteKey) ? renderLangSwitcher(weekendRouteKey, "en") : "";
 
   const html = renderShell({
     title,
@@ -3478,6 +3523,7 @@ function buildSpotSlugLookup(spotItems) {
 // ---------------------------------------------------------------------------
 
 function renderLangSwitcher(routeKey, currentLocale) {
+  if (IS_ADULTS) return "";
   const cluster = routeMap[routeKey];
   if (!cluster) return "";
   const links = [];
