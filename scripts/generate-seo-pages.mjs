@@ -712,8 +712,9 @@ function main() {
     }
     const eventSlugs = generateEventPages(capEventsForPages(events), eventsDoc?.generatedAt, eventSlugLookup, citySlugsPre);
     generatedEventSlugsByMetro.set(metro.id, eventSlugs);
-    const citySlugs = generateCityPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs);
+    const { slugs: citySlugs, cities } = generateCityPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs);
     const categorySlugs = generateCategoryPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs);
+    const cityCategorySlugs = generateCityCategoryPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs, cities);
     // Weekend guides link events through this lookup; restrict it to events
     // whose pages were actually written so capped-out events fall back to
     // their official link instead of a broken internal one.
@@ -741,7 +742,7 @@ function main() {
     totalSpotPages += spotSlugs.size;
     totalEventPages += eventSlugs.size;
     totalCityPages += citySlugs.size;
-    totalCategoryPages += categorySlugs.size;
+    totalCategoryPages += categorySlugs.size + cityCategorySlugs.size;
     totalWeekendPages += wroteThisWeekend ? 1 : 0;
   }
 
@@ -2279,7 +2280,7 @@ function generateCityPages(spotItems, eventItems, spotSlugLookup, eventSlugLooku
       priority: 0.8,
     });
   }
-  return slugs;
+  return { slugs, cities };
 }
 
 // ---------------------------------------------------------------------------
@@ -2399,6 +2400,132 @@ function generateCategoryPages(spotItems, eventItems, spotSlugLookup, eventSlugL
       changefreq: "daily",
       priority: 0.85,
     });
+  }
+  return slugs;
+}
+
+// ---------------------------------------------------------------------------
+// City Categories
+// ---------------------------------------------------------------------------
+
+function generateCityCategoryPages(spotItems, eventItems, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs, cities) {
+  const slugs = new Set();
+
+  // Only trust a Google rating with enough reviews to be stable.
+  const stableRating = (s) =>
+    typeof s.googleRating === "number" && (s.googleRatingCount ?? 0) >= 25;
+  const ratingBadge = (s) =>
+    stableRating(s)
+      ? ` <span class="cat-rating">★ ${s.googleRating.toFixed(1)} (${s.googleRatingCount})</span>`
+      : "";
+
+  for (const city of cities) {
+    const citySlug = slugify(city.name);
+    if (!citySlug) continue;
+
+    for (const cat of CATEGORY_PAGES) {
+      const matchingSpots = city.spots
+        .filter((s) => cat.spotMatch(s))
+        .sort((a, b) => {
+          const ra = stableRating(a) ? a.googleRating : -1;
+          const rb = stableRating(b) ? b.googleRating : -1;
+          if (rb !== ra) return rb - ra;
+          return (b.friendScore || 0) - (a.friendScore || 0);
+        })
+        .slice(0, 30);
+      const matchingEvents = city.events
+        .filter((e) => cat.eventMatch(e))
+        .sort((a, b) => (a.startDateTime || "").localeCompare(b.startDateTime || ""))
+        .slice(0, 40);
+
+      if (matchingSpots.length + matchingEvents.length === 0) continue;
+
+      const canonical = metroUrl(`city/${citySlug}/category/${cat.slug}/`);
+      const canonicalCity = metroUrl(`city/${citySlug}/`);
+      const pageName = `Best ${cat.label.toLowerCase()} in ${city.name}`;
+      const description =
+        `Best ${cat.label.toLowerCase()} in ${city.name}. Browse ${matchingSpots.length} ${A.friendlyAdj}spots and ${matchingEvents.length} upcoming events on ${BRAND}.`;
+
+      const spotsList = matchingSpots.length
+        ? `<section><h2>Top-rated ${esc(cat.label.toLowerCase())}</h2><ul class="card-list">${matchingSpots
+            .map((s) => {
+              const sslug = spotSlugLookup.get(s);
+              if (!sslug) return "";
+              if (!spotSlugs.has(sslug)) {
+                return `<li><strong>${esc(s.name)}</strong>${s.neighborhood ? `<span> · ${esc(s.neighborhood)}</span>` : ""}${ratingBadge(s)}</li>`;
+              }
+              return `<li><a href="${metroPath(`spot/${sslug}/`)}"><strong>${esc(s.name)}</strong>${s.neighborhood ? `<span> · ${esc(s.neighborhood)}</span>` : ""}${ratingBadge(s)}</a>${s.note ? `<p>${esc(s.note)}</p>` : ""}</li>`;
+            })
+            .join("")}</ul></section>`
+        : "";
+
+      const eventsList = matchingEvents.length
+        ? `<section><h2>Upcoming ${esc(cat.label.toLowerCase())}</h2><ul class="card-list">${matchingEvents
+            .map((e) => {
+              const eslug = eventSlugLookup.get(e);
+              if (!eslug) return "";
+              const dateStr = formatEventDate(e);
+              if (!eventSlugs.has(eslug)) {
+                return `<li><strong>${esc(e.title)}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}</li>`;
+              }
+              return `<li><a href="${metroPath(`event/${eslug}/`)}"><strong>${esc(e.title)}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}</a>${e.venue ? `<p>${esc(e.venue)}${e.city ? `, ${esc(e.city)}` : ""}${e.cost && e.cost !== "Unknown" ? ` · ${esc(e.cost)}` : ""}</p>` : ""}</li>`;
+            })
+            .join("")}</ul></section>`
+        : "";
+
+      const body = `
+        <p class="lede">${esc(description)}</p>
+        <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a day with ${BRAND}</a> <a class="cta-secondary" href="${metroPath("this-weekend/")}">Weekend guide</a></p>
+        ${eventsList}
+        ${spotsList}
+      `;
+
+      const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "@id": `${canonical}#page`,
+        url: canonical,
+        name: pageName,
+        description,
+        isPartOf: { "@id": `${metroUrl("")}#website` },
+        about: {
+          "@type": "Place",
+          name: city.name,
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: city.name,
+            addressRegion: activeMetro.state || "US",
+            addressCountry: "US",
+          },
+        },
+      };
+
+      const html = renderShell({
+        title: `${pageName} — ${BRAND}`,
+        description,
+        canonical,
+        ogImage: OG_IMAGE,
+        jsonLd,
+        breadcrumb: [
+          { name: BRAND, url: metroUrl("") },
+          { name: city.name, url: canonicalCity },
+          { name: cat.label, url: canonical },
+        ],
+        h1: pageName,
+        eyebrow: metroTag(),
+        body,
+      });
+
+      writeMetroPage(`city/${citySlug}/category/${cat.slug}/index.html`, html);
+      slugs.add(`${citySlug}/category/${cat.slug}`);
+
+      sitemapEntries.push({
+        loc: canonical,
+        lastmod: today(),
+        changefreq: "daily",
+        priority: 0.7,
+      });
+    }
   }
   return slugs;
 }
