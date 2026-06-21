@@ -726,7 +726,16 @@ function main() {
     generateMetroAppShellPage(metro, categorySlugs);
 
     const slugHistory = readEventSlugHistory(metro);
-    totalEndedEventStubs += generateEndedEventStubs(slugHistory, allCurrentEventSlugs);
+    totalEndedEventStubs += generateEndedEventStubs(
+      slugHistory,
+      allCurrentEventSlugs,
+      events,
+      eventSlugLookup,
+      eventSlugs,
+      spots,
+      spotSlugLookup,
+      spotSlugs
+    );
 
     totalSpotPages += spotSlugs.size;
     totalEventPages += eventSlugs.size;
@@ -1797,7 +1806,17 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
 // templates (entries with isRecurring=true) are skipped — their canonical
 // page already comes from the live events.json or — if the template died —
 // will simply 404 (future work per the ADR's evergreen-page option).
-function generateEndedEventStubs(history, liveSlugs, now = new Date()) {
+function generateEndedEventStubs(
+  history,
+  liveSlugs,
+  events,
+  eventSlugLookup,
+  eventSlugs,
+  spots,
+  spotSlugLookup,
+  spotSlugs,
+  now = new Date()
+) {
   const stubDays = 30;
   const cutoff = new Date(now);
   cutoff.setUTCDate(cutoff.getUTCDate() - stubDays);
@@ -1818,36 +1837,130 @@ function generateEndedEventStubs(history, liveSlugs, now = new Date()) {
     : eligible.length;
   const capped = eligible.slice(0, take);
   if (Number.isFinite(endedStubBudget)) endedStubBudget -= capped.length;
-  for (const { slug } of capped) writeEndedEventStub(slug);
+
+  const upcomingEvents = events
+    .filter((e) => {
+      const slug = eventSlugLookup.get(e);
+      return slug && eventSlugs.has(slug) && e.startDateTime && new Date(e.startDateTime) >= now;
+    })
+    .sort((a, b) => a.startDateTime.localeCompare(b.startDateTime))
+    .slice(0, 5);
+
+  const featuredSpots = spots
+    .filter((s) => {
+      const slug = spotSlugLookup.get(s);
+      return slug && spotSlugs.has(slug);
+    })
+    .sort((a, b) => {
+      const ra = typeof a.googleRating === "number" ? a.googleRating : 0;
+      const rb = typeof b.googleRating === "number" ? b.googleRating : 0;
+      if (rb !== ra) return rb - ra;
+
+      const ca = typeof a.googleRatingCount === "number" ? a.googleRatingCount : 0;
+      const cb = typeof b.googleRatingCount === "number" ? b.googleRatingCount : 0;
+      if (cb !== ca) return cb - ca;
+
+      const fa = typeof a.friendScore === "number" ? a.friendScore : 0;
+      const fb = typeof b.friendScore === "number" ? b.friendScore : 0;
+      return fb - fa;
+    })
+    .slice(0, 5);
+
+  for (const { slug } of capped) {
+    writeEndedEventStub(slug, upcomingEvents, featuredSpots, eventSlugLookup, spotSlugLookup);
+  }
   return capped.length;
 }
 
-function writeEndedEventStub(slug) {
+function writeEndedEventStub(
+  slug,
+  upcomingEvents,
+  featuredSpots,
+  eventSlugLookup,
+  spotSlugLookup
+) {
   const canonical = metroUrl(`event/${slug}/`);
   const metroHomeUrl = metroUrl("");
   const title = `This event has ended — ${metroLabel()} | ${BRAND}`;
   const description = `This ${metroLabel()} event is no longer scheduled. Browse the latest weekend picks on ${BRAND}.`;
-  // noindex + meta-refresh combination matches the alias-page pattern in
-  // validate-all-seo.mjs so the page is exempt from the "must appear in
-  // sitemap" check. The refresh is long enough that humans actually read
-  // the stub before being bounced to the metro guide.
-  const html = `<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>${esc(title)}</title>
-<meta name="description" content="${esc(description)}">
-<meta name="robots" content="noindex,follow">
-<link rel="canonical" href="${esc(canonical)}">
-<meta http-equiv="refresh" content="10;url=${esc(metroHomeUrl)}">
-<style>body{font-family:system-ui,sans-serif;max-width:36rem;margin:4rem auto;padding:0 1rem;line-height:1.5;color:#222}a{color:#0066cc}</style>
-</head>
-<body>
-<h1>This event has ended</h1>
-<p>The event at this link is no longer scheduled. It happened recently or was removed by the organizer.</p>
-<p><a href="${esc(metroHomeUrl)}">See this weekend in ${esc(metroLabel())} on ${esc(BRAND)} &rarr;</a></p>
-</body>
-</html>`;
+
+  const centers = activeMetro.spotCoverage?.cityCenters;
+  const cityName = Array.isArray(centers) && centers.length > 0 && centers[0] ? centers[0][0] : metroLabel();
+  const citySlug = cityName ? slugify(cityName) : "";
+
+  // stableRating helper
+  const stableRating = (s) =>
+    typeof s.googleRating === "number" && (s.googleRatingCount ?? 0) >= 25;
+
+  let upcomingHtml = "";
+  if (upcomingEvents.length > 0) {
+    upcomingHtml = `
+      <h2>Upcoming Events in ${esc(metroLabel())}</h2>
+      <ul class="card-list">
+        ${upcomingEvents
+          .map((e) => {
+            const eSlug = eventSlugLookup.get(e);
+            return `
+              <li>
+                <a href="${metroPath(`event/${eSlug}/`)}"><strong>${esc(e.title)}</strong></a>
+                <p>${esc(formatEventDate(e))}${e.venue ? ` · ${esc(e.venue)}` : ""}</p>
+              </li>
+            `;
+          })
+          .join("")}
+      </ul>
+    `;
+  }
+
+  let spotsHtml = "";
+  if (featuredSpots.length > 0) {
+    spotsHtml = `
+      <h2>Featured Spots in ${esc(metroLabel())}</h2>
+      <ul class="card-list">
+        ${featuredSpots
+          .map((s) => {
+            const sSlug = spotSlugLookup.get(s);
+            const ratingHtml = stableRating(s)
+              ? ` <span class="cat-rating">★ ${s.googleRating.toFixed(1)} (${s.googleRatingCount})</span>`
+              : "";
+            return `
+              <li>
+                <a href="${metroPath(`spot/${sSlug}/`)}"><strong>${esc(s.name)}</strong></a>
+                ${ratingHtml}
+                <p>${esc(s.category || "")}${s.neighborhood ? ` · ${esc(s.neighborhood)}` : ""}</p>
+              </li>
+            `;
+          })
+          .join("")}
+      </ul>
+    `;
+  }
+
+  const body = `
+    <p class="lede">The event at this link is no longer scheduled. It happened recently or was removed by the organizer.</p>
+    <p>You will be redirected to the <a href="${esc(metroHomeUrl)}">${esc(BRAND)} ${esc(metroLabel())} homepage</a> in a few seconds, or you can explore the upcoming events and featured spots below.</p>
+    
+    ${upcomingHtml}
+    ${spotsHtml}
+  `;
+
+  const html = renderShell({
+    title,
+    description,
+    canonical,
+    ogImage: OG_IMAGE,
+    jsonLd: null,
+    breadcrumb: [
+      { name: BRAND, url: metroUrl("") },
+      { name: cityName, url: metroUrl(`city/${citySlug}/`) },
+    ],
+    h1: "This event has ended",
+    eyebrow: metroLabel(),
+    body,
+    noindex: true,
+    refresh: `10;url=${metroHomeUrl}`,
+  });
+
   writeMetroPage(`event/${slug}/index.html`, html);
 }
 
@@ -3754,7 +3867,23 @@ ${entries
 // Page shell
 // ---------------------------------------------------------------------------
 
-function renderShell({ title, description, canonical, ogImage, jsonLd, breadcrumb, h1, eyebrow, body, lang = "en", hreflangLinks = [], langSwitcherHtml = "", ogLocale = "en_US" }) {
+function renderShell({
+  title,
+  description,
+  canonical,
+  ogImage,
+  jsonLd,
+  breadcrumb,
+  h1,
+  eyebrow,
+  body,
+  lang = "en",
+  hreflangLinks = [],
+  langSwitcherHtml = "",
+  ogLocale = "en_US",
+  noindex = false,
+  refresh = "",
+}) {
   const breadcrumbLd = breadcrumb && breadcrumb.length
     ? {
         "@context": "https://schema.org",
@@ -3783,12 +3912,15 @@ function renderShell({ title, description, canonical, ogImage, jsonLd, breadcrum
     `<link rel="alternate" hreflang="${esc(link.hreflang)}" href="${esc(link.href)}">`
   ).join("\n");
 
+  const robots = noindex ? "noindex,follow" : "index,follow";
+  const refreshHtml = refresh ? `\n<meta http-equiv="refresh" content="${esc(refresh)}">` : "";
+
   return `<!doctype html>
 <html lang="${esc(lang)}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="index,follow">${GSC_VERIFICATION ? `\n<meta name="google-site-verification" content="${esc(GSC_VERIFICATION)}">` : ""}
+<meta name="robots" content="${esc(robots)}">${GSC_VERIFICATION ? `\n<meta name="google-site-verification" content="${esc(GSC_VERIFICATION)}">` : ""}${refreshHtml}
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${esc(canonical)}">
