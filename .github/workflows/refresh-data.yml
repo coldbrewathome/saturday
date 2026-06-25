@@ -39,19 +39,28 @@ jobs:
       - run: npm run validate:data
       - run: npm run validate:events
       - run: npm run build
-      - name: Commit refreshed data
+
+      - name: Publish to Google Indexing API
+        if: ${{ secrets.GOOGLE_INDEXING_CREDENTIALS != '' }}
+        env:
+          GOOGLE_INDEXING_CREDENTIALS: ${{ secrets.GOOGLE_INDEXING_CREDENTIALS }}
+          GOOGLE_CLOUD_PROJECT: leafy-acumen-468616-d1
+        run: npm run publish:indexing
+
+      - name: Commit refreshed data and indexing history
         run: |
-          # status --porcelain (not diff) so new per-metro files count too; the
-          # old explicit-path list predated the public/data/<metro>/ layout and
-          # silently dropped bay-area/events.json, coverage + featured plans.
-          if [ -z "$(git status --porcelain -- public/data)" ]; then
-            echo "No data changes."
+          git add public/data
+          if [ -f data/indexing-history.json ]; then
+            git add data/indexing-history.json
+          fi
+
+          if [ -z "$(git status --porcelain --cached)" ]; then
+            echo "No data or indexing changes."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/data
-          git commit -m "Refresh Bay Area data"
+          git commit -m "Refresh Bay Area data and indexing history"
           # Concurrent local sessions commit to main; rebase + retry so a push
           # that lands mid-run doesn't reject ours.
           for attempt in 1 2 3; do
