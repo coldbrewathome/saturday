@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "new-york-city",
-  "generatedAt": "2026-06-07T14:53:41.950Z",
-  "alertCount": 17,
+  "generatedAt": "2026-06-25T23:44:57.659Z",
+  "alertCount": 19,
   "alerts": [
     {
       "severity": "warning",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://queens.libnet.info/events",
@@ -44,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://www.nypl.org/events/calendar",
@@ -70,13 +70,38 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://www.amnh.org/calendar",
           "status": "http-error",
           "httpStatus": 403,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "new-york-city",
+      "sourceId": "bronx-zoo-events",
+      "sourceName": "Bronx Zoo Events",
+      "sourceType": "html",
+      "url": "https://bronxzoo.com/things-to-do/events",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
+      "fetches": [
+        {
+          "url": "https://bronxzoo.com/things-to-do/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -95,7 +120,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://njfair.com/",
@@ -120,7 +145,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://www.brooklynsteel.com/calendar",
@@ -145,7 +170,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://www.boweryballroom.com/calendar",
@@ -170,7 +195,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://www.musichallofwilliamsburg.com/calendar",
@@ -195,7 +220,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://lpr.com/calendar",
@@ -220,7 +245,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://www.terminal5nyc.com/calendar",
@@ -245,7 +270,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://www.websterhall.com/events",
@@ -270,7 +295,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://www.comedycellar.com/line-up/",
@@ -287,6 +312,32 @@
       "sourceName": "Gotham Comedy Club",
       "sourceType": "html",
       "url": "https://gothamcomedyclub.com/calendar",
+      "status": "blocked",
+      "issueType": "fetch-failed",
+      "reason": "challenge page returned instead of event content",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
+      "fetches": [
+        {
+          "url": "https://gothamcomedyclub.com/calendar",
+          "status": "blocked",
+          "reason": "challenge page returned instead of event content",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "elsewhere-brooklyn",
+      "sourceName": "Elsewhere",
+      "sourceType": "html",
+      "url": "https://www.elsewherebrooklyn.com/events",
       "status": "ok",
       "issueType": "zero-extracted",
       "reason": "Source returned a payload but no events were extracted.",
@@ -295,10 +346,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
-          "url": "https://gothamcomedyclub.com/calendar",
+          "url": "https://www.elsewherebrooklyn.com/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -320,7 +371,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://www.roughtradenyc.com/events",
@@ -344,7 +395,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://www.bluenotejazz.com/new-york/schedule",
@@ -369,7 +420,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://villagevanguard.com/events",
@@ -382,10 +433,10 @@
     {
       "severity": "warning",
       "metroId": "new-york-city",
-      "sourceId": "bric-celebrate-brooklyn-royel-otis-2026",
-      "sourceName": "BRIC Celebrate Brooklyn!: Royel Otis",
+      "sourceId": "jazz-age-lawn-party-2026",
+      "sourceName": "Jazz Age Lawn Party 2026",
       "sourceType": "officialTextEvents",
-      "url": "http://bricartsmedia.org/celebrate-brooklyn/",
+      "url": "https://www.jazzagelawnparty.com/",
       "status": "ok",
       "issueType": "zero-in-window",
       "reason": "Source returned events, but none were in the planning window.",
@@ -394,32 +445,32 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
-          "url": "http://bricartsmedia.org/celebrate-brooklyn/",
+          "url": "https://www.jazzagelawnparty.com/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "text/html;charset=utf-8"
         }
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "new-york-city",
       "sourceId": "summerstage-yellowcard-2026",
       "sourceName": "SummerStage: Yellowcard / New Found Glory / Plain White T's",
       "sourceType": "officialTextEvents",
       "url": "https://cityparksfoundation.org/summerstage/",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://cityparksfoundation.org/summerstage/",

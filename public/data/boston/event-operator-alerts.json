@@ -1,9 +1,34 @@
 {
   "schemaVersion": 1,
   "metroId": "boston",
-  "generatedAt": "2026-06-07T14:58:15.955Z",
+  "generatedAt": "2026-06-25T23:52:14.745Z",
   "alertCount": 11,
   "alerts": [
+    {
+      "severity": "warning",
+      "metroId": "boston",
+      "sourceId": "boston-parks-family",
+      "sourceName": "City of Boston Events",
+      "sourceType": "rss",
+      "url": "https://www.boston.gov/rss/events",
+      "status": "ok-template-fallback",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": "recurring-template",
+      "recoveredEvents": 8,
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-25T23:52:14.745Z",
+      "fetches": [
+        {
+          "url": "https://www.boston.gov/rss/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/rss+xml; charset=utf-8"
+        }
+      ]
+    },
     {
       "severity": "critical",
       "metroId": "boston",
@@ -19,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:58:15.955Z",
+      "fetchedAt": "2026-06-25T23:52:14.745Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -44,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:58:15.955Z",
+      "fetchedAt": "2026-06-25T23:52:14.745Z",
       "fetches": [
         {
           "url": "https://www.easternstatesexposition.com/",
@@ -69,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:58:15.955Z",
+      "fetchedAt": "2026-06-25T23:52:14.745Z",
       "fetches": [
         {
           "url": "https://marshfieldfair.org/",
@@ -94,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:58:15.955Z",
+      "fetchedAt": "2026-06-25T23:52:14.745Z",
       "fetches": [
         {
           "url": "https://www.bostonharborfest.com/",
@@ -105,46 +130,21 @@
       ]
     },
     {
-      "severity": "warning",
-      "metroId": "boston",
-      "sourceId": "salem-heritage-days-2026",
-      "sourceName": "Salem 400+ Heritage Days Parade 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.salemma.gov/CivicAlerts.aspx?AID=235",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:58:15.955Z",
-      "fetches": [
-        {
-          "url": "https://www.salemma.gov/CivicAlerts.aspx?AID=235",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "boston",
       "sourceId": "cambridge-carnival-2026",
       "sourceName": "Cambridge Carnival 2026",
       "sourceType": "officialTextEvents",
       "url": "https://www.cambridgecarnival.org/",
       "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:58:15.955Z",
+      "fetchedAt": "2026-06-25T23:52:14.745Z",
       "fetches": [
         {
           "url": "https://www.cambridgecarnival.org/",
@@ -169,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:58:15.955Z",
+      "fetchedAt": "2026-06-25T23:52:14.745Z",
       "fetches": [
         {
           "url": "https://www.crossroadspresents.com/paradise-rock-club",
@@ -194,7 +194,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:58:15.955Z",
+      "fetchedAt": "2026-06-25T23:52:14.745Z",
       "fetches": [
         {
           "url": "https://www.crossroadspresents.com/brighton-music-hall",
@@ -219,7 +219,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:58:15.955Z",
+      "fetchedAt": "2026-06-25T23:52:14.745Z",
       "fetches": [
         {
           "url": "https://www.sinclaircambridge.com/events",
@@ -244,7 +244,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:58:15.955Z",
+      "fetchedAt": "2026-06-25T23:52:14.745Z",
       "fetches": [
         {
           "url": "https://www.nickscomedystop.com/calendar",
@@ -269,7 +269,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:58:15.955Z",
+      "fetchedAt": "2026-06-25T23:52:14.745Z",
       "fetches": [
         {
           "url": "https://www.laughboston.com/calendar",

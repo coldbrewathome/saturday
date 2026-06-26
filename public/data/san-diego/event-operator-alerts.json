@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "metroId": "san-diego",
-  "generatedAt": "2026-06-07T14:58:44.399Z",
+  "generatedAt": "2026-06-25T23:52:40.500Z",
   "alertCount": 9,
   "alerts": [
     {
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:58:44.399Z",
+      "fetchedAt": "2026-06-25T23:52:40.500Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -44,13 +44,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:58:44.399Z",
+      "fetchedAt": "2026-06-25T23:52:40.500Z",
       "fetches": [
         {
           "url": "https://www.sdfair.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "san-diego",
+      "sourceId": "balboa-park-twilight-concerts",
+      "sourceName": "Twilight in the Park Free Summer Concerts",
+      "sourceType": "officialTextEvents",
+      "url": "https://balboapark.org/twilight-concerts/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-25T23:52:40.500Z",
+      "fetches": [
+        {
+          "url": "https://balboapark.org/twilight-concerts/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -69,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:58:44.399Z",
+      "fetchedAt": "2026-06-25T23:52:40.500Z",
       "fetches": [
         {
           "url": "https://www.casbahmusic.com/events",
@@ -94,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:58:44.399Z",
+      "fetchedAt": "2026-06-25T23:52:40.500Z",
       "fetches": [
         {
           "url": "https://www.bellyup.com/events",
@@ -119,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:58:44.399Z",
+      "fetchedAt": "2026-06-25T23:52:40.500Z",
       "fetches": [
         {
           "url": "https://www.musicboxsd.com/events",
@@ -144,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:58:44.399Z",
+      "fetchedAt": "2026-06-25T23:52:40.500Z",
       "fetches": [
         {
           "url": "https://www.observatorysd.com/events",
@@ -169,7 +194,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:58:44.399Z",
+      "fetchedAt": "2026-06-25T23:52:40.500Z",
       "fetches": [
         {
           "url": "https://www.americancomedyco.com/calendar",
@@ -194,35 +219,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:58:44.399Z",
+      "fetchedAt": "2026-06-25T23:52:40.500Z",
       "fetches": [
         {
           "url": "https://thecomedystore.com/la-jolla/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "san-diego",
-      "sourceId": "sd-pride-festival-2026",
-      "sourceName": "San Diego Pride Festival 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://sdpride.org/festival/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:58:44.399Z",
-      "fetches": [
-        {
-          "url": "https://sdpride.org/festival/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"

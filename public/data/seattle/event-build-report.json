@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "seattle",
-  "generatedAt": "2026-06-07T14:54:04.110Z",
+  "generatedAt": "2026-06-25T23:45:27.815Z",
   "registryPath": "data/event-sources-seattle.json",
   "outputPath": "public/data/seattle/events.json",
-  "eventCount": 500,
-  "adultsEventCount": 273,
+  "eventCount": 454,
+  "adultsEventCount": 5,
   "sourceCount": 30,
-  "liveEventCount": 493,
-  "lastKnownGoodEventCount": 10,
+  "liveEventCount": 456,
+  "lastKnownGoodEventCount": 2,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 21,
+  "operatorAlertCount": 19,
   "errors": [],
   "operatorAlerts": [
     {
@@ -24,11 +24,11 @@
       "issueType": "fetch-failed",
       "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 10,
+      "recoveredEvents": 2,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 10,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
+      "lastKnownGoodEvents": 2,
+      "fetchedAt": "2026-06-25T23:45:27.815Z",
       "fetches": [
         {
           "url": "https://www.zoo.org/events?cgid=1",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
+      "fetchedAt": "2026-06-25T23:45:27.815Z",
       "fetches": [
         {
           "url": "https://www.burkemuseum.org/events",
@@ -78,35 +78,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
+      "fetchedAt": "2026-06-25T23:45:27.815Z",
       "fetches": [
         {
           "url": "https://pacificsciencecenter.org/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "seattle",
-      "sourceId": "seattle-aquarium-toddler-time",
-      "sourceName": "Seattle Aquarium Toddler Time",
-      "sourceType": "eventList",
-      "url": "https://www.seattleaquarium.org/explore-the-aquarium/programs/toddler-time/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
-      "fetches": [
-        {
-          "url": "https://www.seattleaquarium.org/explore-the-aquarium/programs/toddler-time/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -128,38 +103,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
+      "fetchedAt": "2026-06-25T23:45:27.815Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "application/json; source=ticketmaster; events=0; queries=1"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "seattle",
-      "sourceId": "washington-state-fair",
-      "sourceName": "Washington State Fair",
-      "sourceType": "html",
-      "url": "https://www.thefair.com/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
-      "fetches": [
-        {
-          "url": "https://www.thefair.com/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -178,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
+      "fetchedAt": "2026-06-25T23:45:27.815Z",
       "fetches": [
         {
           "url": "https://www.evergreenfair.org/",
@@ -191,10 +141,10 @@
     {
       "severity": "warning",
       "metroId": "seattle",
-      "sourceId": "festal-tibet-fest-2026",
-      "sourceName": "Festál: Tibet Fest",
+      "sourceId": "festal-indigenous-people-festival-2026",
+      "sourceName": "Festál: Indigenous People Festival",
       "sourceType": "officialTextEvents",
-      "url": "https://www.seattlecenter.com/events/featured-events/festal/tibet-fest",
+      "url": "https://www.seattlecenter.com/events/featured-events/festal/indigenous-people-festival",
       "status": "ok",
       "issueType": "zero-in-window",
       "reason": "Source returned events, but none were in the planning window.",
@@ -203,10 +153,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
+      "fetchedAt": "2026-06-25T23:45:27.815Z",
       "fetches": [
         {
-          "url": "https://www.seattlecenter.com/events/featured-events/festal/tibet-fest",
+          "url": "https://www.seattlecenter.com/events/featured-events/festal/indigenous-people-festival",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -228,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
+      "fetchedAt": "2026-06-25T23:45:27.815Z",
       "fetches": [
         {
           "url": "https://www.seattlecenter.com/events/featured-events/festal/brasilfest",
@@ -253,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
+      "fetchedAt": "2026-06-25T23:45:27.815Z",
       "fetches": [
         {
           "url": "https://www.seattlecenter.com/events/featured-events/festal/live-aloha-hawaiian-cultural-festival",
@@ -278,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
+      "fetchedAt": "2026-06-25T23:45:27.815Z",
       "fetches": [
         {
           "url": "https://www.seattlecenter.com/events/featured-events/festal/croatiafest",
@@ -303,7 +253,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
+      "fetchedAt": "2026-06-25T23:45:27.815Z",
       "fetches": [
         {
           "url": "https://www.neumos.com/events",
@@ -328,7 +278,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
+      "fetchedAt": "2026-06-25T23:45:27.815Z",
       "fetches": [
         {
           "url": "https://www.thecrocodile.com/events",
@@ -353,7 +303,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
+      "fetchedAt": "2026-06-25T23:45:27.815Z",
       "fetches": [
         {
           "url": "https://www.showboxpresents.com/events",
@@ -378,7 +328,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
+      "fetchedAt": "2026-06-25T23:45:27.815Z",
       "fetches": [
         {
           "url": "https://www.tractortavern.com/events",
@@ -403,7 +353,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
+      "fetchedAt": "2026-06-25T23:45:27.815Z",
       "fetches": [
         {
           "url": "https://www.sunsettavern.com/events",
@@ -428,7 +378,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
+      "fetchedAt": "2026-06-25T23:45:27.815Z",
       "fetches": [
         {
           "url": "https://www.unexpectedproductions.org/shows",
@@ -453,13 +403,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
+      "fetchedAt": "2026-06-25T23:45:27.815Z",
       "fetches": [
         {
           "url": "https://www.comedyunderground.com/calendar",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "seattle",
+      "sourceId": "nectar-lounge-shows",
+      "sourceName": "Nectar Lounge Shows",
+      "sourceType": "html",
+      "url": "https://www.nectarlounge.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-25T23:45:27.815Z",
+      "fetches": [
+        {
+          "url": "https://www.nectarlounge.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -478,7 +453,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
+      "fetchedAt": "2026-06-25T23:45:27.815Z",
       "fetches": [
         {
           "url": "https://bumbershoot.com/",
@@ -503,38 +478,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
+      "fetchedAt": "2026-06-25T23:45:27.815Z",
       "fetches": [
         {
           "url": "https://www.capitolhillblockparty.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html;charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "seattle",
-      "sourceId": "timber-music-fest-2026",
-      "sourceName": "Timber! Outdoor Music Festival 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://timbermusicfest.com/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:54:04.110Z",
-      "fetches": [
-        {
-          "url": "https://timbermusicfest.com/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
         }
       ]
     }
@@ -549,9 +499,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 14,
+      "liveEvents": 20,
       "fallbackEvents": 0,
-      "eventCount": 14,
+      "eventCount": 20,
       "fetches": [
         {
           "url": "https://kcls.bibliocommons.com/v2/events?programs=6092fc2d8910133a0055a335",
@@ -563,7 +513,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 14,
+      "extractedEvents": 20,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -576,9 +526,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 160,
+      "liveEvents": 165,
       "fallbackEvents": 0,
-      "eventCount": 160,
+      "eventCount": 165,
       "fetches": [
         {
           "url": "https://www.trumba.com/calendars/kalendaro.json?filterview=SeriesStoryTime",
@@ -589,8 +539,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=UTF-8",
-      "rejectedLiveEvents": 35,
-      "extractedEvents": 195,
+      "rejectedLiveEvents": 2,
+      "extractedEvents": 167,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -603,9 +553,9 @@
       "metroId": "seattle",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 79,
+      "liveEvents": 30,
       "fallbackEvents": 0,
-      "eventCount": 79,
+      "eventCount": 30,
       "fetches": [
         {
           "url": "https://seattlechildrensmuseum.org/calendar/",
@@ -616,7 +566,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 18,
+      "rejectedLiveEvents": 67,
       "extractedEvents": 97,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -632,7 +582,7 @@
       "status": "http-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 10,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://www.zoo.org/events?cgid=1",
@@ -644,7 +594,7 @@
       "httpStatus": 403,
       "contentType": "text/html",
       "extractedEvents": 0,
-      "lastKnownGoodEvents": 10,
+      "lastKnownGoodEvents": 2,
       "recoveryMode": "last-known-good"
     },
     {
@@ -710,9 +660,9 @@
       "metroId": "seattle",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://www.seattleaquarium.org/explore-the-aquarium/programs/toddler-time/",
@@ -724,7 +674,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 2,
-      "extractedEvents": 2,
+      "extractedEvents": 3,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -764,9 +714,9 @@
       "metroId": "seattle",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://www.thefair.com/",
@@ -778,7 +728,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -818,9 +768,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 4,
+      "liveEvents": 5,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 5,
       "fetches": [
         {
           "url": "https://kcls.bibliocommons.com/v2/events",
@@ -832,7 +782,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 4,
+      "extractedEvents": 5,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -845,9 +795,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 13,
+      "liveEvents": 12,
       "fallbackEvents": 0,
-      "eventCount": 13,
+      "eventCount": 12,
       "fetches": [
         {
           "url": "https://sno-isle.bibliocommons.com/v2/events",
@@ -859,7 +809,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 13,
+      "extractedEvents": 12,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -880,13 +830,13 @@
           "url": "https://bellevuebotanical.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=89; pages=1"
+          "contentType": "application/json; source=tribe-events; events=95; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=89; pages=1",
-      "rejectedLiveEvents": 66,
-      "extractedEvents": 88,
+      "contentType": "application/json; source=tribe-events; events=95; pages=1",
+      "rejectedLiveEvents": 72,
+      "extractedEvents": 94,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -926,9 +876,9 @@
       "metroId": "seattle",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.seattlecenter.com/events/featured-events/festal/indigenous-people-festival",
@@ -939,7 +889,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -953,9 +903,9 @@
       "metroId": "seattle",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://www.seattlecenter.com/events/featured-events/festal/tibet-fest",
@@ -966,7 +916,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 0,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -1247,9 +1197,9 @@
       "metroId": "seattle",
       "category": "Live Music",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.nectarlounge.com/",
@@ -1261,7 +1211,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 2,
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1328,9 +1278,9 @@
       "metroId": "seattle",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://timbermusicfest.com/",
@@ -1341,7 +1291,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 0,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null

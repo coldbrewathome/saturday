@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "metroId": "atlanta",
-  "generatedAt": "2026-06-07T14:56:39.213Z",
+  "generatedAt": "2026-06-25T23:49:38.405Z",
   "alertCount": 14,
   "alerts": [
     {
@@ -19,38 +19,13 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:56:39.213Z",
+      "fetchedAt": "2026-06-25T23:49:38.405Z",
       "fetches": [
         {
           "url": "https://www.atlantaga.gov/government/departments/parks-recreation/events",
           "status": "http-error",
           "httpStatus": 404,
           "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "atlanta",
-      "sourceId": "ticketmaster-atlanta-family",
-      "sourceName": "Ticketmaster Atlanta Family Events",
-      "sourceType": "ticketmaster",
-      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:56:39.213Z",
-      "fetches": [
-        {
-          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
         }
       ]
     },
@@ -69,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:56:39.213Z",
+      "fetchedAt": "2026-06-25T23:49:38.405Z",
       "fetches": [
         {
           "url": "https://www.northgeorgiastatefair.com/",
@@ -94,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:56:39.213Z",
+      "fetchedAt": "2026-06-25T23:49:38.405Z",
       "fetches": [
         {
           "url": "https://www.gwinnettcountyfair.com/",
@@ -119,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:56:39.213Z",
+      "fetchedAt": "2026-06-25T23:49:38.405Z",
       "fetches": [
         {
           "url": "https://beltline.org/art/lantern-parade/",
@@ -144,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:56:39.213Z",
+      "fetchedAt": "2026-06-25T23:49:38.405Z",
       "fetches": [
         {
           "url": "https://www.mariettaga.gov/194/Fourth-of-July-Celebration",
@@ -169,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:56:39.213Z",
+      "fetchedAt": "2026-06-25T23:49:38.405Z",
       "fetches": [
         {
           "url": "https://www.terminalwestatl.com/events",
@@ -194,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:56:39.213Z",
+      "fetchedAt": "2026-06-25T23:49:38.405Z",
       "fetches": [
         {
           "url": "https://www.varietyplayhouse.com/events",
@@ -219,13 +194,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:56:39.213Z",
+      "fetchedAt": "2026-06-25T23:49:38.405Z",
       "fetches": [
         {
           "url": "https://www.badearl.com/calendar",
           "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=UTF-8"
+          "httpStatus": 403,
+          "contentType": "text/html"
         }
       ]
     },
@@ -244,7 +219,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:56:39.213Z",
+      "fetchedAt": "2026-06-25T23:49:38.405Z",
       "fetches": [
         {
           "url": "https://laughingskulllounge.com/calendar",
@@ -269,13 +244,37 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:56:39.213Z",
+      "fetchedAt": "2026-06-25T23:49:38.405Z",
       "fetches": [
         {
           "url": "https://www.dadsgarage.com/calendar",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "atlanta",
+      "sourceId": "ponce-city-market-atl",
+      "sourceName": "Ponce City Market Events",
+      "sourceType": "tribeEvents",
+      "url": "https://www.poncecitymarket.com/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 7,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 7,
+      "fetchedAt": "2026-06-25T23:49:38.405Z",
+      "fetches": [
+        {
+          "url": "https://www.poncecitymarket.com/events/",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ]
     },
@@ -294,7 +293,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:56:39.213Z",
+      "fetchedAt": "2026-06-25T23:49:38.405Z",
       "fetches": [
         {
           "url": "https://www.shakykneesfestival.com/",
@@ -305,21 +304,21 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "atlanta",
       "sourceId": "atl-food-wine-fest-2026",
       "sourceName": "Atlanta Food & Wine Festival 2026",
       "sourceType": "officialTextEvents",
       "url": "https://atlfoodandwinefestival.com/",
       "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:56:39.213Z",
+      "fetchedAt": "2026-06-25T23:49:38.405Z",
       "fetches": [
         {
           "url": "https://atlfoodandwinefestival.com/",
@@ -344,7 +343,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:56:39.213Z",
+      "fetchedAt": "2026-06-25T23:49:38.405Z",
       "fetches": [
         {
           "url": "https://www.dragoncon.org/",

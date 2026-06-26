@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "new-york-city",
-  "generatedAt": "2026-06-07T14:53:41.950Z",
+  "generatedAt": "2026-06-25T23:44:57.659Z",
   "registryPath": "data/event-sources-new-york-city.json",
   "outputPath": "public/data/new-york-city/events.json",
-  "eventCount": 2260,
-  "adultsEventCount": 176,
+  "eventCount": 1982,
+  "adultsEventCount": 17,
   "sourceCount": 30,
-  "liveEventCount": 2243,
-  "lastKnownGoodEventCount": 1,
+  "liveEventCount": 1963,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 20,
-  "operatorAlertCount": 17,
+  "operatorAlertCount": 19,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://queens.libnet.info/events",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://www.nypl.org/events/calendar",
@@ -79,13 +79,38 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://www.amnh.org/calendar",
           "status": "http-error",
           "httpStatus": 403,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "new-york-city",
+      "sourceId": "bronx-zoo-events",
+      "sourceName": "Bronx Zoo Events",
+      "sourceType": "html",
+      "url": "https://bronxzoo.com/things-to-do/events",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
+      "fetches": [
+        {
+          "url": "https://bronxzoo.com/things-to-do/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -104,7 +129,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://njfair.com/",
@@ -129,7 +154,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://www.brooklynsteel.com/calendar",
@@ -154,7 +179,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://www.boweryballroom.com/calendar",
@@ -179,7 +204,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://www.musichallofwilliamsburg.com/calendar",
@@ -204,7 +229,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://lpr.com/calendar",
@@ -229,7 +254,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://www.terminal5nyc.com/calendar",
@@ -254,7 +279,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://www.websterhall.com/events",
@@ -279,7 +304,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://www.comedycellar.com/line-up/",
@@ -296,6 +321,32 @@
       "sourceName": "Gotham Comedy Club",
       "sourceType": "html",
       "url": "https://gothamcomedyclub.com/calendar",
+      "status": "blocked",
+      "issueType": "fetch-failed",
+      "reason": "challenge page returned instead of event content",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
+      "fetches": [
+        {
+          "url": "https://gothamcomedyclub.com/calendar",
+          "status": "blocked",
+          "reason": "challenge page returned instead of event content",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "elsewhere-brooklyn",
+      "sourceName": "Elsewhere",
+      "sourceType": "html",
+      "url": "https://www.elsewherebrooklyn.com/events",
       "status": "ok",
       "issueType": "zero-extracted",
       "reason": "Source returned a payload but no events were extracted.",
@@ -304,10 +355,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
-          "url": "https://gothamcomedyclub.com/calendar",
+          "url": "https://www.elsewherebrooklyn.com/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -329,7 +380,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://www.roughtradenyc.com/events",
@@ -353,7 +404,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://www.bluenotejazz.com/new-york/schedule",
@@ -378,7 +429,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://villagevanguard.com/events",
@@ -391,10 +442,10 @@
     {
       "severity": "warning",
       "metroId": "new-york-city",
-      "sourceId": "bric-celebrate-brooklyn-royel-otis-2026",
-      "sourceName": "BRIC Celebrate Brooklyn!: Royel Otis",
+      "sourceId": "jazz-age-lawn-party-2026",
+      "sourceName": "Jazz Age Lawn Party 2026",
       "sourceType": "officialTextEvents",
-      "url": "http://bricartsmedia.org/celebrate-brooklyn/",
+      "url": "https://www.jazzagelawnparty.com/",
       "status": "ok",
       "issueType": "zero-in-window",
       "reason": "Source returned events, but none were in the planning window.",
@@ -403,32 +454,32 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
-          "url": "http://bricartsmedia.org/celebrate-brooklyn/",
+          "url": "https://www.jazzagelawnparty.com/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "text/html;charset=utf-8"
         }
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "new-york-city",
       "sourceId": "summerstage-yellowcard-2026",
       "sourceName": "SummerStage: Yellowcard / New Found Glory / Plain White T's",
       "sourceType": "officialTextEvents",
       "url": "https://cityparksfoundation.org/summerstage/",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-06-07T14:53:41.950Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-06-25T23:44:57.659Z",
       "fetches": [
         {
           "url": "https://cityparksfoundation.org/summerstage/",
@@ -504,12 +555,66 @@
       "metroId": "new-york-city",
       "category": "Library",
       "status": "ok",
+      "liveEvents": 2,
+      "fallbackEvents": 0,
+      "eventCount": 2,
+      "fetches": [
+        {
+          "url": "https://www.bklynlibrary.org/event-series/events-for-youth-and-family",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 2,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "nyc-parks-kids",
+      "name": "NYC Parks Events",
+      "url": "https://www.nycgovparks.org/events",
+      "sourceType": "nycParksEvents",
+      "city": "New York",
+      "metroId": "new-york-city",
+      "category": "Park",
+      "status": "ok",
+      "liveEvents": 1604,
+      "fallbackEvents": 0,
+      "eventCount": 1604,
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/kids",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 409,
+      "extractedEvents": 2013,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "brooklyn-childrens-museum",
+      "name": "Brooklyn Children's Museum",
+      "url": "https://www.brooklynkids.org/events/",
+      "sourceType": "html",
+      "city": "Brooklyn",
+      "metroId": "new-york-city",
+      "category": "Museum",
+      "status": "ok",
       "liveEvents": 3,
       "fallbackEvents": 0,
       "eventCount": 3,
       "fetches": [
         {
-          "url": "https://www.bklynlibrary.org/event-series/events-for-youth-and-family",
+          "url": "https://www.brooklynkids.org/events/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -523,60 +628,6 @@
       "recoveryMode": null
     },
     {
-      "id": "nyc-parks-kids",
-      "name": "NYC Parks Events",
-      "url": "https://www.nycgovparks.org/events",
-      "sourceType": "nycParksEvents",
-      "city": "New York",
-      "metroId": "new-york-city",
-      "category": "Park",
-      "status": "ok",
-      "liveEvents": 1839,
-      "fallbackEvents": 0,
-      "eventCount": 1839,
-      "fetches": [
-        {
-          "url": "https://www.nycgovparks.org/events/kids",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 657,
-      "extractedEvents": 2496,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "brooklyn-childrens-museum",
-      "name": "Brooklyn Children's Museum",
-      "url": "https://www.brooklynkids.org/events/",
-      "sourceType": "html",
-      "city": "Brooklyn",
-      "metroId": "new-york-city",
-      "category": "Museum",
-      "status": "ok",
-      "liveEvents": 6,
-      "fallbackEvents": 0,
-      "eventCount": 6,
-      "fetches": [
-        {
-          "url": "https://www.brooklynkids.org/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 6,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
       "id": "new-victory-theater",
       "name": "New Victory Theater",
       "url": "https://www.newvictory.org/api/event-instances.json",
@@ -585,9 +636,9 @@
       "metroId": "new-york-city",
       "category": "Theater",
       "status": "ok",
-      "liveEvents": 14,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 14,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://www.newvictory.org/api/event-instances.json",
@@ -598,8 +649,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 142,
-      "extractedEvents": 156,
+      "rejectedLiveEvents": 140,
+      "extractedEvents": 143,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -665,9 +716,9 @@
       "metroId": "new-york-city",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://bronxzoo.com/things-to-do/events",
@@ -678,7 +729,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 2,
       "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -692,21 +743,21 @@
       "metroId": "new-york-city",
       "category": "Ticketed",
       "status": "ok",
-      "liveEvents": 9,
+      "liveEvents": 4,
       "fallbackEvents": 0,
-      "eventCount": 9,
+      "eventCount": 4,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=9; queries=1"
+          "contentType": "application/json; source=ticketmaster; events=4; queries=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=ticketmaster; events=9; queries=1",
+      "contentType": "application/json; source=ticketmaster; events=4; queries=1",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 9,
+      "extractedEvents": 4,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -746,21 +797,21 @@
       "metroId": "new-york-city",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 34,
+      "liveEvents": 26,
       "fallbackEvents": 0,
-      "eventCount": 34,
+      "eventCount": 26,
       "fetches": [
         {
           "url": "https://queensbotanical.org/calendar/list/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=97; pages=2"
+          "contentType": "application/json; source=tribe-events; events=81; pages=2"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=97; pages=2",
-      "rejectedLiveEvents": 57,
-      "extractedEvents": 91,
+      "contentType": "application/json; source=tribe-events; events=81; pages=2",
+      "rejectedLiveEvents": 49,
+      "extractedEvents": 75,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -773,9 +824,9 @@
       "metroId": "new-york-city",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 196,
+      "liveEvents": 194,
       "fallbackEvents": 0,
-      "eventCount": 196,
+      "eventCount": 194,
       "fetches": [
         {
           "url": "https://www.prospectpark.org/events/",
@@ -787,7 +838,7 @@
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
       "rejectedLiveEvents": 4,
-      "extractedEvents": 200,
+      "extractedEvents": 198,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -800,21 +851,21 @@
       "metroId": "new-york-city",
       "category": "Community",
       "status": "ok",
-      "liveEvents": 133,
+      "liveEvents": 121,
       "fallbackEvents": 0,
-      "eventCount": 133,
+      "eventCount": 121,
       "fetches": [
         {
           "url": "https://cityparksfoundation.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=179; pages=4"
+          "contentType": "application/json; source=tribe-events; events=142; pages=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=179; pages=4",
-      "rejectedLiveEvents": 46,
-      "extractedEvents": 179,
+      "contentType": "application/json; source=tribe-events; events=142; pages=3",
+      "rejectedLiveEvents": 21,
+      "extractedEvents": 142,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1040,21 +1091,22 @@
       "city": "Manhattan",
       "metroId": "new-york-city",
       "category": "Comedy",
-      "status": "ok",
+      "status": "blocked",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://gothamcomedyclub.com/calendar",
-          "status": "ok",
+          "status": "blocked",
+          "reason": "challenge page returned instead of event content",
           "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
+          "contentType": "text/html; charset=UTF-8"
         }
       ],
+      "reason": "challenge page returned instead of event content",
       "httpStatus": 200,
-      "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0,
+      "contentType": "text/html; charset=UTF-8",
       "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -1068,9 +1120,9 @@
       "metroId": "new-york-city",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.elsewherebrooklyn.com/events",
@@ -1082,7 +1134,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 2,
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1171,9 +1223,9 @@
       "metroId": "new-york-city",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.jazzagelawnparty.com/",
@@ -1184,7 +1236,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html;charset=utf-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -1198,9 +1250,9 @@
       "metroId": "new-york-city",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "http://bricartsmedia.org/celebrate-brooklyn/",
@@ -1211,7 +1263,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 0,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -1224,10 +1276,10 @@
       "city": "Manhattan",
       "metroId": "new-york-city",
       "category": "Music",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://cityparksfoundation.org/summerstage/",
@@ -1240,9 +1292,8 @@
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "recoveryMode": "last-known-good",
-      "reason": "source produced no live events; using last-known-good future events"
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     }
   ]
 }
