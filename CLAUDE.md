@@ -76,6 +76,16 @@ When the user says "deploy", it means **deploy to Cloudflare Pages directly via 
 
 If the user says "deploy" without specifying, default to both kids and adults (the shared `App.tsx` means a change usually ships to both). Run `npm run test` + `npm run validate:data` + `npm run validate:events` first to match what CI would check.
 
+## Google Indexing API & Automation
+
+To resolve sitemap crawl budget issues and automate search engine indexation:
+- **Core Script**: `npm run publish:indexing` (runs [publish-indexing.mjs](file:///Users/kning/Projects/saturday/scripts/publish-indexing.mjs)) reads `dist/sitemap.xml`, prioritizes hub pages, filters for new/modified events, and submits up to 200 URLs/day (quota limit) to the Google Indexing API.
+- **History**: Submission timestamps are saved in [indexing-history.json](file:///Users/kning/Projects/saturday/data/indexing-history.json) to maintain a rolling queue.
+- **GitHub Actions (Cloud)**: The daily `refresh-data` workflow runs the publisher and automatically commits the updated history file back to `main`. Requires the `GOOGLE_INDEXING_CREDENTIALS` repository secret.
+- **macOS Scheduler (Local)**: A launchd agent runs [local-indexing-cron.sh](file:///Users/kning/Projects/saturday/scripts/local-indexing-cron.sh) daily at 9:00 AM using local `gcloud` ADC credentials.
+  - Setup: run [setup-local-cron.sh](file:///Users/kning/Projects/saturday/scripts/setup-local-cron.sh) to copy the plist configuration to `~/Library/LaunchAgents/` and load it.
+  - Logs: written to [local-indexing.log](file:///Users/kning/Projects/saturday/tmp/local-indexing.log).
+
 ## Shared Skills
 
 - For local event discovery, source repair, Bay Area feed repopulation, or missing-event audits, read and follow `skills/grounded-event-discovery/SKILL.md`. It defines the official-source search workflow and verification gates shared with Codex.
