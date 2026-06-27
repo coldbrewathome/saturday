@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "tsc -b && vite build && SEO_MAX_ENDED_STUBS=0 SEO_MAX_EVENT_PAGES_PER_METRO=600 node scripts/generate-seo-pages.mjs",
+    "build": "tsc -b && vite build && SEO_MAX_ENDED_STUBS=0 SEO_MAX_EVENT_PAGES_PER_METRO=600 SEO_PRIORITY_UNTIL=2026-07-05 node scripts/generate-seo-pages.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "ingest:bay-area": "node scripts/ingest-bay-area.mjs",
     "ingest:events": "node scripts/ingest-events.mjs && node scripts/generate-featured-plans.mjs && node scripts/build-coverage-summary.mjs",
@@ -18,6 +18,7 @@
     "ops:sources": "node scripts/source-repair-agent.mjs",
     "publish:events": "node scripts/publish-events.mjs",
     "publish:events:all": "node scripts/publish-events-all.mjs",
+    "publish:indexing": "node scripts/publish-indexing.mjs",
     "build:data-site": "node scripts/build-data-site.mjs",
     "deploy:data": "npm run build:data-site && npx wrangler pages deploy data-site/dist --project-name=famhop-data --branch=main --commit-dirty=true",
     "deploy:kids": "npm run build && npx wrangler pages deploy dist --project-name=saturday-spots --branch=main --commit-dirty=true",

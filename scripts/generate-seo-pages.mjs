@@ -153,12 +153,29 @@ const ADULTS_DATA_FILES = {
 // total deployment file count regardless of how stubs distribute by metro.
 let endedStubBudget = MAX_ENDED_STUBS;
 
+// Soonest event dates lead to the highest-intent SEO pages, but on dense
+// metros a flood of weekday events can push an upcoming *holiday weekend* past
+// the soonest-N cap (e.g. Bay Area July 4th events sat at rank ~960 > 600).
+// SEO_PRIORITY_UNTIL (YYYY-MM-DD) force-includes every event on/before that
+// date, then fills the remaining budget by soonest. Default empty = unchanged.
+const SEO_PRIORITY_UNTIL = process.env.SEO_PRIORITY_UNTIL || "";
 function capEventsForPages(events) {
-  if (events.length <= MAX_EVENT_PAGES_PER_METRO) return events;
+  if (events.length <= MAX_EVENT_PAGES_PER_METRO && !SEO_PRIORITY_UNTIL) return events;
   const FAR = "9999"; // undated (recurring) events sort last → dropped first
-  return [...events]
-    .sort((a, b) => (a.startDateTime || FAR).localeCompare(b.startDateTime || FAR))
-    .slice(0, MAX_EVENT_PAGES_PER_METRO);
+  const sorted = [...events].sort((a, b) =>
+    (a.startDateTime || FAR).localeCompare(b.startDateTime || FAR),
+  );
+  if (SEO_PRIORITY_UNTIL) {
+    const priority = [];
+    const rest = [];
+    for (const e of sorted) {
+      if ((e.startDateTime || FAR).slice(0, 10) <= SEO_PRIORITY_UNTIL) priority.push(e);
+      else rest.push(e);
+    }
+    if (priority.length >= MAX_EVENT_PAGES_PER_METRO) return priority;
+    return [...priority, ...rest.slice(0, MAX_EVENT_PAGES_PER_METRO - priority.length)];
+  }
+  return sorted.slice(0, MAX_EVENT_PAGES_PER_METRO);
 }
 const SEO_PINNED_PATHS = readJson(path.join(ROOT, "data", "seo-pinned-paths.json")) || {};
 const FREE_CATEGORIES = new Set(["Library", "Park"]);

@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "san-diego",
-  "generatedAt": "2026-06-25T23:52:40.500Z",
+  "generatedAt": "2026-06-27T01:04:28.969Z",
   "registryPath": "data/event-sources-san-diego.json",
   "outputPath": "public/data/san-diego/events.json",
-  "eventCount": 308,
-  "adultsEventCount": 71,
-  "sourceCount": 17,
-  "liveEventCount": 374,
+  "eventCount": 319,
+  "adultsEventCount": 93,
+  "sourceCount": 18,
+  "liveEventCount": 398,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
   "operatorAlertCount": 9,
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:52:40.500Z",
+      "fetchedAt": "2026-06-27T01:04:28.969Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:52:40.500Z",
+      "fetchedAt": "2026-06-27T01:04:28.969Z",
       "fetches": [
         {
           "url": "https://www.sdfair.com/",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:52:40.500Z",
+      "fetchedAt": "2026-06-27T01:04:28.969Z",
       "fetches": [
         {
           "url": "https://balboapark.org/twilight-concerts/",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:52:40.500Z",
+      "fetchedAt": "2026-06-27T01:04:28.969Z",
       "fetches": [
         {
           "url": "https://www.casbahmusic.com/events",
@@ -128,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:52:40.500Z",
+      "fetchedAt": "2026-06-27T01:04:28.969Z",
       "fetches": [
         {
           "url": "https://www.bellyup.com/events",
@@ -153,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:52:40.500Z",
+      "fetchedAt": "2026-06-27T01:04:28.969Z",
       "fetches": [
         {
           "url": "https://www.musicboxsd.com/events",
@@ -178,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:52:40.500Z",
+      "fetchedAt": "2026-06-27T01:04:28.969Z",
       "fetches": [
         {
           "url": "https://www.observatorysd.com/events",
@@ -203,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:52:40.500Z",
+      "fetchedAt": "2026-06-27T01:04:28.969Z",
       "fetches": [
         {
           "url": "https://www.americancomedyco.com/calendar",
@@ -228,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:52:40.500Z",
+      "fetchedAt": "2026-06-27T01:04:28.969Z",
       "fetches": [
         {
           "url": "https://thecomedystore.com/la-jolla/",
@@ -240,6 +240,20 @@
     }
   ],
   "sources": [
+    {
+      "id": "manual",
+      "name": "Manual entries",
+      "url": "data/manual-events-san-diego.json",
+      "sourceType": "manual",
+      "city": null,
+      "metroId": "san-diego",
+      "category": null,
+      "status": "ok",
+      "liveEvents": 11,
+      "fallbackEvents": 0,
+      "eventCount": 11,
+      "fetches": []
+    },
     {
       "id": "san-diego-library-family",
       "name": "San Diego County Library Events",
@@ -276,9 +290,9 @@
       "metroId": "san-diego",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 23,
+      "liveEvents": 18,
       "fallbackEvents": 0,
-      "eventCount": 23,
+      "eventCount": 18,
       "fetches": [
         {
           "url": "https://www.sandiego.gov/park-and-recreation/event-calendar",
@@ -289,7 +303,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; source=san-diego-drupal-page-only",
-      "rejectedLiveEvents": 43,
+      "rejectedLiveEvents": 48,
       "extractedEvents": 66,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -303,9 +317,9 @@
       "metroId": "san-diego",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 47,
+      "liveEvents": 39,
       "fallbackEvents": 0,
-      "eventCount": 47,
+      "eventCount": 39,
       "fetches": [
         {
           "url": "https://thinkplaycreate.org/events/",
@@ -316,7 +330,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 153,
+      "rejectedLiveEvents": 161,
       "extractedEvents": 200,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -330,9 +344,9 @@
       "metroId": "san-diego",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 135,
+      "liveEvents": 132,
       "fallbackEvents": 0,
-      "eventCount": 135,
+      "eventCount": 132,
       "fetches": [
         {
           "url": "https://zoo.sandiegozoo.org/activities/wildlife-presentations",
@@ -343,7 +357,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 3,
+      "rejectedLiveEvents": 6,
       "extractedEvents": 138,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -411,9 +425,9 @@
       "metroId": "san-diego",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 93,
+      "liveEvents": 109,
       "fallbackEvents": 0,
-      "eventCount": 93,
+      "eventCount": 109,
       "fetches": [
         {
           "url": "https://www.balboapark.org/events/",
@@ -424,7 +438,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 107,
+      "rejectedLiveEvents": 91,
       "extractedEvents": 200,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -651,9 +665,9 @@
       "metroId": "san-diego",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 64,
+      "liveEvents": 77,
       "fallbackEvents": 0,
-      "eventCount": 64,
+      "eventCount": 77,
       "fetches": [
         {
           "url": "https://www.balboapark.org/events/",
@@ -664,7 +678,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 136,
+      "rejectedLiveEvents": 123,
       "extractedEvents": 200,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null

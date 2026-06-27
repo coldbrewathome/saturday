@@ -180,6 +180,35 @@ const HOLIDAY_WEEKENDS = [
     re: /\b(memorial|fleet\s*week|carnaval|flag\s*garden|fort\s*rosecrans|uss\s*midway|uss\s*pampanito|hillsborough|rohnert|foodieland|brooklyn.{0,40}parade|intrepid|danceafrica|arlington|rolling\s*to\s*remember|seaport.{0,40}parade|dorchester.{0,40}parade|canoga|national\s*memorial|veteran)\b/i,
     accent: "festival",
   },
+  {
+    id: "juneteenth-2026",
+    name: "Juneteenth Weekend",
+    short: "Juneteenth",
+    start: "2026-06-19T00:00:00-07:00",
+    end: "2026-06-22T00:00:00-07:00",
+    re: /\bjuneteenth\b/i,
+    accent: "festival",
+  },
+  {
+    id: "fathers-day-2026",
+    name: "Father's Day Weekend",
+    short: "Father's Day",
+    start: "2026-06-20T00:00:00-07:00",
+    end: "2026-06-22T00:00:00-07:00",
+    re: /\b(father['’]?s\s*day|day\s*of\s*the\s*dad|wild\s*dads?|for\s*dads?)\b/i,
+    accent: "festival",
+  },
+  {
+    id: "independence-day-2026",
+    name: "4th of July Weekend",
+    short: "4th of July",
+    // Wide window (Eastern midnight Jul 3 -> Hawaii midnight Jul 6) so every
+    // metro's Jul 3-5 local events fall inside regardless of timezone.
+    start: "2026-07-03T00:00:00-04:00",
+    end: "2026-07-06T00:00:00-10:00",
+    re: /\b(4th\s*of\s*july|fourth\s*of\s*july|july\s*4th?|independence\s*day|fireworks|drone\s*show|freedom\s*fest|americafest|big\s*bay\s*boom|boston\s*pops|capitol\s*fourth|salute\s*to\s*america|star[\s-]*spangled|red,?\s*white|patriotic|nathan['’]?s|harborfest|world['’]?s\s*shortest\s*parade|pancake\s*breakfast|all[\s-]*american|stars?\s*(?:&|and)\s*stripes|america['’]?s?\s*250|parade)\b/i,
+    accent: "festival",
+  },
 ];
 
 function eventMatchesHoliday(event, holiday) {
