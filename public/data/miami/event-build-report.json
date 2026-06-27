@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "miami",
-  "generatedAt": "2026-06-25T23:51:12.505Z",
+  "generatedAt": "2026-06-27T15:29:01.532Z",
   "registryPath": "data/event-sources-miami.json",
   "outputPath": "public/data/miami/events.json",
-  "eventCount": 1747,
-  "adultsEventCount": 63,
-  "sourceCount": 20,
-  "liveEventCount": 1776,
-  "lastKnownGoodEventCount": 1,
+  "eventCount": 1704,
+  "adultsEventCount": 67,
+  "sourceCount": 21,
+  "liveEventCount": 1552,
+  "lastKnownGoodEventCount": 182,
   "fallbackEventCount": 8,
-  "operatorAlertCount": 10,
+  "operatorAlertCount": 11,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:51:12.505Z",
+      "fetchedAt": "2026-06-27T15:29:01.532Z",
       "fetches": [
         {
           "url": "https://mdpls.libnet.info/events",
@@ -52,7 +52,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:51:12.505Z",
+      "fetchedAt": "2026-06-27T15:29:01.532Z",
       "fetches": [
         {
           "url": "https://www.fairexpo.com/",
@@ -77,13 +77,37 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:51:12.505Z",
+      "fetchedAt": "2026-06-27T15:29:01.532Z",
       "fetches": [
         {
           "url": "https://www.southfloridafair.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "miami",
+      "sourceId": "miami-beach-city-events",
+      "sourceName": "City of Miami Beach Events",
+      "sourceType": "tribeEvents",
+      "url": "https://events.miamibeachfl.gov/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 181,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 181,
+      "fetchedAt": "2026-06-27T15:29:01.532Z",
+      "fetches": [
+        {
+          "url": "https://events.miamibeachfl.gov/",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ]
     },
@@ -102,7 +126,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-06-25T23:51:12.505Z",
+      "fetchedAt": "2026-06-27T15:29:01.532Z",
       "fetches": [
         {
           "url": "https://www.miamidade.gov/global/news-item.page?Mduid_news=news1749487408016784",
@@ -127,7 +151,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:51:12.505Z",
+      "fetchedAt": "2026-06-27T15:29:01.532Z",
       "fetches": [
         {
           "url": "https://clubspace.com/events",
@@ -152,7 +176,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:51:12.505Z",
+      "fetchedAt": "2026-06-27T15:29:01.532Z",
       "fetches": [
         {
           "url": "https://thegroundmiami.com/events",
@@ -177,7 +201,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:51:12.505Z",
+      "fetchedAt": "2026-06-27T15:29:01.532Z",
       "fetches": [
         {
           "url": "https://www.grframps.com/calendar",
@@ -201,7 +225,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:51:12.505Z",
+      "fetchedAt": "2026-06-27T15:29:01.532Z",
       "fetches": [
         {
           "url": "https://www.oasiswynwood.com/events",
@@ -226,7 +250,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:51:12.505Z",
+      "fetchedAt": "2026-06-27T15:29:01.532Z",
       "fetches": [
         {
           "url": "https://www.lasrosasbar.com/events",
@@ -251,7 +275,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:51:12.505Z",
+      "fetchedAt": "2026-06-27T15:29:01.532Z",
       "fetches": [
         {
           "url": "https://www.miamiimprov.com/calendar",
@@ -263,6 +287,20 @@
     }
   ],
   "sources": [
+    {
+      "id": "manual",
+      "name": "Manual entries",
+      "url": "data/manual-events-miami.json",
+      "sourceType": "manual",
+      "city": null,
+      "metroId": "miami",
+      "category": null,
+      "status": "ok",
+      "liveEvents": 6,
+      "fallbackEvents": 0,
+      "eventCount": 6,
+      "fetches": []
+    },
     {
       "id": "miami-library-family",
       "name": "Miami-Dade Public Library Events",
@@ -323,21 +361,21 @@
       "metroId": "miami",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 17,
+      "liveEvents": 19,
       "fallbackEvents": 0,
-      "eventCount": 17,
+      "eventCount": 19,
       "fetches": [
         {
           "url": "https://www.frostscience.org/calendar-events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=25; pages=1"
+          "contentType": "application/json; source=tribe-events; events=29; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=25; pages=1",
-      "rejectedLiveEvents": 8,
-      "extractedEvents": 25,
+      "contentType": "application/json; source=tribe-events; events=29; pages=1",
+      "rejectedLiveEvents": 10,
+      "extractedEvents": 29,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -458,21 +496,21 @@
       "metroId": "miami",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 1360,
+      "liveEvents": 1326,
       "fallbackEvents": 0,
-      "eventCount": 1360,
+      "eventCount": 1326,
       "fetches": [
         {
           "url": "https://broward.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=2419; locations=40"
+          "contentType": "application/json; source=communico-events; events=2426; locations=40"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=2419; locations=40",
-      "rejectedLiveEvents": 6,
-      "extractedEvents": 1366,
+      "contentType": "application/json; source=communico-events; events=2426; locations=40",
+      "rejectedLiveEvents": 23,
+      "extractedEvents": 1349,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -484,24 +522,21 @@
       "city": "Miami Beach",
       "metroId": "miami",
       "category": "Community",
-      "status": "ok",
-      "liveEvents": 196,
+      "status": "fetch-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 196,
+      "eventCount": 181,
       "fetches": [
         {
           "url": "https://events.miamibeachfl.gov/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=200; pages=4"
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 4,
-      "extractedEvents": 200,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "reason": "This operation was aborted",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 181,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "miami-coral-gables-museum",
@@ -520,13 +555,13 @@
           "url": "http://coralgablesmuseum.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=43; pages=1"
+          "contentType": "application/json; source=tribe-events; events=42; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=43; pages=1",
-      "rejectedLiveEvents": 3,
-      "extractedEvents": 43,
+      "contentType": "application/json; source=tribe-events; events=42; pages=1",
+      "rejectedLiveEvents": 2,
+      "extractedEvents": 42,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -539,21 +574,21 @@
       "metroId": "miami",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 11,
+      "liveEvents": 10,
       "fallbackEvents": 0,
-      "eventCount": 11,
+      "eventCount": 10,
       "fetches": [
         {
           "url": "https://miamibeachbandshell.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=26; pages=1"
+          "contentType": "application/json; source=tribe-events; events=25; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=26; pages=1",
+      "contentType": "application/json; source=tribe-events; events=25; pages=1",
       "rejectedLiveEvents": 15,
-      "extractedEvents": 26,
+      "extractedEvents": 25,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -566,9 +601,9 @@
       "metroId": "miami",
       "category": "Community",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://www.citynmb.com/calendar.aspx?view=list&CID=14",
@@ -586,7 +621,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 3,
+      "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
