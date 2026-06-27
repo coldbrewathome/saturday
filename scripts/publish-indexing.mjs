@@ -215,8 +215,9 @@ async function main() {
                     /this-weekend\/?$/i.test(loc);
                     
       const isNew = lastmod === todayStr || lastmod === yesterdayStr;
+      const isEvent = loc.includes("/event/");
 
-      if (isHub || isNew) {
+      if (isHub || isNew || isEvent) {
         urls.push({ loc, lastmod, isHub });
       }
     }
@@ -226,11 +227,17 @@ async function main() {
 
   // Sort candidate URLs:
   // 1. Hubs first (highest priority)
-  // 2. Non-hubs with no history (never submitted)
-  // 3. Non-hubs with oldest submission date first (rolling queue)
+  // 2. Events over spots (timely content)
+  // 3. Non-hubs with no history (never submitted)
+  // 4. Non-hubs with oldest submission date first (rolling queue)
   urls.sort((a, b) => {
     if (a.isHub && !b.isHub) return -1;
     if (!a.isHub && b.isHub) return 1;
+
+    const aIsEvent = a.loc.includes("/event/");
+    const bIsEvent = b.loc.includes("/event/");
+    if (aIsEvent && !bIsEvent) return -1;
+    if (!aIsEvent && bIsEvent) return 1;
 
     const aHist = history[a.loc] || "";
     const bHist = history[b.loc] || "";
