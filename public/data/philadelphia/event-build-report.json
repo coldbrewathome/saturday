@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "philadelphia",
-  "generatedAt": "2026-06-25T23:50:36.505Z",
+  "generatedAt": "2026-06-27T05:42:32.831Z",
   "registryPath": "data/event-sources-philadelphia.json",
   "outputPath": "public/data/philadelphia/events.json",
-  "eventCount": 1175,
-  "adultsEventCount": 77,
-  "sourceCount": 24,
-  "liveEventCount": 1199,
+  "eventCount": 1177,
+  "adultsEventCount": 83,
+  "sourceCount": 25,
+  "liveEventCount": 1200,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 16,
   "operatorAlertCount": 12,
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:50:36.505Z",
+      "fetchedAt": "2026-06-27T05:42:32.831Z",
       "fetches": [
         {
           "url": "https://freelibraryfoundation.org/events/",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:50:36.505Z",
+      "fetchedAt": "2026-06-27T05:42:32.831Z",
       "fetches": [
         {
           "url": "https://www.phila.gov/departments/philadelphia-parks-recreation/#calendar",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:50:36.505Z",
+      "fetchedAt": "2026-06-27T05:42:32.831Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -95,20 +95,21 @@
       "sourceName": "Middletown Grange Fair",
       "sourceType": "html",
       "url": "https://middletowngrangefair.org/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:50:36.505Z",
+      "fetchedAt": "2026-06-27T05:42:32.831Z",
       "fetches": [
         {
           "url": "https://middletowngrangefair.org/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
         }
       ]
     },
@@ -127,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:50:36.505Z",
+      "fetchedAt": "2026-06-27T05:42:32.831Z",
       "fetches": [
         {
           "url": "https://www.utphilly.com/events",
@@ -152,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:50:36.505Z",
+      "fetchedAt": "2026-06-27T05:42:32.831Z",
       "fetches": [
         {
           "url": "https://www.thefillmorephilly.com/events",
@@ -177,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:50:36.505Z",
+      "fetchedAt": "2026-06-27T05:42:32.831Z",
       "fetches": [
         {
           "url": "https://www.johnnybrendas.com/events",
@@ -202,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:50:36.505Z",
+      "fetchedAt": "2026-06-27T05:42:32.831Z",
       "fetches": [
         {
           "url": "https://www.thefoundryphilly.com/events",
@@ -226,7 +227,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:50:36.505Z",
+      "fetchedAt": "2026-06-27T05:42:32.831Z",
       "fetches": [
         {
           "url": "https://philadelphia.heliumcomedy.com/events",
@@ -251,7 +252,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:50:36.505Z",
+      "fetchedAt": "2026-06-27T05:42:32.831Z",
       "fetches": [
         {
           "url": "https://xpn.org/xpnfest/",
@@ -276,7 +277,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:50:36.505Z",
+      "fetchedAt": "2026-06-27T05:42:32.831Z",
       "fetches": [
         {
           "url": "https://phillyfringe.org/",
@@ -301,7 +302,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-25T23:50:36.505Z",
+      "fetchedAt": "2026-06-27T05:42:32.831Z",
       "fetches": [
         {
           "url": "https://folkfest.org/",
@@ -313,6 +314,20 @@
     }
   ],
   "sources": [
+    {
+      "id": "manual",
+      "name": "Manual entries",
+      "url": "data/manual-events-philadelphia.json",
+      "sourceType": "manual",
+      "city": null,
+      "metroId": "philadelphia",
+      "category": null,
+      "status": "ok",
+      "liveEvents": 9,
+      "fallbackEvents": 0,
+      "eventCount": 9,
+      "fetches": []
+    },
     {
       "id": "philadelphia-library-family",
       "name": "Free Library of Philadelphia Foundation Events",
@@ -376,9 +391,9 @@
       "metroId": "philadelphia",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 566,
+      "liveEvents": 537,
       "fallbackEvents": 0,
-      "eventCount": 566,
+      "eventCount": 537,
       "fetches": [
         {
           "url": "https://www.pleasetouchmuseum.org/calendar/month/",
@@ -389,7 +404,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=600; pages=12",
-      "rejectedLiveEvents": 34,
+      "rejectedLiveEvents": 63,
       "extractedEvents": 600,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -456,18 +471,21 @@
       "city": "Wrightstown",
       "metroId": "philadelphia",
       "category": "Festival",
-      "status": "fetch-error",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://middletowngrangefair.org/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
         }
       ],
-      "reason": "fetch failed",
+      "httpStatus": 200,
+      "contentType": "text/html;charset=utf-8",
+      "rejectedLiveEvents": 0,
       "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -481,9 +499,9 @@
       "metroId": "philadelphia",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 11,
+      "liveEvents": 8,
       "fallbackEvents": 0,
-      "eventCount": 11,
+      "eventCount": 8,
       "fetches": [
         {
           "url": "https://bclsnj.bibliocommons.com/v2/events",
@@ -495,7 +513,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 11,
+      "extractedEvents": 8,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -508,9 +526,9 @@
       "metroId": "philadelphia",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 146,
+      "liveEvents": 144,
       "fallbackEvents": 0,
-      "eventCount": 146,
+      "eventCount": 144,
       "fetches": [
         {
           "url": "https://mnl.libcal.com/calendar?cid=19360&cal=19360",
@@ -521,8 +539,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 21,
-      "extractedEvents": 167,
+      "rejectedLiveEvents": 18,
+      "extractedEvents": 162,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -535,9 +553,9 @@
       "metroId": "philadelphia",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 236,
+      "liveEvents": 222,
       "fallbackEvents": 0,
-      "eventCount": 236,
+      "eventCount": 222,
       "fetches": [
         {
           "url": "https://delcolibraries.libcal.com/calendar?cid=10206&cal=10206",
@@ -548,8 +566,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 237,
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 222,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -562,9 +580,9 @@
       "metroId": "philadelphia",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 180,
+      "liveEvents": 221,
       "fallbackEvents": 0,
-      "eventCount": 180,
+      "eventCount": 221,
       "fetches": [
         {
           "url": "https://calendar.buckslib.org/calendar?cid=3891&cal=3891",
@@ -575,8 +593,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 2,
-      "extractedEvents": 182,
+      "rejectedLiveEvents": 4,
+      "extractedEvents": 225,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -589,9 +607,9 @@
       "metroId": "philadelphia",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 7,
+      "liveEvents": 8,
       "fallbackEvents": 0,
-      "eventCount": 7,
+      "eventCount": 8,
       "fetches": [
         {
           "url": "https://ansp.org/programs-and-events/events/",
@@ -602,8 +620,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 7,
-      "extractedEvents": 14,
+      "rejectedLiveEvents": 8,
+      "extractedEvents": 16,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -616,9 +634,9 @@
       "metroId": "philadelphia",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://july4thphilly.com/events/",
@@ -629,7 +647,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 2,
       "extractedEvents": 4,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -774,9 +792,9 @@
       "metroId": "philadelphia",
       "category": "Comedy",
       "status": "ok",
-      "liveEvents": 36,
+      "liveEvents": 35,
       "fallbackEvents": 0,
-      "eventCount": 36,
+      "eventCount": 35,
       "fetches": [
         {
           "url": "https://www.punchlinephilly.com/shows",
@@ -787,7 +805,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 36,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
