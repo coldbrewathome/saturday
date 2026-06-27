@@ -36,6 +36,8 @@ const DIST = path.join(ROOT, "dist");
 const DATA = path.join(ROOT, "public", "data");
 const metroConfig = loadMetroConfig();
 const BUILD_ENV = readBuildEnv();
+const TEMPLATE_UPDATED_AT = "2026-06-27"; // Signal template/schema changes to Googlebot
+
 
 function envValue(name, fallback = "") {
   return process.env[name] || BUILD_ENV[name] || fallback;
@@ -1619,7 +1621,7 @@ function generateSpotPages(items, spotSlugLookup, generatedCitySlugs, featuredSp
 
     sitemapEntries.push({
       loc: canonical,
-      lastmod: spot.updatedAt || today(),
+      lastmod: (spot.updatedAt && spot.updatedAt > TEMPLATE_UPDATED_AT) ? spot.updatedAt : TEMPLATE_UPDATED_AT,
       changefreq: "weekly",
       priority: 0.6,
     });
@@ -1734,6 +1736,14 @@ function buildSpotJsonLd(spot, canonical) {
       ratingValue: Number(spot.googleRating.toFixed(1)),
       reviewCount: spot.googleRatingCount,
     };
+    const localBusinessSubtypes = new Set([
+      "LocalBusiness", "Restaurant", "Bakery", "CafeOrCoffeeShop", "NightClub",
+      "BarOrPub", "ArtGallery", "Library", "MovieTheater", "AmusementPark",
+      "ExerciseGym", "HealthAndBeautyBusiness", "Store", "FoodEstablishment"
+    ]);
+    if (!localBusinessSubtypes.has(placeType)) {
+      node["@type"] = [placeType, "LocalBusiness"];
+    }
   }
   if (spot.website) node.sameAs = [spot.website];
   if (spot.wikidataId) {
