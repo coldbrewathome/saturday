@@ -32,14 +32,38 @@ export function slugEndedAfterMs(slug) {
 // - "gone": ended event → HTTP 410 branded page (noindex). Without this,
 //   expired event URLs serve the SPA shell with 200 + index,follow —
 //   thousands of soft-404s.
-// - "noindex-shell": future/undated event (e.g. capped-out live events) or
-//   gated-out spot → serve the SPA shell but add x-robots-tag: noindex.
-//   410 is wrong for spots: a spot can re-earn its prerendered page on a
-//   later build, and undated slugs give no evidence the thing is over.
-export function missingPageDisposition(kind, slug, nowMs = Date.now()) {
+// - "not-found": event slug the catalog has never recorded → HTTP 404
+//   (noindex). Only returned when an authoritative `catalog` is supplied;
+//   without it we cannot tell a fake slug from a real-but-uncatalogued one,
+//   so we fall back to "noindex-shell".
+// - "noindex-shell": a live-but-not-prerendered event (capped out of the page
+//   budget), or any spot, or — with no catalog — a future/undated event.
+//   Serve the SPA shell but add x-robots-tag: noindex. 410/404 are wrong for
+//   spots (a spot can re-earn its prerendered page on a later build) and for
+//   live capped events (the page is real, just not statically rendered).
+//
+// `catalog` (optional) is the per-metro event-seo-manifest classification:
+//   { liveSet: Set<slug>, endedSet: Set<slug> }. liveSet = slugs in the
+//   current dataset; endedSet = slugs seen in the rolling slug history but no
+//   longer live. When present it is authoritative for the unknown→404 split.
+/**
+ * @param {string} kind
+ * @param {string} slug
+ * @param {number} [nowMs]
+ * @param {{liveSet?: Set<string>, endedSet?: Set<string>} | null} [catalog]
+ * @returns {"gone"|"not-found"|"noindex-shell"}
+ */
+export function missingPageDisposition(kind, slug, nowMs = Date.now(), catalog = null) {
   if (kind === "event") {
     const endedAfter = slugEndedAfterMs(slug);
     if (endedAfter !== null && nowMs >= endedAfter) return "gone";
+    if (catalog) {
+      if (catalog.endedSet && catalog.endedSet.has(slug)) return "gone";
+      if (catalog.liveSet && catalog.liveSet.has(slug)) return "noindex-shell";
+      // Authoritative catalog and the slug is neither live nor a known-ended
+      // event, and it carries no past date — it never existed.
+      return "not-found";
+    }
   }
   return "noindex-shell";
 }

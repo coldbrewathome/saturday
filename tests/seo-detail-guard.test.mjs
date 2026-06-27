@@ -71,3 +71,55 @@ test("spot pages never 410, even with a date-like suffix", () => {
   assert.equal(missingPageDisposition("spot", "pop-up-2020-01-01", NOW), "noindex-shell");
   assert.equal(missingPageDisposition("spot", "exploratorium", NOW), "noindex-shell");
 });
+
+// --- missingPageDisposition with an authoritative catalog (404 vs 410) --------
+
+const CATALOG = {
+  liveSet: new Set(["coyote-hills-fabulous-frogs", "summer-fest-2026-08-01"]),
+  endedSet: new Set(["hayward-rec-family-fun-day-9d4b2ef02f"]),
+};
+
+test("undated slug in the ended catalog is gone (410), not a soft-404", () => {
+  assert.equal(
+    missingPageDisposition("event", "hayward-rec-family-fun-day-9d4b2ef02f", NOW, CATALOG),
+    "gone",
+  );
+});
+
+test("live-but-capped event (in liveSet, no page) stays noindex-shell, never 404", () => {
+  assert.equal(
+    missingPageDisposition("event", "coyote-hills-fabulous-frogs", NOW, CATALOG),
+    "noindex-shell",
+  );
+  // A future-dated live event the catalog knows about is also just shell.
+  assert.equal(
+    missingPageDisposition("event", "summer-fest-2026-08-01", NOW, CATALOG),
+    "noindex-shell",
+  );
+});
+
+test("slug the catalog never recorded is a real 404", () => {
+  assert.equal(
+    missingPageDisposition("event", "this-is-a-totally-fake-event-xyz123", NOW, CATALOG),
+    "not-found",
+  );
+});
+
+test("a past date always wins over the catalog (410 even if untracked)", () => {
+  assert.equal(
+    missingPageDisposition("event", "mystery-parade-2026-05-25", NOW, CATALOG),
+    "gone",
+  );
+});
+
+test("without a catalog, unknown event slugs stay noindex-shell (no false 404)", () => {
+  assert.equal(missingPageDisposition("event", "who-knows-this", NOW), "noindex-shell");
+  assert.equal(missingPageDisposition("event", "who-knows-this", NOW, null), "noindex-shell");
+});
+
+test("spots ignore the catalog entirely", () => {
+  assert.equal(
+    missingPageDisposition("spot", "this-is-a-totally-fake-spot-xyz123", NOW, CATALOG),
+    "noindex-shell",
+  );
+});

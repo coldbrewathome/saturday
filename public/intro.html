@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>FamHop — Find your weekend</title>
+<meta name="description" content="FamHop turns 'what do we do this weekend?' into a ready-made plan — parks, libraries, museums, and real family events near you." />
+<link rel="canonical" href="https://famhop.com/intro.html" />
+
+<!-- VideoObject for the narrated intro. Swap REPLACE_WITH_VIDEO_ID for the real
+     YouTube 11-char ID after upload (see video/youtube-metadata.md). -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "FamHop — Plan Your Weekend With the Kids",
+  "description": "FamHop finds parks, libraries, museums, and real family events near you — then maps them into a ready-made plan you can share and vote on. Free across 16 U.S. metros.",
+  "thumbnailUrl": "https://famhop.com/og-image.png",
+  "uploadDate": "2026-06-20",
+  "duration": "PT52S",
+  "contentUrl": "https://www.youtube.com/watch?v=REPLACE_WITH_VIDEO_ID",
+  "embedUrl": "https://www.youtube.com/embed/REPLACE_WITH_VIDEO_ID",
+  "publisher": {
+    "@type": "Organization",
+    "name": "FamHop",
+    "url": "https://famhop.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://famhop.com/icon-512.png"
+    }
+  }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  /* ---- FamHop brand tokens (from src/styles.css, kids theme) ---- */
+  :root{
+    --bg:#faf5eb; --surface:#ffffff; --surface-strong:#f2ead9;
+    --line:#e8dfca; --line-soft:#f0e8d4;
+    --ink:#1b1916; --ink-soft:#4a453f; --muted:#6b7280; --mute-soft:#8a8278;
+    --accent:#dd6a1a; --accent-strong:#b8541a; --accent-soft:#fbe9d6;
+    --forest:#2d5043; --forest-soft:#dde7dc;
+    --blue:#5a7896; --blue-soft:#dce5ec;
+    --berry:#b25368; --berry-soft:#f2dde2;
+    --sun:#e8b547; --sun-soft:#faedc9;
+    --shadow:0 18px 45px rgba(31,27,23,.1);
+    --font:"Inter",ui-sans-serif,system-ui,sans-serif;
+    /* timeline = sum of scene durations; kept in sync with JS SCENES */
+    --total:31s;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:var(--font); color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 80% -10%, var(--sun-soft), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, var(--accent-soft), transparent 55%),
+      var(--bg);
+    display:grid; place-items:center; min-height:100%;
+    -webkit-font-smoothing:antialiased; overflow:hidden;
+  }
+
+  /* 16:9 stage that scales to the viewport — clean recording surface */
+  .stage{
+    position:relative; width:min(96vw, 96vh*1.7778); aspect-ratio:16/9;
+    background:var(--bg); border-radius:24px; overflow:hidden;
+    box-shadow:var(--shadow); border:1px solid var(--line);
+  }
+
+  /* ---- scenes ---- */
+  .scene{position:absolute; inset:0; opacity:0; pointer-events:none;
+    display:grid; place-items:center; padding:6%;}
+  .scene.show{opacity:1}
+  .scene.show .anim{animation-play-state:running}
+  .anim{animation-play-state:paused}
+
+  .center{display:flex; flex-direction:column; align-items:center; text-align:center; gap:18px}
+  .eyebrow{font-weight:700; letter-spacing:.14em; text-transform:uppercase; font-size:clamp(11px,1.1vw,15px); color:var(--accent-strong)}
+  h1{font-weight:900; letter-spacing:-.02em; line-height:1.02; font-size:clamp(28px,5.2vw,76px)}
+  h2{font-weight:800; letter-spacing:-.015em; line-height:1.05; font-size:clamp(22px,3.6vw,52px)}
+  .sub{font-size:clamp(15px,1.7vw,24px); color:var(--ink-soft); max-width:62ch; line-height:1.4}
+
+  /* ===== Scene 1 — the problem ===== */
+  .bubble{
+    background:var(--surface); border:1px solid var(--line); border-radius:22px 22px 22px 6px;
+    padding:22px 28px; font-size:clamp(18px,2.4vw,34px); font-weight:600; color:var(--ink);
+    box-shadow:var(--shadow); position:relative;
+  }
+  .bubble .typed{border-right:3px solid var(--accent); white-space:nowrap; overflow:hidden; display:inline-block;
+    animation:type 1.8s steps(34) .3s both, caret .7s step-end infinite;}
+  @keyframes type{from{width:0}to{width:33ch}}
+  @keyframes caret{50%{border-color:transparent}}
+  .kids{font-size:clamp(40px,7vw,96px); animation:wiggle 1.4s ease-in-out infinite; transform-origin:bottom center}
+  @keyframes wiggle{0%,100%{transform:rotate(-6deg) translateY(0)}50%{transform:rotate(6deg) translateY(-6px)}}
+
+  /* ===== Logo lockup ===== */
+  .logo{display:inline-flex; align-items:center; gap:.5ch; font-weight:900; letter-spacing:-.03em}
+  .logo .fam{color:var(--ink)} .logo .hop{color:var(--accent)}
+  .pin{display:inline-block; color:var(--accent); animation:bounce 1.1s cubic-bezier(.5,0,.5,1) infinite}
+  @keyframes bounce{0%,100%{transform:translateY(0)}30%{transform:translateY(-22%)}}
+  .logo-big{font-size:clamp(44px,9vw,120px)}
+
+  /* ===== Phone mock for in-app scenes ===== */
+  .split{display:grid; grid-template-columns:1.05fr .95fr; gap:5%; align-items:center; width:100%; height:100%}
+  .copy{display:flex; flex-direction:column; gap:14px}
+  .copy h2{max-width:14ch}
+  .phone{
+    justify-self:center; width:min(30vh,300px); aspect-ratio:9/19.5;
+    background:var(--surface); border-radius:36px; padding:12px;
+    border:1px solid var(--line);
+    box-shadow:0 30px 60px rgba(31,27,23,.18), inset 0 0 0 6px #0d0c0b;
+  }
+  .screen{height:100%; width:100%; background:var(--bg); border-radius:26px; overflow:hidden;
+    display:flex; flex-direction:column;}
+  .appbar{padding:14px 14px 8px; display:flex; align-items:center; justify-content:space-between}
+  .appbar .brand{font-weight:900; font-size:15px}
+  .appbar .brand .hop{color:var(--accent)}
+  .tag{font-size:10px; font-weight:700; color:#fff; background:var(--accent); padding:3px 8px; border-radius:999px}
+  .applist{padding:6px 12px 12px; display:flex; flex-direction:column; gap:9px; overflow:hidden}
+
+  .card{
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    padding:10px 11px; display:flex; gap:10px; align-items:center; box-shadow:0 6px 16px rgba(31,27,23,.05);
+    opacity:0; transform:translateY(14px);
+  }
+  .show .card.run{animation:rise .5s cubic-bezier(.2,.7,.2,1) forwards}
+  .card.d1{animation-delay:.25s}.card.d2{animation-delay:.45s}.card.d3{animation-delay:.65s}.card.d4{animation-delay:.85s}
+  @keyframes rise{to{opacity:1; transform:translateY(0)}}
+  .ico{width:34px; height:34px; border-radius:10px; display:grid; place-items:center; font-size:18px; flex:none}
+  .ico.park{background:var(--forest-soft)} .ico.lib{background:var(--blue-soft)}
+  .ico.mus{background:var(--berry-soft)} .ico.fest{background:var(--sun-soft)} .ico.now{background:var(--accent-soft)}
+  .meta{min-width:0}
+  .meta .t{font-weight:700; font-size:12.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .meta .s{font-size:11px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .pill{margin-left:auto; font-size:10px; font-weight:700; color:var(--accent-strong); background:var(--accent-soft);
+    padding:3px 7px; border-radius:999px; flex:none}
+
+  /* chips / filters */
+  .chips{display:flex; gap:6px; flex-wrap:wrap; padding:2px 12px 10px}
+  .chip{font-size:10.5px; font-weight:700; padding:5px 10px; border-radius:999px; border:1px solid var(--line);
+    background:var(--surface); color:var(--ink-soft)}
+  .chip.on{background:var(--accent); color:#fff; border-color:var(--accent)}
+  .show .chip.tapped{animation:pop .5s ease both .4s}
+  @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
+
+  /* mini map for the plan scene */
+  .map{position:relative; margin:6px 12px 12px; height:120px; border-radius:14px; overflow:hidden;
+    background:
+      linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px) 0 0/22px 22px,
+      linear-gradient(0deg, rgba(0,0,0,.04) 1px, transparent 1px) 0 0/22px 22px,
+      var(--forest-soft);
+    border:1px solid var(--line)}
+  .dot{position:absolute; width:20px; height:20px; border-radius:50%; background:var(--accent); color:#fff;
+    display:grid; place-items:center; font-size:11px; font-weight:800; transform:scale(0);
+    box-shadow:0 4px 10px rgba(0,0,0,.2)}
+  .show .dot.run{animation:plop .45s cubic-bezier(.2,1.4,.4,1) forwards}
+  .dot.p1{left:16%; top:60%; animation-delay:.3s}
+  .dot.p2{left:46%; top:28%; animation-delay:.6s}
+  .dot.p3{left:76%; top:64%; animation-delay:.9s}
+  @keyframes plop{to{transform:scale(1)}}
+  .route{position:absolute; inset:0}
+  .route path{stroke:var(--accent); stroke-width:2.5; stroke-dasharray:6 6; fill:none; opacity:0;
+    stroke-linecap:round}
+  .show .route path{animation:draw .9s ease 1s forwards}
+  @keyframes draw{to{opacity:.85}}
+
+  /* vote toast */
+  .toast{margin:auto 12px 14px; background:var(--forest); color:#fff; border-radius:12px; padding:10px 12px;
+    display:flex; align-items:center; gap:8px; font-size:12px; font-weight:700; opacity:0; transform:translateY(10px)}
+  .show .toast.run{animation:rise .5s ease .5s forwards}
+  .avatars{display:flex; margin-left:auto}
+  .avatars span{width:22px; height:22px; border-radius:50%; border:2px solid var(--forest); margin-left:-8px;
+    display:grid; place-items:center; font-size:11px; background:var(--sun)}
+  .react{font-size:16px}
+
+  /* ===== CTA ===== */
+  .cta .url{display:inline-flex; align-items:center; gap:.4ch; font-weight:800; color:#fff; background:var(--accent);
+    padding:14px 26px; border-radius:999px; font-size:clamp(16px,2vw,26px); box-shadow:0 12px 30px rgba(221,106,26,.4)}
+  .free{font-weight:700; color:var(--accent-strong)}
+  .confetti{position:absolute; inset:0; pointer-events:none; overflow:hidden}
+  .confetti i{position:absolute; top:-12%; width:9px; height:14px; border-radius:2px; opacity:.9;
+    animation:fall linear infinite}
+  @keyframes fall{to{transform:translateY(130vh) rotate(540deg)}}
+
+  /* word-by-word reveal helper */
+  .reveal>*{opacity:0; transform:translateY(12px)}
+  .show .reveal>*{animation:rise .55s cubic-bezier(.2,.7,.2,1) forwards}
+  .show .reveal>*:nth-child(1){animation-delay:.1s}
+  .show .reveal>*:nth-child(2){animation-delay:.3s}
+  .show .reveal>*:nth-child(3){animation-delay:.5s}
+  .show .reveal>*:nth-child(4){animation-delay:.7s}
+
+  /* ---- progress + controls ---- */
+  .bar{position:absolute; left:0; top:0; height:4px; background:var(--accent); width:0; z-index:5}
+  .bar.run{animation:fill var(--total) linear forwards}
+  @keyframes fill{to{width:100%}}
+  .controls{position:absolute; bottom:14px; right:16px; display:flex; gap:8px; z-index:6}
+  .controls button{font-family:inherit; font-weight:700; font-size:12px; cursor:pointer;
+    border:1px solid var(--line); background:var(--glass-bg,rgba(255,255,255,.8)); color:var(--ink);
+    padding:7px 12px; border-radius:999px; backdrop-filter:blur(8px)}
+  .controls button:hover{border-color:var(--accent); color:var(--accent-strong)}
+  #watch{border-color:var(--accent); color:#fff; background:var(--accent)}
+  #watch:hover{background:var(--accent-strong); color:#fff}
+  .hint{position:absolute; left:16px; bottom:16px; font-size:11px; color:var(--mute-soft); z-index:6}
+
+  /* YouTube facade overlay */
+  .player{position:absolute; inset:0; z-index:20; background:#000; display:grid; place-items:center}
+  .player[hidden]{display:none}
+  .player-frame{width:100%; height:100%}
+  .player-frame iframe{width:100%; height:100%; border:0}
+  .player-close{position:absolute; top:12px; right:14px; z-index:21; cursor:pointer;
+    font-family:inherit; font-weight:700; font-size:16px; line-height:1; width:34px; height:34px;
+    border-radius:999px; border:0; color:#fff; background:rgba(0,0,0,.55)}
+  .player-close:hover{background:rgba(0,0,0,.8)}
+
+  @media (max-width:640px){
+    .split{grid-template-columns:1fr; gap:18px}
+    .copy{order:2; align-items:center; text-align:center}
+    .phone{width:min(34vh,210px)}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .anim,.card,.dot,.route path,.toast,.reveal>*{animation-duration:.01ms !important}
+  }
+</style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <div class="bar" id="bar"></div>
+
+    <!-- 1 · Problem -->
+    <section class="scene" data-dur="3500">
+      <div class="center">
+        <div class="kids anim">🧒🧒</div>
+        <div class="bubble"><span class="typed">What do we even do this weekend?</span></div>
+        <div class="sub">Every Saturday starts with the same question.</div>
+      </div>
+    </section>
+
+    <!-- 2 · Logo -->
+    <section class="scene" data-dur="2000">
+      <div class="center reveal">
+        <div class="logo logo-big"><span class="pin">📍</span><span class="fam">Fam</span><span class="hop">Hop</span></div>
+        <div class="sub">famhop.com</div>
+      </div>
+    </section>
+
+    <!-- 3 · Weekend guide -->
+    <section class="scene" data-dur="5000">
+      <div class="split">
+        <div class="copy reveal">
+          <div class="eyebrow">The weekend guide</div>
+          <h2>Your whole weekend, in one place.</h2>
+          <p class="sub">Parks, libraries, museums, and real family events near you — sorted for Friday to Sunday.</p>
+        </div>
+        <div class="phone anim">
+          <div class="screen">
+            <div class="appbar"><span class="brand">Fam<span class="hop">Hop</span></span><span class="tag">Weekend · Fri–Sun</span></div>
+            <div class="applist">
+              <div class="card run d1"><span class="ico park">🌳</span><span class="meta"><div class="t">Tilden Nature Area</div><div class="s">Outdoors · all ages</div></span><span class="pill">Free</span></div>
+              <div class="card run d2"><span class="ico lib">📚</span><span class="meta"><div class="t">Library story-time</div><div class="s">Sat 10:00 · ages 2–5</div></span><span class="pill">Free</span></div>
+              <div class="card run d3"><span class="ico mus">🏛️</span><span class="meta"><div class="t">Children's Museum</div><div class="s">Culture · indoors</div></span><span class="pill">$</span></div>
+              <div class="card run d4"><span class="ico fest">🎪</span><span class="meta"><div class="t">Spring Family Festival</div><div class="s">Sun · live music</div></span><span class="pill">Free</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 · Hop Now -->
+    <section class="scene" data-dur="4000">
+      <div class="split">
+        <div class="copy reveal">
+          <div class="eyebrow">Hop Now</div>
+          <h2>Need something <em>right now?</em></h2>
+          <p class="sub">One tap surfaces go-this-minute picks near you, with distances.</p>
+        </div>
+        <div class="phone anim">
+          <div class="screen">
+            <div class="appbar"><span class="brand">Fam<span class="hop">Hop</span></span><span class="tag">⚡ Hop Now</span></div>
+            <div class="applist">
+              <div class="card run d1"><span class="ico now">🎠</span><span class="meta"><div class="t">Playground at Live Oak</div><div class="s">Open now</div></span><span class="pill">0.4 mi</span></div>
+              <div class="card run d2"><span class="ico now">🍦</span><span class="meta"><div class="t">Ice cream + plaza</div><div class="s">Open now</div></span><span class="pill">0.8 mi</span></div>
+              <div class="card run d3"><span class="ico now">🦆</span><span class="meta"><div class="t">Lakeside duck walk</div><div class="s">Open now</div></span><span class="pill">1.2 mi</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 · Editor's picks → plan on a map -->
+    <section class="scene" data-dur="5000">
+      <div class="split">
+        <div class="copy reveal">
+          <div class="eyebrow">Editor's picks · starter plans</div>
+          <h2>Ready-made plans, or build your own.</h2>
+          <p class="sub">Start from an editor's pick and FamHop maps your stops into a route for the day.</p>
+        </div>
+        <div class="phone anim">
+          <div class="screen">
+            <div class="appbar"><span class="brand">Fam<span class="hop">Hop</span></span><span class="tag">Plan</span></div>
+            <div class="map">
+              <svg class="route" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M18,62 L46,30 L76,66"/></svg>
+              <span class="dot p1 run">1</span><span class="dot p2 run">2</span><span class="dot p3 run">3</span>
+            </div>
+            <div class="applist" style="padding-top:0">
+              <div class="card run d1"><span class="ico park">①</span><span class="meta"><div class="t">Morning park</div><div class="s">9:30 · 0.4 mi</div></span></div>
+              <div class="card run d2"><span class="ico mus">②</span><span class="meta"><div class="t">Children's Museum</div><div class="s">11:00 · 1.1 mi</div></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 · Filters -->
+    <section class="scene" data-dur="4000">
+      <div class="split">
+        <div class="copy reveal">
+          <div class="eyebrow">Filters that fit your kids</div>
+          <h2>By age, interest &amp; distance.</h2>
+          <p class="sub">Tune the list to your kids' ages and what they're into, so every stop actually fits.</p>
+        </div>
+        <div class="phone anim">
+          <div class="screen">
+            <div class="appbar"><span class="brand">Fam<span class="hop">Hop</span></span><span class="tag">Filters</span></div>
+            <div class="chips">
+              <span class="chip">0–2</span><span class="chip on tapped">3–5</span><span class="chip on">6–9</span><span class="chip">10+</span>
+            </div>
+            <div class="chips" style="padding-top:0">
+              <span class="chip on">Outdoors</span><span class="chip">Culture</span><span class="chip on">Free</span><span class="chip">≤ 5 mi</span>
+            </div>
+            <div class="applist">
+              <div class="card run d1"><span class="ico park">🌳</span><span class="meta"><div class="t">Nature playground</div><div class="s">ages 3–5 · outdoors</div></span><span class="pill">Free</span></div>
+              <div class="card run d2"><span class="ico fest">🎨</span><span class="meta"><div class="t">Toddler art hour</div><div class="s">ages 3–5 · 1.0 mi</div></span><span class="pill">Free</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7 · Share & vote -->
+    <section class="scene" data-dur="4000">
+      <div class="split">
+        <div class="copy reveal">
+          <div class="eyebrow">Decide together</div>
+          <h2>Share it. Let everyone vote.</h2>
+          <p class="sub">Send the plan, the family weighs in, and you're set.</p>
+        </div>
+        <div class="phone anim">
+          <div class="screen">
+            <div class="appbar"><span class="brand">Fam<span class="hop">Hop</span></span><span class="tag">Shared plan</span></div>
+            <div class="applist">
+              <div class="card run d1"><span class="ico park">🌳</span><span class="meta"><div class="t">Morning park</div><div class="s">3 votes</div></span><span class="react">👍</span></div>
+              <div class="card run d2"><span class="ico mus">🏛️</span><span class="meta"><div class="t">Children's Museum</div><div class="s">4 votes</div></span><span class="react">🎉</span></div>
+              <div class="card run d3"><span class="ico fest">🍦</span><span class="meta"><div class="t">Ice cream stop</div><div class="s">4 votes</div></span><span class="react">❤️</span></div>
+            </div>
+            <div class="toast run"><span>Votes are in!</span><span class="avatars"><span>🧑</span><span>👩</span><span>🧒</span></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8 · CTA -->
+    <section class="scene" data-dur="3500">
+      <div class="confetti" id="confetti"></div>
+      <div class="center reveal">
+        <div class="logo" style="font-size:clamp(34px,6vw,80px)"><span class="pin">📍</span><span class="fam">Fam</span><span class="hop">Hop</span></div>
+        <h1>Find your weekend.</h1>
+        <div class="sub"><span class="free">Plan your weekend free</span> across 16 U.S. metros.</div>
+        <a class="url" href="https://famhop.com">famhop.com →</a>
+      </div>
+    </section>
+
+    <div class="hint" id="hint">▶ Plays automatically · loops</div>
+    <div class="controls">
+      <button id="watch">🔊 Watch with sound</button>
+      <button id="replay">↻ Replay</button>
+      <button id="toggle">⏸ Pause</button>
+    </div>
+
+    <!-- YouTube facade: the iframe is only injected on click, so the page stays
+         fast and the looping animation is the default. -->
+    <div class="player" id="player" hidden>
+      <button class="player-close" id="playerClose" aria-label="Close video">✕</button>
+      <div class="player-frame" id="playerFrame"></div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const scenes = [...document.querySelectorAll('.scene')];
+  const bar = document.getElementById('bar');
+  const toggle = document.getElementById('toggle');
+  const replay = document.getElementById('replay');
+  const durs = scenes.map(s => +s.dataset.dur);
+  let i = 0, timer = null, paused = false, remaining = 0, startedAt = 0;
+
+  // confetti for the CTA
+  const cc = document.getElementById('confetti');
+  const colors = ['#dd6a1a','#e8b547','#2d5043','#b25368','#5a7896'];
+  for (let k=0;k<40;k++){
+    const f=document.createElement('i');
+    f.style.left=(k/40*100)+'%';
+    f.style.background=colors[k%colors.length];
+    f.style.animationDuration=(2.6+(k%5)*0.5)+'s';
+    f.style.animationDelay=(-(k%9)*0.3)+'s';
+    cc.appendChild(f);
+  }
+
+  function showScene(n){
+    scenes.forEach((s,idx)=>s.classList.toggle('show', idx===n));
+    // restart in-scene animations by reflow
+    const cur = scenes[n];
+    cur.querySelectorAll('.anim,.reveal>*,.card,.dot,.route path,.toast,.chip').forEach(el=>{
+      el.style.animation='none'; el.offsetHeight; el.style.animation='';
+    });
+  }
+
+  function restartBar(){
+    bar.classList.remove('run'); bar.style.width='0'; void bar.offsetWidth; bar.classList.add('run');
+  }
+
+  function schedule(ms){
+    startedAt = performance.now(); remaining = ms;
+    timer = setTimeout(next, ms);
+  }
+  function next(){ i = (i+1) % scenes.length; play(); }
+
+  function play(){
+    clearTimeout(timer);
+    if (i===0) restartBar();
+    showScene(i);
+    schedule(durs[i]);
+  }
+
+  toggle.addEventListener('click', ()=>{
+    paused = !paused;
+    if (paused){
+      clearTimeout(timer);
+      remaining -= performance.now() - startedAt;
+      document.querySelectorAll('.show .anim, .bar').forEach(()=>{});
+      document.getElementById('stage').style.setProperty('--ps','paused');
+      scenes[i].querySelectorAll('*').forEach(el=>el.style.animationPlayState='paused');
+      bar.style.animationPlayState='paused';
+      toggle.textContent='▶ Play';
+    } else {
+      scenes[i].querySelectorAll('*').forEach(el=>el.style.animationPlayState='');
+      bar.style.animationPlayState='';
+      toggle.textContent='⏸ Pause';
+      schedule(Math.max(200, remaining));
+    }
+  });
+
+  replay.addEventListener('click', ()=>{
+    clearTimeout(timer); i=0; paused=false; toggle.textContent='⏸ Pause';
+    scenes.forEach(s=>s.querySelectorAll('*').forEach(el=>el.style.animationPlayState=''));
+    play();
+  });
+
+  // "Watch with sound" — load the narrated YouTube cut on demand (facade).
+  const VIDEO_ID = 'REPLACE_WITH_VIDEO_ID';
+  const watch = document.getElementById('watch');
+  const player = document.getElementById('player');
+  const playerFrame = document.getElementById('playerFrame');
+  const playerClose = document.getElementById('playerClose');
+  watch.addEventListener('click', ()=>{
+    clearTimeout(timer);                       // stop the silent loop while watching
+    playerFrame.innerHTML =
+      '<iframe src="https://www.youtube-nocookie.com/embed/' + VIDEO_ID +
+      '?autoplay=1&rel=0" title="FamHop intro" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>';
+    player.hidden = false;
+  });
+  playerClose.addEventListener('click', ()=>{
+    player.hidden = true;
+    playerFrame.innerHTML = '';                // unload to stop audio
+    if (!paused) play();                       // resume the loop
+  });
+
+  play();
+})();
+</script>
+</body>
+</html>

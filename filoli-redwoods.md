@@ -1,0 +1,261 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#fl-main-content"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - link "Filoli Logo Color Wordmark" [ref=e17] [cursor=pointer]:
+            - /url: https://filoli.org/
+            - img "Filoli Logo Color Wordmark" [ref=e18]
+          - generic [ref=e20]:
+            - generic [ref=e23]:
+              - navigation [ref=e26]:
+                - list [ref=e28]:
+                  - listitem [ref=e29]:
+                    - link " Tickets " [ref=e30] [cursor=pointer]:
+                      - /url: "#!"
+                      - generic [ref=e31]: 
+                      - text: Tickets
+                      - generic [ref=e32]: 
+                - text: 
+              - group [ref=e36]:
+                - link "Donate" [ref=e39] [cursor=pointer]:
+                  - /url: https://51772.blackbaudhosting.com/51772/Annual-Fund-Donations?_gl=1*mor4nk*_gcl_au*MTEwODg4Njc0NC4xNzM4Mjc3MTk2*_ga*MTkyNjkwMzY2MC4xNzM4Mjc3MTk3*_ga_SFCYR6JK8K*MTczODc3NTgyMi40LjEuMTczODc5MTUwMy41Mi4wLjA
+                  - generic [ref=e40]: 
+                  - text: Donate
+            - generic [ref=e41]:
+              - navigation [ref=e46]:
+                - list [ref=e48]:
+                  - listitem [ref=e49]:
+                    - link "What's On" [ref=e50] [cursor=pointer]:
+                      - /url: "#!"
+                      - text: What's On
+                    - text:  
+                  - listitem [ref=e51]:
+                    - link "Visit" [ref=e52] [cursor=pointer]:
+                      - /url: "#!"
+                      - text: Visit
+                  - listitem [ref=e53]:
+                    - link "Membership" [ref=e54] [cursor=pointer]:
+                      - /url: "#!"
+                      - text: Membership
+                  - listitem [ref=e55]:
+                    - link "Learn" [ref=e56] [cursor=pointer]:
+                      - /url: "#!"
+                      - text: Learn
+                  - listitem [ref=e57]:
+                    - link "Support" [ref=e58] [cursor=pointer]:
+                      - /url: "#!"
+                      - text: Support
+                  - listitem [ref=e59]:
+                    - link "Private Events" [ref=e60] [cursor=pointer]:
+                      - /url: "#!"
+                      - text: Private Events
+                - text: 
+              - generic [ref=e66]:
+                - generic:
+                  - generic:
+                    - button "Search":
+                      - generic [ref=e67] [cursor=pointer]: 
+        - generic:             
+    - main [ref=e68]:
+      - article [ref=e72]:
+        - generic [ref=e74]:
+          - generic [ref=e91]:
+            - heading "NEW FOR 2026" [level=3] [ref=e95]
+            - img "Redwoods In The Round Logo Green" [ref=e102]
+            - heading "Redwoods in the Round" [level=1] [ref=e103]
+            - heading "Where every story takes root." [level=2] [ref=e107]
+            - generic [ref=e110]:
+              - paragraph [ref=e111]:
+                - text: Step into
+                - strong [ref=e112]: Redwoods in the Round
+                - text: ", where storytelling, theater, and imagination come alive beneath Filoli’s towering redwoods. From enchanting evening performances to playful children’s adventures, each experience invites you to slow down, look up, and get lost in the magic. Discover outdoor entertainment unlike anywhere else in the Bay Area."
+              - paragraph [ref=e113]:
+                - strong [ref=e114]: Want more outdoor adventures?
+                - text: Check out our brand new summer experience,
+                - emphasis [ref=e116]:
+                  - strong [ref=e117]:
+                    - link "Creating Home" [ref=e118] [cursor=pointer]:
+                      - /url: https://filoli.org/creating-home/
+                - text: ", for more Redwoods and Filoli fun!"
+          - generic [ref=e130]:
+            - heading "Redwoods in the Round Theater Presents:" [level=2] [ref=e135]:
+              - generic [ref=e136]: "Redwoods in the Round Theater Presents:"
+            - 'heading "Poetry Nap: The Nature of Love" [level=2] [ref=e138]':
+              - generic [ref=e139]: "Poetry Nap: The Nature of Love"
+            - heading "Calling all dreamers!" [level=3] [ref=e141]
+            - paragraph [ref=e143]: June 27 | 5:30pm
+            - generic [ref=e144]:
+              - paragraph [ref=e145]: "Lie down beneath the redwoods and drift into Poetry Nap: The Nature of Love, a twilight voyage of whimsy and wonder guided by Lady and Lord Dosis. Bring cozy bedding and nestle into Filoli’s Redwood Grove for an enchanting outdoor Poetry Nap for grown-up dreamers only. We promise: you are in for an otherworldly treat."
+              - paragraph [ref=e146]: Poetry Nap is a WYALD Art.
+              - paragraph [ref=e147]:
+                - strong [ref=e148]: "Tickets: $65"
+                - emphasis [ref=e149]: Members receive 10% off
+            - link "Buy Tickets" [ref=e151] [cursor=pointer]:
+              - /url: https://51772.blackbaudhosting.com/51772/tickets?tab=2&txobjid=996cba11-ad86-4afd-8c74-dbe9e2900181
+          - generic [ref=e164]:
+            - heading "Redwoods in the Round Theater Presents:" [level=2] [ref=e169]:
+              - generic [ref=e170]: "Redwoods in the Round Theater Presents:"
+            - heading "My Dog Jack" [level=2] [ref=e172]
+            - heading "Where folk comes alive." [level=3] [ref=e174]
+            - paragraph [ref=e176]: July 10 | 5:30pm
+            - generic [ref=e177]:
+              - paragraph [ref=e178]: An evening of live music, fresh air, and Redwood magic. Join San Francisco-based band My Dog Jack for a spirited 90-minute set of original songs infused with the warm nostalgia of old Dylan tapes—perfectly at home among the towering trees.
+              - paragraph [ref=e179]: Bring a blanket or chair, grab a drink and bite, and make the short scenic walk to settle in for a laid-back, music-filled escape.
+              - paragraph [ref=e180]:
+                - strong [ref=e181]: "Tickets: $65"
+                - emphasis [ref=e182]: Members receive 10% off
+            - link "Buy Tickets" [ref=e184] [cursor=pointer]:
+              - /url: https://51772.blackbaudhosting.com/51772/tickets?tab=2&txobjid=a2344c62-2b41-4c03-8b4f-e6d14b0bf49a
+          - generic [ref=e193]:
+            - heading "Redwoods in the Round Theater Presents:" [level=2] [ref=e198]:
+              - generic [ref=e199]: "Redwoods in the Round Theater Presents:"
+            - heading "Shakespeare Staged Reading" [level=2] [ref=e201]:
+              - generic [ref=e202]: Shakespeare Staged Reading
+            - heading "A midsummer dream beneath the redwoods." [level=3] [ref=e204]
+            - paragraph [ref=e206]: August 22 | 5:30pm
+            - generic [ref=e207]:
+              - paragraph [ref=e208]: Experience Shakespeare’s “A Midsummer Night’s Dream” imagined for the first time in the unique outdoor setting under Filoli’s towering Redwoods. Silicon Valley Shakespeare’s performance invites you to an enchanting evening of theatre, nature, and timeless comedy.
+              - paragraph [ref=e209]:
+                - strong [ref=e210]: "Tickets: $65"
+                - emphasis [ref=e211]: Members receive 10% off
+            - link "Buy Tickets" [ref=e213] [cursor=pointer]:
+              - /url: https://51772.blackbaudhosting.com/51772/tickets?tab=2&txobjid=96190d74-b828-45db-b414-42f3fb7018bd
+          - generic [ref=e226]:
+            - heading "Children's Redwood Theater Presents:" [level=2] [ref=e231]:
+              - generic [ref=e232]: "Children's Redwood Theater Presents:"
+            - heading "Captain Achoo's Big Pirate Adventure" [level=2] [ref=e234]:
+              - generic [ref=e235]: Captain Achoo's Big Pirate Adventure
+            - heading "Ahoy, adventurers!" [level=3] [ref=e237]
+            - paragraph [ref=e239]: June 28 | 11am & 1pm
+            - generic [ref=e240]:
+              - paragraph [ref=e241]: Head into Filoli’s Redwoods for Children’s Redwood Theater, where stories come to life and laughter fills the forest. Kick things off with Rabbit Hole Theater’s Captain Achoo’s Big Pirate Adventure—a hilarious, high-spirited show packed with silly antics, wild characters, and pirate-sized fun. Bring a blanket and get ready to cheer, laugh, and join the adventure!
+              - paragraph [ref=e242]:
+                - strong [ref=e243]: "Tickets: Free with General Admission; reservation required"
+                - emphasis [ref=e244]: Members receive free admission; reservation required
+            - group [ref=e245]:
+              - link "11am Tickets (Sold Out)" [ref=e248] [cursor=pointer]:
+                - /url: https://51772.blackbaudhosting.com/51772/tickets?tab=2&txobjid=81ceb395-4691-4daa-bf6d-ef99ca471939
+              - link "1pm Tickets (Sold Out)" [ref=e251] [cursor=pointer]:
+                - /url: https://51772.blackbaudhosting.com/51772/tickets?tab=2&txobjid=838853a7-bd7a-4a20-902f-a3ff99e64f84
+          - generic [ref=e260]:
+            - heading "Children's Redwood Theater Presents:" [level=2] [ref=e265]:
+              - generic [ref=e266]: "Children's Redwood Theater Presents:"
+            - heading "Miss Jasmine Tea and Her Enchanted Teapot" [level=2] [ref=e268]:
+              - generic [ref=e269]: Miss Jasmine Tea and Her Enchanted Teapot
+            - heading "You’re invited to a magical celebration!" [level=3] [ref=e271]
+            - paragraph [ref=e273]: July 11 | 11am & 1pm
+            - generic [ref=e274]:
+              - paragraph [ref=e275]: Enter a world of wonder beneath Filoli’s towering Redwoods. In this unique outdoor setting, Rabbit Hole Theater’s Miss Jasmine Tea and Her Enchanted Teapot tells the whimsical tale of a magical birthday celebration, filled with music, puppetry, and unexpected delights!
+              - paragraph [ref=e276]: Follow along as Miss Jasmine Tea brings her enchanted world to life—inviting audiences of all ages to laugh, dream, and believe in the magic of creativity.
+              - paragraph [ref=e277]:
+                - strong [ref=e278]: "Tickets: Free with General Admission; reservation required"
+                - emphasis [ref=e279]: Members receive free admission; reservation required
+            - group [ref=e280]:
+              - link "11am Tickets (Sold Out)" [ref=e283] [cursor=pointer]:
+                - /url: https://51772.blackbaudhosting.com/51772/tickets?tab=2&txobjid=cd33d701-db73-49a4-bd72-3df4529ef2a1
+              - link "1pm Tickets (Sold Out)" [ref=e286] [cursor=pointer]:
+                - /url: https://51772.blackbaudhosting.com/51772/tickets?tab=2&txobjid=afdc7bff-c94f-437c-a686-35a529d84b04
+          - generic [ref=e299]:
+            - heading "Children's Redwood Theater Presents:" [level=2] [ref=e304]:
+              - generic [ref=e305]: "Children's Redwood Theater Presents:"
+            - heading "Miss Emu and Her Lost Characters" [level=2] [ref=e307]:
+              - generic [ref=e308]: Miss Emu and Her Lost Characters
+            - heading "A Cozy Forest Adventure Awaits!" [level=3] [ref=e310]
+            - paragraph [ref=e312]: August 22 | 11am & 1pm
+            - generic [ref=e313]:
+              - paragraph [ref=e314]: Head into Filoli’s Redwoods for Children’s Redwood Theater, where stories come to life and laughter fills the forest. Kick things off with Rabbit Hole Theater’s Miss Emu and Her Lost Characters—a story about a famous author in the Queendom whose storybook characters have run away, and it’s up to us to help find them! Guests are encouraged to bring blankets or folding chairs for a cozy forest theater experience.
+              - paragraph [ref=e315]:
+                - strong [ref=e316]: "Tickets: Free with General Admission; reservation required"
+                - emphasis [ref=e317]: Members receive free admission; reservation required
+            - group [ref=e318]:
+              - link "11am Tickets (Sold Out)" [ref=e321] [cursor=pointer]:
+                - /url: https://51772.blackbaudhosting.com/51772/tickets?tab=2&txobjid=30f9294a-dc26-4dcc-86c1-463b18231802
+              - link "1pm Tickets (Sold Out)" [ref=e324] [cursor=pointer]:
+                - /url: https://51772.blackbaudhosting.com/51772/tickets?tab=2&txobjid=8222c25b-a4f6-4bd7-834d-dca5e553fbe2
+    - contentinfo:
+      - generic [ref=e330]:
+        - generic [ref=e337]:
+          - generic [ref=e339]:
+            - link "Filoli Logo FullLockup Stone (1)" [ref=e346] [cursor=pointer]:
+              - /url: https://www.filoli.org/
+              - img "Filoli Logo FullLockup Stone (1)" [ref=e347]
+            - generic [ref=e350]:
+              - paragraph [ref=e354]:
+                - text: 86 Cañada Road
+                - text: Woodside, CA 94062
+              - paragraph [ref=e358]:
+                - strong [ref=e359]: Open Daily
+                - text: 10am-5pm
+          - generic [ref=e362]:
+            - navigation "Navigation Menu" [ref=e368]:
+              - list [ref=e369]:
+                - listitem [ref=e370]:
+                  - link "About" [ref=e371] [cursor=pointer]:
+                    - /url: https://filoli.org/about/
+                - listitem [ref=e372]:
+                  - link "DEAI" [ref=e373] [cursor=pointer]:
+                    - /url: https://filoli.org/about/diversity/
+                - listitem [ref=e374]:
+                  - link "Land Acknowledgement" [ref=e375] [cursor=pointer]:
+                    - /url: https://filoli.org/land-acknowledgement/
+                - listitem [ref=e376]:
+                  - link "Sustainability" [ref=e377] [cursor=pointer]:
+                    - /url: https://filoli.org/about/sustainability/
+                - listitem [ref=e378]:
+                  - link "Requests for Proposal" [ref=e379] [cursor=pointer]:
+                    - /url: https://filoli.org/about/rfps/
+            - navigation "Navigation Menu" [ref=e385]:
+              - list [ref=e386]:
+                - listitem [ref=e387]:
+                  - link "Board of Directors" [ref=e388] [cursor=pointer]:
+                    - /url: https://filoli.org/about/board/
+                - listitem [ref=e389]:
+                  - link "Leadership" [ref=e390] [cursor=pointer]:
+                    - /url: https://filoli.org/about/leadership/
+                - listitem [ref=e391]:
+                  - link "Careers" [ref=e392] [cursor=pointer]:
+                    - /url: https://filoli.org/about/careers/
+                - listitem [ref=e393]:
+                  - link "Press Room" [ref=e394] [cursor=pointer]:
+                    - /url: https://filoli.org/press/
+          - generic [ref=e396]:
+            - link "Contact Us" [ref=e400] [cursor=pointer]:
+              - /url: https://filoli.org/about/contact/
+            - paragraph [ref=e404]:
+              - text: 650.364.8300
+              - link "guestservices@filoli.org" [ref=e405] [cursor=pointer]:
+                - /url: mailto:guestservices@filoli.org
+            - link "Newsletter Sign-Up" [ref=e409] [cursor=pointer]:
+              - /url: https://filoli.org/about/contact/#newsletter-subscribe
+            - generic [ref=e412]:
+              - button "Facebook" [ref=e414] [cursor=pointer]:
+                - generic [ref=e415]: 
+              - button "Instagram" [ref=e417] [cursor=pointer]:
+                - generic [ref=e418]: 
+              - button "TikTok" [ref=e420] [cursor=pointer]:
+                - generic [ref=e421]: 
+              - button "YouTube" [ref=e423] [cursor=pointer]:
+                - generic [ref=e424]: 
+              - button "LinkedIn" [ref=e426] [cursor=pointer]:
+                - generic [ref=e427]: 
+            - link "NTHP LOGO RGB+reverse NoTAG" [ref=e434] [cursor=pointer]:
+              - /url: https://savingplaces.org/
+              - img "NTHP LOGO RGB+reverse NoTAG" [ref=e435]
+        - paragraph [ref=e451]:
+          - text: © 2026 Filoli, All Rights Reserved. |
+          - link "Privacy Policy" [ref=e453] [cursor=pointer]:
+            - /url: https://filoli.org/privacy-policy/
+          - text: "|"
+          - link "Photography Guidelines" [ref=e455] [cursor=pointer]:
+            - /url: https://filoli.org/personal-photography/
+          - text: Filoli is a 501(c)(3) nonprofit organization.
+  - text: 
+  - navigation "Mobile menu": 
+  - navigation "Mobile menu":       
+  - navigation "Mobile menu":        
+  - navigation "Mobile menu":       
+  - navigation "Mobile menu":        
+  - navigation "Mobile menu": 

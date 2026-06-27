@@ -160,8 +160,8 @@ button {
   column-gap: 12px;
   display: flex;
   flex-wrap: nowrap;
-  margin: 0 auto 16px;
-  max-width: 1500px;
+  margin: 0;
+  max-width: none;
   padding: 8px 12px;
   left: var(--overlay-gap);
   position: fixed;
@@ -229,7 +229,18 @@ button {
   font-weight: 700;
   letter-spacing: -0.01em;
   outline: 0;
+  overflow: hidden;
   padding: 0 16px 0 0;
+  /* Fixed width so the dropdown is identical across every view and the
+     prerendered Guide page (which uses a different display font). 140px fits
+     the longest metro name ("Dallas-Fort Worth") without truncation. min/max
+     pin it because the select is a flex item that would otherwise shrink to
+     its content. Mobile media queries below relax this. */
+  width: 140px;
+  min-width: 140px;
+  max-width: 140px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .topbar-tabs {
@@ -564,17 +575,9 @@ h3 {
   display: none;
 }
 
-/* ── Browse: topbar needs no margin (map is full-bleed) ──────────── */
-.is-browse .topbar {
-  margin: 0;
-  max-width: none;
-}
-
-.is-browse .topbar-metro select {
-  max-width: 160px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+/* The topbar is full-width in every view (see base .topbar) and the metro
+   dropdown is capped to one width (see base .topbar-metro select) so the header
+   doesn't resize when switching tabs. */
 
 @media (max-width: 1000px) {
   .is-browse .topbar-add {

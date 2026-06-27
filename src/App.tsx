@@ -5949,6 +5949,12 @@ function App({ metro }: AppProps) {
           <div className="app-footer-meta">
             <span>© {new Date().getFullYear()} {APP_BRAND}</span>
             <span aria-hidden="true">·</span>
+            {APP_AUDIENCE === "kids" && (
+              <>
+                <a href="/intro.html">Watch the intro</a>
+                <span aria-hidden="true">·</span>
+              </>
+            )}
             <span>
               Map &amp; place data ©{" "}
               <a

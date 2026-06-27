@@ -1248,9 +1248,16 @@ test("validateEventsDataset rejects adult-only events and accepts generated even
 test("inferAgeBands and parseLooseDate handle common calendar text", () => {
   assert.deepEqual(inferAgeBands("Baby lapsit for ages 0-3"), ["toddler"]);
   assert.equal(parseLooseDate("Family day on May 9, 2026 at 2pm"), "2026-05-09T14:00:00-07:00");
+  // June 14 has no explicit year: the parser rolls to the next future
+  // occurrence (year+1 once the date is before yesterday UTC), so derive the
+  // expected year the same way to keep this assertion stable year-round.
+  const now = new Date();
+  const jun14 = Date.UTC(now.getUTCFullYear(), 5, 14);
+  const yesterday = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1);
+  const yr = jun14 < yesterday ? now.getUTCFullYear() + 1 : now.getUTCFullYear();
   assert.deepEqual(parseDateTimeRange("Sunday, June 14, 9am - 12pm"), {
-    startDateTime: "2026-06-14T09:00:00-07:00",
-    endDateTime: "2026-06-14T12:00:00-07:00",
+    startDateTime: `${yr}-06-14T09:00:00-07:00`,
+    endDateTime: `${yr}-06-14T12:00:00-07:00`,
   });
 });
 

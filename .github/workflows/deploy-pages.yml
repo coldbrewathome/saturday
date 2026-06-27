@@ -61,3 +61,10 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=nighthop --branch=main --commit-dirty=true
+
+      - name: Publish to Google Indexing API
+        if: ${{ secrets.GOOGLE_INDEXING_CREDENTIALS != '' }}
+        env:
+          GOOGLE_INDEXING_CREDENTIALS: ${{ secrets.GOOGLE_INDEXING_CREDENTIALS }}
+          GOOGLE_CLOUD_PROJECT: leafy-acumen-468616-d1
+        run: npm run publish:indexing

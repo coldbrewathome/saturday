@@ -7,6 +7,7 @@ import {
   dedupeEvents,
   expandRecurringTemplates,
   extractEventsFromPayload,
+  slugify,
   updateSlugHistory,
   validateEventsDataset,
 } from "./eventPipeline.mjs";
@@ -1426,7 +1427,7 @@ function applyRegistryDefaults(reg, metro = activeMetro) {
   }
 }
 
-function addFetchedAt(event, generatedAt) {
+function addFetchedAt(event, generatedAt, previousEventsMap) {
   if (event.sourceMode === "last-known-good") {
     return {
       ...event,
@@ -1434,6 +1435,18 @@ function addFetchedAt(event, generatedAt) {
       restoredAt: event.restoredAt || generatedAt,
     };
   }
+
+  const key = [
+    slugify(event.title),
+    slugify(event.venue),
+    event.startDateTime || "",
+  ].join("|");
+
+  const prev = previousEventsMap ? previousEventsMap.get(key) : null;
+  if (prev && prev.fetchedAt) {
+    return { ...event, fetchedAt: prev.fetchedAt };
+  }
+
   return { ...event, fetchedAt: generatedAt };
 }
 
@@ -1470,6 +1483,15 @@ async function main() {
     await readJsonOrEmpty(adultsOutputPath),
   ];
   const previousEvents = collectPreviousEvents(previousDatasets);
+  const previousEventsMap = new Map();
+  for (const prev of previousEvents) {
+    const key = [
+      slugify(prev.title),
+      slugify(prev.venue),
+      prev.startDateTime || "",
+    ].join("|");
+    previousEventsMap.set(key, prev);
+  }
   const allEvents = [];
   const sourceReports = [];
   const operatorAlerts = [];
@@ -1624,7 +1646,7 @@ async function main() {
 
     for (const event of [...liveEvents, ...lastKnownGoodEvents, ...templateFallbackEvents]) {
       allEvents.push({
-        ...addFetchedAt(event, generatedAt),
+        ...addFetchedAt(event, generatedAt, previousEventsMap),
         metroId: event.metroId || activeMetro.id,
         sourceId: event.sourceId || source.id,
         sourceName: event.sourceName || source.name,

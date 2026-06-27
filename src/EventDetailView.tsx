@@ -198,7 +198,22 @@ export default function EventDetailView({
   );
 
   useEffect(() => {
-    if (!event || !slug) return;
+    if (!slug) return;
+
+    if (!event) {
+      const robots = document.createElement("meta");
+      robots.name = "robots";
+      robots.content = "noindex,follow";
+      document.head.appendChild(robots);
+
+      const prevTitle = document.title;
+      document.title = `Event Ended | ${APP_BRAND}`;
+
+      return () => {
+        document.title = prevTitle;
+        robots.remove();
+      };
+    }
 
     const canonicalUrl = `${window.location.origin}${metro.canonicalPath.replace(/\/+$/, "")}/event/${encodeURIComponent(slug)}/`;
     const title = `${event.title} — ${event.city || metro.label} | ${APP_BRAND}`;
