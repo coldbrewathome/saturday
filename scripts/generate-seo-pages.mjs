@@ -688,7 +688,7 @@ a:hover{text-decoration:underline}
 .city-list{list-style:none;margin:0;padding:0;max-height:520px;overflow:auto;border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:0 12px 30px rgba(34,34,31,.05);}
 .city-row{border-bottom:1px solid var(--line);}
 .city-row:last-child{border-bottom:0;}
-.city-row.is-filtered,.spot-card.is-filtered,.event-card.is-filtered{display:none;}
+.city-row.is-filtered,.spot-card.is-filtered{display:none;}
 .city-row a,.city-row .city-row-inner{display:flex;align-items:flex-start;gap:11px;padding:12px 14px;text-decoration:none;color:inherit;}
 .city-row a:hover,.city-row.is-active a,.city-row.is-active .city-row-inner{background:var(--accent-soft);}
 .city-row-main{display:flex;flex-direction:column;gap:1px;min-width:0;}
@@ -713,8 +713,7 @@ a:hover{text-decoration:underline}
 .cm-pop strong{display:block;font-size:14px;}
 .cm-pop span{display:block;color:var(--muted);font-size:12.5px;margin:2px 0 6px;}
 .cm-pop a{color:var(--accent-strong);font-weight:600;text-decoration:none;font-size:13px;}
-.spot-photo-grid,.event-card-grid{list-style:none;margin:0;padding:0;display:grid;gap:14px;}
-.spot-photo-grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));}
+.spot-photo-grid{list-style:none;margin:0;padding:0;display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));}
 .spot-card a,.spot-card .spot-card-inner{display:flex;flex-direction:column;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;height:100%;transition:transform .15s,box-shadow .15s;box-shadow:0 6px 18px rgba(34,34,31,.05);}
 .spot-card a:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(34,34,31,.12);}
 .spot-card-media{position:relative;aspect-ratio:5/3;background:var(--surface-strong);display:block;overflow:hidden;}
@@ -727,32 +726,44 @@ a:hover{text-decoration:underline}
 .spot-card-meta{display:flex;flex-wrap:wrap;gap:5px;}
 .spot-card-meta span{font-size:11.5px;color:var(--muted);background:var(--surface-strong);border-radius:6px;padding:2px 7px;}
 .city-photo-credit{font-size:11.5px;color:var(--muted);margin:12px 0 0;}
-.event-card-grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));}
-.event-card a,.event-card .event-card-inner{display:flex;gap:12px;align-items:flex-start;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--cm,#8a8580);border-radius:14px;padding:12px 14px;height:100%;transition:transform .15s,box-shadow .15s;box-shadow:0 6px 18px rgba(34,34,31,.05);}
-.event-card a:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(34,34,31,.12);}
-.cm-b-outdoors{--cm:#2f8f5b;}.cm-b-culture{--cm:#b25368;}.cm-b-food{--cm:#dd6a1a;}.cm-b-learn{--cm:#4d7cad;}.cm-b-wellness{--cm:#2b9a8f;}.cm-b-shopping{--cm:#9a6cc9;}.cm-b-other{--cm:#8a8580;}
-.event-date{flex:none;width:52px;text-align:center;background:var(--surface-strong);border-radius:10px;padding:7px 0;line-height:1;}
-.event-date b{display:block;font-family:var(--font-display);font-size:20px;font-weight:700;}
-.event-date span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-top:2px;}
-.event-date--tba b{font-size:13px;}
-.event-body{min-width:0;}
-.event-body strong{display:block;font-size:14.5px;font-weight:600;line-height:1.3;}
-.event-meta{display:block;font-size:12.5px;color:var(--muted);margin-top:3px;}
-.event-blurb{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:12.5px;line-height:1.45;color:#57534e;margin-top:7px;}
-.event-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
-.event-tag{font:600 10.5px var(--font-ui);color:var(--muted);background:var(--surface-strong);border-radius:6px;padding:2px 8px;white-space:nowrap;}
-.event-tag--cat{color:#fff;background:var(--cm,#8a8580);}
-.event-tag--free{color:#1c6b3f;background:#e5f4ea;}
+/* Event agenda — a date-grouped timeline (calmer than a card grid for
+   time-ordered events: one date per day in a left rail, clean rows beneath). */
+.event-agenda{display:flex;flex-direction:column;gap:20px;}
+.agenda-day{display:grid;grid-template-columns:96px 1fr;gap:4px 22px;align-items:start;}
+.agenda-daylabel{position:sticky;top:88px;align-self:start;display:flex;flex-direction:column;line-height:1.02;padding-top:12px;}
+.agenda-dow{font:700 12px var(--font-ui);text-transform:uppercase;letter-spacing:.09em;color:var(--accent-strong);}
+.agenda-date{font-family:var(--font-display);font-size:23px;font-weight:700;color:var(--ink);}
+.agenda-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line);}
+.agenda-item{border-bottom:1px solid var(--line);}
+.agenda-item.is-filtered{display:none;}
+.agenda-item>a,.agenda-item>.agenda-item-inner{display:grid;grid-template-columns:78px 1fr auto;gap:16px;align-items:baseline;padding:14px 8px;text-decoration:none;color:inherit;border-radius:10px;transition:background .12s;}
+.agenda-item>a:hover{background:var(--accent-soft);}
+.agenda-time{font:600 13px var(--font-ui);color:var(--muted);white-space:nowrap;}
+.agenda-body{min-width:0;}
+.agenda-title{display:flex;align-items:baseline;gap:9px;font-size:15.5px;font-weight:600;line-height:1.3;color:var(--ink);}
+.agenda-dot{flex:none;width:9px;height:9px;border-radius:50%;background:var(--cm,#8a8580);transform:translateY(-1px);}
+.agenda-meta{display:block;font-size:12.5px;color:var(--muted);margin-top:4px;}
+.agenda-blurb{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:13px;line-height:1.5;color:#57534e;margin-top:7px;max-width:70ch;}
+.agenda-free{align-self:center;font:700 10.5px var(--font-ui);letter-spacing:.03em;color:#1c6b3f;background:#e5f4ea;border-radius:999px;padding:3px 10px;white-space:nowrap;}
 .city-cards{margin-top:34px;}
 .city-cards h2{margin:0 0 14px;}
+@media(max-width:640px){
+  .agenda-day{grid-template-columns:1fr;gap:2px;}
+  .agenda-daylabel{position:static;flex-direction:row;align-items:baseline;gap:8px;padding:2px 0 6px;}
+  .agenda-date{font-size:17px;}
+  .agenda-item>a,.agenda-item>.agenda-item-inner{grid-template-columns:1fr auto;gap:4px 12px;}
+  .agenda-time{grid-area:1/1;}
+  .agenda-free{grid-area:1/2;justify-self:end;align-self:baseline;}
+  .agenda-body{grid-area:2/1/3/3;}
+}
 @media(max-width:820px){
   .city-explorer-grid{grid-template-columns:1fr;}
   .city-map{height:360px;}
   .city-list{max-height:340px;}
 }
 @media(prefers-reduced-motion:reduce){
-  .spot-card a,.event-card a,.cm-mk{transition:none;}
-  .spot-card a:hover,.event-card a:hover{transform:none;}
+  .spot-card a,.cm-mk{transition:none;}
+  .spot-card a:hover{transform:none;}
 }
 `;
 
@@ -2364,6 +2375,9 @@ const CITY_MAP_SCRIPT = `<script>
           if (ok) { if (!map.hasLayer(m)) m.addTo(map); b.push([it.la, it.lo]); }
           else if (map.hasLayer(m)) map.removeLayer(m);
         });
+        document.querySelectorAll('.agenda-day').forEach(function(day){
+          day.style.display = day.querySelector('.agenda-item:not(.is-filtered)') ? '' : 'none';
+        });
         if (b.length) map.fitBounds(b, { padding:[36,36], maxZoom:15 });
       });
     });
@@ -2374,14 +2388,18 @@ const CITY_MAP_SCRIPT = `<script>
 })();
 </script>`;
 
-function eventDayBadge(ev) {
-  const t = ev?.startDateTime ? new Date(ev.startDateTime) : null;
-  if (!t || !Number.isFinite(t.getTime())) return null;
+// Day grouping for the agenda: sortable key + weekday + "Mon D" label, in the
+// metro timezone.
+function eventDayInfo(ev) {
+  if (!ev?.startDateTime) return null;
+  const t = new Date(ev.startDateTime);
+  if (!Number.isFinite(t.getTime())) return null;
   const tz = activeMetro.timezone || "America/Los_Angeles";
   try {
     return {
-      day: t.toLocaleDateString("en-US", { day: "numeric", timeZone: tz }),
-      mon: t.toLocaleDateString("en-US", { month: "short", timeZone: tz }),
+      key: zonedDateKey(t, tz),
+      dow: t.toLocaleDateString("en-US", { weekday: "short", timeZone: tz }),
+      label: t.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: tz }),
     };
   } catch {
     return null;
@@ -2502,7 +2520,7 @@ function buildCityExplorer(city, topSpots, upcomingEvents, description, spotSlug
   }
 
   const eventRows = [];
-  const eventCards = [];
+  const eventsByDay = new Map();
   for (const e of upcomingEvents) {
     const eslug = eventSlugLookup.get(e);
     const url = eslug && eventSlugs.has(eslug) ? metroPath(`event/${eslug}/`) : null;
@@ -2518,20 +2536,18 @@ function buildCityExplorer(city, topSpots, upcomingEvents, description, spotSlug
     const inner = `<span class="cm-swatch cm-pin cm-c-${fam}" aria-hidden="true"></span><span class="city-row-main"><strong>${esc(e.title)}</strong><span class="city-row-meta">${esc(meta)}</span></span>`;
     eventRows.push(`<li class="city-row" data-i="${i}">${url ? `<a href="${url}">${inner}</a>` : `<span class="city-row-inner">${inner}</span>`}</li>`);
 
-    const badge = eventDayBadge(e);
-    const badgeHtml = badge ? `<span class="event-date"><b>${esc(badge.day)}</b><span>${esc(badge.mon)}</span></span>` : `<span class="event-date event-date--tba"><b>TBA</b></span>`;
+    // Agenda row (grouped by day below). Meta collapses to one calm line;
+    // "Free" is the one highlighted chip so it stays scannable.
     const timeStr = eventTimeStr(e);
     const ageLabel = eventAgeLabel(e);
-    const metaLine = [timeStr, e.venue].filter(Boolean).map((b) => esc(b)).join(" · ");
     const catLabel = e.category || CITY_CAT_FAMILIES[fam].label;
-    const tags = [
-      `<span class="event-tag event-tag--cat cm-c-${fam}">${esc(catLabel)}</span>`,
-      ageLabel ? `<span class="event-tag">${esc(ageLabel)}</span>` : "",
-      free ? `<span class="event-tag event-tag--free">Free</span>` : (costStr ? `<span class="event-tag">${esc(costStr)}</span>` : ""),
-    ].filter(Boolean).join("");
     const blurb = cleanEventBlurb(e);
-    const cardInner = `${badgeHtml}<span class="event-body"><strong>${esc(e.title)}</strong>${metaLine ? `<span class="event-meta">${metaLine}</span>` : ""}${blurb ? `<span class="event-blurb">${esc(blurb)}</span>` : ""}<span class="event-tags">${tags}</span></span>`;
-    eventCards.push(`<li class="event-card cm-b-${fam}" data-i="${i}">${url ? `<a href="${url}">${cardInner}</a>` : `<span class="event-card-inner">${cardInner}</span>`}</li>`);
+    const metaParts = [e.venue, catLabel, ageLabel, !free && costStr ? costStr : null].filter(Boolean);
+    const agendaInner = `<span class="agenda-time">${esc(timeStr || "All day")}</span><span class="agenda-body"><strong class="agenda-title"><span class="agenda-dot cm-c-${fam}" aria-hidden="true"></span>${esc(e.title)}</strong><span class="agenda-meta">${metaParts.map((p) => esc(p)).join(" · ")}</span>${blurb ? `<span class="agenda-blurb">${esc(blurb)}</span>` : ""}</span>${free ? `<span class="agenda-free">Free</span>` : ""}`;
+    const agendaItem = `<li class="agenda-item" data-i="${i}">${url ? `<a href="${url}">${agendaInner}</a>` : `<span class="agenda-item-inner">${agendaInner}</span>`}</li>`;
+    const dinfo = eventDayInfo(e) || { key: "zzzz", dow: "", label: "Date TBA" };
+    if (!eventsByDay.has(dinfo.key)) eventsByDay.set(dinfo.key, { dow: dinfo.dow, label: dinfo.label, items: [] });
+    eventsByDay.get(dinfo.key).items.push(agendaItem);
   }
 
   // Filter chips from families actually present, ordered by frequency.
@@ -2583,8 +2599,12 @@ function buildCityExplorer(city, topSpots, upcomingEvents, description, spotSlug
   const spotsSection = spotCards.length
     ? `<section class="city-cards"><h2>${IS_ADULTS ? "Spots" : "Family-friendly spots"} in ${esc(city.name)}</h2><ul class="spot-photo-grid">${spotCards.join("")}</ul><p class="city-photo-credit">Place photos via Wikimedia Commons, Unsplash, and venue sources.</p></section>`
     : "";
-  const eventsSection = eventCards.length
-    ? `<section class="city-cards"><h2>Upcoming ${A.eventsAdj}events in ${esc(city.name)}</h2><ul class="event-card-grid">${eventCards.join("")}</ul></section>`
+  const agendaHtml = [...eventsByDay.keys()].sort().map((k) => {
+    const day = eventsByDay.get(k);
+    return `<div class="agenda-day"><div class="agenda-daylabel"><span class="agenda-dow">${esc(day.dow)}</span><span class="agenda-date">${esc(day.label)}</span></div><ol class="agenda-list">${day.items.join("")}</ol></div>`;
+  }).join("");
+  const eventsSection = eventsByDay.size
+    ? `<section class="city-cards"><h2>Upcoming ${A.eventsAdj}events in ${esc(city.name)}</h2><div class="event-agenda">${agendaHtml}</div></section>`
     : "";
 
   const body = `
