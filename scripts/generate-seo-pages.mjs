@@ -738,6 +738,7 @@ a:hover{text-decoration:underline}
 .event-body{min-width:0;}
 .event-body strong{display:block;font-size:14.5px;font-weight:600;line-height:1.3;}
 .event-meta{display:block;font-size:12.5px;color:var(--muted);margin-top:3px;}
+.event-blurb{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:12.5px;line-height:1.45;color:#57534e;margin-top:7px;}
 .event-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
 .event-tag{font:600 10.5px var(--font-ui);color:var(--muted);background:var(--surface-strong);border-radius:6px;padding:2px 8px;white-space:nowrap;}
 .event-tag--cat{color:#fff;background:var(--cm,#8a8580);}
@@ -2421,6 +2422,55 @@ function eventAgeLabel(ev) {
   return `Ages ${min}–${max}`;
 }
 
+function decodeBasicEntities(s) {
+  return String(s)
+    .replace(/&thinsp;|&nbsp;|&ensp;|&emsp;/g, " ")
+    .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"').replace(/&#0*39;|&apos;|&rsquo;|&lsquo;/g, "’")
+    .replace(/&ldquo;|&rdquo;/g, '"').replace(/&ndash;/g, "–").replace(/&mdash;/g, "—")
+    .replace(/&hellip;/g, "…")
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(+n))
+    .replace(/&[a-z]+;/gi, " ");
+}
+
+const BLURB_STOPWORDS = new Set([
+  "january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december",
+  "jan", "feb", "mar", "apr", "jun", "jul", "aug", "sep", "sept", "oct", "nov", "dec",
+  "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",
+  "mon", "tue", "wed", "thu", "fri", "sat", "sun", "and", "the", "for", "with", "from", "this", "that",
+]);
+
+// A short, clean blurb from the event description. Feed data often wraps the
+// real prose in date/venue/title boilerplate (sometimes ending in an ISO
+// timestamp), and ~40% of rows are pure date/venue with no prose at all. Strip
+// the boilerplate; require several lowercase prose words (verbs/articles, not
+// just Title-Case venue/date tokens) so stubs are omitted rather than shown;
+// then cut at a sentence boundary. ~59% of events yield a real sentence.
+function cleanEventBlurb(ev) {
+  let d = decodeBasicEntities(ev?.description || "");
+  if (!d) return null;
+  const iso = [...d.matchAll(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?/g)];
+  if (iso.length) { const l = iso[iso.length - 1]; d = d.slice(l.index + l[0].length); }
+  d = d.replace(/^\s*(?:Drop-?in Program|Featured Event|Program|Event)[.:]?\s+/i, "");
+  // Strip a leading run of date / weekday / time boilerplate (keeps real prose,
+  // even prose that later mentions a date, because only the leading run goes).
+  d = d.replace(/^(?:(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)[a-z]*day|(?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)\.?\s*\d{0,2}(?:st|nd|rd|th)?|\d{1,2}:\d{2}\s*[ap]\.?m\.?|\d{1,2}(?:st|nd|rd|th)\b|\d{4}|\bon\b|\bat\b|\bto\b|\bfrom\b|[,–—.\s-])+/i, "");
+  d = d.replace(/\s+/g, " ").trim().replace(/^[\s:@.–—,-]+/, "");
+  const t = (ev?.title || "").trim();
+  if (t && d.toLowerCase().startsWith(t.toLowerCase())) d = d.slice(t.length).replace(/^[\s:@.–—,-]+/, "");
+  d = d.trim();
+  // Real prose has several lowercase words; date/venue boilerplate is Title
+  // Case. Fewer than 3 lowercase prose words -> treat as a stub, show nothing.
+  const proseWords = (d.match(/\b[a-z][a-z]{3,}\b/g) || []).filter((w) => !BLURB_STOPWORDS.has(w));
+  if (proseWords.length < 3) return null;
+  const head = d.slice(0, 170);
+  const m = head.match(/(?<=[a-z0-9)])[.!?](?=\s+[A-Z"“]|$)/);
+  if (m && m.index >= 40) d = d.slice(0, m.index + 1);
+  else if (d.length > 140) d = d.slice(0, 140).replace(/\s+\S*$/, "") + "…";
+  if (d.length < 25) return null;
+  return d;
+}
+
 // Builds the interactive body + the head/bodyEnd payloads for one city page.
 function buildCityExplorer(city, topSpots, upcomingEvents, description, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs) {
   const items = [];
@@ -2479,7 +2529,8 @@ function buildCityExplorer(city, topSpots, upcomingEvents, description, spotSlug
       ageLabel ? `<span class="event-tag">${esc(ageLabel)}</span>` : "",
       free ? `<span class="event-tag event-tag--free">Free</span>` : (costStr ? `<span class="event-tag">${esc(costStr)}</span>` : ""),
     ].filter(Boolean).join("");
-    const cardInner = `${badgeHtml}<span class="event-body"><strong>${esc(e.title)}</strong>${metaLine ? `<span class="event-meta">${metaLine}</span>` : ""}<span class="event-tags">${tags}</span></span>`;
+    const blurb = cleanEventBlurb(e);
+    const cardInner = `${badgeHtml}<span class="event-body"><strong>${esc(e.title)}</strong>${metaLine ? `<span class="event-meta">${metaLine}</span>` : ""}${blurb ? `<span class="event-blurb">${esc(blurb)}</span>` : ""}<span class="event-tags">${tags}</span></span>`;
     eventCards.push(`<li class="event-card cm-b-${fam}" data-i="${i}">${url ? `<a href="${url}">${cardInner}</a>` : `<span class="event-card-inner">${cardInner}</span>`}</li>`);
   }
 
