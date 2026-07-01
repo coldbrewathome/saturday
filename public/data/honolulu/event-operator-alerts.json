@@ -1,9 +1,34 @@
 {
   "schemaVersion": 1,
   "metroId": "honolulu",
-  "generatedAt": "2026-06-27T01:05:24.339Z",
-  "alertCount": 8,
+  "generatedAt": "2026-07-01T04:01:14.329Z",
+  "alertCount": 9,
   "alerts": [
+    {
+      "severity": "warning",
+      "metroId": "honolulu",
+      "sourceId": "hawaii-state-library",
+      "sourceName": "Hawaii State Public Library System",
+      "sourceType": "tribeEvents",
+      "url": "https://www.librarieshawaii.org/events/",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 319,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 319,
+      "fetchedAt": "2026-07-01T04:01:14.329Z",
+      "fetches": [
+        {
+          "url": "https://www.librarieshawaii.org/events/",
+          "status": "http-error",
+          "httpStatus": 500,
+          "contentType": "application/json; charset=UTF-8"
+        }
+      ]
+    },
     {
       "severity": "critical",
       "metroId": "honolulu",
@@ -19,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:05:24.339Z",
+      "fetchedAt": "2026-07-01T04:01:14.329Z",
       "fetches": [
         {
           "url": "https://www.bishopmuseum.org/events/",
@@ -45,7 +70,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:05:24.339Z",
+      "fetchedAt": "2026-07-01T04:01:14.329Z",
       "fetches": [
         {
           "url": "https://honolulumuseum.org/events/",
@@ -70,7 +95,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:05:24.339Z",
+      "fetchedAt": "2026-07-01T04:01:14.329Z",
       "fetches": [
         {
           "url": "https://www.honoluluzoo.org/experiences-events/",
@@ -87,20 +112,20 @@
       "sourceName": "Hawaii Children's Discovery Center",
       "sourceType": "html",
       "url": "https://discoverycenterhawaii.org/events/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:05:24.339Z",
+      "fetchedAt": "2026-07-01T04:01:14.329Z",
       "fetches": [
         {
           "url": "https://discoverycenterhawaii.org/events/",
-          "status": "ok",
-          "httpStatus": 200,
+          "status": "http-error",
+          "httpStatus": 404,
           "contentType": "text/html; charset=UTF-8"
         }
       ]
@@ -120,7 +145,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:05:24.339Z",
+      "fetchedAt": "2026-07-01T04:01:14.329Z",
       "fetches": [
         {
           "url": "https://www.waikikiaquarium.org/experience/events/",
@@ -145,7 +170,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:05:24.339Z",
+      "fetchedAt": "2026-07-01T04:01:14.329Z",
       "fetches": [
         {
           "url": "https://www.iolanipalace.org/events/",
@@ -170,7 +195,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:05:24.339Z",
+      "fetchedAt": "2026-07-01T04:01:14.329Z",
       "fetches": [
         {
           "url": "https://www.kualoa.com/activities/",
@@ -195,7 +220,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:05:24.339Z",
+      "fetchedAt": "2026-07-01T04:01:14.329Z",
       "fetches": [
         {
           "url": "https://www.alohacomedyclub.com/calendar",

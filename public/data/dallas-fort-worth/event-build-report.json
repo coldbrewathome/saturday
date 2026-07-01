@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "dallas-fort-worth",
-  "generatedAt": "2026-06-27T05:40:38.524Z",
+  "generatedAt": "2026-07-01T03:55:11.310Z",
   "registryPath": "data/event-sources-dallas-fort-worth.json",
   "outputPath": "public/data/dallas-fort-worth/events.json",
-  "eventCount": 994,
+  "eventCount": 958,
   "adultsEventCount": 28,
   "sourceCount": 27,
-  "liveEventCount": 1009,
-  "lastKnownGoodEventCount": 0,
+  "liveEventCount": 892,
+  "lastKnownGoodEventCount": 81,
   "fallbackEventCount": 4,
-  "operatorAlertCount": 9,
+  "operatorAlertCount": 10,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:40:38.524Z",
+      "fetchedAt": "2026-07-01T03:55:11.310Z",
       "fetches": [
         {
           "url": "https://www.perotmuseum.org/events/",
@@ -53,13 +53,42 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:40:38.524Z",
+      "fetchedAt": "2026-07-01T03:55:11.310Z",
       "fetches": [
         {
           "url": "https://www.fairparkdallas.com/events/detail/2026-state-fair-of-texas",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dfw-garland-library-civicplus",
+      "sourceName": "Garland Library Calendar",
+      "sourceType": "civicpluscal",
+      "url": "https://www.garlandtx.gov/calendar.aspx?CID=24&view=list&showPastEvents=false",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 81,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 81,
+      "fetchedAt": "2026-07-01T03:55:11.310Z",
+      "fetches": [
+        {
+          "url": "https://www.garlandtx.gov/calendar.aspx?CID=24&view=list&showPastEvents=false",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        },
+        {
+          "url": "https://www.garlandtx.gov/calendar.aspx?CID=24&view=list&showPastEvents=false&month=8&year=2026",
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -78,7 +107,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:40:38.524Z",
+      "fetchedAt": "2026-07-01T03:55:11.310Z",
       "fetches": [
         {
           "url": "https://www.treesdallas.com/events",
@@ -103,7 +132,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:40:38.524Z",
+      "fetchedAt": "2026-07-01T03:55:11.310Z",
       "fetches": [
         {
           "url": "https://www.thefactoryindeepellum.com/events",
@@ -128,7 +157,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:40:38.524Z",
+      "fetchedAt": "2026-07-01T03:55:11.310Z",
       "fetches": [
         {
           "url": "https://www.daboredada.com/events",
@@ -152,7 +181,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:40:38.524Z",
+      "fetchedAt": "2026-07-01T03:55:11.310Z",
       "fetches": [
         {
           "url": "https://www.tulipsftw.com/events",
@@ -177,7 +206,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:40:38.524Z",
+      "fetchedAt": "2026-07-01T03:55:11.310Z",
       "fetches": [
         {
           "url": "https://dallascomedyclub.com/shows/",
@@ -201,7 +230,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:40:38.524Z",
+      "fetchedAt": "2026-07-01T03:55:11.310Z",
       "fetches": [
         {
           "url": "https://www.hyenascomedynightclub.com/calendar",
@@ -226,7 +255,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:40:38.524Z",
+      "fetchedAt": "2026-07-01T03:55:11.310Z",
       "fetches": [
         {
           "url": "https://www.fairparkdallas.com/events",
@@ -288,9 +317,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://www.dallasparks.org/RSSFeed.aspx?ModID=58&CID=Main-Calendar-14",
@@ -301,7 +330,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/xml; charset=utf-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 3,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -342,21 +371,21 @@
       "metroId": "dallas-fort-worth",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 30,
+      "liveEvents": 25,
       "fallbackEvents": 0,
-      "eventCount": 30,
+      "eventCount": 25,
       "fetches": [
         {
           "url": "https://www.dallaszoo.com/dallas-zoo-events/calendar/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; source=dallas-zoo-ajax; pages=4"
+          "contentType": "text/html; source=dallas-zoo-ajax; pages=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; source=dallas-zoo-ajax; pages=4",
+      "contentType": "text/html; source=dallas-zoo-ajax; pages=3",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 30,
+      "extractedEvents": 25,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -423,21 +452,21 @@
       "metroId": "dallas-fort-worth",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 244,
+      "liveEvents": 239,
       "fallbackEvents": 0,
-      "eventCount": 244,
+      "eventCount": 239,
       "fetches": [
         {
           "url": "https://plano.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=450; locations=6"
+          "contentType": "application/json; source=communico-events; events=451; locations=6"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=450; locations=6",
+      "contentType": "application/json; source=communico-events; events=451; locations=6",
       "rejectedLiveEvents": 8,
-      "extractedEvents": 252,
+      "extractedEvents": 247,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -450,9 +479,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 10,
+      "liveEvents": 12,
       "fallbackEvents": 0,
-      "eventCount": 10,
+      "eventCount": 12,
       "fetches": [
         {
           "url": "https://friscolibrary.bibliocommons.com/v2/events",
@@ -464,7 +493,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 10,
+      "extractedEvents": 12,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -504,9 +533,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 177,
+      "liveEvents": 172,
       "fallbackEvents": 0,
-      "eventCount": 177,
+      "eventCount": 172,
       "fetches": [
         {
           "url": "https://fortworthtexas.libcal.com/calendar",
@@ -517,8 +546,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 13,
-      "extractedEvents": 190,
+      "rejectedLiveEvents": 11,
+      "extractedEvents": 183,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -531,9 +560,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 215,
+      "liveEvents": 197,
       "fallbackEvents": 0,
-      "eventCount": 215,
+      "eventCount": 197,
       "fetches": [
         {
           "url": "https://arlingtontx.libcal.com/calendar",
@@ -545,7 +574,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 215,
+      "extractedEvents": 197,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -558,9 +587,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 104,
+      "liveEvents": 103,
       "fallbackEvents": 0,
-      "eventCount": 104,
+      "eventCount": 103,
       "fetches": [
         {
           "url": "https://irvinglibrary.libcal.com/calendar",
@@ -571,8 +600,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 93,
-      "extractedEvents": 197,
+      "rejectedLiveEvents": 89,
+      "extractedEvents": 192,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -585,9 +614,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 88,
+      "liveEvents": 90,
       "fallbackEvents": 0,
-      "eventCount": 88,
+      "eventCount": 90,
       "fetches": [
         {
           "url": "https://mckinneytexas.libcal.com/calendar",
@@ -598,8 +627,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 38,
-      "extractedEvents": 126,
+      "rejectedLiveEvents": 29,
+      "extractedEvents": 119,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -611,30 +640,26 @@
       "city": "Garland",
       "metroId": "dallas-fort-worth",
       "category": "Library",
-      "status": "ok",
-      "liveEvents": 85,
+      "status": "fetch-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 85,
+      "eventCount": 81,
       "fetches": [
         {
           "url": "https://www.garlandtx.gov/calendar.aspx?CID=24&view=list&showPastEvents=false",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         },
         {
-          "url": "https://www.garlandtx.gov/calendar.aspx?CID=24&view=list&showPastEvents=false&month=7&year=2026",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
+          "url": "https://www.garlandtx.gov/calendar.aspx?CID=24&view=list&showPastEvents=false&month=8&year=2026",
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 85,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "reason": "fetch failed",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 81,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "dfw-texas-discovery-gardens-tribe",
@@ -645,21 +670,21 @@
       "metroId": "dallas-fort-worth",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 5,
+      "liveEvents": 4,
       "fallbackEvents": 0,
-      "eventCount": 5,
+      "eventCount": 4,
       "fetches": [
         {
           "url": "https://txdg.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=5; pages=1"
+          "contentType": "application/json; source=tribe-events; events=4; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=5; pages=1",
+      "contentType": "application/json; source=tribe-events; events=4; pages=1",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 5,
+      "extractedEvents": 4,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -914,13 +939,13 @@
           "url": "https://lakewoodbrewing.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=45; pages=1"
+          "contentType": "application/json; source=tribe-events; events=44; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=45; pages=1",
-      "rejectedLiveEvents": 26,
-      "extractedEvents": 37,
+      "contentType": "application/json; source=tribe-events; events=44; pages=1",
+      "rejectedLiveEvents": 25,
+      "extractedEvents": 36,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

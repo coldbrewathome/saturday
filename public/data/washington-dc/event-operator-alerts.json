@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "metroId": "washington-dc",
-  "generatedAt": "2026-06-27T01:01:55.463Z",
+  "generatedAt": "2026-07-01T03:56:44.754Z",
   "alertCount": 13,
   "alerts": [
     {
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:01:55.463Z",
+      "fetchedAt": "2026-07-01T03:56:44.754Z",
       "fetches": [
         {
           "url": "https://dpr.dc.gov/events",
@@ -44,13 +44,37 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:01:55.463Z",
+      "fetchedAt": "2026-07-01T03:56:44.754Z",
       "fetches": [
         {
           "url": "https://naturalhistory.si.edu/events/family-programs",
           "status": "http-error",
           "httpStatus": 403,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "washington-dc",
+      "sourceId": "washington-dc-zoo-family",
+      "sourceName": "National Zoo Events",
+      "sourceType": "nationalZooJsonApi",
+      "url": "https://nationalzoo.si.edu/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 4,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 4,
+      "fetchedAt": "2026-07-01T03:56:44.754Z",
+      "fetches": [
+        {
+          "url": "https://nationalzoo.si.edu/events",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ]
     },
@@ -69,38 +93,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:01:55.463Z",
+      "fetchedAt": "2026-07-01T03:56:44.754Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "application/json; source=ticketmaster; events=0; queries=1"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "washington-dc",
-      "sourceId": "montgomery-county-ag-fair",
-      "sourceName": "Montgomery County Agricultural Fair",
-      "sourceType": "html",
-      "url": "https://mcagfair.com/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:01:55.463Z",
-      "fetches": [
-        {
-          "url": "https://mcagfair.com/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -119,7 +118,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:01:55.463Z",
+      "fetchedAt": "2026-07-01T03:56:44.754Z",
       "fetches": [
         {
           "url": "https://marylandstatefair.com/",
@@ -136,21 +135,21 @@
       "sourceName": "National Building Museum Children & Youth Programs",
       "sourceType": "tribeEvents",
       "url": "https://www.nbm.org/events/",
-      "status": "ok-last-known-good",
-      "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": "last-known-good",
       "recoveredEvents": 4,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 4,
-      "fetchedAt": "2026-06-27T01:01:55.463Z",
+      "fetchedAt": "2026-07-01T03:56:44.754Z",
       "fetches": [
         {
           "url": "https://www.nbm.org/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=0; pages=1"
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "application/json; charset=UTF-8"
         }
       ]
     },
@@ -169,7 +168,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:01:55.463Z",
+      "fetchedAt": "2026-07-01T03:56:44.754Z",
       "fetches": [
         {
           "url": "https://glenechopark.org/pridemonth",
@@ -194,7 +193,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:01:55.463Z",
+      "fetchedAt": "2026-07-01T03:56:44.754Z",
       "fetches": [
         {
           "url": "https://newsroom.loc.gov/news/library-to-host-26th-national-book-festival-in-august-2026/s/81b2c74b-c263-46cc-b3ed-f91974bf4c8e",
@@ -219,7 +218,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:01:55.463Z",
+      "fetchedAt": "2026-07-01T03:56:44.754Z",
       "fetches": [
         {
           "url": "https://www.930.com/events",
@@ -244,7 +243,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:01:55.463Z",
+      "fetchedAt": "2026-07-01T03:56:44.754Z",
       "fetches": [
         {
           "url": "https://www.dcimprov.com/shows",
@@ -269,7 +268,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:01:55.463Z",
+      "fetchedAt": "2026-07-01T03:56:44.754Z",
       "fetches": [
         {
           "url": "https://www.unionstage.com/events",
@@ -293,7 +292,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:01:55.463Z",
+      "fetchedAt": "2026-07-01T03:56:44.754Z",
       "fetches": [
         {
           "url": "https://www.songbyrddc.com/events",
@@ -318,7 +317,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:01:55.463Z",
+      "fetchedAt": "2026-07-01T03:56:44.754Z",
       "fetches": [
         {
           "url": "https://www.dcjazzfest.org/event-details/dcjazzfest2026",

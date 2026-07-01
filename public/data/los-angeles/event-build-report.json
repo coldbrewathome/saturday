@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "metroId": "los-angeles",
-  "generatedAt": "2026-06-27T01:03:26.098Z",
+  "generatedAt": "2026-07-01T03:50:50.691Z",
   "registryPath": "data/event-sources-los-angeles.json",
   "outputPath": "public/data/los-angeles/events.json",
-  "eventCount": 1816,
-  "adultsEventCount": 39,
+  "eventCount": 1811,
+  "adultsEventCount": 58,
   "sourceCount": 47,
-  "liveEventCount": 1822,
-  "lastKnownGoodEventCount": 13,
+  "liveEventCount": 1845,
+  "lastKnownGoodEventCount": 8,
   "fallbackEventCount": 0,
   "operatorAlertCount": 29,
   "errors": [],
@@ -24,11 +24,11 @@
       "issueType": "fetch-failed",
       "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 3,
+      "recoveredEvents": 1,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 3,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://www.lapl.org/rss/events",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://nhm.org/calendar",
@@ -64,21 +64,21 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "los-angeles",
       "sourceId": "la-brea-tar-pits",
       "sourceName": "La Brea Tar Pits & Museum",
       "sourceType": "html",
       "url": "https://tarpits.org/calendar",
       "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://tarpits.org/calendar",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://www.getty.edu/visit/cal/",
@@ -128,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://www.skirball.org/programs",
@@ -149,11 +149,11 @@
       "issueType": "fetch-failed",
       "reason": "challenge page returned instead of event content",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 10,
+      "recoveredEvents": 7,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 10,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "lastKnownGoodEvents": 7,
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://www.petersen.org/events",
@@ -179,7 +179,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://griffithobservatory.lacity.gov/events/",
@@ -204,7 +204,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://www.aquariumofpacific.org/events",
@@ -229,7 +229,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://www.nortonsimon.org/calendar",
@@ -254,7 +254,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://californiasciencecenter.org/events",
@@ -279,7 +279,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://www.lazoo.org/events",
@@ -304,7 +304,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://www.huntington.org/calendar",
@@ -329,7 +329,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://www.cityofpasadena.net/library/calendar/",
@@ -354,7 +354,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://www.longbeach.gov/library/events/",
@@ -379,7 +379,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://grandparkla.org/events/",
@@ -404,7 +404,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -429,7 +429,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://www.lacountyfair.com/",
@@ -454,7 +454,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://ocfair.com/oc-fair/",
@@ -479,7 +479,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://venturacountyfair.org/",
@@ -504,7 +504,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://www.troubadour.com/events",
@@ -529,7 +529,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://www.theecho.com/events",
@@ -554,7 +554,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://www.theecho.com/echoplex-events",
@@ -579,7 +579,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://www.theelrey.com/events",
@@ -604,7 +604,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://www.theroxy.com/events",
@@ -629,7 +629,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://thecomedystore.com/calendar/",
@@ -654,7 +654,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://www.laughfactory.com/shows",
@@ -679,7 +679,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://improv.com/hollywood/calendar/",
@@ -704,7 +704,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://www.wiltern.com/events",
@@ -729,7 +729,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T01:03:26.098Z",
+      "fetchedAt": "2026-07-01T03:50:50.691Z",
       "fetches": [
         {
           "url": "https://www.theregenttheater.com/events",
@@ -764,21 +764,21 @@
       "metroId": "los-angeles",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 1328,
+      "liveEvents": 1340,
       "fallbackEvents": 0,
-      "eventCount": 1328,
+      "eventCount": 1340,
       "fetches": [
         {
           "url": "https://visit.lacountylibrary.org/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=1727; locations=91"
+          "contentType": "application/json; source=communico-events; events=1736; locations=91"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=1727; locations=91",
-      "rejectedLiveEvents": 14,
-      "extractedEvents": 1342,
+      "contentType": "application/json; source=communico-events; events=1736; locations=91",
+      "rejectedLiveEvents": 28,
+      "extractedEvents": 1368,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -793,7 +793,7 @@
       "status": "http-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://www.lapl.org/rss/events",
@@ -805,7 +805,7 @@
       "httpStatus": 404,
       "contentType": "text/html; charset=UTF-8",
       "extractedEvents": 0,
-      "lastKnownGoodEvents": 3,
+      "lastKnownGoodEvents": 1,
       "recoveryMode": "last-known-good"
     },
     {
@@ -852,11 +852,11 @@
           "url": "https://burbank.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=138; locations=6"
+          "contentType": "application/json; source=communico-events; events=142; locations=6"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=138; locations=6",
+      "contentType": "application/json; source=communico-events; events=142; locations=6",
       "rejectedLiveEvents": 2,
       "extractedEvents": 50,
       "lastKnownGoodEvents": 0,
@@ -871,21 +871,21 @@
       "metroId": "los-angeles",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 281,
+      "liveEvents": 315,
       "fallbackEvents": 0,
-      "eventCount": 281,
+      "eventCount": 315,
       "fetches": [
         {
           "url": "https://glendaleca.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=410; locations=15"
+          "contentType": "application/json; source=communico-events; events=433; locations=15"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=410; locations=15",
-      "rejectedLiveEvents": 15,
-      "extractedEvents": 296,
+      "contentType": "application/json; source=communico-events; events=433; locations=15",
+      "rejectedLiveEvents": 5,
+      "extractedEvents": 320,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -898,9 +898,9 @@
       "metroId": "los-angeles",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 42,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 42,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://www.beverlyhills.org/Calendar.aspx?CID=25",
@@ -909,7 +909,7 @@
           "contentType": "text/html; charset=utf-8"
         },
         {
-          "url": "https://www.beverlyhills.org/Calendar.aspx?CID=25&view=list&month=7&year=2026",
+          "url": "https://www.beverlyhills.org/Calendar.aspx?CID=25&view=list&month=8&year=2026",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -918,7 +918,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 42,
+      "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -958,9 +958,9 @@
       "metroId": "los-angeles",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 10,
+      "liveEvents": 11,
       "fallbackEvents": 0,
-      "eventCount": 10,
+      "eventCount": 11,
       "fetches": [
         {
           "url": "https://www.lacma.org/event-calendar-by-day",
@@ -971,7 +971,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 0,
       "extractedEvents": 11,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -998,8 +998,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1068,7 +1068,7 @@
       "status": "blocked",
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 10,
+      "eventCount": 7,
       "fetches": [
         {
           "url": "https://www.petersen.org/events",
@@ -1082,7 +1082,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "extractedEvents": 0,
-      "lastKnownGoodEvents": 10,
+      "lastKnownGoodEvents": 7,
       "recoveryMode": "last-known-good"
     },
     {
@@ -1121,21 +1121,21 @@
       "metroId": "los-angeles",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 10,
+      "liveEvents": 9,
       "fallbackEvents": 0,
-      "eventCount": 10,
+      "eventCount": 9,
       "fetches": [
         {
           "url": "https://kidspacemuseum.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=26; pages=1"
+          "contentType": "application/json; source=tribe-events; events=24; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=26; pages=1",
+      "contentType": "application/json; source=tribe-events; events=24; pages=1",
       "rejectedLiveEvents": 5,
-      "extractedEvents": 15,
+      "extractedEvents": 14,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1296,8 +1296,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 2,
-      "extractedEvents": 4,
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 3,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1390,9 +1390,9 @@
       "metroId": "los-angeles",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 31,
+      "liveEvents": 27,
       "fallbackEvents": 0,
-      "eventCount": 31,
+      "eventCount": 27,
       "fetches": [
         {
           "url": "https://www.descansogardens.org/events",
@@ -1403,8 +1403,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 262,
-      "extractedEvents": 293,
+      "rejectedLiveEvents": 112,
+      "extractedEvents": 139,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1632,21 +1632,21 @@
       "metroId": "los-angeles",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 27,
+      "liveEvents": 25,
       "fallbackEvents": 0,
-      "eventCount": 27,
+      "eventCount": 25,
       "fetches": [
         {
           "url": "https://wendemuseum.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=37; pages=1"
+          "contentType": "application/json; source=tribe-events; events=34; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=37; pages=1",
-      "rejectedLiveEvents": 10,
-      "extractedEvents": 37,
+      "contentType": "application/json; source=tribe-events; events=34; pages=1",
+      "rejectedLiveEvents": 9,
+      "extractedEvents": 34,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1951,21 +1951,21 @@
       "metroId": "los-angeles",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 5,
+      "liveEvents": 27,
       "fallbackEvents": 0,
-      "eventCount": 5,
+      "eventCount": 27,
       "fetches": [
         {
           "url": "https://www.boomtownbrew.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=90; pages=2"
+          "contentType": "application/json; source=tribe-events; events=112; pages=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=90; pages=2",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 6,
+      "contentType": "application/json; source=tribe-events; events=112; pages=3",
+      "rejectedLiveEvents": 3,
+      "extractedEvents": 30,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1978,9 +1978,9 @@
       "metroId": "los-angeles",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 14,
+      "liveEvents": 15,
       "fallbackEvents": 0,
-      "eventCount": 14,
+      "eventCount": 15,
       "fetches": [
         {
           "url": "https://artslb.org/calendar/",
@@ -1991,7 +1991,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=300; pages=6",
-      "rejectedLiveEvents": 286,
+      "rejectedLiveEvents": 285,
       "extractedEvents": 300,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null

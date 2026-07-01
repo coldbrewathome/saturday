@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "philadelphia",
-  "generatedAt": "2026-06-27T05:42:32.831Z",
+  "generatedAt": "2026-07-01T03:58:17.106Z",
   "registryPath": "data/event-sources-philadelphia.json",
   "outputPath": "public/data/philadelphia/events.json",
-  "eventCount": 1177,
-  "adultsEventCount": 83,
+  "eventCount": 1074,
+  "adultsEventCount": 79,
   "sourceCount": 25,
-  "liveEventCount": 1200,
+  "liveEventCount": 1096,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 16,
-  "operatorAlertCount": 12,
+  "operatorAlertCount": 13,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:42:32.831Z",
+      "fetchedAt": "2026-07-01T03:58:17.106Z",
       "fetches": [
         {
           "url": "https://freelibraryfoundation.org/events/",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:42:32.831Z",
+      "fetchedAt": "2026-07-01T03:58:17.106Z",
       "fetches": [
         {
           "url": "https://www.phila.gov/departments/philadelphia-parks-recreation/#calendar",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:42:32.831Z",
+      "fetchedAt": "2026-07-01T03:58:17.106Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:42:32.831Z",
+      "fetchedAt": "2026-07-01T03:58:17.106Z",
       "fetches": [
         {
           "url": "https://middletowngrangefair.org/",
@@ -128,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:42:32.831Z",
+      "fetchedAt": "2026-07-01T03:58:17.106Z",
       "fetches": [
         {
           "url": "https://www.utphilly.com/events",
@@ -153,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:42:32.831Z",
+      "fetchedAt": "2026-07-01T03:58:17.106Z",
       "fetches": [
         {
           "url": "https://www.thefillmorephilly.com/events",
@@ -178,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:42:32.831Z",
+      "fetchedAt": "2026-07-01T03:58:17.106Z",
       "fetches": [
         {
           "url": "https://www.johnnybrendas.com/events",
@@ -203,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:42:32.831Z",
+      "fetchedAt": "2026-07-01T03:58:17.106Z",
       "fetches": [
         {
           "url": "https://www.thefoundryphilly.com/events",
@@ -227,7 +227,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:42:32.831Z",
+      "fetchedAt": "2026-07-01T03:58:17.106Z",
       "fetches": [
         {
           "url": "https://philadelphia.heliumcomedy.com/events",
@@ -252,13 +252,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:42:32.831Z",
+      "fetchedAt": "2026-07-01T03:58:17.106Z",
       "fetches": [
         {
           "url": "https://xpn.org/xpnfest/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "manayunk-arts-festival-2026",
+      "sourceName": "Manayunk Arts Festival 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://manayunk.com/mnyk-events/manayunk-art-festival/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-01T03:58:17.106Z",
+      "fetches": [
+        {
+          "url": "https://manayunk.com/mnyk-events/manayunk-art-festival/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -277,7 +302,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:42:32.831Z",
+      "fetchedAt": "2026-07-01T03:58:17.106Z",
       "fetches": [
         {
           "url": "https://phillyfringe.org/",
@@ -302,7 +327,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-06-27T05:42:32.831Z",
+      "fetchedAt": "2026-07-01T03:58:17.106Z",
       "fetches": [
         {
           "url": "https://folkfest.org/",
@@ -323,9 +348,9 @@
       "metroId": "philadelphia",
       "category": null,
       "status": "ok",
-      "liveEvents": 9,
+      "liveEvents": 6,
       "fallbackEvents": 0,
-      "eventCount": 9,
+      "eventCount": 6,
       "fetches": []
     },
     {
@@ -391,9 +416,9 @@
       "metroId": "philadelphia",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 537,
+      "liveEvents": 502,
       "fallbackEvents": 0,
-      "eventCount": 537,
+      "eventCount": 502,
       "fetches": [
         {
           "url": "https://www.pleasetouchmuseum.org/calendar/month/",
@@ -404,7 +429,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=600; pages=12",
-      "rejectedLiveEvents": 63,
+      "rejectedLiveEvents": 98,
       "extractedEvents": 600,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -418,9 +443,9 @@
       "metroId": "philadelphia",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 10,
+      "liveEvents": 9,
       "fallbackEvents": 0,
-      "eventCount": 10,
+      "eventCount": 9,
       "fetches": [
         {
           "url": "https://www.philadelphiazoo.org/events/",
@@ -431,7 +456,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=wp-rest-events; events=83",
-      "rejectedLiveEvents": 198,
+      "rejectedLiveEvents": 199,
       "extractedEvents": 208,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -499,9 +524,9 @@
       "metroId": "philadelphia",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 8,
+      "liveEvents": 10,
       "fallbackEvents": 0,
-      "eventCount": 8,
+      "eventCount": 10,
       "fetches": [
         {
           "url": "https://bclsnj.bibliocommons.com/v2/events",
@@ -513,7 +538,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 8,
+      "extractedEvents": 10,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -526,9 +551,9 @@
       "metroId": "philadelphia",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 144,
+      "liveEvents": 135,
       "fallbackEvents": 0,
-      "eventCount": 144,
+      "eventCount": 135,
       "fetches": [
         {
           "url": "https://mnl.libcal.com/calendar?cid=19360&cal=19360",
@@ -540,7 +565,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 18,
-      "extractedEvents": 162,
+      "extractedEvents": 153,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -553,9 +578,9 @@
       "metroId": "philadelphia",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 222,
+      "liveEvents": 169,
       "fallbackEvents": 0,
-      "eventCount": 222,
+      "eventCount": 169,
       "fetches": [
         {
           "url": "https://delcolibraries.libcal.com/calendar?cid=10206&cal=10206",
@@ -567,7 +592,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 222,
+      "extractedEvents": 169,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -580,9 +605,9 @@
       "metroId": "philadelphia",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 221,
+      "liveEvents": 217,
       "fallbackEvents": 0,
-      "eventCount": 221,
+      "eventCount": 217,
       "fetches": [
         {
           "url": "https://calendar.buckslib.org/calendar?cid=3891&cal=3891",
@@ -593,8 +618,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 4,
-      "extractedEvents": 225,
+      "rejectedLiveEvents": 2,
+      "extractedEvents": 219,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -873,9 +898,9 @@
       "metroId": "philadelphia",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://manayunk.com/mnyk-events/manayunk-art-festival/",
@@ -886,7 +911,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
