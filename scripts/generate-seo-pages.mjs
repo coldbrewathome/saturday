@@ -662,6 +662,93 @@ a:hover{text-decoration:underline}
   font-weight: 700;
   cursor: pointer;
 }
+
+/* ---- City map-first explorer ---- */
+.famhop-page--wide{max-width:1160px;}
+.famhop-page--wide .lede{max-width:680px;}
+.city-snapshot{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin:0 0 22px;}
+.city-snapshot .snap{font-size:15px;color:var(--muted);}
+.city-snapshot .snap b{font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--ink);margin-right:2px;}
+.city-snapshot .cta{margin-left:auto;}
+@media(max-width:640px){.city-snapshot .cta{margin-left:0;width:100%;text-align:center;}}
+.city-filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;}
+.city-filters .filter-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 13.5px var(--font-ui);cursor:pointer;transition:background .15s,border-color .15s,color .15s;}
+.city-filters .filter-chip:hover{border-color:var(--accent);}
+.city-filters .filter-chip.is-active{background:var(--ink);border-color:var(--ink);color:#fff;}
+.city-filters .filter-chip .cm-swatch{width:11px;height:11px;margin-top:0;}
+.city-filters .filter-chip.is-active .cm-swatch{box-shadow:0 0 0 1.5px rgba(255,255,255,.6);}
+.city-explorer-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:16px;align-items:stretch;}
+.city-map-panel{position:relative;}
+.city-map{height:520px;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:var(--surface-strong);box-shadow:0 12px 30px rgba(34,34,31,.06);z-index:0;}
+.city-map-note{margin:0;height:100%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;}
+.city-map.is-ready .city-map-note{display:none;}
+.city-map.is-unavailable{display:none;}
+.city-legend{position:absolute;left:12px;bottom:12px;margin:0;padding:8px 12px;list-style:none;display:flex;gap:14px;background:var(--glass-bg);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border:var(--glass-border);border-radius:12px;font-size:12px;color:var(--ink);box-shadow:var(--glass-shadow);z-index:500;}
+.city-legend li{display:flex;align-items:center;gap:6px;}
+.city-list{list-style:none;margin:0;padding:0;max-height:520px;overflow:auto;border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:0 12px 30px rgba(34,34,31,.05);}
+.city-row{border-bottom:1px solid var(--line);}
+.city-row:last-child{border-bottom:0;}
+.city-row.is-filtered,.spot-card.is-filtered,.event-card.is-filtered{display:none;}
+.city-row a,.city-row .city-row-inner{display:flex;align-items:flex-start;gap:11px;padding:12px 14px;text-decoration:none;color:inherit;}
+.city-row a:hover,.city-row.is-active a,.city-row.is-active .city-row-inner{background:var(--accent-soft);}
+.city-row-main{display:flex;flex-direction:column;gap:1px;min-width:0;}
+.city-row-main strong{font-weight:600;font-size:14.5px;line-height:1.3;}
+.city-row-meta{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cm-swatch{flex:none;display:inline-block;width:13px;height:13px;margin-top:3px;background:var(--cm,#8a8580);}
+.cm-swatch.cm-dot{border-radius:50%;}
+.cm-swatch.cm-pin{border-radius:50% 50% 50% 0;transform:rotate(-45deg);}
+.cm-c-outdoors{--cm:#2f8f5b;}
+.cm-c-culture{--cm:#b25368;}
+.cm-c-food{--cm:#dd6a1a;}
+.cm-c-learn{--cm:#4d7cad;}
+.cm-c-wellness{--cm:#2b9a8f;}
+.cm-c-shopping{--cm:#9a6cc9;}
+.cm-c-other{--cm:#8a8580;}
+.cm-ico{background:none;border:0;}
+.cm-mk{display:block;background:var(--cm,#8a8580);box-shadow:0 1px 3px rgba(0,0,0,.35);transition:transform .12s;}
+.cm-mk.cm-dot{width:18px;height:18px;border-radius:50%;border:2.5px solid #fff;}
+.cm-mk.cm-pin{width:22px;height:22px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2.5px solid #fff;}
+.cm-mk.cm-hi{transform:scale(1.35);}
+.cm-mk.cm-pin.cm-hi{transform:rotate(-45deg) scale(1.35);}
+.cm-pop strong{display:block;font-size:14px;}
+.cm-pop span{display:block;color:var(--muted);font-size:12.5px;margin:2px 0 6px;}
+.cm-pop a{color:var(--accent-strong);font-weight:600;text-decoration:none;font-size:13px;}
+.spot-photo-grid,.event-card-grid{list-style:none;margin:0;padding:0;display:grid;gap:14px;}
+.spot-photo-grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));}
+.spot-card a,.spot-card .spot-card-inner{display:flex;flex-direction:column;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;height:100%;transition:transform .15s,box-shadow .15s;box-shadow:0 6px 18px rgba(34,34,31,.05);}
+.spot-card a:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(34,34,31,.12);}
+.spot-card-media{position:relative;aspect-ratio:5/3;background:var(--surface-strong);display:block;overflow:hidden;}
+.spot-card-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+.spot-card-media.no-img img{display:none;}
+.spot-card-media.no-img{background:linear-gradient(135deg,var(--surface-strong),var(--line));}
+.spot-card-cat{position:absolute;left:10px;top:10px;padding:3px 9px;border-radius:999px;font:600 11px var(--font-ui);color:#fff;background:var(--cm,#8a8580);box-shadow:0 1px 4px rgba(0,0,0,.2);}
+.spot-card-body{padding:11px 13px 14px;display:flex;flex-direction:column;gap:6px;}
+.spot-card-body strong{font-size:14.5px;font-weight:600;line-height:1.3;}
+.spot-card-meta{display:flex;flex-wrap:wrap;gap:5px;}
+.spot-card-meta span{font-size:11.5px;color:var(--muted);background:var(--surface-strong);border-radius:6px;padding:2px 7px;}
+.city-photo-credit{font-size:11.5px;color:var(--muted);margin:12px 0 0;}
+.event-card-grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));}
+.event-card a,.event-card .event-card-inner{display:flex;gap:12px;align-items:center;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--cm,#8a8580);border-radius:14px;padding:12px 14px;height:100%;transition:transform .15s,box-shadow .15s;box-shadow:0 6px 18px rgba(34,34,31,.05);}
+.event-card a:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(34,34,31,.12);}
+.cm-b-outdoors{--cm:#2f8f5b;}.cm-b-culture{--cm:#b25368;}.cm-b-food{--cm:#dd6a1a;}.cm-b-learn{--cm:#4d7cad;}.cm-b-wellness{--cm:#2b9a8f;}.cm-b-shopping{--cm:#9a6cc9;}.cm-b-other{--cm:#8a8580;}
+.event-date{flex:none;width:52px;text-align:center;background:var(--surface-strong);border-radius:10px;padding:7px 0;line-height:1;}
+.event-date b{display:block;font-family:var(--font-display);font-size:20px;font-weight:700;}
+.event-date span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-top:2px;}
+.event-date--tba b{font-size:13px;}
+.event-body{min-width:0;}
+.event-body strong{display:block;font-size:14.5px;font-weight:600;line-height:1.3;}
+.event-meta{display:block;font-size:12.5px;color:var(--muted);margin-top:3px;}
+.city-cards{margin-top:34px;}
+.city-cards h2{margin:0 0 14px;}
+@media(max-width:820px){
+  .city-explorer-grid{grid-template-columns:1fr;}
+  .city-map{height:360px;}
+  .city-list{max-height:340px;}
+}
+@media(prefers-reduced-motion:reduce){
+  .spot-card a,.event-card a,.cm-mk{transition:none;}
+  .spot-card a:hover,.event-card a:hover{transform:none;}
+}
 `;
 
 // Guarded so tests can import the exported helpers (spotPassesQualityGate,
@@ -2163,6 +2250,257 @@ function formatEventDate(event) {
 // Cities
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// City "map-first explorer" — an interactive Leaflet map (progressive
+// enhancement over server-rendered lists/cards) plus a synced list and
+// picture-rich cards. Every spot + event has real lat/lon, so the map is the
+// authentic hero; photos are supporting texture (many spot photos are generic
+// category stock, credited in aggregate under the grid and via each image's
+// title attribute).
+// ---------------------------------------------------------------------------
+const CITY_CAT_FAMILIES = {
+  outdoors: { color: "#2f8f5b", label: "Outdoors" },
+  culture: { color: "#b25368", label: "Culture" },
+  food: { color: "#dd6a1a", label: "Food & drink" },
+  learn: { color: "#4d7cad", label: "Library" },
+  wellness: { color: "#2b9a8f", label: "Wellness" },
+  shopping: { color: "#9a6cc9", label: "Shopping" },
+  other: { color: "#8a8580", label: "More" },
+};
+const CITY_CAT_MAP = {
+  Outdoors: "outdoors", Park: "outdoors", Sports: "outdoors", Farm: "outdoors", Garden: "outdoors",
+  Culture: "culture", Museum: "culture", Festival: "culture", Music: "culture", Zoo: "culture", Ticketed: "culture", Theatre: "culture", Art: "culture",
+  Food: "food", Market: "food",
+  Library: "learn", Community: "learn", Education: "learn",
+  Wellness: "wellness",
+  Shopping: "shopping",
+};
+function cityCatFamily(cat) {
+  return (cat && CITY_CAT_MAP[cat]) || "other";
+}
+
+const CITY_MAP_HEAD = [
+  '<link rel="preconnect" href="https://unpkg.com" crossorigin>',
+  '<link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin>',
+  '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">',
+  '<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>',
+].join("\n");
+
+// Static (identical for every city page); reads the per-city JSON payload by id.
+// Written without backticks / ${} so it survives being embedded in this module's
+// template literals. Graceful: if Leaflet fails to load, the list + cards remain.
+const CITY_MAP_SCRIPT = `<script>
+(function(){
+  var dataEl = document.getElementById('famhop-city-data');
+  var mapEl = document.getElementById('famhop-city-map');
+  if (!dataEl || !mapEl) return;
+  var items;
+  try { items = JSON.parse(dataEl.textContent); } catch (e) { return; }
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function row(i){ return document.querySelector('.city-row[data-i="'+i+'"]'); }
+  function boot(){
+    var L = window.L;
+    if (!L) { mapEl.classList.add('is-unavailable'); return; }
+    var map = L.map(mapEl, { scrollWheelZoom:false, zoomControl:true });
+    if (map.attributionControl) map.attributionControl.setPrefix('<a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>');
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:19, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(map);
+    var markers = [];
+    var bounds = [];
+    items.forEach(function(it){
+      if (typeof it.la !== 'number' || typeof it.lo !== 'number') { markers[it.i]=null; return; }
+      var shape = it.t === 'e' ? 'pin' : 'dot';
+      var html = '<span class="cm-mk cm-'+shape+' cm-c-'+it.f+'"></span>';
+      var icon = L.divIcon({ className:'cm-ico', html:html, iconSize: it.t==='e'?[24,32]:[18,18], iconAnchor: it.t==='e'?[12,30]:[9,9], popupAnchor:[0, it.t==='e'?-28:-10] });
+      var m = L.marker([it.la, it.lo], { icon:icon, riseOnHover:true, keyboard:false });
+      var pop = document.createElement('div');
+      pop.className = 'cm-pop';
+      var nm = document.createElement('strong'); nm.textContent = it.n; pop.appendChild(nm);
+      if (it.m) { var mt = document.createElement('span'); mt.textContent = it.m; pop.appendChild(mt); }
+      if (it.u) { var lk = document.createElement('a'); lk.href = it.u; lk.textContent = 'View details →'; pop.appendChild(lk); }
+      m.bindPopup(pop);
+      m.on('mouseover', function(){ var r=row(it.i); if(r) r.classList.add('is-active'); });
+      m.on('mouseout', function(){ var r=row(it.i); if(r) r.classList.remove('is-active'); });
+      m.on('click', function(){ var r=row(it.i); if(r){ r.scrollIntoView({block:'nearest', behavior: reduce?'auto':'smooth'}); } });
+      m.addTo(map);
+      markers[it.i] = m;
+      bounds.push([it.la, it.lo]);
+    });
+    if (bounds.length) map.fitBounds(bounds, { padding:[36,36], maxZoom:15 });
+    mapEl.classList.add('is-ready');
+    function markerSpan(i){ var m=markers[i]; return (m && m._icon) ? m._icon.firstChild : null; }
+    function hover(i, on){ var s=markerSpan(i); if(s) s.classList.toggle('cm-hi', on); var m=markers[i]; if(m) m.setZIndexOffset(on?1000:0); }
+    document.querySelectorAll('.city-row').forEach(function(r){
+      var i = +r.getAttribute('data-i');
+      r.addEventListener('mouseenter', function(){ hover(i, true); });
+      r.addEventListener('mouseleave', function(){ hover(i, false); });
+      r.addEventListener('focusin', function(){ hover(i, true); });
+      r.addEventListener('focusout', function(){ hover(i, false); });
+    });
+    function matches(it, f){
+      if (!f || f === 'all') return true;
+      if (f === 'free') return !!it.free;
+      if (f === 'type:spot') return it.t === 's';
+      if (f === 'type:event') return it.t === 'e';
+      if (f.indexOf('cat:') === 0) return it.f === f.slice(4);
+      return true;
+    }
+    var chips = document.querySelectorAll('.city-filters .filter-chip');
+    chips.forEach(function(chip){
+      chip.addEventListener('click', function(){
+        chips.forEach(function(c){ c.classList.remove('is-active'); c.setAttribute('aria-pressed','false'); });
+        chip.classList.add('is-active'); chip.setAttribute('aria-pressed','true');
+        var f = chip.getAttribute('data-filter');
+        var b = [];
+        items.forEach(function(it){
+          var ok = matches(it, f);
+          document.querySelectorAll('[data-i="'+it.i+'"]').forEach(function(el){ el.classList.toggle('is-filtered', !ok); });
+          var m = markers[it.i];
+          if (!m) return;
+          if (ok) { if (!map.hasLayer(m)) m.addTo(map); b.push([it.la, it.lo]); }
+          else if (map.hasLayer(m)) map.removeLayer(m);
+        });
+        if (b.length) map.fitBounds(b, { padding:[36,36], maxZoom:15 });
+      });
+    });
+    setTimeout(function(){ map.invalidateSize(); }, 60);
+  }
+  if (document.readyState !== 'loading') boot();
+  else document.addEventListener('DOMContentLoaded', boot);
+})();
+</script>`;
+
+function eventDayBadge(ev) {
+  const t = ev?.startDateTime ? new Date(ev.startDateTime) : null;
+  if (!t || !Number.isFinite(t.getTime())) return null;
+  const tz = activeMetro.timezone || "America/Los_Angeles";
+  try {
+    return {
+      day: t.toLocaleDateString("en-US", { day: "numeric", timeZone: tz }),
+      mon: t.toLocaleDateString("en-US", { month: "short", timeZone: tz }),
+    };
+  } catch {
+    return null;
+  }
+}
+
+// Builds the interactive body + the head/bodyEnd payloads for one city page.
+function buildCityExplorer(city, topSpots, upcomingEvents, description, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs) {
+  const items = [];
+  const mapData = [];
+  let gi = 0;
+
+  const spotRows = [];
+  const spotCards = [];
+  for (const s of topSpots) {
+    const sslug = spotSlugLookup.get(s);
+    const url = sslug && spotSlugs.has(sslug) ? metroPath(`spot/${sslug}/`) : null;
+    const fam = cityCatFamily(s.category);
+    const free = /free/i.test(s.cost || "");
+    const metaBits = [s.category, free ? "Free" : (s.cost && s.cost !== "Unknown" ? s.cost : null), Number.isFinite(s.distanceMiles) ? `${s.distanceMiles} mi` : null].filter(Boolean);
+    const meta = metaBits.slice(0, 2).join(" · ");
+    const i = gi++;
+    if (Number.isFinite(s.lat) && Number.isFinite(s.lon)) {
+      mapData.push({ i, t: "s", n: s.name, la: s.lat, lo: s.lon, f: fam, u: url, free, m: meta });
+    }
+    const inner = `<span class="cm-swatch cm-dot cm-c-${fam}" aria-hidden="true"></span><span class="city-row-main"><strong>${esc(s.name)}</strong><span class="city-row-meta">${esc(meta)}</span></span>`;
+    spotRows.push(`<li class="city-row" data-i="${i}">${url ? `<a href="${url}">${inner}</a>` : `<span class="city-row-inner">${inner}</span>`}</li>`);
+
+    const media = s.imageUrl
+      ? `<span class="spot-card-media"><img src="${esc(s.imageUrl)}" alt="${esc(`${s.name} in ${city.name}`)}"${s.imageAttribution ? ` title="${esc(s.imageAttribution)}"` : ""} loading="lazy" decoding="async" width="400" height="240" onerror="this.closest('.spot-card-media').classList.add('no-img')"><span class="spot-card-cat cm-c-${fam}">${esc(CITY_CAT_FAMILIES[fam].label)}</span></span>`
+      : `<span class="spot-card-media no-img"><span class="spot-card-cat cm-c-${fam}">${esc(CITY_CAT_FAMILIES[fam].label)}</span></span>`;
+    const chips = metaBits.map((b) => `<span>${esc(b)}</span>`).join("");
+    const cardInner = `${media}<span class="spot-card-body"><strong>${esc(s.name)}</strong><span class="spot-card-meta">${chips}</span></span>`;
+    spotCards.push(`<li class="spot-card" data-i="${i}">${url ? `<a href="${url}">${cardInner}</a>` : `<span class="spot-card-inner">${cardInner}</span>`}</li>`);
+  }
+
+  const eventRows = [];
+  const eventCards = [];
+  for (const e of upcomingEvents) {
+    const eslug = eventSlugLookup.get(e);
+    const url = eslug && eventSlugs.has(eslug) ? metroPath(`event/${eslug}/`) : null;
+    const fam = cityCatFamily(e.category);
+    const free = /free/i.test(e.cost || "");
+    const dateStr = formatEventDate(e);
+    const costStr = free ? "Free" : (e.cost && e.cost !== "Unknown" ? e.cost : null);
+    const meta = [dateStr, e.venue].filter(Boolean).join(" · ");
+    const i = gi++;
+    if (Number.isFinite(e.lat) && Number.isFinite(e.lon)) {
+      mapData.push({ i, t: "e", n: e.title, la: e.lat, lo: e.lon, f: fam, u: url, free, m: meta });
+    }
+    const inner = `<span class="cm-swatch cm-pin cm-c-${fam}" aria-hidden="true"></span><span class="city-row-main"><strong>${esc(e.title)}</strong><span class="city-row-meta">${esc(meta)}</span></span>`;
+    eventRows.push(`<li class="city-row" data-i="${i}">${url ? `<a href="${url}">${inner}</a>` : `<span class="city-row-inner">${inner}</span>`}</li>`);
+
+    const badge = eventDayBadge(e);
+    const badgeHtml = badge ? `<span class="event-date"><b>${esc(badge.day)}</b><span>${esc(badge.mon)}</span></span>` : `<span class="event-date event-date--tba"><b>TBA</b></span>`;
+    const cardInner = `${badgeHtml}<span class="event-body"><strong>${esc(e.title)}</strong><span class="event-meta">${[e.venue, costStr].filter(Boolean).map((b) => esc(b)).join(" · ")}</span></span>`;
+    eventCards.push(`<li class="event-card cm-b-${fam}" data-i="${i}">${url ? `<a href="${url}">${cardInner}</a>` : `<span class="event-card-inner">${cardInner}</span>`}</li>`);
+  }
+
+  // Filter chips from families actually present, ordered by frequency.
+  const famCounts = new Map();
+  for (const it of mapData) famCounts.set(it.f, (famCounts.get(it.f) || 0) + 1);
+  const famChips = [...famCounts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .filter(([f]) => f !== "other")
+    .slice(0, 5)
+    .map(([f]) => `<button type="button" class="filter-chip" data-filter="cat:${f}" aria-pressed="false"><i class="cm-swatch cm-dot cm-c-${f}" aria-hidden="true"></i>${esc(CITY_CAT_FAMILIES[f].label)}</button>`)
+    .join("");
+  const hasFree = mapData.some((it) => it.free);
+  const filters = `<div class="city-filters" role="group" aria-label="Filter the map">
+    <button type="button" class="filter-chip is-active" data-filter="all" aria-pressed="true">All</button>
+    ${topSpots.length ? `<button type="button" class="filter-chip" data-filter="type:spot" aria-pressed="false">Places</button>` : ""}
+    ${upcomingEvents.length ? `<button type="button" class="filter-chip" data-filter="type:event" aria-pressed="false">Events</button>` : ""}
+    ${hasFree ? `<button type="button" class="filter-chip" data-filter="free" aria-pressed="false">Free</button>` : ""}
+    ${famChips}
+  </div>`;
+
+  // Snapshot: counts + dominant place category. Only "outing" families count
+  // toward the "mostly X" label — gyms/dance studios (wellness) and shops rank
+  // high by friendScore but read oddly as the headline for a kids day out.
+  const OUTING_FAMS = new Set(["outdoors", "culture", "food", "learn"]);
+  const spotFamCounts = new Map();
+  for (const s of topSpots) { const f = cityCatFamily(s.category); if (OUTING_FAMS.has(f)) spotFamCounts.set(f, (spotFamCounts.get(f) || 0) + 1); }
+  const dominant = [...spotFamCounts.entries()].sort((a, b) => b[1] - a[1])[0];
+  const snapshot = `<div class="city-snapshot">
+    <span class="snap"><b>${topSpots.length}</b> ${topSpots.length === 1 ? "place" : "places"}</span>
+    <span class="snap"><b>${upcomingEvents.length}</b> ${upcomingEvents.length === 1 ? "event" : "events"}</span>
+    ${dominant ? `<span class="snap">mostly <b>${esc(CITY_CAT_FAMILIES[dominant[0]].label)}</b></span>` : ""}
+    <a class="cta" href="${metroPath("")}">Plan a day with ${BRAND}</a>
+  </div>`;
+
+  const explorer = `<section class="city-explorer" aria-label="Map of ${esc(city.name)}">
+    ${filters}
+    <div class="city-explorer-grid">
+      <div class="city-map-panel">
+        <div id="famhop-city-map" class="city-map" role="application" aria-label="Interactive map of ${esc(city.name)}"><p class="city-map-note">Loading map…</p></div>
+        <ul class="city-legend" aria-hidden="true">
+          <li><span class="cm-swatch cm-dot cm-c-other"></span>Places</li>
+          <li><span class="cm-swatch cm-pin cm-c-culture"></span>Events</li>
+        </ul>
+      </div>
+      <ol class="city-list" aria-label="Places and events in ${esc(city.name)}">${spotRows.join("")}${eventRows.join("")}</ol>
+    </div>
+  </section>`;
+
+  const spotsSection = spotCards.length
+    ? `<section class="city-cards"><h2>${IS_ADULTS ? "Spots" : "Family-friendly spots"} in ${esc(city.name)}</h2><ul class="spot-photo-grid">${spotCards.join("")}</ul><p class="city-photo-credit">Place photos via Wikimedia Commons, Unsplash, and venue sources.</p></section>`
+    : "";
+  const eventsSection = eventCards.length
+    ? `<section class="city-cards"><h2>Upcoming ${A.eventsAdj}events in ${esc(city.name)}</h2><ul class="event-card-grid">${eventCards.join("")}</ul></section>`
+    : "";
+
+  const body = `
+    <p class="lede">${esc(description)}</p>
+    ${snapshot}
+    ${explorer}
+    ${spotsSection}
+    ${eventsSection}
+  `;
+
+  const bodyEnd = `<script type="application/json" id="famhop-city-data">${safeJsonScript(mapData)}</script>\n${CITY_MAP_SCRIPT}`;
+  return { body, headExtra: CITY_MAP_HEAD, bodyEnd, mainClass: "famhop-page famhop-page--wide" };
+}
+
 function generateCityPages(spotItems, eventItems, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs) {
   const byCity = new Map();
 
@@ -2233,35 +2571,16 @@ function generateCityPages(spotItems, eventItems, spotSlugLookup, eventSlugLooku
       ? `Things to do in ${city.name} in ${cityYear}: ${city.events.length} upcoming events plus ${city.spots.length} bars, cafes and venues.${freshness} Plan a day or night with ${BRAND}.`
       : `Family-friendly things to do in ${city.name} in ${cityYear}: ${city.events.length} kid-friendly events plus ${city.spots.length} parks, museums and venues.${freshness} Plan a weekend with ${BRAND}.`;
 
-    const spotsList = topSpots.length
-      ? `<section><h2>${IS_ADULTS ? "Spots" : "Family-friendly spots"} in ${esc(city.name)}</h2><ul class="card-list">${topSpots.map((s) => {
-          const sslug = spotSlugLookup.get(s);
-          if (!sslug) return "";
-          if (!spotSlugs.has(sslug)) {
-            return `<li><strong>${esc(s.name)}</strong>${s.category ? `<span> · ${esc(s.category)}</span>` : ""}${s.note ? `<p>${esc(s.note)}</p>` : ""}</li>`;
-          }
-          return `<li><a href="${metroPath(`spot/${sslug}/`)}"><strong>${esc(s.name)}</strong>${s.category ? `<span> · ${esc(s.category)}</span>` : ""}</a>${s.note ? `<p>${esc(s.note)}</p>` : ""}</li>`;
-        }).join("")}</ul></section>`
-      : "";
-
-    const eventsList = upcomingEvents.length
-      ? `<section><h2>Upcoming ${A.eventsAdj}events in ${esc(city.name)}</h2><ul class="card-list">${upcomingEvents.map((e) => {
-          const eslug = eventSlugLookup.get(e);
-          if (!eslug) return "";
-          const dateStr = formatEventDate(e);
-          if (!eventSlugs.has(eslug)) {
-            return `<li><strong>${esc(e.title)}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}${e.venue ? `<p>${esc(e.venue)}${e.cost && e.cost !== "Unknown" ? ` · ${esc(e.cost)}` : ""}</p>` : ""}</li>`;
-          }
-          return `<li><a href="${metroPath(`event/${eslug}/`)}"><strong>${esc(e.title)}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}</a>${e.venue ? `<p>${esc(e.venue)}${e.cost && e.cost !== "Unknown" ? ` · ${esc(e.cost)}` : ""}</p>` : ""}</li>`;
-        }).join("")}</ul></section>`
-      : "";
-
-    const body = `
-      <p class="lede">${esc(description)}</p>
-      <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a day with ${BRAND}</a></p>
-      ${spotsList}
-      ${eventsList}
-    `;
+    const { body, headExtra, bodyEnd, mainClass } = buildCityExplorer(
+      city,
+      topSpots,
+      upcomingEvents,
+      description,
+      spotSlugLookup,
+      eventSlugLookup,
+      spotSlugs,
+      eventSlugs,
+    );
 
     const jsonLd = {
       "@context": "https://schema.org",
@@ -2295,6 +2614,9 @@ function generateCityPages(spotItems, eventItems, spotSlugLookup, eventSlugLooku
       h1: A.thingsToDoIn(city.name),
       eyebrow: metroTag(),
       body,
+      headExtra,
+      bodyEnd,
+      mainClass,
     });
 
     writeMetroPage(`city/${slug}/index.html`, html);
@@ -4083,6 +4405,9 @@ function renderShell({
   ogLocale = "en_US",
   noindex = false,
   refresh = "",
+  headExtra = "",
+  bodyEnd = "",
+  mainClass = "famhop-page",
 }) {
   const breadcrumbLd = breadcrumb && breadcrumb.length
     ? {
@@ -4140,13 +4465,13 @@ ${hreflangHtml}
 <meta name="twitter:image" content="${esc(ogImage)}">
 <meta name="theme-color" content="${IS_ADULTS ? "#7c3aed" : "#f59e0b"}">
 <style>${PAGE_CSS}</style>
-${allLd.map((node) => `<script type="application/ld+json">${safeJsonScript(node)}</script>`).join("\n")}
+${allLd.map((node) => `<script type="application/ld+json">${safeJsonScript(node)}</script>`).join("\n")}${headExtra ? `\n${headExtra}` : ""}
 </head>
 <body>
 ${renderStaticTopbar({ guideCurrent })}
 ${langSwitcherHtml}
 ${renderStaticAuthScript()}
-<main class="famhop-page">
+<main class="${mainClass}">
   ${breadcrumbHtml}
   ${eyebrow ? `<p class="eyebrow">${eyebrow}</p>` : ""}
   <h1>${esc(h1)}</h1>
@@ -4156,6 +4481,7 @@ ${renderStaticAuthScript()}
   <p>© ${BRAND} · ${metroTag()}.</p>
   <p>Spot data © OpenStreetMap contributors (ODbL). Event listings from configured public sources.</p>
 </footer>
+${bodyEnd}
 </body>
 </html>`;
 }
