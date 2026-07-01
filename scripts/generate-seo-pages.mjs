@@ -728,7 +728,7 @@ a:hover{text-decoration:underline}
 .spot-card-meta span{font-size:11.5px;color:var(--muted);background:var(--surface-strong);border-radius:6px;padding:2px 7px;}
 .city-photo-credit{font-size:11.5px;color:var(--muted);margin:12px 0 0;}
 .event-card-grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));}
-.event-card a,.event-card .event-card-inner{display:flex;gap:12px;align-items:center;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--cm,#8a8580);border-radius:14px;padding:12px 14px;height:100%;transition:transform .15s,box-shadow .15s;box-shadow:0 6px 18px rgba(34,34,31,.05);}
+.event-card a,.event-card .event-card-inner{display:flex;gap:12px;align-items:flex-start;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--cm,#8a8580);border-radius:14px;padding:12px 14px;height:100%;transition:transform .15s,box-shadow .15s;box-shadow:0 6px 18px rgba(34,34,31,.05);}
 .event-card a:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(34,34,31,.12);}
 .cm-b-outdoors{--cm:#2f8f5b;}.cm-b-culture{--cm:#b25368;}.cm-b-food{--cm:#dd6a1a;}.cm-b-learn{--cm:#4d7cad;}.cm-b-wellness{--cm:#2b9a8f;}.cm-b-shopping{--cm:#9a6cc9;}.cm-b-other{--cm:#8a8580;}
 .event-date{flex:none;width:52px;text-align:center;background:var(--surface-strong);border-radius:10px;padding:7px 0;line-height:1;}
@@ -738,6 +738,10 @@ a:hover{text-decoration:underline}
 .event-body{min-width:0;}
 .event-body strong{display:block;font-size:14.5px;font-weight:600;line-height:1.3;}
 .event-meta{display:block;font-size:12.5px;color:var(--muted);margin-top:3px;}
+.event-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.event-tag{font:600 10.5px var(--font-ui);color:var(--muted);background:var(--surface-strong);border-radius:6px;padding:2px 8px;white-space:nowrap;}
+.event-tag--cat{color:#fff;background:var(--cm,#8a8580);}
+.event-tag--free{color:#1c6b3f;background:#e5f4ea;}
 .city-cards{margin-top:34px;}
 .city-cards h2{margin:0 0 14px;}
 @media(max-width:820px){
@@ -2383,6 +2387,40 @@ function eventDayBadge(ev) {
   }
 }
 
+// Start time in the metro's timezone (e.g. "10 AM", "1:30 PM"); null for
+// all-day/midnight rows so we never print a bogus "12 AM".
+function eventTimeStr(ev) {
+  if (!ev?.startDateTime || /T00:00/.test(ev.startDateTime)) return null;
+  const t = new Date(ev.startDateTime);
+  if (!Number.isFinite(t.getTime())) return null;
+  const tz = activeMetro.timezone || "America/Los_Angeles";
+  try {
+    return t
+      .toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: tz })
+      .replace(":00 ", " ");
+  } catch {
+    return null;
+  }
+}
+
+// Age bands -> a compact "Ages 1–5" / "All ages" label parents can scan.
+const AGE_BAND_RANGES = {
+  baby: [0, 1], infant: [0, 1], toddler: [1, 3], preschool: [3, 5],
+  "school-age": [5, 12], tween: [10, 13], teen: [13, 18],
+};
+function eventAgeLabel(ev) {
+  const bands = Array.isArray(ev?.ageBands) ? ev.ageBands : [];
+  let min = Infinity;
+  let max = -Infinity;
+  for (const b of bands) {
+    const r = AGE_BAND_RANGES[b];
+    if (r) { min = Math.min(min, r[0]); max = Math.max(max, r[1]); }
+  }
+  if (!Number.isFinite(min)) return null;
+  if (min <= 1 && max >= 13) return "All ages";
+  return `Ages ${min}–${max}`;
+}
+
 // Builds the interactive body + the head/bodyEnd payloads for one city page.
 function buildCityExplorer(city, topSpots, upcomingEvents, description, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs) {
   const items = [];
@@ -2432,7 +2470,16 @@ function buildCityExplorer(city, topSpots, upcomingEvents, description, spotSlug
 
     const badge = eventDayBadge(e);
     const badgeHtml = badge ? `<span class="event-date"><b>${esc(badge.day)}</b><span>${esc(badge.mon)}</span></span>` : `<span class="event-date event-date--tba"><b>TBA</b></span>`;
-    const cardInner = `${badgeHtml}<span class="event-body"><strong>${esc(e.title)}</strong><span class="event-meta">${[e.venue, costStr].filter(Boolean).map((b) => esc(b)).join(" · ")}</span></span>`;
+    const timeStr = eventTimeStr(e);
+    const ageLabel = eventAgeLabel(e);
+    const metaLine = [timeStr, e.venue].filter(Boolean).map((b) => esc(b)).join(" · ");
+    const catLabel = e.category || CITY_CAT_FAMILIES[fam].label;
+    const tags = [
+      `<span class="event-tag event-tag--cat cm-c-${fam}">${esc(catLabel)}</span>`,
+      ageLabel ? `<span class="event-tag">${esc(ageLabel)}</span>` : "",
+      free ? `<span class="event-tag event-tag--free">Free</span>` : (costStr ? `<span class="event-tag">${esc(costStr)}</span>` : ""),
+    ].filter(Boolean).join("");
+    const cardInner = `${badgeHtml}<span class="event-body"><strong>${esc(e.title)}</strong>${metaLine ? `<span class="event-meta">${metaLine}</span>` : ""}<span class="event-tags">${tags}</span></span>`;
     eventCards.push(`<li class="event-card cm-b-${fam}" data-i="${i}">${url ? `<a href="${url}">${cardInner}</a>` : `<span class="event-card-inner">${cardInner}</span>`}</li>`);
   }
 
