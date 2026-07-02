@@ -53,6 +53,11 @@ jobs:
           if [ -f data/indexing-history.json ]; then
             git add data/indexing-history.json
           fi
+          # seo-lastmod.json keeps content-hash -> <lastmod> continuity across
+          # builds so unchanged pages don't get fresh timestamps every day.
+          if [ -f data/seo-lastmod.json ]; then
+            git add data/seo-lastmod.json
+          fi
 
           if [ -z "$(git status --porcelain --cached)" ]; then
             echo "No data or indexing changes."

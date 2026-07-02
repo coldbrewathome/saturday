@@ -8,6 +8,7 @@
 //   dist/<metro>/city/<slug>/index.html     — one per city with content
 //   dist/sitemap.xml                — overwrites the static sitemap with full URL list
 
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -36,7 +37,7 @@ const DIST = path.join(ROOT, "dist");
 const DATA = path.join(ROOT, "public", "data");
 const metroConfig = loadMetroConfig();
 const BUILD_ENV = readBuildEnv();
-const TEMPLATE_UPDATED_AT = "2026-06-27"; // Signal template/schema changes to Googlebot
+const TEMPLATE_UPDATED_AT = "2026-07-02"; // Signal template/schema changes to Googlebot (Fraunces/Nunito type + guide/city redesign)
 
 
 function envValue(name, fallback = "") {
@@ -201,6 +202,40 @@ function lookupOfGenerated(lookup, generatedSlugs) {
   }
   return filtered;
 }
+// Content-hash-tracked <lastmod>: aggregate pages (metro/city/category/event)
+// used to stamp today() on every build, bumping lastmod daily even when the
+// page didn't change — a pattern Google learns to distrust (and which makes
+// publish-indexing prioritize unchanged pages). Persist url -> {hash, date}
+// across builds and only advance the date when the rendered HTML changes.
+// Weekend guides intentionally keep today(): their content genuinely changes
+// with the shifting weekend window and daily event ingest.
+const LASTMOD_STORE_PATH = path.join(ROOT, "data", "seo-lastmod.json");
+let lastmodStore = {};
+try {
+  lastmodStore = JSON.parse(fs.readFileSync(LASTMOD_STORE_PATH, "utf8"));
+} catch {
+  lastmodStore = {};
+}
+const lastmodStoreNext = {};
+function trackedLastmod(url, content) {
+  const hash = crypto.createHash("sha1").update(String(content)).digest("hex").slice(0, 16);
+  const prev = lastmodStore[url];
+  const date = prev && prev.h === hash && prev.d ? prev.d : today();
+  lastmodStoreNext[url] = { h: hash, d: date };
+  return date;
+}
+function saveLastmodStore() {
+  // Keep the other audience's entries (kids vs Mosey share the file, keyed by
+  // full URL); drop this host's stale URLs so removed pages don't accumulate.
+  const merged = {};
+  for (const [url, entry] of Object.entries(lastmodStore)) {
+    if (!url.startsWith(`${SITE}/`)) merged[url] = entry;
+  }
+  Object.assign(merged, lastmodStoreNext);
+  fs.mkdirSync(path.dirname(LASTMOD_STORE_PATH), { recursive: true });
+  fs.writeFileSync(LASTMOD_STORE_PATH, JSON.stringify(merged) + "\n");
+}
+
 let sitemapEntries = [
   { loc: `${SITE}/`, lastmod: today(), changefreq: "daily", priority: 1.0 },
 ];
@@ -920,6 +955,7 @@ function main() {
   const totalLocalizedPages = IS_ADULTS ? 0 : generateLocalizedWeekendPages();
 
   writeSitemap(sitemapEntries);
+  saveLastmodStore();
   writeRobotsAndLlms();
 
   console.log(
@@ -1479,7 +1515,7 @@ function generateMetroAppShellPage(metro, categorySlugs = null) {
   }
   sitemapEntries.push({
     loc: canonical,
-    lastmod: today(),
+    lastmod: trackedLastmod(canonical, html),
     changefreq: "daily",
     priority: metro.id === metroConfig.defaultMetro.id ? 0.95 : 0.9,
   });
@@ -1973,7 +2009,9 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
 
     sitemapEntries.push({
       loc: canonical,
-      lastmod: event.fetchedAt || generatedAt || today(),
+      // Hash-tracked: fetchedAt re-stamps on every ingest even when the event
+      // content is unchanged, which bumped 8k event pages per ingest day.
+      lastmod: trackedLastmod(canonical, html),
       changefreq: "daily",
       priority: 0.7,
     });
@@ -2791,7 +2829,7 @@ function generateCityPages(spotItems, eventItems, spotSlugLookup, eventSlugLooku
 
     sitemapEntries.push({
       loc: canonical,
-      lastmod: today(),
+      lastmod: trackedLastmod(canonical, html),
       changefreq: "daily",
       priority: 0.8,
     });
@@ -2912,7 +2950,7 @@ function generateCategoryPages(spotItems, eventItems, spotSlugLookup, eventSlugL
 
     sitemapEntries.push({
       loc: canonical,
-      lastmod: today(),
+      lastmod: trackedLastmod(canonical, html),
       changefreq: "daily",
       priority: 0.85,
     });
@@ -3037,7 +3075,7 @@ function generateCityCategoryPages(spotItems, eventItems, spotSlugLookup, eventS
 
       sitemapEntries.push({
         loc: canonical,
-        lastmod: today(),
+        lastmod: trackedLastmod(canonical, html),
         changefreq: "daily",
         priority: 0.7,
       });
