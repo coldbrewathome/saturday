@@ -345,9 +345,11 @@ const ADULT_CATEGORY_PAGES = [
 const CATEGORY_PAGES = IS_ADULTS ? ADULT_CATEGORY_PAGES : KIDS_CATEGORY_PAGES;
 
 const PAGE_CSS = `
-@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap");
-:root{--font-ui:"Plus Jakarta Sans",Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--font-display:"Bricolage Grotesque","Plus Jakarta Sans",Inter,ui-sans-serif,system-ui,sans-serif;--bg:#faf5eb;--surface:#fff;--surface-strong:#f2ead9;--line:#e8dfca;--ink:#1b1916;--muted:#6b7280;--blue:#5a7896;--accent:#dd6a1a;--accent-strong:#b8541a;--accent-soft:#fdece7;--fact-bg:#fff8ec;--fact-border:rgba(245,158,11,.22);--chip-bg:#fff3d5;--chip-border:rgba(245,158,11,.3);--chip-ink:#8a4f00;--brand:var(--accent);--brand-strong:var(--accent-strong);--card:var(--surface);--glass-bg:rgba(250,245,235,.82);--glass-blur:blur(20px) saturate(160%);--glass-border:.5px solid rgba(255,255,255,.6);--glass-shadow:0 6px 24px rgba(0,0,0,.08);--glass-radius:16px;--overlay-gap:16px;}
-${IS_ADULTS ? `:root{--bg:#f3f0fa;--surface-strong:#e8e2f4;--line:#d4cde5;--ink:#1e1a2b;--muted:#6b6580;--blue:#3b5998;--accent:#7c3aed;--accent-strong:#5b21b6;--accent-soft:#ede5fc;--fact-bg:#f4f0fc;--fact-border:rgba(124,58,237,.18);--chip-bg:#ede5fc;--chip-border:rgba(124,58,237,.3);--chip-ink:#5b21b6;--glass-bg:rgba(243,240,250,.85);--glass-border:.5px solid rgba(124,58,237,.15);--font-display:"Inter",ui-sans-serif,system-ui,sans-serif;}` : ""}
+@import url("${IS_ADULTS
+  ? "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap"
+  : "https://fonts.googleapis.com/css2?family=Fraunces:opsz,SOFT,wght@9..144,50,500;9..144,50,600;9..144,50,700;9..144,50,800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&display=swap"}");
+:root{--font-ui:"Nunito Sans",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--font-display:"Fraunces",Georgia,"Times New Roman",serif;--bg:#faf5eb;--surface:#fff;--surface-strong:#f2ead9;--line:#e8dfca;--ink:#1b1916;--muted:#6b7280;--blue:#5a7896;--accent:#dd6a1a;--accent-strong:#b8541a;--accent-soft:#fdece7;--fact-bg:#fff8ec;--fact-border:rgba(245,158,11,.22);--chip-bg:#fff3d5;--chip-border:rgba(245,158,11,.3);--chip-ink:#8a4f00;--brand:var(--accent);--brand-strong:var(--accent-strong);--card:var(--surface);--glass-bg:rgba(250,245,235,.82);--glass-blur:blur(20px) saturate(160%);--glass-border:.5px solid rgba(255,255,255,.6);--glass-shadow:0 6px 24px rgba(0,0,0,.08);--glass-radius:16px;--overlay-gap:16px;}
+${IS_ADULTS ? `:root{--bg:#f3f0fa;--surface-strong:#e8e2f4;--line:#d4cde5;--ink:#1e1a2b;--muted:#6b6580;--blue:#3b5998;--accent:#7c3aed;--accent-strong:#5b21b6;--accent-soft:#ede5fc;--fact-bg:#f4f0fc;--fact-border:rgba(124,58,237,.18);--chip-bg:#ede5fc;--chip-border:rgba(124,58,237,.3);--chip-ink:#5b21b6;--glass-bg:rgba(243,240,250,.85);--glass-border:.5px solid rgba(124,58,237,.15);--font-ui:"Plus Jakarta Sans",Inter,ui-sans-serif,system-ui,sans-serif;--font-display:"Inter",ui-sans-serif,system-ui,sans-serif;}` : ""}
 *{box-sizing:border-box}
 body{margin:0;font:16px/1.55 var(--font-ui);background:var(--bg);color:var(--ink);}
 button,input,select,textarea{font:inherit}
@@ -432,6 +434,13 @@ a:hover{text-decoration:underline}
 .guide-preset-card,.guide-editorial-card,.guide-newsletter{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 10px 28px rgba(34,34,31,.05);}
 .guide-preset-card h3,.guide-editorial-card h3{font-size:18px;line-height:1.25;margin:0 0 6px;}
 .guide-preset-card p,.guide-editorial-card p{color:var(--muted);font-size:14px;margin:0 0 10px;}
+.guide-preset-card{display:flex;flex-direction:column;gap:8px;}
+.guide-preset-card h3{font-size:16.5px;margin:0;}
+.guide-preset-card p{font-size:12.5px;line-height:1.45;margin:0;}
+.guide-preset-kicker{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;}
+.guide-preset-kicker--0{color:#1c6b3f;}.guide-preset-kicker--1{color:#4d7cad;}.guide-preset-kicker--2{color:#b25368;}.guide-preset-kicker--3{color:#2f8f5b;}
+.guide-preset-open{margin-top:auto;font-size:13px;font-weight:800;color:var(--accent-strong);text-decoration:none;}
+.guide-preset-open:hover{text-decoration:underline;}
 .guide-mini-list{display:grid;gap:8px;list-style:none;margin:12px 0;padding:0;}
 .guide-mini-list li{border-top:1px solid var(--line);padding-top:8px;}
 .guide-mini-list a{color:var(--ink);font-size:14px;font-weight:900;}
@@ -446,24 +455,64 @@ a:hover{text-decoration:underline}
 .guide-newsletter button{background:var(--brand);border:0;border-radius:999px;color:#fff;cursor:pointer;font-weight:900;padding:11px 16px;}
 .guide-newsletter button:hover{filter:brightness(.95);}
 .guide-newsletter-status{color:var(--muted);font-size:13px;font-weight:700;min-height:18px;}
-.guide-day{margin:30px 0 0;}
-.guide-day-note{color:var(--muted);font-size:14px;margin:0 0 12px;}
-.timeline-list{list-style:none;margin:0;padding:0;display:grid;gap:12px;}
-.timeline-card{background:var(--card);border:1px solid var(--line);border-radius:16px;display:grid;grid-template-columns:92px minmax(0,1fr);gap:16px;padding:16px;box-shadow:0 10px 28px rgba(34,34,31,.05);}
-.timeline-time{color:var(--brand-strong);font-size:15px;font-weight:900;line-height:1.2;}
-.timeline-time span{display:block;color:var(--muted);font-size:12px;font-weight:800;margin-top:4px;}
-.timeline-card h3{font-size:18px;line-height:1.25;margin:4px 0 6px;}
-.timeline-card h3 a{color:var(--ink);}
-.timeline-meta{color:var(--muted);font-size:14px;font-weight:700;margin:0 0 8px;}
-.timeline-desc{color:#3b3b35;font-size:14px;margin:0 0 10px;}
-.timeline-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;}
-.timeline-links a{font-size:14px;font-weight:800;}
+.guide-day{margin:36px 0 0;}
+.guide-day h2{display:inline;font-size:26px;}
+.guide-day-head{display:flex;align-items:baseline;gap:14px;border-bottom:2.5px solid var(--ink);padding-bottom:10px;margin:0 0 2px;}
+.guide-day-note{color:var(--muted);font-size:13.5px;font-weight:600;margin:0;}
+.timeline-list{list-style:none;margin:0;padding:0;}
+.timeline-card{border-bottom:1px solid var(--line);display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:4px 16px;align-items:baseline;padding:13px 8px;border-radius:10px;transition:background .12s;}
+.timeline-card:hover{background:var(--accent-soft);}
+.timeline-time{grid-row:1/3;color:var(--muted);font-size:13px;font-weight:700;line-height:1.2;white-space:nowrap;}
+.timeline-time span{display:none;}
+.timeline-card h3{font-size:15.5px;line-height:1.3;margin:0;display:flex;align-items:baseline;gap:9px;}
+.timeline-card h3 a{color:var(--ink);text-decoration:none;}
+.timeline-card h3 a:hover{color:var(--accent-strong);}
+.timeline-dot{flex:none;width:9px;height:9px;border-radius:50%;background:var(--cm,#8a8580);transform:translateY(-1px);}
+.timeline-meta{grid-column:2;color:var(--muted);font-size:12.5px;font-weight:600;margin:0;}
+.timeline-desc{grid-column:2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:#57534e;font-size:13px;line-height:1.5;margin:3px 0 0;max-width:70ch;}
+.timeline-side{grid-row:1/3;grid-column:3;align-self:center;display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
+.timeline-free{font-size:10.5px;font-weight:800;letter-spacing:.03em;color:#1c6b3f;background:#e5f4ea;border-radius:999px;padding:3px 10px;white-space:nowrap;}
+.timeline-official{font-size:11.5px;font-weight:700;color:var(--muted);text-decoration:none;white-space:nowrap;}
+.timeline-official:hover{color:var(--accent-strong);}
 .event-chip{display:inline-block;background:var(--chip-bg);border:1px solid var(--chip-border);border-radius:999px;color:var(--chip-ink);font-size:11px;font-weight:900;letter-spacing:.07em;padding:3px 8px;text-transform:uppercase;}
-.timeline-chip-row{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 4px;}
-.quality-chip{display:inline-block;border:1px solid var(--line);border-radius:999px;font-size:11px;font-weight:900;letter-spacing:.06em;padding:3px 8px;text-transform:uppercase;}
-.quality-high{background:#ecfdf5;border-color:#a7f3d0;color:#047857;}
-.quality-medium{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8;}
-.quality-low{background:#fff7ed;border-color:#fed7aa;color:#9a3412;}
+/* Weekend guide hero + marquee (this-weekend page) */
+.wg-lede{font-size:17px;color:#44403a;max-width:58ch;margin:0 0 14px;}
+.wg-lede b{color:var(--ink);}
+.wg-stats{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 8px;}
+.wg-stat{display:inline-flex;align-items:baseline;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:7px 15px;font-size:13.5px;font-weight:600;color:var(--muted);}
+.wg-stat b{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--ink);}
+.wg-stat--free b{color:#1c6b3f;}
+.wg-nav{position:sticky;top:74px;z-index:20;display:flex;gap:6px;overflow-x:auto;margin:18px -6px 26px;padding:9px 6px;background:linear-gradient(rgba(250,245,235,.98),rgba(250,245,235,.92));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);}
+${IS_ADULTS ? ".wg-nav{background:linear-gradient(rgba(243,240,250,.98),rgba(243,240,250,.92));}" : ""}
+.wg-nav a{flex:none;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);white-space:nowrap;}
+.wg-nav a:hover{border-color:var(--accent);}
+.wg-marquee{display:grid;grid-template-columns:1.35fr 1fr 1fr;grid-template-rows:178px 178px;gap:14px;margin:0 0 16px;}
+.mq{position:relative;border-radius:20px;padding:20px 22px;display:flex;flex-direction:column;justify-content:flex-end;color:#fff;text-decoration:none;overflow:hidden;box-shadow:0 14px 34px rgba(27,25,22,.16);transition:transform .15s;}
+.mq:hover{transform:translateY(-3px);text-decoration:none;}
+.mq-cat{position:absolute;top:16px;left:20px;right:70px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mq-big{font-family:var(--font-display);font-size:clamp(19px,2vw,26px);font-weight:700;line-height:1.1;letter-spacing:-.01em;margin:0 0 6px;color:#fff;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.mq--hero .mq-big{-webkit-line-clamp:5;}
+.mq-sub{font-size:12.5px;font-weight:600;opacity:.85;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.mq--hero .mq-sub{-webkit-line-clamp:3;}
+.mq-free{position:absolute;top:14px;right:16px;font-size:10.5px;font-weight:800;background:rgba(255,255,255,.92);color:#1c6b3f;border-radius:999px;padding:4px 11px;}
+.mq--hero{grid-row:1/3;background:linear-gradient(160deg,#2c3e54,#141d29);}
+.mq--hero .mq-big{font-size:clamp(24px,2.7vw,34px);}
+.mq--hero::after{content:"";position:absolute;inset:auto -30px -40px auto;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(232,181,71,.5),transparent 65%);}
+.mq--c1{background:linear-gradient(150deg,#c4657a,#963d54);}
+.mq--c2{background:linear-gradient(150deg,#3aa06b,#25714a);}
+.mq--c3{background:linear-gradient(150deg,#5f8cbf,#3d6491);}
+.mq--c4{background:linear-gradient(150deg,#e8842e,#c05a12);}
+.wg-chips{display:flex;flex-wrap:wrap;gap:9px;margin:0 0 42px;}
+.wg-chip{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:9px 17px;text-decoration:none;}
+.wg-chip:hover{border-color:var(--accent);text-decoration:none;}
+.wg-chip b{font-family:var(--font-display);font-weight:700;color:var(--accent-strong);}
+.wg-chip--free{border-color:#bfe3cc;background:#e5f4ea;color:#1c6b3f;}
+.wg-chip--free b{color:#1c6b3f;}
+@media (max-width:760px){
+  .wg-marquee{grid-template-columns:1fr;grid-template-rows:190px repeat(4,148px);}
+  .mq--hero{grid-row:auto;}
+  .wg-nav{top:60px;}
+}
 .famhop-lang-switcher{display:flex;gap:4px;align-items:center;justify-content:flex-end;max-width:1500px;margin:78px auto 0;padding:0 var(--overlay-gap);font-size:13px;font-weight:600;}
 .famhop-lang-switcher a{color:var(--muted);padding:4px 8px;border-radius:6px;text-decoration:none;}
 .famhop-lang-switcher a:hover{color:var(--ink);background:var(--surface-strong);}
@@ -472,7 +521,7 @@ a:hover{text-decoration:underline}
 .famhop-footer{border-top:1px solid var(--line);padding:24px 28px;color:var(--muted);font-size:13px;}
 .famhop-footer p{margin:0 0 4px;}
 @media (max-width:820px){.famhop-topbar{column-gap:5px;flex-wrap:nowrap;left:12px;min-height:0;padding:8px;right:12px;row-gap:0;}.famhop-brand{gap:5px;margin-right:0;min-width:0;order:1;}.famhop-mark svg{height:20px;width:20px;}.famhop-wordmark{display:block;font-size:.9rem;letter-spacing:0;max-width:none;overflow:visible;white-space:nowrap;}.famhop-metro{flex:1 1 72px;max-width:none;min-width:72px;order:2;padding:5px 6px 5px 7px;}.famhop-metro-prefix{display:none;}.famhop-metro select{font-family:var(--font-ui);font-size:.76rem;max-width:none;min-width:0;overflow:hidden;padding-right:11px;text-overflow:ellipsis;width:100%;}.famhop-tabs{flex:0 0 88px;margin-left:0;order:3;width:88px;}.famhop-tabs a{font-size:0;gap:0;padding:5px 6px;}.famhop-tabs svg{height:14px;width:14px;}.famhop-tabs .tab-count{display:none;}.famhop-topbar-spacer{display:none;}.famhop-auth{flex:0 0 40px;justify-content:flex-end;margin-left:0;order:4;width:40px;}.famhop-auth .user-chip{gap:0;padding:0;}.famhop-auth .user-name,.famhop-auth .sync-pill,.famhop-auth .text-button,.famhop-auth .signin-error{display:none;}.famhop-auth .signin-wrap{min-height:32px;}.famhop-auth .signin-slot{min-height:32px;}.famhop-auth .user-chip-avatar,.famhop-auth .user-chip-avatar img,.famhop-auth .user-avatar-fallback{height:32px;width:32px;}.famhop-auth .user-avatar-fallback svg{height:16px;width:16px;}}
-@media (max-width:640px){.famhop-page{padding:100px 18px 40px;}.famhop-page h1{font-size:28px;}.guide-newsletter form{grid-template-columns:1fr;}.timeline-card{grid-template-columns:1fr;gap:8px}.timeline-time{display:flex;gap:8px;align-items:baseline}.timeline-time span{margin-top:0}}
+@media (max-width:640px){.famhop-page{padding:100px 18px 40px;}.famhop-page h1{font-size:28px;}.guide-newsletter form{grid-template-columns:1fr;}.timeline-card{grid-template-columns:1fr auto;gap:2px 12px}.timeline-time{grid-row:1;grid-column:1}.timeline-side{grid-row:1;grid-column:2;flex-direction:row;align-items:baseline}.timeline-card h3,.timeline-meta,.timeline-desc{grid-column:1/3}}
 @media (max-width:370px){.famhop-topbar{column-gap:4px;left:10px;right:10px;}.famhop-wordmark{font-size:.84rem;max-width:none;}.famhop-metro{flex-basis:68px;min-width:68px;padding-left:5px;padding-right:5px;}.famhop-metro select{font-size:.72rem;}.famhop-tabs{flex-basis:76px;width:76px;}.famhop-tabs a{padding:5px 4px;}}
 
 /* Interactive Timeline Filters */
@@ -3117,10 +3166,8 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
   const categoryCounts = countBy(upcoming, (event) => event.category || "Other");
   const cityCounts = countBy(upcoming, (event) => event.city || event.neighborhood || metroLabel());
   const topCategories = topCountLabels(categoryCounts, 4);
-  const topCities = topCountLabels(cityCounts, 5);
   const freeCount = upcoming.filter(eventLikelyFree).length;
-  const highlights = pickWeekendHighlights(upcoming, lookup).slice(0, 6);
-  const qualityCount = upcoming.filter((event) => eventQualityScore(event) >= 70).length;
+  const headliners = pickWeekendHeadliners(upcoming, lookup);
   const planPresets = buildWeekendPlanPresets(upcoming, lookup);
   const editorialBuckets = buildWeekendEditorialBuckets(upcoming, lookup);
   const daySections = [weekend.saturdayKey, weekend.sundayKey]
@@ -3133,28 +3180,40 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     timeZone: activeMetro.timezone || "America/Los_Angeles",
   });
 
+  const marqueeHtml = renderWeekendMarquee(headliners, lookup);
+  const topCatPhrase = topCategories
+    .slice(0, 3)
+    .map((c) => `${c.label.toLowerCase()} (${c.count})`)
+    .join(", ");
+  const ledeHtml = `<b>${upcoming.length} ${A.eventsAdj}events</b> across ${cityCounts.size} ${esc(metroLabel())} cities this weekend — <b>${freeCount} likely free</b>.${topCatPhrase ? ` Biggest clusters: ${esc(topCatPhrase)}.` : ""}`;
+  const navHtml = `<nav class="wg-nav" aria-label="Guide sections">
+      ${marqueeHtml ? `<a href="#top-picks">Top picks</a>` : ""}
+      ${(byDay.get(weekend.saturdayKey) || []).length ? `<a href="#day-sat">Saturday</a>` : ""}
+      ${(byDay.get(weekend.sundayKey) || []).length ? `<a href="#day-sun">Sunday</a>` : ""}
+      ${freeCount && !IS_ADULTS && activeMetro.id === "bay-area" ? `<a href="${metroPath("free-this-weekend/")}">Free only</a>` : ""}
+      ${planPresets.length ? `<a href="#plans">Ready-made plans</a>` : ""}
+      ${editorialBuckets.length ? `<a href="#by-interest">By interest</a>` : ""}
+    </nav>`;
+
   const body = `
-    <p class="lede">${esc(description)}</p>
-    <section class="guide-summary" aria-label="Weekend summary">
-      <h2>Weekend snapshot</h2>
-      <p>${esc(buildWeekendGuideSummary(upcoming, topCategories, topCities, weekendLabel, sundayLabel))}</p>
-      <div class="guide-facts">
-        <div class="guide-fact"><strong>${upcoming.length}</strong><span>dated ${A.eventsAdj}events</span></div>
-        <div class="guide-fact"><strong>${freeCount}</strong><span>likely free options</span></div>
-        <div class="guide-fact"><strong>${qualityCount}</strong><span>strong-detail listings</span></div>
-        <div class="guide-fact"><strong>${cityCounts.size}</strong><span>metro cities represented</span></div>
-      </div>
-      ${highlights.length ? `<ul class="guide-highlights">${highlights.map((item) => `<li><a href="${item.href}">${esc(item.event.title)}</a><p>${esc(formatTimelineMeta(item.event))}</p></li>`).join("")}</ul>` : ""}
-    </section>
+    <p class="wg-lede">${ledeHtml}</p>
+    <div class="wg-stats" aria-label="Weekend snapshot">
+      <span class="wg-stat"><b>${upcoming.length}</b> ${A.eventsAdj}events</span>
+      <span class="wg-stat wg-stat--free"><b>${freeCount}</b> free</span>
+      <span class="wg-stat"><b>${cityCounts.size}</b> cities</span>
+    </div>
+    ${navHtml}
+    ${marqueeHtml}
+    ${renderWeekendInterestChips(editorialBuckets, freeCount)}
     ${planPresets.length ? renderWeekendPlanPresets(planPresets) : ""}
-    ${editorialBuckets.length ? renderWeekendEditorialBuckets(editorialBuckets) : ""}
-    ${renderNewsletterSignup()}
-    <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a 3-stop day with ${BRAND}</a> <a class="cta-secondary" href="#timeline">Jump to the timeline</a></p>
     <section id="timeline" aria-label="Weekend event timeline">
       <p class="eyebrow">Generated ${esc(generatedLabel)} from official event sources</p>
       ${renderWeekendFilters("en", upcoming.length)}
       ${daySections.join("")}
     </section>
+    ${editorialBuckets.length ? renderWeekendEditorialBuckets(editorialBuckets) : ""}
+    ${renderNewsletterSignup()}
+    <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a 3-stop day with ${BRAND}</a></p>
     ${renderWeekendFilterScript("en")}
   `;
 
@@ -3229,6 +3288,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     body,
     hreflangLinks,
     langSwitcherHtml,
+    mainClass: "famhop-page famhop-page--wide",
   });
 
   writeMetroPage("this-weekend/index.html", html);
@@ -3522,16 +3582,6 @@ function topCountLabels(counts, limit) {
     .map(([label, count]) => ({ label, count }));
 }
 
-function buildWeekendGuideSummary(events, topCategories, topCities, saturdayLabel, sundayLabel) {
-  const categoryText = topCategories.length
-    ? topCategories.map((item) => `${item.label.toLowerCase()} (${item.count})`).join(", ")
-    : "family programs";
-  const cityText = topCities.length
-    ? topCities.map((item) => item.label).join(", ")
-    : metroLabel();
-  return `From ${saturdayLabel} through ${sundayLabel}, ${BRAND} found ${events.length} dated ${A.eventsAdj}events across ${metroLabel()}. The biggest clusters are ${categoryText}, with options in ${cityText}. Use the timeline below to compare times, venues, costs${IS_ADULTS ? "" : ", age fit"}, and official event links before building a plan.`;
-}
-
 function eventQualityScore(event) {
   let score = 0;
   if (event.verified) score += 20;
@@ -3547,15 +3597,12 @@ function eventQualityScore(event) {
   return Math.max(0, Math.min(100, score));
 }
 
-function eventQualityLabel(score) {
-  if (score >= 78) return { text: "Verified detail", className: "quality-high" };
-  if (score >= 58) return { text: "Good detail", className: "quality-medium" };
-  return { text: "Confirm details", className: "quality-low" };
-}
-
 function highSignalEvents(events) {
-  const strong = events.filter((event) => eventQualityScore(event) >= 58);
-  return strong.length >= 3 ? strong : events;
+  // Closure notices stay in the timeline, but never in featured slots
+  // (presets, editorial buckets) — "Library Closed" is not a plan anchor.
+  const pool = events.filter((event) => !isClosureNotice(event));
+  const strong = pool.filter((event) => eventQualityScore(event) >= 58);
+  return strong.length >= 3 ? strong : pool.length ? pool : events;
 }
 
 function buildWeekendPlanPresets(events, eventSlugLookup) {
@@ -3691,8 +3738,17 @@ function buildWeekendEditorialBuckets(events, eventSlugLookup) {
     .sort((a, b) => b.count - a.count);
 }
 
+// Kicker labels for the slim preset cards, keyed by preset id.
+const PRESET_KICKERS = {
+  "free-family-day": "Free",
+  "little-kids": "Little kids",
+  "live-music": "Live music",
+  "indoor-backup": "Indoor",
+  "low-drive": "Low drive",
+};
+
 function renderWeekendPlanPresets(presets) {
-  return `<section class="guide-presets" aria-label="Weekend plan starters">
+  return `<section class="guide-presets" id="plans" aria-label="Weekend plan starters">
     <div class="guide-section-heading">
       <h2>Start with a ready-made plan</h2>
       <p>Pick a guide preset and ${BRAND} will open it as an editable plan you can share for votes.</p>
@@ -3703,17 +3759,17 @@ function renderWeekendPlanPresets(presets) {
   </section>`;
 }
 
-function renderWeekendPlanPresetCard(preset) {
+function renderWeekendPlanPresetCard(preset, index) {
   return `<article class="guide-preset-card">
+    <span class="guide-preset-kicker guide-preset-kicker--${index % 4}">${esc(PRESET_KICKERS[preset.id] || "Plan")}</span>
     <h3>${esc(preset.title)}</h3>
     <p>${esc(preset.blurb)}</p>
-    ${renderMiniEventList(preset.events, preset.eventSlugLookup)}
-    <a class="guide-card-cta" href="${esc(preset.href)}">Open this plan</a>
+    <a class="guide-preset-open" href="${esc(preset.href)}">Open this plan →</a>
   </article>`;
 }
 
 function renderWeekendEditorialBuckets(buckets) {
-  return `<section class="guide-editorial" aria-label="Weekend events by interest">
+  return `<section class="guide-editorial" id="by-interest" aria-label="Weekend events by interest">
     <div class="guide-section-heading">
       <h2>Browse by interest</h2>
       <p>Jump to the kind of weekend you're after — story time, hands-on science, music, the outdoors, and more.</p>
@@ -3807,10 +3863,97 @@ function renderNewsletterScript() {
 </script>`;
 }
 
+// Closure/cancellation notices ("All Branches Closed: ...") are useful in the
+// timeline but must never be featured (snapshot highlights, marquee, presets).
+function isClosureNotice(event) {
+  return /\b(closed|closure|cancel{1,2}ed|cancelation|cancellation)\b/i.test(event?.title || "");
+}
+
+// The weekend's marquee headliners: crowd-scale events (parades, fireworks,
+// fairs, festivals) scored by scale keywords + quality + free bonus, then
+// picked greedily with city diversity so all five posters aren't one town.
+function headlinerScore(event) {
+  const title = event.title || "";
+  let score = 0;
+  if (/parade/i.test(title)) score += 4;
+  if (/firework|drone show/i.test(title)) score += 4;
+  if (/\bfair\b|festival|celebration|carnival|street fest/i.test(title)) score += 3;
+  if (event.category === "Festival") score += 3;
+  if (eventLikelyFree(event)) score += 2;
+  score += eventQualityScore(event) / 25;
+  return score;
+}
+
+function pickWeekendHeadliners(events, eventSlugLookup, limit = 5) {
+  const candidates = events
+    .filter((event) => !isClosureNotice(event) && eventSlugLookup.get(event))
+    .map((event) => ({ event, score: headlinerScore(event) }))
+    .filter((c) => c.score >= 5)
+    .sort((a, b) => b.score - a.score);
+  const picked = [];
+  const seenCities = new Set();
+  const seenTitleKeys = new Set();
+  for (const { event } of candidates) {
+    const city = (event.city || event.neighborhood || "").toLowerCase();
+    const titleKey = (event.title || "").split(/[—:|·(]/)[0].trim().toLowerCase();
+    if (seenTitleKeys.has(titleKey)) continue;
+    if (city && seenCities.has(city)) continue;
+    picked.push(event);
+    seenCities.add(city);
+    seenTitleKeys.add(titleKey);
+    if (picked.length >= limit) break;
+  }
+  return picked;
+}
+
+function renderWeekendMarquee(headliners, eventSlugLookup) {
+  if (headliners.length < 3) return "";
+  const tz = activeMetro.timezone || "America/Los_Angeles";
+  const cards = headliners.map((event, i) => {
+    const slug = eventSlugLookup.get(event);
+    const href = metroPath(`event/${slug}/`);
+    const cls = i === 0 ? "mq--hero" : `mq--c${i}`;
+    const start = event.startDateTime ? new Date(event.startDateTime) : null;
+    const dow = start ? start.toLocaleDateString("en-US", { weekday: "short", timeZone: tz }) : "";
+    const time = formatEventTime(event) || "";
+    const city = event.city || event.neighborhood || "";
+    const catLine = [dow, time, city].filter(Boolean).join(" · ");
+    const blurbFull = cleanEventBlurb(event);
+    const sub = blurbFull
+      ? (blurbFull.length > 96 ? blurbFull.slice(0, 96).replace(/\s+\S*$/, "") + "…" : blurbFull)
+      : (event.venue || "");
+    // Poster display title: drop " - Venue Plaza"-style marketing suffixes on
+    // long titles (the full title stays on the linked event page).
+    let displayTitle = event.title || "";
+    if (displayTitle.length > 56) {
+      const head = displayTitle.split(/\s[–—-]\s|\s\(/)[0].trim();
+      if (head.length >= 24) displayTitle = head;
+    }
+    return `<a class="mq ${cls}" href="${href}" title="${esc(event.title)}">
+      <span class="mq-cat">${esc(catLine)}</span>
+      ${eventLikelyFree(event) ? `<span class="mq-free">Free</span>` : ""}
+      <p class="mq-big">${esc(displayTitle)}</p>
+      ${sub ? `<p class="mq-sub">${esc(sub)}</p>` : ""}
+    </a>`;
+  });
+  return `<div class="wg-marquee" id="top-picks" aria-label="This weekend's top picks">${cards.join("")}</div>`;
+}
+
+function renderWeekendInterestChips(buckets, freeCount) {
+  const chips = buckets
+    .filter((bucket) => bucket.count >= 3)
+    .slice(0, 6)
+    .map((bucket) => `<a class="wg-chip" href="#by-interest">${esc(bucket.title)} <b>${bucket.count}</b></a>`);
+  if (!chips.length && !freeCount) return "";
+  const freeHref = (!IS_ADULTS && activeMetro.id === "bay-area") ? metroPath("free-this-weekend/") : "#timeline";
+  const freeChip = freeCount > 0 ? `<a class="wg-chip wg-chip--free" href="${freeHref}">Free only <b>${freeCount}</b></a>` : "";
+  return `<div class="wg-chips" aria-label="Browse by interest">${chips.join("")}${freeChip}</div>`;
+}
+
 function pickWeekendHighlights(events, eventSlugLookup) {
   const picked = [];
   const seenCategories = new Set();
-  const sorted = events.slice().sort((a, b) => {
+  const sorted = events.filter((event) => !isClosureNotice(event)).sort((a, b) => {
     const aFree = eventLikelyFree(a) ? 0 : 1;
     const bFree = eventLikelyFree(b) ? 0 : 1;
     return (
@@ -3845,47 +3988,47 @@ function renderWeekendDaySection(dayKey, events, eventSlugLookup, locale = "en")
     day: "numeric",
     timeZone: "UTC",
   });
+  // Timed rows first (chronological); all-day rows (closures, day-long fairs)
+  // after them so a "Library Closed" notice never leads the day.
   const sorted = events
     .slice()
-    .sort((a, b) => (a.startDateTime || "").localeCompare(b.startDateTime || ""));
+    .sort((a, b) =>
+      (eventIsAllDay(a) ? 1 : 0) - (eventIsAllDay(b) ? 1 : 0) ||
+      (a.startDateTime || "").localeCompare(b.startDateTime || ""));
   const items = sorted.map((event) => renderTimelineEvent(event, eventSlugLookup, locale)).join("");
+  const freeCount = events.filter(eventLikelyFree).length;
   const noteMap = {
-    en: `${events.length} event${events.length === 1 ? "" : "s"} ordered by start time.`,
-    es: `${events.length} evento${events.length === 1 ? "" : "s"} en orden cronológico.`,
-    "zh-Hans": `${events.length} 个活动，按开始时间排列。`,
+    en: `${events.length} event${events.length === 1 ? "" : "s"}${freeCount ? ` · ${freeCount} free` : ""}`,
+    es: `${events.length} evento${events.length === 1 ? "" : "s"}${freeCount ? ` · ${freeCount} gratis` : ""}`,
+    "zh-Hans": `${events.length} 个活动${freeCount ? ` · ${freeCount} 个免费` : ""}`,
   };
-  return `<section class="guide-day"><h2>${esc(dayLabel)}</h2><p class="guide-day-note">${noteMap[locale] || noteMap.en}</p><ol class="timeline-list">${items}</ol></section>`;
+  const dow = date.toLocaleDateString("en-US", { weekday: "short", timeZone: "UTC" }).toLowerCase();
+  return `<section class="guide-day" id="day-${esc(dow)}"><div class="guide-day-head"><h2>${esc(dayLabel)}</h2><p class="guide-day-note">${noteMap[locale] || noteMap.en}</p></div><ol class="timeline-list">${items}</ol></section>`;
 }
 
 function renderTimelineEvent(event, eventSlugLookup, locale = "en") {
   const slug = eventSlugLookup.get(event);
   const internalHref = slug ? metroPath(`event/${slug}/`) : "";
   const time = formatEventTime(event, locale);
-  const bucket = timelineBucket(event, locale);
   const bucketKey = timelineBucket(event, "en").toLowerCase();
   const free = eventLikelyFree(event);
   const ageBands = Array.isArray(event.ageBands) ? event.ageBands.join(",") : "";
   const description = buildTimelineDescription(event);
   const meta = formatTimelineMeta(event);
-  const quality = eventQualityLabel(eventQualityScore(event));
+  const fam = cityCatFamily(event.category);
   const timeTba = { en: "Time TBA", es: "Hora por confirmar", "zh-Hans": "时间待定" };
-  const detailsLabel = { en: "FamHop event details", es: "Detalles del evento en FamHop", "zh-Hans": "FamHop 活动详情" };
-  const officialLabel = { en: "Official event page", es: "Página oficial del evento", "zh-Hans": "官方活动页面" };
+  const freeLabel = { en: "Free", es: "Gratis", "zh-Hans": "免费" };
+  const officialLabel = { en: "Official ↗", es: "Oficial ↗", "zh-Hans": "官方 ↗" };
+  const title = internalHref ? `<a href="${internalHref}">${esc(event.title)}</a>` : esc(event.title);
   return `<li class="timeline-card" data-age-bands="${esc(ageBands)}" data-cost-free="${free}" data-category="${esc(event.category || "")}" data-bucket="${esc(bucketKey)}">
-    <time class="timeline-time" datetime="${esc(event.startDateTime || "")}">${esc(time || (timeTba[locale] || timeTba.en))}<span>${esc(bucket)}</span></time>
-    <div>
-      <div class="timeline-chip-row">
-        ${event.category ? `<span class="event-chip">${esc(event.category)}</span>` : ""}
-        <span class="quality-chip ${esc(quality.className)}">${esc(quality.text)}</span>
-      </div>
-      <h3>${internalHref ? `<a href="${internalHref}">${esc(event.title)}</a>` : esc(event.title)}</h3>
-      <p class="timeline-meta">${esc(meta)}</p>
-      ${description ? `<p class="timeline-desc">${esc(description)}</p>` : ""}
-      <p class="timeline-links">
-        ${internalHref ? `<a href="${internalHref}">${detailsLabel[locale] || detailsLabel.en}</a>` : ""}
-        ${event.url ? `<a rel="noopener nofollow" href="${esc(event.url)}">${officialLabel[locale] || officialLabel.en}</a>` : ""}
-      </p>
-    </div>
+    <time class="timeline-time" datetime="${esc(event.startDateTime || "")}">${esc(time || (timeTba[locale] || timeTba.en))}</time>
+    <h3><span class="timeline-dot cm-c-${fam}" aria-hidden="true"></span>${title}</h3>
+    <p class="timeline-meta">${esc(meta)}</p>
+    ${description ? `<p class="timeline-desc">${esc(description)}</p>` : ""}
+    <span class="timeline-side">
+      ${free ? `<span class="timeline-free">${freeLabel[locale] || freeLabel.en}</span>` : ""}
+      ${event.url ? `<a class="timeline-official" rel="noopener nofollow" href="${esc(event.url)}">${officialLabel[locale] || officialLabel.en}</a>` : ""}
+    </span>
   </li>`;
 }
 
@@ -4104,8 +4247,23 @@ function renderWeekendFilterScript(locale) {
 </script>`;
 }
 
+function eventIsAllDay(event) {
+  // Midnight-local starts are all-day rows (closures, day-long festivals) —
+  // showing "12:00 AM" for them is wrong. Midnight must be checked in the
+  // metro timezone, not the UTC ISO string.
+  if (!event.startDateTime) return false;
+  const date = new Date(event.startDateTime);
+  if (!Number.isFinite(date.getTime())) return false;
+  const { hour, minute } = zonedTimeParts(date, activeMetro.timezone);
+  return hour === 0 && minute === 0;
+}
+
 function formatEventTime(event, locale = "en") {
   if (!event.startDateTime) return "";
+  if (eventIsAllDay(event)) {
+    const allDay = { en: "All day", es: "Todo el día", "zh-Hans": "全天" };
+    return allDay[locale] || allDay.en;
+  }
   const date = new Date(event.startDateTime);
   if (!Number.isFinite(date.getTime())) return "";
   const dateLocale = locale === "zh-Hans" ? "zh-CN" : (locale === "es" ? "es-US" : "en-US");
@@ -4120,19 +4278,19 @@ function formatTimelineMeta(event) {
   const parts = [];
   if (event.venue) parts.push(event.venue);
   if (event.city) parts.push(event.city);
-  if (event.cost && event.cost !== "Unknown") parts.push(event.cost);
-  if (!IS_ADULTS && Array.isArray(event.ageBands) && event.ageBands.length) {
-    parts.push(`Ages: ${event.ageBands.join(", ")}`);
+  if (event.cost && event.cost !== "Unknown" && !/free/i.test(event.cost)) parts.push(event.cost);
+  if (!IS_ADULTS) {
+    const ageLabel = eventAgeLabel(event);
+    if (ageLabel) parts.push(ageLabel);
   }
   return parts.join(" · ");
 }
 
 function buildTimelineDescription(event) {
-  const desc = String(event.description || "").replace(/\s+/g, " ").trim();
-  if (desc) return desc.length > 210 ? `${desc.slice(0, 207)}…` : desc;
-  const where = [event.venue, event.city].filter(Boolean).join(" in ");
-  const cat = event.category ? `${event.category.toLowerCase()} event` : IS_ADULTS ? "event" : "family event";
-  return `${event.title} is a ${cat}${where ? ` at ${where}` : ""}. Confirm registration, cost, and age fit on the official listing.`;
+  // cleanEventBlurb strips the date/venue boilerplate that raw descriptions
+  // carry; rows whose description is boilerplate-only get no blurb instead of
+  // repeated generic filler.
+  return cleanEventBlurb(event);
 }
 
 function getStableSuffix(id) {
