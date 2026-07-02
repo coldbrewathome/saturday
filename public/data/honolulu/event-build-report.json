@@ -1,50 +1,25 @@
 {
   "schemaVersion": 1,
   "metroId": "honolulu",
-  "generatedAt": "2026-07-01T04:01:14.329Z",
+  "generatedAt": "2026-07-02T13:40:39.383Z",
   "registryPath": "data/event-sources-honolulu.json",
   "outputPath": "public/data/honolulu/events.json",
-  "eventCount": 326,
+  "eventCount": 403,
   "adultsEventCount": 36,
   "sourceCount": 13,
-  "liveEventCount": 38,
-  "lastKnownGoodEventCount": 319,
+  "liveEventCount": 434,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 9,
+  "operatorAlertCount": 6,
   "errors": [],
   "operatorAlerts": [
-    {
-      "severity": "warning",
-      "metroId": "honolulu",
-      "sourceId": "hawaii-state-library",
-      "sourceName": "Hawaii State Public Library System",
-      "sourceType": "tribeEvents",
-      "url": "https://www.librarieshawaii.org/events/",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 319,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 319,
-      "fetchedAt": "2026-07-01T04:01:14.329Z",
-      "fetches": [
-        {
-          "url": "https://www.librarieshawaii.org/events/",
-          "status": "http-error",
-          "httpStatus": 500,
-          "contentType": "application/json; charset=UTF-8"
-        }
-      ]
-    },
     {
       "severity": "critical",
       "metroId": "honolulu",
       "sourceId": "bishop-museum",
       "sourceName": "Bishop Museum",
       "sourceType": "html",
-      "url": "https://www.bishopmuseum.org/events/",
+      "url": "https://www.bishopmuseum.org/exhibits-and-programs/events/",
       "status": "blocked",
       "issueType": "fetch-failed",
       "reason": "challenge page returned instead of event content",
@@ -53,10 +28,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:01:14.329Z",
+      "fetchedAt": "2026-07-02T13:40:39.383Z",
       "fetches": [
         {
-          "url": "https://www.bishopmuseum.org/events/",
+          "url": "https://www.bishopmuseum.org/exhibits-and-programs/events/",
           "status": "blocked",
           "reason": "challenge page returned instead of event content",
           "httpStatus": 200,
@@ -79,7 +54,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:01:14.329Z",
+      "fetchedAt": "2026-07-02T13:40:39.383Z",
       "fetches": [
         {
           "url": "https://honolulumuseum.org/events/",
@@ -104,7 +79,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:01:14.329Z",
+      "fetchedAt": "2026-07-02T13:40:39.383Z",
       "fetches": [
         {
           "url": "https://www.honoluluzoo.org/experiences-events/",
@@ -115,77 +90,27 @@
       ]
     },
     {
-      "severity": "critical",
-      "metroId": "honolulu",
-      "sourceId": "hawaii-childrens-discovery",
-      "sourceName": "Hawaii Children's Discovery Center",
-      "sourceType": "html",
-      "url": "https://discoverycenterhawaii.org/events/",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:01:14.329Z",
-      "fetches": [
-        {
-          "url": "https://discoverycenterhawaii.org/events/",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "honolulu",
       "sourceId": "waikiki-aquarium",
       "sourceName": "Waikiki Aquarium",
       "sourceType": "html",
-      "url": "https://www.waikikiaquarium.org/experience/events/",
+      "url": "https://calendar.google.com/calendar/ical/hawaii.edu_ur7iq68mqshu5q73n79rmb4jrk%40group.calendar.google.com/public/basic.ics",
       "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:01:14.329Z",
+      "fetchedAt": "2026-07-02T13:40:39.383Z",
       "fetches": [
         {
-          "url": "https://www.waikikiaquarium.org/experience/events/",
+          "url": "https://calendar.google.com/calendar/ical/hawaii.edu_ur7iq68mqshu5q73n79rmb4jrk%40group.calendar.google.com/public/basic.ics",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "honolulu",
-      "sourceId": "iolani-palace",
-      "sourceName": "Iolani Palace",
-      "sourceType": "html",
-      "url": "https://www.iolanipalace.org/events/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:01:14.329Z",
-      "fetches": [
-        {
-          "url": "https://www.iolanipalace.org/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "text/calendar; charset=utf-8"
         }
       ]
     },
@@ -204,7 +129,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:01:14.329Z",
+      "fetchedAt": "2026-07-02T13:40:39.383Z",
       "fetches": [
         {
           "url": "https://www.kualoa.com/activities/",
@@ -229,7 +154,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:01:14.329Z",
+      "fetchedAt": "2026-07-02T13:40:39.383Z",
       "fetches": [
         {
           "url": "https://www.alohacomedyclub.com/calendar",
@@ -262,28 +187,29 @@
       "city": "Honolulu",
       "metroId": "honolulu",
       "category": "Library",
-      "status": "http-error",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 394,
       "fallbackEvents": 0,
-      "eventCount": 319,
+      "eventCount": 394,
       "fetches": [
         {
           "url": "https://www.librarieshawaii.org/events/",
-          "status": "http-error",
-          "httpStatus": 500,
-          "contentType": "application/json; charset=UTF-8"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=400; pages=8"
         }
       ],
-      "httpStatus": 500,
-      "contentType": "application/json; charset=UTF-8",
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 319,
-      "recoveryMode": "last-known-good"
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=400; pages=8",
+      "rejectedLiveEvents": 2,
+      "extractedEvents": 396,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "bishop-museum",
       "name": "Bishop Museum",
-      "url": "https://www.bishopmuseum.org/events/",
+      "url": "https://www.bishopmuseum.org/exhibits-and-programs/events/",
       "sourceType": "html",
       "city": "Honolulu",
       "metroId": "honolulu",
@@ -294,7 +220,7 @@
       "eventCount": 0,
       "fetches": [
         {
-          "url": "https://www.bishopmuseum.org/events/",
+          "url": "https://www.bishopmuseum.org/exhibits-and-programs/events/",
           "status": "blocked",
           "reason": "challenge page returned instead of event content",
           "httpStatus": 200,
@@ -364,33 +290,34 @@
     {
       "id": "hawaii-childrens-discovery",
       "name": "Hawaii Children's Discovery Center",
-      "url": "https://discoverycenterhawaii.org/events/",
+      "url": "https://www.discoverycenterhawaii.org/event-list",
       "sourceType": "html",
       "city": "Honolulu",
       "metroId": "honolulu",
       "category": "Museum",
-      "status": "http-error",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
-          "url": "https://discoverycenterhawaii.org/events/",
-          "status": "http-error",
-          "httpStatus": 404,
+          "url": "https://www.discoverycenterhawaii.org/event-list",
+          "status": "ok",
+          "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "httpStatus": 404,
+      "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "extractedEvents": 0,
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
     {
       "id": "waikiki-aquarium",
       "name": "Waikiki Aquarium",
-      "url": "https://www.waikikiaquarium.org/experience/events/",
+      "url": "https://calendar.google.com/calendar/ical/hawaii.edu_ur7iq68mqshu5q73n79rmb4jrk%40group.calendar.google.com/public/basic.ics",
       "sourceType": "html",
       "city": "Honolulu",
       "metroId": "honolulu",
@@ -401,43 +328,43 @@
       "eventCount": 0,
       "fetches": [
         {
-          "url": "https://www.waikikiaquarium.org/experience/events/",
+          "url": "https://calendar.google.com/calendar/ical/hawaii.edu_ur7iq68mqshu5q73n79rmb4jrk%40group.calendar.google.com/public/basic.ics",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "text/calendar; charset=utf-8"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "contentType": "text/calendar; charset=utf-8",
+      "rejectedLiveEvents": 627,
+      "extractedEvents": 627,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
     {
       "id": "iolani-palace",
       "name": "Iolani Palace",
-      "url": "https://www.iolanipalace.org/events/",
+      "url": "https://www.iolanipalace.org/event/feed/",
       "sourceType": "html",
       "city": "Honolulu",
       "metroId": "honolulu",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
-          "url": "https://www.iolanipalace.org/events/",
+          "url": "https://www.iolanipalace.org/event/feed/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "application/rss+xml; charset=UTF-8"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "contentType": "application/rss+xml; charset=UTF-8",
+      "rejectedLiveEvents": 9,
+      "extractedEvents": 10,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

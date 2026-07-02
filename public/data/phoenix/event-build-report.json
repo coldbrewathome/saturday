@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "phoenix",
-  "generatedAt": "2026-07-01T03:59:38.202Z",
+  "generatedAt": "2026-07-02T13:38:56.448Z",
   "registryPath": "data/event-sources-phoenix.json",
   "outputPath": "public/data/phoenix/events.json",
-  "eventCount": 632,
-  "adultsEventCount": 15,
+  "eventCount": 608,
+  "adultsEventCount": 29,
   "sourceCount": 15,
-  "liveEventCount": 635,
+  "liveEventCount": 624,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 7,
+  "operatorAlertCount": 5,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:59:38.202Z",
+      "fetchedAt": "2026-07-02T13:38:56.448Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -39,21 +39,21 @@
       ]
     },
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "phoenix",
       "sourceId": "arizona-state-fair",
       "sourceName": "Arizona State Fair",
       "sourceType": "html",
       "url": "https://azstatefair.com/",
       "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:59:38.202Z",
+      "fetchedAt": "2026-07-02T13:38:56.448Z",
       "fetches": [
         {
           "url": "https://azstatefair.com/",
@@ -78,60 +78,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:59:38.202Z",
+      "fetchedAt": "2026-07-02T13:38:56.448Z",
       "fetches": [
         {
           "url": "https://www.crescentphx.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "phoenix",
-      "sourceId": "the-van-buren",
-      "sourceName": "The Van Buren",
-      "sourceType": "html",
-      "url": "https://www.thevanburenphx.com/events",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:59:38.202Z",
-      "fetches": [
-        {
-          "url": "https://www.thevanburenphx.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "phoenix",
-      "sourceId": "marquee-theatre-tempe",
-      "sourceName": "Marquee Theatre",
-      "sourceType": "html",
-      "url": "https://www.luckymanonline.com/marquee-theatre",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:59:38.202Z",
-      "fetches": [
-        {
-          "url": "https://www.luckymanonline.com/marquee-theatre",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -153,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:59:38.202Z",
+      "fetchedAt": "2026-07-02T13:38:56.448Z",
       "fetches": [
         {
           "url": "https://phoenix.standuplive.com/events",
@@ -178,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:59:38.202Z",
+      "fetchedAt": "2026-07-02T13:38:56.448Z",
       "fetches": [
         {
           "url": "https://houseofcomedy.net/scottsdale",
@@ -213,9 +163,9 @@
       "metroId": "phoenix",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 261,
+      "liveEvents": 240,
       "fallbackEvents": 0,
-      "eventCount": 261,
+      "eventCount": 240,
       "fetches": [
         {
           "url": "https://calendar.phoenixpubliclibrary.org/calendar/",
@@ -227,7 +177,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 261,
+      "extractedEvents": 240,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -240,9 +190,9 @@
       "metroId": "phoenix",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 7,
+      "liveEvents": 6,
       "fallbackEvents": 0,
-      "eventCount": 7,
+      "eventCount": 6,
       "fetches": [
         {
           "url": "https://www.phoenix.gov/calendar/parks-events.html",
@@ -253,7 +203,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=phoenix-city-calendar; events=19",
-      "rejectedLiveEvents": 12,
+      "rejectedLiveEvents": 13,
       "extractedEvents": 19,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -267,21 +217,21 @@
       "metroId": "phoenix",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 211,
+      "liveEvents": 201,
       "fallbackEvents": 0,
-      "eventCount": 211,
+      "eventCount": 201,
       "fetches": [
         {
           "url": "https://childrensmuseumofphoenix.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=220; pages=5"
+          "contentType": "application/json; source=tribe-events; events=210; pages=5"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=220; pages=5",
+      "contentType": "application/json; source=tribe-events; events=210; pages=5",
       "rejectedLiveEvents": 9,
-      "extractedEvents": 220,
+      "extractedEvents": 210,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -361,8 +311,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "rejectedLiveEvents": 3,
+      "extractedEvents": 3,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -375,9 +325,9 @@
       "metroId": "phoenix",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 140,
+      "liveEvents": 148,
       "fallbackEvents": 0,
-      "eventCount": 140,
+      "eventCount": 148,
       "fetches": [
         {
           "url": "https://dbg.org/events/",
@@ -388,7 +338,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 60,
+      "rejectedLiveEvents": 52,
       "extractedEvents": 200,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -423,18 +373,18 @@
     {
       "id": "the-van-buren",
       "name": "The Van Buren",
-      "url": "https://www.thevanburenphx.com/events",
+      "url": "https://www.thevanburenphx.com/shows",
       "sourceType": "html",
       "city": "Phoenix",
       "metroId": "phoenix",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 12,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 12,
       "fetches": [
         {
-          "url": "https://www.thevanburenphx.com/events",
+          "url": "https://www.thevanburenphx.com/shows",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -442,8 +392,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "rejectedLiveEvents": 24,
+      "extractedEvents": 36,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -477,18 +427,18 @@
     {
       "id": "marquee-theatre-tempe",
       "name": "Marquee Theatre",
-      "url": "https://www.luckymanonline.com/marquee-theatre",
+      "url": "https://www.marqueetheatreaz.com/calendar/",
       "sourceType": "html",
       "city": "Tempe",
       "metroId": "phoenix",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
-          "url": "https://www.luckymanonline.com/marquee-theatre",
+          "url": "https://www.marqueetheatreaz.com/calendar/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -497,7 +447,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

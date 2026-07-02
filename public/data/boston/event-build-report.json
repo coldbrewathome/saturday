@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "boston",
-  "generatedAt": "2026-07-01T04:00:00.570Z",
+  "generatedAt": "2026-07-02T13:40:06.439Z",
   "registryPath": "data/event-sources-boston.json",
   "outputPath": "public/data/boston/events.json",
-  "eventCount": 509,
-  "adultsEventCount": 14,
+  "eventCount": 534,
+  "adultsEventCount": 47,
   "sourceCount": 21,
-  "liveEventCount": 514,
+  "liveEventCount": 572,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 10,
+  "operatorAlertCount": 7,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:00:00.570Z",
+      "fetchedAt": "2026-07-02T13:40:06.439Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:00:00.570Z",
+      "fetchedAt": "2026-07-02T13:40:06.439Z",
       "fetches": [
         {
           "url": "https://www.easternstatesexposition.com/",
@@ -64,24 +64,24 @@
       ]
     },
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "boston",
       "sourceId": "marshfield-fair",
       "sourceName": "Marshfield Fair",
       "sourceType": "html",
-      "url": "https://marshfieldfair.org/",
+      "url": "https://marshfieldfair.org/events/",
       "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:00:00.570Z",
+      "fetchedAt": "2026-07-02T13:40:06.439Z",
       "fetches": [
         {
-          "url": "https://marshfieldfair.org/",
+          "url": "https://marshfieldfair.org/events/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:00:00.570Z",
+      "fetchedAt": "2026-07-02T13:40:06.439Z",
       "fetches": [
         {
           "url": "https://www.bostonharborfest.com/",
@@ -128,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:00:00.570Z",
+      "fetchedAt": "2026-07-02T13:40:06.439Z",
       "fetches": [
         {
           "url": "https://www.cambridgecarnival.org/",
@@ -153,63 +153,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:00:00.570Z",
+      "fetchedAt": "2026-07-02T13:40:06.439Z",
       "fetches": [
         {
           "url": "https://www.crossroadspresents.com/paradise-rock-club",
           "status": "http-error",
           "httpStatus": 404,
           "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "boston",
-      "sourceId": "brighton-music-hall",
-      "sourceName": "Brighton Music Hall",
-      "sourceType": "html",
-      "url": "https://www.crossroadspresents.com/brighton-music-hall",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:00:00.570Z",
-      "fetches": [
-        {
-          "url": "https://www.crossroadspresents.com/brighton-music-hall",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "boston",
-      "sourceId": "the-sinclair",
-      "sourceName": "The Sinclair",
-      "sourceType": "html",
-      "url": "https://www.sinclaircambridge.com/events",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:00:00.570Z",
-      "fetches": [
-        {
-          "url": "https://www.sinclaircambridge.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -228,37 +178,12 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:00:00.570Z",
+      "fetchedAt": "2026-07-02T13:40:06.439Z",
       "fetches": [
         {
           "url": "https://www.nickscomedystop.com/calendar",
           "status": "http-error",
           "httpStatus": 404,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "boston",
-      "sourceId": "laugh-boston",
-      "sourceName": "Laugh Boston",
-      "sourceType": "html",
-      "url": "https://www.laughboston.com/calendar",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:00:00.570Z",
-      "fetches": [
-        {
-          "url": "https://www.laughboston.com/calendar",
-          "status": "ok",
-          "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ]
@@ -288,9 +213,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 13,
+      "liveEvents": 14,
       "fallbackEvents": 0,
-      "eventCount": 13,
+      "eventCount": 14,
       "fetches": [
         {
           "url": "https://bpl.bibliocommons.com/v2/events?audiences=57f66113863736755f79b0ca",
@@ -302,7 +227,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 13,
+      "extractedEvents": 14,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -315,9 +240,9 @@
       "metroId": "boston",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://www.boston.gov/rss/events",
@@ -328,7 +253,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/rss+xml; charset=utf-8",
-      "rejectedLiveEvents": 23,
+      "rejectedLiveEvents": 24,
       "extractedEvents": 25,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -342,21 +267,21 @@
       "metroId": "boston",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 118,
+      "liveEvents": 142,
       "fallbackEvents": 0,
-      "eventCount": 118,
+      "eventCount": 142,
       "fetches": [
         {
           "url": "https://bostonchildrensmuseum.org/Calendar/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=eventon-events; events=119"
+          "contentType": "application/json; source=eventon-events; events=146"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=eventon-events; events=119",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 118,
+      "contentType": "application/json; source=eventon-events; events=146",
+      "rejectedLiveEvents": 3,
+      "extractedEvents": 145,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -444,7 +369,7 @@
     {
       "id": "marshfield-fair",
       "name": "Marshfield Fair",
-      "url": "https://marshfieldfair.org/",
+      "url": "https://marshfieldfair.org/events/",
       "sourceType": "html",
       "city": "Marshfield",
       "metroId": "boston",
@@ -455,7 +380,7 @@
       "eventCount": 0,
       "fetches": [
         {
-          "url": "https://marshfieldfair.org/",
+          "url": "https://marshfieldfair.org/events/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -463,8 +388,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "rejectedLiveEvents": 3,
+      "extractedEvents": 3,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -477,9 +402,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 118,
+      "liveEvents": 114,
       "fallbackEvents": 0,
-      "eventCount": 118,
+      "eventCount": 114,
       "fetches": [
         {
           "url": "https://cambridgepl.libcal.com/calendar/publicevents?cid=7052&cal=7052",
@@ -491,7 +416,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 1,
-      "extractedEvents": 119,
+      "extractedEvents": 115,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -504,9 +429,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 117,
+      "liveEvents": 118,
       "fallbackEvents": 0,
-      "eventCount": 117,
+      "eventCount": 118,
       "fetches": [
         {
           "url": "https://newtonfreelibrary.libcal.com/calendar?cid=3836&cal=3836",
@@ -517,8 +442,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 10,
-      "extractedEvents": 127,
+      "rejectedLiveEvents": 8,
+      "extractedEvents": 126,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -531,9 +456,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 70,
+      "liveEvents": 73,
       "fallbackEvents": 0,
-      "eventCount": 70,
+      "eventCount": 73,
       "fetches": [
         {
           "url": "https://brooklinelibrary.libcal.com/calendar/events?cid=20102&cal=20102",
@@ -544,8 +469,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 23,
-      "extractedEvents": 93,
+      "rejectedLiveEvents": 21,
+      "extractedEvents": 94,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -558,9 +483,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 60,
+      "liveEvents": 61,
       "fallbackEvents": 0,
-      "eventCount": 60,
+      "eventCount": 61,
       "fetches": [
         {
           "url": "https://somervillepubliclibrary.assabetinteractive.com/calendar/",
@@ -571,8 +496,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 61,
+      "rejectedLiveEvents": 3,
+      "extractedEvents": 64,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -686,53 +611,54 @@
     {
       "id": "brighton-music-hall",
       "name": "Brighton Music Hall",
-      "url": "https://www.crossroadspresents.com/brighton-music-hall",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&sort=date,asc&venueId=KovZpapwne&apikey=oo1qd0wzLe7WJpm61ALQuUCTMXGK7U5z&source=ticketmaster",
       "sourceType": "html",
       "city": "Boston",
       "metroId": "boston",
       "category": "Music",
-      "status": "http-error",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 11,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 11,
       "fetches": [
         {
-          "url": "https://www.crossroadspresents.com/brighton-music-hall",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=utf-8"
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&sort=date,asc&venueId=KovZpapwne&apikey=oo1qd0wzLe7WJpm61ALQuUCTMXGK7U5z&source=ticketmaster",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=utf-8"
         }
       ],
-      "httpStatus": 404,
-      "contentType": "text/html; charset=utf-8",
-      "extractedEvents": 0,
+      "httpStatus": 200,
+      "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 61,
+      "extractedEvents": 72,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
     {
       "id": "the-sinclair",
       "name": "The Sinclair",
-      "url": "https://www.sinclaircambridge.com/events",
+      "url": "https://www.sinclaircambridge.com/events/rss",
       "sourceType": "html",
       "city": "Cambridge",
       "metroId": "boston",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 10,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 10,
       "fetches": [
         {
-          "url": "https://www.sinclaircambridge.com/events",
+          "url": "https://www.sinclaircambridge.com/events/rss",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "application/rss+xml"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
+      "contentType": "application/rss+xml",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "extractedEvents": 10,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -765,18 +691,18 @@
     {
       "id": "laugh-boston",
       "name": "Laugh Boston",
-      "url": "https://www.laughboston.com/calendar",
+      "url": "https://laughboston.com/",
       "sourceType": "html",
       "city": "Boston",
       "metroId": "boston",
       "category": "Comedy",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 12,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 12,
       "fetches": [
         {
-          "url": "https://www.laughboston.com/calendar",
+          "url": "https://laughboston.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -784,8 +710,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "rejectedLiveEvents": 8,
+      "extractedEvents": 20,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

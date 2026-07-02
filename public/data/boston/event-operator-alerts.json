@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "boston",
-  "generatedAt": "2026-07-01T04:00:00.570Z",
-  "alertCount": 10,
+  "generatedAt": "2026-07-02T13:40:06.439Z",
+  "alertCount": 7,
   "alerts": [
     {
       "severity": "critical",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:00:00.570Z",
+      "fetchedAt": "2026-07-02T13:40:06.439Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -44,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:00:00.570Z",
+      "fetchedAt": "2026-07-02T13:40:06.439Z",
       "fetches": [
         {
           "url": "https://www.easternstatesexposition.com/",
@@ -55,24 +55,24 @@
       ]
     },
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "boston",
       "sourceId": "marshfield-fair",
       "sourceName": "Marshfield Fair",
       "sourceType": "html",
-      "url": "https://marshfieldfair.org/",
+      "url": "https://marshfieldfair.org/events/",
       "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:00:00.570Z",
+      "fetchedAt": "2026-07-02T13:40:06.439Z",
       "fetches": [
         {
-          "url": "https://marshfieldfair.org/",
+          "url": "https://marshfieldfair.org/events/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -94,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:00:00.570Z",
+      "fetchedAt": "2026-07-02T13:40:06.439Z",
       "fetches": [
         {
           "url": "https://www.bostonharborfest.com/",
@@ -119,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:00:00.570Z",
+      "fetchedAt": "2026-07-02T13:40:06.439Z",
       "fetches": [
         {
           "url": "https://www.cambridgecarnival.org/",
@@ -144,63 +144,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:00:00.570Z",
+      "fetchedAt": "2026-07-02T13:40:06.439Z",
       "fetches": [
         {
           "url": "https://www.crossroadspresents.com/paradise-rock-club",
           "status": "http-error",
           "httpStatus": 404,
           "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "boston",
-      "sourceId": "brighton-music-hall",
-      "sourceName": "Brighton Music Hall",
-      "sourceType": "html",
-      "url": "https://www.crossroadspresents.com/brighton-music-hall",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:00:00.570Z",
-      "fetches": [
-        {
-          "url": "https://www.crossroadspresents.com/brighton-music-hall",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "boston",
-      "sourceId": "the-sinclair",
-      "sourceName": "The Sinclair",
-      "sourceType": "html",
-      "url": "https://www.sinclaircambridge.com/events",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:00:00.570Z",
-      "fetches": [
-        {
-          "url": "https://www.sinclaircambridge.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -219,37 +169,12 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:00:00.570Z",
+      "fetchedAt": "2026-07-02T13:40:06.439Z",
       "fetches": [
         {
           "url": "https://www.nickscomedystop.com/calendar",
           "status": "http-error",
           "httpStatus": 404,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "boston",
-      "sourceId": "laugh-boston",
-      "sourceName": "Laugh Boston",
-      "sourceType": "html",
-      "url": "https://www.laughboston.com/calendar",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T04:00:00.570Z",
-      "fetches": [
-        {
-          "url": "https://www.laughboston.com/calendar",
-          "status": "ok",
-          "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ]

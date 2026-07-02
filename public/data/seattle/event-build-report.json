@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "seattle",
-  "generatedAt": "2026-07-01T03:53:09.319Z",
+  "generatedAt": "2026-07-02T13:34:46.559Z",
   "registryPath": "data/event-sources-seattle.json",
   "outputPath": "public/data/seattle/events.json",
-  "eventCount": 457,
-  "adultsEventCount": 10,
+  "eventCount": 530,
+  "adultsEventCount": 31,
   "sourceCount": 31,
-  "liveEventCount": 459,
+  "liveEventCount": 556,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 19,
+  "operatorAlertCount": 16,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:09.319Z",
+      "fetchedAt": "2026-07-02T13:34:46.559Z",
       "fetches": [
         {
           "url": "https://www.zoo.org/events?cgid=1",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:09.319Z",
+      "fetchedAt": "2026-07-02T13:34:46.559Z",
       "fetches": [
         {
           "url": "https://www.burkemuseum.org/events",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:09.319Z",
+      "fetchedAt": "2026-07-02T13:34:46.559Z",
       "fetches": [
         {
           "url": "https://pacificsciencecenter.org/events/",
@@ -103,38 +103,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:09.319Z",
+      "fetchedAt": "2026-07-02T13:34:46.559Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "application/json; source=ticketmaster; events=0; queries=1"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "seattle",
-      "sourceId": "evergreen-state-fair",
-      "sourceName": "Evergreen State Fair",
-      "sourceType": "html",
-      "url": "https://www.evergreenfair.org/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:09.319Z",
-      "fetches": [
-        {
-          "url": "https://www.evergreenfair.org/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -153,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:09.319Z",
+      "fetchedAt": "2026-07-02T13:34:46.559Z",
       "fetches": [
         {
           "url": "https://www.seattlecenter.com/events/featured-events/festal/indigenous-people-festival",
@@ -178,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:09.319Z",
+      "fetchedAt": "2026-07-02T13:34:46.559Z",
       "fetches": [
         {
           "url": "https://www.seattlecenter.com/events/featured-events/festal/brasilfest",
@@ -203,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:09.319Z",
+      "fetchedAt": "2026-07-02T13:34:46.559Z",
       "fetches": [
         {
           "url": "https://www.seattlecenter.com/events/featured-events/festal/live-aloha-hawaiian-cultural-festival",
@@ -228,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:09.319Z",
+      "fetchedAt": "2026-07-02T13:34:46.559Z",
       "fetches": [
         {
           "url": "https://www.seattlecenter.com/events/featured-events/festal/croatiafest",
@@ -253,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:09.319Z",
+      "fetchedAt": "2026-07-02T13:34:46.559Z",
       "fetches": [
         {
           "url": "https://www.neumos.com/events",
@@ -278,38 +253,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:09.319Z",
+      "fetchedAt": "2026-07-02T13:34:46.559Z",
       "fetches": [
         {
           "url": "https://www.thecrocodile.com/events",
           "status": "http-error",
           "httpStatus": 404,
           "contentType": "text/html;charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "seattle",
-      "sourceId": "the-showbox",
-      "sourceName": "The Showbox",
-      "sourceType": "html",
-      "url": "https://www.showboxpresents.com/events",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:09.319Z",
-      "fetches": [
-        {
-          "url": "https://www.showboxpresents.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -328,7 +278,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:09.319Z",
+      "fetchedAt": "2026-07-02T13:34:46.559Z",
       "fetches": [
         {
           "url": "https://www.tractortavern.com/events",
@@ -353,37 +303,12 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:09.319Z",
+      "fetchedAt": "2026-07-02T13:34:46.559Z",
       "fetches": [
         {
           "url": "https://www.sunsettavern.com/events",
           "status": "http-error",
           "httpStatus": 404,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "seattle",
-      "sourceId": "unexpected-productions",
-      "sourceName": "Unexpected Productions",
-      "sourceType": "html",
-      "url": "https://www.unexpectedproductions.org/shows",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:09.319Z",
-      "fetches": [
-        {
-          "url": "https://www.unexpectedproductions.org/shows",
-          "status": "ok",
-          "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ]
@@ -403,7 +328,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:09.319Z",
+      "fetchedAt": "2026-07-02T13:34:46.559Z",
       "fetches": [
         {
           "url": "https://www.comedyunderground.com/calendar",
@@ -428,7 +353,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:09.319Z",
+      "fetchedAt": "2026-07-02T13:34:46.559Z",
       "fetches": [
         {
           "url": "https://www.nectarlounge.com/",
@@ -453,7 +378,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:09.319Z",
+      "fetchedAt": "2026-07-02T13:34:46.559Z",
       "fetches": [
         {
           "url": "https://bumbershoot.com/",
@@ -478,7 +403,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:09.319Z",
+      "fetchedAt": "2026-07-02T13:34:46.559Z",
       "fetches": [
         {
           "url": "https://www.capitolhillblockparty.com/",
@@ -513,9 +438,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 18,
+      "liveEvents": 19,
       "fallbackEvents": 0,
-      "eventCount": 18,
+      "eventCount": 19,
       "fetches": [
         {
           "url": "https://kcls.bibliocommons.com/v2/events?programs=6092fc2d8910133a0055a335",
@@ -527,7 +452,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 18,
+      "extractedEvents": 19,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -567,9 +492,9 @@
       "metroId": "seattle",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 18,
+      "liveEvents": 93,
       "fallbackEvents": 0,
-      "eventCount": 18,
+      "eventCount": 93,
       "fetches": [
         {
           "url": "https://seattlechildrensmuseum.org/calendar/",
@@ -580,8 +505,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 82,
-      "extractedEvents": 100,
+      "rejectedLiveEvents": 13,
+      "extractedEvents": 106,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -749,18 +674,18 @@
     {
       "id": "evergreen-state-fair",
       "name": "Evergreen State Fair",
-      "url": "https://www.evergreenfair.org/",
+      "url": "https://www.evergreenfair.org/calendar.aspx",
       "sourceType": "html",
       "city": "Monroe",
       "metroId": "seattle",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 2,
       "fetches": [
         {
-          "url": "https://www.evergreenfair.org/",
+          "url": "https://www.evergreenfair.org/calendar.aspx",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -769,7 +694,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -782,9 +707,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 8,
+      "liveEvents": 7,
       "fallbackEvents": 0,
-      "eventCount": 8,
+      "eventCount": 7,
       "fetches": [
         {
           "url": "https://kcls.bibliocommons.com/v2/events",
@@ -796,7 +721,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 8,
+      "extractedEvents": 7,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -809,9 +734,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 18,
+      "liveEvents": 16,
       "fallbackEvents": 0,
-      "eventCount": 18,
+      "eventCount": 16,
       "fetches": [
         {
           "url": "https://sno-isle.bibliocommons.com/v2/events",
@@ -823,7 +748,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 18,
+      "extractedEvents": 16,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -836,21 +761,21 @@
       "metroId": "seattle",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 22,
+      "liveEvents": 24,
       "fallbackEvents": 0,
-      "eventCount": 22,
+      "eventCount": 24,
       "fetches": [
         {
           "url": "https://bellevuebotanical.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=92; pages=1"
+          "contentType": "application/json; source=tribe-events; events=94; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=92; pages=1",
+      "contentType": "application/json; source=tribe-events; events=94; pages=1",
       "rejectedLiveEvents": 69,
-      "extractedEvents": 91,
+      "extractedEvents": 93,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1072,27 +997,27 @@
     {
       "id": "the-showbox",
       "name": "The Showbox",
-      "url": "https://www.showboxpresents.com/events",
+      "url": "https://www.showboxpresents.com/events/rss",
       "sourceType": "html",
       "city": "Seattle",
       "metroId": "seattle",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 8,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 8,
       "fetches": [
         {
-          "url": "https://www.showboxpresents.com/events",
+          "url": "https://www.showboxpresents.com/events/rss",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "application/rss+xml"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
+      "contentType": "application/rss+xml",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "extractedEvents": 8,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1151,18 +1076,18 @@
     {
       "id": "unexpected-productions",
       "name": "Unexpected Productions",
-      "url": "https://www.unexpectedproductions.org/shows",
+      "url": "https://www.unexpectedproductions.org/events/list/",
       "sourceType": "html",
       "city": "Seattle",
       "metroId": "seattle",
       "category": "Comedy",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 12,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 12,
       "fetches": [
         {
-          "url": "https://www.unexpectedproductions.org/shows",
+          "url": "https://www.unexpectedproductions.org/events/list/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -1171,7 +1096,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "extractedEvents": 12,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

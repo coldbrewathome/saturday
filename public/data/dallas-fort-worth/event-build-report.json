@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "dallas-fort-worth",
-  "generatedAt": "2026-07-01T03:55:11.310Z",
+  "generatedAt": "2026-07-02T13:35:24.367Z",
   "registryPath": "data/event-sources-dallas-fort-worth.json",
   "outputPath": "public/data/dallas-fort-worth/events.json",
-  "eventCount": 958,
-  "adultsEventCount": 28,
+  "eventCount": 984,
+  "adultsEventCount": 143,
   "sourceCount": 27,
-  "liveEventCount": 892,
-  "lastKnownGoodEventCount": 81,
+  "liveEventCount": 1114,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 4,
-  "operatorAlertCount": 10,
+  "operatorAlertCount": 6,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:55:11.310Z",
+      "fetchedAt": "2026-07-02T13:35:24.367Z",
       "fetches": [
         {
           "url": "https://www.perotmuseum.org/events/",
@@ -53,42 +53,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:55:11.310Z",
+      "fetchedAt": "2026-07-02T13:35:24.367Z",
       "fetches": [
         {
           "url": "https://www.fairparkdallas.com/events/detail/2026-state-fair-of-texas",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "dallas-fort-worth",
-      "sourceId": "dfw-garland-library-civicplus",
-      "sourceName": "Garland Library Calendar",
-      "sourceType": "civicpluscal",
-      "url": "https://www.garlandtx.gov/calendar.aspx?CID=24&view=list&showPastEvents=false",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 81,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 81,
-      "fetchedAt": "2026-07-01T03:55:11.310Z",
-      "fetches": [
-        {
-          "url": "https://www.garlandtx.gov/calendar.aspx?CID=24&view=list&showPastEvents=false",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        },
-        {
-          "url": "https://www.garlandtx.gov/calendar.aspx?CID=24&view=list&showPastEvents=false&month=8&year=2026",
-          "status": "fetch-error",
-          "reason": "fetch failed"
         }
       ]
     },
@@ -107,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:55:11.310Z",
+      "fetchedAt": "2026-07-02T13:35:24.367Z",
       "fetches": [
         {
           "url": "https://www.treesdallas.com/events",
@@ -118,51 +89,27 @@
       ]
     },
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "dallas-fort-worth",
       "sourceId": "the-bomb-factory",
       "sourceName": "The Factory in Deep Ellum",
       "sourceType": "html",
-      "url": "https://www.thefactoryindeepellum.com/events",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
+      "url": "https://www.thebombfactory.com/events/rss",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:55:11.310Z",
+      "fetchedAt": "2026-07-02T13:35:24.367Z",
       "fetches": [
         {
-          "url": "https://www.thefactoryindeepellum.com/events",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "dallas-fort-worth",
-      "sourceId": "dada-dallas",
-      "sourceName": "Dada",
-      "sourceType": "html",
-      "url": "https://www.daboredada.com/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:55:11.310Z",
-      "fetches": [
-        {
-          "url": "https://www.daboredada.com/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "url": "https://www.thebombfactory.com/events/rss",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/rss+xml"
         }
       ]
     },
@@ -181,62 +128,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:55:11.310Z",
+      "fetchedAt": "2026-07-02T13:35:24.367Z",
       "fetches": [
         {
           "url": "https://www.tulipsftw.com/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "dallas-fort-worth",
-      "sourceId": "dallas-comedy-club",
-      "sourceName": "Dallas Comedy Club",
-      "sourceType": "html",
-      "url": "https://dallascomedyclub.com/shows/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:55:11.310Z",
-      "fetches": [
-        {
-          "url": "https://dallascomedyclub.com/shows/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "dallas-fort-worth",
-      "sourceId": "hyenas-dfw",
-      "sourceName": "Hyena's Comedy Club",
-      "sourceType": "html",
-      "url": "https://www.hyenascomedynightclub.com/calendar",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:55:11.310Z",
-      "fetches": [
-        {
-          "url": "https://www.hyenascomedynightclub.com/calendar",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -255,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:55:11.310Z",
+      "fetchedAt": "2026-07-02T13:35:24.367Z",
       "fetches": [
         {
           "url": "https://www.fairparkdallas.com/events",
@@ -452,21 +350,21 @@
       "metroId": "dallas-fort-worth",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 239,
+      "liveEvents": 240,
       "fallbackEvents": 0,
-      "eventCount": 239,
+      "eventCount": 240,
       "fetches": [
         {
           "url": "https://plano.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=451; locations=6"
+          "contentType": "application/json; source=communico-events; events=439; locations=6"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=451; locations=6",
-      "rejectedLiveEvents": 8,
-      "extractedEvents": 247,
+      "contentType": "application/json; source=communico-events; events=439; locations=6",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 240,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -506,9 +404,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 8,
+      "liveEvents": 7,
       "fallbackEvents": 0,
-      "eventCount": 8,
+      "eventCount": 7,
       "fetches": [
         {
           "url": "https://denton.bibliocommons.com/v2/events",
@@ -520,7 +418,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 8,
+      "extractedEvents": 7,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -533,9 +431,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 172,
+      "liveEvents": 180,
       "fallbackEvents": 0,
-      "eventCount": 172,
+      "eventCount": 180,
       "fetches": [
         {
           "url": "https://fortworthtexas.libcal.com/calendar",
@@ -546,8 +444,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 11,
-      "extractedEvents": 183,
+      "rejectedLiveEvents": 13,
+      "extractedEvents": 193,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -560,9 +458,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 197,
+      "liveEvents": 210,
       "fallbackEvents": 0,
-      "eventCount": 197,
+      "eventCount": 210,
       "fetches": [
         {
           "url": "https://arlingtontx.libcal.com/calendar",
@@ -574,7 +472,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 197,
+      "extractedEvents": 210,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -587,9 +485,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 103,
+      "liveEvents": 99,
       "fallbackEvents": 0,
-      "eventCount": 103,
+      "eventCount": 99,
       "fetches": [
         {
           "url": "https://irvinglibrary.libcal.com/calendar",
@@ -600,8 +498,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 89,
-      "extractedEvents": 192,
+      "rejectedLiveEvents": 106,
+      "extractedEvents": 205,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -627,8 +525,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 29,
-      "extractedEvents": 119,
+      "rejectedLiveEvents": 26,
+      "extractedEvents": 116,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -640,26 +538,30 @@
       "city": "Garland",
       "metroId": "dallas-fort-worth",
       "category": "Library",
-      "status": "fetch-error",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 90,
       "fallbackEvents": 0,
-      "eventCount": 81,
+      "eventCount": 90,
       "fetches": [
         {
           "url": "https://www.garlandtx.gov/calendar.aspx?CID=24&view=list&showPastEvents=false",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         },
         {
           "url": "https://www.garlandtx.gov/calendar.aspx?CID=24&view=list&showPastEvents=false&month=8&year=2026",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ],
-      "reason": "fetch failed",
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 81,
-      "recoveryMode": "last-known-good"
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 3,
+      "extractedEvents": 93,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "dfw-texas-discovery-gardens-tribe",
@@ -744,50 +646,54 @@
     {
       "id": "the-bomb-factory",
       "name": "The Factory in Deep Ellum",
-      "url": "https://www.thefactoryindeepellum.com/events",
+      "url": "https://www.thebombfactory.com/events/rss",
       "sourceType": "html",
       "city": "Dallas",
       "metroId": "dallas-fort-worth",
       "category": "Music",
-      "status": "http-error",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
-          "url": "https://www.thefactoryindeepellum.com/events",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=utf-8"
+          "url": "https://www.thebombfactory.com/events/rss",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/rss+xml"
         }
       ],
-      "httpStatus": 404,
-      "contentType": "text/html; charset=utf-8",
-      "extractedEvents": 0,
+      "httpStatus": 200,
+      "contentType": "application/rss+xml",
+      "rejectedLiveEvents": 61,
+      "extractedEvents": 61,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
     {
       "id": "dada-dallas",
       "name": "Dada",
-      "url": "https://www.daboredada.com/events",
+      "url": "https://dadadallas.com/calendar/",
       "sourceType": "html",
       "city": "Dallas",
       "metroId": "dallas-fort-worth",
       "category": "Music",
-      "status": "fetch-error",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 2,
       "fetches": [
         {
-          "url": "https://www.daboredada.com/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "url": "https://dadadallas.com/calendar/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "reason": "fetch failed",
-      "extractedEvents": 0,
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -821,50 +727,54 @@
     {
       "id": "dallas-comedy-club",
       "name": "Dallas Comedy Club",
-      "url": "https://dallascomedyclub.com/shows/",
+      "url": "https://www.prekindle.com/events/dallas-comedy-club",
       "sourceType": "html",
       "city": "Dallas",
       "metroId": "dallas-fort-worth",
       "category": "Comedy",
-      "status": "fetch-error",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 97,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 97,
       "fetches": [
         {
-          "url": "https://dallascomedyclub.com/shows/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "url": "https://www.prekindle.com/events/dallas-comedy-club",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=UTF-8"
         }
       ],
-      "reason": "fetch failed",
-      "extractedEvents": 0,
+      "httpStatus": 200,
+      "contentType": "text/html;charset=UTF-8",
+      "rejectedLiveEvents": 449,
+      "extractedEvents": 546,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
     {
       "id": "hyenas-dfw",
       "name": "Hyena's Comedy Club",
-      "url": "https://www.hyenascomedynightclub.com/calendar",
+      "url": "https://www.prekindle.com/events/hyenasdallas",
       "sourceType": "html",
       "city": "Dallas",
       "metroId": "dallas-fort-worth",
       "category": "Comedy",
-      "status": "http-error",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 17,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 17,
       "fetches": [
         {
-          "url": "https://www.hyenascomedynightclub.com/calendar",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=utf-8"
+          "url": "https://www.prekindle.com/events/hyenasdallas",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=UTF-8"
         }
       ],
-      "httpStatus": 404,
-      "contentType": "text/html; charset=utf-8",
-      "extractedEvents": 0,
+      "httpStatus": 200,
+      "contentType": "text/html;charset=UTF-8",
+      "rejectedLiveEvents": 74,
+      "extractedEvents": 91,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -931,21 +841,21 @@
       "metroId": "dallas-fort-worth",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 11,
+      "liveEvents": 10,
       "fallbackEvents": 0,
-      "eventCount": 11,
+      "eventCount": 10,
       "fetches": [
         {
           "url": "https://lakewoodbrewing.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=44; pages=1"
+          "contentType": "application/json; source=tribe-events; events=43; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=44; pages=1",
+      "contentType": "application/json; source=tribe-events; events=43; pages=1",
       "rejectedLiveEvents": 25,
-      "extractedEvents": 36,
+      "extractedEvents": 35,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

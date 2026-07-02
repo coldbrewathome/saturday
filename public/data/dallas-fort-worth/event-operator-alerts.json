@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "dallas-fort-worth",
-  "generatedAt": "2026-07-01T03:55:11.310Z",
-  "alertCount": 10,
+  "generatedAt": "2026-07-02T13:35:24.367Z",
+  "alertCount": 6,
   "alerts": [
     {
       "severity": "warning",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:55:11.310Z",
+      "fetchedAt": "2026-07-02T13:35:24.367Z",
       "fetches": [
         {
           "url": "https://www.perotmuseum.org/events/",
@@ -44,42 +44,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:55:11.310Z",
+      "fetchedAt": "2026-07-02T13:35:24.367Z",
       "fetches": [
         {
           "url": "https://www.fairparkdallas.com/events/detail/2026-state-fair-of-texas",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "dallas-fort-worth",
-      "sourceId": "dfw-garland-library-civicplus",
-      "sourceName": "Garland Library Calendar",
-      "sourceType": "civicpluscal",
-      "url": "https://www.garlandtx.gov/calendar.aspx?CID=24&view=list&showPastEvents=false",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 81,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 81,
-      "fetchedAt": "2026-07-01T03:55:11.310Z",
-      "fetches": [
-        {
-          "url": "https://www.garlandtx.gov/calendar.aspx?CID=24&view=list&showPastEvents=false",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        },
-        {
-          "url": "https://www.garlandtx.gov/calendar.aspx?CID=24&view=list&showPastEvents=false&month=8&year=2026",
-          "status": "fetch-error",
-          "reason": "fetch failed"
         }
       ]
     },
@@ -98,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:55:11.310Z",
+      "fetchedAt": "2026-07-02T13:35:24.367Z",
       "fetches": [
         {
           "url": "https://www.treesdallas.com/events",
@@ -109,51 +80,27 @@
       ]
     },
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "dallas-fort-worth",
       "sourceId": "the-bomb-factory",
       "sourceName": "The Factory in Deep Ellum",
       "sourceType": "html",
-      "url": "https://www.thefactoryindeepellum.com/events",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
+      "url": "https://www.thebombfactory.com/events/rss",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:55:11.310Z",
+      "fetchedAt": "2026-07-02T13:35:24.367Z",
       "fetches": [
         {
-          "url": "https://www.thefactoryindeepellum.com/events",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "dallas-fort-worth",
-      "sourceId": "dada-dallas",
-      "sourceName": "Dada",
-      "sourceType": "html",
-      "url": "https://www.daboredada.com/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:55:11.310Z",
-      "fetches": [
-        {
-          "url": "https://www.daboredada.com/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "url": "https://www.thebombfactory.com/events/rss",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/rss+xml"
         }
       ]
     },
@@ -172,62 +119,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:55:11.310Z",
+      "fetchedAt": "2026-07-02T13:35:24.367Z",
       "fetches": [
         {
           "url": "https://www.tulipsftw.com/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "dallas-fort-worth",
-      "sourceId": "dallas-comedy-club",
-      "sourceName": "Dallas Comedy Club",
-      "sourceType": "html",
-      "url": "https://dallascomedyclub.com/shows/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:55:11.310Z",
-      "fetches": [
-        {
-          "url": "https://dallascomedyclub.com/shows/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "dallas-fort-worth",
-      "sourceId": "hyenas-dfw",
-      "sourceName": "Hyena's Comedy Club",
-      "sourceType": "html",
-      "url": "https://www.hyenascomedynightclub.com/calendar",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:55:11.310Z",
-      "fetches": [
-        {
-          "url": "https://www.hyenascomedynightclub.com/calendar",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -246,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:55:11.310Z",
+      "fetchedAt": "2026-07-02T13:35:24.367Z",
       "fetches": [
         {
           "url": "https://www.fairparkdallas.com/events",

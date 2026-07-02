@@ -1,37 +1,37 @@
 {
   "schemaVersion": 1,
   "metroId": "chicago",
-  "generatedAt": "2026-07-01T03:53:38.440Z",
+  "generatedAt": "2026-07-02T13:37:26.782Z",
   "registryPath": "data/event-sources-chicago.json",
   "outputPath": "public/data/chicago/events.json",
-  "eventCount": 1007,
-  "adultsEventCount": 36,
+  "eventCount": 1003,
+  "adultsEventCount": 56,
   "sourceCount": 28,
-  "liveEventCount": 1028,
+  "liveEventCount": 1043,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 15,
+  "operatorAlertCount": 13,
   "errors": [],
   "operatorAlerts": [
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "chicago",
       "sourceId": "lake-county-fair-il",
       "sourceName": "Lake County Fair",
       "sourceType": "html",
-      "url": "https://lcfair.com/",
+      "url": "https://www.lcfairgrounds.com/events",
       "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:38.440Z",
+      "fetchedAt": "2026-07-02T13:37:26.782Z",
       "fetches": [
         {
-          "url": "https://lcfair.com/",
+          "url": "https://www.lcfairgrounds.com/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html;charset=utf-8"
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:38.440Z",
+      "fetchedAt": "2026-07-02T13:37:26.782Z",
       "fetches": [
         {
           "url": "https://oakpark.librarycalendar.com/events/month",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:38.440Z",
+      "fetchedAt": "2026-07-02T13:37:26.782Z",
       "fetches": [
         {
           "url": "https://napervillepl.librarycalendar.com/events/month",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:38.440Z",
+      "fetchedAt": "2026-07-02T13:37:26.782Z",
       "fetches": [
         {
           "url": "https://mortonarb.org/explore/activities/events/arbor-evenings/",
@@ -128,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:38.440Z",
+      "fetchedAt": "2026-07-02T13:37:26.782Z",
       "fetches": [
         {
           "url": "https://metrochicago.com/shows/",
@@ -153,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:38.440Z",
+      "fetchedAt": "2026-07-02T13:37:26.782Z",
       "fetches": [
         {
           "url": "https://www.emptybottle.com/events/",
@@ -178,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:38.440Z",
+      "fetchedAt": "2026-07-02T13:37:26.782Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
@@ -203,63 +203,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:38.440Z",
+      "fetchedAt": "2026-07-02T13:37:26.782Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
           "status": "http-error",
           "httpStatus": 404,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "chicago",
-      "sourceId": "thalia-hall-chicago",
-      "sourceName": "Thalia Hall",
-      "sourceType": "html",
-      "url": "https://www.thaliahallchicago.com/events",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:38.440Z",
-      "fetches": [
-        {
-          "url": "https://www.thaliahallchicago.com/events",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html;charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "chicago",
-      "sourceId": "second-city-chicago",
-      "sourceName": "The Second City",
-      "sourceType": "html",
-      "url": "https://www.secondcity.com/shows/chicago",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:38.440Z",
-      "fetches": [
-        {
-          "url": "https://www.secondcity.com/shows/chicago",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -278,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:38.440Z",
+      "fetchedAt": "2026-07-02T13:37:26.782Z",
       "fetches": [
         {
           "url": "https://chicago.zanies.com/events",
@@ -303,7 +253,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:38.440Z",
+      "fetchedAt": "2026-07-02T13:37:26.782Z",
       "fetches": [
         {
           "url": "https://www.hideoutchicago.com/events",
@@ -328,7 +278,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:38.440Z",
+      "fetchedAt": "2026-07-02T13:37:26.782Z",
       "fetches": [
         {
           "url": "https://www.choosechicago.com/articles/festivals-special-events/millennium-park-summer-music-series/",
@@ -353,7 +303,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:38.440Z",
+      "fetchedAt": "2026-07-02T13:37:26.782Z",
       "fetches": [
         {
           "url": "https://www.chicagojazz.com/post/city-of-chicago-announces-2026-chicago-jazz-festival-lineup-sept-3-6-featuring-dee-dee-bridgewater",
@@ -378,7 +328,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-01T03:53:38.440Z",
+      "fetchedAt": "2026-07-02T13:37:26.782Z",
       "fetches": [
         {
           "url": "https://www.choosechicago.com/articles/festivals-special-events/chicago-blues-festival/",
@@ -413,9 +363,9 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 18,
+      "liveEvents": 20,
       "fallbackEvents": 0,
-      "eventCount": 18,
+      "eventCount": 20,
       "fetches": [
         {
           "url": "https://chipublib.bibliocommons.com/v2/events?audiences=53f250153860d10000000010",
@@ -427,7 +377,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 18,
+      "extractedEvents": 20,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -440,9 +390,9 @@
       "metroId": "chicago",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 41,
+      "liveEvents": 38,
       "fallbackEvents": 0,
-      "eventCount": 41,
+      "eventCount": 38,
       "fetches": [
         {
           "url": "https://www.chicagoparkdistrict.com/events?field_event_category_target_id=766&field_location_target_id=All&field_community_area_target_id=All&field_zip_code_target_id=All&title=&field_date_value=&field_age_range_target_id=All",
@@ -489,8 +439,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 10,
-      "extractedEvents": 51,
+      "rejectedLiveEvents": 14,
+      "extractedEvents": 52,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -503,9 +453,9 @@
       "metroId": "chicago",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 32,
+      "liveEvents": 29,
       "fallbackEvents": 0,
-      "eventCount": 32,
+      "eventCount": 29,
       "fetches": [
         {
           "url": "https://www.fieldmuseum.org/our-events",
@@ -516,8 +466,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; charset=utf-8",
-      "rejectedLiveEvents": 17,
-      "extractedEvents": 49,
+      "rejectedLiveEvents": 33,
+      "extractedEvents": 62,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -605,7 +555,7 @@
     {
       "id": "lake-county-fair-il",
       "name": "Lake County Fair",
-      "url": "https://lcfair.com/",
+      "url": "https://www.lcfairgrounds.com/events",
       "sourceType": "html",
       "city": "Grayslake",
       "metroId": "chicago",
@@ -616,7 +566,7 @@
       "eventCount": 0,
       "fetches": [
         {
-          "url": "https://lcfair.com/",
+          "url": "https://www.lcfairgrounds.com/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html;charset=utf-8"
@@ -624,8 +574,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html;charset=utf-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "rejectedLiveEvents": 2,
+      "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -665,21 +615,21 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 258,
+      "liveEvents": 252,
       "fallbackEvents": 0,
-      "eventCount": 258,
+      "eventCount": 252,
       "fetches": [
         {
           "url": "https://schaumburg.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=406; locations=4"
+          "contentType": "application/json; source=communico-events; events=393; locations=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=406; locations=4",
-      "rejectedLiveEvents": 5,
-      "extractedEvents": 263,
+      "contentType": "application/json; source=communico-events; events=393; locations=4",
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 253,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -692,21 +642,21 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 114,
+      "liveEvents": 116,
       "fallbackEvents": 0,
-      "eventCount": 114,
+      "eventCount": 116,
       "fetches": [
         {
           "url": "https://downersgrove.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=180; locations=1"
+          "contentType": "application/json; source=communico-events; events=177; locations=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=180; locations=1",
-      "rejectedLiveEvents": 5,
-      "extractedEvents": 119,
+      "contentType": "application/json; source=communico-events; events=177; locations=1",
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 117,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -719,21 +669,21 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 247,
+      "liveEvents": 246,
       "fallbackEvents": 0,
-      "eventCount": 247,
+      "eventCount": 246,
       "fetches": [
         {
           "url": "https://egvpl.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=347; locations=3"
+          "contentType": "application/json; source=communico-events; events=343; locations=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=347; locations=3",
-      "rejectedLiveEvents": 5,
-      "extractedEvents": 252,
+      "contentType": "application/json; source=communico-events; events=343; locations=3",
+      "rejectedLiveEvents": 3,
+      "extractedEvents": 249,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -800,9 +750,9 @@
       "metroId": "chicago",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 179,
+      "liveEvents": 184,
       "fallbackEvents": 0,
-      "eventCount": 179,
+      "eventCount": 184,
       "fetches": [
         {
           "url": "https://fpdcc.com/events/",
@@ -813,7 +763,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 15,
+      "rejectedLiveEvents": 10,
       "extractedEvents": 194,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -952,44 +902,45 @@
     {
       "id": "thalia-hall-chicago",
       "name": "Thalia Hall",
-      "url": "https://www.thaliahallchicago.com/events",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
       "sourceType": "html",
       "city": "Chicago",
       "metroId": "chicago",
       "category": "Music",
-      "status": "http-error",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 18,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 18,
       "fetches": [
         {
-          "url": "https://www.thaliahallchicago.com/events",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html;charset=utf-8"
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json;charset=utf-8"
         }
       ],
-      "httpStatus": 404,
-      "contentType": "text/html;charset=utf-8",
-      "extractedEvents": 0,
+      "httpStatus": 200,
+      "contentType": "application/json;charset=utf-8",
+      "rejectedLiveEvents": 64,
+      "extractedEvents": 82,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
     {
       "id": "second-city-chicago",
       "name": "The Second City",
-      "url": "https://www.secondcity.com/shows/chicago",
+      "url": "https://www.secondcity.com/show-finder/chicago",
       "sourceType": "html",
       "city": "Chicago",
       "metroId": "chicago",
       "category": "Comedy",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
-          "url": "https://www.secondcity.com/shows/chicago",
+          "url": "https://www.secondcity.com/show-finder/chicago",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -998,7 +949,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
