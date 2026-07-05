@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "austin",
-  "generatedAt": "2026-07-02T12:43:24.503Z",
-  "alertCount": 14,
+  "generatedAt": "2026-07-05T20:28:29.427Z",
+  "alertCount": 15,
   "alerts": [
     {
       "severity": "critical",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T12:43:24.503Z",
+      "fetchedAt": "2026-07-05T20:28:29.427Z",
       "fetches": [
         {
           "url": "https://library.austintexas.gov/events/calendar",
@@ -45,7 +45,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T12:43:24.503Z",
+      "fetchedAt": "2026-07-05T20:28:29.427Z",
       "fetches": [
         {
           "url": "https://thinkeryaustin.org/visit-us/",
@@ -70,7 +70,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T12:43:24.503Z",
+      "fetchedAt": "2026-07-05T20:28:29.427Z",
       "fetches": [
         {
           "url": "https://www.thestoryoftexas.com/visit/calendar",
@@ -81,21 +81,21 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "austin",
       "sourceId": "lbj-library",
       "sourceName": "LBJ Presidential Library",
       "sourceType": "html",
       "url": "https://www.lbjlibrary.org/events",
       "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T12:43:24.503Z",
+      "fetchedAt": "2026-07-05T20:28:29.427Z",
       "fetches": [
         {
           "url": "https://www.lbjlibrary.org/events",
@@ -120,7 +120,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T12:43:24.503Z",
+      "fetchedAt": "2026-07-05T20:28:29.427Z",
       "fetches": [
         {
           "url": "https://blantonmuseum.org/events/",
@@ -145,13 +145,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T12:43:24.503Z",
+      "fetchedAt": "2026-07-05T20:28:29.427Z",
       "fetches": [
         {
           "url": "https://www.umlaufsculpture.org/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "austin",
+      "sourceId": "austin-symphony-july4-2026",
+      "sourceName": "Austin Symphony Orchestra July 4th Concert and Fireworks (H-E-B)",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.starspangledfest.com/july-4",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-05T20:28:29.427Z",
+      "fetches": [
+        {
+          "url": "https://www.starspangledfest.com/july-4",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
         }
       ]
     },
@@ -170,7 +195,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T12:43:24.503Z",
+      "fetchedAt": "2026-07-05T20:28:29.427Z",
       "fetches": [
         {
           "url": "https://stubbsaustin.com/concert-calendar/",
@@ -195,7 +220,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T12:43:24.503Z",
+      "fetchedAt": "2026-07-05T20:28:29.427Z",
       "fetches": [
         {
           "url": "https://mohawkaustin.com/calendar",
@@ -220,7 +245,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T12:43:24.503Z",
+      "fetchedAt": "2026-07-05T20:28:29.427Z",
       "fetches": [
         {
           "url": "https://continentalclub.com/austin-tx/",
@@ -245,7 +270,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T12:43:24.503Z",
+      "fetchedAt": "2026-07-05T20:28:29.427Z",
       "fetches": [
         {
           "url": "https://antonesnightclub.com/calendar/",
@@ -270,7 +295,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T12:43:24.503Z",
+      "fetchedAt": "2026-07-05T20:28:29.427Z",
       "fetches": [
         {
           "url": "https://acl-live.com/calendar/",
@@ -295,7 +320,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T12:43:24.503Z",
+      "fetchedAt": "2026-07-05T20:28:29.427Z",
       "fetches": [
         {
           "url": "https://drafthouse.com/austin/calendar",
@@ -320,7 +345,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T12:43:24.503Z",
+      "fetchedAt": "2026-07-05T20:28:29.427Z",
       "fetches": [
         {
           "url": "https://www.capcitycomedy.com/calendar",
@@ -345,7 +370,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T12:43:24.503Z",
+      "fetchedAt": "2026-07-05T20:28:29.427Z",
       "fetches": [
         {
           "url": "https://pecanstreetfestival.org/event-info/",

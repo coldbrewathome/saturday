@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "honolulu",
-  "generatedAt": "2026-07-02T13:40:39.383Z",
+  "generatedAt": "2026-07-05T20:27:42.320Z",
   "registryPath": "data/event-sources-honolulu.json",
   "outputPath": "public/data/honolulu/events.json",
-  "eventCount": 403,
-  "adultsEventCount": 36,
+  "eventCount": 399,
+  "adultsEventCount": 29,
   "sourceCount": 13,
-  "liveEventCount": 434,
-  "lastKnownGoodEventCount": 0,
+  "liveEventCount": 427,
+  "lastKnownGoodEventCount": 1,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 6,
+  "operatorAlertCount": 7,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:40:39.383Z",
+      "fetchedAt": "2026-07-05T20:27:42.320Z",
       "fetches": [
         {
           "url": "https://www.bishopmuseum.org/exhibits-and-programs/events/",
@@ -54,7 +54,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:40:39.383Z",
+      "fetchedAt": "2026-07-05T20:27:42.320Z",
       "fetches": [
         {
           "url": "https://honolulumuseum.org/events/",
@@ -79,12 +79,37 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:40:39.383Z",
+      "fetchedAt": "2026-07-05T20:27:42.320Z",
       "fetches": [
         {
           "url": "https://www.honoluluzoo.org/experiences-events/",
           "status": "http-error",
           "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "honolulu",
+      "sourceId": "hawaii-childrens-discovery",
+      "sourceName": "Hawaii Children's Discovery Center",
+      "sourceType": "html",
+      "url": "https://www.discoverycenterhawaii.org/event-list",
+      "status": "ok-last-known-good",
+      "issueType": "zero-extracted",
+      "reason": "source produced no live events; using last-known-good future events",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-07-05T20:27:42.320Z",
+      "fetches": [
+        {
+          "url": "https://www.discoverycenterhawaii.org/event-list",
+          "status": "ok",
+          "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ]
@@ -104,7 +129,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:40:39.383Z",
+      "fetchedAt": "2026-07-05T20:27:42.320Z",
       "fetches": [
         {
           "url": "https://calendar.google.com/calendar/ical/hawaii.edu_ur7iq68mqshu5q73n79rmb4jrk%40group.calendar.google.com/public/basic.ics",
@@ -129,7 +154,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:40:39.383Z",
+      "fetchedAt": "2026-07-05T20:27:42.320Z",
       "fetches": [
         {
           "url": "https://www.kualoa.com/activities/",
@@ -154,7 +179,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:40:39.383Z",
+      "fetchedAt": "2026-07-05T20:27:42.320Z",
       "fetches": [
         {
           "url": "https://www.alohacomedyclub.com/calendar",
@@ -174,9 +199,9 @@
       "metroId": "honolulu",
       "category": null,
       "status": "ok",
-      "liveEvents": 7,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 7,
+      "eventCount": 0,
       "fetches": []
     },
     {
@@ -188,9 +213,9 @@
       "metroId": "honolulu",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 394,
+      "liveEvents": 397,
       "fallbackEvents": 0,
-      "eventCount": 394,
+      "eventCount": 397,
       "fetches": [
         {
           "url": "https://www.librarieshawaii.org/events/",
@@ -201,8 +226,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=400; pages=8",
-      "rejectedLiveEvents": 2,
-      "extractedEvents": 396,
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 398,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -295,8 +320,8 @@
       "city": "Honolulu",
       "metroId": "honolulu",
       "category": "Museum",
-      "status": "ok",
-      "liveEvents": 1,
+      "status": "ok-last-known-good",
+      "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 1,
       "fetches": [
@@ -310,9 +335,10 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "recoveryMode": "last-known-good",
+      "reason": "source produced no live events; using last-known-good future events"
     },
     {
       "id": "waikiki-aquarium",
@@ -454,21 +480,21 @@
       "metroId": "honolulu",
       "category": "Theater",
       "status": "ok",
-      "liveEvents": 27,
+      "liveEvents": 25,
       "fallbackEvents": 0,
-      "eventCount": 27,
+      "eventCount": 25,
       "fetches": [
         {
           "url": "https://blaisdellcenter.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=192; pages=2"
+          "contentType": "application/json; source=tribe-events; events=188; pages=2"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=192; pages=2",
-      "rejectedLiveEvents": 149,
-      "extractedEvents": 176,
+      "contentType": "application/json; source=tribe-events; events=188; pages=2",
+      "rejectedLiveEvents": 147,
+      "extractedEvents": 172,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

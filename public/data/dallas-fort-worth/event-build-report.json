@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "dallas-fort-worth",
-  "generatedAt": "2026-07-02T13:35:24.367Z",
+  "generatedAt": "2026-07-05T20:22:35.362Z",
   "registryPath": "data/event-sources-dallas-fort-worth.json",
   "outputPath": "public/data/dallas-fort-worth/events.json",
-  "eventCount": 984,
-  "adultsEventCount": 143,
+  "eventCount": 1008,
+  "adultsEventCount": 126,
   "sourceCount": 27,
-  "liveEventCount": 1114,
+  "liveEventCount": 1129,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 4,
-  "operatorAlertCount": 6,
+  "operatorAlertCount": 7,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:35:24.367Z",
+      "fetchedAt": "2026-07-05T20:22:35.362Z",
       "fetches": [
         {
           "url": "https://www.perotmuseum.org/events/",
@@ -53,10 +53,35 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:35:24.367Z",
+      "fetchedAt": "2026-07-05T20:22:35.362Z",
       "fetches": [
         {
           "url": "https://www.fairparkdallas.com/events/detail/2026-state-fair-of-texas",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dfw-fort-worths-fourth-2026",
+      "sourceName": "Fort Worth's Fourth (July 4, 2026)",
+      "sourceType": "officialTextEvents",
+      "url": "https://fortworthsfourth.com/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-05T20:22:35.362Z",
+      "fetches": [
+        {
+          "url": "https://fortworthsfourth.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -78,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:35:24.367Z",
+      "fetchedAt": "2026-07-05T20:22:35.362Z",
       "fetches": [
         {
           "url": "https://www.treesdallas.com/events",
@@ -103,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:35:24.367Z",
+      "fetchedAt": "2026-07-05T20:22:35.362Z",
       "fetches": [
         {
           "url": "https://www.thebombfactory.com/events/rss",
@@ -128,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:35:24.367Z",
+      "fetchedAt": "2026-07-05T20:22:35.362Z",
       "fetches": [
         {
           "url": "https://www.tulipsftw.com/events",
@@ -153,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:35:24.367Z",
+      "fetchedAt": "2026-07-05T20:22:35.362Z",
       "fetches": [
         {
           "url": "https://www.fairparkdallas.com/events",
@@ -174,9 +199,9 @@
       "metroId": "dallas-fort-worth",
       "category": null,
       "status": "ok",
-      "liveEvents": 8,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 8,
+      "eventCount": 1,
       "fetches": []
     },
     {
@@ -188,9 +213,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 8,
+      "liveEvents": 7,
       "fallbackEvents": 0,
-      "eventCount": 8,
+      "eventCount": 7,
       "fetches": [
         {
           "url": "https://dallaslibrary.librarymarket.com/events/month",
@@ -202,7 +227,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 8,
+      "extractedEvents": 7,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -215,9 +240,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 5,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 5,
       "fetches": [
         {
           "url": "https://www.dallasparks.org/RSSFeed.aspx?ModID=58&CID=Main-Calendar-14",
@@ -229,7 +254,7 @@
       "httpStatus": 200,
       "contentType": "text/xml; charset=utf-8",
       "rejectedLiveEvents": 1,
-      "extractedEvents": 3,
+      "extractedEvents": 6,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -269,9 +294,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 25,
+      "liveEvents": 22,
       "fallbackEvents": 0,
-      "eventCount": 25,
+      "eventCount": 22,
       "fetches": [
         {
           "url": "https://www.dallaszoo.com/dallas-zoo-events/calendar/",
@@ -283,7 +308,7 @@
       "httpStatus": 200,
       "contentType": "text/html; source=dallas-zoo-ajax; pages=3",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 25,
+      "extractedEvents": 22,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -350,21 +375,21 @@
       "metroId": "dallas-fort-worth",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 240,
+      "liveEvents": 249,
       "fallbackEvents": 0,
-      "eventCount": 240,
+      "eventCount": 249,
       "fetches": [
         {
           "url": "https://plano.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=439; locations=6"
+          "contentType": "application/json; source=communico-events; events=460; locations=6"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=439; locations=6",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 240,
+      "contentType": "application/json; source=communico-events; events=460; locations=6",
+      "rejectedLiveEvents": 5,
+      "extractedEvents": 254,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -377,12 +402,39 @@
       "metroId": "dallas-fort-worth",
       "category": "Library",
       "status": "ok",
+      "liveEvents": 14,
+      "fallbackEvents": 0,
+      "eventCount": 14,
+      "fetches": [
+        {
+          "url": "https://friscolibrary.bibliocommons.com/v2/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 14,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "dfw-denton-library-biblio",
+      "name": "Denton Public Library Events",
+      "url": "https://denton.bibliocommons.com/v2/events",
+      "sourceType": "biblioevents",
+      "city": "Denton",
+      "metroId": "dallas-fort-worth",
+      "category": "Library",
+      "status": "ok",
       "liveEvents": 12,
       "fallbackEvents": 0,
       "eventCount": 12,
       "fetches": [
         {
-          "url": "https://friscolibrary.bibliocommons.com/v2/events",
+          "url": "https://denton.bibliocommons.com/v2/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -396,33 +448,6 @@
       "recoveryMode": null
     },
     {
-      "id": "dfw-denton-library-biblio",
-      "name": "Denton Public Library Events",
-      "url": "https://denton.bibliocommons.com/v2/events",
-      "sourceType": "biblioevents",
-      "city": "Denton",
-      "metroId": "dallas-fort-worth",
-      "category": "Library",
-      "status": "ok",
-      "liveEvents": 7,
-      "fallbackEvents": 0,
-      "eventCount": 7,
-      "fetches": [
-        {
-          "url": "https://denton.bibliocommons.com/v2/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 7,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
       "id": "dfw-fort-worth-library-libcal",
       "name": "Fort Worth Public Library Events",
       "url": "https://fortworthtexas.libcal.com/calendar",
@@ -431,9 +456,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 180,
+      "liveEvents": 190,
       "fallbackEvents": 0,
-      "eventCount": 180,
+      "eventCount": 190,
       "fetches": [
         {
           "url": "https://fortworthtexas.libcal.com/calendar",
@@ -444,8 +469,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 13,
-      "extractedEvents": 193,
+      "rejectedLiveEvents": 15,
+      "extractedEvents": 205,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -458,9 +483,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 210,
+      "liveEvents": 222,
       "fallbackEvents": 0,
-      "eventCount": 210,
+      "eventCount": 222,
       "fetches": [
         {
           "url": "https://arlingtontx.libcal.com/calendar",
@@ -472,7 +497,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 210,
+      "extractedEvents": 222,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -485,9 +510,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 99,
+      "liveEvents": 94,
       "fallbackEvents": 0,
-      "eventCount": 99,
+      "eventCount": 94,
       "fetches": [
         {
           "url": "https://irvinglibrary.libcal.com/calendar",
@@ -499,7 +524,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 106,
-      "extractedEvents": 205,
+      "extractedEvents": 200,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -512,9 +537,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 90,
+      "liveEvents": 89,
       "fallbackEvents": 0,
-      "eventCount": 90,
+      "eventCount": 89,
       "fetches": [
         {
           "url": "https://mckinneytexas.libcal.com/calendar",
@@ -525,8 +550,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 26,
-      "extractedEvents": 116,
+      "rejectedLiveEvents": 23,
+      "extractedEvents": 112,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -539,9 +564,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 90,
+      "liveEvents": 92,
       "fallbackEvents": 0,
-      "eventCount": 90,
+      "eventCount": 92,
       "fetches": [
         {
           "url": "https://www.garlandtx.gov/calendar.aspx?CID=24&view=list&showPastEvents=false",
@@ -558,8 +583,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 3,
-      "extractedEvents": 93,
+      "rejectedLiveEvents": 2,
+      "extractedEvents": 94,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -572,21 +597,21 @@
       "metroId": "dallas-fort-worth",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 4,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://txdg.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=4; pages=1"
+          "contentType": "application/json; source=tribe-events; events=3; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=4; pages=1",
+      "contentType": "application/json; source=tribe-events; events=3; pages=1",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 4,
+      "extractedEvents": 3,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -599,9 +624,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://fortworthsfourth.com/",
@@ -612,7 +637,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -665,8 +690,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/rss+xml",
-      "rejectedLiveEvents": 61,
-      "extractedEvents": 61,
+      "rejectedLiveEvents": 58,
+      "extractedEvents": 58,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -679,9 +704,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://dadadallas.com/calendar/",
@@ -693,7 +718,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 2,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -733,9 +758,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Comedy",
       "status": "ok",
-      "liveEvents": 97,
+      "liveEvents": 91,
       "fallbackEvents": 0,
-      "eventCount": 97,
+      "eventCount": 91,
       "fetches": [
         {
           "url": "https://www.prekindle.com/events/dallas-comedy-club",
@@ -747,7 +772,7 @@
       "httpStatus": 200,
       "contentType": "text/html;charset=UTF-8",
       "rejectedLiveEvents": 449,
-      "extractedEvents": 546,
+      "extractedEvents": 540,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -760,9 +785,9 @@
       "metroId": "dallas-fort-worth",
       "category": "Comedy",
       "status": "ok",
-      "liveEvents": 17,
+      "liveEvents": 15,
       "fallbackEvents": 0,
-      "eventCount": 17,
+      "eventCount": 15,
       "fetches": [
         {
           "url": "https://www.prekindle.com/events/hyenasdallas",
@@ -773,8 +798,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html;charset=UTF-8",
-      "rejectedLiveEvents": 74,
-      "extractedEvents": 91,
+      "rejectedLiveEvents": 72,
+      "extractedEvents": 87,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -787,21 +812,21 @@
       "metroId": "dallas-fort-worth",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 4,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://tuppsbrewery.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=15; pages=1"
+          "contentType": "application/json; source=tribe-events; events=11; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=15; pages=1",
-      "rejectedLiveEvents": 2,
-      "extractedEvents": 6,
+      "contentType": "application/json; source=tribe-events; events=11; pages=1",
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 3,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -814,21 +839,21 @@
       "metroId": "dallas-fort-worth",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://www.peticolasbrewing.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=11; pages=1"
+          "contentType": "application/json; source=tribe-events; events=10; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=11; pages=1",
+      "contentType": "application/json; source=tribe-events; events=10; pages=1",
       "rejectedLiveEvents": 8,
-      "extractedEvents": 11,
+      "extractedEvents": 10,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -841,21 +866,21 @@
       "metroId": "dallas-fort-worth",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 10,
+      "liveEvents": 13,
       "fallbackEvents": 0,
-      "eventCount": 10,
+      "eventCount": 13,
       "fetches": [
         {
           "url": "https://lakewoodbrewing.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=43; pages=1"
+          "contentType": "application/json; source=tribe-events; events=45; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=43; pages=1",
+      "contentType": "application/json; source=tribe-events; events=45; pages=1",
       "rejectedLiveEvents": 25,
-      "extractedEvents": 35,
+      "extractedEvents": 38,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

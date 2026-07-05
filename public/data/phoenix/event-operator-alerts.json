@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "phoenix",
-  "generatedAt": "2026-07-02T13:38:56.448Z",
-  "alertCount": 5,
+  "generatedAt": "2026-07-05T20:26:10.231Z",
+  "alertCount": 6,
   "alerts": [
     {
       "severity": "critical",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:56.448Z",
+      "fetchedAt": "2026-07-05T20:26:10.231Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -44,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:56.448Z",
+      "fetchedAt": "2026-07-05T20:26:10.231Z",
       "fetches": [
         {
           "url": "https://azstatefair.com/",
@@ -69,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:56.448Z",
+      "fetchedAt": "2026-07-05T20:26:10.231Z",
       "fetches": [
         {
           "url": "https://www.crescentphx.com/events",
@@ -94,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:56.448Z",
+      "fetchedAt": "2026-07-05T20:26:10.231Z",
       "fetches": [
         {
           "url": "https://phoenix.standuplive.com/events",
@@ -119,12 +119,37 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:56.448Z",
+      "fetchedAt": "2026-07-05T20:26:10.231Z",
       "fetches": [
         {
           "url": "https://houseofcomedy.net/scottsdale",
           "status": "http-error",
           "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "phoenix",
+      "sourceId": "nile-theater-mesa",
+      "sourceName": "The Nile Theater",
+      "sourceType": "html",
+      "url": "https://www.theniletheater.com/events",
+      "status": "ok-last-known-good",
+      "issueType": "zero-in-window",
+      "reason": "source produced no live events; using last-known-good future events",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-07-05T20:26:10.231Z",
+      "fetches": [
+        {
+          "url": "https://www.theniletheater.com/events",
+          "status": "ok",
+          "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ]

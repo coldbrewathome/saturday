@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "philadelphia",
-  "generatedAt": "2026-07-02T13:38:11.809Z",
+  "generatedAt": "2026-07-05T20:24:48.792Z",
   "registryPath": "data/event-sources-philadelphia.json",
   "outputPath": "public/data/philadelphia/events.json",
-  "eventCount": 1108,
-  "adultsEventCount": 97,
+  "eventCount": 1179,
+  "adultsEventCount": 87,
   "sourceCount": 25,
-  "liveEventCount": 1165,
+  "liveEventCount": 1235,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 16,
-  "operatorAlertCount": 11,
+  "operatorAlertCount": 13,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:11.809Z",
+      "fetchedAt": "2026-07-05T20:24:48.792Z",
       "fetches": [
         {
           "url": "https://freelibraryfoundation.org/events/",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:11.809Z",
+      "fetchedAt": "2026-07-05T20:24:48.792Z",
       "fetches": [
         {
           "url": "https://www.phila.gov/departments/philadelphia-parks-recreation/#calendar",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:11.809Z",
+      "fetchedAt": "2026-07-05T20:24:48.792Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -103,13 +103,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:11.809Z",
+      "fetchedAt": "2026-07-05T20:24:48.792Z",
       "fetches": [
         {
           "url": "https://middletowngrangefair.org/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "wawa-welcome-america-2026",
+      "sourceName": "Wawa Welcome America 2026 (Philadelphia July 4 / America250)",
+      "sourceType": "officialTextEvents",
+      "url": "https://july4thphilly.com/events/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-05T20:24:48.792Z",
+      "fetches": [
+        {
+          "url": "https://july4thphilly.com/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -128,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:11.809Z",
+      "fetchedAt": "2026-07-05T20:24:48.792Z",
       "fetches": [
         {
           "url": "https://www.utphilly.com/events",
@@ -153,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:11.809Z",
+      "fetchedAt": "2026-07-05T20:24:48.792Z",
       "fetches": [
         {
           "url": "https://www.johnnybrendas.com/events",
@@ -178,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:11.809Z",
+      "fetchedAt": "2026-07-05T20:24:48.792Z",
       "fetches": [
         {
           "url": "https://philadelphia.heliumcomedy.com/events",
@@ -203,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:11.809Z",
+      "fetchedAt": "2026-07-05T20:24:48.792Z",
       "fetches": [
         {
           "url": "https://xpn.org/xpnfest/",
@@ -228,7 +253,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:11.809Z",
+      "fetchedAt": "2026-07-05T20:24:48.792Z",
       "fetches": [
         {
           "url": "https://manayunk.com/mnyk-events/manayunk-art-festival/",
@@ -253,7 +278,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:11.809Z",
+      "fetchedAt": "2026-07-05T20:24:48.792Z",
       "fetches": [
         {
           "url": "https://phillyfringe.org/",
@@ -278,10 +303,35 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:11.809Z",
+      "fetchedAt": "2026-07-05T20:24:48.792Z",
       "fetches": [
         {
           "url": "https://folkfest.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "wawa-welcome-america-2026",
+      "sourceName": "Wawa Welcome America 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://july4thphilly.com/events/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-05T20:24:48.792Z",
+      "fetches": [
+        {
+          "url": "https://july4thphilly.com/events/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -299,9 +349,9 @@
       "metroId": "philadelphia",
       "category": null,
       "status": "ok",
-      "liveEvents": 6,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 6,
+      "eventCount": 0,
       "fetches": []
     },
     {
@@ -367,9 +417,9 @@
       "metroId": "philadelphia",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 496,
+      "liveEvents": 449,
       "fallbackEvents": 0,
-      "eventCount": 496,
+      "eventCount": 449,
       "fetches": [
         {
           "url": "https://www.pleasetouchmuseum.org/calendar/month/",
@@ -380,7 +430,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=600; pages=12",
-      "rejectedLiveEvents": 104,
+      "rejectedLiveEvents": 151,
       "extractedEvents": 600,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -394,9 +444,9 @@
       "metroId": "philadelphia",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 8,
+      "liveEvents": 5,
       "fallbackEvents": 0,
-      "eventCount": 8,
+      "eventCount": 5,
       "fetches": [
         {
           "url": "https://www.philadelphiazoo.org/events/",
@@ -407,7 +457,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=wp-rest-events; events=83",
-      "rejectedLiveEvents": 200,
+      "rejectedLiveEvents": 203,
       "extractedEvents": 208,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -475,9 +525,9 @@
       "metroId": "philadelphia",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 7,
+      "liveEvents": 12,
       "fallbackEvents": 0,
-      "eventCount": 7,
+      "eventCount": 12,
       "fetches": [
         {
           "url": "https://bclsnj.bibliocommons.com/v2/events",
@@ -489,7 +539,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 7,
+      "extractedEvents": 12,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -515,8 +565,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 16,
-      "extractedEvents": 148,
+      "rejectedLiveEvents": 14,
+      "extractedEvents": 146,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -529,9 +579,9 @@
       "metroId": "philadelphia",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 237,
+      "liveEvents": 273,
       "fallbackEvents": 0,
-      "eventCount": 237,
+      "eventCount": 273,
       "fetches": [
         {
           "url": "https://delcolibraries.libcal.com/calendar?cid=10206&cal=10206",
@@ -542,8 +592,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 237,
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 274,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -556,9 +606,9 @@
       "metroId": "philadelphia",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 197,
+      "liveEvents": 284,
       "fallbackEvents": 0,
-      "eventCount": 197,
+      "eventCount": 284,
       "fetches": [
         {
           "url": "https://calendar.buckslib.org/calendar?cid=3891&cal=3891",
@@ -569,8 +619,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 2,
-      "extractedEvents": 199,
+      "rejectedLiveEvents": 4,
+      "extractedEvents": 288,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -610,9 +660,9 @@
       "metroId": "philadelphia",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://july4thphilly.com/events/",
@@ -623,7 +673,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 3,
+      "rejectedLiveEvents": 4,
       "extractedEvents": 4,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -933,9 +983,9 @@
       "metroId": "philadelphia",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://july4thphilly.com/events/",
@@ -946,7 +996,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null

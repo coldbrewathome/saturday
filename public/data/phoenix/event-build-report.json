@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "phoenix",
-  "generatedAt": "2026-07-02T13:38:56.448Z",
+  "generatedAt": "2026-07-05T20:26:10.231Z",
   "registryPath": "data/event-sources-phoenix.json",
   "outputPath": "public/data/phoenix/events.json",
-  "eventCount": 608,
-  "adultsEventCount": 29,
+  "eventCount": 621,
+  "adultsEventCount": 23,
   "sourceCount": 15,
-  "liveEventCount": 624,
-  "lastKnownGoodEventCount": 0,
+  "liveEventCount": 638,
+  "lastKnownGoodEventCount": 1,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 5,
+  "operatorAlertCount": 6,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:56.448Z",
+      "fetchedAt": "2026-07-05T20:26:10.231Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:56.448Z",
+      "fetchedAt": "2026-07-05T20:26:10.231Z",
       "fetches": [
         {
           "url": "https://azstatefair.com/",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:56.448Z",
+      "fetchedAt": "2026-07-05T20:26:10.231Z",
       "fetches": [
         {
           "url": "https://www.crescentphx.com/events",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:56.448Z",
+      "fetchedAt": "2026-07-05T20:26:10.231Z",
       "fetches": [
         {
           "url": "https://phoenix.standuplive.com/events",
@@ -128,12 +128,37 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-02T13:38:56.448Z",
+      "fetchedAt": "2026-07-05T20:26:10.231Z",
       "fetches": [
         {
           "url": "https://houseofcomedy.net/scottsdale",
           "status": "http-error",
           "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "phoenix",
+      "sourceId": "nile-theater-mesa",
+      "sourceName": "The Nile Theater",
+      "sourceType": "html",
+      "url": "https://www.theniletheater.com/events",
+      "status": "ok-last-known-good",
+      "issueType": "zero-in-window",
+      "reason": "source produced no live events; using last-known-good future events",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-07-05T20:26:10.231Z",
+      "fetches": [
+        {
+          "url": "https://www.theniletheater.com/events",
+          "status": "ok",
+          "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ]
@@ -149,9 +174,9 @@
       "metroId": "phoenix",
       "category": null,
       "status": "ok",
-      "liveEvents": 8,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 8,
+      "eventCount": 0,
       "fetches": []
     },
     {
@@ -163,9 +188,9 @@
       "metroId": "phoenix",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 240,
+      "liveEvents": 274,
       "fallbackEvents": 0,
-      "eventCount": 240,
+      "eventCount": 274,
       "fetches": [
         {
           "url": "https://calendar.phoenixpubliclibrary.org/calendar/",
@@ -177,7 +202,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 240,
+      "extractedEvents": 274,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -190,21 +215,21 @@
       "metroId": "phoenix",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 6,
+      "liveEvents": 4,
       "fallbackEvents": 0,
-      "eventCount": 6,
+      "eventCount": 4,
       "fetches": [
         {
           "url": "https://www.phoenix.gov/calendar/parks-events.html",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=phoenix-city-calendar; events=19"
+          "contentType": "application/json; source=phoenix-city-calendar; events=15"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=phoenix-city-calendar; events=19",
-      "rejectedLiveEvents": 13,
-      "extractedEvents": 19,
+      "contentType": "application/json; source=phoenix-city-calendar; events=15",
+      "rejectedLiveEvents": 11,
+      "extractedEvents": 15,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -217,21 +242,21 @@
       "metroId": "phoenix",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 201,
+      "liveEvents": 182,
       "fallbackEvents": 0,
-      "eventCount": 201,
+      "eventCount": 182,
       "fetches": [
         {
           "url": "https://childrensmuseumofphoenix.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=210; pages=5"
+          "contentType": "application/json; source=tribe-events; events=197; pages=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=210; pages=5",
+      "contentType": "application/json; source=tribe-events; events=197; pages=4",
       "rejectedLiveEvents": 9,
-      "extractedEvents": 210,
+      "extractedEvents": 191,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -244,9 +269,9 @@
       "metroId": "phoenix",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 5,
+      "liveEvents": 4,
       "fallbackEvents": 0,
-      "eventCount": 5,
+      "eventCount": 4,
       "fetches": [
         {
           "url": "https://www.phoenixzoo.org/events/",
@@ -258,7 +283,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 4,
-      "extractedEvents": 9,
+      "extractedEvents": 8,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -325,9 +350,9 @@
       "metroId": "phoenix",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 148,
+      "liveEvents": 157,
       "fallbackEvents": 0,
-      "eventCount": 148,
+      "eventCount": 157,
       "fetches": [
         {
           "url": "https://dbg.org/events/",
@@ -338,7 +363,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 52,
+      "rejectedLiveEvents": 43,
       "extractedEvents": 200,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -379,9 +404,9 @@
       "metroId": "phoenix",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 12,
+      "liveEvents": 14,
       "fallbackEvents": 0,
-      "eventCount": 12,
+      "eventCount": 14,
       "fetches": [
         {
           "url": "https://www.thevanburenphx.com/shows",
@@ -392,7 +417,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 24,
+      "rejectedLiveEvents": 22,
       "extractedEvents": 36,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -512,8 +537,8 @@
       "city": "Mesa",
       "metroId": "phoenix",
       "category": "Music",
-      "status": "ok",
-      "liveEvents": 1,
+      "status": "ok-last-known-good",
+      "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 1,
       "fetches": [
@@ -526,10 +551,11 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "lastKnownGoodEvents": 1,
+      "recoveryMode": "last-known-good",
+      "reason": "source produced no live events; using last-known-good future events"
     }
   ]
 }
