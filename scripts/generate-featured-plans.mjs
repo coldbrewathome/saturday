@@ -294,6 +294,10 @@ function buildHolidayWeekendPlans(spots, events, audienceTag) {
         lon: center?.lon ?? null,
         generated: true,
         themed: holiday.id,
+        // Client-side expiry backstop: the rail drops a themed plan once its
+        // holiday window has passed, so a lapsed feed regeneration can't leave
+        // a stale "4th of July" card pinned to the top.
+        themedEnd: holiday.end,
       });
     }
   }

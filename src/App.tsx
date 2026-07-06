@@ -1120,6 +1120,7 @@ export type FeaturedPlan = {
   lon?: number | null;
   generated?: boolean;
   themed?: string;
+  themedEnd?: string;
 };
 
 // ── Plan-first hero (browse view) ────────────────────────────────────
@@ -2734,8 +2735,14 @@ function App({ metro }: AppProps) {
     // Themed plans (e.g. Memorial Day weekend) are pinned at the top of the
     // rail regardless of map center — they're time-sensitive and metro-wide,
     // not local, so distance ranking would bury them. They auto-expire from
-    // the data feed once the holiday window passes.
-    const themed = featuredPlans.filter((p) => Boolean(p.themed));
+    // the data feed once the holiday window passes; the themedEnd guard is a
+    // backstop so a lapsed feed regeneration can't leave a stale holiday card.
+    const nowMs = Date.now();
+    const themed = featuredPlans.filter(
+      (p) =>
+        Boolean(p.themed) &&
+        !(p.themedEnd && Date.parse(p.themedEnd) <= nowMs),
+    );
     const handCurated = featuredPlans.filter((p) => !p.generated && !p.themed);
     const generated = featuredPlans.filter((p) => p.generated && !p.themed);
     const scored = generated
