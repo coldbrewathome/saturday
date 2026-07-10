@@ -169,10 +169,19 @@ function audienceJsonLdPlugin(env: Record<string, string>): Plugin {
     transformIndexHtml(html: string) {
       // Replace the entire existing JSON-LD <script> with the audience-aware
       // version. Matches the exact pattern emitted by the source index.html.
-      return html.replace(
+      let out = html.replace(
         /<script type="application\/ld\+json">[\s\S]*?<\/script>/,
         `<script type="application/ld+json">${json}</script>`,
       );
+      if (!isAdults) {
+        // Bing Webmaster Tools verification — famhop.com only; Mosey gets
+        // its own tag if/when that site is added to the BWT account.
+        out = out.replace(
+          '<meta name="robots" content="index,follow" />',
+          '<meta name="robots" content="index,follow" />\n    <meta name="msvalidate.01" content="8786B16A2912485D5CBF37C44E8A60D9" />',
+        );
+      }
+      return out;
     },
   };
 }
