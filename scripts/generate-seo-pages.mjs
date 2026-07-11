@@ -180,6 +180,58 @@ function capEventsForPages(events) {
   }
   return sorted.slice(0, MAX_EVENT_PAGES_PER_METRO);
 }
+// Ticketed feeds emit one record per timed-entry slot: Chicago's Balloon
+// Museum ships 100 records for a single exhibition, differing only by a
+// 15-minute startDateTime, and each one minted its own slug. That one exhibit
+// ate 100 URLs of a 600-page metro budget while real events went unpublished.
+// Collapse each (title, venue) to a single page that lists every occurrence.
+// Dropped occurrences stay in `events`, so they are treated exactly like any
+// capped-out event: no page, no "ended" stub, still routable in the SPA.
+function eventGroupKey(event) {
+  const title = (event.title || "").trim().toLowerCase();
+  const venue = (event.venue || event.neighborhood || "").trim().toLowerCase();
+  return `${title}|${venue}`;
+}
+function dedupeEventOccurrences(events, eventSlugLookup) {
+  const groups = new Map();
+  for (const event of events) {
+    const key = eventGroupKey(event);
+    const group = groups.get(key);
+    if (group) group.push(event);
+    else groups.set(key, [event]);
+  }
+  const representatives = [];
+  for (const group of groups.values()) {
+    if (group.length === 1) {
+      representatives.push(group[0]);
+      continue;
+    }
+    // Keep the record holding the clean base slug — collision suffixes only
+    // ever lengthen it — so the surviving URL is the one Google already knows.
+    const [rep] = [...group].sort((a, b) => {
+      const sa = eventSlugLookup.get(a) ?? "";
+      const sb = eventSlugLookup.get(b) ?? "";
+      return (
+        sa.length - sb.length ||
+        (a.startDateTime || "").localeCompare(b.startDateTime || "")
+      );
+    });
+    // Additive field: the page and its JSON-LD render the full occurrence list,
+    // and the last occurrence becomes the page's endDate so a multi-date run
+    // does not expire on the first date.
+    rep.occurrenceStarts = group
+      .map((e) => e.startDateTime)
+      .filter(Boolean)
+      .sort();
+    rep.occurrenceEnd = group
+      .map((e) => e.endDateTime)
+      .filter(Boolean)
+      .sort()
+      .at(-1);
+    representatives.push(rep);
+  }
+  return representatives;
+}
 const SEO_PINNED_PATHS = readJson(path.join(ROOT, "data", "seo-pinned-paths.json")) || {};
 const FREE_CATEGORIES = new Set(["Library", "Park"]);
 function eventLikelyFree(event) {
@@ -916,7 +968,10 @@ function main() {
       const s = eventSlugLookup.get(ev);
       if (s) allCurrentEventSlugs.add(s);
     }
-    const eventSlugs = generateEventPages(capEventsForPages(events), eventsDoc?.generatedAt, eventSlugLookup, citySlugsPre);
+    // Dedupe before the cap so the per-metro budget is spent on distinct
+    // events, not on repeat occurrences of the same one.
+    const distinctEvents = dedupeEventOccurrences(events, eventSlugLookup);
+    const eventSlugs = generateEventPages(capEventsForPages(distinctEvents), eventsDoc?.generatedAt, eventSlugLookup, citySlugsPre);
     generatedEventSlugsByMetro.set(metro.id, eventSlugs);
     const { slugs: citySlugs, cities } = generateCityPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs);
     const categorySlugs = generateCategoryPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs);
@@ -1674,7 +1729,15 @@ const JUNK_CHAIN_NAME_RE =
 const JUNK_GYM_NAME_RE =
   /\b(ufc gym|anytime fitness|24 hour fitness|planet fitness|crunch fitness|gold'?s gym|la fitness|orangetheory|snap fitness)\b/i;
 
-// Same stable-rating threshold the aggregateRating snippet uses (≥25 reviews).
+// A restaurant/shop/gym page on a kids' site is a page we cannot win: Yelp and
+// Google Maps own those queries, and a templated stub competing for them is the
+// site's biggest scaled-content liability (our best-performing spot page was a
+// Dunkin'). Kids spot pages are places you take a child *to*; Mosey (adults)
+// still wants food and nightlife, so this only narrows the kids build.
+const KIDS_SPOT_CATEGORIES = new Set(["outdoors", "culture"]);
+
+// Ratings still gate page quality (a well-reviewed place is a real place); we
+// just no longer republish the numbers as schema — see buildSpotJsonLd.
 function hasStableRating(spot) {
   return typeof spot.googleRating === "number" && (spot.googleRatingCount ?? 0) >= 25;
 }
@@ -1690,6 +1753,7 @@ export function spotPassesQualityGate(
   const category = String(spot?.category || "").trim();
   if (!category || /^other$/i.test(category)) return false;
   if (featured) return true;
+  if (!adults && !KIDS_SPOT_CATEGORIES.has(category.toLowerCase())) return false;
   if (metroHasRatings && !hasStableRating(spot)) return false;
   return true;
 }
@@ -1913,26 +1977,10 @@ function buildSpotJsonLd(spot, canonical) {
     };
   }
   if (spot.openingHours) node.openingHours = spot.openingHours;
-  // Google rating → aggregateRating rich snippet. Require ≥25 reviews (same
-  // trust threshold the planner uses) so we only surface stable ratings.
-  if (
-    typeof spot.googleRating === "number" &&
-    (spot.googleRatingCount ?? 0) >= 25
-  ) {
-    node.aggregateRating = {
-      "@type": "AggregateRating",
-      ratingValue: Number(spot.googleRating.toFixed(1)),
-      reviewCount: spot.googleRatingCount,
-    };
-    const localBusinessSubtypes = new Set([
-      "LocalBusiness", "Restaurant", "Bakery", "CafeOrCoffeeShop", "NightClub",
-      "BarOrPub", "ArtGallery", "Library", "MovieTheater", "AmusementPark",
-      "ExerciseGym", "HealthAndBeautyBusiness", "Store", "FoodEstablishment"
-    ]);
-    if (!localBusinessSubtypes.has(placeType)) {
-      node["@type"] = [placeType, "LocalBusiness"];
-    }
-  }
+  // No aggregateRating: the only ratings we hold are Google Places', and
+  // republishing a third party's ratings as our own violates Google's
+  // structured-data policy (and the Maps Platform terms). They also never
+  // render on the page, so marking them up would be invisible content.
   if (spot.website) node.sameAs = [spot.website];
   if (spot.wikidataId) {
     node.sameAs = [...(node.sameAs ?? []), `https://www.wikidata.org/entity/${spot.wikidataId}`];
@@ -1961,6 +2009,13 @@ function mapPlaceType(category) {
 // Events
 // ---------------------------------------------------------------------------
 
+// A deduped event runs on N distinct days (a run of timed-entry slots collapses
+// to one day; a weekly storytime to many). List the days, not the slots.
+function eventRunDays(event) {
+  if (!Array.isArray(event.occurrenceStarts)) return [];
+  return [...new Set(event.occurrenceStarts.map((s) => s.slice(0, 10)))].sort();
+}
+
 function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySlugs) {
   const slugs = new Set();
   for (const event of items) {
@@ -1976,10 +2031,18 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
     const description = buildEventDescription(event, dateStr);
 
     const detailRows = buildEventDetailRows(event, dateStr);
+    const runDays = eventRunDays(event);
 
     const body = `
       <p class="lede">${esc(description)}</p>
       ${detailRows.length ? `<dl class="meta-grid">${detailRows.map((r) => `<div><dt>${esc(r.label)}</dt><dd>${r.html}</dd></div>`).join("")}</dl>` : ""}
+      ${
+        runDays.length > 1
+          ? `<section class="event-dates"><h2>All dates</h2><ul>${runDays
+              .map((d) => `<li>${esc(formatEventDay(d))}</li>`)
+              .join("")}</ul></section>`
+          : ""
+      }
       <p class="cta-row">
         <a class="cta" href="${metroPath("")}">Plan a day with ${BRAND}</a>
         ${event.url ? `<a class="cta-secondary" rel="noopener nofollow" href="${esc(event.url)}">Event details</a>` : ""}
@@ -2272,7 +2335,10 @@ function buildEventJsonLd(event, canonical) {
   const officialUrl = event.sourceUrl || event.url;
   if (officialUrl) node.sourceUrl = officialUrl;
   if (free) node.isAccessibleForFree = true;
-  if (event.endDateTime) node.endDate = event.endDateTime;
+  // A deduped multi-occurrence event runs until its LAST occurrence ends —
+  // using the representative's own endDateTime would expire the page on day one.
+  const endDate = event.occurrenceEnd || event.endDateTime;
+  if (endDate) node.endDate = endDate;
   if (event.imageUrl) {
     node.image = event.imageUrl;
   } else {
@@ -2340,6 +2406,20 @@ function formatEventDate(event) {
   if (!event.startDateTime) return "";
   const d = new Date(event.startDateTime);
   if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: activeMetro.timezone || "America/Los_Angeles",
+  });
+}
+
+// A bare YYYY-MM-DD day from a deduped event's run. Parsed as UTC noon so the
+// metro timezone conversion can't roll it back to the previous day.
+function formatEventDay(day) {
+  const d = new Date(`${day}T12:00:00Z`);
+  if (Number.isNaN(d.getTime())) return day;
   return d.toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",

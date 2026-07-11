@@ -26,7 +26,7 @@ test("quality gate rejects big-box gyms for the kids audience", () => {
 test("quality gate accepts a rated venue in a rated metro", () => {
   const spot = {
     name: "Exploratorium",
-    category: "Museum",
+    category: "Culture",
     googleRating: 4.7,
     googleRatingCount: 1200,
   };
@@ -34,13 +34,47 @@ test("quality gate accepts a rated venue in a rated metro", () => {
 });
 
 test("quality gate drops unrated spots when the metro has rating data", () => {
-  const spot = { name: "Some Unrated Place", category: "Park" };
+  const spot = { name: "Some Unrated Place", category: "Outdoors" };
   assert.equal(spotPassesQualityGate(spot, { metroHasRatings: true }), false);
 });
 
 test("quality gate keeps unrated spots in metros with no rating data at all", () => {
-  const spot = { name: "Neighborhood Library", category: "Library" };
+  const spot = { name: "Neighborhood Playground", category: "Outdoors" };
   assert.equal(spotPassesQualityGate(spot, { metroHasRatings: false }), true);
+});
+
+// Restaurants/shops/gyms are pages we cannot win on a kids' site (Yelp and
+// Google Maps own those queries), so the kids build publishes Outdoors and
+// Culture only. Mosey still needs Food.
+test("quality gate drops Food/Shopping/Wellness spots for the kids audience", () => {
+  for (const category of ["Food", "Shopping", "Wellness"]) {
+    assert.equal(
+      spotPassesQualityGate(
+        { name: "Some Local Bistro", category, googleRating: 4.6, googleRatingCount: 900 },
+        { adults: false, metroHasRatings: true },
+      ),
+      false,
+      category,
+    );
+  }
+});
+
+test("quality gate keeps Food spots for the adults audience", () => {
+  const spot = {
+    name: "Some Local Bistro",
+    category: "Food",
+    googleRating: 4.6,
+    googleRatingCount: 900,
+  };
+  assert.equal(spotPassesQualityGate(spot, { adults: true, metroHasRatings: true }), true);
+});
+
+test("featured Food spots survive the kids category gate (featured plans link them)", () => {
+  const spot = { name: "Ferry Building Marketplace", category: "Food" };
+  assert.equal(
+    spotPassesQualityGate(spot, { adults: false, metroHasRatings: true, featured: true }),
+    true,
+  );
 });
 
 test("featured/editor's-pick spots bypass the rating requirement", () => {
