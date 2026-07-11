@@ -3228,7 +3228,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
       ${marqueeHtml ? `<a href="#top-picks">Top picks</a>` : ""}
       ${(byDay.get(weekend.saturdayKey) || []).length ? `<a href="#day-sat">Saturday</a>` : ""}
       ${(byDay.get(weekend.sundayKey) || []).length ? `<a href="#day-sun">Sunday</a>` : ""}
-      ${freeCount && !IS_ADULTS && activeMetro.id === "bay-area" ? `<a href="${metroPath("free-this-weekend/")}">Free only</a>` : ""}
+      ${!IS_ADULTS && CITY_WEEKEND_METROS.has(activeMetro.id) && freeCount >= MIN_WEEKEND_SUB_PAGE_EVENTS ? `<a href="${metroPath("free-this-weekend/")}">Free only</a>` : ""}
       ${planPresets.length ? `<a href="#plans">Ready-made plans</a>` : ""}
       ${editorialBuckets.length ? `<a href="#by-interest">By interest</a>` : ""}
     </nav>`;
@@ -3362,7 +3362,8 @@ export function formatWeekendRange(saturday, sunday, timeZone = "America/Los_Ang
 }
 
 // ---------------------------------------------------------------------------
-// Per-city + free weekend pages (Bay Area kids only for now)
+// Per-city + free weekend pages (every kids metro; Mosey stays Bay Area-only
+// via the metroConfig filter above)
 // ---------------------------------------------------------------------------
 
 // /{metro}/this-weekend/{city}/ for the cities with the most dated weekend
@@ -3370,7 +3371,7 @@ export function formatWeekendRange(saturday, sunday, timeZone = "America/Los_Ang
 // main guide (real dated events + embedded Event JSON-LD); a city needs at
 // least MIN_WEEKEND_SUB_PAGE_EVENTS dated events to earn a page, and the page
 // count stays small (≤ MAX_CITY_WEEKEND_PAGES + 1 per metro).
-const CITY_WEEKEND_METROS = new Set(["bay-area"]);
+const CITY_WEEKEND_METROS = new Set(metroConfig.metros.map((m) => m.id));
 const MAX_CITY_WEEKEND_PAGES = 20;
 const MIN_WEEKEND_SUB_PAGE_EVENTS = 3;
 
@@ -3983,7 +3984,7 @@ function renderWeekendInterestChips(buckets, freeCount) {
     .slice(0, 6)
     .map((bucket) => `<a class="wg-chip" href="#by-interest">${esc(bucket.title)} <b>${bucket.count}</b></a>`);
   if (!chips.length && !freeCount) return "";
-  const freeHref = (!IS_ADULTS && activeMetro.id === "bay-area") ? metroPath("free-this-weekend/") : "#timeline";
+  const freeHref = (!IS_ADULTS && CITY_WEEKEND_METROS.has(activeMetro.id) && freeCount >= MIN_WEEKEND_SUB_PAGE_EVENTS) ? metroPath("free-this-weekend/") : "#timeline";
   const freeChip = freeCount > 0 ? `<a class="wg-chip wg-chip--free" href="${freeHref}">Free only <b>${freeCount}</b></a>` : "";
   return `<div class="wg-chips" aria-label="Browse by interest">${chips.join("")}${freeChip}</div>`;
 }
