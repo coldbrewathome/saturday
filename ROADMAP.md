@@ -1,6 +1,6 @@
 # Roadmap
 
-_Last updated: 2026-06-10_ (tick 37)
+_Last updated: 2026-07-11_ (tick 38)
 
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
@@ -40,6 +40,17 @@ _Focus decision (2026-06-10): Bay-Area-first. The 2026-06-09 audit of the live f
 
 ## Next
 _Committed, not yet started. Ordered by priority. Aim for ≤5 items._
+
+### Seasonal event ingest: Halloween + December — **publish by early-to-mid September 2026**
+- **Why:** the 2026-07-11 SEO audit established that event pages are the only thing that ranks (~85% of clicks; a dated local event hits page one in ~13 days with zero backlinks — the Milpitas fireworks page reached position 7.4 on 990 impressions). Halloween and December are far bigger family-search seasons than July 4th, and they are exactly the proven query shape: `{town} trick or treat 2026`, `trunk or treat {town}`, `pumpkin patch near {town}`, `{town} tree lighting`, `santa photos {town}`, `{town} nye fireworks`.
+- **Deadline is the whole point:** search demand builds from **late September**; time-to-rank is ~13 days. Ingested and published by **early-to-mid September** = indexed 6+ weeks ahead of the curve. Ingested in October = missed the season entirely. This is where realistic Q4 traffic comes from.
+- **Effort:** M (ingest + verify, per `skills/grounded-event-discovery/SKILL.md`)
+- **Depends on:** the Google Indexing API staying authed (it silently breaks whenever ADC is re-authed for another GCP project — see the SEO invariants in `CLAUDE.md`).
+- **Tasks:**
+  - [ ] Halloween sources ingested across metros (trick-or-treat, trunk-or-treat, pumpkin patches, harvest festivals)
+  - [ ] December sources (tree lightings, Santa photos, light drives, NYE)
+  - [ ] Published + submitted to the Indexing API by mid-September
+  - [ ] Spot-check that the pages rank before demand peaks (late Sept / late Nov)
 
 ### Viral-loop polish (share → vote)
 - **Why:** the funnel shows people open but barely build and never share (855 opens → 7 plans → ~0 shares); once the quality bar lands, cut friction to first share and instrument the build→share gap on both brands.
