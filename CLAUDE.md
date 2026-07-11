@@ -86,6 +86,22 @@ To resolve sitemap crawl budget issues and automate search engine indexation:
   - Setup: run [setup-local-cron.sh](file:///Users/kning/Projects/saturday/scripts/setup-local-cron.sh) to copy the plist configuration to `~/Library/LaunchAgents/` and load it.
   - Logs: written to [local-indexing.log](file:///Users/kning/Projects/saturday/tmp/local-indexing.log).
 
+## SEO invariants
+
+Audited 2026-07-11 against GSC and the Google URL Inspection API. These are conclusions, not guesses — re-verify before overriding.
+
+**Event pages are the traffic.** They earn ~85% of clicks; a dated local event ranks in ~13 days with no backlinks. The spot directory earns ~nothing (25 clicks/mo across 4,953 pages) — don't invest there.
+
+**Crawl budget is the binding constraint.** The domain is young (registered 2026-05-09) with zero backlinks, so Google crawls very little: pre-fix, 2 of 3 event pages had *never* been fetched. Every published URL competes for that budget, which makes pruning low-value pages a traffic lever rather than hygiene. Before adding a new page type at scale, ask what it displaces.
+
+**Never emit `aggregateRating` (or any third-party rating) in JSON-LD.** It previously republished Google Places' ratings as our own — a Google structured-data policy violation *and* a Maps Platform terms violation, with no rich result to show for it (Google won't render stars for ratings you didn't collect). Removed in `30d71a5` from both brands. Do not restore it, for Mosey or FamHop.
+
+**Event pages are deduped to one per (title, venue)** in `generate-seo-pages.mjs` (`dedupeEventOccurrences`). Ticketed feeds emit one record per timed-entry slot — a single Chicago exhibition once minted 100 near-identical URLs. The surviving page lists every date and its JSON-LD `endDate` spans the full run, so multi-date events don't expire on day one. Keep the dedupe ahead of the per-metro cap so the cap is spent on *distinct* events.
+
+**Kids spot pages are Outdoors/Culture only** (`KIDS_SPOT_CATEGORIES`). A templated stub for a restaurant or gym cannot outrank Yelp and Google Maps. Mosey still publishes Food; featured-plan spots bypass the gate so curated plans keep their stops.
+
+Do **not** restructure URLs, add FAQPage schema (dead in Google Search since 2026-05), chase EXIF geotagging, or do NAP/local-pack work — a directory with no physical address cannot enter the local pack.
+
 ## Shared Skills
 
 - For local event discovery, source repair, Bay Area feed repopulation, or missing-event audits, read and follow `skills/grounded-event-discovery/SKILL.md`. It defines the official-source search workflow and verification gates shared with Codex.
