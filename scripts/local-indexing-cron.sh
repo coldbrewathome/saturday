@@ -16,6 +16,17 @@ mkdir -p tmp
 # Log start time
 echo "=== Indexing job started at $(date) ===" >> tmp/local-indexing.log
 
+# publish-indexing.mjs reads dist/sitemap.xml, and dist/ is shared by both
+# brands — a `npm run deploy:adults` leaves Mosey's sitemap there. Without this
+# rebuild the cron silently spends FamHop's entire ~200/day quota on Mosey URLs
+# (this happened on 2026-07-11). Rebuild FamHop so the sitemap is unambiguous.
+echo "Rebuilding FamHop so dist/sitemap.xml is FamHop's..." >> tmp/local-indexing.log
+if ! /opt/homebrew/bin/npm run build >> tmp/local-indexing.log 2>&1; then
+  echo "BUILD FAILED — skipping indexing rather than submitting a stale sitemap" >> tmp/local-indexing.log
+  echo "=== Indexing job aborted at $(date) ===" >> tmp/local-indexing.log
+  exit 1
+fi
+
 # Run the indexing script using Node.js directly
 /opt/homebrew/bin/node scripts/publish-indexing.mjs >> tmp/local-indexing.log 2>&1
 
