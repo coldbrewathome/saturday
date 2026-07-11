@@ -27,3 +27,14 @@ data/places-usage.json
 # YouTube upload OAuth client secret + cached token (never commit)
 video/youtube-oauth.json
 video/.youtube-token.json
+
+# Rendered video/audio assets (~486MB). The video/ build scripts, manifests and
+# per-metro upload metadata ARE tracked; the renders they produce are not.
+video/**/*.mp4
+video/**/*.webm
+video/**/*.mp3
+video/**/*.wav
+video/**/*.png
+
+# Cron/agent run logs
+data/*.log

@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FamHop — This Weekend</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#faf5eb; --surface:#ffffff; --surface-strong:#f2ead9;
+    --line:#e8dfca;
+    --ink:#1b1916; --ink-soft:#4a453f; --muted:#6b7280; --mute-soft:#8a8278;
+    --accent:#FF6B5B; --accent-strong:#e0513f; --accent-soft:#ffe2d9;
+    --forest:#2d5043; --blue:#5a7896; --sun:#e8b547;
+    --shadow:0 24px 60px rgba(31,27,23,.14);
+    --font:"Inter",ui-sans-serif,system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:var(--font); color:var(--ink);
+    background:
+      radial-gradient(1000px 600px at 80% -10%, #faedc9, transparent 60%),
+      radial-gradient(900px 600px at -10% 110%, var(--accent-soft), transparent 55%),
+      var(--bg);
+    display:grid; place-items:center; min-height:100%;
+    -webkit-font-smoothing:antialiased; overflow:hidden;
+  }
+
+  /* stage sizes itself to the requested orientation */
+  .stage{ position:relative; overflow:hidden; background:var(--bg); }
+  .stage[data-orient="vertical"]{ width:min(96vw, 96vh*0.5625); aspect-ratio:9/16; }
+  .stage[data-orient="landscape"]{ width:min(96vw, 96vh*1.7778); aspect-ratio:16/9; }
+
+  .bar{position:absolute; top:0; left:0; height:6px; width:0; background:var(--accent); z-index:8; border-radius:0 4px 4px 0}
+
+  .scene{position:absolute; inset:0; opacity:0; pointer-events:none;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; padding:7%;}
+  .scene.show{opacity:1}
+
+  /* shared bits */
+  .eyebrow{font-weight:800; letter-spacing:.16em; text-transform:uppercase;
+    font-size:clamp(11px,1.6vw,18px); color:var(--accent-strong)}
+  .confetti i{position:absolute; width:11px; height:11px; border-radius:50%;
+    background:var(--accent); opacity:.12}
+
+  /* ── hook / free (big number) ── */
+  .big{display:flex; flex-direction:column; align-items:center; text-align:center; gap:14px}
+  .num{font-weight:900; line-height:.9; letter-spacing:-.03em; color:var(--accent);
+    font-size:min(40vw, 34vh); text-shadow:0 12px 0 rgba(224,81,63,.12)}
+  .big h1{font-weight:900; letter-spacing:-.02em; line-height:1.04; color:var(--ink);
+    font-size:clamp(26px,4.6vw,58px); max-width:18ch}
+  .big .sub{font-weight:700; color:var(--ink-soft); font-size:clamp(15px,2.3vw,30px)}
+  .pill{display:inline-flex; align-items:center; gap:10px; padding:9px 18px; border-radius:999px;
+    background:var(--accent); color:#fff; font-weight:800; font-size:clamp(13px,1.8vw,22px);
+    letter-spacing:.02em}
+  .pill.ghost{background:#fff; color:var(--accent-strong); border:2px solid var(--accent-soft)}
+
+  /* ── event card ── */
+  .event-wrap{width:100%; height:100%; display:flex; gap:4%; padding:2%;
+    align-items:center; justify-content:center}
+  .stage[data-orient="vertical"] .event-wrap{flex-direction:column}
+  .stage[data-orient="landscape"] .event-wrap{flex-direction:row}
+
+  .map{position:relative; border-radius:26px; overflow:hidden; flex:none;
+    background:#ece3cf; /* land */
+    border:1px solid #d8ccb0; box-shadow:var(--shadow)}
+  .stage[data-orient="vertical"] .map{width:88%; aspect-ratio:1/1}
+  .stage[data-orient="landscape"] .map{height:82%; aspect-ratio:1/1}
+  .map .geo{position:absolute; inset:0; width:100%; height:100%; object-fit:cover}
+  .map .map-fade{position:absolute; inset:0; pointer-events:none;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.05), inset 0 -40px 60px -30px rgba(31,27,23,.25)}
+
+  /* event-page screenshot thumbnail on the card */
+  .shot{width:100%; border-radius:14px; overflow:hidden; border:1px solid var(--line);
+    aspect-ratio:16/9; background:var(--surface-strong)}
+  .shot img{width:100%; height:100%; object-fit:cover; object-position:center}
+
+  /* open / title card */
+  .kicker{font-weight:800; letter-spacing:.04em; color:var(--ink-soft); font-size:clamp(15px,2.2vw,30px)}
+  .metroname{font-weight:900; letter-spacing:-.03em; line-height:1; color:var(--accent);
+    font-size:clamp(44px,9vw,120px)}
+  .brandtag{font-weight:900; letter-spacing:-.02em; color:var(--ink); font-size:clamp(20px,3vw,40px); margin-top:6px}
+  .brandtag b{color:#FF6B5B}
+  .pin{position:absolute; transform:translate(-50%,-100%); z-index:3}
+  .pin .dot{width:clamp(26px,3.4vw,40px); height:clamp(26px,3.4vw,40px); border-radius:50% 50% 50% 0;
+    background:var(--accent); transform:rotate(-45deg); box-shadow:0 8px 16px rgba(224,81,63,.4);
+    display:grid; place-items:center}
+  .pin .dot::after{content:""; width:36%; height:36%; border-radius:50%; background:#fff}
+  .pin .emoji{position:absolute; top:50%; left:50%; transform:translate(-50%,-58%);
+    font-size:clamp(13px,1.7vw,20px)}
+
+  .card{position:relative; overflow:hidden; flex:1; min-width:0; display:flex; flex-direction:column; gap:14px;
+    background:#fff; border:1px solid var(--line); border-radius:24px; box-shadow:var(--shadow);
+    padding:clamp(20px,3vw,40px)}
+  .stage[data-orient="vertical"] .card{width:92%; flex:none}
+  .card .cat{display:inline-flex; align-items:center; gap:10px; align-self:flex-start;
+    background:var(--surface-strong); border-radius:999px; padding:7px 15px;
+    font-weight:800; color:var(--ink-soft); font-size:clamp(12px,1.5vw,19px)}
+  .card .cat .e{font-size:1.25em}
+  .card h2{font-weight:900; letter-spacing:-.015em; line-height:1.08; color:var(--ink);
+    font-size:clamp(22px,3.2vw,44px)}
+  .card .where{font-weight:700; color:var(--ink-soft); font-size:clamp(14px,1.9vw,26px)}
+  .card .meta{display:flex; flex-wrap:wrap; gap:10px; margin-top:4px}
+  .tag{display:inline-flex; align-items:center; gap:7px; padding:8px 15px; border-radius:999px;
+    font-weight:800; font-size:clamp(12px,1.5vw,20px)}
+  .tag.when{background:var(--surface-strong); color:var(--ink-soft)}
+  .tag.free{background:#e7f3ea; color:#1f7a44}
+  .tag.cost{background:var(--accent-soft); color:var(--accent-strong)}
+  .idx{position:absolute; font-weight:900; color:var(--accent); opacity:.12;
+    font-size:clamp(120px,18vw,260px); top:-14%; right:4%; line-height:1; z-index:0; pointer-events:none}
+  .card > *:not(.idx){position:relative; z-index:1}
+
+  /* ── montage chips ── */
+  .chips{display:flex; flex-wrap:wrap; gap:14px; justify-content:center; max-width:90%}
+  .chip{display:inline-flex; align-items:center; gap:12px; padding:14px 22px; border-radius:18px;
+    background:#fff; border:1px solid var(--line); box-shadow:var(--shadow); font-weight:800;
+    color:var(--ink); font-size:clamp(16px,2.2vw,30px)}
+  .chip .e{font-size:1.3em} .chip b{color:var(--accent)}
+  .montage h2{font-weight:900; letter-spacing:-.02em; color:var(--ink); text-align:center;
+    margin-bottom:26px; font-size:clamp(22px,3.2vw,46px)}
+
+  /* ── cta ── */
+  .cta-wrap{display:flex; flex-direction:column; align-items:center; text-align:center; gap:18px}
+  .logo{font-weight:900; letter-spacing:-.03em; font-size:clamp(40px,8vw,110px); color:var(--ink)}
+  .logo b{color:#FF6B5B} /* FamHop wordmark stays coral regardless of metro accent */
+  .emojis{font-size:clamp(30px,5vw,64px); letter-spacing:.12em; line-height:1}
+  .cta-wrap .tagline{font-weight:700; color:var(--ink-soft); font-size:clamp(16px,2.4vw,32px)}
+  .url{font-weight:900; letter-spacing:.04em; color:var(--accent); font-size:clamp(20px,3.4vw,46px)}
+
+  /* ── animations ── */
+  @keyframes pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+  @keyframes rise{0%{transform:translateY(28px);opacity:0}100%{transform:translateY(0);opacity:1}}
+  @keyframes drop{0%{transform:translate(-50%,-220%);opacity:0}55%{opacity:1}70%{transform:translate(-50%,-86%)}85%{transform:translate(-50%,-104%)}100%{transform:translate(-50%,-100%)}}
+  @keyframes dash{to{stroke-dashoffset:-1000}}
+  .show .num{animation:pop .7s cubic-bezier(.2,.8,.2,1) both}
+  .show .a-rise{animation:rise .6s ease both}
+  .show .a-rise.d1{animation-delay:.12s}.show .a-rise.d2{animation-delay:.24s}
+  .show .a-rise.d3{animation-delay:.36s}.show .a-rise.d4{animation-delay:.48s}
+  .show .pin{animation:drop .9s cubic-bezier(.2,.7,.3,1) both .15s}
+  .show .chip{animation:pop .5s ease both}
+  .show .chip:nth-child(2){animation-delay:.1s}.show .chip:nth-child(3){animation-delay:.2s}
+  .show .chip:nth-child(4){animation-delay:.3s}.show .chip:nth-child(5){animation-delay:.4s}
+</style>
+</head>
+<body>
+<div class="stage" id="stage"><div class="bar" id="bar"></div></div>
+
+<script>
+(async () => {
+  const stage = document.getElementById('stage');
+  const bar = document.getElementById('bar');
+  const params = new URLSearchParams(location.search);
+  stage.dataset.orient = params.get('orient') === 'landscape' ? 'landscape' : 'vertical';
+
+  const data = window.__scenes || await fetch('weekend-scenes.json?ts=' + Date.now()).then(r => r.json());
+  const scenes = data.scenes;
+  const meta = data.meta || {};
+  if (meta.accent) { stage.style.setProperty('--accent', meta.accent); stage.style.setProperty('--accent-strong', meta.accent); }
+  const emojiBand = (meta.emojis || []).join(' ');
+
+  // map bbox → panel %; per-metro (bay-area fixed, others computed in curate).
+  const BBOX = meta.bbox || { latMax: 38.6, latMin: 36.5, lonMin: -122.9, lonMax: -121.3 };
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  function pinPos(lat, lon) {
+    if (lat == null || lon == null) return { x: 50, y: 46 };
+    const x = (lon - BBOX.lonMin) / (BBOX.lonMax - BBOX.lonMin) * 100;
+    const y = (BBOX.latMax - lat) / (BBOX.latMax - BBOX.latMin) * 100;
+    return { x: clamp(x, 10, 90), y: clamp(y, 12, 84) };
+  }
+  const esc = (s) => String(s ?? '').replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+
+  // Stylized San Francisco Bay map (viewBox matches pinPos: x = lon 0–100, y = lat 0–100).
+  const BAY_SVG = `<svg class="geo" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#bcdae6"/><stop offset="1" stop-color="#a2cad9"/></linearGradient></defs>
+    <!-- Pacific Ocean (west + Monterey Bay sweep) -->
+    <path d="M0,0 L23,0 C23,16 22,30 24,40 C26,49 30,55 41,70 C50,80 56,85 61,96 L63,100 L0,100 Z"
+      fill="url(#water)" stroke="#ffffff" stroke-width="0.5" stroke-opacity="0.7"/>
+    <!-- San Pablo Bay + SF Bay + South Bay (one connected water body) -->
+    <path d="M34,17 C30,19 30,24 31,28 C33,33 35,38 39,44 C44,51 50,55 57,57
+             C58,54 56,50 51,47 C46,43 42,39 39,34 C37,29 37,23 39,19
+             C38,17 36,16 34,17 Z" fill="url(#water)" stroke="#ffffff" stroke-width="0.5" stroke-opacity="0.7"/>
+    <!-- Golden Gate strait (bay ↔ ocean) -->
+    <path d="M24,38 L31,36" stroke="#a2cad9" stroke-width="2.4" stroke-linecap="round"/>
+    <!-- green open space -->
+    <ellipse cx="27.5" cy="40" rx="3.2" ry="1.3" fill="#cde0bf" opacity=".85"/>
+    <ellipse cx="50" cy="64" rx="4.5" ry="2.4" fill="#cde0bf" opacity=".7"/>
+    <ellipse cx="20" cy="64" rx="3.5" ry="2" fill="#cde0bf" opacity=".6"/>
+    <!-- faint freeways -->
+    <g stroke="#dccfb2" stroke-width="0.7" fill="none" opacity=".9" stroke-linecap="round">
+      <path d="M30,10 C36,28 45,45 60,58 C74,70 83,82 92,96"/>
+      <path d="M14,50 C32,49 50,52 66,46 C79,40 87,28 93,16"/>
+    </g>
+    <!-- city labels (no markers — the only pin is the event) -->
+    <g font-family="Inter,system-ui,sans-serif" font-weight="700" font-size="3" fill="#857d72" letter-spacing="0.1">
+      <text x="11" y="50">San Francisco</text>
+      <text x="44" y="35">Oakland</text>
+      <text x="56" y="66">San Jose</text>
+      <text x="35" y="26">Berkeley</text>
+    </g>
+  </svg>`;
+
+  // Generic stylized city map for non-Bay metros: street grid + river + parks.
+  const GENERIC_SVG = `<svg class="geo" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- river -->
+    <path d="M-5,66 C18,60 34,70 52,58 C70,46 84,40 105,30 L105,46 C86,55 72,62 54,72 C36,82 18,80 -5,84 Z"
+      fill="#bcdae6" opacity="0.9"/>
+    <!-- parks -->
+    <ellipse cx="28" cy="34" rx="7" ry="4.5" fill="#cde0bf" opacity=".85"/>
+    <ellipse cx="74" cy="70" rx="8" ry="5" fill="#cde0bf" opacity=".75"/>
+    <!-- street grid -->
+    <g stroke="#dccfb2" stroke-width="0.5" opacity="0.75">
+      <path d="M0,16 H100"/><path d="M0,32 H100"/><path d="M0,48 H100"/><path d="M0,64 H100"/><path d="M0,80 H100"/>
+      <path d="M16,0 V100"/><path d="M32,0 V100"/><path d="M48,0 V100"/><path d="M64,0 V100"/><path d="M84,0 V100"/>
+    </g>
+    <!-- two arterials -->
+    <g stroke="#d3c5a6" stroke-width="0.9" fill="none" opacity="0.9" stroke-linecap="round">
+      <path d="M6,90 C30,70 50,60 96,18"/><path d="M4,30 C36,40 62,42 98,72"/>
+    </g>
+    <!-- downtown blocks -->
+    <g fill="#e4dac1" opacity="0.9">
+      <rect x="46" y="44" width="7" height="6" rx="1"/><rect x="55" y="42" width="6" height="7" rx="1"/>
+      <rect x="47" y="52" width="6" height="6" rx="1"/><rect x="56" y="51" width="7" height="6" rx="1"/>
+    </g>
+  </svg>`;
+
+  const mapSvg = meta.map === 'bay' ? BAY_SVG : GENERIC_SVG;
+
+  function confetti() {
+    const wrap = document.createElement('div'); wrap.className = 'confetti';
+    const colors = ['#FF6B5B', '#e8b547', '#2d5043', '#5a7896'];
+    for (let k = 0; k < 26; k++) {
+      const f = document.createElement('i');
+      f.style.left = (7 + (k * 37) % 86) + '%';
+      f.style.top = (8 + (k * 53) % 84) + '%';
+      f.style.background = colors[k % colors.length];
+      f.style.transform = `scale(${0.6 + (k % 4) * 0.3})`;
+      wrap.appendChild(f);
+    }
+    return wrap;
+  }
+
+  function render(s) {
+    const el = document.createElement('section');
+    el.className = 'scene scene-' + s.type;
+    if (s.type === 'hook') {
+      el.appendChild(confetti());
+      el.innerHTML += `<div class="big">
+        <div class="emojis a-rise">${esc(emojiBand)}</div>
+        <div class="eyebrow a-rise d1">${esc(s.metro)} · ${esc(s.weekend)}</div>
+        <div class="num">${esc(s.count)}</div>
+        <h1 class="a-rise d2">things to do with the kids in ${esc(s.metro)} this weekend</h1>
+      </div>`;
+    } else if (s.type === 'free') {
+      el.appendChild(confetti());
+      el.innerHTML += `<div class="big">
+        <div class="num">${esc(s.free)}</div>
+        <h1 class="a-rise d1">of them are <span style="color:var(--accent)">completely free</span></h1>
+        <div class="pill a-rise d2">Here are a few we love ↓</div>
+      </div>`;
+    } else if (s.type === 'event') {
+      const p = pinPos(s.lat, s.lon);
+      const tag = s.free
+        ? `<span class="tag free">FREE</span>`
+        : (s.costLabel ? `<span class="tag cost">${esc(s.costLabel)}</span>` : '');
+      // real map image (centered on the event) if provided, else the stylized SVG
+      const mapInner = s.mapImage
+        ? `<img class="geo" src="${s.mapImage}" alt=""><div class="map-fade"></div>
+           <div class="pin" style="left:50%; top:50%"><div class="dot"></div><div class="emoji">${esc(s.emoji)}</div></div>`
+        : `${mapSvg}<div class="pin" style="left:${p.x}%; top:${p.y}%"><div class="dot"></div><div class="emoji">${esc(s.emoji)}</div></div>`;
+      const shot = s.shot ? `<div class="shot a-rise"><img src="${s.shot}" alt=""></div>` : "";
+      el.innerHTML = `<div class="event-wrap">
+        <div class="map">${mapInner}</div>
+        <div class="card">
+          <span class="idx">${esc(s.index)}</span>
+          ${shot}
+          <span class="cat a-rise"><span class="e">${esc(s.emoji)}</span>${esc(s.category)}</span>
+          <h2 class="a-rise d1">${esc(s.title)}</h2>
+          <div class="where a-rise d2">${esc(s.venue)} · ${esc(s.city)}</div>
+          <div class="meta a-rise d3">
+            <span class="tag when">${esc(s.whenLabel)}</span>${tag}
+          </div>
+        </div>
+      </div>`;
+    } else if (s.type === 'montage') {
+      el.innerHTML = `<div class="montage">
+        <h2 class="a-rise">There's something for everyone</h2>
+        <div class="chips">${s.chips.map(c =>
+          `<span class="chip"><span class="e">${esc(c.emoji)}</span><b>${esc(c.n)}</b> ${esc(c.label)}</span>`
+        ).join('')}</div>
+      </div>`;
+    } else if (s.type === 'open') {
+      el.appendChild(confetti());
+      el.innerHTML += `<div class="cta-wrap">
+        <div class="emojis a-rise">${esc(emojiBand)}</div>
+        <div class="kicker a-rise d1">This weekend in</div>
+        <div class="metroname a-rise d2">${esc(s.metro)}</div>
+        <div class="eyebrow a-rise d3">${esc(s.weekend)} · with the kids</div>
+        <div class="brandtag a-rise d4">Fam<b>Hop</b></div>
+      </div>`;
+    } else if (s.type === 'outro' || s.type === 'cta') {
+      el.appendChild(confetti());
+      el.innerHTML += `<div class="cta-wrap">
+        <div class="emojis a-rise">${esc(emojiBand)}</div>
+        <div class="logo a-rise d1">Fam<b>Hop</b></div>
+        <div class="tagline a-rise d2">Your whole weekend in ${esc(s.metro)}, planned.</div>
+        <div class="url a-rise d3">famhop.com</div>
+        <div class="kicker a-rise d4">New picks every weekend — see you out there!</div>
+      </div>`;
+    }
+    return el;
+  }
+
+  const nodes = scenes.map(s => { const n = render(s); stage.appendChild(n); return n; });
+
+  // durations: VO-driven (injected by recorder) or the per-scene minimum
+  const durs = window.__durs || scenes.map(s => s.min);
+  const total = durs.reduce((a, b) => a + b, 0);
+  window.__total = total;
+
+  function restartAnims(node) {
+    node.querySelectorAll('.num,.a-rise,.pin,.chip,.confetti i').forEach(elx => {
+      elx.style.animation = 'none'; void elx.offsetWidth; elx.style.animation = '';
+    });
+  }
+  function show(n) {
+    nodes.forEach((x, idx) => x.classList.toggle('show', idx === n));
+    restartAnims(nodes[n]);
+  }
+
+  // freeze on one scene for deterministic preview/screenshots
+  const only = params.get('scene');
+  if (only !== null) { bar.style.display = 'none'; show(Number(only)); return; }
+
+  let i = 0, timer = null;
+  function startBar() {
+    bar.style.transition = 'none'; bar.style.width = '0';
+    void bar.offsetWidth; bar.style.transition = `width ${total}ms linear`; bar.style.width = '100%';
+  }
+  function advance() {
+    show(i);
+    timer = setTimeout(() => {
+      i++;
+      if (i >= nodes.length) { if (window.__once) { window.__contentMs = performance.now() - window.__t0; window.__done = true; return; } i = 0; startBar(); }
+      advance();
+    }, durs[i]);
+  }
+  function run() { i = 0; window.__done = false; window.__t0 = performance.now(); startBar(); advance(); }
+  window.__play = run;
+  window.__start = () => { window.__once = true; run(); }; // recorder plays once
+  if (!window.__manual) run();                              // preview loops
+})();
+</script>
+</body>
+</html>

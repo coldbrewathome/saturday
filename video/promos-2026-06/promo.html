@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FamHop Promo</title>
+<style>
+  :root {
+    --ink: #171512;
+    --paper: #fffaf0;
+    --panel: #ffffff;
+    --line: #eadbc0;
+    --orange: #e96612;
+    --orange-soft: #ffe0c7;
+    --forest: #174237;
+    --blue: #466985;
+    --rose: #b94b69;
+    --shadow: 0 34px 80px rgba(23, 21, 18, 0.22);
+    --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #10231f; }
+  body { font-family: var(--font); color: var(--ink); }
+  #stage {
+    position: relative;
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+    background:
+      linear-gradient(180deg, #fff9ed 0%, #f7efe0 52%, #dbe9e3 52%, #dbe9e3 100%);
+  }
+  #stage.promo-hop-now {
+    background:
+      linear-gradient(148deg, rgba(233, 102, 18, 0.13) 0 16%, transparent 16% 100%),
+      repeating-linear-gradient(100deg, rgba(23, 66, 55, 0.045) 0 2px, transparent 2px 34px),
+      linear-gradient(180deg, #fff8ec 0%, #fff0dd 52%, #d7ece7 52%, #d7ece7 100%);
+  }
+  #stage.promo-hop-now::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    left: -180px;
+    top: 140px;
+    width: 1400px;
+    height: 520px;
+    transform: skewY(-8deg);
+    background:
+      linear-gradient(110deg, transparent 0 26%, rgba(233, 102, 18, 0.14) 26% 39%, rgba(23, 66, 55, 0.08) 39% 51%, transparent 51% 100%);
+    animation: urgencySweep 6.8s ease-in-out infinite alternate;
+  }
+  .brand {
+    position: absolute;
+    z-index: 20;
+    top: 42px;
+    left: 54px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    font-weight: 900;
+    font-size: 42px;
+  }
+  .mark {
+    width: 58px;
+    height: 58px;
+    border-radius: 15px;
+    background: var(--orange);
+    color: white;
+    display: grid;
+    place-items: center;
+    font-size: 34px;
+    font-weight: 900;
+  }
+  .progress {
+    position: absolute;
+    z-index: 30;
+    left: 0;
+    bottom: 0;
+    height: 10px;
+    width: 0;
+    background: var(--orange);
+  }
+  .scene {
+    position: absolute;
+    z-index: 5;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    display: block;
+    padding: 0 54px 70px;
+    transition: opacity 260ms ease;
+  }
+  .scene.show { opacity: 1; }
+  .scene.brand-scene {
+    background:
+      linear-gradient(152deg, rgba(23, 66, 55, 0.06) 0 25%, transparent 25% 100%),
+      linear-gradient(180deg, #fff8ec 0%, #fff1df 100%);
+  }
+  .scene.brand-scene::after {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    left: -150px;
+    right: -150px;
+    top: 720px;
+    height: 455px;
+    transform: skewY(-6deg);
+    background:
+      linear-gradient(100deg, #174237 0%, #174237 48%, #e96612 48%, #e96612 100%);
+    box-shadow: 0 36px 80px rgba(23, 21, 18, 0.16);
+  }
+  .scene.brand-scene .visual {
+    display: none;
+  }
+  .scene.brand-scene .copy {
+    top: 210px;
+  }
+  .scene.brand-scene .eyebrow {
+    color: var(--forest);
+  }
+  .scene.brand-scene h1 {
+    max-width: 970px;
+    font-size: 86px;
+  }
+  .scene.brand-scene .body {
+    max-width: 910px;
+    font-size: 38px;
+  }
+  .copy {
+    position: absolute;
+    top: 230px;
+    left: 54px;
+    right: 54px;
+    z-index: 12;
+    padding-bottom: 0;
+  }
+  .scene.promo-hop-now .copy {
+    top: 200px;
+  }
+  .eyebrow {
+    color: var(--rose);
+    font-size: 28px;
+    line-height: 1;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    margin: 0 0 22px;
+  }
+  h1 {
+    max-width: 880px;
+    margin: 0;
+    font-size: 80px;
+    line-height: 0.98;
+    letter-spacing: 0;
+    font-weight: 950;
+  }
+  .scene.promo-hop-now h1 {
+    max-width: 940px;
+    font-size: 76px;
+  }
+  .body {
+    max-width: 830px;
+    margin: 24px 0 0;
+    color: #4d5560;
+    font-size: 36px;
+    line-height: 1.16;
+    font-weight: 740;
+  }
+  .scene.promo-hop-now .body {
+    max-width: 910px;
+  }
+  .visual {
+    position: absolute;
+    left: 54px;
+    right: 54px;
+    bottom: 118px;
+    height: 900px;
+    min-height: 0;
+  }
+  .phone {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 570px;
+    height: 1235px;
+    transform: translateX(-50%) translateY(170px) rotate(-2deg) scale(0.88);
+    border: 16px solid #141414;
+    border-radius: 68px;
+    overflow: hidden;
+    background: #f4efe5;
+    box-shadow: var(--shadow);
+  }
+  .phone::before {
+    content: "";
+    position: absolute;
+    z-index: 3;
+    top: 12px;
+    left: 50%;
+    width: 154px;
+    height: 32px;
+    transform: translateX(-50%);
+    border-radius: 0 0 22px 22px;
+    background: #141414;
+  }
+  .phone img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    transform: scale(1.03);
+  }
+  .scene.show .phone {
+    animation: phoneIn 920ms cubic-bezier(.18,.8,.2,1) both, phoneDrift 6s ease-in-out 900ms both;
+  }
+  .scene.show .copy {
+    animation: rise 680ms cubic-bezier(.18,.8,.2,1) both;
+  }
+  .metric {
+    position: absolute;
+    right: 0;
+    top: 102px;
+    width: 430px;
+    min-height: 172px;
+    border: 2px solid var(--line);
+    border-radius: 34px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 24px 48px rgba(23, 21, 18, 0.13);
+    padding: 32px 34px;
+    color: var(--forest);
+    font-size: 32px;
+    line-height: 1.12;
+    font-weight: 900;
+  }
+  .metric::before {
+    content: "";
+    display: block;
+    width: 72px;
+    height: 8px;
+    margin-bottom: 20px;
+    background: var(--orange);
+    border-radius: 999px;
+  }
+  .scene.show .metric {
+    animation: metricIn 620ms cubic-bezier(.18,.8,.2,1) 420ms both;
+  }
+  .scene.promo-hop-now .metric {
+    top: 74px;
+    width: 400px;
+    min-height: 150px;
+    font-size: 30px;
+  }
+  .story-layer {
+    position: absolute;
+    z-index: 16;
+    left: 54px;
+    right: 54px;
+    top: 660px;
+    pointer-events: none;
+  }
+  .beat-friend .story-layer {
+    top: 630px;
+  }
+  .beat-instant .story-layer,
+  .beat-go .story-layer {
+    top: 650px;
+  }
+  .callout-stack,
+  .result-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    max-width: 780px;
+  }
+  .callout,
+  .result-chip,
+  .chat {
+    opacity: 0;
+    transform: translateY(28px) scale(0.94) rotate(var(--rot, 0deg));
+  }
+  .callout {
+    padding: 17px 22px;
+    border: 2px solid rgba(234, 219, 192, 0.95);
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 20px 42px rgba(23, 21, 18, 0.13);
+    color: var(--ink);
+    font-size: 30px;
+    line-height: 1;
+    font-weight: 920;
+  }
+  .callout:nth-child(1) { --rot: -3deg; }
+  .callout:nth-child(2) { --rot: 2deg; }
+  .callout:nth-child(3) { --rot: -1deg; }
+  .chat-stack {
+    width: 690px;
+    display: grid;
+    gap: 16px;
+  }
+  .chat {
+    width: max-content;
+    max-width: 650px;
+    padding: 20px 24px;
+    border-radius: 30px;
+    box-shadow: 0 22px 44px rgba(23, 21, 18, 0.15);
+    font-size: 30px;
+    line-height: 1.12;
+    font-weight: 850;
+  }
+  .chat-parent {
+    background: rgba(255, 255, 255, 0.96);
+    border: 2px solid var(--line);
+    color: var(--ink);
+  }
+  .chat-friend {
+    justify-self: end;
+    background: var(--forest);
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    color: #fff;
+  }
+  .result-chip {
+    padding: 18px 24px;
+    border-radius: 999px;
+    background: var(--forest);
+    color: #fff;
+    box-shadow: 0 22px 44px rgba(23, 21, 18, 0.14);
+    font-size: 30px;
+    line-height: 1;
+    font-weight: 920;
+  }
+  .result-chip:nth-child(2) {
+    background: var(--orange);
+  }
+  .result-chip:nth-child(3) {
+    background: #fff;
+    color: var(--forest);
+    border: 2px solid var(--line);
+  }
+  .scene.show .callout,
+  .scene.show .result-chip,
+  .scene.show .chat {
+    animation: storyPop 620ms cubic-bezier(.18,.8,.2,1) 320ms both;
+  }
+  .scene.show .callout:nth-child(2),
+  .scene.show .result-chip:nth-child(2),
+  .scene.show .chat:nth-child(2) {
+    animation-delay: 520ms;
+  }
+  .scene.show .callout:nth-child(3),
+  .scene.show .result-chip:nth-child(3) {
+    animation-delay: 700ms;
+  }
+  .scene.promo-hop-now.show .phone {
+    animation: phoneUrgentIn 760ms cubic-bezier(.18,.8,.2,1) both, phoneUrgentDrift 4.2s ease-in-out 760ms both;
+  }
+  .brand-moment {
+    position: absolute;
+    z-index: 18;
+    top: 778px;
+    left: 54px;
+    right: 54px;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(42px);
+  }
+  .brand-lockup {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+  .brand-lockup-mark {
+    width: 96px;
+    height: 96px;
+    border-radius: 24px;
+    display: grid;
+    place-items: center;
+    background: #fff;
+    color: var(--orange);
+    font-size: 58px;
+    line-height: 1;
+    font-weight: 950;
+    box-shadow: 0 20px 48px rgba(23, 21, 18, 0.2);
+  }
+  .brand-lockup-title {
+    font-size: 88px;
+    line-height: 0.95;
+    font-weight: 950;
+  }
+  .brand-tagline {
+    max-width: 840px;
+    font-size: 42px;
+    line-height: 1.12;
+    font-weight: 850;
+  }
+  .brand-pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 34px;
+  }
+  .brand-pill {
+    padding: 16px 22px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    border: 2px solid rgba(255, 255, 255, 0.34);
+    color: #fff;
+    font-size: 28px;
+    line-height: 1;
+    font-weight: 900;
+  }
+  .beat-brand-close .brand-moment {
+    top: 790px;
+  }
+  .beat-brand-close .brand-lockup-title {
+    font-size: 82px;
+  }
+  .scene.brand-scene .cta {
+    border-top-color: rgba(255, 255, 255, 0.34);
+  }
+  .scene.brand-scene .url {
+    box-shadow: 0 18px 40px rgba(233, 102, 18, 0.28);
+  }
+  .scene.brand-scene.show .brand-moment {
+    animation: brandMomentIn 780ms cubic-bezier(.18,.8,.2,1) 120ms both;
+  }
+  .cta {
+    position: absolute;
+    z-index: 22;
+    left: 54px;
+    right: 54px;
+    bottom: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    border-top: 3px solid rgba(23, 66, 55, 0.16);
+    padding-top: 32px;
+    color: var(--forest);
+    font-weight: 900;
+    font-size: 30px;
+  }
+  .url {
+    display: inline-flex;
+    align-items: center;
+    min-height: 70px;
+    padding: 0 28px;
+    border-radius: 999px;
+    background: var(--orange);
+    color: white;
+  }
+  .scene:last-child .url { animation: pulse 1300ms ease-in-out infinite; }
+  @keyframes rise {
+    from { transform: translateY(42px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes phoneIn {
+    from { transform: translateX(-50%) translateY(260px) rotate(3deg) scale(0.78); opacity: 0; }
+    to { transform: translateX(-50%) translateY(170px) rotate(-2deg) scale(0.88); opacity: 1; }
+  }
+  @keyframes phoneDrift {
+    from { transform: translateX(-50%) translateY(170px) rotate(-2deg) scale(0.88); }
+    to { transform: translateX(-50%) translateY(125px) rotate(1deg) scale(0.91); }
+  }
+  @keyframes metricIn {
+    from { transform: translateX(70px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.035); }
+  }
+  @keyframes storyPop {
+    from { transform: translateY(28px) scale(0.94) rotate(var(--rot, 0deg)); opacity: 0; }
+    to { transform: translateY(0) scale(1) rotate(var(--rot, 0deg)); opacity: 1; }
+  }
+  @keyframes urgencySweep {
+    from { transform: translateX(-46px) skewY(-8deg); }
+    to { transform: translateX(42px) skewY(-8deg); }
+  }
+  @keyframes phoneUrgentIn {
+    from { transform: translateX(-50%) translateY(245px) rotate(-6deg) scale(0.78); opacity: 0; }
+    to { transform: translateX(-50%) translateY(145px) rotate(1deg) scale(0.91); opacity: 1; }
+  }
+  @keyframes phoneUrgentDrift {
+    from { transform: translateX(-50%) translateY(145px) rotate(1deg) scale(0.91); }
+    to { transform: translateX(-50%) translateY(105px) rotate(-1deg) scale(0.93); }
+  }
+  @keyframes brandMomentIn {
+    from { transform: translateY(42px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="brand"><span class="mark">F</span><span>FamHop</span></div>
+  <div class="progress" id="progress"></div>
+  <div id="scenes"></div>
+</div>
+<script>
+  const promo = window.__PROMO;
+  const stage = document.getElementById("stage");
+  const scenesRoot = document.getElementById("scenes");
+  const progress = document.getElementById("progress");
+  const esc = (value) => String(value ?? "").replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+  const safeClass = (value) => String(value ?? "").toLowerCase().replace(/[^a-z0-9-]/g, "");
+  const fallbackSceneSeconds = Number(promo.totalSeconds) / promo.scenes.length;
+  const sceneDurations = promo.scenes.map((scene) => {
+    const seconds = Number(scene.seconds);
+    return Number.isFinite(seconds) && seconds > 0 ? seconds : fallbackSceneSeconds;
+  });
+  const totalSeconds = sceneDurations.reduce((sum, seconds) => sum + seconds, 0);
+  const sceneStarts = sceneDurations.map((_, index) => sceneDurations.slice(0, index).reduce((sum, seconds) => sum + seconds, 0));
+  stage.classList.add(`promo-${safeClass(promo.id)}`);
+
+  function sceneClass(scene, index) {
+    return [
+      "scene",
+      `promo-${safeClass(promo.id)}`,
+      `beat-${safeClass(scene.beat || `scene-${index}`)}`,
+      scene.brandMoment ? "brand-scene" : "",
+    ].filter(Boolean).join(" ");
+  }
+
+  function storyLayer(scene) {
+    const callouts = Array.isArray(scene.callouts) ? scene.callouts : [];
+    const chat = Array.isArray(scene.chat) ? scene.chat : [];
+    const resultChips = Array.isArray(scene.resultChips) ? scene.resultChips : [];
+    if (!callouts.length && !chat.length && !resultChips.length) return "";
+    return `
+      <div class="story-layer">
+        ${callouts.length ? `<div class="callout-stack">${callouts.map((item) => `<span class="callout">${esc(item)}</span>`).join("")}</div>` : ""}
+        ${chat.length ? `<div class="chat-stack">${chat.map((item) => `<span class="chat chat-${safeClass(item.type)}">${esc(item.text)}</span>`).join("")}</div>` : ""}
+        ${resultChips.length ? `<div class="result-strip">${resultChips.map((item) => `<span class="result-chip">${esc(item)}</span>`).join("")}</div>` : ""}
+      </div>
+    `;
+  }
+
+  function brandMoment(scene) {
+    const brand = scene.brandMoment;
+    if (!brand) return "";
+    const pills = Array.isArray(brand.pills) ? brand.pills : [];
+    return `
+      <div class="brand-moment">
+        <div class="brand-lockup">
+          <span class="brand-lockup-mark">F</span>
+          <span class="brand-lockup-title">${esc(brand.label)}</span>
+        </div>
+        <div class="brand-tagline">${esc(brand.tagline)}</div>
+        ${pills.length ? `<div class="brand-pill-row">${pills.map((pill) => `<span class="brand-pill">${esc(pill)}</span>`).join("")}</div>` : ""}
+      </div>
+    `;
+  }
+
+  scenesRoot.innerHTML = promo.scenes.map((scene, index) => `
+    <section class="${sceneClass(scene, index)}" data-index="${index}">
+      <div class="copy">
+        <p class="eyebrow">${esc(scene.eyebrow)}</p>
+        <h1>${esc(scene.headline)}</h1>
+        <p class="body">${esc(scene.body)}</p>
+      </div>
+      ${storyLayer(scene)}
+      ${brandMoment(scene)}
+      <div class="visual">
+        <div class="phone">
+          <img alt="" src="${esc(scene.image)}" />
+        </div>
+        <div class="metric">${esc(scene.metric)}</div>
+      </div>
+      <div class="cta"><span>${esc(promo.title)}</span><span class="url">famhop.com</span></div>
+    </section>
+  `).join("");
+
+  const sceneEls = Array.from(document.querySelectorAll(".scene"));
+  let startedAt = 0;
+  let timer = null;
+  function setScene(index) {
+    sceneEls.forEach((el, i) => {
+      el.classList.toggle("show", i === index);
+    });
+  }
+  function tick() {
+    const elapsed = (performance.now() - startedAt) / 1000;
+    let sceneIndex = sceneStarts.findLastIndex((start, index) => elapsed >= start && elapsed < start + sceneDurations[index]);
+    if (sceneIndex < 0) sceneIndex = sceneEls.length - 1;
+    setScene(sceneIndex);
+    progress.style.width = `${Math.min(100, elapsed / totalSeconds * 100)}%`;
+    if (elapsed >= totalSeconds) {
+      progress.style.width = "100%";
+      window.__done = true;
+      clearInterval(timer);
+    }
+  }
+  window.__start = () => {
+    window.__done = false;
+    startedAt = performance.now();
+    setScene(0);
+    timer = setInterval(tick, 60);
+    tick();
+  };
+  if (!window.__manual) window.__start();
+</script>
+</body>
+</html>
