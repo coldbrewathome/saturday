@@ -3881,17 +3881,47 @@ function App({ metro }: AppProps) {
                 <circle cx="37.5" cy="28.25" r="3.75" fill="var(--accent)" />
               </svg>
             ) : (
+              // FamHop: sun over two hills — matches the app icon/favicon.
               <svg width="22" height="22" viewBox="0 0 64 64">
-                <rect width="64" height="64" rx="14" fill="var(--accent)" />
-                <path d="M 14 46 Q 32 18 50 46" stroke="#fff" strokeWidth="3" strokeDasharray="3 4" strokeLinecap="round" fill="none" />
-                <circle cx="14" cy="46" r="3.5" fill="#fff" />
-                <circle cx="50" cy="46" r="3.5" fill="#fff" />
-                <circle cx="32" cy="24" r="9" fill="#fff" />
-                <circle cx="29.5" cy="21.5" r="2.4" fill="var(--accent)" opacity="0.55" />
+                <defs>
+                  <clipPath id="famhop-topbar-tile">
+                    <rect width="64" height="64" rx="14" />
+                  </clipPath>
+                </defs>
+                <rect width="64" height="64" rx="14" fill="#FAEDC9" />
+                <g clipPath="url(#famhop-topbar-tile)">
+                  <circle cx="30" cy="25" r="10.5" fill="var(--accent)" />
+                  <path d="M-8 66 Q22 4 52 66 Z" fill="#2D5043" />
+                  <path d="M16 66 Q46 14 76 66 Z" fill="#1F3A2F" />
+                </g>
               </svg>
             )}
           </span>
-          <h1 className="topbar-wordmark">{APP_BRAND}</h1>
+          <h1 className="topbar-wordmark">
+            {APP_AUDIENCE === "adults" ? (
+              APP_BRAND
+            ) : (
+              // Gabarito 800 cut to outlines, with the "o" burned out into the sun.
+              // Shipped as paths so the logo never waits on (or falls back from) a webfont.
+              <>
+                <svg className="topbar-logotype" viewBox="0 0 320.4 100" aria-hidden="true">
+                  <g transform="translate(0 76) scale(0.1 -0.1)">
+                    <g fill="currentColor">
+                      <path d="M81 0V515Q81 571 102.5 611.5Q124 652 163.5 674.5Q203 697 256 697Q284 697 305.5 693.5Q327 690 339 688V541Q331 543 320.5 545.5Q310 548 294 548Q268 548 256.0 533.5Q244 519 244 488V0ZM328 320H18V469H328Z" />
+                      <path d="M196 -13Q144 -13 104.0 7.5Q64 28 41.5 65.5Q19 103 19 151Q19 203 43.5 239.5Q68 276 108.5 295.5Q149 315 198 315Q271 315 317.0 281.5Q363 248 377 183L311 198V309Q311 334 293.0 352.0Q275 370 237 370Q210 370 175.0 363.0Q140 356 101 337L55 452Q99 474 152.0 488.5Q205 503 262 503Q331 503 378.5 478.0Q426 453 450.0 407.5Q474 362 474 300V0H338L307 97L377 119Q362 58 317.5 22.5Q273 -13 196 -13ZM251 97Q279 97 296.0 112.0Q313 127 313 151Q313 174 296.0 189.0Q279 204 251 204Q221 204 204.5 189.0Q188 174 188 151Q188 127 204.5 112.0Q221 97 251 97Z" transform="translate(317 0)" />
+                      <path d="M48 0V490H168L200 389L141 395Q166 423 198.5 447.5Q231 472 270.0 487.5Q309 503 352 503Q400 503 429.5 486.0Q459 469 475.0 440.5Q491 412 497.5 376.0Q504 340 504 301V0H342V282Q342 320 330.0 332.0Q318 344 299 344Q272 344 246.5 329.5Q221 315 195 289L160 370H210V0ZM634 0V282Q634 320 622.5 332.0Q611 344 592 344Q566 344 540.0 329.5Q514 315 488 289L435 395Q460 423 492.5 447.5Q525 472 564.0 487.5Q603 503 645 503Q693 503 723.0 486.0Q753 469 769.0 440.5Q785 412 791.0 376.0Q797 340 797 301V0Z" transform="translate(800 0)" />
+                      <path d="M48 0V681H210V0ZM352 0V282Q352 320 340.0 332.0Q328 344 305 344Q288 344 269.0 337.5Q250 331 231.5 318.5Q213 306 195 289L141 395Q166 423 199.5 447.5Q233 472 272.5 487.5Q312 503 356 503Q405 503 436.0 486.0Q467 469 484.0 440.5Q501 412 507.5 376.0Q514 340 514 301V0Z" transform="translate(1607 0)" />
+                    </g>
+                    <circle cx="2411.5" cy="245" r="269.9" fill="var(--accent)" />
+                    <g fill="currentColor" transform="translate(2662 0)">
+                      <path d="M326 -13Q262 -13 215.0 16.0Q168 45 142.0 102.0Q116 159 116 245Q116 325 142.5 382.5Q169 440 216.5 471.5Q264 503 327 503Q394 503 444.5 469.5Q495 436 523.5 378.0Q552 320 552 245Q552 170 523.0 111.5Q494 53 442.5 20.0Q391 -13 326 -13ZM48 -190V490H168L210 356H201V144H210V-190ZM295 143Q334 143 360.5 171.5Q387 200 387 245Q387 289 360.5 318.5Q334 348 295 348Q256 348 229.0 318.5Q202 289 202 245Q202 200 229.0 171.5Q256 143 295 143Z" />
+                    </g>
+                  </g>
+                </svg>
+                <span className="topbar-wordmark-text">{APP_BRAND}</span>
+              </>
+            )}
+          </h1>
         </div>
 
         <label className="topbar-metro" title={`Browsing ${metro.label}`}>
