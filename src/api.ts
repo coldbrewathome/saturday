@@ -77,10 +77,18 @@ export async function createPoll(body: {
   return response.json();
 }
 
+export class PollFetchError extends Error {
+  status: number;
+  constructor(status: number) {
+    super(`Poll not found (${status})`);
+    this.status = status;
+  }
+}
+
 export async function getPoll(pollId: string): Promise<PollSnapshot> {
   const response = await fetch(`${requireApi()}/polls/${pollId}`);
   if (!response.ok) {
-    throw new Error(`Poll not found (${response.status})`);
+    throw new PollFetchError(response.status);
   }
   return response.json();
 }

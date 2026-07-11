@@ -45,6 +45,7 @@ import {
   fetchAdminEvents,
   fetchGeo,
   getPoll,
+  PollFetchError,
   subscribeNewsletter,
   trackMetric,
   fetchWeather,
@@ -2170,8 +2171,18 @@ function App({ metro }: AppProps) {
         setActivePollTally(snapshot);
         setPollTallyStatus("idle");
       })
-      .catch(() => {
-        if (!cancelled) setPollTallyStatus("error");
+      .catch((err) => {
+        if (cancelled) return;
+        setPollTallyStatus("error");
+        // Poll expired (30-day TTL) or was deleted server-side — drop the
+        // dead pollId so this plan stops re-checking it on every load.
+        if (err instanceof PollFetchError && err.status === 404) {
+          setPlans((current) =>
+            current.map((plan) =>
+              plan.pollId === activePollId ? { ...plan, pollId: undefined } : plan,
+            ),
+          );
+        }
       });
     return () => {
       cancelled = true;
@@ -2188,11 +2199,31 @@ function App({ metro }: AppProps) {
     votesCheckedRef.current = true;
     let cancelled = false;
     Promise.all(
-      shared.map((plan) => getPoll(plan.pollId as string).catch(() => null)),
-    ).then((snapshots) => {
+      shared.map((plan) =>
+        getPoll(plan.pollId as string)
+          .then((snapshot) => ({ planId: plan.id, snapshot, expired: false }))
+          .catch((err) => ({
+            planId: plan.id,
+            snapshot: null as PollSnapshot | null,
+            expired: err instanceof PollFetchError && err.status === 404,
+          })),
+      ),
+    ).then((results) => {
       if (cancelled) return;
-      if (snapshots.some((snap) => snap && snap.voterCount > 0)) {
+      if (results.some((r) => r.snapshot && r.snapshot.voterCount > 0)) {
         setVotesIn(true);
+      }
+      // Prune plans whose poll expired (30-day TTL) or was deleted
+      // server-side so future loads don't keep re-checking a dead pollId.
+      const expiredIds = new Set(
+        results.filter((r) => r.expired).map((r) => r.planId),
+      );
+      if (expiredIds.size > 0) {
+        setPlans((current) =>
+          current.map((plan) =>
+            expiredIds.has(plan.id) ? { ...plan, pollId: undefined } : plan,
+          ),
+        );
       }
     });
     return () => {
