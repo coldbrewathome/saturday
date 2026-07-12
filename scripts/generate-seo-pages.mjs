@@ -985,7 +985,13 @@ function main() {
       generateCityWeekendPages(events, weekendEventLookup) +
       generateFreeThisWeekendPage(events, weekendEventLookup);
 
-    generateMetroAppShellPage(metro, categorySlugs);
+    generateMetroAppShellPage(metro, {
+      categorySlugs,
+      cities,
+      events: distinctEvents,
+      eventLookup: weekendEventLookup,
+      hasWeekendGuide: wroteThisWeekend,
+    });
 
     const slugHistory = readEventSlugHistory(metro);
     totalEndedEventStubs += generateEndedEventStubs(
@@ -1503,7 +1509,35 @@ function metroText(text) {
     .replace(/Peninsula, South Bay, and East Bay/g, `${metroLabel()} neighborhoods`);
 }
 
-function generateMetroAppShellPage(metro, categorySlugs = null) {
+// Prerendered shell content: the homepage and metro hub pages are the SPA
+// shell, and until 2026-07 their h1/copy/links lived only inside <noscript>,
+// so crawlers saw zero body text on exactly the pages targeting head keywords.
+// This block puts that content directly in #root — src/main.tsx mounts with
+// createRoot().render(), which clears #root's children on first render, so
+// the static block is crawlable in raw HTML and replaced once the app boots.
+// Marker comments let the per-metro pass swap out the root pass's block
+// (metro shells are cloned from the already-processed dist/index.html).
+const SHELL_BLOCK_RE = /<!--seo-shell:start-->[\s\S]*?<!--seo-shell:end-->/;
+function replaceShellBlock(html, inner) {
+  const block = `<!--seo-shell:start-->${inner}<!--seo-shell:end-->`;
+  const re = SHELL_BLOCK_RE.test(html) ? SHELL_BLOCK_RE : /<noscript>[\s\S]*?<\/noscript>/;
+  return html.replace(re, () => block);
+}
+
+// Minimal self-contained styling; removed along with the block when React
+// mounts, so it can't leak into the live app.
+const SHELL_STYLE =
+  `<style>` +
+  `.seo-shell{max-width:860px;margin:0 auto;padding:28px 20px 48px;font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;color:#22221f}` +
+  `.seo-shell h1{font-size:1.65rem;line-height:1.25;margin:0 0 10px}` +
+  `.seo-shell h2{font-size:1.15rem;margin:26px 0 10px}` +
+  `.seo-shell p{margin:0 0 10px}` +
+  `.seo-shell ul{margin:0;padding-left:20px}` +
+  `.seo-shell li{margin:4px 0}` +
+  `.seo-shell nav a{display:inline-block;margin:0 14px 8px 0}` +
+  `</style>`;
+
+function generateMetroAppShellPage(metro, extras = {}) {
   const shellPath = path.join(DIST, "index.html");
   if (!fs.existsSync(shellPath)) return;
   const canonical = metroUrl("");
@@ -1546,7 +1580,7 @@ function generateMetroAppShellPage(metro, categorySlugs = null) {
   };
   let html = fs.readFileSync(shellPath, "utf8");
   html = metro.id === metroConfig.defaultMetro.id ? html : metroText(html);
-  html = replaceMetroShellCopy(html, title, description, categorySlugs);
+  html = replaceMetroShellCopy(html, title, description, extras);
   html = html.replace(
     /<script type="application\/ld\+json">[\s\S]*?<\/script>/,
     `<script type="application/ld+json">${safeJsonScript(jsonLd)}</script>`,
@@ -1589,8 +1623,8 @@ function generateRootAppShellPage() {
       return `<li><a href="${esc(href)}"><strong>${esc(label)}</strong><p>${esc(metroCardBlurb(label))}</p></a></li>`;
     })
     .join("");
-  const noscript = `
-      <noscript>
+  const shellContent = `${SHELL_STYLE}
+      <div class="seo-shell">
         <header>
           <h1>${esc(title)}</h1>
           <p>${esc(description)}</p>
@@ -1599,8 +1633,8 @@ function generateRootAppShellPage() {
           <h2>Choose your metro</h2>
           <ul>${metroCards}</ul>
         </section>
-        <p><strong>Heads-up:</strong> ${esc(BRAND)} is an interactive planner. Please enable JavaScript to plan, share and vote.</p>
-      </noscript>`;
+        <noscript><p><strong>Heads-up:</strong> ${esc(BRAND)} is an interactive planner. Please enable JavaScript to plan, share and vote.</p></noscript>
+      </div>`;
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -1636,12 +1670,10 @@ function generateRootAppShellPage() {
     ],
   };
   let html = fs.readFileSync(shellPath, "utf8");
-  html = html
-    .replace(/<noscript>[\s\S]*?<\/noscript>/, noscript)
-    .replace(
-      /<script type="application\/ld\+json">[\s\S]*?<\/script>/,
-      `<script type="application/ld+json">${safeJsonScript(jsonLd)}</script>`,
-    );
+  html = replaceShellBlock(html, shellContent).replace(
+    /<script type="application\/ld\+json">[\s\S]*?<\/script>/,
+    `<script type="application/ld+json">${safeJsonScript(jsonLd)}</script>`,
+  );
   html = upsertHeadTag(html, "title", esc(title));
   html = upsertMeta(html, "name", "description", description);
   html = upsertLink(html, "canonical", canonical);
@@ -1655,9 +1687,18 @@ function generateRootAppShellPage() {
   fs.writeFileSync(shellPath, html);
 }
 
-function replaceMetroShellCopy(html, title, description, categorySlugs = null) {
+function replaceMetroShellCopy(html, title, description, extras = {}) {
+  const {
+    categorySlugs = null,
+    cities = [],
+    events = [],
+    eventLookup = null,
+    hasWeekendGuide = true,
+  } = extras;
   const area = metroLabel();
-  
+  // h1 targets the head keyword; the brand suffix stays in <title> only.
+  const h1 = title.replace(` | ${BRAND}`, "");
+
   const categoriesList = [];
   const allowedCats = IS_ADULTS
     ? [
@@ -1678,11 +1719,43 @@ function replaceMetroShellCopy(html, title, description, categorySlugs = null) {
       categoriesList.push(`<a href="${metroPath(`category/${c.slug}/`)}">${esc(c.label)}</a>`);
     }
   }
+  const browseLinks = [
+    ...(hasWeekendGuide
+      ? [`<a href="${metroPath("this-weekend/")}">${esc(area)} weekend guide</a>`]
+      : []),
+    ...categoriesList,
+  ];
 
-  const noscript = `
-      <noscript>
+  // City hub links — `cities` is exactly the set generateCityPages wrote, so
+  // every anchor resolves to a prerendered page.
+  const cityLinks = cities.map(
+    (c) => `<a href="${metroPath(`city/${slugify(c.name)}/`)}">${esc(c.name)}</a>`,
+  );
+
+  // Soonest upcoming events that actually got a prerendered page (eventLookup
+  // is already restricted to generated slugs; capped-out events miss).
+  const now = new Date();
+  const seenEventSlugs = new Set();
+  const eventItems = [];
+  const sortedEvents = [...events].sort((a, b) =>
+    (a.startDateTime || "").localeCompare(b.startDateTime || ""),
+  );
+  for (const ev of sortedEvents) {
+    const slug = eventLookup?.get(ev);
+    if (!slug || seenEventSlugs.has(slug)) continue;
+    if (!ev.startDateTime || new Date(ev.startDateTime) < now) continue;
+    seenEventSlugs.add(slug);
+    const when = formatEventDate(ev);
+    eventItems.push(
+      `<li><a href="${metroPath(`event/${slug}/`)}">${esc(ev.title)}</a>${when ? ` — ${esc(when)}` : ""}</li>`,
+    );
+    if (eventItems.length >= 10) break;
+  }
+
+  const shellContent = `${SHELL_STYLE}
+      <div class="seo-shell">
         <header>
-          <h1>${esc(title)}</h1>
+          <h1>${esc(h1)}</h1>
           <p>${esc(description)} Search ${IS_ADULTS ? "good spots and upcoming events" : "1,500+ kid-friendly spots and upcoming family events"}, then build a shareable ${A.planNoun}.</p>
         </header>
         <section>
@@ -1694,17 +1767,22 @@ function replaceMetroShellCopy(html, title, description, categorySlugs = null) {
             <li>Build a 3-stop plan and share a link so ${A.voters} can vote.</li>
           </ul>
         </section>
-        <section>
+        ${browseLinks.length ? `<section>
           <h2>Browse ${esc(area)}</h2>
-          <p>
-            <a href="${metroPath("this-weekend/")}">Weekend guide</a>${categoriesList.length ? ", " + categoriesList.join(", ") : ""}.
-          </p>
-        </section>
-        <p><strong>Heads-up:</strong> ${esc(BRAND)} is an interactive planner. Please enable JavaScript to plan, share and vote.</p>
-      </noscript>`;
+          <nav>${browseLinks.join("\n          ")}</nav>
+        </section>` : ""}
+        ${cityLinks.length ? `<section>
+          <h2>${esc(area)} cities and towns</h2>
+          <nav>${cityLinks.join("\n          ")}</nav>
+        </section>` : ""}
+        ${eventItems.length ? `<section>
+          <h2>Upcoming ${A.eventsAdj}events in ${esc(area)}</h2>
+          <ul>${eventItems.join("\n          ")}</ul>
+        </section>` : ""}
+        <noscript><p><strong>Heads-up:</strong> ${esc(BRAND)} is an interactive planner. Please enable JavaScript to plan, share and vote.</p></noscript>
+      </div>`;
 
-  return html
-    .replace(/<noscript>[\s\S]*?<\/noscript>/, noscript)
+  return replaceShellBlock(html, shellContent)
     .replace(
       /Events are pulled directly from public source pages \(libraries like SFPL, SJPL, Oakland; parks; museums; family festivals\) using their official event calendars in JSON-LD, iCal, RSS, LibCal, and dated HTML formats\./g,
       `Events are pulled directly from public source pages for ${area} ${IS_ADULTS ? "music venues, museums, breweries, and festivals" : "libraries, parks, museums, and family venues"}.`,
@@ -4984,7 +5062,7 @@ function esc(s) {
 function safeJsonScript(obj) {
   return JSON.stringify(obj, (_k, v) => (v === undefined ? undefined : v))
     .replace(/</g, "\\u003c")
-    .replace(/-->/g, "--\\>");
+    .replace(/-->/g, "--\\u003e");
 }
 
 function stripProto(url) {
