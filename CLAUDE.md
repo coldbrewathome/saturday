@@ -105,3 +105,4 @@ Do **not** restructure URLs, add FAQPage schema (dead in Google Search since 202
 ## Shared Skills
 
 - For local event discovery, source repair, Bay Area feed repopulation, or missing-event audits, read and follow `skills/grounded-event-discovery/SKILL.md`. It defines the official-source search workflow and verification gates shared with Codex.
+- For the weekly "prepare events for the coming week" routine (feed refresh → GSC/Trends-guided discovery → source repair → SEO no-regression gate → deploy), read and follow `skills/weekly-event-prep/SKILL.md`. It encodes the gate order (plans before validate, build before seo:audit, hub `seo-shell` markers) and the Eventbrite/visible-text gate rules.
