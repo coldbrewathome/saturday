@@ -9,10 +9,12 @@ import {
   extractCommunicoEvents,
   extractChicagoParkDistrictEvents,
   extractCivicPlusCalendarEvents,
+  extractAopCalendarEvents,
   extractDrupalCardEvents,
   extractEventOnEvents,
   extractEventListEvents,
   extractFamsfEvents,
+  extractLaplEvents,
   extractHtmlEvents,
   extractIcsEvents,
   extractLibCalEvents,
@@ -1154,6 +1156,43 @@ test("extractOfficialTextEvents expands verified monthly community events", () =
   assert.equal(events[0].extractionMethod, "official-recurring-event");
 });
 
+test("extractOfficialTextEvents expands verified weekly recurring events on configured days until the cutoff", () => {
+  const html = `
+    <main>
+      <h2>Storytime in the Nature Garden</h2>
+      <p>weekly 10:30 am Saturday and Sunday</p>
+    </main>
+  `;
+
+  const events = extractOfficialTextEvents(html, {
+    id: "nhm-family-calendar",
+    name: "Natural History Museums of Los Angeles County",
+    url: "https://nhm.org/calendar",
+    city: "Los Angeles",
+    category: "Museum",
+    officialRecurringEvents: [
+      {
+        id: "nhm-storytime-nature-garden",
+        title: "Storytime in the Nature Garden",
+        description: "Interactive storytime for caregivers and children ages 0-5.",
+        venue: "Natural History Museum of Los Angeles County",
+        startTime: "10:30",
+        durationMinutes: 30,
+        ageBands: ["toddler", "preschool"],
+        requiredText: ["Storytime in the", "Nature Garden", "10:30 am"],
+        recurrence: { frequency: "weekly", daysOfWeek: [0, 6], until: "2026-05-10" },
+      },
+    ],
+  }, { now: new Date("2026-05-05T12:00:00Z"), windowDays: 45 });
+
+  // Sat May 9 and Sun May 10 fall inside the window; the until cutoff drops
+  // Sat May 16 and everything after.
+  assert.equal(events.length, 2);
+  assert.equal(events[0].startDateTime, "2026-05-09T17:30:00.000Z");
+  assert.equal(events[1].startDateTime, "2026-05-10T17:30:00.000Z");
+  assert.equal(events[0].extractionMethod, "official-recurring-event");
+});
+
 test("expandRecurringTemplates creates dated events inside the planning window", () => {
   const events = expandRecurringTemplates(
     [
@@ -1369,6 +1408,110 @@ test("extractCivicPlusCalendarEvents reads schema.org list-view events with sour
   assert.equal(events[0].title, "Golden Gate Bandshell: Kids Festival");
   assert.equal(events[0].venue, "Golden Gate Bandshell");
   assert.equal(events[0].extractionMethod, "civicpluscal");
+});
+
+test("extractCivicPlusCalendarEvents reads month-grid day cells that wrap the day number in calendar_day_value", () => {
+  const html = `
+    <a href="/events/calendar-month-view/-curm-6/-cury-2026">June</a>
+    <a href="/events/calendar-month-view/-curm-8/-cury-2026">August</a>
+    <table>
+      <tr>
+        <td class="calendar_day calendar_day_with_items" aria-label="Scheduled events, Monday, July 13, 2026">
+          <span class="calendar_day_value" aria-hidden="true">13</span>
+          <div class="calendar_items">
+            <div class="calendar_item"><span class="calendar_eventtime">10:30 AM</span><a class="calendar_eventlink" href="/Home/Components/Calendar/Event/11695/74" title="Family Storytime">Family Storytime</a></div>
+          </div>
+        </td>
+        <td class="calendar_day">14</td>
+      </tr>
+    </table>
+  `;
+  const events = extractCivicPlusCalendarEvents(html, {
+    id: "sunnyvale-library-calendar",
+    name: "Sunnyvale Public Library",
+    url: "https://www.library.sunnyvale.ca.gov/events/calendar-month-view",
+    city: "Sunnyvale",
+    category: "Library",
+  });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "Family Storytime");
+  assert.equal(events[0].startDateTime, "2026-07-13T17:30:00.000Z");
+  assert.equal(events[0].url, "https://www.library.sunnyvale.ca.gov/Home/Components/Calendar/Event/11695/74");
+  assert.equal(events[0].extractionMethod, "civicpluscal");
+});
+
+test("extractLaplEvents joins split date/time teaser meta and reads branch venues", () => {
+  const html = `
+    <div class="c-teaser-standard__content">
+      <h3 class="c-teaser-standard__heading">
+        <a href="/events/childrens-storytime-3" class="e-link"><span class="e-link__text">Children's Storytime</span></a>
+      </h3>
+      <div class="c-teaser-standard__text"><p>Stories and songs for young children and their caregivers.</p></div>
+      <ul class="c-teaser-standard__meta">
+        <li class="c-teaser-standard__date"><span class="visually-hidden">Date:</span> 7/13/2026</li>
+        <li class="c-teaser-standard__time"><span class="visually-hidden">Time:</span> 10:30 AM - 11:00 AM</li>
+        <li class="c-teaser-standard__location"><span class="visually-hidden">Location:</span> <a href="/branches/van-nuys" hreflang="en">Van Nuys</a></li>
+      </ul>
+    </div>
+    <div class="c-teaser-standard__content">
+      <h3 class="c-teaser-standard__heading">
+        <a href="/events/no-date-card" class="e-link"><span class="e-link__text">Card Without A Date</span></a>
+      </h3>
+    </div>
+  `;
+  const events = extractLaplEvents(html, {
+    id: "lapl-kids",
+    name: "Los Angeles Public Library Events",
+    url: "https://www.lapl.org/events/search?search=&audience=1556",
+    city: "Los Angeles",
+    category: "Library",
+    defaultAudienceText: "kids children family library storytime",
+  }, { now: new Date("2026-07-12T12:00:00Z") });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "Children's Storytime");
+  assert.equal(events[0].venue, "Van Nuys");
+  assert.equal(events[0].startDateTime, "2026-07-13T17:30:00.000Z");
+  assert.equal(events[0].endDateTime, "2026-07-13T18:00:00.000Z");
+  assert.equal(events[0].url, "https://www.lapl.org/events/childrens-storytime-3");
+  assert.equal(events[0].extractionMethod, "lapl-events");
+});
+
+test("extractAopCalendarEvents reads aria-label day cells and skips grayed-out entries", () => {
+  const html = `
+    <table>
+      <td class="day_cell" role="gridcell" tabIndex='-1' aria-label="July 13, 2026">
+        <div class="date">13</div>
+        <div class="event ">
+          <span style="white-space:nowrap">
+            <a href="/events/info/sea_squirts_camp/"><span style="white-space:normal">Sea Squirts Camp</span>&nbsp;</a>
+            <br />
+            8:30&ndash;11:30am
+        </div>
+        <div class="event ">
+          <a href="/events/info/fish_fry_camp/" class="grayed-out">Fish Fry Camp</a>
+          <br /><span class="grayed-out">8:30&ndash;10:30am</span>
+        </div>
+      </td>
+    </table>
+  `;
+  const events = extractAopCalendarEvents(html, {
+    id: "aquarium-of-the-pacific",
+    name: "Aquarium of the Pacific",
+    url: "https://www.aquariumofpacific.org/events/calendar",
+    city: "Long Beach",
+    category: "Museum",
+    venue: "Aquarium of the Pacific",
+    defaultAudienceText: "kids family aquarium ocean sea life",
+  }, { now: new Date("2026-07-12T12:00:00Z") });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "Sea Squirts Camp");
+  assert.equal(events[0].startDateTime, "2026-07-13T15:30:00.000Z");
+  assert.equal(events[0].endDateTime, "2026-07-13T18:30:00.000Z");
+  assert.equal(events[0].url, "https://www.aquariumofpacific.org/events/info/sea_squirts_camp/");
+  assert.equal(events[0].extractionMethod, "aop-calendar");
 });
 
 test("extractTicketmasterEvents applies source allow and exclude filters", () => {

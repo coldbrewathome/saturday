@@ -105,14 +105,21 @@
     {
       "id": "lapl-kids",
       "name": "Los Angeles Public Library Events",
-      "url": "https://www.lapl.org/rss/events",
+      "url": "https://www.lapl.org/events/search?search=&audience=1556",
       "city": "Los Angeles",
       "neighborhood": "Downtown",
       "category": "Library",
-      "sourceType": "rss",
+      "sourceType": "laplEvents",
       "trust": "official",
       "lat": 34.0537,
-      "lon": -118.2557
+      "lon": -118.2557,
+      "urls": [
+        "https://www.lapl.org/events/search?search=&audience=1556",
+        "https://www.lapl.org/events/search?search=&audience=1555",
+        "https://www.lapl.org/events/search?search=&audience=2976"
+      ],
+      "defaultAudienceText": "kids children family library storytime",
+      "notes": "LAPL's Drupal 11 events search renders dated c-teaser-standard cards; the old /rss/events feed is gone (404). Audience filters: 1556 Kids, 1555 Babies and Toddlers, 2976 All Ages/Family Friendly (1554 is Adults)."
     },
     {
       "id": "santa-monica-library",
@@ -169,16 +176,118 @@
       "url": "https://nhm.org/calendar",
       "city": "Los Angeles",
       "category": "Museum",
-      "sourceType": "eventList",
+      "sourceType": "officialTextEvents",
       "trust": "official",
       "lat": 34.0169,
       "lon": -118.2888,
       "defaultAudienceText": "kids family museum natural history science",
-      "eventList": {
-        "venue": "Natural History Museum of Los Angeles County",
-        "neighborhood": "Exposition Park",
-        "city": "Los Angeles"
-      }
+      "officialRecurringEvents": [
+        {
+          "id": "nhm-storytime-nature-garden",
+          "title": "Storytime in the Nature Garden",
+          "description": "Interactive storytime in the Nature Gardens for caregivers and children ages 0-5, led by Museum Educators.",
+          "venue": "Natural History Museum of Los Angeles County",
+          "neighborhood": "Exposition Park",
+          "recurrence": {
+            "frequency": "weekly",
+            "daysOfWeek": [
+              0,
+              6
+            ]
+          },
+          "startTime": "10:30",
+          "durationMinutes": 30,
+          "ageBands": [
+            "toddler",
+            "preschool"
+          ],
+          "category": "Museum",
+          "cost": "Included with admission",
+          "url": "https://nhm.org/calendar/storytime-nature-garden",
+          "requiredText": [
+            "Storytime in the",
+            "Nature Garden",
+            "10:30 am"
+          ]
+        },
+        {
+          "id": "nhm-dinosaur-encounters",
+          "title": "Dinosaur Encounters",
+          "description": "Live theater performance where dinosaurs come to life through large-scale puppets. Friday through Sunday, 11 am and 1:45 pm; schedule varies.",
+          "venue": "Natural History Museum of Los Angeles County",
+          "neighborhood": "Exposition Park",
+          "recurrence": {
+            "frequency": "weekly",
+            "daysOfWeek": [
+              5,
+              6,
+              0
+            ]
+          },
+          "startTime": "11:00",
+          "durationMinutes": 20,
+          "ageBands": [
+            "preschool",
+            "school-age"
+          ],
+          "category": "Museum",
+          "cost": "Included with admission",
+          "url": "https://nhm.org/calendar/dinosaur-encounters",
+          "requiredText": [
+            "Dinosaur Encounters",
+            "11:00 am"
+          ]
+        },
+        {
+          "id": "nhm-dinosaur-hall-tour",
+          "title": "Dinosaur Hall Tour",
+          "description": "Explore the Dinosaur Hall with a Museum Educator and learn about the fascinating world of dinosaurs.",
+          "venue": "Natural History Museum of Los Angeles County",
+          "neighborhood": "Exposition Park",
+          "recurrence": {
+            "frequency": "daily"
+          },
+          "startTime": "13:00",
+          "durationMinutes": 45,
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "category": "Museum",
+          "cost": "Included with admission",
+          "url": "https://nhm.org/calendar/dinosaur-hall-tour",
+          "requiredText": [
+            "Dinosaur Hall Tour",
+            "1:00 pm"
+          ]
+        },
+        {
+          "id": "nhm-meet-live-animal",
+          "title": "Meet a Live Animal",
+          "description": "Get up close with the Museum's resident animals and hear amazing stories about critters that are often misunderstood or overlooked.",
+          "venue": "Natural History Museum of Los Angeles County",
+          "neighborhood": "Exposition Park",
+          "recurrence": {
+            "frequency": "daily"
+          },
+          "startTime": "15:00",
+          "durationMinutes": 30,
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "category": "Museum",
+          "cost": "Included with admission",
+          "url": "https://nhm.org/calendar/meet-live-animal",
+          "requiredText": [
+            "Meet a Live Animal",
+            "3:00 pm"
+          ]
+        }
+      ],
+      "notes": "nhm.org/calendar now renders undated recurring highlight cards (no per-instance dates, no JSON-LD). Recurring family programs are expanded from officialRecurringEvents, each gated on the schedule text still present on the live calendar page."
     },
     {
       "id": "lacma-events",
@@ -293,14 +402,16 @@
     {
       "id": "aquarium-of-the-pacific",
       "name": "Aquarium of the Pacific",
-      "url": "https://www.aquariumofpacific.org/events",
+      "url": "https://www.aquariumofpacific.org/events/calendar",
       "city": "Long Beach",
       "category": "Museum",
-      "sourceType": "html",
+      "sourceType": "aopCalendar",
       "trust": "official",
       "lat": 33.7621,
       "lon": -118.1968,
-      "defaultAudienceText": "kids family aquarium ocean sea life"
+      "defaultAudienceText": "kids family aquarium ocean sea life",
+      "venue": "Aquarium of the Pacific",
+      "notes": "/events is an undated hub page; the dated month grid lives at /events/calendar as day_cell table cells parsed by extractAopCalendarEvents."
     },
     {
       "id": "autry-museum",
@@ -349,19 +460,6 @@
       "lat": 34.1457,
       "lon": -118.1602,
       "defaultAudienceText": "family art museum"
-    },
-    {
-      "id": "california-science-center",
-      "name": "California Science Center",
-      "url": "https://californiasciencecenter.org/events",
-      "city": "Los Angeles",
-      "category": "Museum",
-      "sourceType": "html",
-      "trust": "official",
-      "lat": 34.0156,
-      "lon": -118.2864,
-      "defaultAudienceText": "kids family science museum",
-      "requiresBrowserHeaders": true
     },
     {
       "id": "los-angeles-zoo",
@@ -535,6 +633,526 @@
             "4:00 p.m. - 9:30 p.m.",
             "July 4th",
             "200 N Grand Ave"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "oc-fair-2026",
+      "name": "OC Fair 2026",
+      "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+      "city": "Costa Mesa",
+      "neighborhood": "Costa Mesa",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 33.6652,
+      "lon": -117.9006,
+      "officialTextEvents": [
+        {
+          "id": "oc-fair-2026-07-17",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-07-17T11:00:00-07:00",
+          "endDateTime": "2026-07-18T00:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-07-18",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-07-18T11:00:00-07:00",
+          "endDateTime": "2026-07-19T00:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-07-19",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-07-19T11:00:00-07:00",
+          "endDateTime": "2026-07-19T23:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-07-22",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-07-22T11:00:00-07:00",
+          "endDateTime": "2026-07-22T23:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-07-23",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-07-23T11:00:00-07:00",
+          "endDateTime": "2026-07-23T23:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-07-24",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-07-24T11:00:00-07:00",
+          "endDateTime": "2026-07-25T00:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-07-25",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-07-25T11:00:00-07:00",
+          "endDateTime": "2026-07-26T00:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-07-26",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-07-26T11:00:00-07:00",
+          "endDateTime": "2026-07-26T23:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-07-29",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-07-29T11:00:00-07:00",
+          "endDateTime": "2026-07-29T23:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-07-30",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-07-30T11:00:00-07:00",
+          "endDateTime": "2026-07-30T23:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-07-31",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-07-31T11:00:00-07:00",
+          "endDateTime": "2026-08-01T00:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-08-01",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-08-01T11:00:00-07:00",
+          "endDateTime": "2026-08-02T00:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-08-02",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-08-02T11:00:00-07:00",
+          "endDateTime": "2026-08-02T23:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-08-05",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-08-05T11:00:00-07:00",
+          "endDateTime": "2026-08-05T23:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-08-06",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-08-06T11:00:00-07:00",
+          "endDateTime": "2026-08-06T23:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-08-07",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-08-07T11:00:00-07:00",
+          "endDateTime": "2026-08-08T00:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-08-08",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-08-08T11:00:00-07:00",
+          "endDateTime": "2026-08-09T00:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-08-09",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-08-09T11:00:00-07:00",
+          "endDateTime": "2026-08-09T23:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-08-12",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-08-12T11:00:00-07:00",
+          "endDateTime": "2026-08-12T23:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-08-13",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-08-13T11:00:00-07:00",
+          "endDateTime": "2026-08-13T23:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-08-14",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-08-14T11:00:00-07:00",
+          "endDateTime": "2026-08-15T00:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-08-15",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-08-15T11:00:00-07:00",
+          "endDateTime": "2026-08-16T00:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
+          ]
+        },
+        {
+          "id": "oc-fair-2026-08-16",
+          "title": "OC Fair",
+          "description": "The 2026 OC Fair brings its \"Your Adventure Awaits\" theme to the OC Fair & Event Center, open Wednesday through Sunday each week. Kids ages 5 and younger get in free every day, and admission for kids 6-12 is $9.",
+          "venue": "OC Fair & Event Center",
+          "neighborhood": "Costa Mesa",
+          "startDateTime": "2026-08-16T11:00:00-07:00",
+          "endDateTime": "2026-08-16T23:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
+          "requiredText": [
+            "July 17",
+            "Aug. 16",
+            "Your Adventure Awaits",
+            "88 Fair Drive"
           ]
         }
       ]

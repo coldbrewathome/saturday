@@ -1901,8 +1901,17 @@ function expandOfficialRecurringEvents(source = {}, pageText = "", options = {})
   for (const config of configs) {
     if (!officialEventMatchesPage(pageText, config)) continue;
     const recurrence = config.recurrence || {};
-    if (recurrence.frequency === "daily") {
+    if (recurrence.frequency === "daily" || recurrence.frequency === "weekly") {
+      // Weekly recurrences emit only on recurrence.daysOfWeek (0 = Sunday).
+      // recurrence.until (YYYY-MM-DD) caps expansion for runs that end
+      // before the page copy is taken down.
+      const weeklyDays = maybeArray(recurrence.daysOfWeek)
+        .map(Number)
+        .filter((day) => day >= 0 && day <= 6);
+      const until = recurrence.until ? new Date(`${recurrence.until}T23:59:59Z`) : null;
       for (let cursor = new Date(start); cursor <= end; cursor = addDays(cursor, 1)) {
+        if (until && cursor > until) break;
+        if (recurrence.frequency === "weekly" && !weeklyDays.includes(cursor.getUTCDay())) continue;
         const startClock = parseClock(config.startTime || "10:00");
         if (!startClock) continue;
         const startDateTime = localDateTime(cursor, startClock, source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET);
@@ -2343,7 +2352,10 @@ export function extractCivicPlusCalendarEvents(html, source = {}, options = {}) 
     for (const cellMatch of html.matchAll(dayCellRegex)) {
       const cell = cellMatch[1];
       if (!/calendar_day_with_items/i.test(cellMatch[0])) continue;
-      const dayMatch = cell.match(/^\s*(\d{1,2})/);
+      // CivicPlus now wraps the day number in <span class="calendar_day_value">
+      // instead of leaving it as bare leading text; accept both shapes.
+      const dayMatch = cell.match(/^\s*(\d{1,2})/) ||
+        cell.match(/calendar_day_value[^>]*>\s*(\d{1,2})\s*</i);
       if (!dayMatch) continue;
       const day = Number(dayMatch[1]);
       if (!day || day < 1 || day > 31) continue;
@@ -2953,6 +2965,107 @@ export function extractWpRestEvents(json, source = {}) {
   return dedupeEvents(events);
 }
 
+// LAPL's Drupal 11 events search (lapl.org/events/search?audience=N) renders
+// one c-teaser-standard card per occurrence:
+//   <div class="c-teaser-standard__content">
+//     <h3 class="c-teaser-standard__heading"><a href="/events/{slug}">Title</a></h3>
+//     <div class="c-teaser-standard__text"><p>Description…</p></div>
+//     <ul class="c-teaser-standard__meta">
+//       <li class="c-teaser-standard__date"><span class="visually-hidden">Date:</span> 7/12/2026</li>
+//       <li class="c-teaser-standard__time"><span class="visually-hidden">Time:</span> 11:00 AM - 1:00 PM</li>
+//       <li class="c-teaser-standard__location"><a href="/branches/{slug}">Branch</a></li>
+// Date and time live in separate list items, so they are joined before
+// handing to parseDateTimeRange. The old /rss/events feed 404s.
+export function extractLaplEvents(html, source = {}, options = {}) {
+  const events = [];
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
+  const now = options.now || new Date();
+  for (const block of blocksByClass(html, "c-teaser-standard__content")) {
+    const title = titleByTagClass(block, "h3", "c-teaser-standard__heading");
+    if (!title) continue;
+    const href = firstHref(block, source.url);
+    const dateText = stripUnsafeText(block.match(/c-teaser-standard__date[\s\S]*?<\/span>\s*([^<]+)/i)?.[1] || "", 40);
+    const timeText = stripUnsafeText(block.match(/c-teaser-standard__time[\s\S]*?<\/span>\s*([^<]+)/i)?.[1] || "", 60);
+    const range = parseDateTimeRange(`${dateText} ${timeText}`, now, timezoneOffset);
+    if (!range) continue;
+    const venue = stripUnsafeText(
+      block.match(/c-teaser-standard__location[\s\S]*?<a[^>]*>([^<]+)</i)?.[1] || source.venue || source.name,
+      120,
+    );
+    const description = firstDivClassText(block, "c-teaser-standard__text", 500);
+    const signalText = `${title} ${description} ${venue} ${sourceAudienceText(source)}`;
+    const event = normalizeRawEvent({
+      title,
+      description,
+      venue,
+      city: source.city,
+      category: source.category || "Library",
+      startDateTime: range.startDateTime,
+      endDateTime: range.endDateTime,
+      ageBands: inferAgeBands(signalText),
+      url: href || source.url,
+      cost: inferCost(signalText),
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.url,
+      extractionMethod: "lapl-events",
+      verified: true,
+    }, source);
+    if (event) events.push(event);
+  }
+  return dedupeEvents(events);
+}
+
+// Aquarium of the Pacific renders its month grid at /events/calendar as one
+// <td class="day_cell …" aria-label="July 13, 2026"> per day, each holding
+// <div class="event "> blocks with a title link and an &ndash;-separated time
+// range (e.g. "8:30&ndash;11:30am"). Sold-out/past entries carry the
+// grayed-out class on the link and are skipped. decodeHtmlEntities only
+// handles a small named set, so &ndash;/&mdash; are normalized here.
+export function extractAopCalendarEvents(html, source = {}, options = {}) {
+  const events = [];
+  const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
+  const now = options.now || new Date();
+  const cellRe = /<td class="day_cell[^"]*"[^>]*aria-label="([^"]+)"[^>]*>([\s\S]*?)<\/td>/gi;
+  for (const cell of html.matchAll(cellRe)) {
+    const dateText = cell[1];
+    for (const block of cell[2].split(/<div class="event\s*"/i).slice(1)) {
+      const link = block.match(/<a href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/i);
+      if (!link || /grayed-out/i.test(link[0])) continue;
+      const title = stripUnsafeText(link[2].replace(/<[^>]+>/g, " "), 140);
+      if (!title) continue;
+      const text = decodeHtmlEntities(block)
+        .replace(/<[^>]+>/g, " ")
+        .replace(/&(?:ndash|mdash);|[–—]/g, "-");
+      const time = text.match(/(\d{1,2}(?::\d{2})?\s*(?:am|pm)?)\s*-\s*(\d{1,2}(?::\d{2})?\s*(?:am|pm))/i);
+      const range = time
+        ? parseDateTimeRange(`${dateText} ${time[1]} - ${time[2]}`, now, timezoneOffset)
+        : null;
+      if (!range) continue;
+      const signalText = `${title} ${sourceAudienceText(source)}`;
+      const event = normalizeRawEvent({
+        title,
+        description: `${title} at the Aquarium of the Pacific | ${dateText}`,
+        venue: source.venue || source.name,
+        city: source.city,
+        category: source.category || "Museum",
+        startDateTime: range.startDateTime,
+        endDateTime: range.endDateTime,
+        ageBands: inferAgeBands(signalText),
+        url: sanitizeUrl(link[1], source.url) || source.url,
+        cost: inferCost(signalText),
+        sourceId: source.id,
+        sourceName: source.name,
+        sourceUrl: source.url,
+        extractionMethod: "aop-calendar",
+        verified: true,
+      }, source);
+      if (event) events.push(event);
+    }
+  }
+  return dedupeEvents(events);
+}
+
 export function extractSanDiegoDrupalCalendarEvents(html, source = {}, options = {}) {
   const events = [];
   const timezoneOffset = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
@@ -3064,6 +3177,9 @@ export function extractEventsFromPayload(payload, source = {}, options = {}) {
   if (source.sourceType === "sfplEvents") {
     return extractSfplEvents(text, source, options);
   }
+  if (source.sourceType === "laplEvents") {
+    return extractLaplEvents(text, source, options);
+  }
   if (source.sourceType === "communicoEvents") {
     return extractCommunicoEvents(payload.json, source);
   }
@@ -3078,6 +3194,9 @@ export function extractEventsFromPayload(payload, source = {}, options = {}) {
   }
   if (source.sourceType === "eventList") {
     return extractEventListEvents(text, source, options);
+  }
+  if (source.sourceType === "aopCalendar") {
+    return extractAopCalendarEvents(text, source, options);
   }
   if (source.sourceType === "lincolnCenterFamily") {
     return extractLincolnCenterFamilyEvents(text, source, options);

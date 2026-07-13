@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "dallas-fort-worth",
-  "generatedAt": "2026-07-05T20:22:35.362Z",
-  "alertCount": 7,
+  "generatedAt": "2026-07-12T19:14:24.371Z",
+  "alertCount": 8,
   "alerts": [
     {
       "severity": "warning",
@@ -19,13 +19,38 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:22:35.362Z",
+      "fetchedAt": "2026-07-12T19:14:24.371Z",
       "fetches": [
         {
           "url": "https://www.perotmuseum.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketure-events; events=3; calendars=3"
+          "contentType": "application/json; source=ticketure-events; events=2; calendars=2"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "ticketmaster-dallas-fort-worth-family",
+      "sourceName": "Ticketmaster Dallas-Fort Worth Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-12T19:14:24.371Z",
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
         }
       ]
     },
@@ -44,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:22:35.362Z",
+      "fetchedAt": "2026-07-12T19:14:24.371Z",
       "fetches": [
         {
           "url": "https://www.fairparkdallas.com/events/detail/2026-state-fair-of-texas",
@@ -69,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:22:35.362Z",
+      "fetchedAt": "2026-07-12T19:14:24.371Z",
       "fetches": [
         {
           "url": "https://fortworthsfourth.com/",
@@ -94,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:22:35.362Z",
+      "fetchedAt": "2026-07-12T19:14:24.371Z",
       "fetches": [
         {
           "url": "https://www.treesdallas.com/events",
@@ -119,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:22:35.362Z",
+      "fetchedAt": "2026-07-12T19:14:24.371Z",
       "fetches": [
         {
           "url": "https://www.thebombfactory.com/events/rss",
@@ -144,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:22:35.362Z",
+      "fetchedAt": "2026-07-12T19:14:24.371Z",
       "fetches": [
         {
           "url": "https://www.tulipsftw.com/events",
@@ -169,7 +194,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:22:35.362Z",
+      "fetchedAt": "2026-07-12T19:14:24.371Z",
       "fetches": [
         {
           "url": "https://www.fairparkdallas.com/events",

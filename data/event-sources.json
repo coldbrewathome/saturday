@@ -892,7 +892,7 @@
       "lon": -122.4011,
       "venue": "SFMOMA",
       "defaultAudienceText": "family kids children art-making workshops museum all ages",
-      "includePattern": "Free Family|Family Day|MAKE!|SCRAP|Community Day|Hat Party|art[- ]making|craft|kids|children",
+      "includePattern": "Family Studio|Family Program|Free Family|Family Day|MAKE!|SCRAP|Community Day|Hat Party|art[- ]making|craft|kids|children",
       "excludePattern": "tasting|cocktail|21\\+",
       "notes": "SFMOMA renders its event archive into APP.data.archive_filter_posts; the parser reads that inline JSON and keeps family/art-making listings."
     },
@@ -914,7 +914,8 @@
       "homeUrl": "https://www.famsf.org/calendar",
       "defaultAudienceText": "family children kids all ages art-making museum tour",
       "includePattern": "Family Art Making|Family Tour|children|kids|all ages|artists of all ages",
-      "notes": "Official FAMSF family detail pages list dated occurrences inside recurring series copy."
+      "notes": "Official FAMSF family detail pages list dated occurrences inside recurring series copy. famsf.org sits behind a Cloudflare JS challenge that 403s plain fetches; requiresBrowserContext clears it via headless Chromium.",
+      "requiresBrowserContext": true
     },
     {
       "id": "omca-family-events",
@@ -1327,42 +1328,6 @@
       ]
     },
     {
-      "id": "fishermans-wharf-play-on-the-bay-2026",
-      "name": "Play on the Bay",
-      "url": "https://www.fishermanswharf.org/event/play-on-the-bay/2433/",
-      "city": "San Francisco",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.8067921,
-      "lon": -122.4176009,
-      "officialTextEvents": [
-        {
-          "id": "play-on-the-bay-2026-06-06",
-          "title": "Play on the Bay",
-          "description": "Free Fisherman's Wharf Entertainment Zone event on Jefferson Street with music, performances, and a sensory play kids zone.",
-          "venue": "Jefferson Street",
-          "neighborhood": "Fisherman's Wharf",
-          "startDateTime": "2026-06-06T12:00:00-07:00",
-          "endDateTime": "2026-06-06T16:00:00-07:00",
-          "ageBands": [
-            "toddler",
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://www.fishermanswharf.org/event/play-on-the-bay/2433/",
-          "requiredText": [
-            "Play on the Bay",
-            "June 6, 2026",
-            "12:00 PM to 4:00 PM",
-            "free and open to the public"
-          ]
-        }
-      ]
-    },
-    {
       "id": "savenature-insectpalooza-2026",
       "name": "InsectPalooza",
       "url": "https://www.savenature.org/events",
@@ -1394,41 +1359,6 @@
             "12:00 PM",
             "3:00 PM",
             "Minnesota Street Project"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "presidio-pollinator-day-2026",
-      "name": "Pollinator Day at Presidio Tunnel Tops",
-      "url": "https://www.parksconservancy.org/events/presidio-tunnel-tops/pollinator-day-presidio-tunnel-tops-1",
-      "city": "San Francisco",
-      "category": "Outdoors",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.8035,
-      "lon": -122.4635,
-      "officialTextEvents": [
-        {
-          "id": "pollinator-day-presidio-tunnel-tops-2026-06-07",
-          "title": "Pollinator Day at Presidio Tunnel Tops",
-          "description": "Drop-in all-ages pollinator activities outside the Field Station, including art, nature observation, educational games, snacks, and a scavenger hunt.",
-          "venue": "Field Station at Presidio Tunnel Tops",
-          "neighborhood": "Presidio",
-          "startDateTime": "2026-06-07T12:00:00-07:00",
-          "endDateTime": "2026-06-07T16:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://www.parksconservancy.org/events/presidio-tunnel-tops/pollinator-day-presidio-tunnel-tops-1",
-          "requiredText": [
-            "Pollinator Day at Presidio Tunnel Tops",
-            "Sun, Jun 7, 2026",
-            "12:00 - 4:00pm",
-            "Field Station at Presidio Tunnel Tops"
           ]
         }
       ]
@@ -1640,104 +1570,6 @@
             "June 28, 2026",
             "10:00 am - 12:00 pm",
             "Hiller Aviation Museum"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "san-bruno-community-day-posy-parade-2026",
-      "name": "Community Day & Posy Parade",
-      "url": "https://www.sanbruno.ca.gov/893/Community-Day-Posy-Parade",
-      "city": "San Bruno",
-      "category": "Community",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.6223,
-      "lon": -122.4266,
-      "officialTextEvents": [
-        {
-          "id": "san-bruno-posy-parade-2026-06-07",
-          "title": "San Bruno Posy Parade",
-          "description": "Children's Posy Parade on Crystal Springs Road leading into San Bruno Community Day.",
-          "venue": "Crystal Springs Road from Linden Avenue to Oak Avenue",
-          "neighborhood": "San Bruno",
-          "startDateTime": "2026-06-07T11:00:00-07:00",
-          "endDateTime": "2026-06-07T11:30:00-07:00",
-          "ageBands": [
-            "toddler",
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://www.sanbruno.ca.gov/893/Community-Day-Posy-Parade",
-          "requiredText": [
-            "Sunday, June 7, 2026",
-            "Posy Parade begins at 11:00am",
-            "Crystal Springs Road",
-            "San Bruno City Park"
-          ]
-        },
-        {
-          "id": "san-bruno-community-day-2026-06-07",
-          "title": "San Bruno Community Day",
-          "description": "Annual outdoor celebration in San Bruno City Park with live music, food, free activities, booths, open swim sessions, and kids activities.",
-          "venue": "San Bruno City Park",
-          "neighborhood": "San Bruno",
-          "startDateTime": "2026-06-07T11:30:00-07:00",
-          "endDateTime": "2026-06-07T16:30:00-07:00",
-          "ageBands": [
-            "toddler",
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://www.sanbruno.ca.gov/893/Community-Day-Posy-Parade",
-          "requiredText": [
-            "Sunday, June 7, 2026",
-            "Community Day will begin after the parade",
-            "3:30pm-4:30pm",
-            "11:00am-4:00pm"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "bay-area-dragon-boat-corporate-novice-race-2026",
-      "name": "Bay Area Dragon Boat Corporate Novice Race",
-      "url": "https://badboatrace.com/",
-      "urls": [
-        "https://badboatrace.com/",
-        "https://www.fostercity.org/community/page/bay-area-dragon-boat-corporate-novice-race-hosted-bay-area-dragons"
-      ],
-      "city": "Foster City",
-      "category": "Outdoors",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.5585,
-      "lon": -122.2702,
-      "officialTextEvents": [
-        {
-          "id": "bay-area-dragon-boat-corporate-novice-race-2026-06-06",
-          "title": "Bay Area Dragon Boat Corporate Novice Race",
-          "description": "Bay Area Dragons novice race festival on the Foster City Lagoon with qualifying races, finals, food, and music.",
-          "venue": "Leo J. Ryan Park",
-          "neighborhood": "Foster City",
-          "startDateTime": "2026-06-06T09:00:00-07:00",
-          "endDateTime": "2026-06-06T16:00:00-07:00",
-          "ageBands": [
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free to watch",
-          "url": "https://badboatrace.com/",
-          "requiredText": [
-            "Bay Area Dragon Boat Corporate Novice Race"
-          ],
-          "requiredAnyPattern": [
-            "Summer Race:\\s*June\\s*6,\\s*2026[\\s\\S]{0,500}Leo J Ryan Park",
-            "Saturday,\\s*June\\s*6,\\s*2026\\s*-\\s*9:00am[\\s\\S]{0,500}Foster City Lagoon"
           ]
         }
       ]
@@ -2019,61 +1851,6 @@
             "weekOfMonth": 1,
             "dayOfWeek": 5
           }
-        }
-      ]
-    },
-    {
-      "id": "sjmade-fest",
-      "name": "SJMADE Fest",
-      "url": "https://www.sanjosemade.com/pages/sjmade-fest-2026",
-      "city": "San Jose",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.3202,
-      "lon": -121.8577,
-      "officialTextEvents": [
-        {
-          "id": "sjmade-fest-2026-05-30",
-          "title": "SJMADE Fest",
-          "description": "Outdoor maker festival with artists, food vendors, K-Pop programming, and a Mini Cat Town kitten lounge.",
-          "venue": "History Park San Jose",
-          "neighborhood": "History Park",
-          "startDateTime": "2026-05-30T11:00:00-07:00",
-          "endDateTime": "2026-05-30T18:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "requiredText": [
-            "May 30",
-            "May 31",
-            "11 am to 6 pm",
-            "Free admission"
-          ]
-        },
-        {
-          "id": "sjmade-fest-2026-05-31",
-          "title": "SJMADE Fest",
-          "description": "Outdoor maker festival with artists, food vendors, K-Pop programming, and a Mini Cat Town kitten lounge.",
-          "venue": "History Park San Jose",
-          "neighborhood": "History Park",
-          "startDateTime": "2026-05-31T11:00:00-07:00",
-          "endDateTime": "2026-05-31T18:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "requiredText": [
-            "May 30",
-            "May 31",
-            "11 am to 6 pm",
-            "Free admission"
-          ]
         }
       ]
     },

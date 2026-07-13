@@ -1,59 +1,9 @@
 {
   "schemaVersion": 1,
   "metroId": "los-angeles",
-  "generatedAt": "2026-07-05T20:19:10.079Z",
-  "alertCount": 20,
+  "generatedAt": "2026-07-12T20:01:40.765Z",
+  "alertCount": 16,
   "alerts": [
-    {
-      "severity": "warning",
-      "metroId": "los-angeles",
-      "sourceId": "lapl-kids",
-      "sourceName": "Los Angeles Public Library Events",
-      "sourceType": "rss",
-      "url": "https://www.lapl.org/rss/events",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-07-05T20:19:10.079Z",
-      "fetches": [
-        {
-          "url": "https://www.lapl.org/rss/events",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "los-angeles",
-      "sourceId": "nhm-family-calendar",
-      "sourceName": "Natural History Museums of Los Angeles County",
-      "sourceType": "eventList",
-      "url": "https://nhm.org/calendar",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:10.079Z",
-      "fetches": [
-        {
-          "url": "https://nhm.org/calendar",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
     {
       "severity": "warning",
       "metroId": "los-angeles",
@@ -65,11 +15,11 @@
       "issueType": "fetch-failed",
       "reason": "challenge page returned instead of event content",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 7,
+      "recoveredEvents": 3,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 7,
-      "fetchedAt": "2026-07-05T20:19:10.079Z",
+      "lastKnownGoodEvents": 3,
+      "fetchedAt": "2026-07-12T20:01:40.765Z",
       "fetches": [
         {
           "url": "https://www.petersen.org/events",
@@ -77,81 +27,6 @@
           "reason": "challenge page returned instead of event content",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "los-angeles",
-      "sourceId": "cabrillo-marine-aquarium",
-      "sourceName": "Cabrillo Marine Aquarium",
-      "sourceType": "html",
-      "url": "https://cma.recreation.parks.lacity.gov/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:10.079Z",
-      "fetches": [
-        {
-          "url": "https://cma.recreation.parks.lacity.gov/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "los-angeles",
-      "sourceId": "aquarium-of-the-pacific",
-      "sourceName": "Aquarium of the Pacific",
-      "sourceType": "html",
-      "url": "https://www.aquariumofpacific.org/events",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:10.079Z",
-      "fetches": [
-        {
-          "url": "https://www.aquariumofpacific.org/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "los-angeles",
-      "sourceId": "california-science-center",
-      "sourceName": "California Science Center",
-      "sourceType": "html",
-      "url": "https://californiasciencecenter.org/events",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:10.079Z",
-      "fetches": [
-        {
-          "url": "https://californiasciencecenter.org/events",
-          "status": "http-error",
-          "httpStatus": 403,
-          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -170,7 +45,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:10.079Z",
+      "fetchedAt": "2026-07-12T20:01:40.765Z",
       "fetches": [
         {
           "url": "https://www.huntington.org/calendar",
@@ -195,7 +70,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:10.079Z",
+      "fetchedAt": "2026-07-12T20:01:40.765Z",
       "fetches": [
         {
           "url": "https://grandparkla.org/events/",
@@ -220,7 +95,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:10.079Z",
+      "fetchedAt": "2026-07-12T20:01:40.765Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -245,7 +120,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:10.079Z",
+      "fetchedAt": "2026-07-12T20:01:40.765Z",
       "fetches": [
         {
           "url": "https://ocfair.com/oc-fair/",
@@ -270,13 +145,37 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:10.079Z",
+      "fetchedAt": "2026-07-12T20:01:40.765Z",
       "fetches": [
         {
           "url": "https://venturacountyfair.org/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "wende-museum-culver-city",
+      "sourceName": "The Wende Museum",
+      "sourceType": "tribeEvents",
+      "url": "https://wendemuseum.org/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 37,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 37,
+      "fetchedAt": "2026-07-12T20:01:40.765Z",
+      "fetches": [
+        {
+          "url": "https://wendemuseum.org/events/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -295,7 +194,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:10.079Z",
+      "fetchedAt": "2026-07-12T20:01:40.765Z",
       "fetches": [
         {
           "url": "https://grandparkla.org/blockparty/",
@@ -320,7 +219,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:10.079Z",
+      "fetchedAt": "2026-07-12T20:01:40.765Z",
       "fetches": [
         {
           "url": "https://www.troubadour.com/events",
@@ -345,7 +244,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:10.079Z",
+      "fetchedAt": "2026-07-12T20:01:40.765Z",
       "fetches": [
         {
           "url": "https://www.theelrey.com/events",
@@ -370,7 +269,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:10.079Z",
+      "fetchedAt": "2026-07-12T20:01:40.765Z",
       "fetches": [
         {
           "url": "https://www.theroxy.com/events",
@@ -395,7 +294,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:10.079Z",
+      "fetchedAt": "2026-07-12T20:01:40.765Z",
       "fetches": [
         {
           "url": "https://thecomedystore.com/calendar/",
@@ -420,7 +319,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:10.079Z",
+      "fetchedAt": "2026-07-12T20:01:40.765Z",
       "fetches": [
         {
           "url": "https://www.laughfactory.com/shows",
@@ -445,7 +344,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:10.079Z",
+      "fetchedAt": "2026-07-12T20:01:40.765Z",
       "fetches": [
         {
           "url": "https://improv.com/hollywood/calendar/",
@@ -470,7 +369,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:10.079Z",
+      "fetchedAt": "2026-07-12T20:01:40.765Z",
       "fetches": [
         {
           "url": "https://www.ticketmaster.com/the-wiltern-tickets-los-angeles/venue/73790",
@@ -496,7 +395,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:10.079Z",
+      "fetchedAt": "2026-07-12T20:01:40.765Z",
       "fetches": [
         {
           "url": "https://www.theregenttheater.com/events",

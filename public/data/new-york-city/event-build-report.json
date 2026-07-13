@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "new-york-city",
-  "generatedAt": "2026-07-05T20:19:56.905Z",
+  "generatedAt": "2026-07-12T19:11:58.303Z",
   "registryPath": "data/event-sources-new-york-city.json",
   "outputPath": "public/data/new-york-city/events.json",
-  "eventCount": 2257,
+  "eventCount": 2209,
   "adultsEventCount": 20,
   "sourceCount": 31,
-  "liveEventCount": 2239,
-  "lastKnownGoodEventCount": 1,
+  "liveEventCount": 2190,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 20,
-  "operatorAlertCount": 20,
+  "operatorAlertCount": 21,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:56.905Z",
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
       "fetches": [
         {
           "url": "https://queens.libnet.info/events",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:56.905Z",
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
       "fetches": [
         {
           "url": "https://www.nypl.org/events/calendar",
@@ -79,7 +79,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:56.905Z",
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
       "fetches": [
         {
           "url": "https://www.amnh.org/calendar",
@@ -104,7 +104,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:56.905Z",
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
       "fetches": [
         {
           "url": "https://bronxzoo.com/things-to-do/events",
@@ -129,7 +129,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:56.905Z",
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -154,7 +154,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:56.905Z",
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
       "fetches": [
         {
           "url": "https://njfair.com/",
@@ -165,21 +165,21 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "new-york-city",
       "sourceId": "macys-july4-fireworks-2026",
       "sourceName": "Macy's 4th of July Fireworks 2026 (50th)",
       "sourceType": "officialTextEvents",
       "url": "https://www.nyctourism.com/events/macys-fourth-of-july-fireworks/",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-07-05T20:19:56.905Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
       "fetches": [
         {
           "url": "https://www.nyctourism.com/events/macys-fourth-of-july-fireworks/",
@@ -204,7 +204,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:56.905Z",
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
       "fetches": [
         {
           "url": "https://www.brooklynsteel.com/calendar",
@@ -229,7 +229,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:56.905Z",
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
       "fetches": [
         {
           "url": "https://www.boweryballroom.com/calendar",
@@ -254,7 +254,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:56.905Z",
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
       "fetches": [
         {
           "url": "https://www.musichallofwilliamsburg.com/calendar",
@@ -279,7 +279,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:56.905Z",
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
       "fetches": [
         {
           "url": "https://lpr.com/calendar",
@@ -304,7 +304,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:56.905Z",
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
       "fetches": [
         {
           "url": "https://www.terminal5nyc.com/calendar",
@@ -329,7 +329,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:56.905Z",
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
       "fetches": [
         {
           "url": "https://www.websterhall.com/events",
@@ -354,7 +354,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:56.905Z",
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
       "fetches": [
         {
           "url": "https://www.comedycellar.com/line-up/",
@@ -379,13 +379,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:56.905Z",
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
       "fetches": [
         {
           "url": "https://gothamcomedyclub.com/calendar",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "elsewhere-brooklyn",
+      "sourceName": "Elsewhere",
+      "sourceType": "html",
+      "url": "https://www.elsewherebrooklyn.com/events",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
+      "fetches": [
+        {
+          "url": "https://www.elsewherebrooklyn.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -404,7 +429,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:56.905Z",
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
       "fetches": [
         {
           "url": "https://www.roughtradenyc.com/events",
@@ -429,7 +454,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:56.905Z",
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
       "fetches": [
         {
           "url": "https://www.bluenotejazz.com/new-york/schedule",
@@ -454,7 +479,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:56.905Z",
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
       "fetches": [
         {
           "url": "https://villagevanguard.com/events",
@@ -479,7 +504,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:56.905Z",
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
       "fetches": [
         {
           "url": "https://www.jazzagelawnparty.com/",
@@ -504,7 +529,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-05T20:19:56.905Z",
+      "fetchedAt": "2026-07-12T19:11:58.303Z",
       "fetches": [
         {
           "url": "https://cityparksfoundation.org/summerstage/",
@@ -525,9 +550,9 @@
       "metroId": "new-york-city",
       "category": null,
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 0,
       "fetches": []
     },
     {
@@ -594,9 +619,9 @@
       "metroId": "new-york-city",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://www.bklynlibrary.org/event-series/events-for-youth-and-family",
@@ -608,7 +633,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 3,
+      "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -621,9 +646,9 @@
       "metroId": "new-york-city",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 1908,
+      "liveEvents": 1866,
       "fallbackEvents": 0,
-      "eventCount": 1908,
+      "eventCount": 1866,
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/kids",
@@ -634,8 +659,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 511,
-      "extractedEvents": 2419,
+      "rejectedLiveEvents": 465,
+      "extractedEvents": 2331,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -648,9 +673,9 @@
       "metroId": "new-york-city",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 5,
+      "liveEvents": 6,
       "fallbackEvents": 0,
-      "eventCount": 5,
+      "eventCount": 6,
       "fetches": [
         {
           "url": "https://www.brooklynkids.org/events/",
@@ -662,7 +687,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 5,
+      "extractedEvents": 6,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -844,13 +869,13 @@
           "url": "https://queensbotanical.org/calendar/list/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=74; pages=2"
+          "contentType": "application/json; source=tribe-events; events=72; pages=2"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=74; pages=2",
-      "rejectedLiveEvents": 45,
-      "extractedEvents": 68,
+      "contentType": "application/json; source=tribe-events; events=72; pages=2",
+      "rejectedLiveEvents": 43,
+      "extractedEvents": 66,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -863,9 +888,9 @@
       "metroId": "new-york-city",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 194,
+      "liveEvents": 199,
       "fallbackEvents": 0,
-      "eventCount": 194,
+      "eventCount": 199,
       "fetches": [
         {
           "url": "https://www.prospectpark.org/events/",
@@ -876,8 +901,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 3,
-      "extractedEvents": 197,
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 199,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -890,21 +915,21 @@
       "metroId": "new-york-city",
       "category": "Community",
       "status": "ok",
-      "liveEvents": 94,
+      "liveEvents": 86,
       "fallbackEvents": 0,
-      "eventCount": 94,
+      "eventCount": 86,
       "fetches": [
         {
           "url": "https://cityparksfoundation.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=110; pages=3"
+          "contentType": "application/json; source=tribe-events; events=97; pages=2"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=110; pages=3",
-      "rejectedLiveEvents": 16,
-      "extractedEvents": 110,
+      "contentType": "application/json; source=tribe-events; events=97; pages=2",
+      "rejectedLiveEvents": 11,
+      "extractedEvents": 97,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -916,10 +941,10 @@
       "city": "Brooklyn",
       "metroId": "new-york-city",
       "category": "Festival",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.nyctourism.com/events/macys-fourth-of-july-fireworks/",
@@ -932,9 +957,8 @@
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "recoveryMode": "last-known-good",
-      "reason": "source produced no live events; using last-known-good future events"
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "brooklyn-steel",
@@ -1159,9 +1183,9 @@
       "metroId": "new-york-city",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.elsewherebrooklyn.com/events",
@@ -1173,7 +1197,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 2,
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
