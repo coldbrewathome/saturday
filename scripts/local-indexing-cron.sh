@@ -27,8 +27,20 @@ if ! /opt/homebrew/bin/npm run build >> tmp/local-indexing.log 2>&1; then
   exit 1
 fi
 
-# Run the indexing script using Node.js directly
+# Run the indexing script using Node.js directly (FamHop / famhop.com)
 /opt/homebrew/bin/node scripts/publish-indexing.mjs >> tmp/local-indexing.log 2>&1
+
+# Now do Mosey (trymosey.com), which was NEVER submitted before 2026-07-14. Rebuild adults so
+# dist/sitemap.xml becomes Mosey's, then submit. Both brands share leafy-acumen's ~200/day
+# Indexing API quota, but publish-indexing.mjs dedupes against data/indexing-history.json, so a
+# normal day only submits each brand's genuinely new/modified URLs. dist/ is left as Mosey's;
+# the next run's FamHop rebuild at the top makes it unambiguous again.
+echo "Rebuilding Mosey so dist/sitemap.xml is trymosey's..." >> tmp/local-indexing.log
+if /opt/homebrew/bin/npm run build:adults >> tmp/local-indexing.log 2>&1; then
+  /opt/homebrew/bin/node scripts/publish-indexing.mjs >> tmp/local-indexing.log 2>&1
+else
+  echo "Mosey build FAILED — skipping Mosey indexing (FamHop already submitted above)" >> tmp/local-indexing.log
+fi
 
 # Log end time
 echo "=== Indexing job finished at $(date) ===" >> tmp/local-indexing.log

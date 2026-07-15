@@ -210,7 +210,8 @@ async function main() {
       const loc = locMatch[1].trim();
       const lastmod = lastmodMatch ? lastmodMatch[1].trim() : "";
       
-      const isHub = loc === "https://famhop.com/" || 
+      const isHub = loc === "https://famhop.com/" ||
+                    loc === "https://trymosey.com/" ||
                     loc.endsWith("/this-weekend/") ||
                     /this-weekend\/?$/i.test(loc);
                     
