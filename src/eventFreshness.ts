@@ -9,25 +9,116 @@ type FreshnessEvent = {
   endDateTime?: string | null;
 };
 
+type FreshnessOptions = {
+  // IANA timezone of the event's metro (e.g. "America/Los_Angeles"). Governs
+  // date-only string boundaries and the "started today" grace window so a PT
+  // event doesn't flip freshness at ET midnight for an ET viewer, and vice
+  // versa. Falls back to the runtime's local timezone when omitted.
+  timeZone?: string;
+};
+
+const DATE_ONLY_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+function zonedDateParts(date: Date, timeZone?: string): { year: number; month: number; day: number } {
+  if (!timeZone) {
+    return { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() };
+  }
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
+  const get = (type: string) => Number(parts.find((p) => p.type === type)?.value);
+  return { year: get("year"), month: get("month"), day: get("day") };
+}
+
+// UTC instant for local wall-clock Y-M-D H:M:S in `timeZone` (or the
+// runtime's local zone when omitted). Intl formatters can render an instant
+// in a timezone but not parse into one, so this uses the standard
+// round-trip-offset technique: format an initial guess, measure how far off
+// it landed, and correct by that amount.
+function zonedWallClockToUtcMs(
+  year: number,
+  month: number, // 1-based
+  day: number,
+  hour: number,
+  minute: number,
+  second: number,
+  timeZone?: string,
+): number {
+  if (!timeZone) {
+    return new Date(year, month - 1, day, hour, minute, second).getTime();
+  }
+  const guessUtcMs = Date.UTC(year, month - 1, day, hour, minute, second);
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    hourCycle: "h23",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  }).formatToParts(new Date(guessUtcMs));
+  const get = (type: string) => Number(parts.find((p) => p.type === type)?.value);
+  const observedAsUtcMs = Date.UTC(
+    get("year"),
+    get("month") - 1,
+    get("day"),
+    get("hour") === 24 ? 0 : get("hour"),
+    get("minute"),
+    get("second"),
+  );
+  return guessUtcMs - (observedAsUtcMs - guessUtcMs);
+}
+
+// A bare YYYY-MM-DD string means "the whole day" in the event's metro
+// timezone: start-of-day (00:00:00.000) or end-of-day (23:59:59.999).
+function dateOnlyBoundaryMs(value: string, timeZone: string | undefined, endOfDay: boolean): number {
+  const [year, month, day] = value.split("-").map(Number);
+  return endOfDay
+    ? zonedWallClockToUtcMs(year, month, day, 23, 59, 59, timeZone) + 999
+    : zonedWallClockToUtcMs(year, month, day, 0, 0, 0, timeZone);
+}
+
+function parseBoundary(value: string | null | undefined, timeZone: string | undefined, endOfDay: boolean): number {
+  if (!value) return NaN;
+  if (DATE_ONLY_RE.test(value)) return dateOnlyBoundaryMs(value, timeZone, endOfDay);
+  return Date.parse(value);
+}
+
 export function isUpcomingEvent(
   event: FreshnessEvent,
   now: Date = new Date(),
+  options: FreshnessOptions = {},
 ): boolean {
-  if (!event.startDateTime) return true; // recurring series keep recurring
-  const start = new Date(event.startDateTime);
-  if (Number.isNaN(start.getTime())) return false;
-  const end = event.endDateTime ? new Date(event.endDateTime) : null;
-  if (end && !Number.isNaN(end.getTime())) {
-    return end.getTime() >= now.getTime();
+  const { timeZone } = options;
+  const start = parseBoundary(event.startDateTime, timeZone, false);
+  const end = parseBoundary(event.endDateTime, timeZone, true);
+
+  if (event.endDateTime && Number.isNaN(end)) return false; // malformed end date
+  if (event.startDateTime && Number.isNaN(start)) return false; // malformed start ("TBD")
+
+  if (Number.isFinite(end)) {
+    // Data error: an end before the start is never attendable.
+    if (Number.isFinite(start) && end < start) return false;
+    return end >= now.getTime();
   }
-  if (start.getTime() >= now.getTime()) return true;
+
+  if (!event.startDateTime) return true; // recurring series keep recurring
+  if (start >= now.getTime()) return true;
+
   // Started with no listed end: treat as plausibly still running only while
-  // it's the same local day — an afternoon festival shouldn't vanish at its
-  // start minute, but yesterday's event must never resurface as upcoming.
+  // it's the same calendar day *in the event's metro timezone* — an
+  // afternoon festival shouldn't vanish at its start minute, but yesterday's
+  // event must never resurface as upcoming.
+  const startDay = zonedDateParts(new Date(start), timeZone);
+  const nowDay = zonedDateParts(now, timeZone);
   return (
-    start.getFullYear() === now.getFullYear() &&
-    start.getMonth() === now.getMonth() &&
-    start.getDate() === now.getDate()
+    startDay.year === nowDay.year &&
+    startDay.month === nowDay.month &&
+    startDay.day === nowDay.day
   );
 }
 

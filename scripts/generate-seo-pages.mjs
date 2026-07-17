@@ -20,6 +20,14 @@ import {
 import { THEMES, classifyEventThemes } from "./eventThemes.mjs";
 import { schemaTypeForGoogleType } from "./lib/placeSchemaType.mjs";
 import {
+  brandSafetyViolation,
+  isBrandSafeForAdults,
+  isKidsPrimaryVenue,
+  matchesBrandSafetyAllowlist,
+} from "./lib/brandSafety.mjs";
+import { ADULT_OVERRIDE_RE, KIDS_CONTENT_RE } from "./lib/adultAudience.mjs";
+import { kidsEventBrandSafetyViolation } from "./eventPipeline.mjs";
+import {
   defaultLocale,
   supportedLocales,
   localeConfig,
@@ -155,6 +163,57 @@ const ADULTS_DATA_FILES = {
 // Global budget across ALL metros (not per-metro), so it reliably bounds the
 // total deployment file count regardless of how stubs distribute by metro.
 let endedStubBudget = MAX_ENDED_STUBS;
+
+// D3: the adults (Mosey) build must never mint a page or sitemap URL for
+// kids content, whatever slug/title it arrives with. Allowlist-aware via the
+// same brand-safety allowlist (Walt Disney Family Museum, etc.).
+// "childrens" (not just "children") because slugify drops the apostrophe in
+// "Children's" (e.g. "Children's Discovery Museum" -> childrens-discovery-museum).
+const ADULTS_FORBIDDEN_SLUG_RE = /(?:^|-|\/)(?:playground|childrens?|kids-show|storytime|toddler|preschool)(?:-|\/|$)/;
+
+function violatesAdultsSlugGate(slug, name) {
+  if (!IS_ADULTS || !slug) return false;
+  if (!ADULTS_FORBIDDEN_SLUG_RE.test(slug)) return false;
+  return !matchesBrandSafetyAllowlist({ name, metro: activeMetro?.id });
+}
+
+// D3 standalone assertion, exported so it's directly unit-testable against a
+// fixture list of sitemap URLs (not just the real build's own output) — the
+// proactive filters above (violatesAdultsSlugGate) are the primary defense;
+// this is the "the build fails" backstop wired into main() below.
+export function sitemapUrlViolatesD3(url) {
+  const urlPath = String(url || "").replace(/^https?:\/\/[^/]+/, "");
+  return ADULTS_FORBIDDEN_SLUG_RE.test(urlPath);
+}
+
+export function auditAdultsSitemapUrls(urls) {
+  return (urls || []).filter((url) => sitemapUrlViolatesD3(url));
+}
+
+// B3: a build must never mint an "upcoming"-copy page for an event that has
+// already ended, regardless of feed staleness — the daily refresh has died
+// silently before. A generous 1-day grace avoids false negatives on
+// date-only/timezone-ambiguous strings; genuinely fresh data never gets near
+// this boundary, and the 410/ended-stub path (generateEndedEventStubs) is the
+// long-term home for anything that ages out.
+function isEventPastForSeo(event, now = new Date()) {
+  const oneDayMs = 24 * 60 * 60 * 1000;
+  const end = event?.endDateTime ? Date.parse(event.endDateTime) : NaN;
+  if (Number.isFinite(end)) return end < now.getTime() - oneDayMs;
+  const start = event?.startDateTime ? Date.parse(event.startDateTime) : NaN;
+  if (!Number.isFinite(start)) return false;
+  return start < now.getTime() - oneDayMs;
+}
+
+// D1 backstop: an adults-build event page must never carry kids-content in
+// its title unless the text also carries an explicit adult-only override —
+// mirrors qualifiesForAdultFeed's title rule without re-running its full
+// (stricter) acceptance gate at SEO-mint time.
+function eventFailsAdultsD1(event) {
+  const title = String(event?.title || "");
+  if (!KIDS_CONTENT_RE.test(title)) return false;
+  return !ADULT_OVERRIDE_RE.test(`${title} ${event?.description || ""}`);
+}
 
 // Soonest event dates lead to the highest-intent SEO pages, but on dense
 // metros a flood of weekday events can push an upcoming *holiday weekend* past
@@ -1015,6 +1074,17 @@ function main() {
 
   const totalLocalizedPages = IS_ADULTS ? 0 : generateLocalizedWeekendPages();
 
+  // D3 hard backstop: the proactive filters above should already keep these
+  // out, but the build fails outright if a kids-content URL reaches the
+  // adults sitemap anyway, rather than shipping it.
+  if (IS_ADULTS) {
+    const violations = auditAdultsSitemapUrls(sitemapEntries.map((entry) => entry.loc));
+    if (violations.length > 0) {
+      console.error(`[seo] D3 gate failed: ${violations.length} kids-content URL(s) in the adults sitemap:\n${violations.join("\n")}`);
+      process.exit(1);
+    }
+  }
+
   writeSitemap(sitemapEntries);
   saveLastmodStore();
   writeRobotsAndLlms();
@@ -1828,6 +1898,14 @@ export function spotPassesQualityGate(
   if (!name) return false;
   if (JUNK_CHAIN_NAME_RE.test(name)) return false;
   if (!adults && JUNK_GYM_NAME_RE.test(name)) return false;
+
+  // D3 backstop: brand-safety and audience-separation gates are never
+  // bypassable, even by the featured-spot exemption below — a build-time
+  // safety net in case an upstream ingest/sweep regression slips one in.
+  if (!adults && brandSafetyViolation(spot)) return false;
+  if (adults && !isBrandSafeForAdults(spot)) return false;
+  if (adults && isKidsPrimaryVenue(spot)) return false;
+
   const category = String(spot?.category || "").trim();
   if (!category || /^other$/i.test(category)) return false;
   if (featured) return true;
@@ -1880,7 +1958,8 @@ function generateSpotPages(items, spotSlugLookup, generatedCitySlugs, featuredSp
       metroHasRatings,
       featured: featuredSpotIds.has(spot.id) || keepAnyway,
     });
-    if (passes) gated.push([slug, spot]);
+    // D3: adults build never mints a kids-content slug, pinned or not.
+    if (passes && !violatesAdultsSlugGate(slug, spot.name)) gated.push([slug, spot]);
   }
   // Stable sort: best content first, dataset order within ties.
   gated.sort((a, b) => spotContentScore(b[1]) - spotContentScore(a[1]));
@@ -2099,6 +2178,16 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
   for (const event of items) {
     const candidate = eventSlugLookup.get(event);
     if (!candidate) continue;
+    // B3: never mint an "upcoming"-copy page for an event that has already
+    // ended, regardless of feed staleness — checked against the actual build
+    // time, not the feed's self-reported generatedAt (a stale feed's
+    // generatedAt would make every event in it look fresh relative to itself).
+    if (isEventPastForSeo(event)) continue;
+    // D3 backstop: adults build never mints a kids-content slug or a page
+    // that fails the D1 title/override rule.
+    if (violatesAdultsSlugGate(candidate, event.title) || (IS_ADULTS && eventFailsAdultsD1(event))) continue;
+    // A3 backstop: kids build never mints a page for a blocklisted-venue event.
+    if (!IS_ADULTS && kidsEventBrandSafetyViolation(event)) continue;
 
     const canonical = metroUrl(`event/${candidate}/`);
     const cityName = event.city || event.neighborhood || metroLabel();

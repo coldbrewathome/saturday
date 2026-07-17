@@ -12,10 +12,12 @@ import {
   selectedMetroFromArgs,
 } from "./metroConfig.mjs";
 import {
+  MAX_PLAN_LEG_MILES,
   MAX_PLAN_RADIUS_MILES,
   coherentPicks,
   eventStartsAtOrAfter,
   milesBetween,
+  nearestNeighborOrder,
 } from "./lib/planQuality.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -113,11 +115,18 @@ function pickTopSpots(spots, count) {
       : [...preferred, ...spots.filter((spot) => !preferred.includes(spot))];
   // Geo-coherence over raw score: a plan whose stops chain Dixon -> Aptos ->
   // Vacaville (~150mi) is worse than a shorter plan, so keep only mutually
-  // close picks and let callers drop plans that end up too small.
-  return coherentPicks(
+  // close picks and let callers drop plans that end up too small. Uses the
+  // tighter max-leg radius (not the 15mi plan-area radius) so a 2-stop plan
+  // — where pairwise distance IS the only leg — can't land between 12-15mi
+  // and fail C1.2 at validate time.
+  const picks = coherentPicks(
     pool.sort((a, b) => (b.friendScore || 0) - (a.friendScore || 0)),
     count,
+    MAX_PLAN_LEG_MILES,
   );
+  // C1.4: order stops nearest-neighbor from the top pick so the path is
+  // roughly monotone instead of a ping-pong zigzag between far corners.
+  return nearestNeighborOrder(picks);
 }
 
 function pickNextEvents(list, count) {

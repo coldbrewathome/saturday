@@ -13,6 +13,7 @@ import { Check, ChevronLeft, Plus, Share2 } from "lucide-react";
 import type { FamilyEvent } from "./App";
 import type { MetroConfig } from "./metros";
 import { APP_BRAND } from "./appConfig";
+import { isUpcomingEvent } from "./eventFreshness";
 
 type Props = {
   events: FamilyEvent[];
@@ -191,7 +192,14 @@ export default function EventDetailView({
   shareCopiedUrl,
   shareUrlFor,
 }: Props) {
-  const event = slug ? events.find((e) => e.slug === slug) : null;
+  const foundEvent = slug ? events.find((e) => e.slug === slug) : null;
+  // A slug that still resolves but whose event has since ended must render
+  // the same "ended" state as a slug that no longer resolves at all — never
+  // upcoming/attendable copy for a past event (SPEC-TRUST-GATE.md B2).
+  const ended = Boolean(
+    foundEvent && !isUpcomingEvent(foundEvent, new Date(), { timeZone: metro.timezone }),
+  );
+  const event = ended ? null : foundEvent;
   const inPlan = event ? planEventIds.includes(event.id) : false;
   const shareCopied = Boolean(
     event?.slug && shareCopiedUrl === shareUrlFor(event.slug),

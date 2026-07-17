@@ -23,6 +23,7 @@ export type DigestEvent = {
   cost?: string;
   url?: string;
   startDateTime?: string;
+  endDateTime?: string;
 };
 
 export type DigestInput = {
@@ -58,7 +59,7 @@ export function renderWeekendDigest(input: DigestInput): DigestOutput {
   const weekend = getWeekendWindow(now, input.timezone);
 
   const plans = pickTopPlans(input.plans, MAX_PLANS);
-  const events = pickTopEvents(input.events, weekend, MAX_EVENTS);
+  const events = pickTopEvents(input.events, weekend, MAX_EVENTS, now);
 
   const subject = `${input.metroLabel} weekend: ${weekend.label}`;
   const html = renderHtml({
@@ -108,10 +109,18 @@ function pickTopEvents(
   events: DigestEvent[],
   weekend: WeekendWindow,
   limit: number,
+  now: Date,
 ): DigestEvent[] {
   if (!Array.isArray(events)) return [];
   const inWindow = events.filter((event) => {
     if (!event.startDateTime) return false;
+    // A digest can be (re)rendered later in the day than its "send" time —
+    // an event that started and already ended earlier the same Saturday
+    // must not still be offered as attendable.
+    if (event.endDateTime) {
+      const endMs = Date.parse(event.endDateTime);
+      if (Number.isFinite(endMs) && endMs < now.getTime()) return false;
+    }
     const key = zonedDateKey(new Date(event.startDateTime), weekend.timezone);
     return key === weekend.saturdayKey || key === weekend.sundayKey;
   });

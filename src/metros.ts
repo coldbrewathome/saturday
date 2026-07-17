@@ -11,6 +11,7 @@ export type MetroConfig = {
   aliases: string[];
   dataDir: string;
   center: { lat: number; lon: number };
+  timezone: string;
   spotCoverage?: {
     bbox?: { south: number; west: number; north: number; east: number };
   };

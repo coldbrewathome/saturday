@@ -2,7 +2,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   buildDataset,
+  buildSplitDatasets,
   commonsFileUrl,
+  extractFriendlyTags,
   imageFromTags,
   normalizeElement,
   sanitizeUrl,
@@ -131,4 +133,50 @@ test("buildDataset dedupes, ranks, and validates", () => {
 
   assert.equal(dataset.count, 2);
   assert.equal(validateDataset(dataset, { minSpots: 2 }).length, 0);
+});
+
+test("extractFriendlyTags propagates the OSM craft tag (brewery/winery/distillery)", () => {
+  const tags = extractFriendlyTags("Culture", { craft: "brewery" });
+  assert.ok(tags.includes("brewery"), `expected craft tag in ${JSON.stringify(tags)}`);
+});
+
+// D2/D4: buildSplitDatasets must drop Nightlife + alcohol-tagged (via the
+// craft=brewery propagation fix) venues from kids, keep them for adults, and
+// drop kids-primary venues from the adults split even with no brand-safety
+// violation.
+test("buildSplitDatasets applies brand-safety + D2 kids-primary gates per audience", () => {
+  const { kids, adults } = buildSplitDatasets([
+    {
+      type: "node",
+      id: 10,
+      lat: 37.78,
+      lon: -122.41,
+      tags: {
+        name: "Coyote Creek Brewery",
+        craft: "brewery",
+        "addr:city": "San Francisco",
+        website: "https://example.com/coyote-creek",
+        opening_hours: "Mo-Su 16:00-23:00",
+      },
+    },
+    {
+      type: "node",
+      id: 11,
+      lat: 37.781,
+      lon: -122.411,
+      tags: {
+        name: "Kidspace Discovery Play Gym",
+        leisure: "escape_game",
+        "addr:city": "San Francisco",
+        website: "https://example.com/kidspace",
+        opening_hours: "Mo-Su 09:00-18:00",
+      },
+    },
+  ]);
+
+  const kidsNames = kids.spots.map((s) => s.name);
+  const adultsNames = adults.spots.map((s) => s.name);
+  assert.ok(!kidsNames.includes("Coyote Creek Brewery"), "brewery must not ship to kids");
+  assert.ok(adultsNames.includes("Coyote Creek Brewery"), "brewery should stay on adults (alcohol is kept)");
+  assert.ok(!adultsNames.includes("Kidspace Discovery Play Gym"), "kids-primary venue must not ship to adults");
 });

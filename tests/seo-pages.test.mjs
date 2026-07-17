@@ -1,7 +1,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
+  auditAdultsSitemapUrls,
   formatWeekendRange,
+  sitemapUrlViolatesD3,
   spotPassesQualityGate,
   weekendGuideTitle,
 } from "../scripts/generate-seo-pages.mjs";
@@ -36,6 +38,40 @@ test("quality gate accepts a rated venue in a rated metro", () => {
 test("quality gate drops unrated spots when the metro has rating data", () => {
   const spot = { name: "Some Unrated Place", category: "Outdoors" };
   assert.equal(spotPassesQualityGate(spot, { metroHasRatings: true }), false);
+});
+
+// D3 backstop: brand-safety and kids-primary-venue gates are never
+// bypassable, even by the featured-spot exemption.
+test("quality gate blocks brand-unsafe kids spots even when featured", () => {
+  const gunRange = { name: "Range USA", category: "Shopping" };
+  assert.equal(
+    spotPassesQualityGate(gunRange, { adults: false, featured: true }),
+    false,
+  );
+});
+
+test("quality gate blocks weapons/cannabis-retail and kids-primary venues for adults", () => {
+  const dispensary = { name: "Barbary Coast", category: "Shopping", tags: ["cannabis"] };
+  const playground = { name: "Raymond Kimbell Playground", category: "Outdoors" };
+  assert.equal(spotPassesQualityGate(dispensary, { adults: true, featured: true }), false);
+  assert.equal(spotPassesQualityGate(playground, { adults: true, featured: true }), false);
+});
+
+// E20: D3 sitemap assertion — pure, fixture-testable independent of the real
+// build's own output.
+test("E20: sitemapUrlViolatesD3 flags playground/children/kids-show/storytime/toddler/preschool URLs", () => {
+  const violating = [
+    "https://trymosey.com/bay-area/spot/foo-playground-x/",
+    "https://trymosey.com/bay-area/spot/childrens-discovery-museum/",
+    "https://trymosey.com/bay-area/event/lion-dance-kids-show-x/",
+    "https://trymosey.com/bay-area/event/library-storytime-hour/",
+  ];
+  for (const url of violating) {
+    assert.equal(sitemapUrlViolatesD3(url), true, url);
+  }
+  assert.equal(sitemapUrlViolatesD3("https://trymosey.com/bay-area/spot/top-of-the-mark/"), false);
+  assert.deepEqual(auditAdultsSitemapUrls(violating).length, violating.length);
+  assert.deepEqual(auditAdultsSitemapUrls(["https://trymosey.com/bay-area/spot/top-of-the-mark/"]), []);
 });
 
 test("quality gate keeps unrated spots in metros with no rating data at all", () => {

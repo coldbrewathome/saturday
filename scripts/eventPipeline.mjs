@@ -1,6 +1,29 @@
 import crypto from "node:crypto";
 import { classifyEventThemes } from "./eventThemes.mjs";
 import { qualifiesForAdultFeed } from "./lib/adultAudience.mjs";
+import { brandSafetyViolation } from "./lib/brandSafety.mjs";
+
+// A3: an event at a blocklisted-venue-class (trivia night at a brewery,
+// tasting at a winery, 21+ anything) must never enter the kids feed, whatever
+// its `audiences` tag says. Reuses the spot taxonomy (brandSafetyViolation)
+// against the event's venue + title — venue/title only (not the free-text
+// description) to keep the gate from tripping on incidental words in long
+// scraped descriptions.
+export function kidsEventBrandSafetyViolation(event) {
+  if (!event) return null;
+  return brandSafetyViolation({
+    name: `${event.venue || ""} ${event.title || ""}`.trim(),
+    description: event.description,
+  });
+}
+
+// D4: whether an event's `audiences` tag allows it into the kids feed.
+// audiences:["adults"] (and not also "kids"/"all") never qualifies —
+// exported so the ingest-time filter and tests share one definition.
+export function isKidsFacingAudience(audiences) {
+  if (!Array.isArray(audiences) || audiences.length === 0) return true;
+  return audiences.includes("kids") || audiences.includes("all");
+}
 
 export const DEFAULT_TIMEZONE = "America/Los_Angeles";
 export const DEFAULT_TIMEZONE_OFFSET = "-07:00";
@@ -4255,6 +4278,14 @@ export function validateEventsDataset(dataset, options = {}) {
     const adultIntent = audiences.includes("adults") && !audiences.includes("kids");
     if (!adultIntent && hasAdultOnlySignal(`${event.title} ${event.description || ""}`)) {
       errors.push(`${prefix} appears adult-only but is tagged for kids/all.`);
+    }
+    // A3: a kids-facing event at a blocklisted-venue-class (brewery, casino,
+    // 21+ anything) fails validation regardless of its audiences tag.
+    if (!adultIntent) {
+      const venueClass = kidsEventBrandSafetyViolation(event);
+      if (venueClass) {
+        errors.push(`${prefix} is at a ${venueClass}-class venue and cannot be a kids event.`);
+      }
     }
   }
   return errors;

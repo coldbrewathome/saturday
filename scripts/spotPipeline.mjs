@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { isBrandSafeForAdults, isBrandSafeForKids } from "./lib/brandSafety.mjs";
+import { isBrandSafeForAdults, isBrandSafeForKids, isKidsPrimaryVenue } from "./lib/brandSafety.mjs";
 
 export const BAY_AREA_BBOX = {
   south: 36.85,
@@ -710,6 +710,10 @@ export function extractFriendlyTags(category, tags = {}) {
         stripUnsafeText(tags.leisure, 24),
         stripUnsafeText(tags.tourism, 24),
         stripUnsafeText(tags.shop, 24),
+        // OSM tags breweries/wineries/distilleries under craft=*, not
+        // amenity=*/shop=* — without this the brand-safety gate's alcohol
+        // tag signal never sees them (name patterns are the only catch).
+        stripUnsafeText(tags.craft, 24),
       ].filter(Boolean),
     ),
   ).slice(0, 6);
@@ -952,7 +956,7 @@ export function buildSplitDatasets(elements, options = {}) {
   ).filter(isBrandSafeForKids);
   const adultsSpots = allNormalized.filter(
     (s) => !s.audiences || !s.audiences.includes("kids"),
-  ).filter(isBrandSafeForAdults);
+  ).filter(isBrandSafeForAdults).filter((s) => !isKidsPrimaryVenue(s));
 
   const meta = {
     schemaVersion: 1,

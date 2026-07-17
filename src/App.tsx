@@ -551,10 +551,11 @@ function isActualPlanningEvent(
   event: FamilyEvent,
   now: Date,
   selectedAgeBand: AgeBand | "any",
+  timeZone?: string,
 ): boolean {
   if (!event.verified || event.sourceMode === "recurring-template") return false;
   if (!event.startDateTime) return false;
-  if (!isUpcomingEvent(event, now)) return false;
+  if (!isUpcomingEvent(event, now, { timeZone })) return false;
   const start = new Date(event.startDateTime);
   if (Number.isNaN(start.getTime())) return false;
   const today = new Date(now);
@@ -1155,6 +1156,7 @@ export function pickHeroFeatured(
   vibe: PlannerVibe | null,
   scoringOptions?: PlannerScoringOptions,
   now: Date = new Date(),
+  timeZone?: string,
 ): HeroPick | null {
   const spotById = new Map(spots.map((s) => [s.id, s] as const));
   const eventById = new Map(events.map((e) => [e.id, e] as const));
@@ -1165,7 +1167,7 @@ export function pickHeroFeatured(
       .filter((s): s is Spot => Boolean(s));
     const upcoming = (featured.eventIds ?? [])
       .map((id) => eventById.get(id))
-      .filter((e): e is FamilyEvent => Boolean(e && isUpcomingEvent(e, now)));
+      .filter((e): e is FamilyEvent => Boolean(e && isUpcomingEvent(e, now, { timeZone })));
     if (resolvedStops.length === 0 && upcoming.length === 0) continue;
     candidates.push({ featured, stops: resolvedStops, events: upcoming });
   }
@@ -1888,7 +1890,7 @@ function App({ metro }: AppProps) {
       .filter((event): event is FamilyEvent =>
         // Freshness gate: a stale guide link must not seed a plan with
         // events that have already happened.
-        Boolean(event && isUpcomingEvent(event, handoffNow)),
+        Boolean(event && isUpcomingEvent(event, handoffNow, { timeZone: metro.timezone })),
       );
 
     params.delete("guidePlan");
@@ -2557,7 +2559,7 @@ function App({ metro }: AppProps) {
     const now = new Date();
     const anchor = plannerAnchor ?? { lat: 37.7749, lon: -122.4194 };
     return events
-      .filter((event) => isActualPlanningEvent(event, now, ageBand))
+      .filter((event) => isActualPlanningEvent(event, now, ageBand, metro.timezone))
       .map((event) => {
         const transitMinutes =
           Number.isFinite(event.lat) && Number.isFinite(event.lon)
@@ -2810,8 +2812,10 @@ function App({ metro }: AppProps) {
         events,
         heroVibe,
         scoringOptions,
+        new Date(),
+        metro.timezone,
       ),
-    [nearbyFeaturedPlans, allSpots, events, heroVibe, scoringOptions],
+    [nearbyFeaturedPlans, allSpots, events, heroVibe, scoringOptions, metro],
   );
   const heroLine = useMemo(() => {
     if (!heroPick) return null;
@@ -2873,7 +2877,7 @@ function App({ metro }: AppProps) {
         const t = date.getTime();
         if (!Number.isFinite(t)) return false;
         // Freshness gate: ended events never render as browsable suggestions.
-        if (!isUpcomingEvent(event, nowDate)) return false;
+        if (!isUpcomingEvent(event, nowDate, { timeZone: metro.timezone })) return false;
         if (t > horizon) return false;
         if (eventDateFilter === "tonight") {
           // Tonight = today, starting in the evening (5pm+).
@@ -2966,7 +2970,7 @@ function App({ metro }: AppProps) {
       if (!e.startDateTime) return false;
       // Freshness gate: don't count events that already ended (e.g. Saturday
       // events when it's already Sunday) — an inflated number reads as stale.
-      if (!isUpcomingEvent(e, now)) return false;
+      if (!isUpcomingEvent(e, now, { timeZone: metro.timezone })) return false;
       const d = new Date(e.startDateTime);
       if (!Number.isFinite(d.getTime())) return false;
       const k = keyOf(d);
@@ -3143,7 +3147,7 @@ function App({ metro }: AppProps) {
       // require that they hit Sat or Sun (the upcoming weekend).
       if (event.startDateTime) {
         // Freshness gate: never suggest an event that already ended.
-        if (!isUpcomingEvent(event, nowDate)) continue;
+        if (!isUpcomingEvent(event, nowDate, { timeZone: metro.timezone })) continue;
         const t = new Date(event.startDateTime).getTime();
         if (!Number.isFinite(t) || t > sevenDays) {
           continue;
@@ -3288,7 +3292,7 @@ function App({ metro }: AppProps) {
     // happened — never fork a past event into a new plan.
     const eventIds = (featured.eventIds ?? []).filter((id) => {
       const event = eventById.get(id);
-      return Boolean(event && isUpcomingEvent(event, forkNow));
+      return Boolean(event && isUpcomingEvent(event, forkNow, { timeZone: metro.timezone }));
     });
     if (stopIds.length === 0 && eventIds.length === 0) {
       // Nothing to fork — let the user know via console; the rail UI also
@@ -4581,7 +4585,7 @@ function App({ metro }: AppProps) {
                 // forkFeaturedPlan will actually put in the plan.
                 const eventCount = (featured.eventIds ?? []).filter((id) => {
                   const event = events.find((e) => e.id === id);
-                  return Boolean(event && isUpcomingEvent(event));
+                  return Boolean(event && isUpcomingEvent(event, new Date(), { timeZone: metro.timezone }));
                 }).length;
                 return (
                   <li
@@ -5358,7 +5362,7 @@ function App({ metro }: AppProps) {
                       : null;
                     // Saved plans keep their history, but an event that has
                     // ended is marked instead of silently staying actionable.
-                    const ended = !isUpcomingEvent(event);
+                    const ended = !isUpcomingEvent(event, new Date(), { timeZone: metro.timezone });
                     return (
                       <li
                         className={`plan-stop plan-stop-event${ended ? " is-ended" : ""}`}
@@ -5904,6 +5908,7 @@ function App({ metro }: AppProps) {
           activePlanName={activePlan?.name ?? null}
           onAddToPlan={addHopNowItemToPlan}
           onClose={() => setIsHopNowOpen(false)}
+          metroTimeZone={metro.timezone}
         />
       )}
 
@@ -6300,6 +6305,7 @@ function HopNowPanel({
   activePlanName,
   onAddToPlan,
   onClose,
+  metroTimeZone,
 }: {
   spots: Spot[];
   events: FamilyEvent[];
@@ -6308,6 +6314,7 @@ function HopNowPanel({
   activePlanName: string | null;
   onAddToPlan: (item: PlanItemRef) => void;
   onClose: () => void;
+  metroTimeZone?: string;
 }) {
   const [seed, setSeed] = useState(0);
   const [excludeIds, setExcludeIds] = useState<ReadonlySet<string>>(
@@ -6323,7 +6330,7 @@ function HopNowPanel({
     // Freshness gate: hopNowPicks re-checks timing, but never hand it an
     // event that already ended.
     const hopEvents = events
-      .filter((event) => isUpcomingEvent(event, now))
+      .filter((event) => isUpcomingEvent(event, now, { timeZone: metroTimeZone }))
       .map(eventToHopNow)
       .filter((e): e is HopNowEvent => e !== null);
     return hopNowPicks(hopSpots, hopEvents, {
@@ -6333,7 +6340,7 @@ function HopNowPanel({
       shuffleSeed: seed,
       excludeIds,
     });
-  }, [audience, events, seed, spots, userLocation, excludeIds]);
+  }, [audience, events, seed, spots, userLocation, excludeIds, metroTimeZone]);
 
   function tryNewBatch() {
     // Park the IDs we just showed so the next batch surfaces fresh items.

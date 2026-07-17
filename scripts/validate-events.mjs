@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs/promises";
 import { validateEventsDataset } from "./eventPipeline.mjs";
-import { expiredFeaturedPlanRefs } from "./lib/planQuality.mjs";
+import { auditPlanGeometry, expiredFeaturedPlanRefs } from "./lib/planQuality.mjs";
 import {
   legacyMetroDataFile,
   loadMetroConfig,
@@ -54,6 +54,48 @@ async function expiredPlanErrors(metro) {
   return errors;
 }
 
+// C2: every metro's featured plans — generated, hand-curated, kids and
+// adults — must satisfy the geometry gate (pairwise radius, max leg, total
+// path). A stopId that doesn't resolve to a spot is a validation failure,
+// not a silent skip.
+async function planGeometryErrors(metro) {
+  const spotsPath = metroDataFile(metro, "spots");
+  const plansPath = metroDataFile(metro, "featuredPlans");
+  // Hand-curated plan stops (e.g. "Day out in X") can reference
+  // curated-spots.json, not just the OSM-derived spots.json — a stop that
+  // resolves fine in the app must not be misreported as "unresolvable" here.
+  const curatedPath = metroDataFile(metro, "curatedSpots");
+  const legacyCuratedPath = legacyMetroDataFile(metro, "curatedSpots");
+  const curatedDoc =
+    (await readJsonOrNull(curatedPath)) ||
+    (legacyCuratedPath ? await readJsonOrNull(legacyCuratedPath) : null);
+  const curatedSpots = Array.isArray(curatedDoc?.spots) ? curatedDoc.spots : [];
+
+  const pairs = [
+    [plansPath, spotsPath],
+    [
+      plansPath.replace(/featured-plans\.json$/, "featured-plans-adults.json"),
+      spotsPath.replace(/spots\.json$/, "spots-adults.json"),
+    ],
+  ];
+  const errors = [];
+  for (const [planFile, spotsFile] of pairs) {
+    const plansDoc = await readJsonOrNull(planFile);
+    const spotsDoc = await readJsonOrNull(spotsFile);
+    if (!plansDoc) continue;
+    const spotById = new Map(
+      [...(Array.isArray(spotsDoc?.spots) ? spotsDoc.spots : []), ...curatedSpots].map((s) => [s.id, s]),
+    );
+    const resolveStop = (stopId) => spotById.get(stopId) ?? null;
+    for (const plan of plansDoc.plans || []) {
+      for (const message of auditPlanGeometry(plan, resolveStop)) {
+        errors.push(`${planFile}: ${message}`);
+      }
+    }
+  }
+  return errors;
+}
+
 async function validateMetro(metro) {
   const dataPath =
     process.env.EVENT_OUTPUT ||
@@ -75,6 +117,7 @@ async function validateMetro(metro) {
     bbox: metro.spotCoverage?.bbox,
   });
   errors.push(...(await expiredPlanErrors(metro)));
+  errors.push(...(await planGeometryErrors(metro)));
 
   if (errors.length > 0) {
     console.error(`[${metro.id}] ${errors.join(`\n[${metro.id}] `)}`);

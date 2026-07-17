@@ -104,6 +104,31 @@ describe("renderWeekendDigest", () => {
     expect(out.text).toContain("Sat morning museum");
   });
 
+  // E12: a digest (re)rendered later the same Saturday must not still offer
+  // an event whose endDateTime has already passed as attendable.
+  it("excludes a weekend event that has already ended by render time", () => {
+    const saturdayEvening = new Date("2026-05-23T23:00:00-04:00"); // Sat 11pm ET
+    const endedEvent: DigestEvent = {
+      id: "evt-sat-morning-ended",
+      title: "Sat morning museum",
+      venue: "Children's Museum",
+      city: "Atlanta",
+      startDateTime: "2026-05-23T13:00:00.000Z", // 9am ET Sat
+      endDateTime: "2026-05-23T15:00:00.000Z", // 11am ET Sat — long over by evening
+      url: "https://example.org/sat-morning",
+    };
+    const out = renderWeekendDigest({
+      metroId: "atlanta",
+      metroLabel: "Atlanta",
+      timezone: "America/New_York",
+      plans: [],
+      events: [endedEvent],
+      now: saturdayEvening,
+    });
+    expect(out.eventCount).toBe(0);
+    expect(out.html).not.toContain("Sat morning museum");
+  });
+
   it("orders plans with events first, then fills with day-out plans", () => {
     const out = renderWeekendDigest({
       metroId: "atlanta",

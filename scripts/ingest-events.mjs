@@ -7,6 +7,8 @@ import {
   dedupeEvents,
   expandRecurringTemplates,
   extractEventsFromPayload,
+  isKidsFacingAudience,
+  kidsEventBrandSafetyViolation,
   slugify,
   updateSlugHistory,
   validateEventsDataset,
@@ -1699,18 +1701,27 @@ async function main() {
   };
 
   const kidsEvents = allEvents.filter((e) => {
-    const a = e.audiences;
-    if (!Array.isArray(a) || a.length === 0) return true;
-    return a.includes("kids") || a.includes("all");
+    // A3: an event at a blocklisted-venue-class (brewery, casino, 21+
+    // anything) never enters the kids feed, whatever its audiences tag says.
+    if (kidsEventBrandSafetyViolation(e)) return false;
+    return isKidsFacingAudience(e.audiences);
   });
   const KIDS_EVENT_RE = /\b(story\s*time|storytime|lapsit|lap\s*sit|toddler|preschool|baby|babies|infant|diaper|stroller|family|families|kids?\s*craft|puppet|pajama|pj\b|bedtime|mommy|daddy|parent.child|child|children|kid|kids|daniel\s*tiger|sesame|peppa|zoo|petting|farm|barnyard|playground|splash\s*pad)\b/i;
+  const ADULT_OVERRIDE_RE = /\b21\s?\+|\badults?\s?only\b|\badults?\s?night\b/i;
   const KIDS_CATEGORIES = new Set(["Library", "Zoo", "Farm", "Park"]);
   const adultsEvents = allEvents.filter((e) => {
     const a = e.audiences;
+    const title = e.title || "";
+    // D1: content evidence outranks source-level tags — a kids-content title
+    // (e.g. "(Kids' Show)") must be dropped even when the source registry
+    // tags the event ["adults"], unless the text also carries an explicit
+    // adult-only override (21+, adults only, adults night).
+    if (KIDS_EVENT_RE.test(title) && !ADULT_OVERRIDE_RE.test(`${title} ${e.description || ""}`)) {
+      return false;
+    }
     if (Array.isArray(a) && a.includes("adults")) return true;
     if (!Array.isArray(a) || a.length === 0 || a.includes("all")) {
       if (KIDS_CATEGORIES.has(e.category)) return false;
-      if (KIDS_EVENT_RE.test(e.title || "")) return false;
       return true;
     }
     return false;
