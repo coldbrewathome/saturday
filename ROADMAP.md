@@ -1,51 +1,50 @@
 # Roadmap
 
-_Last updated: 2026-07-11_ (tick 38)
+_Last updated: 2026-07-16_ (tick 39)
 
 ## Now
 _In flight — actively being worked on. Keep this to 1–3 items._
 
-_Focus decision (2026-06-10): Bay-Area-first. The 2026-06-09 audit of the live funnel (855 opens / 3 weeks → 7 plans → ~0 organic shares, votes, or sign-ups) showed quality and trust problems where the users already are — breadth work (new metros, rolling enrichment) is paused until the Bay Area earns its retention._
+_Focus decision (2026-06-10, reaffirmed 2026-07-16): funnel trust/retention outranks all SEO work. The 2026-06-09 audit of the live funnel (855 opens / 3 weeks → 7 plans → ~0 organic shares, votes, or sign-ups) showed quality and trust problems where the users already are. The 2026-06-10 remediation batch fixed the surfaces the audit named; a second, deeper pass (the trust-safety gate v2, shipped 2026-07-16 — see Done) closed the taxonomy/freshness/geometry/audience holes that batch left open. Nothing here is "in flight" as loose ends anymore — it's verify-live, activate distribution, and give Mosey a real supply bar._
 
-### Bay-Area-first quality bar (FamHop)
-- **Why:** the audit found trust-breaking defects in the core surfaces: gun ranges + a cannabis cafe in kids `spots.json`, editor's picks serving Jun 7 events as "upcoming" on Jun 9, preset plans chaining Dixon→Aptos→Vacaville (~150 mi), Hop Now recommending Anytime Fitness + 9pm cinemas to a kids-brand user. No growth tactic outruns a feed parents can't trust.
-- **Effort:** M
-- **Status:** in flight — the 2026-06-10 audit-remediation batch (multi-agent): kids data hygiene, picks freshness, plan geography, Hop Now audience fit, tolerant all-metro ingest. Ops side landed: the daily refresh is repaired — **every scheduled run from 05-09 to 06-10 failed** on a missing `TZ: America/Los_Angeles` pin (the TZ-sensitive event-pipeline test that `deploy-pages.yml` already pinned for), plus Overpass 504s with no retry, stale commit paths that predated the `public/data/<metro>/` layout, and no rebase-before-push against concurrent commits to main (all fixed in `.github/workflows/refresh-data.yml`). A Friday 13:00 UTC pre-weekend rebuild cron was added to `deploy-pages.yml` (kids → adults, sequential) so prerendered guides stop going stale between manual deploys.
+### Verify the trust gate live + re-verify the funnel
+- **Why:** the trust-safety gate v2 (`SPEC-TRUST-GATE.md`, commits `4755392`/`108c46e`/`822a24b`/`fc91043` — see Done) fixed brand-safety taxonomy gaps, render-time freshness, plan geometry, and audience separation across both brands, but it fixed them in the pipeline and data files — nobody has confirmed the fixes are live on famhop.com/trymosey.com after deploy, or that the funnel (opens → plans → shares) actually improves once a full week runs on the corrected pipeline.
+- **Effort:** S
+- **Status:** not started — deploy verification is a quick live spot-check (kids + adults spot pages, event freshness, plan geometry on a few metros); the funnel re-verification needs 7 days of clean daily refreshes to accumulate before it's meaningful.
 - **Tasks:**
-  - [x] Refresh-data workflow: TZ pin + Overpass retry + per-metro commit paths + rebase-before-push
-  - [x] Friday pre-weekend rebuild cron (kids then adults, never parallel)
-  - [ ] Kids data hygiene + picks freshness + plan geography + Hop Now fit (rest of the batch)
-  - [ ] Re-verify the funnel after a full week of clean daily refreshes
+  - [ ] Confirm the gate's fixes are live post-deploy (spot-check previously-flagged surfaces: kids spots, editor's picks freshness, preset-plan geography, adults spots/events audience split)
+  - [ ] Re-verify the funnel after a full week of clean daily refreshes on the corrected pipeline
 
-### Mosey: SF-only beta rebuild (supply-first)
-- **Why:** Mosey's adult feeds are polluted — bay-area `events-adults.json` has 656 events with 649 tagged `all` (children's-museum / library / university / Zoom items) and only ~287 adults-tagged events nationwide; the share message says "I put together a FamHop plan"; trymosey.com has 0 pages indexed. Breadth-before-supply was the mistake: rebuild as an SF-only beta with a real adult supply bar before touching other metros.
-- **Effort:** M
-- **Status:** in flight — this batch tightens the adult audience filter and brand-correct share copy; SF adult source build-out follows. trymosey.com Search Console verification + sitemap submission is a human-ops blocker (see below).
-- **Tasks:**
-  - [ ] Strict adults feed filter (no kids/`all`-flood events)
-  - [ ] Brand-correct share copy on Mosey
-  - [ ] SF adult event sources to a real supply bar (music / food / late-night)
-  - [ ] trymosey.com verified + indexed in GSC (human ops)
-
-### Newsletter activation + week-1 distribution (external human ops)
-- **Why:** the newsletter is code-complete but has never sent (`NEWSLETTER_ENABLED` unset), and organic distribution is ~0. Both are blocked on operator work, not code.
+### Newsletter activation (external human ops)
+- **Why:** the newsletter has been code-complete since 2026-05-24 but has never sent (`NEWSLETTER_ENABLED` unset) — it's the most direct lever on retention (a recurring touch for the 855 monthly opens who aren't yet sharing/voting) and it's blocked on operator work, not code. A 2026-07-16 dry-run traced the full send path end-to-end (subscriber source, per-metro render, allowlist gate, unsubscribe/List-Unsubscribe, the Resend call) against live data — render logic is verified correct (freshness-gated, excludes ended events); the checklist below reflects what that dry-run found, which corrects two stale claims in `docs/launch/HUMAN-OPS.md`.
 - **Effort:** S (operator time)
-- **Status:** **blocked on external human ops** — checklist with exact commands in `docs/launch/HUMAN-OPS.md`: Resend account + famhop.com DNS verification + worker secrets (`RESEND_API_KEY`, `NEWSLETTER_ADMIN_TOKEN`, `UNSUBSCRIBE_SECRET`) + `NEWSLETTER_ENABLED=true`; Google Search Console verification for famhop.com **and** trymosey.com + sitemap submissions + indexing requests; purge of `@example.com` test subscribers from KV. Week-1 post drafts (`docs/launch/WEEK1-POSTS.md`, human-posted only), backlink outreach drafts (`docs/launch/OUTREACH.md`), and the curator voice guide (`docs/launch/CURATOR-VOICE.md`) are ready.
+- **Status:** **blocked on external human ops.** Corrected from the 2026-06-10 checklist: (a) KV currently holds **zero** subscribers, including zero `@example.com` test rows — there is nothing to purge, that step in `HUMAN-OPS.md` §2 is moot; (b) `POST /newsletter/send` takes its recipient list from the request body, not from KV — nothing in the worker enumerates `newsletter:*` subscribers automatically, so a "send to everyone" step needs a small script (list KV → build the recipients JSON) that doesn't exist yet, or the first sends stay manual/allowlisted. Also found: the worker's per-metro digest table (`worker/src/newsletter.ts` `METROS`) is missing `austin` (present in `data/metros.json`, 110 live events) — an Austin subscriber's digest would silently fail with "unknown metroId" until that's added.
 - **Tasks:**
   - [x] Operator checklist + post/outreach drafts + voice guide (`docs/launch/`)
-  - [ ] Resend account + DNS + secrets + allowlisted test send (human)
-  - [ ] GSC: verify both domains, submit both sitemaps, request indexing (human)
-  - [ ] Purge `@example.com` KV subscribers (human)
-  - [ ] Post the week-1 lists by hand (human)
+  - [x] Dry-run verification of the full send path against live data (2026-07-16)
+  - [ ] Add `austin` to the worker's `METROS` table before any Austin subscriber can be sent to
+  - [ ] Write the KV-subscriber-listing → recipients-payload script (or accept manual/allowlisted sends only for launch)
+  - [ ] Resend account + DNS + secrets (`RESEND_API_KEY`, `NEWSLETTER_ADMIN_TOKEN`, `UNSUBSCRIBE_SECRET`) + `NEWSLETTER_ENABLED=true` (human)
+  - [ ] Allowlisted test send, QA in Gmail + Apple Mail (human)
+  - [ ] Post the week-1 lists by hand once activation lands (human, drafts ready in `docs/launch/WEEK1-POSTS.md`)
+
+### Mosey: SF-only supply bar
+- **Why:** Mosey's adult feeds are still polluted — bay-area `events-adults.json` has 656 events with 649 tagged `all` (children's-museum / library / university / Zoom items) and only ~287 adults-tagged events nationwide; trymosey.com has 0 pages indexed. The trust-gate v2 batch tightened the audience-separation *gate* (D1/D2 in `SPEC-TRUST-GATE.md`) but that's a hygiene fix, not new supply — Mosey still needs a real adult event source base in SF before its own funnel can be judged.
+- **Effort:** M
+- **Status:** not started (gate work that unblocks it just shipped 2026-07-16). trymosey.com Search Console verification + sitemap submission is a human-ops blocker (see Later).
+- **Tasks:**
+  - [ ] SF adult event sources to a real supply bar (music / food / late-night)
+  - [ ] Brand-correct share copy on Mosey
+  - [ ] Re-check the adults feed audience split after the gate v2 hardening (should already be much cleaner — confirm counts)
 
 ## Next
 _Committed, not yet started. Ordered by priority. Aim for ≤5 items._
 
-### Seasonal event ingest: Halloween + December — **publish by early-to-mid September 2026**
+### Seasonal event ingest: Halloween + December — **publish by early-to-mid September 2026, gated behind the Now items**
 - **Why:** the 2026-07-11 SEO audit established that event pages are the only thing that ranks (~85% of clicks; a dated local event hits page one in ~13 days with zero backlinks — the Milpitas fireworks page reached position 7.4 on 990 impressions). Halloween and December are far bigger family-search seasons than July 4th, and they are exactly the proven query shape: `{town} trick or treat 2026`, `trunk or treat {town}`, `pumpkin patch near {town}`, `{town} tree lighting`, `santa photos {town}`, `{town} nye fireworks`.
 - **Deadline is the whole point:** search demand builds from **late September**; time-to-rank is ~13 days. Ingested and published by **early-to-mid September** = indexed 6+ weeks ahead of the curve. Ingested in October = missed the season entirely. This is where realistic Q4 traffic comes from.
 - **Effort:** M (ingest + verify, per `skills/grounded-event-discovery/SKILL.md`)
-- **Depends on:** the Google Indexing API staying authed (it silently breaks whenever ADC is re-authed for another GCP project — see the SEO invariants in `CLAUDE.md`).
+- **Depends on:** gated behind the Now items above (funnel trust/retention outranks SEO — this only starts once the trust gate is verified live and the newsletter/Mosey Now items are moving) **and** the Google Indexing API staying authed (it silently breaks whenever ADC is re-authed for another GCP project — see the SEO invariants in `CLAUDE.md`). The September deadline is real regardless — don't let the gating slip it past early September.
 - **Tasks:**
   - [ ] Halloween sources ingested across metros (trick-or-treat, trunk-or-treat, pumpkin patches, harvest festivals)
   - [ ] December sources (tree lightings, Santa photos, light drives, NYE)
@@ -53,20 +52,21 @@ _Committed, not yet started. Ordered by priority. Aim for ≤5 items._
   - [ ] Spot-check that the pages rank before demand peaks (late Sept / late Nov)
 
 ### Viral-loop polish (share → vote)
-- **Why:** the funnel shows people open but barely build and never share (855 opens → 7 plans → ~0 shares); once the quality bar lands, cut friction to first share and instrument the build→share gap on both brands.
+- **Why:** the funnel shows people open but barely build and never share (855 opens → 7 plans → ~0 shares); with the trust-gate v2 hardening shipped, cut friction to first share and instrument the build→share gap on both brands.
 - **Effort:** S
-- **Depends on:** Bay-Area quality bar (no point polishing a loop around picks users don't trust)
+- **Depends on:** the trust gate verified live (Now) — no point polishing a loop around picks users don't trust
 
 ### Mosey SF beta launch follow-through
 - **Why:** once SF supply + indexing exist, run the "Mosey picks" content loop (IG/TikTok concepts seeded in `docs/launch/WEEK1-POSTS.md`) and city-sub distribution.
 - **Effort:** S–M
-- **Depends on:** Mosey SF-only rebuild (Now), GSC verification (human ops)
+- **Depends on:** Mosey SF-only supply bar (Now), GSC verification (human ops)
 
 ## Later
 _Candidates and ideas. Unordered. No commitment._
 
-- **Rolling 15-metro ratings batches (paused 2026-06-10)** — moved from Now under the Bay-Area-first decision. Bay Area is done (846 venues, $0, in feed + UI + JSON-LD); the monthly free-tier cron (`.github/workflows/enrich-ratings.yml`) keeps dripping the next priority metro within the free cap, but no active work until the Bay Area funnel earns it. _Effort: S (resume only)._
-- **High-intent adult SEO pages + Search Console (paused 2026-06-10)** — moved from Next; superseded by the Mosey SF-only beta. "Best bars in {neighborhood}" / "things to do tonight" pages only make sense once SF supply is real and trymosey.com is indexed at all. _Effort: M (after SF beta)._
+- **High-intent adult SEO pages + Search Console (paused 2026-06-10)** — superseded by the Mosey SF-only beta. "Best bars in {neighborhood}" / "things to do tonight" pages only make sense once SF supply is real and trymosey.com is indexed at all. SEO work; sits below the Now/Next trust and retention items. _Effort: M (after SF beta)._
+- **Rolling 15-metro ratings batches (paused 2026-06-10)** — Bay Area is done (846 venues, $0, in feed + UI + JSON-LD); the monthly free-tier cron (`.github/workflows/enrich-ratings.yml`) keeps dripping the next priority metro within the free cap, but no active work until the Bay Area funnel earns it. _Effort: S (resume only)._
+- **DST offset derived once per ingest run, not per event date** — `scripts/eventPipeline.mjs`'s `offsetStringForZone` (shipped `108c46e`) computes a metro's UTC offset once per ingest run rather than per individual event date, so an event dated near a DST transition boundary can carry up to a 1-hour error. Deferred: correct but coarse-grained fix. _Effort: S._
 - **Weekend reminder push (Fri-AM "your weekend is set")** — retention play that pairs sign-in (`1d3ae14`) with Hop-me-now; depends on PWA shipping first. _Effort: M (after PWA)._
 - **Interest-theme polish (post Phase 2)** — core + auto-personalized default + cross-device sync shipped. Remaining nice-to-haves: lower the ~24% no-theme classifier rate; add a real "Sports & active" data source (thin today); window the chip counts to the visible set; optionally auto-enable "For you" mid-session when synced interests arrive (today it waits for next load). _Effort: S–M._
 - **Thin-metro source repair (re-ingest + selectors + aggregators)** — per `docs/data-source-triage-2026-05.md`: run `ingest:events:all` to activate the 5 applied URL fixes + verify extraction on the coverage panel; then per-page selector work for JS-rendered calendars (Mohawk, Continental Club, Alamo), try Antone's→Ticketmaster (structured), remove no-feed venues (zoo/ranch/comedy), and add a structured metro aggregator (Do512 / Eventbrite-org / Ticketmaster) — the durable fix for Honolulu/Austin starvation. _Effort: M (mostly manual/per-venue + a re-ingest)._
@@ -74,9 +74,11 @@ _Candidates and ideas. Unordered. No commitment._
 - **"Mosey picks" content engine** — turn the 67–90 curated adult plans into shareable IG/TikTok carousels + a `/best-of` index (SEO + social). _Effort: M._
 - **Mosey launch distribution (Reddit city subs, Product Hunt, AEO)** — genuinely-helpful curated answers linking Mosey plans; lean on the shipped `llms.txt` + `/api` AI-citability. _Effort: S, ongoing._
 - **Repo cleanup: root screenshots, tracked drift, residual dead CSS** — ~44 PNG screenshots at repo root (untracked, ~21 MB local) + routine event-data drift. Dead `view==="home"` branch + dead AI-plan code already removed (2026-05-30). Residual harmless dead CSS noted: `.browse-near-events*` (pre-existing, never rendered) and `.profile-grid`/`.profile-field` + their two `@media` blocks (orphaned by the home-view removal); left in place because they interleave with possibly-live rules and removing precisely is fiddly. _Effort: XS._
+
 ## Done
 _Recently shipped (last ~10 items). Older items live in [CHANGELOG.md](CHANGELOG.md)._
 
+- 2026-07-16 · **Trust-safety gate v2 (`SPEC-TRUST-GATE.md`)** — the deeper pass the 2026-06-10 audit-remediation batch left open: brand-safety taxonomy v2 (`scripts/lib/brandSafety.mjs` — adds gambling/alcohol/age-gated classes, allow/denylist files for named exceptions, fixes OSM `craft=*` propagation that made brewery/winery/distillery invisible to the gate, a kids-events venue-class gate, a kids-primary-venue gate for the adults spots feed; `validate:data` now defaults to `--all`), a render-time freshness invariant (`src/eventFreshness.ts` fixes to `isUpcomingEvent` — rejects an ended `endDateTime` with no `startDateTime`, handles date-only strings and same-day grace in the event's own metro timezone, rejects `endDateTime < startDateTime`; threaded through every `App.tsx` suggestion surface, `EventDetailView`, themed-plan expiry, and the newsletter digest template), preset-plan geometry gates (max-leg/total-path/nearest-neighbor reordering), and FamHop/Mosey audience separation on both the adults events and adults spots feeds. Landed across four commits: `4755392` (taxonomy v2 + freshness + geometry + audience separation), `108c46e` (DST-aware ingest timezone, render-tick freshness, themed-plan expiry, `EventDetailView`/Hop Now coverage), `822a24b` (fixes for all 43 findings from an ultracode adversarial review — exact allow/denylist matching, hard OSM tag signals outranking the allowlist, metro-scoped gate calls, venue-only event allowlist matching), `fc91043` (restored 5 venues/events the review confirmed were spec-inherited false positives, now passing via the round-2 allowlist fixes). A small round-3 fix batch is in flight from a second adversarial pass; not yet merged.
 - 2026-06-07 · **Adult-fit planner (date-night / with-friends / solo / tonight) — code-complete** — v1 shipped 2026-06-06; v2 committed 2026-06-07 (`a335874`): Going-out mode persists across sessions (`famhop:goingOutMode`) + adults get a "Tonight" event chip (dated events today 5pm+ and recurring evening series). Verified live in the adults dev build; deploy was held for an in-flight all-metro re-ingest and rides the next integrator deploy. Deferred nice-to-have: extend "Tonight" to venue open-hours, not just scheduled events.
 - 2026-06-06 · **Venue schema.org (precise types) on spot pages** — closes the "Venue schema.org (Bar/Restaurant + aggregateRating)" item. Spot JSON-LD now maps Google's own `googleType` (Italian Restaurant, Wine Bar, Coffee Shop, Museum, …) to a precise schema.org `@type` (`Restaurant`/`BarOrPub`/`NightClub`/`CafeOrCoffeeShop`/`Bakery`/`Museum`/`ArtGallery`/`Park`/`TouristAttraction`/…) via a new tested pure module (`scripts/lib/placeSchemaType.mjs`, 10 tests; ordered so "Oyster Bar Restaurant"→Restaurant, "Ice Cream Shop"→FoodEstablishment, unmatched/data-noise→category fallback, no regression). Bay Area: 735 spot pages now emit precise types (444 Restaurant, 69 Cafe, 50 Park, 6 BarOrPub, 7 Museum…), with the shipped `aggregateRating` now sitting on rich-result-eligible LocalBusiness subtypes (444 pages). aggregateRating itself shipped earlier in `1478cd3`. Build + 269 tests + seo:audit (0 errors) green; affects both apps (Mosey benefits most for nightlife).
 - 2026-06-06 · **Mosey venue ratings (Bay Area) + free-tier spend guard** — enriched 846 Bay-Area venues with Google ratings for **$0** (894/1,000 free Place Details). New metered guard (`scripts/lib/places-usage.mjs` + `npm run places:usage`) records every billable call to a gitignored monthly ledger and throws before exceeding the free cap (verified it blocks + won't increment at cap). Ratings live in the feed + UI (★ 4.6 · 16k). Key in gitignored `.env.local`. Remaining metros run as rolling monthly free batches.
