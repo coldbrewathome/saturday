@@ -362,12 +362,17 @@ function optionLabel<T extends string>(
 
 const SHORT_DAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-// True when an event has a definite start time that is in the past. Recurring
-// events without a startDateTime are never "expired" — they keep recurring.
-function isEventExpired(event: { startDateTime?: string | null }, now = Date.now()): boolean {
-  if (!event.startDateTime) return false;
-  const t = new Date(event.startDateTime).getTime();
-  return Number.isFinite(t) && t < now - 6 * 60 * 60 * 1000;
+// True when an event is no longer upcoming. Delegates to the shared
+// freshness gate (src/eventFreshness.ts) instead of a start+/-6h heuristic —
+// that heuristic both showed a just-ended short event as attendable (start
+// less than 6h ago) and marked a live multi-day exhibition "Past" the day
+// after it opened (start more than 6h ago, endDateTime ignored entirely).
+function isEventExpired(
+  event: { startDateTime?: string | null; endDateTime?: string | null },
+  now: Date = new Date(),
+  timeZone?: string,
+): boolean {
+  return !isUpcomingEvent(event, now, { timeZone });
 }
 
 function dayWindowLabel(days: number[]): string {
@@ -2612,7 +2617,7 @@ function App({ metro }: AppProps) {
             : 25;
         return eventToPlanningSpot(event, transitMinutes);
       });
-  }, [ageBand, events, plannerAnchor]);
+  }, [ageBand, events, plannerAnchor, metro, clockTick]);
 
   const planningSpots = useMemo(
     () => [...allSpots, ...eventActivitySpots, ...boaActivitySpots],
@@ -5055,7 +5060,7 @@ function App({ metro }: AppProps) {
               )}
               {savedEvents.length > 0 && (() => {
                 const expiredIds = savedEvents
-                  .filter((e) => isEventExpired(e))
+                  .filter((e) => isEventExpired(e, new Date(), metro.timezone))
                   .map((e) => e.id);
                 return (
                   <>
@@ -5090,7 +5095,7 @@ function App({ metro }: AppProps) {
                           </div>
                           <div className="saved-list">
                             {group.events.map((event) => {
-                              const expired = isEventExpired(event);
+                              const expired = isEventExpired(event, new Date(), metro.timezone);
                               const timeLabel = eventTimeLabel(event);
                               const detail = [timeLabel, event.venue]
                                 .filter(Boolean)

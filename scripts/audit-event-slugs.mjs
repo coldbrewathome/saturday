@@ -25,7 +25,13 @@ import {
 } from "./metroConfig.mjs";
 
 const metroConfig = loadMetroConfig();
-const selection = selectedMetroFromArgs(process.argv.slice(2), metroConfig);
+const rawArgs = process.argv.slice(2);
+// Same A4 default-to-all fix as validate-data.mjs/validate-events.mjs — the
+// bare `npm run validate:events` chains this script too.
+const hasExplicitMetro = rawArgs.some((arg) => arg.startsWith("--metro="));
+const selection = hasExplicitMetro
+  ? selectedMetroFromArgs(rawArgs, metroConfig)
+  : { all: true, metro: null };
 
 async function readJsonOrNull(filePath) {
   try {

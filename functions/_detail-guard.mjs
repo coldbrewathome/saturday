@@ -43,27 +43,38 @@ export function slugEndedAfterMs(slug) {
 //   live capped events (the page is real, just not statically rendered).
 //
 // `catalog` (optional) is the per-metro event-seo-manifest classification:
-//   { liveSet: Set<slug>, endedSet: Set<slug> }. liveSet = slugs in the
-//   current dataset; endedSet = slugs seen in the rolling slug history but no
-//   longer live. When present it is authoritative for the unknown→404 split.
+//   { liveSet: Set<slug>, liveEnds?: Record<slug, msEpoch>, endedSet: Set<slug> }.
+//   liveSet = slugs in the current dataset; liveEnds = the true end instant
+//   for a live slug (spans the full occurrence run for a deduped multi-date
+//   event) — authoritative over the slug-date+2d heuristic below, which
+//   would otherwise 410 a live multi-day event partway through its run (its
+//   slug carries the *start* date). endedSet = slugs seen in the rolling
+//   slug history but no longer live. When present, `catalog` is authoritative
+//   for the unknown->404 split.
 /**
  * @param {string} kind
  * @param {string} slug
  * @param {number} [nowMs]
- * @param {{liveSet?: Set<string>, endedSet?: Set<string>} | null} [catalog]
+ * @param {{liveSet?: Set<string>, liveEnds?: Record<string, number>, endedSet?: Set<string>} | null} [catalog]
  * @returns {"gone"|"not-found"|"noindex-shell"}
  */
 export function missingPageDisposition(kind, slug, nowMs = Date.now(), catalog = null) {
   if (kind === "event") {
-    const endedAfter = slugEndedAfterMs(slug);
-    if (endedAfter !== null && nowMs >= endedAfter) return "gone";
     if (catalog) {
+      const hasLiveEnd = catalog.liveEnds && Object.prototype.hasOwnProperty.call(catalog.liveEnds, slug);
+      if (hasLiveEnd) return nowMs >= catalog.liveEnds[slug] ? "gone" : "noindex-shell";
       if (catalog.endedSet && catalog.endedSet.has(slug)) return "gone";
       if (catalog.liveSet && catalog.liveSet.has(slug)) return "noindex-shell";
-      // Authoritative catalog and the slug is neither live nor a known-ended
-      // event, and it carries no past date — it never existed.
+      // Authoritative catalog, slug unknown to it, and no live end on record —
+      // fall back to the slug-date heuristic for a past date, else it never
+      // existed.
+      const endedAfter = slugEndedAfterMs(slug);
+      if (endedAfter !== null && nowMs >= endedAfter) return "gone";
       return "not-found";
     }
+    // No catalog at all — the slug-date heuristic is all we have.
+    const endedAfter = slugEndedAfterMs(slug);
+    if (endedAfter !== null && nowMs >= endedAfter) return "gone";
   }
   return "noindex-shell";
 }

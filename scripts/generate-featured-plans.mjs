@@ -19,6 +19,7 @@ import {
   milesBetween,
   nearestNeighborOrder,
 } from "./lib/planQuality.mjs";
+import { isBrandSafeForKids } from "./lib/brandSafety.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -505,9 +506,15 @@ function generateForMetro(metro) {
 
   const kidsSpotsDoc = readJsonOrEmpty(path.join(ROOT, metroDataFile(metro, "spots")), { spots: [] });
   const kidsEventsDoc = readJsonOrEmpty(path.join(ROOT, metroDataFile(metro, "events")), { events: [] });
+  // Hand-curated spots have no other enforcement point on this merge path —
+  // gate them the same as the OSM-ingested pool before they can become plan
+  // stops.
+  const curatedKidsSpots = (Array.isArray(curatedDoc.spots) ? curatedDoc.spots : []).filter((spot) =>
+    isBrandSafeForKids({ ...spot, metro: metro.id }),
+  );
   const kidsSpots = [
     ...(Array.isArray(kidsSpotsDoc.spots) ? kidsSpotsDoc.spots : []),
-    ...(Array.isArray(curatedDoc.spots) ? curatedDoc.spots : []),
+    ...curatedKidsSpots,
   ];
   const kidsEvents = Array.isArray(kidsEventsDoc.events) ? kidsEventsDoc.events : [];
 

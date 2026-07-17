@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs/promises";
 import { validateEventsDataset } from "./eventPipeline.mjs";
+import { qualifiesForAdultFeed } from "./lib/adultAudience.mjs";
 import { auditPlanGeometry, expiredFeaturedPlanRefs } from "./lib/planQuality.mjs";
 import {
   legacyMetroDataFile,
@@ -11,7 +12,15 @@ import {
 } from "./metroConfig.mjs";
 
 const metroConfig = loadMetroConfig();
-const selection = selectedMetroFromArgs(process.argv.slice(2), metroConfig);
+const rawArgs = process.argv.slice(2);
+// A4: the bare command (no flags) validates every metro, same as
+// validate-data.mjs — CLAUDE.md's deploy checklist and the .github
+// workflows both invoke this bare, so a violating kids event or a 150-mile
+// plan in any of the other 15 metros must not silently ship.
+const hasExplicitMetro = rawArgs.some((arg) => arg.startsWith("--metro="));
+const selection = hasExplicitMetro
+  ? selectedMetroFromArgs(rawArgs, metroConfig)
+  : { all: true, metro: null };
 
 async function readJson(path) {
   return JSON.parse(await fs.readFile(path, "utf8"));
@@ -96,6 +105,23 @@ async function planGeometryErrors(metro) {
   return errors;
 }
 
+// D1/spec deliverable G3: events-adults.json is a live app-serving feed (the
+// Mosey SPA fetches it directly) with no other validator — check every
+// shipped event against the same gate the ingest writer now uses, so a
+// stale or hand-edited payload with a "(Kids' Show)" offender fails the
+// deploy-path command instead of shipping silently.
+async function adultEventsErrors(metro) {
+  const eventsPath = metroDataFile(metro, "events").replace(/events\.json$/, "events-adults.json");
+  const doc = await readJsonOrNull(eventsPath);
+  const errors = [];
+  for (const event of doc?.events || []) {
+    if (!qualifiesForAdultFeed(event)) {
+      errors.push(`${eventsPath}: event "${event.title}" (${event.id}) fails qualifiesForAdultFeed.`);
+    }
+  }
+  return errors;
+}
+
 async function validateMetro(metro) {
   const dataPath =
     process.env.EVENT_OUTPUT ||
@@ -115,9 +141,11 @@ async function validateMetro(metro) {
       ...(metro.eventCommunities || []),
     ].filter(Boolean),
     bbox: metro.spotCoverage?.bbox,
+    metroId: metro.id,
   });
   errors.push(...(await expiredPlanErrors(metro)));
   errors.push(...(await planGeometryErrors(metro)));
+  errors.push(...(await adultEventsErrors(metro)));
 
   if (errors.length > 0) {
     console.error(`[${metro.id}] ${errors.join(`\n[${metro.id}] `)}`);

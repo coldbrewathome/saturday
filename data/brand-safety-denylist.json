@@ -2,8 +2,9 @@
   "entries": [
     { "name": "The Apothecarium", "class": "cannabis", "reason": "cannabis dispensary brand; no cannabis word/tag in the name" },
     { "name": "MedMen", "class": "cannabis", "reason": "cannabis dispensary brand; no cannabis word/tag in the name" },
-    { "name": "Golden Nugget", "class": "gambling", "reason": "casino brand; no gambling word/tag in the name" },
+    { "name": "Golden Nugget", "class": "gambling", "metro": "las-vegas", "reason": "casino brand; metro-scoped to where the real casino exists (no Golden Nugget casino is in any of our 16 live metros) so it never collides with the unrelated Golden Nugget Pancake House chain (real, live in chicago)" },
     { "name": "The Spearmint Rhino", "class": "adult", "reason": "strip club brand; no adult word/tag in the name" },
+    { "name": "Déjà Vu", "class": "adult", "match": "prefix", "reason": "strip club chain (Déjà Vu Showgirls); prefix match since shipped names carry a city/venue suffix" },
     { "name": "Cloud 9 Lounge", "class": "age_gated", "reason": "vape lounge brand caught by tag in practice; denylisted as a backstop for feeds missing the tag" },
     { "name": "Bullseye Indoor Range LLC", "class": "weapons", "reason": "gun range; \"indoor range\" evades the gun/shooting-range name patterns" },
     { "name": "2nd Amendment Sports", "class": "weapons", "reason": "gun retailer branding as \"sports\"; no gun/firearm word in the name" }

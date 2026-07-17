@@ -27,6 +27,7 @@ type Context = { request: Request; env: Env };
 type UpcomingLink = { slug: string; title: string };
 type MetroCatalog = {
   liveSet: Set<string>;
+  liveEnds: Record<string, number>;
   endedSet: Set<string>;
   upcoming: UpcomingLink[];
 };
@@ -46,11 +47,13 @@ async function loadCatalog(env: Env, origin: string, metro: string): Promise<Met
     if (res.ok) {
       const doc = (await res.json()) as {
         live?: string[];
+        liveEnds?: Record<string, number>;
         ended?: string[];
         upcoming?: UpcomingLink[];
       };
       catalog = {
         liveSet: new Set(Array.isArray(doc.live) ? doc.live : []),
+        liveEnds: doc.liveEnds && typeof doc.liveEnds === "object" ? doc.liveEnds : {},
         endedSet: new Set(Array.isArray(doc.ended) ? doc.ended : []),
         upcoming: Array.isArray(doc.upcoming) ? doc.upcoming.slice(0, 10) : [],
       };
@@ -150,13 +153,29 @@ export async function onRequest(context: Context): Promise<Response> {
   const shell = await env.ASSETS.fetch(new URL("/", url).toString());
   const assetEtag = asset.headers.get("etag");
   const isShellFallback = assetEtag !== null && assetEtag === shell.headers.get("etag");
-  if (!isShellFallback && asset.status === 200) return asset;
 
-  // Only events consult the catalog; spots are always noindex-shell.
+  // Only events consult the catalog; spots are always noindex-shell/passthrough.
   const catalog =
     detail.kind === "event"
       ? await loadCatalog(env, url.origin, detail.metro)
       : null;
+
+  // A real prerendered event page must still be freshness-checked — a page
+  // minted before its event ended (or one that ages out between manual
+  // deploys, which run roughly weekly) would otherwise keep serving
+  // attendable copy with no client-side correction (event detail pages are
+  // fully static, unlike the in-app EventDetailView). Spots never 410, so
+  // they pass through untouched regardless.
+  if (!isShellFallback && asset.status === 200) {
+    if (detail.kind === "event") {
+      const disposition = missingPageDisposition(detail.kind, detail.slug, Date.now(), catalog);
+      if (disposition === "gone") {
+        return detailMissPage(url.hostname, detail.metro, 410, catalog?.upcoming ?? []);
+      }
+    }
+    return asset;
+  }
+
   const disposition = missingPageDisposition(
     detail.kind,
     detail.slug,

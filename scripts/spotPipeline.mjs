@@ -701,22 +701,34 @@ export function extractFeatures(tags = {}) {
 }
 
 export function extractFriendlyTags(category, tags = {}) {
-  return Array.from(
-    new Set(
-      [
-        "Friends",
-        category,
-        stripUnsafeText(tags.amenity, 24),
-        stripUnsafeText(tags.leisure, 24),
-        stripUnsafeText(tags.tourism, 24),
-        stripUnsafeText(tags.shop, 24),
-        // OSM tags breweries/wineries/distilleries under craft=*, not
-        // amenity=*/shop=* — without this the brand-safety gate's alcohol
-        // tag signal never sees them (name patterns are the only catch).
-        stripUnsafeText(tags.craft, 24),
-      ].filter(Boolean),
-    ),
-  ).slice(0, 6);
+  // OSM multi-value tags are semicolon-separated (shop=alcohol;convenience);
+  // split each raw value before dedup so the brand-safety gate sees every
+  // individual value, not one combined "alcohol;convenience" string a Set
+  // lookup can never match.
+  const rawValues = [
+    tags.amenity,
+    tags.leisure,
+    tags.tourism,
+    tags.shop,
+    // OSM tags breweries/wineries/distilleries under craft=*, not
+    // amenity=*/shop=* — without this the brand-safety gate's alcohol tag
+    // signal never sees them (name patterns are the only catch).
+    tags.craft,
+    // sport=shooting / club=* — OSM's standard gun-range tagging is
+    // leisure=sports_centre + sport=shooting; without reading tags.sport
+    // and tags.club, WEAPONS_TAG_VALUES's "shooting" can never fire from
+    // real ingest data.
+    tags.sport,
+    tags.club,
+  ]
+    .flatMap((value) => String(value ?? "").split(";"))
+    .map((value) => stripUnsafeText(value, 24))
+    .filter(Boolean);
+
+  // Capped generously above the ~7 possible raw sources (plus "Friends" and
+  // category) so a brand-safety-relevant tag value is never truncated out —
+  // the old cap of 6 could silently drop it when several tags were present.
+  return Array.from(new Set(["Friends", category, ...rawValues])).slice(0, 12);
 }
 
 export function normalizeElement(element, generatedAt = new Date().toISOString(), options = {}) {

@@ -14,6 +14,8 @@ import {
 // Same bundle as App (main.tsx imports both eagerly), so reusing the digest
 // card + trust-line helper from App.tsx costs nothing.
 import { NewsletterCard, sourceHostname } from "./App";
+import { isUpcomingEvent } from "./eventFreshness";
+import { metroBySlug } from "./metros";
 
 type Status = "loading" | "ready" | "error";
 
@@ -86,6 +88,12 @@ export default function PollView({
   const [submitting, setSubmitting] = useState(false);
   const [trackedVote, setTrackedVote] = useState(false);
   const voterId = useMemo(() => getOrCreateVoterId(), []);
+  // Poll snapshots don't carry an endDateTime (worker schema stores
+  // startDateTime only), so freshness here uses the same-day grace rather
+  // than an exact end — still closes the "ended events stay votable forever"
+  // gap, which is what matters on a link distributed to other people that
+  // outlives the plan by design.
+  const metroTimeZone = poll?.metroId ? metroBySlug(poll.metroId).timezone : undefined;
 
   // Build a single ordered visit list mixing places + events. Honors the
   // poll's itemOrder when present; otherwise falls back to "places, then
@@ -301,8 +309,12 @@ export default function PollView({
             );
           }
           const event = item.event;
+          const ended = !isUpcomingEvent(event, new Date(), { timeZone: metroTimeZone });
           return (
-            <li className="poll-stop poll-stop-event" key={`event:${event.id}`}>
+            <li
+              className={`poll-stop poll-stop-event${ended ? " is-ended" : ""}`}
+              key={`event:${event.id}`}
+            >
               <div className="poll-stop-head">
                 <span className="plan-stop-index plan-stop-index-event">
                   {index + 1}
@@ -310,6 +322,7 @@ export default function PollView({
                 <div>
                   <strong>
                     <span className="plan-event-tag">EVENT</span> {event.title}
+                    {ended && <span className="plan-event-ended"> · Ended</span>}
                   </strong>
                   <span>
                     {formatEventWhen(event)}
@@ -350,24 +363,30 @@ export default function PollView({
                     })()}
                 </div>
               </div>
-              <div className="poll-vote-row">
-                {VOTES.map((value) => {
-                  const Icon = VOTE_ICON[value];
-                  const active = myChoice === value;
-                  return (
-                    <button
-                      key={value}
-                      className={`vote-button vote-${value}${active ? " active" : ""}`}
-                      disabled={submitting}
-                      onClick={() => vote(event.id, value)}
-                    >
-                      <Icon aria-hidden="true" />
-                      <span>{VOTE_LABEL[value]}</span>
-                      <em>{tally[value]}</em>
-                    </button>
-                  );
-                })}
-              </div>
+              {ended ? (
+                <p className="poll-event-ended-note">
+                  This event has already happened — voting is closed.
+                </p>
+              ) : (
+                <div className="poll-vote-row">
+                  {VOTES.map((value) => {
+                    const Icon = VOTE_ICON[value];
+                    const active = myChoice === value;
+                    return (
+                      <button
+                        key={value}
+                        className={`vote-button vote-${value}${active ? " active" : ""}`}
+                        disabled={submitting}
+                        onClick={() => vote(event.id, value)}
+                      >
+                        <Icon aria-hidden="true" />
+                        <span>{VOTE_LABEL[value]}</span>
+                        <em>{tally[value]}</em>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </li>
           );
         })}

@@ -8,12 +8,19 @@ import { brandSafetyViolation } from "./lib/brandSafety.mjs";
 // its `audiences` tag says. Reuses the spot taxonomy (brandSafetyViolation)
 // against the event's venue + title — venue/title only (not the free-text
 // description) to keep the gate from tripping on incidental words in long
-// scraped descriptions.
-export function kidsEventBrandSafetyViolation(event) {
+// scraped descriptions. `allowlistName` is set to the venue ALONE (never the
+// venue+title concatenation) so an allowlisted word appearing anywhere in a
+// scraped title can't disable the whole gate for that event. `metroId` (a
+// metro id string, e.g. "chicago") threads through to the allow/denylist's
+// optional metro scoping — event objects don't carry a metro field, so
+// callers pass the active metro explicitly.
+export function kidsEventBrandSafetyViolation(event, metroId) {
   if (!event) return null;
   return brandSafetyViolation({
     name: `${event.venue || ""} ${event.title || ""}`.trim(),
+    allowlistName: event.venue || "",
     description: event.description,
+    metro: metroId,
   });
 }
 
@@ -4307,7 +4314,7 @@ export function validateEventsDataset(dataset, options = {}) {
     // A3: a kids-facing event at a blocklisted-venue-class (brewery, casino,
     // 21+ anything) fails validation regardless of its audiences tag.
     if (!adultIntent) {
-      const venueClass = kidsEventBrandSafetyViolation(event);
+      const venueClass = kidsEventBrandSafetyViolation(event, options.metroId);
       if (venueClass) {
         errors.push(`${prefix} is at a ${venueClass}-class venue and cannot be a kids event.`);
       }

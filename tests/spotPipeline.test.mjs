@@ -180,3 +180,38 @@ test("buildSplitDatasets applies brand-safety + D2 kids-primary gates per audien
   assert.ok(adultsNames.includes("Coyote Creek Brewery"), "brewery should stay on adults (alcohol is kept)");
   assert.ok(!adultsNames.includes("Kidspace Discovery Play Gym"), "kids-primary venue must not ship to adults");
 });
+
+// Round 2, finding 1: OSM sport=shooting / club=* propagation — the standard
+// OSM gun-range tagging is leisure=sports_centre + sport=shooting, and
+// without reading tags.sport, WEAPONS_TAG_VALUES's "shooting" can never fire.
+test("finding 1: extractFriendlyTags propagates sport= and club= tag values", () => {
+  const tags = extractFriendlyTags("Wellness", { leisure: "sports_centre", sport: "shooting" });
+  assert.ok(tags.includes("shooting"), `expected sport tag in ${JSON.stringify(tags)}`);
+  const clubTags = extractFriendlyTags("Culture", { club: "poker" });
+  assert.ok(clubTags.includes("poker"), `expected club tag in ${JSON.stringify(clubTags)}`);
+});
+
+// Finding 8: semicolon-separated OSM multi-value tags must split into
+// individual friendly-tag entries, not one opaque combined string.
+test("finding 8: extractFriendlyTags splits semicolon multi-value tags", () => {
+  const tags = extractFriendlyTags("Culture", { tourism: "attraction", craft: "brewery;distillery" });
+  assert.ok(tags.includes("brewery"), `expected split "brewery" in ${JSON.stringify(tags)}`);
+  assert.ok(tags.includes("distillery"), `expected split "distillery" in ${JSON.stringify(tags)}`);
+  assert.ok(!tags.includes("brewery;distillery"), `must not keep the combined string in ${JSON.stringify(tags)}`);
+});
+
+// Finding 1: the slice(0, 6) cap could silently truncate a brand-safety-
+// relevant tag once amenity/leisure/tourism/shop/craft/sport/club were all
+// present — raised generously so nothing is truncated out.
+test("finding 1: the friendly-tags cap does not truncate a brand-safety-relevant value", () => {
+  const tags = extractFriendlyTags("Wellness", {
+    amenity: "restaurant",
+    leisure: "sports_centre",
+    tourism: "attraction",
+    shop: "convenience",
+    craft: "brewery",
+    sport: "shooting",
+    club: "social",
+  });
+  assert.ok(tags.includes("shooting"), `expected "shooting" not to be truncated out of ${JSON.stringify(tags)}`);
+});

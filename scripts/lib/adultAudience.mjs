@@ -26,9 +26,11 @@ const UNIVERSITY_NOISE_RE = /\b(office hours|info(?:rmation)? session|program ov
 // Exported so the SEO build's D3 backstop assertion (generate-seo-pages.mjs)
 // can reuse the same title-level kids-content/override check that gates
 // ingest, instead of drifting its own copy.
-export const KIDS_CONTENT_RE = /\b(children(?:'s)?|kids?|family|families|toddlers?|preschool(?:ers)?|pre-k|storytime|story time|lapsit|lap sit|babies|baby|infants?|tweens?|teens?|youth|school-?age|grades?\s?(?:k|[0-9])|stroller|puppet|sensory[- ]friendly|scouts?|all ages)\b/i;
+export const KIDS_CONTENT_RE = /\b(children(?:'s)?|kids?|family|families|toddlers?|tots?|lil|juniors?|preschool(?:ers)?|pre-k|storytime|story time|lapsit|lap sit|babies|baby|infants?|tweens?|teens?|youth|school-?age|grades?\s?(?:k|[0-9])|stroller|puppet|sensory(?:[- ]friendly)?|scouts?|all ages|little ones|homeschool(?:ers?)?)\b/i;
 
-export const ADULT_OVERRIDE_RE = /\b21\s?\+|\badults?\s?only\b|\badults?\s?night\b/i;
+// Excludes a price ("$21+") or another number ("121+") from tripping the
+// override — the same lookbehind as brandSafety.mjs's AGE_GATE_TEXT_RE.
+export const ADULT_OVERRIDE_RE = /(?<![$\d])\b21\s?\+|\badults?\s?only\b|\badults?\s?night\b/i;
 
 const ADULT_POSITIVE_RE = /(?:\b21\s?\+|\b(?:adults? only|adults? night|nightlife|night out|night market|dj|concert|live music|gig|open mic|karaoke|trivia|comedy|stand-?up|improv|burlesque|drag (?:show|brunch|night)|bar crawl|bars?|pub|brewery|brewpub|brewing|taproom|tap room|beer|cider|wine|winery|vineyard|distillery|cocktails?|happy hour|speakeasy|food (?:truck|hall|crawl|festival|tour)|supper club|tasting|brunch|restaurant week|farmers'? market|flea market|makers market|market|festival|fest|street fair|fair|county fair|parade|block party|art walk|art-walk|gallery (?:night|crawl|opening)|first friday|museum after dark|late night|after hours|paint (?:&|and) sip|sip|singles (?:night|mixer|event)|date night|run club)\b)/i;
 

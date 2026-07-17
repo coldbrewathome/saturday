@@ -44,22 +44,57 @@ async function validateMetro(metro) {
   // Kids spots must never contain brand-unsafe venues (weapons, cannabis,
   // gambling, alcohol, adult, age-gated). Hard-fail so a bad ingest can't ship.
   for (const spot of dataset.spots || []) {
-    const violation = brandSafetyViolation(spot);
+    const violation = brandSafetyViolation({ ...spot, metro: metro.id });
     if (violation) {
       errors.push(`spot "${spot.name}" (${spot.id}) is blocklisted for kids: ${violation}.`);
     }
   }
 
   // D2: adults spots must never contain weapons/cannabis-retail venues or
-  // kids-primary venues (playgrounds, children's museums/gyms).
-  const adultsPath = dataPath.replace(/spots\.json$/, "spots-adults.json");
+  // kids-primary venues (playgrounds, children's museums/gyms). Always
+  // derived from the canonical per-metro path (metroDataFile), never from
+  // `dataPath` — bay-area's kids spots resolve to a *legacy* mirror file
+  // (public/data/bay-area-spots.json), and naively deriving the adults path
+  // from that legacy filename points at a file that doesn't exist, silently
+  // skipping the one metro Mosey actually serves.
+  const adultsPath = metroDataFile(metro, "spots").replace(/spots\.json$/, "spots-adults.json");
   const adultsDataset = await readJsonOrNull(adultsPath);
   for (const spot of adultsDataset?.spots || []) {
-    if (!isBrandSafeForAdults(spot)) {
-      errors.push(`adults spot "${spot.name}" (${spot.id}) is blocklisted: ${brandSafetyViolation(spot)}.`);
+    const probe = { ...spot, metro: metro.id };
+    if (!isBrandSafeForAdults(probe)) {
+      errors.push(`adults spot "${spot.name}" (${spot.id}) is blocklisted: ${brandSafetyViolation(probe)}.`);
     }
-    if (isKidsPrimaryVenue(spot)) {
+    if (isKidsPrimaryVenue(probe)) {
       errors.push(`adults spot "${spot.name}" (${spot.id}) is a kids-primary venue.`);
+    }
+  }
+
+  // Curated spots (hand-maintained, not OSM-ingested) get the same taxonomy
+  // + D2 gate — they're a live serving path (App.tsx merges them into
+  // allSpots, generate-featured-plans.mjs merges them into the plan-stop
+  // pool) with no other enforcement point.
+  const curatedPath = metroDataFile(metro, "curatedSpots");
+  const legacyCuratedPath = legacyMetroDataFile(metro, "curatedSpots");
+  const curatedDoc =
+    (await readJsonOrNull(curatedPath)) ||
+    (legacyCuratedPath ? await readJsonOrNull(legacyCuratedPath) : null);
+  for (const spot of curatedDoc?.spots || []) {
+    const probe = { ...spot, metro: metro.id };
+    const violation = brandSafetyViolation(probe);
+    if (violation) {
+      errors.push(`curated spot "${spot.name}" (${spot.id}) is blocklisted for kids: ${violation}.`);
+    }
+  }
+
+  const curatedAdultsPath = metroDataFile(metro, "spots").replace(/spots\.json$/, "curated-spots-adults.json");
+  const curatedAdultsDoc = await readJsonOrNull(curatedAdultsPath);
+  for (const spot of curatedAdultsDoc?.spots || []) {
+    const probe = { ...spot, metro: metro.id };
+    if (!isBrandSafeForAdults(probe)) {
+      errors.push(`curated adults spot "${spot.name}" (${spot.id}) is blocklisted: ${brandSafetyViolation(probe)}.`);
+    }
+    if (isKidsPrimaryVenue(probe)) {
+      errors.push(`curated adults spot "${spot.name}" (${spot.id}) is a kids-primary venue.`);
     }
   }
 

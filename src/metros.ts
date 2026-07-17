@@ -58,6 +58,11 @@ const ADULTS_DATA_FILES: Partial<Record<DataKey, string>> = {
   spots: "spots-adults.json",
   events: "events-adults.json",
   featuredPlans: "featured-plans-adults.json",
+  // D2: without this, the adults build fell through to the kids curated
+  // file below (curatedSpots has no audience split otherwise) — Mosey was
+  // serving Koret Children's Quarter Playground, Yerba Buena Children's
+  // Garden, etc. straight from curated-spots.json.
+  curatedSpots: "curated-spots-adults.json",
 };
 
 export function metroBySlug(slug: string | null | undefined): MetroConfig {
@@ -94,6 +99,11 @@ export function metroDataPath(metro: MetroConfig, key: DataKey): string {
 }
 
 export function legacyMetroDataPath(metro: MetroConfig, key: DataKey): string | null {
+  // A legacy mirror is a kids/FamHop-era artifact (bay-area's single-metro
+  // history) — it must never win over an explicit audience-specific file
+  // (ADULTS_DATA_FILES), or the adults build silently falls back to the
+  // kids file for that key regardless of what metroDataPath resolves to.
+  if (APP_AUDIENCE === "adults" && ADULTS_DATA_FILES[key]) return null;
   return metro.legacyData?.[key] || null;
 }
 

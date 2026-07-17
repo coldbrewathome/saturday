@@ -17,6 +17,7 @@
  */
 import { readFileSync } from "node:fs";
 import path from "node:path";
+import { isKidsFacingAudience, kidsEventBrandSafetyViolation } from "./eventPipeline.mjs";
 
 const token = process.env.SATURDAY_SESSION_TOKEN;
 const api = (process.env.SATURDAY_API || "").replace(/\/$/, "");
@@ -55,6 +56,24 @@ const raw = readFileSync(filePath, "utf8");
 const parsed = JSON.parse(raw);
 if (!Array.isArray(parsed.events)) {
   console.error(`No 'events' array found in ${filePath}`);
+  process.exit(1);
+}
+
+// This override replaces the live feed for the metro with no other gate on
+// the worker side (the KV key carries no audience dimension) — refuse to
+// publish a payload that would put a brand-unsafe venue in front of kids.
+const violations = [];
+for (const event of parsed.events) {
+  if (!isKidsFacingAudience(event.audiences)) continue;
+  const violation = kidsEventBrandSafetyViolation(event, metro);
+  if (violation) {
+    violations.push(`"${event.title}" (${event.id || "no id"}) is at a ${violation}-class venue.`);
+  }
+}
+if (violations.length > 0) {
+  console.error(
+    `Refusing to publish: ${violations.length} kids-facing event(s) fail the brand-safety gate:\n${violations.join("\n")}`,
+  );
   process.exit(1);
 }
 

@@ -23,6 +23,7 @@ import {
   selectedMetroFromArgs,
   sourceRegistryPath,
 } from "./metroConfig.mjs";
+import { qualifiesForAdultFeed } from "./lib/adultAudience.mjs";
 import {
   buildOperatorAlert,
   collectPreviousEvents,
@@ -1712,29 +1713,15 @@ async function main() {
   const kidsEvents = allEvents.filter((e) => {
     // A3: an event at a blocklisted-venue-class (brewery, casino, 21+
     // anything) never enters the kids feed, whatever its audiences tag says.
-    if (kidsEventBrandSafetyViolation(e)) return false;
+    if (kidsEventBrandSafetyViolation(e, activeMetro.id)) return false;
     return isKidsFacingAudience(e.audiences);
   });
-  const KIDS_EVENT_RE = /\b(story\s*time|storytime|lapsit|lap\s*sit|toddler|preschool|baby|babies|infant|diaper|stroller|family|families|kids?\s*craft|puppet|pajama|pj\b|bedtime|mommy|daddy|parent.child|child|children|kid|kids|daniel\s*tiger|sesame|peppa|zoo|petting|farm|barnyard|playground|splash\s*pad)\b/i;
-  const ADULT_OVERRIDE_RE = /\b21\s?\+|\badults?\s?only\b|\badults?\s?night\b/i;
-  const KIDS_CATEGORIES = new Set(["Library", "Zoo", "Farm", "Park"]);
-  const adultsEvents = allEvents.filter((e) => {
-    const a = e.audiences;
-    const title = e.title || "";
-    // D1: content evidence outranks source-level tags — a kids-content title
-    // (e.g. "(Kids' Show)") must be dropped even when the source registry
-    // tags the event ["adults"], unless the text also carries an explicit
-    // adult-only override (21+, adults only, adults night).
-    if (KIDS_EVENT_RE.test(title) && !ADULT_OVERRIDE_RE.test(`${title} ${e.description || ""}`)) {
-      return false;
-    }
-    if (Array.isArray(a) && a.includes("adults")) return true;
-    if (!Array.isArray(a) || a.length === 0 || a.includes("all")) {
-      if (KIDS_CATEGORIES.has(e.category)) return false;
-      return true;
-    }
-    return false;
-  });
+  // The adults feed writer used to gate on a locally-drifted copy of the
+  // kids-content regex (missing teen/tween/youth/grades/tot/junior/etc. —
+  // see spec finding 13/29/39) instead of the shared, tested D1 gate. Calling
+  // the real qualifiesForAdultFeed here means the app-serving events-adults
+  // feed and the offline sweep (sweep-adult-feed.mjs) can never disagree.
+  const adultsEvents = allEvents.filter(qualifiesForAdultFeed);
 
   const kidsDataset = buildEventsDataset(kidsEvents, datasetOpts);
   const adultsDataset = buildEventsDataset(adultsEvents, datasetOpts);
@@ -1749,6 +1736,7 @@ async function main() {
       ...(activeMetro.eventCommunities || []),
     ].filter(Boolean),
     bbox: activeMetro.spotCoverage?.bbox,
+    metroId: activeMetro.id,
   });
 
   // ADR 02: tag alerts whose sourceId has an unexpired snooze in

@@ -192,17 +192,18 @@ export function auditAdultsSitemapUrls(urls) {
 
 // B3: a build must never mint an "upcoming"-copy page for an event that has
 // already ended, regardless of feed staleness — the daily refresh has died
-// silently before. A generous 1-day grace avoids false negatives on
-// date-only/timezone-ambiguous strings; genuinely fresh data never gets near
-// this boundary, and the 410/ended-stub path (generateEndedEventStubs) is the
-// long-term home for anything that ages out.
+// silently before. No grace period: every startDateTime/endDateTime in the
+// live 16-metro dataset is a full ISO instant with an offset (verified;
+// zero date-only values), so a grace window here only ever protects a
+// genuinely-ended event, not a date-only/ambiguous one. The 410/ended-stub
+// path (generateEndedEventStubs) is the long-term home for anything that
+// ages out.
 function isEventPastForSeo(event, now = new Date()) {
-  const oneDayMs = 24 * 60 * 60 * 1000;
   const end = event?.endDateTime ? Date.parse(event.endDateTime) : NaN;
-  if (Number.isFinite(end)) return end < now.getTime() - oneDayMs;
+  if (Number.isFinite(end)) return end < now.getTime();
   const start = event?.startDateTime ? Date.parse(event.startDateTime) : NaN;
   if (!Number.isFinite(start)) return false;
-  return start < now.getTime() - oneDayMs;
+  return start < now.getTime();
 }
 
 // D1 backstop: an adults-build event page must never carry kids-content in
@@ -985,6 +986,11 @@ function main() {
   let totalWeekendPages = 0;
   let totalWeekendSubPages = 0;
   let totalEndedEventStubs = 0;
+  // D3 (kids side): spotPassesQualityGate/generateEventPages already filter
+  // these proactively — this is the "the build fails" backstop mirroring the
+  // adults-side hard gate below, in case a filter regression ever slips one
+  // of these past the proactive checks.
+  const kidsGateViolations = [];
 
   for (const metro of metroConfig.metros) {
     activeMetro = metro;
@@ -1032,6 +1038,25 @@ function main() {
     const distinctEvents = dedupeEventOccurrences(events, eventSlugLookup);
     const eventSlugs = generateEventPages(capEventsForPages(distinctEvents), eventsDoc?.generatedAt, eventSlugLookup, citySlugsPre);
     generatedEventSlugsByMetro.set(metro.id, eventSlugs);
+
+    if (!IS_ADULTS) {
+      for (const spot of spots) {
+        const slug = spotSlugLookup.get(spot);
+        if (!slug || !spotSlugs.has(slug)) continue;
+        const violation = brandSafetyViolation({ ...spot, metro: metro.id });
+        if (violation) {
+          kidsGateViolations.push(`spot ${spot.id} "${spot.name}" (${metro.id}) minted despite a ${violation} violation`);
+        }
+      }
+      for (const event of distinctEvents) {
+        const slug = eventSlugLookup.get(event);
+        if (!slug || !eventSlugs.has(slug)) continue;
+        const violation = kidsEventBrandSafetyViolation(event, metro.id);
+        if (violation) {
+          kidsGateViolations.push(`event ${event.id} "${event.title}" (${metro.id}) minted despite an A3 ${violation} violation`);
+        }
+      }
+    }
     const { slugs: citySlugs, cities } = generateCityPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs);
     const categorySlugs = generateCategoryPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs);
     const cityCategorySlugs = generateCityCategoryPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs, cities);
@@ -1083,6 +1108,11 @@ function main() {
       console.error(`[seo] D3 gate failed: ${violations.length} kids-content URL(s) in the adults sitemap:\n${violations.join("\n")}`);
       process.exit(1);
     }
+  } else if (kidsGateViolations.length > 0) {
+    // D3 hard backstop, kids side: the adults build has always had this;
+    // the kids build did not.
+    console.error(`[seo] D3 gate failed: ${kidsGateViolations.length} brand-unsafe page(s) minted for kids:\n${kidsGateViolations.join("\n")}`);
+    process.exit(1);
   }
 
   writeSitemap(sitemapEntries);
@@ -1902,9 +1932,10 @@ export function spotPassesQualityGate(
   // D3 backstop: brand-safety and audience-separation gates are never
   // bypassable, even by the featured-spot exemption below — a build-time
   // safety net in case an upstream ingest/sweep regression slips one in.
-  if (!adults && brandSafetyViolation(spot)) return false;
-  if (adults && !isBrandSafeForAdults(spot)) return false;
-  if (adults && isKidsPrimaryVenue(spot)) return false;
+  const probe = spot?.metro ? spot : { ...spot, metro: activeMetro?.id };
+  if (!adults && brandSafetyViolation(probe)) return false;
+  if (adults && !isBrandSafeForAdults(probe)) return false;
+  if (adults && isKidsPrimaryVenue(probe)) return false;
 
   const category = String(spot?.category || "").trim();
   if (!category || /^other$/i.test(category)) return false;
@@ -2187,7 +2218,7 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
     // that fails the D1 title/override rule.
     if (violatesAdultsSlugGate(candidate, event.title) || (IS_ADULTS && eventFailsAdultsD1(event))) continue;
     // A3 backstop: kids build never mints a page for a blocklisted-venue event.
-    if (!IS_ADULTS && kidsEventBrandSafetyViolation(event)) continue;
+    if (!IS_ADULTS && kidsEventBrandSafetyViolation(event, activeMetro?.id)) continue;
 
     const canonical = metroUrl(`event/${candidate}/`);
     const cityName = event.city || event.neighborhood || metroLabel();
@@ -2327,12 +2358,27 @@ function generateEndedEventStubs(
 // noindex-shell for live-but-capped events. Without it every miss is a 200
 // soft-404. Written next to the metro's data so env.ASSETS can serve it.
 //   live:     every slug in the current dataset (live, possibly capped-out)
+//   liveEnds: slug -> end instant (ms) for every live slug, spanning the full
+//             occurrence run for a deduped multi-date event — lets the
+//             request-time guard (functions/_detail-guard.mjs) decide "gone"
+//             from the real end date instead of a start-date+2d heuristic,
+//             which would 410 a live multi-day event on day 3 of a 60-day run
 //   ended:    slugs in the rolling 90-day history that are no longer live
 //   upcoming: soonest prerendered events, for soft-landing links on 410/404
 function writeEventSeoManifest(metro, events, eventSlugLookup, liveSlugs, prerenderedSlugs, slugHistory) {
   const ended = [];
   for (const slug of Object.keys(slugHistory?.slugs || {})) {
     if (slug && !liveSlugs.has(slug)) ended.push(slug);
+  }
+  const liveEnds = {};
+  for (const ev of events) {
+    const slug = eventSlugLookup.get(ev);
+    if (!slug || !liveSlugs.has(slug)) continue;
+    const endMs = ev.endDateTime ? Date.parse(ev.endDateTime) : ev.startDateTime ? Date.parse(ev.startDateTime) : NaN;
+    if (!Number.isFinite(endMs)) continue;
+    // A slug can cover multiple occurrences (dedupeEventOccurrences) — keep
+    // the latest end across all of them, matching the JSON-LD endDate.
+    if (!(slug in liveEnds) || endMs > liveEnds[slug]) liveEnds[slug] = endMs;
   }
   const upcoming = events
     .map((ev) => ({ ev, slug: eventSlugLookup.get(ev) }))
@@ -2341,10 +2387,11 @@ function writeEventSeoManifest(metro, events, eventSlugLookup, liveSlugs, preren
     .slice(0, 10)
     .map(({ ev, slug }) => ({ slug, title: String(ev.title || "").slice(0, 90) }));
   const manifest = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     metroId: metro.id,
     generatedAt: new Date().toISOString(),
     live: [...liveSlugs],
+    liveEnds,
     ended,
     upcoming,
   };

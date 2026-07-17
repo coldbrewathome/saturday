@@ -6,13 +6,14 @@
     { "name": "The Gundis", "reason": "Kurdish restaurant" },
     { "name": "Shogun", "reason": "restaurant name, substring-only match on \"gun\"" },
     { "name": "Gunther-Hirsh Family Center", "reason": "family/community center, substring-only match on \"gun\"" },
-    { "name": "Movie Tavern", "reason": "family-marketed dine-in cinema chain" },
+    { "name": "Movie Tavern", "match": "prefix", "reason": "family-marketed dine-in cinema chain; shipped OSM names carry a city suffix (e.g. \"Movie Tavern Phoenix\")" },
     { "name": "Fraunces Tavern Museum", "reason": "historic house museum" },
     { "name": "Golden Ball Tavern Museum", "reason": "historic house museum" },
     { "name": "Munroe Tavern", "reason": "historic house museum" },
     { "name": "George Washington's Distillery & Gristmill", "reason": "historic site, not an operating distillery retailer" },
     { "name": "Walt Disney Family Museum", "reason": "adult-interest museum; keep on Mosey (D2) and it isn't a weapons/cannabis/etc. venue for kids either" },
     { "name": "The Smoke Shop BBQ", "reason": "BBQ restaurant; name collides with the \"smoke shop\" cannabis-retail pattern" },
+    { "name": "The Smoke Shop", "metro": "boston", "reason": "same BBQ chain (thesmokeshopbbq.com) shipped under its shorter OSM name in Boston; metro-scoped because a bare \"The Smoke Shop\" elsewhere could be a real smoke shop" },
     { "name": "Range Cafe", "reason": "restaurant; name collides loosely with weapons \"range\" wording" },
     { "name": "Hardwood Bar & Smokery", "reason": "restaurant; bare \"bar\"/\"smokery\" are not brand-safety signals" },
     { "name": "International Smoke", "reason": "restaurant" },
@@ -20,6 +21,12 @@
     { "name": "Dorlan's Tavern & Oyster Bar", "reason": "restaurant; bare \"tavern\"/\"bar\" are not brand-safety signals" },
     { "name": "Park Avenue Armory", "reason": "cultural/performance venue; bare \"armory\" is not a weapons signal" },
     { "name": "Highland Park Adult Senior Citizen Center", "reason": "senior center; bare \"adult\" is not an adult-entertainment signal" },
-    { "name": "Mario's Bohemian Cigar Store Cafe", "reason": "historic North Beach SF cafe; \"Cigar Store\" is the landmark's name, not an operating tobacco retailer" }
+    { "name": "Mario's Bohemian Cigar Store Cafe", "reason": "historic North Beach SF cafe; \"Cigar Store\" is the landmark's name, not an operating tobacco retailer" },
+    { "name": "Springs Cinema & Taphouse", "metro": "atlanta", "reason": "family-marketed dine-in cinema, same class as Movie Tavern" },
+    { "name": "CBD Provisions", "metro": "dallas-fort-worth", "reason": "The Joule hotel brasserie named for Dallas's Central Business District, not a CBD retailer" },
+    { "name": "Casino", "metro": "new-york-city", "reason": "LES Italian restaurant (casinonyc.info), not a gambling venue" },
+    { "name": "Vineyard Recreation Center", "reason": "public rec center (named for a street), not a winery — collides with the vineyard alcohol pattern" },
+    { "name": "The Book Cellar", "reason": "bookstore/cafe, not a wine cellar — collides with the cellars alcohol pattern" },
+    { "name": "Rise Brewing Company", "reason": "nitro cold brew COFFEE brand, not a beer brewery — collides with the brewing alcohol pattern" }
   ]
 }
