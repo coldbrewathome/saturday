@@ -9,6 +9,7 @@ import {
   extractEventsFromPayload,
   isKidsFacingAudience,
   kidsEventBrandSafetyViolation,
+  offsetStringForZone,
   slugify,
   updateSlugHistory,
   validateEventsDataset,
@@ -1418,7 +1419,15 @@ function applyDefaultAudiences(reg) {
 function applyRegistryDefaults(reg, metro = activeMetro) {
   applyDefaultAudiences(reg);
   if (!reg || !Array.isArray(reg.sources)) return;
-  const timezoneOffset = reg.defaults?.timezoneOffset || metro.timezoneOffset;
+  // B1.6: derive a DST-aware offset from the metro's IANA timezone instead
+  // of trusting a static registry default (which goes stale twice a year)
+  // or falling all the way back to DEFAULT_TIMEZONE_OFFSET's Pacific time —
+  // every adults-feed registry has no per-registry override at all, so
+  // non-Pacific-metro adults events were being timestamped as if they were
+  // in California. A hand-set `defaults.timezoneOffset` (or a source's own
+  // `timezoneOffset`) still wins, for sources known to need an override.
+  const derivedOffset = offsetStringForZone(new Date(), reg.coverage?.timezone || metro.timezone);
+  const timezoneOffset = derivedOffset || reg.defaults?.timezoneOffset || metro.timezoneOffset;
   if (timezoneOffset) {
     for (const source of reg.sources) {
       if (!source.timezoneOffset) source.timezoneOffset = timezoneOffset;

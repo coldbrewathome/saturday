@@ -1144,6 +1144,28 @@ export type HeroPick = {
   events: FamilyEvent[];
 };
 
+// B4: a themed plan (e.g. Memorial Day weekend) is pinned at the top of the
+// Editor's-picks rail regardless of map center. With an explicit themedEnd
+// it expires there. Without one, it used to pin forever — derive an
+// effective window from the plan's own events instead: eligible only while
+// at least one resolves and hasn't ended; ineligible if none resolve or
+// none carry a usable date. Exported for tests.
+export function isThemedPlanEligible(
+  plan: FeaturedPlan,
+  eventsById: Map<string, FamilyEvent>,
+  now: Date = new Date(),
+): boolean {
+  if (!plan.themed) return false;
+  if (plan.themedEnd) return Date.parse(plan.themedEnd) > now.getTime();
+  const ends = (plan.eventIds ?? [])
+    .map((id) => eventsById.get(id))
+    .filter((e): e is FamilyEvent => Boolean(e))
+    .map((e) => Date.parse(e.endDateTime || e.startDateTime || ""))
+    .filter((t) => Number.isFinite(t));
+  if (ends.length === 0) return false;
+  return Math.max(...ends) > now.getTime();
+}
+
 // Pick the hero suggestion from the already-loaded featured plans. Plans
 // whose referenced items are all missing/ended are skipped (freshness gate:
 // only upcoming events count). Without a vibe the editorial rail order wins;
@@ -1388,6 +1410,26 @@ type AppProps = {
 };
 
 function App({ metro }: AppProps) {
+  // B1.7: freshness-gated useMemos below capture `now`/Date.now() once, at
+  // whatever instant they last recomputed for some other reason (a filter
+  // change, a map move). A tab left open for hours would keep showing an
+  // event that ended in the meantime. clockTick is a cheap dependency that
+  // forces those memos to re-evaluate periodically (and when the tab
+  // regains focus, since a backgrounded tab's timers get throttled).
+  const [clockTick, setClockTick] = useState(0);
+  useEffect(() => {
+    const tick = () => setClockTick((n) => n + 1);
+    const interval = setInterval(tick, 5 * 60 * 1000);
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") tick();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, []);
+
   const dataUrls = useMemo(() => ({
     spots: dataUrl(metroDataPath(metro, "spots")),
     enrichment: dataUrl(
@@ -2770,12 +2812,9 @@ function App({ metro }: AppProps) {
     // not local, so distance ranking would bury them. They auto-expire from
     // the data feed once the holiday window passes; the themedEnd guard is a
     // backstop so a lapsed feed regeneration can't leave a stale holiday card.
-    const nowMs = Date.now();
-    const themed = featuredPlans.filter(
-      (p) =>
-        Boolean(p.themed) &&
-        !(p.themedEnd && Date.parse(p.themedEnd) <= nowMs),
-    );
+    const now = new Date();
+    const eventById = new Map(events.map((e) => [e.id, e] as const));
+    const themed = featuredPlans.filter((p) => isThemedPlanEligible(p, eventById, now));
     const handCurated = featuredPlans.filter((p) => !p.generated && !p.themed);
     const generated = featuredPlans.filter((p) => p.generated && !p.themed);
     const scored = generated
@@ -2800,7 +2839,7 @@ function App({ metro }: AppProps) {
       ...handCurated,
       ...scored.slice(0, generatedCap).map((s) => s.plan),
     ];
-  }, [featuredPlans, mapCenter, userLocation, inferredGeo]);
+  }, [featuredPlans, mapCenter, userLocation, inferredGeo, events, clockTick]);
 
   // Plan-first hero pick: top of the rail order, or vibe-re-ranked
   // client-side when a hero vibe chip is active. No backend calls.
@@ -2915,7 +2954,7 @@ function App({ metro }: AppProps) {
           /evening|night|sunset/i.test(event.timeWindow || ""))
       );
     });
-  }, [events, ageBand, eventDateFilter, query, activeTheme, forYou, preferredThemes]);
+  }, [events, ageBand, eventDateFilter, query, activeTheme, forYou, preferredThemes, clockTick]);
 
   // Interest themes present in this metro, in taxonomy order. Drives the
   // "Browse by interest" chip band; themes with no events here are hidden.
@@ -2929,12 +2968,19 @@ function App({ metro }: AppProps) {
 
   const highlightedEventIds = useMemo(() => {
     const ids = new Set<string>();
-    const now = Date.now();
-    const weekendHorizon = now + 7 * 24 * 60 * 60 * 1000;
+    const nowDate = new Date();
+    const weekendHorizon = nowDate.getTime() + 7 * 24 * 60 * 60 * 1000;
     for (const event of mapEvents) {
       if (event.startDateTime) {
         const t = new Date(event.startDateTime).getTime();
-        if (Number.isFinite(t) && t >= now - 6 * 60 * 60 * 1000 && t <= weekendHorizon) {
+        // Freshness gate replaces the old "started within 6h" heuristic,
+        // which highlighted a short event hours after it ended and missed a
+        // still-running one that started more than 6h ago.
+        if (
+          Number.isFinite(t) &&
+          t <= weekendHorizon &&
+          isUpcomingEvent(event, nowDate, { timeZone: metro.timezone })
+        ) {
           ids.add(event.id);
         }
       } else if (event.daysOfWeek.some((d) => d === 0 || d === 6)) {
@@ -2942,7 +2988,7 @@ function App({ metro }: AppProps) {
       }
     }
     return ids;
-  }, [mapEvents]);
+  }, [mapEvents, metro, clockTick]);
 
   // Dynamic teaser for the weekend-guide entry point on the browse view: how
   // much is actually happening this weekend, so the link feels promising
@@ -2983,7 +3029,7 @@ function App({ metro }: AppProps) {
     if (scoped.length < 3) return null;
     const free = scoped.filter((e) => e.cost === "Free").length;
     return { count: scoped.length, free };
-  }, [events, ageBand]);
+  }, [events, ageBand, clockTick]);
 
   const activeFilterCount = useMemo(() => {
     let n = 0;
@@ -3174,7 +3220,7 @@ function App({ metro }: AppProps) {
     matches.sort((a, b) => a.dist - b.dist);
     void matchAge;
     return matches.slice(0, 16).map((m) => m.event);
-  }, [activePlan, activePlanStops, events, ageBand, targetDayOfWeek]);
+  }, [activePlan, activePlanStops, events, ageBand, targetDayOfWeek, clockTick]);
 
   const planTotalTransit = useMemo(
     () => activePlanStops.reduce((sum, spot) => sum + spot.transitMinutes, 0),
@@ -6297,7 +6343,7 @@ function mapsHref(query: string): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 }
 
-function HopNowPanel({
+export function HopNowPanel({
   spots,
   events,
   userLocation,
@@ -6323,6 +6369,21 @@ function HopNowPanel({
   const [addedIds, setAddedIds] = useState<ReadonlySet<string>>(
     () => new Set<string>(),
   );
+  // B1.7: a Hop Now panel left open (or backgrounded and returned to) should
+  // not keep suggesting an event that has since ended.
+  const [clockTick, setClockTick] = useState(0);
+  useEffect(() => {
+    const tick = () => setClockTick((n) => n + 1);
+    const interval = setInterval(tick, 5 * 60 * 1000);
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") tick();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, []);
 
   const result: HopNowResult = useMemo(() => {
     const now = new Date();
@@ -6340,7 +6401,7 @@ function HopNowPanel({
       shuffleSeed: seed,
       excludeIds,
     });
-  }, [audience, events, seed, spots, userLocation, excludeIds, metroTimeZone]);
+  }, [audience, events, seed, spots, userLocation, excludeIds, metroTimeZone, clockTick]);
 
   function tryNewBatch() {
     // Park the IDs we just showed so the next batch surfaces fresh items.

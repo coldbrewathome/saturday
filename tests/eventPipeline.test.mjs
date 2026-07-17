@@ -34,12 +34,26 @@ import {
   extractWwcEvents,
   extractZooAtlantaEvents,
   inferAgeBands,
+  offsetStringForZone,
   parseDateTimeRange,
   parseLooseDate,
   pruneSlugHistory,
   updateSlugHistory,
   validateEventsDataset,
 } from "../scripts/eventPipeline.mjs";
+
+// E27: offsetStringForZone derives a DST-aware UTC offset per date/zone
+// instead of a fixed per-metro string that goes stale twice a year.
+test("E27: offsetStringForZone is DST-aware and metro-specific", () => {
+  assert.equal(offsetStringForZone(new Date("2026-07-01T12:00:00Z"), "America/New_York"), "-04:00");
+  assert.equal(offsetStringForZone(new Date("2026-01-01T12:00:00Z"), "America/New_York"), "-05:00");
+  assert.equal(offsetStringForZone(new Date("2026-07-01T12:00:00Z"), "America/Los_Angeles"), "-07:00");
+  assert.equal(offsetStringForZone(new Date("2026-01-01T12:00:00Z"), "America/Los_Angeles"), "-08:00");
+  // Phoenix doesn't observe DST — same offset year-round.
+  assert.equal(offsetStringForZone(new Date("2026-07-01T12:00:00Z"), "America/Phoenix"), "-07:00");
+  assert.equal(offsetStringForZone(new Date("2026-01-01T12:00:00Z"), "America/Phoenix"), "-07:00");
+  assert.equal(offsetStringForZone(new Date(), ""), null);
+});
 
 const source = {
   id: "sfpl",

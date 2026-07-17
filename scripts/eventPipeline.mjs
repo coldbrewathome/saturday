@@ -29,6 +29,31 @@ export const DEFAULT_TIMEZONE = "America/Los_Angeles";
 export const DEFAULT_TIMEZONE_OFFSET = "-07:00";
 export const DEFAULT_WINDOW_DAYS = 45;
 
+// B1.6: a fixed offset (e.g. "-04:00" hardcoded per metro registry, or the
+// Pacific DEFAULT_TIMEZONE_OFFSET for registries with no override at all —
+// every adults event-source registry) is wrong half the year once DST
+// flips, and wrong all year for any non-Pacific metro whose registry never
+// set one. Derives the actual UTC offset for `date` in the metro's IANA
+// `timeZone`, DST-aware. Returns null if the zone can't be resolved.
+export function offsetStringForZone(date, timeZone) {
+  if (!timeZone) return null;
+  let tzName;
+  try {
+    tzName = new Intl.DateTimeFormat("en-US", {
+      timeZone,
+      timeZoneName: "shortOffset",
+    })
+      .formatToParts(date)
+      .find((part) => part.type === "timeZoneName")?.value;
+  } catch {
+    return null;
+  }
+  const match = /GMT([+-])(\d{1,2})(?::?(\d{2}))?/.exec(tzName || "");
+  if (!match) return null;
+  const [, sign, hours, minutes = "00"] = match;
+  return `${sign}${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`;
+}
+
 const TIME_WINDOW_START = {
   Morning: "10:00",
   Afternoon: "14:00",

@@ -180,24 +180,6 @@ const ALCOHOL_TAG_VALUES = new Set([
 ]);
 const ADULT_TAG_VALUES = new Set(["stripclub", "brothel", "erotic"]);
 
-// Best-effort googleType (Google Places primaryTypeDisplayName) signal —
-// only populated on spots that went through the OSM<->Places enrichment
-// sidecar merge, so this is a forward-compatible hook, not the primary path.
-const GOOGLE_TYPE_CLASS = new Map(
-  [
-    ["Bar", "alcohol"],
-    ["Night Club", "alcohol"],
-    ["Wine Bar", "alcohol"],
-    ["Brewery", "alcohol"],
-    ["Winery", "alcohol"],
-    ["Distillery", "alcohol"],
-    ["Liquor Store", "alcohol"],
-    ["Casino", "gambling"],
-    ["Hookah Lounge", "age_gated"],
-    ["Cigar Bar", "age_gated"],
-  ].map(([type, cls]) => [type.toLowerCase(), cls]),
-);
-
 function spotTagValues(spot) {
   return (Array.isArray(spot?.tags) ? spot.tags : [])
     .map((tag) => String(tag || "").toLowerCase().trim())
@@ -223,18 +205,13 @@ export function brandSafetyViolation(spot) {
 
   const name = String(spot.name || "");
   const tags = spotTagValues(spot);
-  const googleType = typeof spot.googleType === "string" ? spot.googleType.toLowerCase() : null;
 
-  // Tier 3: tag/type signals (authoritative, low false-positive).
+  // Tier 3: OSM tags[] signals (authoritative, low false-positive). Spots
+  // are OSM-only — there is no googleType field to check.
   if (tags.some((tag) => WEAPONS_TAG_VALUES.has(tag))) return "weapons";
-  if (tags.some((tag) => GAMBLING_TAG_VALUES.has(tag)) || (googleType && GOOGLE_TYPE_CLASS.get(googleType) === "gambling")) {
-    return "gambling";
-  }
-  if (tags.some((tag) => ALCOHOL_TAG_VALUES.has(tag)) || (googleType && GOOGLE_TYPE_CLASS.get(googleType) === "alcohol")) {
-    return "alcohol";
-  }
+  if (tags.some((tag) => GAMBLING_TAG_VALUES.has(tag))) return "gambling";
+  if (tags.some((tag) => ALCOHOL_TAG_VALUES.has(tag))) return "alcohol";
   if (tags.some((tag) => ADULT_TAG_VALUES.has(tag))) return "adult";
-  if (googleType && GOOGLE_TYPE_CLASS.get(googleType) === "age_gated") return "age_gated";
   if (tags.some((tag) => CANNABIS_TAG_VALUES.has(tag))) return "cannabis";
 
   // Tier 4: name patterns (conservative). Lounges are checked ahead of the

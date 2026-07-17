@@ -5,6 +5,7 @@
 // behind the vote-tally panel and the "Verified · host" trust line.
 import { describe, expect, it } from "vitest";
 import {
+  isThemedPlanEligible,
   pickHeroFeatured,
   sourceHostname,
   summarizePollTallies,
@@ -139,6 +140,47 @@ describe("pickHeroFeatured", () => {
     expect(
       pickHeroFeatured([stalePlan], [], [pastEvent], null, undefined, NOW),
     ).toBeNull();
+  });
+});
+
+// E25: themed plans with no themedEnd must not pin in Editor's picks
+// forever — eligibility derives from the plan's own events instead.
+describe("isThemedPlanEligible", () => {
+  it("uses themedEnd when present", () => {
+    const future = makePlan({ id: "themed-future", themed: true, themedEnd: "2026-06-15T00:00:00-07:00" });
+    const past = makePlan({ id: "themed-past", themed: true, themedEnd: "2026-06-01T00:00:00-07:00" });
+    expect(isThemedPlanEligible(future, new Map(), NOW)).toBe(true);
+    expect(isThemedPlanEligible(past, new Map(), NOW)).toBe(false);
+  });
+
+  it("without themedEnd, derives eligibility from the plan's own events (never pins forever)", () => {
+    const upcoming = makeEvent({ id: "evt-upcoming", startDateTime: "2026-06-13T10:00:00-07:00" });
+    const ended = makeEvent({
+      id: "evt-ended",
+      startDateTime: "2026-06-01T10:00:00-07:00",
+      endDateTime: "2026-06-01T16:00:00-07:00",
+    });
+    const eventsById = new Map([
+      [upcoming.id, upcoming],
+      [ended.id, ended],
+    ] as const);
+
+    const withUpcomingEvent = makePlan({ id: "themed-no-end-upcoming", themed: true, eventIds: ["evt-upcoming"] });
+    expect(isThemedPlanEligible(withUpcomingEvent, eventsById, NOW)).toBe(true);
+
+    const withOnlyEndedEvent = makePlan({ id: "themed-no-end-ended", themed: true, eventIds: ["evt-ended"] });
+    expect(isThemedPlanEligible(withOnlyEndedEvent, eventsById, NOW)).toBe(false);
+
+    const withNoResolvableEvents = makePlan({ id: "themed-no-end-unresolved", themed: true, eventIds: ["missing"] });
+    expect(isThemedPlanEligible(withNoResolvableEvents, eventsById, NOW)).toBe(false);
+
+    const withNoEventsAtAll = makePlan({ id: "themed-no-end-none", themed: true });
+    expect(isThemedPlanEligible(withNoEventsAtAll, eventsById, NOW)).toBe(false);
+  });
+
+  it("a non-themed plan is never eligible for the themed slot", () => {
+    const plan = makePlan({ id: "not-themed" });
+    expect(isThemedPlanEligible(plan, new Map(), NOW)).toBe(false);
   });
 });
 
