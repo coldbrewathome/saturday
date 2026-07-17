@@ -3,7 +3,9 @@
 Things only the operator can do — accounts, DNS, dashboards, secrets. Work top
 to bottom; each section is independent. Commands assume repo root.
 
-_Status as of 2026-06-10. Check items off in place as you complete them._
+_Status as of 2026-06-10, corrected 2026-07-16 after an end-to-end dry-run
+(render logic verified against live data; no secret was set, no email was
+sent). Check items off in place as you complete them._
 
 ---
 
@@ -29,24 +31,46 @@ The newsletter is code-complete (`worker/src/newsletter.ts`, runbook in the
       npx wrangler secret put UNSUBSCRIBE_SECRET       # mint your own: openssl rand -hex 32
       ```
 
-- [ ] Edit `worker/wrangler.toml` `[vars]`: add `NEWSLETTER_ENABLED = "true"`.
-      For the first send also add
+- [ ] Edit `worker/wrangler.toml` `[vars]`: currently there is no
+      `NEWSLETTER_ENABLED` line at all — only a comment above the secrets list
+      (around line 19) describing what it would do. **Add** a new line
+      `NEWSLETTER_ENABLED = "true"` inside the `[vars]` block (there's nothing
+      to uncomment). For the first send also add
       `NEWSLETTER_TEST_ALLOWLIST = "kaining.usc@gmail.com"` so nothing can go
       to the real list yet (anything not on the allowlist is filtered out).
 - [ ] Deploy the worker: `npm --prefix worker run deploy`.
-- [ ] Trigger a test send (POST `/newsletter/send` with
-      `Authorization: Bearer <NEWSLETTER_ADMIN_TOKEN>`), then QA the digest in
-      **Gmail and Apple Mail** (images, links, unsubscribe footer).
+- [ ] Trigger a test send using `scripts/newsletter-send.mjs` (added
+      2026-07-16 — the worker has no code path that lists KV subscribers
+      itself, so this script is what builds the `recipients` payload
+      `POST /newsletter/send` expects):
+
+      ```sh
+      node scripts/newsletter-send.mjs              # dry-run: prints the payload, sends nothing
+      NEWSLETTER_ADMIN_TOKEN=<token> node scripts/newsletter-send.mjs --send   # actually POSTs
+      ```
+
+      The worker's own `NEWSLETTER_ENABLED`/`RESEND_API_KEY`/
+      `NEWSLETTER_TEST_ALLOWLIST` gates still apply — this script only
+      assembles who to send to. QA the digest in **Gmail and Apple Mail**
+      (images, links, unsubscribe footer).
 - [ ] Remove `NEWSLETTER_TEST_ALLOWLIST` from `[vars]` and redeploy the worker
       when you're ready for production list sends.
 
 ## 2. Purge KV test data (before any real send)
 
-The subscriber list contains `@example.com` test entries. Keys live in the
-`POLLS` KV namespace (id `dd49dd61e74b4823b9427a91df59eb3e`, from
-`worker/wrangler.toml`) shaped `newsletter:<metroId>:<email>`.
+**Checked 2026-07-16: the `newsletter:` KV prefix is currently empty — zero
+subscribers, including zero `@example.com` test rows. There is nothing to
+purge right now.** Leaving this section for whenever real signups (or fresh
+test entries) accumulate — re-check before every real send, since
+`scripts/newsletter-send.mjs` will happily build a payload that includes any
+`@example.com` rows still sitting in KV.
 
-- [ ] List newsletter keys:
+Keys live in the `POLLS` KV namespace (id `dd49dd61e74b4823b9427a91df59eb3e`,
+from `worker/wrangler.toml`) shaped `newsletter:<metroId>:<email>`.
+
+- [ ] List newsletter keys and check for test rows (or just run
+      `node scripts/newsletter-send.mjs` — its dry-run output lists every
+      metro/email pair currently in KV):
 
       ```sh
       cd worker

@@ -55,7 +55,7 @@ const DEFAULT_SITE_ORIGIN = "https://famhop.com";
 // timezone) — kept inline because the worker has no build step and
 // can't read the JSON at deploy time. Add new metros here when they
 // graduate to the public list.
-const METROS: Record<string, { label: string; timezone: string }> = {
+export const METROS: Record<string, { label: string; timezone: string }> = {
   "bay-area": { label: "Bay Area", timezone: "America/Los_Angeles" },
   "los-angeles": { label: "Los Angeles", timezone: "America/Los_Angeles" },
   "new-york-city": { label: "New York City", timezone: "America/New_York" },
@@ -71,6 +71,7 @@ const METROS: Record<string, { label: string; timezone: string }> = {
   "boston": { label: "Boston", timezone: "America/New_York" },
   "san-diego": { label: "San Diego", timezone: "America/Los_Angeles" },
   "honolulu": { label: "Honolulu", timezone: "Pacific/Honolulu" },
+  "austin": { label: "Austin", timezone: "America/Chicago" },
 };
 
 // Hook for tests to swap the fetch implementation. Production always

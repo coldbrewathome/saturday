@@ -1,12 +1,18 @@
 import { createHmac } from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import {
   buildUnsubscribeUrl,
+  METROS,
   parseAllowlist,
   sendWeekendDigest,
   unsubscribeToken,
   type NewsletterRecipient,
 } from "../worker/src/newsletter";
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 describe("parseAllowlist", () => {
   it("returns null for unset or empty input", () => {
@@ -188,5 +194,22 @@ describe("unsubscribe link helpers", () => {
     expect(url).toBe(
       `https://polls.example.com/newsletter/unsubscribe?email=ops%40famhop.com&token=${token}`,
     );
+  });
+});
+
+describe("METROS drift guard", () => {
+  // The worker has no build step, so METROS is a hand-maintained copy of
+  // data/metros.json (see the comment above its declaration). A metro added
+  // there without a matching METROS entry silently drops every subscriber in
+  // that metro with "unknown metroId" — this is exactly how austin went
+  // missing. Fails loudly the next time the two drift apart.
+  it("has an entry for every metro in data/metros.json", () => {
+    const doc = JSON.parse(
+      fs.readFileSync(path.join(ROOT, "data", "metros.json"), "utf8"),
+    ) as { metros: Array<{ id: string }> };
+    const missing = doc.metros
+      .map((m) => m.id)
+      .filter((id) => !METROS[id]);
+    expect(missing).toEqual([]);
   });
 });
