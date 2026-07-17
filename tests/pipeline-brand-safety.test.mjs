@@ -401,6 +401,39 @@ test("finding 28: D2 catches Fairyland, LEGOLAND Discovery, Chuck E. Cheese, Jun
   assert.equal(isKidsPrimaryVenue({ name: "Palo Alto Junior Museum and Zoo" }), true);
 });
 
+// Round 3: D2 residue — 15 shipped spots-adults.json venues the pattern
+// missed. Suffix set widened beyond museum/discovery/play/gym to also cover
+// garden/park/theater/aquarium/zoo/library/hospital/physicians/services;
+// bare LEGOLAND (not just "...Discovery Center"); a leading "kids"+"park"
+// standalone pattern.
+test("round 3: D2 residue — widened suffix set, curly/no-apostrophe, bare LEGOLAND, leading kids+park", () => {
+  for (const name of [
+    "Lou Glenn Children's Garden",
+    "Boston Children's Physicians Weymouth",
+    "Kids Square Park",
+    "Children's Aquarium",
+    "Helemano Children and Dog Parks",
+    "Scholes Street Children’s Garden", // curly apostrophe (U+2019)
+    "Camden Children's Garden",
+    "Pentridge Children's Garden",
+    "Forget Me Knot Children & Youth Services",
+    "LEGOLAND California",
+    "Childrens Park", // no apostrophe at all
+    "Donnie Chin International Children’s Park", // curly apostrophe
+    "Seattle Children's Theater",
+  ]) {
+    assert.equal(isKidsPrimaryVenue({ name }), true, name);
+  }
+});
+
+// A park merely named after a street called "Kid Street" is not a
+// kids-branded venue — the leading-kids+park pattern would otherwise catch
+// it; protected by an exact-match allowlist entry instead of narrowing the
+// pattern (which would also miss "Kids Square Park").
+test("round 3: 'Kid Street Park' (named for the street, not for kids) is not flagged", () => {
+  assert.equal(isKidsPrimaryVenue({ name: "Kid Street Park", category: "Outdoors" }), false);
+});
+
 // Finding 1: OSM sport=shooting / club=* propagation (unit-tested at the
 // spotPipeline level too — this confirms the taxonomy side once tagged).
 test("finding 1: sport=shooting tag value is a reachable weapons signal", () => {

@@ -321,15 +321,28 @@ const KIDS_PRIMARY_NAME_PATTERNS = [
   /\bplayground\b/i,
   /\btot\s?lot\b/i,
   /\bsplash\s?pad\b/i,
-  /(?:children'?s?|kids?)\b.*\b(?:museum|discovery|play|gym)\b/i,
+  // "children'?s?" also matches the apostrophe-less "Childrens" (optional
+  // apostrophe, optional trailing s); normalizeQuotes upstream collapses
+  // curly '’' to straight so both spellings land here. The suffix list
+  // covers every kids-primary venue TYPE shipped in spots-adults.json, not
+  // just museums/play spaces — a "Children's Garden"/"...Park"/"...Theatre"/
+  // "...Aquarium"/"...Zoo"/"...Library"/"...Physicians"/"...Services" is as
+  // much a kids-primary venue as a museum, and the wildcard between the
+  // "children's"/"kids" token and the suffix already tolerates "&"/"and"
+  // (e.g. "Children & Youth Services", "Children and Dog Parks").
+  /(?:children'?s?|kids?)\b.*\b(?:museum|discovery|play|gym|gardens?|parks?|theaters?|theatres?|aquariums?|zoos?|librar(?:y|ies)|hospitals?|physicians?|services?)\b/i,
   /\bthe\s?little\s?gym\b/i,
   /\bmy\s?gym\b/i,
   /\bkidzania\b/i,
   /\bkidspace\b/i,
   /\bfairyland\b/i,
-  /\blegoland\s?discovery\b/i,
+  /\blegoland\b/i,
   /\bchuck\s?e\.?\s?cheese\b/i,
   /\bjunior\s?museum\b/i,
+  // Standalone "Kids ... Park" (no "children's" wording at all) — leading
+  // "kids" specifically, so a name that merely mentions a park in passing
+  // ("Kid Curry's near the park") isn't caught.
+  /^kids?\b.*\bparks?\b/i,
 ];
 
 export function isKidsPrimaryVenue(spot) {
