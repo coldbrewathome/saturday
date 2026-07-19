@@ -154,3 +154,41 @@ test("formatWeekendRange spells out both months across a boundary", () => {
     "October 31 – November 1",
   );
 });
+
+// --- pickRelatedEvents -------------------------------------------------------
+
+test("pickRelatedEvents prefers same-city events, soonest first", async () => {
+  const { pickRelatedEvents } = await import("../scripts/generate-seo-pages.mjs");
+  const mk = (title, city, start) => ({ title, city, startDateTime: start });
+  const target = mk("Target", "Oakland", "2026-07-20");
+  const sorted = [
+    mk("A", "Oakland", "2026-07-19"),
+    target,
+    mk("B", "Berkeley", "2026-07-21"),
+    mk("C", "Oakland", "2026-07-22"),
+    mk("D", "Fremont", "2026-07-23"),
+    mk("E", "Oakland", "2026-07-24"),
+    mk("F", "Oakland", "2026-07-25"),
+  ];
+  const picked = pickRelatedEvents(target, sorted);
+  assert.equal(picked.length, 4);
+  assert.deepEqual(picked.map((e) => e.title), ["A", "C", "E", "F"]);
+  assert.ok(!picked.includes(target), "never links to itself");
+});
+
+test("pickRelatedEvents backfills from metro when city has too few", async () => {
+  const { pickRelatedEvents } = await import("../scripts/generate-seo-pages.mjs");
+  const mk = (title, city, start) => ({ title, city, startDateTime: start });
+  const target = mk("Target", "Alameda", "2026-07-20");
+  const sorted = [mk("A", "Alameda", "2026-07-21"), target, mk("B", "Berkeley", "2026-07-22")];
+  const picked = pickRelatedEvents(target, sorted);
+  assert.deepEqual(picked.map((e) => e.title), ["A", "B"]);
+});
+
+test("pickRelatedEvents handles an event with no city", async () => {
+  const { pickRelatedEvents } = await import("../scripts/generate-seo-pages.mjs");
+  const mk = (title, city, start) => ({ title, city, startDateTime: start });
+  const target = mk("Target", "", "2026-07-20");
+  const sorted = [target, mk("A", "Oakland", "2026-07-21"), mk("B", "Berkeley", "2026-07-22")];
+  assert.deepEqual(pickRelatedEvents(target, sorted).map((e) => e.title), ["A", "B"]);
+});

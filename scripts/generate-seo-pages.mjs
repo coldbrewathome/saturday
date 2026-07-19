@@ -557,6 +557,11 @@ a:hover{text-decoration:underline}
 .cta:hover{filter:brightness(.95);text-decoration:none;}
 .cta-secondary{background:#fff;border:1px solid var(--line);color:var(--ink);}
 .see-also{margin-top:28px;color:var(--muted);}
+.event-related{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin:26px 0;box-shadow:0 10px 28px rgba(34,34,31,.05);}
+.event-related h2{font-size:22px;line-height:1.25;margin:0 0 10px;}
+.event-related ul{margin:0 0 12px;padding-left:1.1rem;}
+.event-related li{margin:.3rem 0;}
+.event-related p{margin:0;font-weight:700;}
 .card-list{list-style:none;padding:0;margin:14px 0 26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;}
 .card-list li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;}
 .card-list li a{color:var(--ink);}
@@ -2204,8 +2209,53 @@ function eventRunDays(event) {
   return [...new Set(event.occurrenceStarts.map((s) => s.slice(0, 10)))].sort();
 }
 
+// Sibling events for the "more coming up" block on an event page: same-city
+// events first, then metro-wide, both in soonest-first order (the caller
+// passes a pre-sorted list). Pure so tests can cover the pick order.
+export function pickRelatedEvents(event, upcomingSorted, limit = 4) {
+  const city = String(event.city || event.neighborhood || "").toLowerCase();
+  const others = upcomingSorted.filter((e) => e !== event);
+  const picked = city
+    ? others.filter((e) => String(e.city || e.neighborhood || "").toLowerCase() === city).slice(0, limit)
+    : [];
+  for (const e of others) {
+    if (picked.length >= limit) break;
+    if (!picked.includes(e)) picked.push(e);
+  }
+  return picked.slice(0, limit);
+}
+
+function renderRelatedEvents(event, upcomingSorted, eventSlugLookup) {
+  const related = pickRelatedEvents(event, upcomingSorted);
+  if (!related.length) return "";
+  const items = related
+    .map((e) => {
+      const slug = eventSlugLookup.get(e);
+      const when = formatEventDate(e);
+      return `<li><a href="${metroPath(`event/${slug}/`)}">${esc(e.title)}</a>${when ? ` — ${esc(when)}` : ""}</li>`;
+    })
+    .join("");
+  return `<section class="event-related">
+        <h2>More ${A.thingsToDoLower} coming up</h2>
+        <ul>${items}</ul>
+        <p><a href="${metroPath("this-weekend/")}" data-weekend-link>See everything happening this weekend in ${esc(metroLabel())} &rarr;</a></p>
+      </section>`;
+}
+
 function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySlugs) {
   const slugs = new Set();
+  // Candidates for the related-events block, mirroring the mint gates below so
+  // every rendered link points at a page this same loop will write (items is
+  // already capped by capEventsForPages, so no capped-out slugs sneak in).
+  const upcomingSorted = items
+    .filter((ev) => {
+      const slug = eventSlugLookup.get(ev);
+      if (!slug || isEventPastForSeo(ev)) return false;
+      if (violatesAdultsSlugGate(slug, ev.title) || (IS_ADULTS && eventFailsAdultsD1(ev))) return false;
+      if (!IS_ADULTS && kidsEventBrandSafetyViolation(ev, activeMetro?.id)) return false;
+      return true;
+    })
+    .sort((a, b) => (a.startDateTime || "").localeCompare(b.startDateTime || ""));
   for (const event of items) {
     const candidate = eventSlugLookup.get(event);
     if (!candidate) continue;
@@ -2245,6 +2295,12 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
         <a class="cta" href="${metroPath("")}">Plan a day with ${BRAND}</a>
         ${event.url ? `<a class="cta-secondary" rel="noopener nofollow" href="${esc(event.url)}">Event details</a>` : ""}
       </p>
+      ${renderRelatedEvents(event, upcomingSorted, eventSlugLookup)}
+      ${renderNewsletterSignup({
+        source: "event-page",
+        heading: `Get next weekend's ${metroLabel()} family events in your inbox`,
+        sub: "One short email each week with the best family-friendly things happening near you.",
+      })}
       ${showCityLink ? `<p class="see-also">More <a href="${metroPath(`city/${citySlug}/`)}">${A.thingsToDoLower} in ${esc(cityName)}</a>.</p>` : ""}
     `;
 
@@ -4127,12 +4183,17 @@ function renderMiniEventList(events, eventSlugLookup) {
   </ul>`;
 }
 
-function renderNewsletterSignup() {
+function renderNewsletterSignup({
+  source = "weekend-guide",
+  heading = "Get the weekend guide before Friday",
+  sub = "",
+} = {}) {
   if (IS_ADULTS) return "";
-  return `<section class="guide-newsletter" data-guide-newsletter data-api-base="${esc(POLLS_API)}" data-metro="${esc(activeMetro.id)}" aria-label="Weekend guide email signup">
+  const subText = sub || `A short family-events email for ${metroLabel()}, ordered by time and grouped by age fit.`;
+  return `<section class="guide-newsletter" data-guide-newsletter data-api-base="${esc(POLLS_API)}" data-metro="${esc(activeMetro.id)}" data-source="${esc(source)}" aria-label="Weekend guide email signup">
     <div>
-      <h2>Get the weekend guide before Friday</h2>
-      <p>A short family-events email for ${esc(metroLabel())}, ordered by time and grouped by age fit.</p>
+      <h2>${esc(heading)}</h2>
+      <p>${esc(subText)}</p>
     </div>
     <form data-guide-newsletter-form>
       <input name="email" type="email" autocomplete="email" placeholder="you@example.com" aria-label="Email address" required>
@@ -4158,6 +4219,19 @@ function renderNewsletterScript() {
   const status = root.querySelector("[data-guide-newsletter-status]");
   const apiBase = root.getAttribute("data-api-base") || "";
   const metroId = root.getAttribute("data-metro") || "";
+  const source = root.getAttribute("data-source") || "weekend-guide";
+  const fireMetric = (name) => {
+    if (!apiBase) return;
+    try {
+      navigator.sendBeacon(
+        apiBase + "/metric?name=" + name + "&metro=" + encodeURIComponent(metroId),
+        new Blob(['{"brand":"famhop"}'], { type: "application/json" }),
+      );
+    } catch {}
+  };
+  document.querySelectorAll("[data-weekend-link]").forEach((el) => {
+    el.addEventListener("click", () => fireMetric("weekend_guide_click"));
+  });
   if (!form || !status) return;
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -4179,11 +4253,12 @@ function renderNewsletterScript() {
           email,
           metroId,
           ageBand: String(data.get("ageBand") || ""),
-          source: "weekend-guide",
+          source,
           url: window.location.href
         })
       });
       if (!response.ok) throw new Error("Subscribe failed");
+      fireMetric("newsletter_subscribed");
       status.textContent = "You're on the list for the next weekend guide.";
       form.reset();
     } catch {
