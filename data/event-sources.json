@@ -731,11 +731,20 @@
     {
       "id": "fairyland",
       "name": "Children's Fairyland",
-      "url": "https://fairyland.org/visit",
+      "url": "https://fairyland.org/",
       "city": "Oakland",
+      "neighborhood": "Lake Merritt",
       "category": "Park",
-      "sourceType": "html",
+      "sourceType": "tribeEvents",
       "trust": "official",
+      "lat": 37.8078,
+      "lon": -122.2624,
+      "defaultAudienceText": "kids toddler preschool family children",
+      "excludePattern": "^Open \\d|Member Magic Hour|Member Morning|Private Event|Closed",
+      "eventList": {
+        "venue": "Children's Fairyland",
+        "city": "Oakland"
+      },
       "fallbackEventIds": [
         "fairyland-saturdays"
       ]
@@ -3054,6 +3063,122 @@
       "defaultAudienceText": "family kids children farmers market food outdoor",
       "lat": 37.7956,
       "lon": -122.3933
+    },
+    {
+      "id": "japan-day-sf-2026",
+      "name": "Japan Day (Japan Week SF)",
+      "url": "https://japanweeksf.com/",
+      "city": "San Francisco",
+      "neighborhood": "Japantown",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 37.7857,
+      "lon": -122.431,
+      "officialTextEvents": [
+        {
+          "id": "japan-day-sf-2026-07-19",
+          "title": "Japan Day",
+          "description": "Japan Day, the summer cultural festival of SF Japantown presented by GenRyu Arts, with taiko drumming, awa odori dance, Okinawan drumming and dance, karate, and shamisen on the outdoor stage at Post and Laguna, plus hands-on washi ningyo, origami, and shodo calligraphy activities.",
+          "venue": "SF Japantown (outdoor stage at Post and Laguna)",
+          "neighborhood": "Japantown",
+          "startDateTime": "2026-07-19T12:00:00-07:00",
+          "endDateTime": "2026-07-19T17:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Free",
+          "url": "https://japanweeksf.com/",
+          "requiredText": [
+            "Japan Day",
+            "July 19, 2026",
+            "12:00 pm"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "circus-bella-ah-ha-salesforce-park-2026",
+      "name": "Circus Bella AH HA! at Salesforce Park",
+      "url": "https://www.theeastcut.org/event/circus-bella-presents-ah-ha/",
+      "city": "San Francisco",
+      "neighborhood": "East Cut",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 37.7897,
+      "lon": -122.3972,
+      "officialTextEvents": [
+        {
+          "id": "circus-bella-ah-ha-salesforce-park-2026-07-19",
+          "title": "Circus Bella Presents: AH HA!",
+          "description": "Free, all-ages Circus Bella performance of AH HA!, a 60-minute one-ring circus with acrobats, aerialists, jugglers and clowns backed by the Circus Bella All-Star Band, at the Salesforce Park Amphitheater. Two shows: 1 p.m. (doors 12 p.m.) and 3 p.m. (doors 2:15 p.m.).",
+          "venue": "Salesforce Park Amphitheater (425 Mission St)",
+          "neighborhood": "East Cut",
+          "startDateTime": "2026-07-19T13:00:00-07:00",
+          "endDateTime": "2026-07-19T16:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Free",
+          "url": "https://www.theeastcut.org/event/circus-bella-presents-ah-ha/",
+          "requiredText": [
+            "Circus Bella",
+            "Salesforce Park",
+            "1 p.m."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sunday-streets-mission-2026",
+      "name": "Sunday Streets: Mission",
+      "url": "https://sundaystreetssf.com/",
+      "city": "San Francisco",
+      "neighborhood": "Mission",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 37.7599,
+      "lon": -122.4213,
+      "officialTextEvents": [
+        {
+          "id": "sunday-streets-mission-2026-07-19",
+          "title": "Sunday Streets: Mission",
+          "description": "Sunday Streets car-free open-streets festival in the Mission District, turning city streets into car-free community space with free active-play games, cultural performances, live music and local businesses. Typically runs 11am to 4pm; check the official site for this date's route and hours.",
+          "venue": "Mission District (Valencia St corridor)",
+          "neighborhood": "Mission",
+          "startDateTime": "2026-07-19T11:00:00-07:00",
+          "endDateTime": "2026-07-19T16:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Free",
+          "url": "https://sundaystreetssf.com/",
+          "requiredText": [
+            "Mission",
+            "July 19"
+          ]
+        }
+      ]
     }
   ]
 }

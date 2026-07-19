@@ -1681,3 +1681,25 @@ test("updateSlugHistory refreshes lastSeenAt on re-seen slugs and prunes the res
   assert.equal(next.slugs["recurring-template"].lastSeenAt, now.toISOString());
 });
 
+
+test("extractTribeEvents honors include/excludePattern like the other extractors", async () => {
+  const { extractTribeEvents } = await import("../scripts/eventPipeline.mjs");
+  const json = {
+    events: [
+      { title: "Teddy Bear Picnic Day", start_date: "2026-07-18 10:00:00", url: "https://fairyland.org/event/teddy-bear/" },
+      { title: "Open 10am-5pm", start_date: "2026-07-18 10:00:00", url: "https://fairyland.org/event/open/" },
+      { title: "Member Magic Hour", start_date: "2026-07-18 09:00:00", url: "https://fairyland.org/event/member/" },
+    ],
+  };
+  const source = {
+    id: "fairyland",
+    name: "Children's Fairyland",
+    url: "https://fairyland.org/",
+    city: "Oakland",
+    excludePattern: "^Open \\d|Member Magic Hour",
+  };
+  const titles = extractTribeEvents(json, source).map((e) => e.title);
+  assert.deepEqual(titles, ["Teddy Bear Picnic Day"]);
+  const included = extractTribeEvents(json, { ...source, excludePattern: undefined, includePattern: "Picnic" });
+  assert.deepEqual(included.map((e) => e.title), ["Teddy Bear Picnic Day"]);
+});

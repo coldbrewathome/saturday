@@ -33,7 +33,18 @@ node scripts/ingest-events-all.mjs; node scripts/build-coverage-summary.mjs
 
 Expect "Ingest succeeded for all 16 metros" and coverage "0 below threshold". Critical `[event-pipeline-alert]` lines are normal background noise (~10/metro chronic backlog) — triage them in step 4, don't panic.
 
-## 3. Grounded discovery for the themes (30–60 min, agents)
+## 3. Grounded discovery (30–60 min, agents)
+
+Two sub-passes, BOTH mandatory. (a) exists because theme-only discovery shipped zero marquee one-offs for 2026-07-18/19 — Teddy Bear Picnic, Hayes Valley Carnival, Japan Day, Sunday Streets etc. were all absent while the routine reported green.
+
+### 3a. One-off sweep — calendar-driven, every week
+
+For each traffic metro (bay-area, los-angeles first): give a discovery agent the metro's lead pages from `data/discovery-leads.json` and have it list every one-off event in the NEXT 7 DAYS those roundups mention, then verify each on its organizer/venue/government page and propose sources. Leads are never fact sources. Target: ≥5 verified one-offs per traffic metro, or state per event why not (no official page, sold out, ended).
+
+- Prefer durable over one-off: when the organizer's calendar has a structured feed, add THAT (recurring source) instead of a one-off gate. Check before writing `officialTextEvents`: `curl -sL <site>/wp-json/tribe/events/v1/events?per_page=5` (Tribe/The Events Calendar is everywhere — fairyland.org sat unnoticed behind a misconfigured `html` source pointing at /visit until 2026-07-18), plus `.ics` links and the other structured sourceTypes.
+- A venue we already ingest missing a known event is a SOURCE BUG, not a discovery gap — fix the source (see fairyland: `html` → `tribeEvents`), don't paper over it with a one-off entry.
+
+### 3b. Theme discovery from search demand
 
 Follow `skills/grounded-event-discovery/SKILL.md` for verification rules. Operational rules learned the hard way:
 

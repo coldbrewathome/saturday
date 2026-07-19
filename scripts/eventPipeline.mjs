@@ -2633,7 +2633,10 @@ export function extractTribeEvents(json, source = {}) {
       const description = htmlText(item.description || item.excerpt, 700);
       const categories = maybeArray(item.categories).map((category) => htmlText(category.name || category, 80));
       const venue = item.venue && !Array.isArray(item.venue) ? item.venue : {};
-      const signalText = `${title} ${description} ${categories.join(" ")} ${sourceAudienceText(source)}`;
+      const eventText = `${title} ${description} ${categories.join(" ")}`;
+      const signalText = `${eventText} ${sourceAudienceText(source)}`;
+      if (source.includePattern && !patternMatches(eventText, source.includePattern)) return null;
+      if (source.excludePattern && patternMatches(eventText, source.excludePattern)) return null;
       if (hasAdultOnlySignal(signalText)) return null;
       return normalizeRawEvent({
         id: item.id ? `${source.id}-${item.id}` : null,
