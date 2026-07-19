@@ -1,9 +1,33 @@
 {
   "schemaVersion": 1,
   "metroId": "dallas-fort-worth",
-  "generatedAt": "2026-07-12T19:14:24.371Z",
-  "alertCount": 8,
+  "generatedAt": "2026-07-19T04:54:13.457Z",
+  "alertCount": 10,
   "alerts": [
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dallas-fort-worth-parks-family",
+      "sourceName": "Dallas Parks Calendar",
+      "sourceType": "rss",
+      "url": "https://www.dallasparks.org/RSSFeed.aspx?ModID=58&CID=Main-Calendar-14",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 2,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 2,
+      "fetchedAt": "2026-07-19T04:54:13.457Z",
+      "fetches": [
+        {
+          "url": "https://www.dallasparks.org/RSSFeed.aspx?ModID=58&CID=Main-Calendar-14",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
+        }
+      ]
+    },
     {
       "severity": "warning",
       "metroId": "dallas-fort-worth",
@@ -19,7 +43,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T19:14:24.371Z",
+      "fetchedAt": "2026-07-19T04:54:13.457Z",
       "fetches": [
         {
           "url": "https://www.perotmuseum.org/events/",
@@ -44,7 +68,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T19:14:24.371Z",
+      "fetchedAt": "2026-07-19T04:54:13.457Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -69,7 +93,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T19:14:24.371Z",
+      "fetchedAt": "2026-07-19T04:54:13.457Z",
       "fetches": [
         {
           "url": "https://www.fairparkdallas.com/events/detail/2026-state-fair-of-texas",
@@ -94,7 +118,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T19:14:24.371Z",
+      "fetchedAt": "2026-07-19T04:54:13.457Z",
       "fetches": [
         {
           "url": "https://fortworthsfourth.com/",
@@ -119,7 +143,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T19:14:24.371Z",
+      "fetchedAt": "2026-07-19T04:54:13.457Z",
       "fetches": [
         {
           "url": "https://www.treesdallas.com/events",
@@ -144,13 +168,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T19:14:24.371Z",
+      "fetchedAt": "2026-07-19T04:54:13.457Z",
       "fetches": [
         {
           "url": "https://www.thebombfactory.com/events/rss",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "application/rss+xml"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dada-dallas",
+      "sourceName": "Dada",
+      "sourceType": "html",
+      "url": "https://dadadallas.com/calendar/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-19T04:54:13.457Z",
+      "fetches": [
+        {
+          "url": "https://dadadallas.com/calendar/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -169,7 +218,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T19:14:24.371Z",
+      "fetchedAt": "2026-07-19T04:54:13.457Z",
       "fetches": [
         {
           "url": "https://www.tulipsftw.com/events",
@@ -194,7 +243,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T19:14:24.371Z",
+      "fetchedAt": "2026-07-19T04:54:13.457Z",
       "fetches": [
         {
           "url": "https://www.fairparkdallas.com/events",

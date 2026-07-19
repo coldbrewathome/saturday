@@ -1,11 +1,36 @@
 {
   "schemaVersion": 1,
   "metroId": "los-angeles",
-  "generatedAt": "2026-07-12T20:01:40.765Z",
-  "alertCount": 16,
+  "generatedAt": "2026-07-19T04:50:35.751Z",
+  "alertCount": 15,
   "alerts": [
     {
       "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "la-brea-tar-pits",
+      "sourceName": "La Brea Tar Pits & Museum",
+      "sourceType": "html",
+      "url": "https://tarpits.org/calendar?_wrapper_format=html&page=0",
+      "status": "ok-last-known-good",
+      "issueType": "zero-extracted",
+      "reason": "source produced no live events; using last-known-good future events",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 2,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 2,
+      "fetchedAt": "2026-07-19T04:50:35.751Z",
+      "fetches": [
+        {
+          "url": "https://tarpits.org/calendar?_wrapper_format=html&page=0",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
       "metroId": "los-angeles",
       "sourceId": "petersen-automotive-museum",
       "sourceName": "Petersen Automotive Museum",
@@ -14,12 +39,12 @@
       "status": "blocked",
       "issueType": "fetch-failed",
       "reason": "challenge page returned instead of event content",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 3,
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 3,
-      "fetchedAt": "2026-07-12T20:01:40.765Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-19T04:50:35.751Z",
       "fetches": [
         {
           "url": "https://www.petersen.org/events",
@@ -45,7 +70,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T20:01:40.765Z",
+      "fetchedAt": "2026-07-19T04:50:35.751Z",
       "fetches": [
         {
           "url": "https://www.huntington.org/calendar",
@@ -70,7 +95,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T20:01:40.765Z",
+      "fetchedAt": "2026-07-19T04:50:35.751Z",
       "fetches": [
         {
           "url": "https://grandparkla.org/events/",
@@ -95,7 +120,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T20:01:40.765Z",
+      "fetchedAt": "2026-07-19T04:50:35.751Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -120,62 +145,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T20:01:40.765Z",
+      "fetchedAt": "2026-07-19T04:50:35.751Z",
       "fetches": [
         {
           "url": "https://ocfair.com/oc-fair/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "los-angeles",
-      "sourceId": "ventura-county-fair",
-      "sourceName": "Ventura County Fair",
-      "sourceType": "html",
-      "url": "https://venturacountyfair.org/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T20:01:40.765Z",
-      "fetches": [
-        {
-          "url": "https://venturacountyfair.org/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "los-angeles",
-      "sourceId": "wende-museum-culver-city",
-      "sourceName": "The Wende Museum",
-      "sourceType": "tribeEvents",
-      "url": "https://wendemuseum.org/events/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 37,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 37,
-      "fetchedAt": "2026-07-12T20:01:40.765Z",
-      "fetches": [
-        {
-          "url": "https://wendemuseum.org/events/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
         }
       ]
     },
@@ -194,7 +170,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T20:01:40.765Z",
+      "fetchedAt": "2026-07-19T04:50:35.751Z",
       "fetches": [
         {
           "url": "https://grandparkla.org/blockparty/",
@@ -219,7 +195,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T20:01:40.765Z",
+      "fetchedAt": "2026-07-19T04:50:35.751Z",
       "fetches": [
         {
           "url": "https://www.troubadour.com/events",
@@ -244,7 +220,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T20:01:40.765Z",
+      "fetchedAt": "2026-07-19T04:50:35.751Z",
       "fetches": [
         {
           "url": "https://www.theelrey.com/events",
@@ -269,7 +245,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T20:01:40.765Z",
+      "fetchedAt": "2026-07-19T04:50:35.751Z",
       "fetches": [
         {
           "url": "https://www.theroxy.com/events",
@@ -294,7 +270,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T20:01:40.765Z",
+      "fetchedAt": "2026-07-19T04:50:35.751Z",
       "fetches": [
         {
           "url": "https://thecomedystore.com/calendar/",
@@ -319,7 +295,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T20:01:40.765Z",
+      "fetchedAt": "2026-07-19T04:50:35.751Z",
       "fetches": [
         {
           "url": "https://www.laughfactory.com/shows",
@@ -344,7 +320,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T20:01:40.765Z",
+      "fetchedAt": "2026-07-19T04:50:35.751Z",
       "fetches": [
         {
           "url": "https://improv.com/hollywood/calendar/",
@@ -369,7 +345,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T20:01:40.765Z",
+      "fetchedAt": "2026-07-19T04:50:35.751Z",
       "fetches": [
         {
           "url": "https://www.ticketmaster.com/the-wiltern-tickets-los-angeles/venue/73790",
@@ -395,7 +371,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T20:01:40.765Z",
+      "fetchedAt": "2026-07-19T04:50:35.751Z",
       "fetches": [
         {
           "url": "https://www.theregenttheater.com/events",

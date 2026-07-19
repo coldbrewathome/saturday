@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "honolulu",
-  "generatedAt": "2026-07-12T19:19:51.947Z",
+  "generatedAt": "2026-07-19T05:00:18.042Z",
   "registryPath": "data/event-sources-honolulu.json",
   "outputPath": "public/data/honolulu/events.json",
-  "eventCount": 399,
-  "adultsEventCount": 30,
-  "sourceCount": 13,
-  "liveEventCount": 428,
-  "lastKnownGoodEventCount": 1,
+  "eventCount": 400,
+  "adultsEventCount": 46,
+  "sourceCount": 14,
+  "liveEventCount": 432,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 7,
+  "operatorAlertCount": 6,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T19:19:51.947Z",
+      "fetchedAt": "2026-07-19T05:00:18.042Z",
       "fetches": [
         {
           "url": "https://www.bishopmuseum.org/exhibits-and-programs/events/",
@@ -54,7 +54,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T19:19:51.947Z",
+      "fetchedAt": "2026-07-19T05:00:18.042Z",
       "fetches": [
         {
           "url": "https://honolulumuseum.org/events/",
@@ -79,37 +79,12 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T19:19:51.947Z",
+      "fetchedAt": "2026-07-19T05:00:18.042Z",
       "fetches": [
         {
           "url": "https://www.honoluluzoo.org/experiences-events/",
           "status": "http-error",
           "httpStatus": 404,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "honolulu",
-      "sourceId": "hawaii-childrens-discovery",
-      "sourceName": "Hawaii Children's Discovery Center",
-      "sourceType": "html",
-      "url": "https://www.discoverycenterhawaii.org/event-list",
-      "status": "ok-last-known-good",
-      "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-07-12T19:19:51.947Z",
-      "fetches": [
-        {
-          "url": "https://www.discoverycenterhawaii.org/event-list",
-          "status": "ok",
-          "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ]
@@ -129,7 +104,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T19:19:51.947Z",
+      "fetchedAt": "2026-07-19T05:00:18.042Z",
       "fetches": [
         {
           "url": "https://calendar.google.com/calendar/ical/hawaii.edu_ur7iq68mqshu5q73n79rmb4jrk%40group.calendar.google.com/public/basic.ics",
@@ -154,7 +129,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T19:19:51.947Z",
+      "fetchedAt": "2026-07-19T05:00:18.042Z",
       "fetches": [
         {
           "url": "https://www.kualoa.com/activities/",
@@ -179,7 +154,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-12T19:19:51.947Z",
+      "fetchedAt": "2026-07-19T05:00:18.042Z",
       "fetches": [
         {
           "url": "https://www.alohacomedyclub.com/calendar",
@@ -213,9 +188,9 @@
       "metroId": "honolulu",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 396,
+      "liveEvents": 397,
       "fallbackEvents": 0,
-      "eventCount": 396,
+      "eventCount": 397,
       "fetches": [
         {
           "url": "https://www.librarieshawaii.org/events/",
@@ -227,7 +202,7 @@
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=400; pages=8",
       "rejectedLiveEvents": 1,
-      "extractedEvents": 397,
+      "extractedEvents": 398,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -320,8 +295,8 @@
       "city": "Honolulu",
       "metroId": "honolulu",
       "category": "Museum",
-      "status": "ok-last-known-good",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 1,
       "fallbackEvents": 0,
       "eventCount": 1,
       "fetches": [
@@ -334,11 +309,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "recoveryMode": "last-known-good",
-      "reason": "source produced no live events; using last-known-good future events"
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 2,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "waikiki-aquarium",
@@ -376,9 +350,9 @@
       "metroId": "honolulu",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://www.iolanipalace.org/event/feed/",
@@ -389,7 +363,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/rss+xml; charset=UTF-8",
-      "rejectedLiveEvents": 8,
+      "rejectedLiveEvents": 9,
       "extractedEvents": 10,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -417,6 +391,33 @@
       "httpStatus": 404,
       "contentType": "text/html; charset=utf-8",
       "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "waimea-valley-summer-concert-2026-07-25-src",
+      "name": "Waimea Valley Summer Concert Series",
+      "url": "https://www.waimeavalley.net/events",
+      "sourceType": "officialTextEvents",
+      "city": "Haleiwa",
+      "metroId": "honolulu",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://www.waimeavalley.net/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html;charset=utf-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -488,13 +489,13 @@
           "url": "https://blaisdellcenter.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=191; pages=2"
+          "contentType": "application/json; source=tribe-events; events=189; pages=2"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=191; pages=2",
-      "rejectedLiveEvents": 149,
-      "extractedEvents": 175,
+      "contentType": "application/json; source=tribe-events; events=189; pages=2",
+      "rejectedLiveEvents": 148,
+      "extractedEvents": 174,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -507,21 +508,21 @@
       "metroId": "honolulu",
       "category": "Comedy",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 5,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 5,
       "fetches": [
         {
           "url": "https://improvhi.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=7; pages=1"
+          "contentType": "application/json; source=tribe-events; events=6; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=7; pages=1",
-      "rejectedLiveEvents": 4,
-      "extractedEvents": 7,
+      "contentType": "application/json; source=tribe-events; events=6; pages=1",
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 6,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     }

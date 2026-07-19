@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "phoenix",
-  "generatedAt": "2026-07-13T00:58:32.582Z",
-  "alertCount": 6,
+  "generatedAt": "2026-07-19T04:58:36.502Z",
+  "alertCount": 7,
   "alerts": [
     {
       "severity": "critical",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-13T00:58:32.582Z",
+      "fetchedAt": "2026-07-19T04:58:36.502Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -30,12 +30,37 @@
       ]
     },
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "phoenix",
       "sourceId": "arizona-state-fair",
       "sourceName": "Arizona State Fair",
       "sourceType": "html",
       "url": "https://azstatefair.com/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-19T04:58:36.502Z",
+      "fetches": [
+        {
+          "url": "https://azstatefair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "phoenix",
+      "sourceId": "vineyard-north-phoenix-bts-giveaway-2026",
+      "sourceName": "Vineyard Church North Phoenix Back to School Giveaway (July 18)",
+      "sourceType": "officialTextEvents",
+      "url": "https://vineyardnorthphoenix.com/backtoschool/",
       "status": "ok",
       "issueType": "zero-extracted",
       "reason": "Source returned a payload but no events were extracted.",
@@ -44,13 +69,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-13T00:58:32.582Z",
+      "fetchedAt": "2026-07-19T04:58:36.502Z",
       "fetches": [
         {
-          "url": "https://azstatefair.com/",
+          "url": "https://vineyardnorthphoenix.com/backtoschool/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html"
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -69,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-13T00:58:32.582Z",
+      "fetchedAt": "2026-07-19T04:58:36.502Z",
       "fetches": [
         {
           "url": "https://www.crescentphx.com/events",
@@ -94,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-13T00:58:32.582Z",
+      "fetchedAt": "2026-07-19T04:58:36.502Z",
       "fetches": [
         {
           "url": "https://phoenix.standuplive.com/events",
@@ -119,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-13T00:58:32.582Z",
+      "fetchedAt": "2026-07-19T04:58:36.502Z",
       "fetches": [
         {
           "url": "https://houseofcomedy.net/scottsdale",
@@ -144,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-13T00:58:32.582Z",
+      "fetchedAt": "2026-07-19T04:58:36.502Z",
       "fetches": [
         {
           "url": "https://www.theniletheater.com/events",
