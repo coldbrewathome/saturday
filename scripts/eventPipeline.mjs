@@ -36,6 +36,18 @@ export const DEFAULT_TIMEZONE = "America/Los_Angeles";
 export const DEFAULT_TIMEZONE_OFFSET = "-07:00";
 export const DEFAULT_WINDOW_DAYS = 45;
 
+// Marquee events (parades, fireworks, fairs, festivals) are searched weeks
+// ahead of their date, unlike commodity weekday programming — they earn a
+// longer planning window (ingest) and page-cap priority (SEO build). Scale
+// signals mirror generate-seo-pages' headlinerScore, minus the too-broad
+// "celebration".
+const MARQUEE_RE = /\bparade\b|firework|drone show|\bfair\b|festival|\bfiesta\b|carnival|street fest|pow ?wow/i;
+export function isMarqueeEvent(event) {
+  if (!event) return false;
+  if (event.category === "Festival") return true;
+  return MARQUEE_RE.test(`${event.title || ""} ${event.category || ""}`);
+}
+
 // B1.6: a fixed offset (e.g. "-04:00" hardcoded per metro registry, or the
 // Pacific DEFAULT_TIMEZONE_OFFSET for registries with no override at all —
 // every adults event-source registry) is wrong half the year once DST

@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "metroId": "seattle",
-  "generatedAt": "2026-07-19T05:05:25.737Z",
+  "generatedAt": "2026-07-20T22:25:55.344Z",
   "registryPath": "data/event-sources-seattle.json",
   "outputPath": "public/data/seattle/events.json",
   "eventCount": 493,
   "adultsEventCount": 32,
   "sourceCount": 38,
   "liveEventCount": 517,
-  "lastKnownGoodEventCount": 0,
+  "lastKnownGoodEventCount": 1,
   "fallbackEventCount": 0,
   "operatorAlertCount": 16,
   "errors": [],
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:05:25.737Z",
+      "fetchedAt": "2026-07-20T22:25:55.344Z",
       "fetches": [
         {
           "url": "https://www.zoo.org/events?cgid=1",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:05:25.737Z",
+      "fetchedAt": "2026-07-20T22:25:55.344Z",
       "fetches": [
         {
           "url": "https://www.burkemuseum.org/events",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:05:25.737Z",
+      "fetchedAt": "2026-07-20T22:25:55.344Z",
       "fetches": [
         {
           "url": "https://pacificsciencecenter.org/events/",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:05:25.737Z",
+      "fetchedAt": "2026-07-20T22:25:55.344Z",
       "fetches": [
         {
           "url": "https://www.seattleaquarium.org/explore-the-aquarium/programs/toddler-time/",
@@ -128,13 +128,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:05:25.737Z",
+      "fetchedAt": "2026-07-20T22:25:55.344Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
+          "contentType": "application/json; source=ticketmaster; events=1; queries=1"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "seattle",
+      "sourceId": "washington-state-fair",
+      "sourceName": "Washington State Fair",
+      "sourceType": "html",
+      "url": "https://www.thefair.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-20T22:25:55.344Z",
+      "fetches": [
+        {
+          "url": "https://www.thefair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -153,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:05:25.737Z",
+      "fetchedAt": "2026-07-20T22:25:55.344Z",
       "fetches": [
         {
           "url": "https://www.seattlecenter.com/events/featured-events/festal/indigenous-people-festival",
@@ -166,10 +191,10 @@
     {
       "severity": "warning",
       "metroId": "seattle",
-      "sourceId": "festal-live-aloha-hawaiian-2026",
-      "sourceName": "Festál: Live Aloha Hawaiian Cultural Festival",
+      "sourceId": "king-county-fair-2026",
+      "sourceName": "King County Fair 2026",
       "sourceType": "officialTextEvents",
-      "url": "https://www.seattlecenter.com/events/featured-events/festal/live-aloha-hawaiian-cultural-festival",
+      "url": "https://www.enumclawexpo.com/p/king-county-fair",
       "status": "ok",
       "issueType": "zero-in-window",
       "reason": "Source returned events, but none were in the planning window.",
@@ -178,10 +203,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:05:25.737Z",
+      "fetchedAt": "2026-07-20T22:25:55.344Z",
       "fetches": [
         {
-          "url": "https://www.seattlecenter.com/events/featured-events/festal/live-aloha-hawaiian-cultural-festival",
+          "url": "https://www.enumclawexpo.com/p/king-county-fair",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -191,25 +216,25 @@
     {
       "severity": "warning",
       "metroId": "seattle",
-      "sourceId": "festal-croatiafest-2026",
-      "sourceName": "Festál: CroatiaFest",
+      "sourceId": "seattle-chinatown-seafair-parade-2026-07-19-src",
+      "sourceName": "Chinatown Seafair Parade",
       "sourceType": "officialTextEvents",
-      "url": "https://www.seattlecenter.com/events/featured-events/festal/croatiafest",
-      "status": "ok",
+      "url": "https://www.seattlechinesechamber.org/chinatown-parade.html",
+      "status": "ok-last-known-good",
       "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
+      "reason": "source produced no live events; using last-known-good future events",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:05:25.737Z",
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-07-20T22:25:55.344Z",
       "fetches": [
         {
-          "url": "https://www.seattlecenter.com/events/featured-events/festal/croatiafest",
+          "url": "https://www.seattlechinesechamber.org/chinatown-parade.html",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -228,7 +253,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:05:25.737Z",
+      "fetchedAt": "2026-07-20T22:25:55.344Z",
       "fetches": [
         {
           "url": "https://biteofseattle.com/",
@@ -253,7 +278,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:05:25.737Z",
+      "fetchedAt": "2026-07-20T22:25:55.344Z",
       "fetches": [
         {
           "url": "https://www.neumos.com/events",
@@ -278,7 +303,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:05:25.737Z",
+      "fetchedAt": "2026-07-20T22:25:55.344Z",
       "fetches": [
         {
           "url": "https://www.thecrocodile.com/events",
@@ -303,7 +328,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:05:25.737Z",
+      "fetchedAt": "2026-07-20T22:25:55.344Z",
       "fetches": [
         {
           "url": "https://www.tractortavern.com/events",
@@ -328,7 +353,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:05:25.737Z",
+      "fetchedAt": "2026-07-20T22:25:55.344Z",
       "fetches": [
         {
           "url": "https://www.sunsettavern.com/events",
@@ -353,7 +378,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:05:25.737Z",
+      "fetchedAt": "2026-07-20T22:25:55.344Z",
       "fetches": [
         {
           "url": "https://www.comedyunderground.com/calendar",
@@ -378,38 +403,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:05:25.737Z",
+      "fetchedAt": "2026-07-20T22:25:55.344Z",
       "fetches": [
         {
           "url": "https://www.nectarlounge.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "seattle",
-      "sourceId": "bumbershoot-2026",
-      "sourceName": "Bumbershoot 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://bumbershoot.com/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:05:25.737Z",
-      "fetches": [
-        {
-          "url": "https://bumbershoot.com/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
         }
       ]
     }
@@ -438,9 +438,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 18,
+      "liveEvents": 19,
       "fallbackEvents": 0,
-      "eventCount": 18,
+      "eventCount": 19,
       "fetches": [
         {
           "url": "https://kcls.bibliocommons.com/v2/events?programs=6092fc2d8910133a0055a335",
@@ -452,7 +452,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 18,
+      "extractedEvents": 19,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -492,9 +492,9 @@
       "metroId": "seattle",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 44,
+      "liveEvents": 41,
       "fallbackEvents": 0,
-      "eventCount": 44,
+      "eventCount": 41,
       "fetches": [
         {
           "url": "https://seattlechildrensmuseum.org/calendar/",
@@ -505,8 +505,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 62,
-      "extractedEvents": 106,
+      "rejectedLiveEvents": 68,
+      "extractedEvents": 109,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -634,11 +634,11 @@
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
+          "contentType": "application/json; source=ticketmaster; events=1; queries=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=ticketmaster; events=0; queries=1",
+      "contentType": "application/json; source=ticketmaster; events=1; queries=1",
       "rejectedLiveEvents": 0,
       "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
@@ -653,9 +653,9 @@
       "metroId": "seattle",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.thefair.com/",
@@ -667,7 +667,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -707,9 +707,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 6,
+      "liveEvents": 8,
       "fallbackEvents": 0,
-      "eventCount": 6,
+      "eventCount": 8,
       "fetches": [
         {
           "url": "https://kcls.bibliocommons.com/v2/events",
@@ -721,7 +721,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 1,
-      "extractedEvents": 7,
+      "extractedEvents": 9,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -734,9 +734,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 15,
+      "liveEvents": 17,
       "fallbackEvents": 0,
-      "eventCount": 15,
+      "eventCount": 17,
       "fetches": [
         {
           "url": "https://sno-isle.bibliocommons.com/v2/events",
@@ -748,7 +748,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 15,
+      "extractedEvents": 17,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -761,9 +761,9 @@
       "metroId": "seattle",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 27,
+      "liveEvents": 26,
       "fallbackEvents": 0,
-      "eventCount": 27,
+      "eventCount": 26,
       "fetches": [
         {
           "url": "https://bellevuebotanical.org/events/",
@@ -774,7 +774,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=89; pages=1",
-      "rejectedLiveEvents": 61,
+      "rejectedLiveEvents": 62,
       "extractedEvents": 88,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -896,9 +896,9 @@
       "metroId": "seattle",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://www.seattlecenter.com/events/featured-events/festal/live-aloha-hawaiian-cultural-festival",
@@ -909,7 +909,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 0,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -923,9 +923,9 @@
       "metroId": "seattle",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://www.seattlecenter.com/events/featured-events/festal/croatiafest",
@@ -936,7 +936,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 0,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -950,9 +950,9 @@
       "metroId": "seattle",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.enumclawexpo.com/p/king-county-fair",
@@ -963,7 +963,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 2,
+      "rejectedLiveEvents": 4,
       "extractedEvents": 4,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -976,8 +976,8 @@
       "city": "Seattle",
       "metroId": "seattle",
       "category": "Festival",
-      "status": "ok",
-      "liveEvents": 1,
+      "status": "ok-last-known-good",
+      "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 1,
       "fetches": [
@@ -990,10 +990,11 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "lastKnownGoodEvents": 1,
+      "recoveryMode": "last-known-good",
+      "reason": "source produced no live events; using last-known-good future events"
     },
     {
       "id": "bite-of-seattle-2026-07-24-src",
@@ -1351,9 +1352,9 @@
       "metroId": "seattle",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://bumbershoot.com/",
@@ -1364,7 +1365,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 0,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null

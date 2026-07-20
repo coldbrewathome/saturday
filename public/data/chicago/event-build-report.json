@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "chicago",
-  "generatedAt": "2026-07-19T05:06:15.130Z",
+  "generatedAt": "2026-07-20T22:26:27.403Z",
   "registryPath": "data/event-sources-chicago.json",
   "outputPath": "public/data/chicago/events.json",
-  "eventCount": 768,
-  "adultsEventCount": 63,
+  "eventCount": 756,
+  "adultsEventCount": 65,
   "sourceCount": 33,
-  "liveEventCount": 814,
+  "liveEventCount": 806,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
   "operatorAlertCount": 13,
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:06:15.130Z",
+      "fetchedAt": "2026-07-20T22:26:27.403Z",
       "fetches": [
         {
           "url": "https://www.lcfairgrounds.com/events",
@@ -53,13 +53,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:06:15.130Z",
+      "fetchedAt": "2026-07-20T22:26:27.403Z",
       "fetches": [
         {
           "url": "https://oakpark.librarycalendar.com/events/month",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -78,13 +78,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:06:15.130Z",
+      "fetchedAt": "2026-07-20T22:26:27.403Z",
       "fetches": [
         {
           "url": "https://napervillepl.librarycalendar.com/events/month",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -103,13 +103,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:06:15.130Z",
+      "fetchedAt": "2026-07-20T22:26:27.403Z",
       "fetches": [
         {
           "url": "https://mortonarb.org/explore/activities/events/arbor-evenings/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "chicago",
+      "sourceId": "kane-county-fair-2026",
+      "sourceName": "Kane County Fair 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.kanecountyfair.com/Fair-Information",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-20T22:26:27.403Z",
+      "fetches": [
+        {
+          "url": "https://www.kanecountyfair.com/Fair-Information",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=UTF-8"
         }
       ]
     },
@@ -128,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:06:15.130Z",
+      "fetchedAt": "2026-07-20T22:26:27.403Z",
       "fetches": [
         {
           "url": "https://metrochicago.com/shows/",
@@ -153,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:06:15.130Z",
+      "fetchedAt": "2026-07-20T22:26:27.403Z",
       "fetches": [
         {
           "url": "https://www.emptybottle.com/events/",
@@ -178,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:06:15.130Z",
+      "fetchedAt": "2026-07-20T22:26:27.403Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
@@ -203,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:06:15.130Z",
+      "fetchedAt": "2026-07-20T22:26:27.403Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
@@ -228,7 +253,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:06:15.130Z",
+      "fetchedAt": "2026-07-20T22:26:27.403Z",
       "fetches": [
         {
           "url": "https://chicago.zanies.com/events",
@@ -253,7 +278,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:06:15.130Z",
+      "fetchedAt": "2026-07-20T22:26:27.403Z",
       "fetches": [
         {
           "url": "https://www.hideoutchicago.com/events",
@@ -278,35 +303,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:06:15.130Z",
+      "fetchedAt": "2026-07-20T22:26:27.403Z",
       "fetches": [
         {
           "url": "https://www.choosechicago.com/articles/festivals-special-events/millennium-park-summer-music-series/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "chicago",
-      "sourceId": "chicago-jazz-festival-2026",
-      "sourceName": "Chicago Jazz Festival 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.chicagojazz.com/post/city-of-chicago-announces-2026-chicago-jazz-festival-lineup-sept-3-6-featuring-dee-dee-bridgewater",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:06:15.130Z",
-      "fetches": [
-        {
-          "url": "https://www.chicagojazz.com/post/city-of-chicago-announces-2026-chicago-jazz-festival-lineup-sept-3-6-featuring-dee-dee-bridgewater",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -328,7 +328,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:06:15.130Z",
+      "fetchedAt": "2026-07-20T22:26:27.403Z",
       "fetches": [
         {
           "url": "https://www.choosechicago.com/articles/festivals-special-events/chicago-blues-festival/",
@@ -453,9 +453,9 @@
       "metroId": "chicago",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 23,
+      "liveEvents": 24,
       "fallbackEvents": 0,
-      "eventCount": 23,
+      "eventCount": 24,
       "fetches": [
         {
           "url": "https://www.fieldmuseum.org/our-events",
@@ -466,7 +466,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; charset=utf-8",
-      "rejectedLiveEvents": 30,
+      "rejectedLiveEvents": 29,
       "extractedEvents": 53,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -507,9 +507,9 @@
       "metroId": "chicago",
       "category": "Ticketed",
       "status": "ok",
-      "liveEvents": 100,
+      "liveEvents": 99,
       "fallbackEvents": 0,
-      "eventCount": 100,
+      "eventCount": 99,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -520,7 +520,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=ticketmaster; events=100; queries=1",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 100,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -588,9 +588,9 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 5,
+      "liveEvents": 6,
       "fallbackEvents": 0,
-      "eventCount": 5,
+      "eventCount": 6,
       "fetches": [
         {
           "url": "https://evanstonlibrary.bibliocommons.com/v2/events",
@@ -602,7 +602,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 5,
+      "extractedEvents": 6,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -615,21 +615,21 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 189,
+      "liveEvents": 187,
       "fallbackEvents": 0,
-      "eventCount": 189,
+      "eventCount": 187,
       "fetches": [
         {
           "url": "https://schaumburg.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=320; locations=4"
+          "contentType": "application/json; source=communico-events; events=317; locations=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=320; locations=4",
+      "contentType": "application/json; source=communico-events; events=317; locations=4",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 189,
+      "extractedEvents": 187,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -642,21 +642,21 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 93,
+      "liveEvents": 90,
       "fallbackEvents": 0,
-      "eventCount": 93,
+      "eventCount": 90,
       "fetches": [
         {
           "url": "https://downersgrove.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=152; locations=1"
+          "contentType": "application/json; source=communico-events; events=149; locations=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=152; locations=1",
+      "contentType": "application/json; source=communico-events; events=149; locations=1",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 93,
+      "extractedEvents": 90,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -669,21 +669,21 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 142,
+      "liveEvents": 139,
       "fallbackEvents": 0,
-      "eventCount": 142,
+      "eventCount": 139,
       "fetches": [
         {
           "url": "https://egvpl.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=226; locations=3"
+          "contentType": "application/json; source=communico-events; events=221; locations=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=226; locations=3",
+      "contentType": "application/json; source=communico-events; events=221; locations=3",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 142,
+      "extractedEvents": 139,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -704,11 +704,11 @@
           "url": "https://oakpark.librarycalendar.com/events/month",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "text/html; charset=utf-8"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
+      "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
@@ -731,11 +731,11 @@
           "url": "https://napervillepl.librarycalendar.com/events/month",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "text/html; charset=utf-8"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
+      "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
@@ -750,9 +750,9 @@
       "metroId": "chicago",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 172,
+      "liveEvents": 169,
       "fallbackEvents": 0,
-      "eventCount": 172,
+      "eventCount": 169,
       "fetches": [
         {
           "url": "https://fpdcc.com/events/",
@@ -763,7 +763,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 24,
+      "rejectedLiveEvents": 27,
       "extractedEvents": 196,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -804,9 +804,9 @@
       "metroId": "chicago",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.kanecountyfair.com/Fair-Information",
@@ -817,7 +817,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html;charset=UTF-8",
-      "rejectedLiveEvents": 3,
+      "rejectedLiveEvents": 5,
       "extractedEvents": 5,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -1043,9 +1043,9 @@
       "metroId": "chicago",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 16,
+      "liveEvents": 19,
       "fallbackEvents": 0,
-      "eventCount": 16,
+      "eventCount": 19,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
@@ -1056,8 +1056,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=utf-8",
-      "rejectedLiveEvents": 66,
-      "extractedEvents": 82,
+      "rejectedLiveEvents": 62,
+      "extractedEvents": 81,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1205,9 +1205,9 @@
       "metroId": "chicago",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://www.chicagojazz.com/post/city-of-chicago-announces-2026-chicago-jazz-festival-lineup-sept-3-6-featuring-dee-dee-bridgewater",
@@ -1218,7 +1218,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 0,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null

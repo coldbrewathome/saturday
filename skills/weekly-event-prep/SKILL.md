@@ -44,6 +44,13 @@ For each traffic metro (bay-area, los-angeles first): the discovery agent MUST r
 - Prefer durable over one-off: when the organizer's calendar has a structured feed, add THAT (recurring source) instead of a one-off gate. Check before writing `officialTextEvents`: `curl -sL <site>/wp-json/tribe/events/v1/events?per_page=5` (Tribe/The Events Calendar is everywhere — fairyland.org sat unnoticed behind a misconfigured `html` source pointing at /visit until 2026-07-18), plus `.ics` links and the other structured sourceTypes.
 - A venue we already ingest missing a known event is a SOURCE BUG, not a discovery gap — fix the source (see fairyland: `html` → `tribeEvents`), don't paper over it with a one-off entry.
 
+### 3a-bis. Marquee lookahead (4–8 weeks out) + annual curation
+
+The ingest window is 45 days for regular events but **120 days for marquee events** (`isMarqueeEvent`: parades, fireworks, fairs, festivals, powwows), and marquee events always win a page slot in `capEventsForPages` — because those are searched weeks ahead and pages need indexing lead time. Feed that machinery:
+
+- In the same discovery pass, also verify the marquee events 4–8 weeks out that the seasonal calendar names (county fairs, seasonal openings). Verified-official + dated = add the source now, not the week of.
+- When a verified one-off is clearly an **annual tradition**, also add an entry to `data/annual-events.json` (evergreen `/{metro}/annual/{slug}/` pages — see the file's `_comment` for curation rules). The evergreen page holds rank between seasons; the dated page cross-links from it automatically once the event is in the dataset.
+
 ### 3b. Theme discovery from search demand
 
 Follow `skills/grounded-event-discovery/SKILL.md` for verification rules. Operational rules learned the hard way:

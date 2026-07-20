@@ -192,3 +192,19 @@ test("pickRelatedEvents handles an event with no city", async () => {
   const sorted = [target, mk("A", "Oakland", "2026-07-21"), mk("B", "Berkeley", "2026-07-22")];
   assert.deepEqual(pickRelatedEvents(target, sorted).map((e) => e.title), ["A", "B"]);
 });
+
+// --- matchAnnualLiveEvent ----------------------------------------------------
+
+test("matchAnnualLiveEvent links only generated pages, by match regex", async () => {
+  const { matchAnnualLiveEvent } = await import("../scripts/generate-seo-pages.mjs");
+  const a = { title: "Hayes Valley Carnival (116th Annual)" };
+  const b = { title: "Bastille Day SF Festival" };
+  const lookup = new Map([[a, "hvc-2027"], [b, "bastille-2027"]]);
+  const entry = { title: "Hayes Valley Carnival", match: "hayes valley carnival" };
+  const hit = matchAnnualLiveEvent(entry, [a, b], lookup, new Set(["hvc-2027"]));
+  assert.equal(hit.slug, "hvc-2027");
+  // not generated -> no link
+  assert.equal(matchAnnualLiveEvent(entry, [a, b], lookup, new Set()), null);
+  // bad regex entry never throws
+  assert.equal(matchAnnualLiveEvent({ title: "x", match: "(" }, [a], lookup, null), null);
+});

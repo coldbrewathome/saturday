@@ -1,40 +1,40 @@
 {
   "schemaVersion": 1,
   "metroId": "boston",
-  "generatedAt": "2026-07-19T05:03:47.918Z",
+  "generatedAt": "2026-07-20T22:32:18.595Z",
   "registryPath": "data/event-sources-boston.json",
   "outputPath": "public/data/boston/events.json",
-  "eventCount": 416,
-  "adultsEventCount": 45,
+  "eventCount": 406,
+  "adultsEventCount": 56,
   "sourceCount": 23,
-  "liveEventCount": 453,
+  "liveEventCount": 456,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 7,
+  "operatorAlertCount": 8,
   "errors": [],
   "operatorAlerts": [
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "boston",
       "sourceId": "ticketmaster-boston-family",
       "sourceName": "Ticketmaster Boston Family Events",
       "sourceType": "ticketmaster",
       "url": "https://app.ticketmaster.com/discovery/v2/events.json",
       "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:03:47.918Z",
+      "fetchedAt": "2026-07-20T22:32:18.595Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
+          "contentType": "application/json; source=ticketmaster; events=1; queries=1"
         }
       ]
     },
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:03:47.918Z",
+      "fetchedAt": "2026-07-20T22:32:18.595Z",
       "fetches": [
         {
           "url": "https://www.easternstatesexposition.com/",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:03:47.918Z",
+      "fetchedAt": "2026-07-20T22:32:18.595Z",
       "fetches": [
         {
           "url": "https://marshfieldfair.org/events/",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:03:47.918Z",
+      "fetchedAt": "2026-07-20T22:32:18.595Z",
       "fetches": [
         {
           "url": "https://www.bostonharborfest.com/",
@@ -128,13 +128,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:03:47.918Z",
+      "fetchedAt": "2026-07-20T22:32:18.595Z",
       "fetches": [
         {
           "url": "https://www.cambridgecarnival.org/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "boston",
+      "sourceId": "revere-beach-sand-sculpting-festival-2026-07-19-src",
+      "sourceName": "Revere Beach International Sand Sculpting Festival",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.internationalsandsculptingfestival.com/event-dates-site-map-details/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-20T22:32:18.595Z",
+      "fetches": [
+        {
+          "url": "https://www.internationalsandsculptingfestival.com/event-dates-site-map-details/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -153,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:03:47.918Z",
+      "fetchedAt": "2026-07-20T22:32:18.595Z",
       "fetches": [
         {
           "url": "https://www.crossroadspresents.com/paradise-rock-club",
@@ -178,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:03:47.918Z",
+      "fetchedAt": "2026-07-20T22:32:18.595Z",
       "fetches": [
         {
           "url": "https://www.nickscomedystop.com/calendar",
@@ -267,9 +292,9 @@
       "metroId": "boston",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 67,
+      "liveEvents": 63,
       "fallbackEvents": 0,
-      "eventCount": 67,
+      "eventCount": 63,
       "fetches": [
         {
           "url": "https://bostonchildrensmuseum.org/Calendar/",
@@ -280,7 +305,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=eventon-events; events=159",
-      "rejectedLiveEvents": 90,
+      "rejectedLiveEvents": 94,
       "extractedEvents": 157,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -329,13 +354,13 @@
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
+          "contentType": "application/json; source=ticketmaster; events=1; queries=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=ticketmaster; events=0; queries=1",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "contentType": "application/json; source=ticketmaster; events=1; queries=1",
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -402,9 +427,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 131,
+      "liveEvents": 134,
       "fallbackEvents": 0,
-      "eventCount": 131,
+      "eventCount": 134,
       "fetches": [
         {
           "url": "https://cambridgepl.libcal.com/calendar/publicevents?cid=7052&cal=7052",
@@ -416,7 +441,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 131,
+      "extractedEvents": 134,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -429,9 +454,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 114,
+      "liveEvents": 110,
       "fallbackEvents": 0,
-      "eventCount": 114,
+      "eventCount": 110,
       "fetches": [
         {
           "url": "https://newtonfreelibrary.libcal.com/calendar?cid=3836&cal=3836",
@@ -443,7 +468,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 7,
-      "extractedEvents": 121,
+      "extractedEvents": 117,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -456,9 +481,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 52,
+      "liveEvents": 51,
       "fallbackEvents": 0,
-      "eventCount": 52,
+      "eventCount": 51,
       "fetches": [
         {
           "url": "https://brooklinelibrary.libcal.com/calendar/events?cid=20102&cal=20102",
@@ -470,7 +495,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 36,
-      "extractedEvents": 88,
+      "extractedEvents": 87,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -483,9 +508,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 24,
+      "liveEvents": 21,
       "fallbackEvents": 0,
-      "eventCount": 24,
+      "eventCount": 21,
       "fetches": [
         {
           "url": "https://somervillepubliclibrary.assabetinteractive.com/calendar/",
@@ -496,7 +521,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 66,
+      "rejectedLiveEvents": 69,
       "extractedEvents": 90,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -618,9 +643,9 @@
       "metroId": "boston",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.internationalsandsculptingfestival.com/event-dates-site-map-details/",
@@ -631,7 +656,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -684,8 +709,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=utf-8",
-      "rejectedLiveEvents": 60,
-      "extractedEvents": 72,
+      "rejectedLiveEvents": 61,
+      "extractedEvents": 73,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -778,21 +803,21 @@
       "metroId": "boston",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 4,
+      "liveEvents": 17,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 17,
       "fetches": [
         {
           "url": "https://www.harpoonbrewery.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=104; pages=3"
+          "contentType": "application/json; source=tribe-events; events=105; pages=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=104; pages=3",
-      "rejectedLiveEvents": 100,
-      "extractedEvents": 104,
+      "contentType": "application/json; source=tribe-events; events=105; pages=3",
+      "rejectedLiveEvents": 88,
+      "extractedEvents": 105,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     }

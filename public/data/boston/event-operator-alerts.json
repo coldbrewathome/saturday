@@ -1,31 +1,31 @@
 {
   "schemaVersion": 1,
   "metroId": "boston",
-  "generatedAt": "2026-07-19T05:03:47.918Z",
-  "alertCount": 7,
+  "generatedAt": "2026-07-20T22:32:18.595Z",
+  "alertCount": 8,
   "alerts": [
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "boston",
       "sourceId": "ticketmaster-boston-family",
       "sourceName": "Ticketmaster Boston Family Events",
       "sourceType": "ticketmaster",
       "url": "https://app.ticketmaster.com/discovery/v2/events.json",
       "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:03:47.918Z",
+      "fetchedAt": "2026-07-20T22:32:18.595Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
+          "contentType": "application/json; source=ticketmaster; events=1; queries=1"
         }
       ]
     },
@@ -44,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:03:47.918Z",
+      "fetchedAt": "2026-07-20T22:32:18.595Z",
       "fetches": [
         {
           "url": "https://www.easternstatesexposition.com/",
@@ -69,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:03:47.918Z",
+      "fetchedAt": "2026-07-20T22:32:18.595Z",
       "fetches": [
         {
           "url": "https://marshfieldfair.org/events/",
@@ -94,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:03:47.918Z",
+      "fetchedAt": "2026-07-20T22:32:18.595Z",
       "fetches": [
         {
           "url": "https://www.bostonharborfest.com/",
@@ -119,13 +119,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:03:47.918Z",
+      "fetchedAt": "2026-07-20T22:32:18.595Z",
       "fetches": [
         {
           "url": "https://www.cambridgecarnival.org/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "boston",
+      "sourceId": "revere-beach-sand-sculpting-festival-2026-07-19-src",
+      "sourceName": "Revere Beach International Sand Sculpting Festival",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.internationalsandsculptingfestival.com/event-dates-site-map-details/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-20T22:32:18.595Z",
+      "fetches": [
+        {
+          "url": "https://www.internationalsandsculptingfestival.com/event-dates-site-map-details/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -144,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:03:47.918Z",
+      "fetchedAt": "2026-07-20T22:32:18.595Z",
       "fetches": [
         {
           "url": "https://www.crossroadspresents.com/paradise-rock-club",
@@ -169,7 +194,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T05:03:47.918Z",
+      "fetchedAt": "2026-07-20T22:32:18.595Z",
       "fetches": [
         {
           "url": "https://www.nickscomedystop.com/calendar",

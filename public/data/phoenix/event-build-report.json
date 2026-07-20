@@ -1,50 +1,25 @@
 {
   "schemaVersion": 1,
   "metroId": "phoenix",
-  "generatedAt": "2026-07-19T04:58:36.502Z",
+  "generatedAt": "2026-07-20T22:31:59.411Z",
   "registryPath": "data/event-sources-phoenix.json",
   "outputPath": "public/data/phoenix/events.json",
-  "eventCount": 515,
-  "adultsEventCount": 33,
+  "eventCount": 513,
+  "adultsEventCount": 37,
   "sourceCount": 18,
   "liveEventCount": 537,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 7,
+  "operatorAlertCount": 6,
   "errors": [],
   "operatorAlerts": [
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "phoenix",
       "sourceId": "ticketmaster-phoenix-family",
       "sourceName": "Ticketmaster Phoenix Family Events",
       "sourceType": "ticketmaster",
       "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T04:58:36.502Z",
-      "fetches": [
-        {
-          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "phoenix",
-      "sourceId": "arizona-state-fair",
-      "sourceName": "Arizona State Fair",
-      "sourceType": "html",
-      "url": "https://azstatefair.com/",
       "status": "ok",
       "issueType": "zero-in-window",
       "reason": "Source returned events, but none were in the planning window.",
@@ -53,13 +28,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T04:58:36.502Z",
+      "fetchedAt": "2026-07-20T22:31:59.411Z",
       "fetches": [
         {
-          "url": "https://azstatefair.com/",
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "application/json; source=ticketmaster; events=1; queries=1"
         }
       ]
     },
@@ -78,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T04:58:36.502Z",
+      "fetchedAt": "2026-07-20T22:31:59.411Z",
       "fetches": [
         {
           "url": "https://vineyardnorthphoenix.com/backtoschool/",
@@ -103,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T04:58:36.502Z",
+      "fetchedAt": "2026-07-20T22:31:59.411Z",
       "fetches": [
         {
           "url": "https://www.crescentphx.com/events",
@@ -128,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T04:58:36.502Z",
+      "fetchedAt": "2026-07-20T22:31:59.411Z",
       "fetches": [
         {
           "url": "https://phoenix.standuplive.com/events",
@@ -153,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T04:58:36.502Z",
+      "fetchedAt": "2026-07-20T22:31:59.411Z",
       "fetches": [
         {
           "url": "https://houseofcomedy.net/scottsdale",
@@ -178,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T04:58:36.502Z",
+      "fetchedAt": "2026-07-20T22:31:59.411Z",
       "fetches": [
         {
           "url": "https://www.theniletheater.com/events",
@@ -213,9 +188,9 @@
       "metroId": "phoenix",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 261,
+      "liveEvents": 256,
       "fallbackEvents": 0,
-      "eventCount": 261,
+      "eventCount": 256,
       "fetches": [
         {
           "url": "https://calendar.phoenixpubliclibrary.org/calendar/",
@@ -227,7 +202,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 261,
+      "extractedEvents": 256,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -267,21 +242,21 @@
       "metroId": "phoenix",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 87,
+      "liveEvents": 81,
       "fallbackEvents": 0,
-      "eventCount": 87,
+      "eventCount": 81,
       "fetches": [
         {
           "url": "https://childrensmuseumofphoenix.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=100; pages=2"
+          "contentType": "application/json; source=tribe-events; events=94; pages=2"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=100; pages=2",
+      "contentType": "application/json; source=tribe-events; events=94; pages=2",
       "rejectedLiveEvents": 8,
-      "extractedEvents": 95,
+      "extractedEvents": 89,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -329,13 +304,13 @@
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=0; queries=1"
+          "contentType": "application/json; source=ticketmaster; events=1; queries=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=ticketmaster; events=0; queries=1",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "contentType": "application/json; source=ticketmaster; events=1; queries=1",
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -348,9 +323,9 @@
       "metroId": "phoenix",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://azstatefair.com/",
@@ -361,7 +336,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 3,
+      "rejectedLiveEvents": 0,
       "extractedEvents": 3,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -375,9 +350,9 @@
       "metroId": "phoenix",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 156,
+      "liveEvents": 162,
       "fallbackEvents": 0,
-      "eventCount": 156,
+      "eventCount": 162,
       "fetches": [
         {
           "url": "https://dbg.org/events/",
@@ -388,7 +363,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 41,
+      "rejectedLiveEvents": 35,
       "extractedEvents": 197,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -510,9 +485,9 @@
       "metroId": "phoenix",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 20,
+      "liveEvents": 22,
       "fallbackEvents": 0,
-      "eventCount": 20,
+      "eventCount": 22,
       "fetches": [
         {
           "url": "https://www.thevanburenphx.com/shows",
@@ -523,7 +498,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 16,
+      "rejectedLiveEvents": 14,
       "extractedEvents": 36,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null

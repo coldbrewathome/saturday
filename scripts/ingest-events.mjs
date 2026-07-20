@@ -8,6 +8,7 @@ import {
   expandRecurringTemplates,
   extractEventsFromPayload,
   isKidsFacingAudience,
+  isMarqueeEvent,
   kidsEventBrandSafetyViolation,
   offsetStringForZone,
   slugify,
@@ -34,6 +35,13 @@ import {
   annotateAlertsWithSnoozes,
   readSnoozesFile,
 } from "./alertSnoozes.mjs";
+
+// Marquee events (isMarqueeEvent) keep pages up to 120 days out — big fairs
+// and festivals are searched weeks ahead, and pages need indexing lead time.
+// Everything else stays on the registry's 45-day planning window. Fetchers
+// pull the wide horizon; filterToPlanningWindow enforces the per-event split.
+const MARQUEE_WINDOW_DAYS = 120;
+const FETCH_HORIZON_DAYS = 120;
 
 const metroConfig = loadMetroConfig();
 const selection = selectedMetroFromArgs(process.argv.slice(2), metroConfig);
@@ -143,7 +151,7 @@ async function fetchSource(source, registry) {
       return { status: "skipped", reason: `missing ${keyName}` };
     }
     const now = new Date();
-    const end = new Date(now.getTime() + Number(source.windowDays || registry.defaults?.windowDays || 45) * 86400000);
+    const end = new Date(now.getTime() + Number(source.windowDays || FETCH_HORIZON_DAYS) * 86400000);
     const queries = Array.isArray(source.ticketmasterQueries) && source.ticketmasterQueries.length > 0
       ? source.ticketmasterQueries
       : [{ classificationName: "Family" }];
@@ -217,7 +225,7 @@ async function fetchSfplEvents(source, registry) {
   const itemsPerPage = Number(source.itemsPerPage || 50);
   const maxPages = Number(source.maxPages || 12);
   const now = new Date();
-  const end = new Date(now.getTime() + Number(registry.defaults?.windowDays || 45) * 86400000);
+  const end = new Date(now.getTime() + FETCH_HORIZON_DAYS * 86400000);
   const chunks = [];
   let fetchedPages = 0;
 
@@ -264,6 +272,7 @@ async function fetchCommunicoEvents(source, registry) {
   }
 
   const now = new Date();
+  // Libraries never host marquee events — keep the narrow fetch on purpose.
   const days = Number(source.communicoDays ?? Number(registry.defaults?.windowDays || 45) + 1);
   const request = {
     private: false,
@@ -321,7 +330,7 @@ async function fetchCommunicoEvents(source, registry) {
 }
 
 async function fetchLocalistEvents(source, registry) {
-  const days = Number(source.localistDays ?? registry.defaults?.windowDays ?? 45);
+  const days = Number(source.localistDays ?? FETCH_HORIZON_DAYS);
   const perPage = Number(source.localistPerPage || source.perPage || 100);
   const maxPages = Number(source.localistMaxPages || source.maxPages || 8);
   const eventTypeIds = Array.isArray(source.localistEventTypeIds)
@@ -1382,13 +1391,15 @@ function filterToPlanningWindow(events, generatedAt, windowDays, timeZone = acti
   const generated = new Date(generatedAt);
   const start = startOfZonedDay(generated, timeZone);
   const end = new Date(start.getTime() + Number(windowDays || 45) * 86400000);
+  const marqueeEnd = new Date(start.getTime() + Math.max(MARQUEE_WINDOW_DAYS, Number(windowDays || 45)) * 86400000);
   return events.filter((event) => {
     if (!event.startDateTime) return false;
     const startDate = new Date(event.startDateTime);
     if (!Number.isFinite(startDate.getTime())) return false;
     const endDate = event.endDateTime ? new Date(event.endDateTime) : null;
     const effectiveEnd = endDate && Number.isFinite(endDate.getTime()) ? endDate : startDate;
-    return effectiveEnd >= start && startDate <= end;
+    const horizon = isMarqueeEvent(event) ? marqueeEnd : end;
+    return effectiveEnd >= start && startDate <= horizon;
   });
 }
 

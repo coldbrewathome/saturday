@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "washington-dc",
-  "generatedAt": "2026-07-19T04:55:26.502Z",
-  "alertCount": 13,
+  "generatedAt": "2026-07-20T22:28:59.891Z",
+  "alertCount": 11,
   "alerts": [
     {
       "severity": "warning",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T04:55:26.502Z",
+      "fetchedAt": "2026-07-20T22:28:59.891Z",
       "fetches": [
         {
           "url": "https://dpr.dc.gov/events",
@@ -44,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T04:55:26.502Z",
+      "fetchedAt": "2026-07-20T22:28:59.891Z",
       "fetches": [
         {
           "url": "https://naturalhistory.si.edu/events/family-programs",
@@ -57,49 +57,25 @@
     {
       "severity": "warning",
       "metroId": "washington-dc",
-      "sourceId": "washington-dc-zoo-family",
-      "sourceName": "National Zoo Events",
-      "sourceType": "nationalZooJsonApi",
-      "url": "https://nationalzoo.si.edu/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 5,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 5,
-      "fetchedAt": "2026-07-19T04:55:26.502Z",
-      "fetches": [
-        {
-          "url": "https://nationalzoo.si.edu/events",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "washington-dc",
       "sourceId": "ticketmaster-washington-dc-family",
       "sourceName": "Ticketmaster Washington DC Family Events",
       "sourceType": "ticketmaster",
       "url": "https://app.ticketmaster.com/discovery/v2/events.json",
       "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T04:55:26.502Z",
+      "fetchedAt": "2026-07-20T22:28:59.891Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=1; queries=1"
+          "contentType": "application/json; source=ticketmaster; events=2; queries=1"
         }
       ]
     },
@@ -118,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T04:55:26.502Z",
+      "fetchedAt": "2026-07-20T22:28:59.891Z",
       "fetches": [
         {
           "url": "https://marylandstatefair.com/",
@@ -143,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T04:55:26.502Z",
+      "fetchedAt": "2026-07-20T22:28:59.891Z",
       "fetches": [
         {
           "url": "https://www.nbm.org/events/",
@@ -168,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T04:55:26.502Z",
+      "fetchedAt": "2026-07-20T22:28:59.891Z",
       "fetches": [
         {
           "url": "https://glenechopark.org/pridemonth",
@@ -193,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T04:55:26.502Z",
+      "fetchedAt": "2026-07-20T22:28:59.891Z",
       "fetches": [
         {
           "url": "https://newsroom.loc.gov/news/library-to-host-26th-national-book-festival-in-august-2026/s/81b2c74b-c263-46cc-b3ed-f91974bf4c8e",
@@ -218,7 +194,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T04:55:26.502Z",
+      "fetchedAt": "2026-07-20T22:28:59.891Z",
       "fetches": [
         {
           "url": "https://www.kennedy-center.org/whats-on/explore-by-genre/young-audiences/2025-2026/fraggle-rock/",
@@ -243,7 +219,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T04:55:26.502Z",
+      "fetchedAt": "2026-07-20T22:28:59.891Z",
       "fetches": [
         {
           "url": "https://www.930.com/events",
@@ -268,7 +244,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T04:55:26.502Z",
+      "fetchedAt": "2026-07-20T22:28:59.891Z",
       "fetches": [
         {
           "url": "https://www.unionstage.com/events",
@@ -292,35 +268,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T04:55:26.502Z",
+      "fetchedAt": "2026-07-20T22:28:59.891Z",
       "fetches": [
         {
           "url": "https://www.songbyrddc.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "washington-dc",
-      "sourceId": "dc-jazzfest-wharf-2026",
-      "sourceName": "DC JazzFest at The Wharf 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.dcjazzfest.org/event-details/dcjazzfest2026",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-19T04:55:26.502Z",
-      "fetches": [
-        {
-          "url": "https://www.dcjazzfest.org/event-details/dcjazzfest2026",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"

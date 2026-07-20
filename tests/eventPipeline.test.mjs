@@ -1703,3 +1703,15 @@ test("extractTribeEvents honors include/excludePattern like the other extractors
   const included = extractTribeEvents(json, { ...source, excludePattern: undefined, includePattern: "Picnic" });
   assert.deepEqual(included.map((e) => e.title), ["Teddy Bear Picnic Day"]);
 });
+
+test("isMarqueeEvent flags searched-ahead event classes, not commodity programming", async () => {
+  const { isMarqueeEvent } = await import("../scripts/eventPipeline.mjs");
+  for (const title of ["Seafair Torchlight Parade", "Alameda County Fair", "Fiesta del Sol", "July 4th Fireworks Show", "Thunderbird American Indian Powwow"]) {
+    assert.equal(isMarqueeEvent({ title }), true, title);
+  }
+  assert.equal(isMarqueeEvent({ title: "Concert", category: "Festival" }), true);
+  for (const title of ["Toddler Storytime", "Read to a Therapy Dog", "Chess Club", "National Ice Cream Day celebration"]) {
+    assert.equal(isMarqueeEvent({ title }), false, title);
+  }
+  assert.equal(isMarqueeEvent(null), false);
+});

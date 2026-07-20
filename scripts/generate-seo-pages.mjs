@@ -26,7 +26,7 @@ import {
   matchesBrandSafetyAllowlist,
 } from "./lib/brandSafety.mjs";
 import { ADULT_OVERRIDE_RE, KIDS_CONTENT_RE } from "./lib/adultAudience.mjs";
-import { kidsEventBrandSafetyViolation } from "./eventPipeline.mjs";
+import { isMarqueeEvent, kidsEventBrandSafetyViolation } from "./eventPipeline.mjs";
 import {
   defaultLocale,
   supportedLocales,
@@ -228,17 +228,20 @@ function capEventsForPages(events) {
   const sorted = [...events].sort((a, b) =>
     (a.startDateTime || FAR).localeCompare(b.startDateTime || FAR),
   );
-  if (SEO_PRIORITY_UNTIL) {
-    const priority = [];
-    const rest = [];
-    for (const e of sorted) {
-      if ((e.startDateTime || FAR).slice(0, 10) <= SEO_PRIORITY_UNTIL) priority.push(e);
-      else rest.push(e);
-    }
-    if (priority.length >= MAX_EVENT_PAGES_PER_METRO) return priority;
-    return [...priority, ...rest.slice(0, MAX_EVENT_PAGES_PER_METRO - priority.length)];
+  // Marquee events always earn a page: they're the searched-weeks-ahead class
+  // the 120-day ingest window exists for, and sorting by soonest date alone
+  // would let a flood of near-term weekday events crowd a September fair out
+  // of the budget. SEO_PRIORITY_UNTIL force-includes by date on top of that.
+  const priority = [];
+  const rest = [];
+  for (const e of sorted) {
+    const forced =
+      isMarqueeEvent(e) ||
+      (SEO_PRIORITY_UNTIL && (e.startDateTime || FAR).slice(0, 10) <= SEO_PRIORITY_UNTIL);
+    (forced ? priority : rest).push(e);
   }
-  return sorted.slice(0, MAX_EVENT_PAGES_PER_METRO);
+  if (priority.length >= MAX_EVENT_PAGES_PER_METRO) return priority;
+  return [...priority, ...rest.slice(0, MAX_EVENT_PAGES_PER_METRO - priority.length)];
 }
 // Ticketed feeds emit one record per timed-entry slot: Chicago's Balloon
 // Museum ships 100 records for a single exhibition, differing only by a
@@ -293,6 +296,9 @@ function dedupeEventOccurrences(events, eventSlugLookup) {
   return representatives;
 }
 const SEO_PINNED_PATHS = readJson(path.join(ROOT, "data", "seo-pinned-paths.json")) || {};
+// Curated recurring annual events → evergreen /{metro}/annual/{slug}/ pages
+// (kids build only). See the file's _comment for the curation rules.
+const ANNUAL_EVENTS = readJson(path.join(ROOT, "data", "annual-events.json"))?.metros || {};
 const FREE_CATEGORIES = new Set(["Library", "Park"]);
 function eventLikelyFree(event) {
   if (typeof event.cost === "string" && /free/i.test(event.cost)) return true;
@@ -991,6 +997,7 @@ function main() {
   let totalWeekendPages = 0;
   let totalWeekendSubPages = 0;
   let totalEndedEventStubs = 0;
+  let totalAnnualPages = 0;
   // D3 (kids side): spotPassesQualityGate/generateEventPages already filter
   // these proactively — this is the "the build fails" backstop mirroring the
   // adults-side hard gate below, in case a filter regression ever slips one
@@ -1069,6 +1076,7 @@ function main() {
     // whose pages were actually written so capped-out events fall back to
     // their official link instead of a broken internal one.
     const weekendEventLookup = lookupOfGenerated(eventSlugLookup, eventSlugs);
+    totalAnnualPages += generateAnnualEventPages(distinctEvents, eventSlugLookup, eventSlugs);
     const wroteThisWeekend = generateThisWeekendPage(events, weekendEventLookup);
     totalWeekendSubPages +=
       generateCityWeekendPages(events, weekendEventLookup) +
@@ -1125,7 +1133,7 @@ function main() {
   writeRobotsAndLlms();
 
   console.log(
-    `[seo] wrote ${totalSpotPages} spot pages, ${totalEventPages} event pages, ${totalEndedEventStubs} ended-event stubs, ${totalCityPages} city pages, ${totalCategoryPages} category pages, ${totalWeekendPages} this-weekend pages, ${totalWeekendSubPages} city/free weekend pages, ${totalLocalizedPages} localized i18n pages, sitemap with ${sitemapEntries.length} URLs.`,
+    `[seo] wrote ${totalSpotPages} spot pages, ${totalEventPages} event pages, ${totalEndedEventStubs} ended-event stubs, ${totalAnnualPages} annual pages, ${totalCityPages} city pages, ${totalCategoryPages} category pages, ${totalWeekendPages} this-weekend pages, ${totalWeekendSubPages} city/free weekend pages, ${totalLocalizedPages} localized i18n pages, sitemap with ${sitemapEntries.length} URLs.`,
   );
 }
 
@@ -2223,6 +2231,106 @@ export function pickRelatedEvents(event, upcomingSorted, limit = 4) {
     if (!picked.includes(e)) picked.push(e);
   }
   return picked.slice(0, limit);
+}
+
+// Annual evergreen pages: dated event pages die with a 410 every year, so
+// "<festival name> <year>" queries — which start weeks before dates are
+// announced — land on a cold start each season. These pages persist across
+// years, cross-linking the live event page whenever this year's event is in
+// the dataset. Curated in data/annual-events.json; kids build only.
+export function matchAnnualLiveEvent(entry, events, eventSlugLookup, generatedSlugs) {
+  let re;
+  try {
+    re = new RegExp(entry.match || entry.title, "i");
+  } catch {
+    return null;
+  }
+  for (const ev of events) {
+    const slug = eventSlugLookup.get(ev);
+    if (!slug || (generatedSlugs && !generatedSlugs.has(slug))) continue;
+    if (re.test(ev.title || "")) return { event: ev, slug };
+  }
+  return null;
+}
+
+function generateAnnualEventPages(distinctEvents, eventSlugLookup, eventSlugs) {
+  if (IS_ADULTS) return 0;
+  const entries = ANNUAL_EVENTS[activeMetro.id] || [];
+  if (!entries.length) return 0;
+
+  const items = entries.map((entry) => ({
+    entry,
+    live: matchAnnualLiveEvent(entry, distinctEvents, eventSlugLookup, eventSlugs),
+  }));
+
+  for (const { entry, live } of items) {
+    const canonical = metroUrl(`annual/${entry.slug}/`);
+    const title = `${entry.title} — annual guide, ${entry.city} | ${BRAND}`;
+    const description = `${entry.title} in ${entry.city}: what it is, when it usually happens (${entry.month}), and this year's dates when announced.`;
+    const liveHtml = live
+      ? `<p class="cta-row"><a class="cta" href="${metroPath(`event/${live.slug}/`)}">This year's event: ${esc(live.event.title)} &rarr;</a></p>`
+      : `<p>Dates for the next edition are usually announced closer to ${esc(entry.month)}. Until then, <a href="${metroPath("this-weekend/")}">see what's on this weekend in ${esc(metroLabel())}</a>.</p>`;
+    const body = `
+      <p class="lede">${esc(entry.description)}</p>
+      <dl class="meta-grid">
+        <div><dt>Usually held</dt><dd>${esc(entry.month)}, every year</dd></div>
+        <div><dt>Where</dt><dd>${esc(entry.venue)}, ${esc(entry.city)}</dd></div>
+      </dl>
+      ${liveHtml}
+      <p class="see-also">More <a href="${metroPath("annual/")}">annual events in ${esc(metroLabel())}</a>.</p>
+    `;
+    const html = renderShell({
+      title,
+      description,
+      canonical,
+      ogImage: OG_IMAGE,
+      breadcrumb: [
+        { name: BRAND, url: metroUrl("") },
+        { name: "Annual events", url: metroUrl("annual/") },
+        { name: entry.title, url: canonical },
+      ],
+      h1: entry.title,
+      eyebrow: `${esc(entry.city)} · every ${esc(entry.month)}`,
+      body,
+    });
+    writeMetroPage(`annual/${entry.slug}/index.html`, html);
+    sitemapEntries.push({
+      loc: canonical,
+      lastmod: trackedLastmod(canonical, html),
+      changefreq: "monthly",
+      priority: 0.6,
+    });
+  }
+
+  const hubCanonical = metroUrl("annual/");
+  const hubBody = `
+    <p class="lede">The ${esc(metroLabel())} events that come back every year — fairs, festivals, parades, and traditions worth planning around. Each guide links to this year's dates as soon as they're announced.</p>
+    <ul>${items
+      .map(({ entry }) => `<li><a href="${metroPath(`annual/${entry.slug}/`)}">${esc(entry.title)}</a> — ${esc(entry.city)}, every ${esc(entry.month)}</li>`)
+      .join("")}</ul>
+  `;
+  const hubHtml = renderShell({
+    title: `Annual events in ${metroLabel()} | ${BRAND}`,
+    description: `The recurring annual fairs, festivals, and family traditions in ${metroLabel()}, with this year's dates as they're announced.`,
+    canonical: hubCanonical,
+    ogImage: OG_IMAGE,
+    breadcrumb: [
+      { name: BRAND, url: metroUrl("") },
+      { name: "Annual events", url: hubCanonical },
+    ],
+    h1: `Annual events in ${metroLabel()}`,
+    eyebrow: "Every year",
+    body: hubBody,
+  });
+  writeMetroPage("annual/index.html", hubHtml);
+  sitemapEntries.push({
+    loc: hubCanonical,
+    lastmod: trackedLastmod(hubCanonical, hubHtml),
+    changefreq: "weekly",
+    priority: 0.6,
+  });
+
+  return items.length + 1;
 }
 
 function renderRelatedEvents(event, upcomingSorted, eventSlugLookup) {
