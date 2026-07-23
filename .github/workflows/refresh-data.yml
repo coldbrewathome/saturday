@@ -40,19 +40,18 @@ jobs:
       - run: npm run validate:events
       - run: npm run build
 
-      - name: Publish to Google Indexing API
-        if: ${{ secrets.GOOGLE_INDEXING_CREDENTIALS != '' }}
-        env:
-          GOOGLE_INDEXING_CREDENTIALS: ${{ secrets.GOOGLE_INDEXING_CREDENTIALS }}
-          GOOGLE_CLOUD_PROJECT: leafy-acumen-468616-d1
-        run: npm run publish:indexing
+      # Indexing API publishing REMOVED 2026-07-22 — the local 9:00 AM PT cron
+      # (scripts/local-indexing-cron.sh) is the SINGLE owner of the 200/day quota
+      # and of data/indexing-history.json. When this step ran too (3:17 AM PT), it
+      # burned the quota first AND committed its history to main, which the local
+      # cron never pulled — so the local run re-submitted the same URLs from stale
+      # history until it 429'd (2026-07-22: 15 ok / 158 quota failures). Two
+      # writers, one quota, one history file. Do not re-add without removing the
+      # local cron.
 
-      - name: Commit refreshed data and indexing history
+      - name: Commit refreshed data
         run: |
           git add public/data
-          if [ -f data/indexing-history.json ]; then
-            git add data/indexing-history.json
-          fi
           # seo-lastmod.json keeps content-hash -> <lastmod> continuity across
           # builds so unchanged pages don't get fresh timestamps every day.
           if [ -f data/seo-lastmod.json ]; then

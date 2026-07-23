@@ -62,9 +62,6 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=nighthop --branch=main --commit-dirty=true
 
-      - name: Publish to Google Indexing API
-        if: ${{ secrets.GOOGLE_INDEXING_CREDENTIALS != '' }}
-        env:
-          GOOGLE_INDEXING_CREDENTIALS: ${{ secrets.GOOGLE_INDEXING_CREDENTIALS }}
-          GOOGLE_CLOUD_PROJECT: leafy-acumen-468616-d1
-        run: npm run publish:indexing
+      # Indexing API publishing REMOVED 2026-07-22 — the local 9:00 AM PT cron is
+      # the single owner of the 200/day quota and data/indexing-history.json (see
+      # refresh-data.yml for the double-burn incident this fixes).

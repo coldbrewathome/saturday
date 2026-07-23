@@ -81,8 +81,8 @@ If the user says "deploy" without specifying, default to both kids and adults (t
 To resolve sitemap crawl budget issues and automate search engine indexation:
 - **Core Script**: `npm run publish:indexing` (runs [publish-indexing.mjs](file:///Users/kning/Projects/saturday/scripts/publish-indexing.mjs)) reads `dist/sitemap.xml`, prioritizes hub pages, filters for new/modified events, and submits up to 200 URLs/day (quota limit) to the Google Indexing API.
 - **History**: Submission timestamps are saved in [indexing-history.json](file:///Users/kning/Projects/saturday/data/indexing-history.json) to maintain a rolling queue.
-- **GitHub Actions (Cloud)**: The daily `refresh-data` workflow runs the publisher and automatically commits the updated history file back to `main`. Requires the `GOOGLE_INDEXING_CREDENTIALS` repository secret.
-- **macOS Scheduler (Local)**: A launchd agent runs [local-indexing-cron.sh](file:///Users/kning/Projects/saturday/scripts/local-indexing-cron.sh) daily at 9:00 AM using local `gcloud` ADC credentials.
+- **Single owner (since 2026-07-22): the local cron.** The GitHub workflows no longer run the publisher — when `refresh-data` also submitted (3:17 AM PT) it burned the quota first and committed a history the local cron never pulled, so the 9:00 AM run re-submitted duplicates until it 429'd. Do not re-add the cloud publish step without removing the local cron.
+- **macOS Scheduler (Local)**: A launchd agent runs [local-indexing-cron.sh](file:///Users/kning/Projects/saturday/scripts/local-indexing-cron.sh) daily at 9:00 AM using local `gcloud` ADC credentials. It submits FamHop first, then Mosey, deduping via the local history file.
   - Setup: run [setup-local-cron.sh](file:///Users/kning/Projects/saturday/scripts/setup-local-cron.sh) to copy the plist configuration to `~/Library/LaunchAgents/` and load it.
   - Logs: written to [local-indexing.log](file:///Users/kning/Projects/saturday/tmp/local-indexing.log).
 
