@@ -1,18 +1,66 @@
 {
   "schemaVersion": 1,
   "metroId": "san-diego",
-  "generatedAt": "2026-07-20T22:32:48.158Z",
+  "generatedAt": "2026-07-23T00:59:08.064Z",
   "registryPath": "data/event-sources-san-diego.json",
   "outputPath": "public/data/san-diego/events.json",
-  "eventCount": 348,
-  "adultsEventCount": 79,
+  "eventCount": 332,
+  "adultsEventCount": 81,
   "sourceCount": 20,
-  "liveEventCount": 420,
-  "lastKnownGoodEventCount": 0,
+  "liveEventCount": 351,
+  "lastKnownGoodEventCount": 53,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 9,
+  "operatorAlertCount": 12,
   "errors": [],
   "operatorAlerts": [
+    {
+      "severity": "warning",
+      "metroId": "san-diego",
+      "sourceId": "san-diego-library-family",
+      "sourceName": "San Diego County Library Events",
+      "sourceType": "biblioevents",
+      "url": "https://sdcl.bibliocommons.com/v2/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 4,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 4,
+      "fetchedAt": "2026-07-23T00:59:08.064Z",
+      "fetches": [
+        {
+          "url": "https://sdcl.bibliocommons.com/v2/events",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "san-diego",
+      "sourceId": "san-diego-museum-family",
+      "sourceName": "The New Children's Museum",
+      "sourceType": "tribeEvents",
+      "url": "https://thinkplaycreate.org/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 49,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 49,
+      "fetchedAt": "2026-07-23T00:59:08.064Z",
+      "fetches": [
+        {
+          "url": "https://thinkplaycreate.org/events/",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
+        }
+      ]
+    },
     {
       "severity": "critical",
       "metroId": "san-diego",
@@ -28,7 +76,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:32:48.158Z",
+      "fetchedAt": "2026-07-23T00:59:08.064Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -53,7 +101,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:32:48.158Z",
+      "fetchedAt": "2026-07-23T00:59:08.064Z",
       "fetches": [
         {
           "url": "https://www.sdfair.com/",
@@ -78,10 +126,35 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:32:48.158Z",
+      "fetchedAt": "2026-07-23T00:59:08.064Z",
       "fetches": [
         {
           "url": "https://balboapark.org/twilight-concerts/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "san-diego",
+      "sourceId": "pawmicon-balboa-park-2026-07-21-src",
+      "sourceName": "PAWmicon",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.animalcenter.org/pawmicon/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-23T00:59:08.064Z",
+      "fetches": [
+        {
+          "url": "https://www.animalcenter.org/pawmicon/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -103,7 +176,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:32:48.158Z",
+      "fetchedAt": "2026-07-23T00:59:08.064Z",
       "fetches": [
         {
           "url": "https://www.casbahmusic.com/events",
@@ -120,21 +193,20 @@
       "sourceName": "Belly Up Tavern",
       "sourceType": "html",
       "url": "https://www.bellyup.com/events",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:32:48.158Z",
+      "fetchedAt": "2026-07-23T00:59:08.064Z",
       "fetches": [
         {
           "url": "https://www.bellyup.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ]
     },
@@ -153,7 +225,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:32:48.158Z",
+      "fetchedAt": "2026-07-23T00:59:08.064Z",
       "fetches": [
         {
           "url": "https://www.observatorysd.com/events",
@@ -178,7 +250,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:32:48.158Z",
+      "fetchedAt": "2026-07-23T00:59:08.064Z",
       "fetches": [
         {
           "url": "https://www.americancomedyco.com/calendar",
@@ -203,7 +275,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:32:48.158Z",
+      "fetchedAt": "2026-07-23T00:59:08.064Z",
       "fetches": [
         {
           "url": "https://thecomedystore.com/la-jolla/",
@@ -228,7 +300,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:32:48.158Z",
+      "fetchedAt": "2026-07-23T00:59:08.064Z",
       "fetches": [
         {
           "url": "https://sdpride.org/festival/",
@@ -262,24 +334,21 @@
       "city": "San Diego",
       "metroId": "san-diego",
       "category": "Library",
-      "status": "ok",
-      "liveEvents": 9,
+      "status": "fetch-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 9,
+      "eventCount": 4,
       "fetches": [
         {
           "url": "https://sdcl.bibliocommons.com/v2/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 9,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "reason": "This operation was aborted",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 4,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "san-diego-parks-family",
@@ -316,24 +385,21 @@
       "city": "San Diego",
       "metroId": "san-diego",
       "category": "Museum",
-      "status": "ok",
-      "liveEvents": 56,
+      "status": "fetch-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 56,
+      "eventCount": 49,
       "fetches": [
         {
           "url": "https://thinkplaycreate.org/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=200; pages=4"
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 144,
-      "extractedEvents": 200,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "reason": "This operation was aborted",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 49,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "san-diego-zoo-family",
@@ -344,9 +410,9 @@
       "metroId": "san-diego",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 135,
+      "liveEvents": 132,
       "fallbackEvents": 0,
-      "eventCount": 135,
+      "eventCount": 132,
       "fetches": [
         {
           "url": "https://zoo.sandiegozoo.org/activities/wildlife-presentations",
@@ -357,7 +423,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 3,
+      "rejectedLiveEvents": 6,
       "extractedEvents": 138,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -425,9 +491,9 @@
       "metroId": "san-diego",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 100,
+      "liveEvents": 101,
       "fallbackEvents": 0,
-      "eventCount": 100,
+      "eventCount": 101,
       "fetches": [
         {
           "url": "https://www.balboapark.org/events/",
@@ -438,7 +504,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 100,
+      "rejectedLiveEvents": 99,
       "extractedEvents": 200,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -452,9 +518,9 @@
       "metroId": "san-diego",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 6,
+      "liveEvents": 5,
       "fallbackEvents": 0,
-      "eventCount": 6,
+      "eventCount": 5,
       "fetches": [
         {
           "url": "https://oceansidepl.librarycalendar.com/events/month",
@@ -466,7 +532,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 6,
+      "extractedEvents": 5,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -533,9 +599,9 @@
       "metroId": "san-diego",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.animalcenter.org/pawmicon/",
@@ -546,7 +612,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -585,21 +651,18 @@
       "city": "San Diego",
       "metroId": "san-diego",
       "category": "Music",
-      "status": "ok",
+      "status": "fetch-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.bellyup.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "reason": "This operation was aborted",
       "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null

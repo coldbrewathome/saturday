@@ -1,9 +1,105 @@
 {
   "schemaVersion": 1,
   "metroId": "phoenix",
-  "generatedAt": "2026-07-20T22:31:59.411Z",
-  "alertCount": 6,
+  "generatedAt": "2026-07-22T23:57:52.410Z",
+  "alertCount": 13,
   "alerts": [
+    {
+      "severity": "warning",
+      "metroId": "phoenix",
+      "sourceId": "phoenix-library-family",
+      "sourceName": "Phoenix Public Library Calendar",
+      "sourceType": "libcal",
+      "url": "https://calendar.phoenixpubliclibrary.org/calendar/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 222,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 222,
+      "fetchedAt": "2026-07-22T23:57:52.410Z",
+      "fetches": [
+        {
+          "url": "https://calendar.phoenixpubliclibrary.org/calendar/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "phoenix",
+      "sourceId": "phoenix-parks-family",
+      "sourceName": "Phoenix Parks Events",
+      "sourceType": "phoenixCityCalendar",
+      "url": "https://www.phoenix.gov/calendar/parks-events.html",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 4,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 4,
+      "fetchedAt": "2026-07-22T23:57:52.410Z",
+      "fetches": [
+        {
+          "url": "https://www.phoenix.gov/calendar/parks-events.html",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "phoenix",
+      "sourceId": "phoenix-museum-family",
+      "sourceName": "Children's Museum of Phoenix Events",
+      "sourceType": "tribeEvents",
+      "url": "https://childrensmuseumofphoenix.org/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "browser fetch failed: page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:302:30), <anonymous>:2:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 66,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 66,
+      "fetchedAt": "2026-07-22T23:57:52.410Z",
+      "fetches": [
+        {
+          "url": "https://childrensmuseumofphoenix.org/events/",
+          "status": "fetch-error",
+          "reason": "browser fetch failed: page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:302:30), <anonymous>:2:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "phoenix",
+      "sourceId": "phoenix-zoo-family",
+      "sourceName": "Phoenix Zoo Events",
+      "sourceType": "phoenixZooEvents",
+      "url": "https://www.phoenixzoo.org/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "browser fetch failed: page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:302:30), <anonymous>:2:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 5,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 5,
+      "fetchedAt": "2026-07-22T23:57:52.410Z",
+      "fetches": [
+        {
+          "url": "https://www.phoenixzoo.org/events/",
+          "status": "fetch-error",
+          "reason": "browser fetch failed: page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:302:30), <anonymous>:2:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        }
+      ]
+    },
     {
       "severity": "warning",
       "metroId": "phoenix",
@@ -19,13 +115,37 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:31:59.411Z",
+      "fetchedAt": "2026-07-22T23:57:52.410Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "application/json; source=ticketmaster; events=1; queries=1"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "phoenix",
+      "sourceId": "desert-botanical-garden",
+      "sourceName": "Desert Botanical Garden",
+      "sourceType": "tribeEvents",
+      "url": "https://dbg.org/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 158,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 158,
+      "fetchedAt": "2026-07-22T23:57:52.410Z",
+      "fetches": [
+        {
+          "url": "https://dbg.org/events/",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ]
     },
@@ -44,7 +164,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:31:59.411Z",
+      "fetchedAt": "2026-07-22T23:57:52.410Z",
       "fetches": [
         {
           "url": "https://vineyardnorthphoenix.com/backtoschool/",
@@ -69,10 +189,60 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:31:59.411Z",
+      "fetchedAt": "2026-07-22T23:57:52.410Z",
       "fetches": [
         {
           "url": "https://www.crescentphx.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "phoenix",
+      "sourceId": "rebel-lounge-phx",
+      "sourceName": "The Rebel Lounge",
+      "sourceType": "html",
+      "url": "https://www.therebellounge.com/events",
+      "status": "ok-last-known-good",
+      "issueType": "zero-extracted",
+      "reason": "source produced no live events; using last-known-good future events",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-07-22T23:57:52.410Z",
+      "fetches": [
+        {
+          "url": "https://www.therebellounge.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "phoenix",
+      "sourceId": "marquee-theatre-tempe",
+      "sourceName": "Marquee Theatre",
+      "sourceType": "html",
+      "url": "https://www.marqueetheatreaz.com/calendar/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-22T23:57:52.410Z",
+      "fetches": [
+        {
+          "url": "https://www.marqueetheatreaz.com/calendar/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -94,7 +264,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:31:59.411Z",
+      "fetchedAt": "2026-07-22T23:57:52.410Z",
       "fetches": [
         {
           "url": "https://phoenix.standuplive.com/events",
@@ -119,7 +289,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:31:59.411Z",
+      "fetchedAt": "2026-07-22T23:57:52.410Z",
       "fetches": [
         {
           "url": "https://houseofcomedy.net/scottsdale",
@@ -144,7 +314,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:31:59.411Z",
+      "fetchedAt": "2026-07-22T23:57:52.410Z",
       "fetches": [
         {
           "url": "https://www.theniletheater.com/events",

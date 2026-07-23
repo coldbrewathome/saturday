@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "los-angeles",
-  "generatedAt": "2026-07-20T22:24:12.713Z",
-  "alertCount": 18,
+  "generatedAt": "2026-07-23T02:50:06.775Z",
+  "alertCount": 16,
   "alerts": [
     {
       "severity": "warning",
@@ -15,11 +15,11 @@
       "issueType": "zero-extracted",
       "reason": "source produced no live events; using last-known-good future events",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 73,
+      "recoveredEvents": 70,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 73,
-      "fetchedAt": "2026-07-20T22:24:12.713Z",
+      "lastKnownGoodEvents": 70,
+      "fetchedAt": "2026-07-23T02:50:06.775Z",
       "fetches": [
         {
           "url": "https://nhm.org/calendar",
@@ -44,12 +44,37 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:24:12.713Z",
+      "fetchedAt": "2026-07-23T02:50:06.775Z",
       "fetches": [
         {
           "url": "https://www.petersen.org/events",
           "status": "blocked",
           "reason": "challenge page returned instead of event content",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "norton-simon",
+      "sourceName": "Norton Simon Museum",
+      "sourceType": "html",
+      "url": "https://www.nortonsimon.org/calendar",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-23T02:50:06.775Z",
+      "fetches": [
+        {
+          "url": "https://www.nortonsimon.org/calendar",
+          "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
         }
@@ -70,7 +95,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:24:12.713Z",
+      "fetchedAt": "2026-07-23T02:50:06.775Z",
       "fetches": [
         {
           "url": "https://www.huntington.org/calendar",
@@ -95,7 +120,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:24:12.713Z",
+      "fetchedAt": "2026-07-23T02:50:06.775Z",
       "fetches": [
         {
           "url": "https://grandparkla.org/events/",
@@ -120,7 +145,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:24:12.713Z",
+      "fetchedAt": "2026-07-23T02:50:06.775Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -145,7 +170,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:24:12.713Z",
+      "fetchedAt": "2026-07-23T02:50:06.775Z",
       "fetches": [
         {
           "url": "https://ocfair.com/oc-fair/",
@@ -170,86 +195,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:24:12.713Z",
+      "fetchedAt": "2026-07-23T02:50:06.775Z",
       "fetches": [
         {
           "url": "https://grandparkla.org/blockparty/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "los-angeles",
-      "sourceId": "smorgasburg-la-ice-cream-fair-2026-07-19-src",
-      "sourceName": "The Great Ice Cream Fair",
-      "sourceType": "officialTextEvents",
-      "url": "https://la.smorgasburg.com/calendar/greaticecreamfair2026",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:24:12.713Z",
-      "fetches": [
-        {
-          "url": "https://la.smorgasburg.com/calendar/greaticecreamfair2026",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "los-angeles",
-      "sourceId": "coast-2026-santa-monica-07-19-src",
-      "sourceName": "COAST 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.santamonica.gov/blog/everything-to-know-about-coast-2026-on-sunday-july-19",
-      "status": "blocked",
-      "issueType": "fetch-failed",
-      "reason": "challenge page returned instead of event content",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:24:12.713Z",
-      "fetches": [
-        {
-          "url": "https://www.santamonica.gov/blog/everything-to-know-about-coast-2026-on-sunday-july-19",
-          "status": "blocked",
-          "reason": "challenge page returned instead of event content",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "los-angeles",
-      "sourceId": "alondra-park-hoolaulea-2026-07-19-src",
-      "sourceName": "Alondra Park Ho'olaule'a",
-      "sourceType": "officialTextEvents",
-      "url": "https://heleloa.com/alondra-park-hoolaulea/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:24:12.713Z",
-      "fetches": [
-        {
-          "url": "https://heleloa.com/alondra-park-hoolaulea/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -271,7 +220,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:24:12.713Z",
+      "fetchedAt": "2026-07-23T02:50:06.775Z",
       "fetches": [
         {
           "url": "https://www.troubadour.com/events",
@@ -296,7 +245,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:24:12.713Z",
+      "fetchedAt": "2026-07-23T02:50:06.775Z",
       "fetches": [
         {
           "url": "https://www.theelrey.com/events",
@@ -321,7 +270,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:24:12.713Z",
+      "fetchedAt": "2026-07-23T02:50:06.775Z",
       "fetches": [
         {
           "url": "https://www.theroxy.com/events",
@@ -346,7 +295,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:24:12.713Z",
+      "fetchedAt": "2026-07-23T02:50:06.775Z",
       "fetches": [
         {
           "url": "https://thecomedystore.com/calendar/",
@@ -371,7 +320,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:24:12.713Z",
+      "fetchedAt": "2026-07-23T02:50:06.775Z",
       "fetches": [
         {
           "url": "https://www.laughfactory.com/shows",
@@ -396,7 +345,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:24:12.713Z",
+      "fetchedAt": "2026-07-23T02:50:06.775Z",
       "fetches": [
         {
           "url": "https://improv.com/hollywood/calendar/",
@@ -421,7 +370,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:24:12.713Z",
+      "fetchedAt": "2026-07-23T02:50:06.775Z",
       "fetches": [
         {
           "url": "https://www.ticketmaster.com/the-wiltern-tickets-los-angeles/venue/73790",
@@ -447,7 +396,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:24:12.713Z",
+      "fetchedAt": "2026-07-23T02:50:06.775Z",
       "fetches": [
         {
           "url": "https://www.theregenttheater.com/events",

@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "seattle",
-  "generatedAt": "2026-07-20T22:25:55.344Z",
+  "generatedAt": "2026-07-22T22:56:39.162Z",
   "registryPath": "data/event-sources-seattle.json",
   "outputPath": "public/data/seattle/events.json",
-  "eventCount": 493,
-  "adultsEventCount": 32,
+  "eventCount": 482,
+  "adultsEventCount": 33,
   "sourceCount": 38,
-  "liveEventCount": 517,
-  "lastKnownGoodEventCount": 1,
+  "liveEventCount": 507,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 16,
+  "operatorAlertCount": 15,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,38 +28,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:25:55.344Z",
+      "fetchedAt": "2026-07-22T22:56:39.162Z",
       "fetches": [
         {
           "url": "https://www.zoo.org/events?cgid=1",
           "status": "http-error",
           "httpStatus": 403,
           "contentType": "text/html"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "seattle",
-      "sourceId": "burke-museum-events",
-      "sourceName": "Burke Museum Events",
-      "sourceType": "eventList",
-      "url": "https://www.burkemuseum.org/events",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:25:55.344Z",
-      "fetches": [
-        {
-          "url": "https://www.burkemuseum.org/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
         }
       ]
     },
@@ -78,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:25:55.344Z",
+      "fetchedAt": "2026-07-22T22:56:39.162Z",
       "fetches": [
         {
           "url": "https://pacificsciencecenter.org/events/",
@@ -103,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:25:55.344Z",
+      "fetchedAt": "2026-07-22T22:56:39.162Z",
       "fetches": [
         {
           "url": "https://www.seattleaquarium.org/explore-the-aquarium/programs/toddler-time/",
@@ -128,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:25:55.344Z",
+      "fetchedAt": "2026-07-22T22:56:39.162Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -153,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:25:55.344Z",
+      "fetchedAt": "2026-07-22T22:56:39.162Z",
       "fetches": [
         {
           "url": "https://www.thefair.com/",
@@ -178,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:25:55.344Z",
+      "fetchedAt": "2026-07-22T22:56:39.162Z",
       "fetches": [
         {
           "url": "https://www.seattlecenter.com/events/featured-events/festal/indigenous-people-festival",
@@ -203,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:25:55.344Z",
+      "fetchedAt": "2026-07-22T22:56:39.162Z",
       "fetches": [
         {
           "url": "https://www.enumclawexpo.com/p/king-county-fair",
@@ -220,15 +195,15 @@
       "sourceName": "Chinatown Seafair Parade",
       "sourceType": "officialTextEvents",
       "url": "https://www.seattlechinesechamber.org/chinatown-parade.html",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "issueType": "zero-in-window",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-07-20T22:25:55.344Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-22T22:56:39.162Z",
       "fetches": [
         {
           "url": "https://www.seattlechinesechamber.org/chinatown-parade.html",
@@ -253,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:25:55.344Z",
+      "fetchedAt": "2026-07-22T22:56:39.162Z",
       "fetches": [
         {
           "url": "https://biteofseattle.com/",
@@ -278,7 +253,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:25:55.344Z",
+      "fetchedAt": "2026-07-22T22:56:39.162Z",
       "fetches": [
         {
           "url": "https://www.neumos.com/events",
@@ -303,7 +278,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:25:55.344Z",
+      "fetchedAt": "2026-07-22T22:56:39.162Z",
       "fetches": [
         {
           "url": "https://www.thecrocodile.com/events",
@@ -328,7 +303,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:25:55.344Z",
+      "fetchedAt": "2026-07-22T22:56:39.162Z",
       "fetches": [
         {
           "url": "https://www.tractortavern.com/events",
@@ -353,7 +328,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:25:55.344Z",
+      "fetchedAt": "2026-07-22T22:56:39.162Z",
       "fetches": [
         {
           "url": "https://www.sunsettavern.com/events",
@@ -378,7 +353,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:25:55.344Z",
+      "fetchedAt": "2026-07-22T22:56:39.162Z",
       "fetches": [
         {
           "url": "https://www.comedyunderground.com/calendar",
@@ -403,7 +378,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:25:55.344Z",
+      "fetchedAt": "2026-07-22T22:56:39.162Z",
       "fetches": [
         {
           "url": "https://www.nectarlounge.com/",
@@ -438,9 +413,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 19,
+      "liveEvents": 20,
       "fallbackEvents": 0,
-      "eventCount": 19,
+      "eventCount": 20,
       "fetches": [
         {
           "url": "https://kcls.bibliocommons.com/v2/events?programs=6092fc2d8910133a0055a335",
@@ -452,7 +427,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 19,
+      "extractedEvents": 20,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -465,9 +440,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 175,
+      "liveEvents": 176,
       "fallbackEvents": 0,
-      "eventCount": 175,
+      "eventCount": 176,
       "fetches": [
         {
           "url": "https://www.trumba.com/calendars/kalendaro.json?filterview=SeriesStoryTime",
@@ -479,7 +454,7 @@
       "httpStatus": 200,
       "contentType": "application/json;charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 175,
+      "extractedEvents": 176,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -492,9 +467,9 @@
       "metroId": "seattle",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 41,
+      "liveEvents": 32,
       "fallbackEvents": 0,
-      "eventCount": 41,
+      "eventCount": 32,
       "fetches": [
         {
           "url": "https://seattlechildrensmuseum.org/calendar/",
@@ -505,8 +480,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 68,
-      "extractedEvents": 109,
+      "rejectedLiveEvents": 74,
+      "extractedEvents": 106,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -545,9 +520,9 @@
       "metroId": "seattle",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://www.burkemuseum.org/events",
@@ -559,7 +534,7 @@
       "httpStatus": 200,
       "contentType": "text/html;charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -707,9 +682,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 8,
+      "liveEvents": 6,
       "fallbackEvents": 0,
-      "eventCount": 8,
+      "eventCount": 6,
       "fetches": [
         {
           "url": "https://kcls.bibliocommons.com/v2/events",
@@ -721,7 +696,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 1,
-      "extractedEvents": 9,
+      "extractedEvents": 7,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -734,9 +709,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 17,
+      "liveEvents": 13,
       "fallbackEvents": 0,
-      "eventCount": 17,
+      "eventCount": 13,
       "fetches": [
         {
           "url": "https://sno-isle.bibliocommons.com/v2/events",
@@ -748,7 +723,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 17,
+      "extractedEvents": 13,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -761,21 +736,21 @@
       "metroId": "seattle",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 26,
+      "liveEvents": 27,
       "fallbackEvents": 0,
-      "eventCount": 26,
+      "eventCount": 27,
       "fetches": [
         {
           "url": "https://bellevuebotanical.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=89; pages=1"
+          "contentType": "application/json; source=tribe-events; events=95; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=89; pages=1",
-      "rejectedLiveEvents": 62,
-      "extractedEvents": 88,
+      "contentType": "application/json; source=tribe-events; events=95; pages=1",
+      "rejectedLiveEvents": 66,
+      "extractedEvents": 93,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -788,9 +763,9 @@
       "metroId": "seattle",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 197,
+      "liveEvents": 198,
       "fallbackEvents": 0,
-      "eventCount": 197,
+      "eventCount": 198,
       "fetches": [
         {
           "url": "https://www.trumba.com/calendars/sea_campus.json",
@@ -802,7 +777,7 @@
       "httpStatus": 200,
       "contentType": "application/json;charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 197,
+      "extractedEvents": 198,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -976,10 +951,10 @@
       "city": "Seattle",
       "metroId": "seattle",
       "category": "Festival",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.seattlechinesechamber.org/chinatown-parade.html",
@@ -992,9 +967,8 @@
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 1,
       "extractedEvents": 1,
-      "lastKnownGoodEvents": 1,
-      "recoveryMode": "last-known-good",
-      "reason": "source produced no live events; using last-known-good future events"
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "bite-of-seattle-2026-07-24-src",

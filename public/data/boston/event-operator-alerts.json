@@ -1,9 +1,33 @@
 {
   "schemaVersion": 1,
   "metroId": "boston",
-  "generatedAt": "2026-07-20T22:32:18.595Z",
-  "alertCount": 8,
+  "generatedAt": "2026-07-23T00:00:44.443Z",
+  "alertCount": 12,
   "alerts": [
+    {
+      "severity": "warning",
+      "metroId": "boston",
+      "sourceId": "boston-zoo-family",
+      "sourceName": "Zoo New England Program Calendar",
+      "sourceType": "eventList",
+      "url": "https://www.zoonewengland.org/discover/program-calendar/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 2,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 2,
+      "fetchedAt": "2026-07-23T00:00:44.443Z",
+      "fetches": [
+        {
+          "url": "https://www.zoonewengland.org/discover/program-calendar/",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
+        }
+      ]
+    },
     {
       "severity": "warning",
       "metroId": "boston",
@@ -19,7 +43,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:32:18.595Z",
+      "fetchedAt": "2026-07-23T00:00:44.443Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -44,7 +68,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:32:18.595Z",
+      "fetchedAt": "2026-07-23T00:00:44.443Z",
       "fetches": [
         {
           "url": "https://www.easternstatesexposition.com/",
@@ -69,13 +93,37 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:32:18.595Z",
+      "fetchedAt": "2026-07-23T00:00:44.443Z",
       "fetches": [
         {
           "url": "https://marshfieldfair.org/events/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "boston",
+      "sourceId": "brookline-library-libcal",
+      "sourceName": "Public Library of Brookline Events",
+      "sourceType": "libcal",
+      "url": "https://brooklinelibrary.libcal.com/calendar/events?cid=20102&cal=20102",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 48,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 48,
+      "fetchedAt": "2026-07-23T00:00:44.443Z",
+      "fetches": [
+        {
+          "url": "https://brooklinelibrary.libcal.com/calendar/events?cid=20102&cal=20102",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ]
     },
@@ -94,13 +142,37 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:32:18.595Z",
+      "fetchedAt": "2026-07-23T00:00:44.443Z",
       "fetches": [
         {
           "url": "https://www.bostonharborfest.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "boston",
+      "sourceId": "salem-heritage-days-2026",
+      "sourceName": "Salem 400+ Heritage Days Parade 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.salemma.gov/CivicAlerts.aspx?AID=235",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-07-23T00:00:44.443Z",
+      "fetches": [
+        {
+          "url": "https://www.salemma.gov/CivicAlerts.aspx?AID=235",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ]
     },
@@ -119,7 +191,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:32:18.595Z",
+      "fetchedAt": "2026-07-23T00:00:44.443Z",
       "fetches": [
         {
           "url": "https://www.cambridgecarnival.org/",
@@ -144,7 +216,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:32:18.595Z",
+      "fetchedAt": "2026-07-23T00:00:44.443Z",
       "fetches": [
         {
           "url": "https://www.internationalsandsculptingfestival.com/event-dates-site-map-details/",
@@ -169,13 +241,37 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:32:18.595Z",
+      "fetchedAt": "2026-07-23T00:00:44.443Z",
       "fetches": [
         {
           "url": "https://www.crossroadspresents.com/paradise-rock-club",
           "status": "http-error",
           "httpStatus": 404,
           "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "boston",
+      "sourceId": "the-sinclair",
+      "sourceName": "The Sinclair",
+      "sourceType": "html",
+      "url": "https://www.sinclaircambridge.com/events/rss",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 7,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 7,
+      "fetchedAt": "2026-07-23T00:00:44.443Z",
+      "fetches": [
+        {
+          "url": "https://www.sinclaircambridge.com/events/rss",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ]
     },
@@ -194,7 +290,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:32:18.595Z",
+      "fetchedAt": "2026-07-23T00:00:44.443Z",
       "fetches": [
         {
           "url": "https://www.nickscomedystop.com/calendar",

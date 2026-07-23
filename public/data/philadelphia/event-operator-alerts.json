@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "philadelphia",
-  "generatedAt": "2026-07-20T22:30:45.847Z",
-  "alertCount": 11,
+  "generatedAt": "2026-07-22T23:51:44.348Z",
+  "alertCount": 26,
   "alerts": [
     {
       "severity": "warning",
@@ -11,21 +11,20 @@
       "sourceName": "Free Library of Philadelphia Foundation Events",
       "sourceType": "html",
       "url": "https://freelibraryfoundation.org/events/",
-      "status": "ok-template-fallback",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
       "recoveredBy": "recurring-template",
       "recoveredEvents": 8,
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
       "fetches": [
         {
           "url": "https://freelibraryfoundation.org/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -36,46 +35,92 @@
       "sourceName": "Philadelphia Parks and Recreation Events",
       "sourceType": "eventList",
       "url": "https://www.phila.gov/departments/philadelphia-parks-recreation/#calendar",
-      "status": "ok-template-fallback",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
       "recoveredBy": "recurring-template",
       "recoveredEvents": 8,
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
       "fetches": [
         {
           "url": "https://www.phila.gov/departments/philadelphia-parks-recreation/#calendar",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
     {
       "severity": "warning",
       "metroId": "philadelphia",
+      "sourceId": "philadelphia-museum-family",
+      "sourceName": "Please Touch Museum Calendar",
+      "sourceType": "tribeEvents",
+      "url": "https://www.pleasetouchmuseum.org/calendar/month/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 335,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 335,
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
+      "fetches": [
+        {
+          "url": "https://www.pleasetouchmuseum.org/calendar/month/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "philadelphia-zoo-family",
+      "sourceName": "Philadelphia Zoo Events",
+      "sourceType": "wpRestEvents",
+      "url": "https://www.philadelphiazoo.org/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "browser fetch failed: page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:302:30), <anonymous>:2:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 8,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 8,
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
+      "fetches": [
+        {
+          "url": "https://www.philadelphiazoo.org/events/",
+          "status": "fetch-error",
+          "reason": "browser fetch failed: page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:302:30), <anonymous>:2:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "philadelphia",
       "sourceId": "ticketmaster-philadelphia-family",
       "sourceName": "Ticketmaster Philadelphia Family Events",
       "sourceType": "ticketmaster",
       "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=1; queries=1"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -86,46 +131,212 @@
       "sourceName": "Middletown Grange Fair",
       "sourceType": "html",
       "url": "https://middletowngrangefair.org/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
       "fetches": [
         {
           "url": "https://middletowngrangefair.org/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
     {
       "severity": "warning",
       "metroId": "philadelphia",
+      "sourceId": "burlington-county-library-biblio",
+      "sourceName": "Burlington County Library System Events",
+      "sourceType": "biblioevents",
+      "url": "https://bclsnj.bibliocommons.com/v2/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
+      "fetches": [
+        {
+          "url": "https://bclsnj.bibliocommons.com/v2/events",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "montgomery-norristown-library-libcal",
+      "sourceName": "Montgomery County-Norristown Public Library Events",
+      "sourceType": "libcal",
+      "url": "https://mnl.libcal.com/calendar?cid=19360&cal=19360",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 85,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 85,
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
+      "fetches": [
+        {
+          "url": "https://mnl.libcal.com/calendar?cid=19360&cal=19360",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "delaware-county-pa-library-libcal",
+      "sourceName": "Delaware County Library System Events",
+      "sourceType": "libcal",
+      "url": "https://delcolibraries.libcal.com/calendar?cid=10206&cal=10206",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 148,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 148,
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
+      "fetches": [
+        {
+          "url": "https://delcolibraries.libcal.com/calendar?cid=10206&cal=10206",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "bucks-county-free-library-libcal",
+      "sourceName": "Bucks County Free Library Events",
+      "sourceType": "libcal",
+      "url": "https://calendar.buckslib.org/calendar?cid=3891&cal=3891",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 174,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 174,
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
+      "fetches": [
+        {
+          "url": "https://calendar.buckslib.org/calendar?cid=3891&cal=3891",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "academy-natural-sciences-events",
+      "sourceName": "Academy of Natural Sciences of Drexel University Events",
+      "sourceType": "html",
+      "url": "https://ansp.org/programs-and-events/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 7,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 7,
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
+      "fetches": [
+        {
+          "url": "https://ansp.org/programs-and-events/events/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "philadelphia",
       "sourceId": "wawa-welcome-america-2026",
       "sourceName": "Wawa Welcome America 2026 (Philadelphia July 4 / America250)",
       "sourceType": "officialTextEvents",
       "url": "https://july4thphilly.com/events/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
       "fetches": [
         {
           "url": "https://july4thphilly.com/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "mann-star-wars-empire-strikes-back-2026-07-24-src",
+      "sourceName": "Star Wars: The Empire Strikes Back In Concert",
+      "sourceType": "officialTextEvents",
+      "url": "https://highmarkmann.org/events/2026-07-24/star-wars-empire-strikes-back-concert",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
+      "fetches": [
+        {
+          "url": "https://highmarkmann.org/events/2026-07-24/star-wars-empire-strikes-back-concert",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "subaru-park-union-vs-red-bulls-2026-07-22-src",
+      "sourceName": "Philadelphia Union vs New York Red Bulls",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.philadelphiaunion.com/news/philadelphia-union-vs-red-bull-new-york-how-to-watch-072226",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
+      "fetches": [
+        {
+          "url": "https://www.philadelphiaunion.com/news/philadelphia-union-vs-red-bull-new-york-how-to-watch-072226",
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -136,21 +347,44 @@
       "sourceName": "Union Transfer",
       "sourceType": "html",
       "url": "https://www.utphilly.com/events",
-      "status": "http-error",
+      "status": "fetch-error",
       "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
       "fetches": [
         {
           "url": "https://www.utphilly.com/events",
-          "status": "http-error",
-          "httpStatus": 403,
-          "contentType": "text/html"
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "the-fillmore-philly",
+      "sourceName": "The Fillmore Philadelphia",
+      "sourceType": "html",
+      "url": "https://www.thefillmorephilly.com/shows",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 16,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 16,
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
+      "fetches": [
+        {
+          "url": "https://www.thefillmorephilly.com/shows",
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -161,21 +395,44 @@
       "sourceName": "Johnny Brenda's",
       "sourceType": "html",
       "url": "https://www.johnnybrendas.com/events",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
       "fetches": [
         {
           "url": "https://www.johnnybrendas.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "philadelphia",
+      "sourceId": "the-foundry-philly",
+      "sourceName": "The Foundry",
+      "sourceType": "html",
+      "url": "https://www.thefillmorephilly.com/shows",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
+      "fetches": [
+        {
+          "url": "https://www.thefillmorephilly.com/shows",
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -186,46 +443,140 @@
       "sourceName": "Helium Comedy Club",
       "sourceType": "html",
       "url": "https://philadelphia.heliumcomedy.com/events",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
       "fetches": [
         {
           "url": "https://philadelphia.heliumcomedy.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
     {
       "severity": "warning",
       "metroId": "philadelphia",
-      "sourceId": "manayunk-arts-festival-2026",
-      "sourceName": "Manayunk Arts Festival 2026",
+      "sourceId": "punchline-philly",
+      "sourceName": "Punch Line Philly",
+      "sourceType": "html",
+      "url": "https://www.punchlinephilly.com/shows",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 35,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 35,
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
+      "fetches": [
+        {
+          "url": "https://www.punchlinephilly.com/shows",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "ardmore-music-hall",
+      "sourceName": "Ardmore Music Hall",
+      "sourceType": "html",
+      "url": "https://ardmoremusichall.com/all-events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 2,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 2,
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
+      "fetches": [
+        {
+          "url": "https://ardmoremusichall.com/all-events/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "philadelphia",
+      "sourceId": "xponential-music-festival-2026",
+      "sourceName": "XPoNential Music Festival 2026",
       "sourceType": "officialTextEvents",
-      "url": "https://manayunk.com/mnyk-events/manayunk-art-festival/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "url": "https://xpn.org/xpnfest/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
+      "fetches": [
+        {
+          "url": "https://xpn.org/xpnfest/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "philadelphia",
+      "sourceId": "manayunk-arts-festival-2026",
+      "sourceName": "Manayunk Arts Festival 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://manayunk.com/mnyk-events/manayunk-art-festival/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
       "fetches": [
         {
           "url": "https://manayunk.com/mnyk-events/manayunk-art-festival/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "philadelphia",
+      "sourceId": "philadelphia-fringe-festival-2026",
+      "sourceName": "Philadelphia Fringe Festival 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://phillyfringe.org/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
+      "fetches": [
+        {
+          "url": "https://phillyfringe.org/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -236,46 +587,44 @@
       "sourceName": "Philadelphia Folk Festival 2026",
       "sourceType": "officialTextEvents",
       "url": "https://folkfest.org/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
       "fetches": [
         {
           "url": "https://folkfest.org/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "philadelphia",
       "sourceId": "wawa-welcome-america-2026",
       "sourceName": "Wawa Welcome America 2026",
       "sourceType": "officialTextEvents",
       "url": "https://july4thphilly.com/events/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
+      "fetchedAt": "2026-07-22T23:51:44.348Z",
       "fetches": [
         {
           "url": "https://july4thphilly.com/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     }

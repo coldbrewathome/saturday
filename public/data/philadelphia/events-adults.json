@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "metroId": "philadelphia",
-  "generatedAt": "2026-07-20T22:30:45.847Z",
+  "generatedAt": "2026-07-22T23:51:44.348Z",
   "source": {
     "name": "Philadelphia event source registry",
     "registryPath": "data/event-sources-philadelphia.json",
@@ -29,87 +29,8 @@
       "University City"
     ]
   },
-  "count": 146,
+  "count": 98,
   "events": [
-    {
-      "id": "delaware-county-pa-library-libcal-16840323",
-      "baseId": null,
-      "title": "Amazing Learners: Allison DeSalvo's World of Music",
-      "description": "All aboard! Jump on the &lsquo;Music Train&rsquo; with singer/songwriter/teaching artist Allison De Salvo&rsquo;s World of Song for a joyful concert filled with fun songs, puppets, instruments, and stories&mdash;a sing-and-dance along summer celebration for little ones and their grown-ups. For all ages.",
-      "venue": "Community Room",
-      "city": "Media",
-      "neighborhood": "Delaware County",
-      "lat": 39.9168,
-      "lon": -75.3877,
-      "category": "Library",
-      "daysOfWeek": [
-        2
-      ],
-      "timeWindow": "Morning",
-      "startDateTime": "2026-07-21T14:00:00.000Z",
-      "endDateTime": "2026-07-21T14:45:00.000Z",
-      "ageBands": [
-        "toddler",
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://delcolibraries.libcal.com/event/16840323",
-      "sourceUrl": "https://delcolibraries.libcal.com/calendar?cid=10206&cal=10206",
-      "sourceId": "delaware-county-pa-library-libcal",
-      "sourceName": "Delaware County Library System Events",
-      "sourceMode": "libcal",
-      "extractionMethod": "libcal",
-      "verified": true,
-      "fetchedAt": "2026-07-19T05:04:38.497Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "story-time",
-        "arts-crafts",
-        "music-performance",
-        "festivals-community"
-      ],
-      "slug": "amazing-learners-allison-desalvo-s-world-of-music-community-room"
-    },
-    {
-      "id": "punchline-philly-tickle-me-tuesdays-89ed5ac94f",
-      "baseId": null,
-      "title": "Tickle Me Tuesdays",
-      "description": "",
-      "venue": "Punch Line Philly",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.965819,
-      "lon": -75.134752,
-      "category": "Comedy",
-      "daysOfWeek": [
-        2
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-07-21T23:30:00.000Z",
-      "endDateTime": "2026-07-22T00:30:00.000Z",
-      "ageBands": [
-        "preschool",
-        "school-age"
-      ],
-      "audiences": [
-        "adults"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.ticketmaster.com/tickle-me-tuesdays-philadelphia-pennsylvania-07-21-2026/event/020064ADF9085F9B",
-      "sourceUrl": "https://www.punchlinephilly.com/shows",
-      "sourceId": "punchline-philly",
-      "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
-      "extractionMethod": "json-ld",
-      "verified": true,
-      "fetchedAt": "2026-06-25T23:50:36.505Z",
-      "metroId": "philadelphia",
-      "themes": [],
-      "slug": "tickle-me-tuesdays-punch-line-philly"
-    },
     {
       "id": "philadelphia-museum-family-10291185",
       "baseId": null,
@@ -138,7 +59,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
@@ -147,7 +68,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level"
+      "slug": "end-of-day-parade-center-core-lower-level",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-fab-comedy-presents-civilized-comedy-civil-service-comedians-e357e0c741",
@@ -178,13 +102,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "fab-comedy-presents-civilized-comedy-civil-service-comedians-punch-line-philly"
+      "slug": "fab-comedy-presents-civilized-comedy-civil-service-comedians-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291186",
@@ -214,7 +141,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
@@ -223,7 +150,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291186"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291186",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "delaware-county-pa-library-libcal-17009367",
@@ -254,7 +184,7 @@
       "sourceUrl": "https://delcolibraries.libcal.com/calendar?cid=10206&cal=10206",
       "sourceId": "delaware-county-pa-library-libcal",
       "sourceName": "Delaware County Library System Events",
-      "sourceMode": "libcal",
+      "sourceMode": "last-known-good",
       "extractionMethod": "libcal",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
@@ -262,7 +192,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "flash-flix-summer-scares-trap-2024-meeting-room"
+      "slug": "flash-flix-summer-scares-trap-2024-meeting-room",
+      "originalSourceMode": "libcal",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-chris-andrade-m-u-t-a-r-en-espanol-c923bc9aaf",
@@ -293,13 +226,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "chris-andrade-m-u-t-a-r-en-espanol-punch-line-philly"
+      "slug": "chris-andrade-m-u-t-a-r-en-espanol-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "delaware-county-pa-library-libcal-17093566",
@@ -331,7 +267,7 @@
       "sourceUrl": "https://delcolibraries.libcal.com/calendar?cid=10206&cal=10206",
       "sourceId": "delaware-county-pa-library-libcal",
       "sourceName": "Delaware County Library System Events",
-      "sourceMode": "libcal",
+      "sourceMode": "last-known-good",
       "extractionMethod": "libcal",
       "verified": true,
       "fetchedAt": "2026-07-20T22:30:45.847Z",
@@ -340,7 +276,10 @@
         "stem",
         "food-markets"
       ],
-      "slug": "the-great-cookie-excavation-stem-challenge-community-large-meeting"
+      "slug": "the-great-cookie-excavation-stem-challenge-community-large-meeting",
+      "originalSourceMode": "libcal",
+      "originalFetchedAt": "2026-07-20T22:30:45.847Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291187",
@@ -370,7 +309,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
@@ -379,7 +318,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291187"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291187",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-william-montgomery-cba5989c81",
@@ -410,13 +352,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "william-montgomery-punch-line-philly"
+      "slug": "william-montgomery-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "the-fillmore-philly-chandol-1b05ed6858",
@@ -447,7 +392,7 @@
       "sourceUrl": "https://www.thefillmorephilly.com/shows",
       "sourceId": "the-fillmore-philly",
       "sourceName": "The Fillmore Philadelphia",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-02T13:38:11.809Z",
@@ -455,7 +400,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "chandol-the-fillmore-philadelphia"
+      "slug": "chandol-the-fillmore-philadelphia",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-02T13:38:11.809Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-william-montgomery-45a72b1779",
@@ -486,13 +434,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "william-montgomery-punch-line-philly-punchline-philly-william-montgomery-45a72b1779"
+      "slug": "william-montgomery-punch-line-philly-punchline-philly-william-montgomery-45a72b1779",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-big-wig-brunch-the-ultimate-drag-experience-0aad7f09d2",
@@ -523,13 +474,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-06-27T05:42:32.831Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "big-wig-brunch-the-ultimate-drag-experience-punch-line-philly"
+      "slug": "big-wig-brunch-the-ultimate-drag-experience-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-06-27T05:42:32.831Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "bucks-county-free-library-libcal-17084333",
@@ -560,7 +514,7 @@
       "sourceUrl": "https://calendar.buckslib.org/calendar?cid=3891&cal=3891",
       "sourceId": "bucks-county-free-library-libcal",
       "sourceName": "Bucks County Free Library Events",
-      "sourceMode": "libcal",
+      "sourceMode": "last-known-good",
       "extractionMethod": "libcal",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
@@ -570,7 +524,10 @@
         "arts-crafts",
         "festivals-community"
       ],
-      "slug": "shell-and-rock-painting-shop-at-scholastic-book-fair-community-room"
+      "slug": "shell-and-rock-painting-shop-at-scholastic-book-fair-community-room",
+      "originalSourceMode": "libcal",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291188",
@@ -600,7 +557,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
@@ -609,7 +566,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291188"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291188",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "the-fillmore-philly-blue-corner-promotions-presents-independence-brawl-de3bccb0f1",
@@ -640,7 +600,7 @@
       "sourceUrl": "https://www.thefillmorephilly.com/shows",
       "sourceId": "the-fillmore-philly",
       "sourceName": "The Fillmore Philadelphia",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-02T13:38:11.809Z",
@@ -648,7 +608,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "blue-corner-promotions-presents-independence-brawl-the-fillmore-philadelphia"
+      "slug": "blue-corner-promotions-presents-independence-brawl-the-fillmore-philadelphia",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-02T13:38:11.809Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-william-montgomery-9a8c8bea72",
@@ -679,13 +642,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-06-27T05:42:32.831Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "william-montgomery-punch-line-philly-punchline-philly-william-montgomery-9a8c8bea72"
+      "slug": "william-montgomery-punch-line-philly-punchline-philly-william-montgomery-9a8c8bea72",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-06-27T05:42:32.831Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "the-fillmore-philly-babychiefdoit-presents-the-rambo-tour-4ff21cc17b",
@@ -716,7 +682,7 @@
       "sourceUrl": "https://www.thefillmorephilly.com/shows",
       "sourceId": "the-fillmore-philly",
       "sourceName": "The Fillmore Philadelphia",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-02T13:38:11.809Z",
@@ -724,7 +690,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "babychiefdoit-presents-the-rambo-tour-the-fillmore-philadelphia"
+      "slug": "babychiefdoit-presents-the-rambo-tour-the-fillmore-philadelphia",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-02T13:38:11.809Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-william-montgomery-bd742583bd",
@@ -755,13 +724,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-01T03:58:17.106Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "william-montgomery-punch-line-philly-punchline-philly-william-montgomery-bd742583bd"
+      "slug": "william-montgomery-punch-line-philly-punchline-philly-william-montgomery-bd742583bd",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-01T03:58:17.106Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291189",
@@ -791,7 +763,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
@@ -800,7 +772,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291189"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291189",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-hanna-dickinson-c69a13c1d9",
@@ -831,13 +806,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-01T03:58:17.106Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "hanna-dickinson-punch-line-philly"
+      "slug": "hanna-dickinson-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-01T03:58:17.106Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "the-fillmore-philly-wxpn-welcomes-passion-pit-the-pretty-penny-tour-13fb51722d",
@@ -868,7 +846,7 @@
       "sourceUrl": "https://www.thefillmorephilly.com/shows",
       "sourceId": "the-fillmore-philly",
       "sourceName": "The Fillmore Philadelphia",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-02T13:38:11.809Z",
@@ -876,7 +854,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "wxpn-welcomes-passion-pit-the-pretty-penny-tour-the-fillmore-philadelphia"
+      "slug": "wxpn-welcomes-passion-pit-the-pretty-penny-tour-the-fillmore-philadelphia",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-02T13:38:11.809Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-punch-line-philly-open-mic-night-2f1f8ade62",
@@ -907,13 +888,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-01T03:58:17.106Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "punch-line-philly-open-mic-night-punch-line-philly"
+      "slug": "punch-line-philly-open-mic-night-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-01T03:58:17.106Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-tickle-me-tuesdays-6edec22ba8",
@@ -944,13 +928,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-01T03:58:17.106Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "tickle-me-tuesdays-punch-line-philly-punchline-philly-tickle-me-tuesdays-6edec22ba8"
+      "slug": "tickle-me-tuesdays-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-01T03:58:17.106Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291190",
@@ -980,7 +967,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
@@ -989,7 +976,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291190"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291190",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-derek-gaines-d0a44df65f",
@@ -1020,13 +1010,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-01T03:58:17.106Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "derek-gaines-punch-line-philly"
+      "slug": "derek-gaines-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-01T03:58:17.106Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "montgomery-norristown-library-libcal-16717572",
@@ -1057,7 +1050,7 @@
       "sourceUrl": "https://mnl.libcal.com/calendar?cid=19360&cal=19360",
       "sourceId": "montgomery-norristown-library-libcal",
       "sourceName": "Montgomery County-Norristown Public Library Events",
-      "sourceMode": "libcal",
+      "sourceMode": "last-known-good",
       "extractionMethod": "libcal",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
@@ -1065,7 +1058,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "special-activities-for-adults-of-all-abilities-npl-community-room"
+      "slug": "special-activities-for-adults-of-all-abilities-npl-community-room",
+      "originalSourceMode": "libcal",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291191",
@@ -1095,7 +1091,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
@@ -1104,7 +1100,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291191"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291191",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "montgomery-norristown-library-libcal-16560373",
@@ -1135,13 +1134,16 @@
       "sourceUrl": "https://mnl.libcal.com/calendar?cid=19360&cal=19360",
       "sourceId": "montgomery-norristown-library-libcal",
       "sourceName": "Montgomery County-Norristown Public Library Events",
-      "sourceMode": "libcal",
+      "sourceMode": "last-known-good",
       "extractionMethod": "libcal",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "cardboard-mask-workshop-npl-community-room"
+      "slug": "cardboard-mask-workshop-npl-community-room",
+      "originalSourceMode": "libcal",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-kiki-yeung-esther-ku-sweet-sour-chicks-comedy-tour-767cbfc19f",
@@ -1172,13 +1174,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-02T12:27:58.052Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "kiki-yeung-esther-ku-sweet-sour-chicks-comedy-tour-punch-line-philly"
+      "slug": "kiki-yeung-esther-ku-sweet-sour-chicks-comedy-tour-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-02T12:27:58.052Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "the-fillmore-philly-babe-rainbow-896513c87b",
@@ -1209,7 +1214,7 @@
       "sourceUrl": "https://www.thefillmorephilly.com/shows",
       "sourceId": "the-fillmore-philly",
       "sourceName": "The Fillmore Philadelphia",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-02T13:38:11.809Z",
@@ -1217,7 +1222,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "babe-rainbow-the-fillmore-philadelphia"
+      "slug": "babe-rainbow-the-fillmore-philadelphia",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-02T13:38:11.809Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291192",
@@ -1247,7 +1255,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
@@ -1256,7 +1264,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291192"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291192",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "the-fillmore-philly-the-word-alive-the-deceiver-dark-matter-anniversary-tour-a85d6eb3ad",
@@ -1287,7 +1298,7 @@
       "sourceUrl": "https://www.thefillmorephilly.com/shows",
       "sourceId": "the-fillmore-philly",
       "sourceName": "The Fillmore Philadelphia",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-02T13:38:11.809Z",
@@ -1295,7 +1306,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "the-word-alive-the-deceiver-dark-matter-anniversary-tour-the-fillmore-philadelphia"
+      "slug": "the-word-alive-the-deceiver-dark-matter-anniversary-tour-the-fillmore-philadelphia",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-02T13:38:11.809Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-james-austin-johnson-c77bbb5e3f",
@@ -1326,13 +1340,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-02T12:27:58.052Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "james-austin-johnson-punch-line-philly"
+      "slug": "james-austin-johnson-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-02T12:27:58.052Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "the-fillmore-philly-pj-morton-saturday-night-sunday-morning-tour-bd656f1b45",
@@ -1363,7 +1380,7 @@
       "sourceUrl": "https://www.thefillmorephilly.com/shows",
       "sourceId": "the-fillmore-philly",
       "sourceName": "The Fillmore Philadelphia",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-02T13:38:11.809Z",
@@ -1371,7 +1388,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "pj-morton-saturday-night-sunday-morning-tour-the-fillmore-philadelphia"
+      "slug": "pj-morton-saturday-night-sunday-morning-tour-the-fillmore-philadelphia",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-02T13:38:11.809Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-james-austin-johnson-98e2e4ee7e",
@@ -1402,13 +1422,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-05T20:24:48.792Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "james-austin-johnson-punch-line-philly-punchline-philly-james-austin-johnson-98e2e4ee7e"
+      "slug": "james-austin-johnson-punch-line-philly-punchline-philly-james-austin-johnson-98e2e4ee7e",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-05T20:24:48.792Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "montgomery-norristown-library-libcal-16249504",
@@ -1441,7 +1464,7 @@
       "sourceUrl": "https://mnl.libcal.com/calendar?cid=19360&cal=19360",
       "sourceId": "montgomery-norristown-library-libcal",
       "sourceName": "Montgomery County-Norristown Public Library Events",
-      "sourceMode": "libcal",
+      "sourceMode": "last-known-good",
       "extractionMethod": "libcal",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
@@ -1450,7 +1473,10 @@
         "arts-crafts",
         "festivals-community"
       ],
-      "slug": "comic-fest-npl-community-room"
+      "slug": "comic-fest-npl-community-room",
+      "originalSourceMode": "libcal",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-big-wig-spice-girls-brunch-the-ultimate-drag-experience-17a6d86bf0",
@@ -1481,13 +1507,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-05T20:24:48.792Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "big-wig-spice-girls-brunch-the-ultimate-drag-experience-punch-line-philly"
+      "slug": "big-wig-spice-girls-brunch-the-ultimate-drag-experience-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-05T20:24:48.792Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291193",
@@ -1517,7 +1546,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
@@ -1526,7 +1555,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291193"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291193",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-james-austin-johnson-bf43fc9c7a",
@@ -1557,13 +1589,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-05T20:24:48.792Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "james-austin-johnson-punch-line-philly-punchline-philly-james-austin-johnson-bf43fc9c7a"
+      "slug": "james-austin-johnson-punch-line-philly-punchline-philly-james-austin-johnson-bf43fc9c7a",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-05T20:24:48.792Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-james-austin-johnson-e681b5191e",
@@ -1594,13 +1629,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-12T19:16:56.793Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "james-austin-johnson-punch-line-philly-punchline-philly-james-austin-johnson-e681b5191e"
+      "slug": "james-austin-johnson-punch-line-philly-punchline-philly-james-austin-johnson-e681b5191e",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-12T19:16:56.793Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "ardmore-music-hall-closed-for-private-event-6dfcd90174",
@@ -1631,7 +1669,7 @@
       "sourceUrl": "https://ardmoremusichall.com/all-events/",
       "sourceId": "ardmore-music-hall",
       "sourceName": "Ardmore Music Hall",
-      "sourceMode": "html",
+      "sourceMode": "last-known-good",
       "extractionMethod": "html",
       "verified": false,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
@@ -1639,7 +1677,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "closed-for-private-event-ardmore-music-hall"
+      "slug": "closed-for-private-event-ardmore-music-hall",
+      "originalSourceMode": "html",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291194",
@@ -1669,7 +1710,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
@@ -1678,7 +1719,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291194"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291194",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-leonard-ouzts-3ad63239f4",
@@ -1709,13 +1753,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-12T19:16:56.793Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "leonard-ouzts-punch-line-philly"
+      "slug": "leonard-ouzts-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-12T19:16:56.793Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "montgomery-norristown-library-libcal-16560459",
@@ -1747,7 +1794,7 @@
       "sourceUrl": "https://mnl.libcal.com/calendar?cid=19360&cal=19360",
       "sourceId": "montgomery-norristown-library-libcal",
       "sourceName": "Montgomery County-Norristown Public Library Events",
-      "sourceMode": "libcal",
+      "sourceMode": "last-known-good",
       "extractionMethod": "libcal",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
@@ -1756,7 +1803,10 @@
         "story-time",
         "music-performance"
       ],
-      "slug": "unearth-your-story-with-turtle-dance-music-npl-community-room"
+      "slug": "unearth-your-story-with-turtle-dance-music-npl-community-room",
+      "originalSourceMode": "libcal",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-the-moth-storyslam-schooled-19bad8e562",
@@ -1787,7 +1837,7 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-12T19:16:56.793Z",
@@ -1795,7 +1845,10 @@
       "themes": [
         "story-time"
       ],
-      "slug": "the-moth-storyslam-schooled-punch-line-philly"
+      "slug": "the-moth-storyslam-schooled-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-12T19:16:56.793Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291195",
@@ -1825,7 +1878,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
@@ -1834,7 +1887,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291195"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291195",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-philly-all-pro-comedy-showcase-d078396daa",
@@ -1865,13 +1921,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-12T19:16:56.793Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "philly-all-pro-comedy-showcase-punch-line-philly"
+      "slug": "philly-all-pro-comedy-showcase-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-12T19:16:56.793Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "the-fillmore-philly-kaleo-way-down-we-go-tour-50d8bf67ec",
@@ -1902,7 +1961,7 @@
       "sourceUrl": "https://www.thefillmorephilly.com/shows",
       "sourceId": "the-fillmore-philly",
       "sourceName": "The Fillmore Philadelphia",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-12T19:16:56.793Z",
@@ -1910,7 +1969,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "kaleo-way-down-we-go-tour-the-fillmore-philadelphia"
+      "slug": "kaleo-way-down-we-go-tour-the-fillmore-philadelphia",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-12T19:16:56.793Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "montgomery-norristown-library-libcal-17170967",
@@ -1943,7 +2005,7 @@
       "sourceUrl": "https://mnl.libcal.com/calendar?cid=19360&cal=19360",
       "sourceId": "montgomery-norristown-library-libcal",
       "sourceName": "Montgomery County-Norristown Public Library Events",
-      "sourceMode": "libcal",
+      "sourceMode": "last-known-good",
       "extractionMethod": "libcal",
       "verified": true,
       "fetchedAt": "2026-07-12T19:16:56.793Z",
@@ -1951,7 +2013,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "live-irish-music-with-the-kelpies-npl-community-room"
+      "slug": "live-irish-music-with-the-kelpies-npl-community-room",
+      "originalSourceMode": "libcal",
+      "originalFetchedAt": "2026-07-12T19:16:56.793Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291196",
@@ -1981,7 +2046,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
@@ -1990,7 +2055,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291196"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291196",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-anirban-dasgupta-s-player-303e36c0b4",
@@ -2021,13 +2089,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-12T19:16:56.793Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "anirban-dasgupta-s-player-punch-line-philly"
+      "slug": "anirban-dasgupta-s-player-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-12T19:16:56.793Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "the-fillmore-philly-luh-tyler-presents-destined-for-greatness-tour-9a2b48891f",
@@ -2058,7 +2129,7 @@
       "sourceUrl": "https://www.thefillmorephilly.com/shows",
       "sourceId": "the-fillmore-philly",
       "sourceName": "The Fillmore Philadelphia",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-12T19:16:56.793Z",
@@ -2066,7 +2137,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "luh-tyler-presents-destined-for-greatness-tour-the-fillmore-philadelphia"
+      "slug": "luh-tyler-presents-destined-for-greatness-tour-the-fillmore-philadelphia",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-12T19:16:56.793Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291197",
@@ -2096,7 +2170,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
@@ -2105,7 +2179,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291197"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291197",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-marcus-d-wiley-7dfb9422ae",
@@ -2136,13 +2213,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-12T19:16:56.793Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "marcus-d-wiley-punch-line-philly"
+      "slug": "marcus-d-wiley-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-12T19:16:56.793Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "the-fillmore-philly-royal-coda-9693f6eeee",
@@ -2173,7 +2253,7 @@
       "sourceUrl": "https://www.thefillmorephilly.com/shows",
       "sourceId": "the-fillmore-philly",
       "sourceName": "The Fillmore Philadelphia",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-12T19:16:56.793Z",
@@ -2181,7 +2261,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "royal-coda-the-fillmore-philadelphia"
+      "slug": "royal-coda-the-fillmore-philadelphia",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-12T19:16:56.793Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-comedy-allstars-5ba1f8fd83",
@@ -2212,13 +2295,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-12T19:16:56.793Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "comedy-allstars-punch-line-philly"
+      "slug": "comedy-allstars-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-12T19:16:56.793Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-zoo-family-70566-2026-08-08",
@@ -2248,7 +2334,7 @@
       "sourceUrl": "https://www.philadelphiazoo.org/events/",
       "sourceId": "philadelphia-zoo-family",
       "sourceName": "Philadelphia Zoo Events",
-      "sourceMode": "wp-rest-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "wp-rest-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
@@ -2257,7 +2343,10 @@
         "music-performance",
         "animals-nature"
       ],
-      "slug": "african-culture-fest-philadelphia-zoo-events"
+      "slug": "african-culture-fest-philadelphia-zoo-events",
+      "originalSourceMode": "wp-rest-events",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-big-wig-brunch-the-ultimate-drag-experience-97c48f0d11",
@@ -2288,13 +2377,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-12T19:16:56.793Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "big-wig-brunch-the-ultimate-drag-experience-punch-line-philly-punchline-philly-big-wig-brunch-the-ultimate-drag-experience-97c48f0d11"
+      "slug": "big-wig-brunch-the-ultimate-drag-experience-punch-line-philly-punchline-philly-big-wig-brunch-the-ultimate-drag-experience-97c48f0d11",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-12T19:16:56.793Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291198",
@@ -2324,7 +2416,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:50:36.505Z",
@@ -2333,7 +2425,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291198"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291198",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-06-25T23:50:36.505Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-marcus-d-wiley-f6bc6fd194",
@@ -2364,13 +2459,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-12T19:16:56.793Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "marcus-d-wiley-punch-line-philly-punchline-philly-marcus-d-wiley-f6bc6fd194"
+      "slug": "marcus-d-wiley-punch-line-philly-punchline-philly-marcus-d-wiley-f6bc6fd194",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-12T19:16:56.793Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-marcus-d-wiley-72f4366731",
@@ -2401,13 +2499,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "marcus-d-wiley-punch-line-philly-punchline-philly-marcus-d-wiley-72f4366731"
+      "slug": "marcus-d-wiley-punch-line-philly-punchline-philly-marcus-d-wiley-72f4366731",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "the-fillmore-philly-cozy-worldwide-throwback-and-current-r-b-hip-hop-party-21-event-c837d4525f",
@@ -2438,7 +2539,7 @@
       "sourceUrl": "https://www.thefillmorephilly.com/shows",
       "sourceId": "the-fillmore-philly",
       "sourceName": "The Fillmore Philadelphia",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-12T19:16:56.793Z",
@@ -2446,7 +2547,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "cozy-worldwide-throwback-and-current-r-b-hip-hop-party-21-event-the-fillmore-philadelphia"
+      "slug": "cozy-worldwide-throwback-and-current-r-b-hip-hop-party-21-event-the-fillmore-philadelphia",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-12T19:16:56.793Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "ardmore-music-hall-ardmore-rock-n-ride-2026-1998faf7bb",
@@ -2477,7 +2581,7 @@
       "sourceUrl": "https://ardmoremusichall.com/all-events/",
       "sourceId": "ardmore-music-hall",
       "sourceName": "Ardmore Music Hall",
-      "sourceMode": "html",
+      "sourceMode": "last-known-good",
       "extractionMethod": "html",
       "verified": false,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
@@ -2485,7 +2589,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "ardmore-rock-n-ride-2026-ardmore-music-hall"
+      "slug": "ardmore-rock-n-ride-2026-ardmore-music-hall",
+      "originalSourceMode": "html",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291199",
@@ -2515,7 +2622,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-06-27T05:42:32.831Z",
@@ -2524,7 +2631,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291199"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291199",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-06-27T05:42:32.831Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-marcus-d-wiley-5d28eb34c5",
@@ -2555,13 +2665,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "marcus-d-wiley-punch-line-philly-punchline-philly-marcus-d-wiley-5d28eb34c5"
+      "slug": "marcus-d-wiley-punch-line-philly-punchline-philly-marcus-d-wiley-5d28eb34c5",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "the-fillmore-philly-millkzy-extension-of-you-tour-b0f068679b",
@@ -2592,7 +2705,7 @@
       "sourceUrl": "https://www.thefillmorephilly.com/shows",
       "sourceId": "the-fillmore-philly",
       "sourceName": "The Fillmore Philadelphia",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-12T19:16:56.793Z",
@@ -2600,7 +2713,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "millkzy-extension-of-you-tour-the-fillmore-philadelphia"
+      "slug": "millkzy-extension-of-you-tour-the-fillmore-philadelphia",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-12T19:16:56.793Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-punch-line-philly-open-mic-night-57775fabdc",
@@ -2631,13 +2747,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "punch-line-philly-open-mic-night-punch-line-philly-punchline-philly-punch-line-philly-open-mic-night-57775fabdc"
+      "slug": "punch-line-philly-open-mic-night-punch-line-philly-punchline-philly-punch-line-philly-open-mic-night-57775fabdc",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-the-clean-set-903a2e2ba6",
@@ -2668,13 +2787,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "the-clean-set-punch-line-philly"
+      "slug": "the-clean-set-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291200",
@@ -2704,7 +2826,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-01T03:58:17.106Z",
@@ -2713,7 +2835,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291200"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291200",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-01T03:58:17.106Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "the-fillmore-philly-molly-santana-north-west-kimokawaii-tour-5a9603820e",
@@ -2744,7 +2869,7 @@
       "sourceUrl": "https://www.thefillmorephilly.com/shows",
       "sourceId": "the-fillmore-philly",
       "sourceName": "The Fillmore Philadelphia",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
@@ -2752,7 +2877,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "molly-santana-north-west-kimokawaii-tour-the-fillmore-philadelphia"
+      "slug": "molly-santana-north-west-kimokawaii-tour-the-fillmore-philadelphia",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-samantha-ruddy-friends-91b3e6d903",
@@ -2783,13 +2911,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "samantha-ruddy-friends-punch-line-philly"
+      "slug": "samantha-ruddy-friends-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291201",
@@ -2819,7 +2950,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-01T03:58:17.106Z",
@@ -2828,7 +2959,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291201"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291201",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-01T03:58:17.106Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-correy-bell-7d9ce00dca",
@@ -2859,13 +2993,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "correy-bell-punch-line-philly"
+      "slug": "correy-bell-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291202",
@@ -2895,7 +3032,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-02T12:27:58.052Z",
@@ -2904,7 +3041,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291202"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291202",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-02T12:27:58.052Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-yannis-pappas-5f48c74c25",
@@ -2935,13 +3075,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "yannis-pappas-punch-line-philly"
+      "slug": "yannis-pappas-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-yannis-pappas-3d98263aeb",
@@ -2972,13 +3115,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "yannis-pappas-punch-line-philly-punchline-philly-yannis-pappas-3d98263aeb"
+      "slug": "yannis-pappas-punch-line-philly-punchline-philly-yannis-pappas-3d98263aeb",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-big-wig-movies-brunch-the-ultimate-drag-experience-3079bb0c12",
@@ -3009,13 +3155,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-20T22:30:45.847Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "big-wig-movies-brunch-the-ultimate-drag-experience-punch-line-philly"
+      "slug": "big-wig-movies-brunch-the-ultimate-drag-experience-punch-line-philly",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-20T22:30:45.847Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291203",
@@ -3045,7 +3194,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-02T12:27:58.052Z",
@@ -3054,7 +3203,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291203"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291203",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-02T12:27:58.052Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "the-fillmore-philly-of-virtue-savage-hands-4643e82540",
@@ -3085,7 +3237,7 @@
       "sourceUrl": "https://www.thefillmorephilly.com/shows",
       "sourceId": "the-fillmore-philly",
       "sourceName": "The Fillmore Philadelphia",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
@@ -3093,7 +3245,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "of-virtue-savage-hands-the-fillmore-philadelphia"
+      "slug": "of-virtue-savage-hands-the-fillmore-philadelphia",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "punchline-philly-yannis-pappas-c2c94c0dcf",
@@ -3124,13 +3279,16 @@
       "sourceUrl": "https://www.punchlinephilly.com/shows",
       "sourceId": "punchline-philly",
       "sourceName": "Punch Line Philly",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-20T22:30:45.847Z",
       "metroId": "philadelphia",
       "themes": [],
-      "slug": "yannis-pappas-punch-line-philly-punchline-philly-yannis-pappas-c2c94c0dcf"
+      "slug": "yannis-pappas-punch-line-philly-punchline-philly-yannis-pappas-c2c94c0dcf",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-20T22:30:45.847Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "the-fillmore-philly-jack-harlow-monica-tour-617ad9437f",
@@ -3161,7 +3319,7 @@
       "sourceUrl": "https://www.thefillmorephilly.com/shows",
       "sourceId": "the-fillmore-philly",
       "sourceName": "The Fillmore Philadelphia",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
@@ -3169,7 +3327,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "jack-harlow-monica-tour-the-fillmore-philadelphia"
+      "slug": "jack-harlow-monica-tour-the-fillmore-philadelphia",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291204",
@@ -3199,7 +3360,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-05T20:24:48.792Z",
@@ -3208,7 +3369,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291204"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291204",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-05T20:24:48.792Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "the-fillmore-philly-max-mcnown-the-summer-vacation-tour-9da2c69275",
@@ -3239,7 +3403,7 @@
       "sourceUrl": "https://www.thefillmorephilly.com/shows",
       "sourceId": "the-fillmore-philly",
       "sourceName": "The Fillmore Philadelphia",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
@@ -3247,7 +3411,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "max-mcnown-the-summer-vacation-tour-the-fillmore-philadelphia"
+      "slug": "max-mcnown-the-summer-vacation-tour-the-fillmore-philadelphia",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291205",
@@ -3277,7 +3444,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-12T19:16:56.793Z",
@@ -3286,7 +3453,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291205"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291205",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-12T19:16:56.793Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291206",
@@ -3316,7 +3486,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-12T19:16:56.793Z",
@@ -3325,7 +3495,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291206"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291206",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-12T19:16:56.793Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291207",
@@ -3355,7 +3528,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-12T19:16:56.793Z",
@@ -3364,7 +3537,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291207"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291207",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-12T19:16:56.793Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291208",
@@ -3394,7 +3570,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-12T19:16:56.793Z",
@@ -3403,7 +3579,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291208"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291208",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-12T19:16:56.793Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-zoo-family-55736-2026-08-22",
@@ -3433,7 +3612,7 @@
       "sourceUrl": "https://www.philadelphiazoo.org/events/",
       "sourceId": "philadelphia-zoo-family",
       "sourceName": "Philadelphia Zoo Events",
-      "sourceMode": "wp-rest-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "wp-rest-events",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
@@ -3444,7 +3623,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "summer-ale-festival-philadelphia-zoo-events"
+      "slug": "summer-ale-festival-philadelphia-zoo-events",
+      "originalSourceMode": "wp-rest-events",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291209",
@@ -3474,7 +3656,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-12T19:16:56.793Z",
@@ -3483,7 +3665,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291209"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291209",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-12T19:16:56.793Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291210",
@@ -3513,7 +3698,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
@@ -3522,7 +3707,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291210"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291210",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291211",
@@ -3552,7 +3740,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
@@ -3561,7 +3749,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291211"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291211",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-zoo-family-71102-2026-08-28",
@@ -3591,7 +3782,7 @@
       "sourceUrl": "https://www.philadelphiazoo.org/events/",
       "sourceId": "philadelphia-zoo-family",
       "sourceName": "Philadelphia Zoo Events",
-      "sourceMode": "wp-rest-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "wp-rest-events",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
@@ -3600,7 +3791,10 @@
         "animals-nature",
         "festivals-community"
       ],
-      "slug": "after-hours-philadelphia-zoo-events"
+      "slug": "after-hours-philadelphia-zoo-events",
+      "originalSourceMode": "wp-rest-events",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291212",
@@ -3630,7 +3824,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
@@ -3639,7 +3833,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291212"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291212",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-zoo-family-71733-2026-08-29",
@@ -3669,7 +3866,7 @@
       "sourceUrl": "https://www.philadelphiazoo.org/events/",
       "sourceId": "philadelphia-zoo-family",
       "sourceName": "Philadelphia Zoo Events",
-      "sourceMode": "wp-rest-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "wp-rest-events",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
@@ -3681,7 +3878,10 @@
         "animals-nature",
         "festivals-community"
       ],
-      "slug": "philadelphia-zoo-art-festival-philadelphia-zoo-events"
+      "slug": "philadelphia-zoo-art-festival-philadelphia-zoo-events",
+      "originalSourceMode": "wp-rest-events",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291213",
@@ -3711,7 +3911,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
@@ -3720,7 +3920,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291213"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291213",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291214",
@@ -3750,7 +3953,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T05:04:38.497Z",
@@ -3759,7 +3962,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291214"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291214",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T05:04:38.497Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291215",
@@ -3789,7 +3995,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-20T22:30:45.847Z",
@@ -3798,7 +4004,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291215"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291215",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-20T22:30:45.847Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291216",
@@ -3828,7 +4037,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-20T22:30:45.847Z",
@@ -3837,7 +4046,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291216"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291216",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-20T22:30:45.847Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     },
     {
       "id": "philadelphia-museum-family-10291217",
@@ -3867,7 +4079,7 @@
       "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
       "sourceId": "philadelphia-museum-family",
       "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-20T22:30:45.847Z",
@@ -3876,1804 +4088,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291217"
-    },
-    {
-      "id": "philadelphia-museum-family-10291218",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        6
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-05T20:15:00.000Z",
-      "endDateTime": "2026-09-05T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-09-05/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291218"
-    },
-    {
-      "id": "philadelphia-museum-family-10291219",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        0
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-06T20:15:00.000Z",
-      "endDateTime": "2026-09-06T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-09-06/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291219"
-    },
-    {
-      "id": "philadelphia-fringe-festival-2026",
-      "baseId": null,
-      "title": "Philadelphia Fringe Festival 2026",
-      "description": "FringeArts' citywide three-week festival of independent contemporary performance, theater, dance, and art across Philadelphia.",
-      "venue": "FringeArts and venues citywide",
-      "city": "Philadelphia",
-      "neighborhood": "Old City",
-      "lat": 39.9531,
-      "lon": -75.14,
-      "category": "Festival",
-      "daysOfWeek": [
-        2
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-08T22:00:00.000Z",
-      "endDateTime": "2026-09-28T03:00:00.000Z",
-      "ageBands": [
-        "preschool",
-        "school-age"
-      ],
-      "audiences": [
-        "adults"
-      ],
-      "cost": "Ticketed",
-      "url": "https://phillyfringe.org/",
-      "sourceUrl": "https://phillyfringe.org/",
-      "sourceId": "philadelphia-fringe-festival-2026",
-      "sourceName": "Philadelphia Fringe Festival 2026",
-      "sourceMode": "official-text-event",
-      "extractionMethod": "official-text-event",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "arts-crafts",
-        "music-performance",
-        "festivals-community"
-      ],
-      "slug": "philadelphia-fringe-festival-2026-fringearts-and-venues-citywide"
-    },
-    {
-      "id": "philadelphia-museum-family-10291220",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        3
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-09T20:15:00.000Z",
-      "endDateTime": "2026-09-09T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-09-09/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291220"
-    },
-    {
-      "id": "philadelphia-museum-family-10291221",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        4
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-10T20:15:00.000Z",
-      "endDateTime": "2026-09-10T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-09-10/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291221"
-    },
-    {
-      "id": "philadelphia-museum-family-10291222",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        5
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-11T20:15:00.000Z",
-      "endDateTime": "2026-09-11T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-09-11/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291222"
-    },
-    {
-      "id": "philadelphia-museum-family-10291223",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        6
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-12T20:15:00.000Z",
-      "endDateTime": "2026-09-12T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-09-12/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291223"
-    },
-    {
-      "id": "philadelphia-museum-family-10291224",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        0
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-13T20:15:00.000Z",
-      "endDateTime": "2026-09-13T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-09-13/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291224"
-    },
-    {
-      "id": "philadelphia-museum-family-10291225",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        3
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-16T20:15:00.000Z",
-      "endDateTime": "2026-09-16T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-09-16/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291225"
-    },
-    {
-      "id": "philadelphia-museum-family-10291226",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        4
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-17T20:15:00.000Z",
-      "endDateTime": "2026-09-17T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-09-17/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291226"
-    },
-    {
-      "id": "philadelphia-museum-family-10291227",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        5
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-18T20:15:00.000Z",
-      "endDateTime": "2026-09-18T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-09-18/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291227"
-    },
-    {
-      "id": "xponential-music-festival-2026",
-      "baseId": null,
-      "title": "XPoNential Music Festival 2026",
-      "description": "WXPN's annual three-day music festival on the Camden Waterfront, headlined by Dawes, Portugal. The Man, and Little Feat, with St. Paul & The Broken Bones and many more.",
-      "venue": "Camden Waterfront (Wiggins Waterfront Park)",
-      "city": "Camden",
-      "neighborhood": "Camden Waterfront",
-      "lat": 39.943,
-      "lon": -75.131,
-      "category": "Festival",
-      "daysOfWeek": [
-        5
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-18T21:00:00.000Z",
-      "endDateTime": "2026-09-21T03:00:00.000Z",
-      "ageBands": [
-        "preschool",
-        "school-age"
-      ],
-      "audiences": [
-        "adults"
-      ],
-      "cost": "Ticketed",
-      "url": "https://xpn.org/xpnfest/",
-      "sourceUrl": "https://xpn.org/xpnfest/",
-      "sourceId": "xponential-music-festival-2026",
-      "sourceName": "XPoNential Music Festival 2026",
-      "sourceMode": "official-text-event",
-      "extractionMethod": "official-text-event",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "music-performance",
-        "festivals-community"
-      ],
-      "slug": "xponential-music-festival-2026-camden-waterfront-wiggins-waterfront-park"
-    },
-    {
-      "id": "philadelphia-museum-family-10291228",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        6
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-19T20:15:00.000Z",
-      "endDateTime": "2026-09-19T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-09-19/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291228"
-    },
-    {
-      "id": "philadelphia-museum-family-10291229",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        0
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-20T20:15:00.000Z",
-      "endDateTime": "2026-09-20T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-09-20/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291229"
-    },
-    {
-      "id": "philadelphia-museum-family-10291230",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        3
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-23T20:15:00.000Z",
-      "endDateTime": "2026-09-23T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-09-23/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291230"
-    },
-    {
-      "id": "philadelphia-museum-family-10291231",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        4
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-24T20:15:00.000Z",
-      "endDateTime": "2026-09-24T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-09-24/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291231"
-    },
-    {
-      "id": "philadelphia-museum-family-10291232",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        5
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-25T20:15:00.000Z",
-      "endDateTime": "2026-09-25T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-09-25/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291232"
-    },
-    {
-      "id": "philadelphia-museum-family-10291233",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        6
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-26T20:15:00.000Z",
-      "endDateTime": "2026-09-26T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-09-26/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291233"
-    },
-    {
-      "id": "philadelphia-museum-family-10291234",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        0
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-27T20:15:00.000Z",
-      "endDateTime": "2026-09-27T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-09-27/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291234"
-    },
-    {
-      "id": "philadelphia-museum-family-10291235",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        3
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-30T20:15:00.000Z",
-      "endDateTime": "2026-09-30T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-09-30/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291235"
-    },
-    {
-      "id": "philadelphia-museum-family-10291236",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        4
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-01T20:15:00.000Z",
-      "endDateTime": "2026-10-01T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-01/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291236"
-    },
-    {
-      "id": "philadelphia-museum-family-10291237",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        5
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-02T20:15:00.000Z",
-      "endDateTime": "2026-10-02T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-02/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291237"
-    },
-    {
-      "id": "philadelphia-museum-family-10291238",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        6
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-03T20:15:00.000Z",
-      "endDateTime": "2026-10-03T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-03/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291238"
-    },
-    {
-      "id": "philadelphia-museum-family-10291239",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        0
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-04T20:15:00.000Z",
-      "endDateTime": "2026-10-04T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-04/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291239"
-    },
-    {
-      "id": "philadelphia-museum-family-10291240",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        3
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-07T20:15:00.000Z",
-      "endDateTime": "2026-10-07T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-07/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291240"
-    },
-    {
-      "id": "philadelphia-museum-family-10291241",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        4
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-08T20:15:00.000Z",
-      "endDateTime": "2026-10-08T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-08/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291241"
-    },
-    {
-      "id": "philadelphia-museum-family-10291242",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        5
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-09T20:15:00.000Z",
-      "endDateTime": "2026-10-09T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-09/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291242"
-    },
-    {
-      "id": "philadelphia-museum-family-10291243",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        6
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-10T20:15:00.000Z",
-      "endDateTime": "2026-10-10T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-10/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291243"
-    },
-    {
-      "id": "philadelphia-museum-family-10291244",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        0
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-11T20:15:00.000Z",
-      "endDateTime": "2026-10-11T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-11/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291244"
-    },
-    {
-      "id": "philadelphia-museum-family-10291245",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        3
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-14T20:15:00.000Z",
-      "endDateTime": "2026-10-14T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-14/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291245"
-    },
-    {
-      "id": "philadelphia-museum-family-10291246",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        4
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-15T20:15:00.000Z",
-      "endDateTime": "2026-10-15T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-15/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291246"
-    },
-    {
-      "id": "philadelphia-museum-family-10291247",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        5
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-16T20:15:00.000Z",
-      "endDateTime": "2026-10-16T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-16/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291247"
-    },
-    {
-      "id": "philadelphia-museum-family-10291248",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        6
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-17T20:15:00.000Z",
-      "endDateTime": "2026-10-17T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-17/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291248"
-    },
-    {
-      "id": "philadelphia-museum-family-10291249",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        0
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-18T20:15:00.000Z",
-      "endDateTime": "2026-10-18T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-18/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291249"
-    },
-    {
-      "id": "philadelphia-museum-family-10291250",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        3
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-21T20:15:00.000Z",
-      "endDateTime": "2026-10-21T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-21/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291250"
-    },
-    {
-      "id": "philadelphia-museum-family-10291251",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        4
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-22T20:15:00.000Z",
-      "endDateTime": "2026-10-22T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-22/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291251"
-    },
-    {
-      "id": "philadelphia-museum-family-10291252",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        5
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-23T20:15:00.000Z",
-      "endDateTime": "2026-10-23T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-23/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291252"
-    },
-    {
-      "id": "philadelphia-museum-family-10291253",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        6
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-24T20:15:00.000Z",
-      "endDateTime": "2026-10-24T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-24/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291253"
-    },
-    {
-      "id": "philadelphia-museum-family-10291254",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        0
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-25T20:15:00.000Z",
-      "endDateTime": "2026-10-25T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-25/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291254"
-    },
-    {
-      "id": "philadelphia-museum-family-10291255",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        3
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-28T20:15:00.000Z",
-      "endDateTime": "2026-10-28T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-28/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291255"
-    },
-    {
-      "id": "philadelphia-museum-family-10291256",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        4
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-29T20:15:00.000Z",
-      "endDateTime": "2026-10-29T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-29/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291256"
-    },
-    {
-      "id": "philadelphia-museum-family-10291257",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        5
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-30T20:15:00.000Z",
-      "endDateTime": "2026-10-30T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-30/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291257"
-    },
-    {
-      "id": "philadelphia-museum-family-10291258",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        6
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-10-31T20:15:00.000Z",
-      "endDateTime": "2026-10-31T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-10-31/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291258"
-    },
-    {
-      "id": "philadelphia-museum-family-10291259",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        0
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-11-01T20:15:00.000Z",
-      "endDateTime": "2026-11-01T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-11-01/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291259"
-    },
-    {
-      "id": "philadelphia-museum-family-10291260",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        3
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-11-04T20:15:00.000Z",
-      "endDateTime": "2026-11-04T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-11-04/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291260"
-    },
-    {
-      "id": "philadelphia-museum-family-10291261",
-      "baseId": null,
-      "title": "End of Day Parade",
-      "description": "Follow the beat and stomp your feet as we end our day in a playful parade from Food & Family up to Hamilton Hall!",
-      "venue": "Center Core, Lower Level",
-      "city": "Philadelphia",
-      "neighborhood": "Philadelphia",
-      "lat": 39.9526,
-      "lon": -75.1652,
-      "category": "Museum",
-      "daysOfWeek": [
-        4
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-11-05T20:15:00.000Z",
-      "endDateTime": "2026-11-05T20:30:00.000Z",
-      "ageBands": [
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pleasetouchmuseum.org/calendar/end-of-day-parade-2-2/2026-11-05/",
-      "sourceUrl": "https://www.pleasetouchmuseum.org/calendar/month/",
-      "sourceId": "philadelphia-museum-family",
-      "sourceName": "Please Touch Museum Calendar",
-      "sourceMode": "tribe-events",
-      "extractionMethod": "tribe-events",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:30:45.847Z",
-      "metroId": "philadelphia",
-      "themes": [
-        "food-markets",
-        "festivals-community"
-      ],
-      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291261"
+      "slug": "end-of-day-parade-center-core-lower-level-philadelphia-museum-family-10291217",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-20T22:30:45.847Z",
+      "restoredAt": "2026-07-22T23:51:44.348Z"
     }
   ]
 }

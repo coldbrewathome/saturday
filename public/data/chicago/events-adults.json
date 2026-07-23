@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "metroId": "chicago",
-  "generatedAt": "2026-07-20T22:26:27.403Z",
+  "generatedAt": "2026-07-22T22:57:11.353Z",
   "source": {
     "name": "Chicago event source registry",
     "registryPath": "data/event-sources-chicago.json",
@@ -34,125 +34,8 @@
       "River North"
     ]
   },
-  "count": 65,
+  "count": 59,
   "events": [
-    {
-      "id": "second-city-chicago-get-tickets-in-chicago-the-second-city-3f5163ecd6",
-      "baseId": null,
-      "title": "Get Tickets in Chicago - The Second City",
-      "description": "Select a Location See a Show Show Finder What’s Playing Group Sales Location Information Eat and Drink The Bentwood Toronto In-Theater Menus Chicago Toronto Touring Dates Gift Cards Classes + Education Training Center Overview Take The Quiz + New Students Class Search View all Classes Online Classes Comedy Studies Program Drop-In Classes Chicago Toronto New ",
-      "venue": "The Second City",
-      "city": "Chicago",
-      "neighborhood": "Chicago",
-      "lat": 41.9115,
-      "lon": -87.6347,
-      "category": "Comedy",
-      "daysOfWeek": [
-        1
-      ],
-      "timeWindow": "Morning",
-      "startDateTime": "2026-07-20T15:00:00.000Z",
-      "endDateTime": "2026-07-20T16:00:00.000Z",
-      "ageBands": [
-        "school-age",
-        "tween"
-      ],
-      "audiences": [
-        "adults"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.secondcity.com/show-finder",
-      "sourceUrl": "https://www.secondcity.com/show-finder/chicago",
-      "sourceId": "second-city-chicago",
-      "sourceName": "The Second City",
-      "sourceMode": "html",
-      "extractionMethod": "html",
-      "verified": false,
-      "fetchedAt": "2026-07-20T22:26:27.403Z",
-      "metroId": "chicago",
-      "themes": [
-        "music-performance"
-      ],
-      "slug": "get-tickets-in-chicago-the-second-city-the-second-city"
-    },
-    {
-      "id": "schaumburg-library-family-15915479",
-      "baseId": null,
-      "title": "Town Square Concert: Roger That",
-      "description": "Grab your chairs and blankets and join us in Town Square this summer. Chicago-area band Roger That delivers a danceable mix of California surf, British Invasion, American rockabilly, and garage rock. Rain date: Tuesday, July 21. Click here for more information about our Town Square events. Grab your picnic basket, chairs and blankets &ndash; it's time for ou",
-      "venue": "Town Square - Town Square",
-      "city": "Schaumburg",
-      "neighborhood": "Town Square",
-      "lat": 42.025069,
-      "lon": -88.083336,
-      "category": "Library",
-      "daysOfWeek": [
-        1
-      ],
-      "timeWindow": "Evening",
-      "startDateTime": "2026-07-21T01:45:00.000Z",
-      "endDateTime": "2026-07-21T03:15:00.000Z",
-      "ageBands": [
-        "preschool",
-        "school-age",
-        "tween"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://schaumburg.libnet.info/event/15915479",
-      "sourceUrl": "https://schaumburg.libnet.info/events",
-      "sourceId": "schaumburg-library-family",
-      "sourceName": "Schaumburg Township District Library Events",
-      "sourceMode": "communico-events",
-      "extractionMethod": "communico-events",
-      "verified": true,
-      "fetchedAt": "2026-06-07T14:54:24.663Z",
-      "metroId": "chicago",
-      "themes": [
-        "music-performance"
-      ],
-      "slug": "town-square-concert-roger-that-town-square-town-square"
-    },
-    {
-      "id": "elk-grove-village-library-family-16863652",
-      "baseId": null,
-      "title": "\"Live at the Concerts\" Library Booth",
-      "description": "@ the EG Midsummer Concert Series on the Village Green Stop by our Booth to pick up some EGVPL swag while you’re waiting for the show to start! We’ll be set up on the Library’s “front porch” while the bands are warming up on the Village Green. Let's Rock!",
-      "venue": "Elk Grove Village Public Library",
-      "city": "Elk Grove Village",
-      "neighborhood": "Elk Grove Village Public Library",
-      "lat": 41.9987162,
-      "lon": -88.0084894,
-      "category": "Library",
-      "daysOfWeek": [
-        2
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-07-21T23:00:00.000Z",
-      "endDateTime": "2026-07-22T02:30:00.000Z",
-      "ageBands": [
-        "tween"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Free",
-      "url": "https://egvpl.libnet.info/event/16863652",
-      "sourceUrl": "https://egvpl.libnet.info/events",
-      "sourceId": "elk-grove-village-library-family",
-      "sourceName": "Elk Grove Village Public Library Events",
-      "sourceMode": "communico-events",
-      "extractionMethod": "communico-events",
-      "verified": true,
-      "fetchedAt": "2026-07-02T12:23:33.413Z",
-      "metroId": "chicago",
-      "themes": [
-        "music-performance"
-      ],
-      "slug": "live-at-the-concerts-library-booth-elk-grove-village-public-library"
-    },
     {
       "id": "schaumburg-library-family-16491355",
       "baseId": null,
@@ -183,7 +66,7 @@
       "sourceUrl": "https://schaumburg.libnet.info/events",
       "sourceId": "schaumburg-library-family",
       "sourceName": "Schaumburg Township District Library Events",
-      "sourceMode": "communico-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "communico-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:45:59.644Z",
@@ -191,7 +74,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "duoremi-concert-central-library-commons"
+      "slug": "duoremi-concert-central-library-commons",
+      "originalSourceMode": "communico-events",
+      "originalFetchedAt": "2026-06-25T23:45:59.644Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "forest-preserves-cook-county-family-198735",
@@ -222,13 +108,16 @@
       "sourceUrl": "https://fpdcc.com/events/",
       "sourceId": "forest-preserves-cook-county-family",
       "sourceName": "Forest Preserves of Cook County Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:45:59.644Z",
       "metroId": "chicago",
       "themes": [],
-      "slug": "naturalist-night-out-fireflies-spears-woods"
+      "slug": "naturalist-night-out-fireflies-spears-woods",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-06-25T23:45:59.644Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "dupage-county-fair-the-dupage-county-fair-97c4e59c17",
@@ -298,7 +187,7 @@
       "sourceUrl": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
       "sourceId": "thalia-hall-chicago",
       "sourceName": "Thalia Hall",
-      "sourceMode": "json",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json",
       "verified": false,
       "fetchedAt": "2026-07-12T19:12:58.538Z",
@@ -306,7 +195,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "wilderado-with-timmy-skelly-thalia-hall"
+      "slug": "wilderado-with-timmy-skelly-thalia-hall",
+      "originalSourceMode": "json",
+      "originalFetchedAt": "2026-07-12T19:12:58.538Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "schaumburg-library-family-16961931",
@@ -338,7 +230,7 @@
       "sourceUrl": "https://schaumburg.libnet.info/events",
       "sourceId": "schaumburg-library-family",
       "sourceName": "Schaumburg Township District Library Events",
-      "sourceMode": "communico-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "communico-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -346,7 +238,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "pop-up-library-for-hanover-park-s-summer-concert-series-hanover-park-park-district-community-center-1919-walnut-ave-hanover-park-il-60133-hanover-park"
+      "slug": "pop-up-library-for-hanover-park-s-summer-concert-series-hanover-park-park-district-community-center-1919-walnut-ave-hanover-park-il-60133-hanover-park",
+      "originalSourceMode": "communico-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "chicago-cultural-alliance-10004781",
@@ -377,13 +272,16 @@
       "sourceUrl": "https://www.chicagoculturalalliance.org/events/",
       "sourceId": "chicago-cultural-alliance",
       "sourceName": "Chicago Cultural Alliance Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
       "metroId": "chicago",
       "themes": [],
-      "slug": "neighborhood-nights-chicago-cultural-alliance-events"
+      "slug": "neighborhood-nights-chicago-cultural-alliance-events",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "thalia-hall-chicago-sam-jay-s-starting-lineup-featuring-sam-jay-zainab-johnson-punkie-johnson-just-nesh-syd-colson-and-tp-eb2194adb2",
@@ -414,7 +312,7 @@
       "sourceUrl": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
       "sourceId": "thalia-hall-chicago",
       "sourceName": "Thalia Hall",
-      "sourceMode": "json",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json",
       "verified": false,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -422,7 +320,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "sam-jay-s-starting-lineup-featuring-sam-jay-zainab-johnson-punkie-johnson-just-nesh-syd-colson-and-tp-thalia-hall"
+      "slug": "sam-jay-s-starting-lineup-featuring-sam-jay-zainab-johnson-punkie-johnson-just-nesh-syd-colson-and-tp-thalia-hall",
+      "originalSourceMode": "json",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "schaumburg-library-family-16828108",
@@ -454,7 +355,7 @@
       "sourceUrl": "https://schaumburg.libnet.info/events",
       "sourceId": "schaumburg-library-family",
       "sourceName": "Schaumburg Township District Library Events",
-      "sourceMode": "communico-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "communico-events",
       "verified": true,
       "fetchedAt": "2026-06-27T05:39:00.235Z",
@@ -463,7 +364,10 @@
         "animals-nature",
         "food-markets"
       ],
-      "slug": "pop-up-library-at-the-farmer-s-market-trickster-parking-lot-trickster-parking-lot"
+      "slug": "pop-up-library-at-the-farmer-s-market-trickster-parking-lot-trickster-parking-lot",
+      "originalSourceMode": "communico-events",
+      "originalFetchedAt": "2026-06-27T05:39:00.235Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "thalia-hall-chicago-kylesa-with-yakuza-and-cloud-rat-7d4fca8d42",
@@ -494,7 +398,7 @@
       "sourceUrl": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
       "sourceId": "thalia-hall-chicago",
       "sourceName": "Thalia Hall",
-      "sourceMode": "json",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json",
       "verified": false,
       "fetchedAt": "2026-07-02T13:37:26.782Z",
@@ -502,7 +406,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "kylesa-with-yakuza-and-cloud-rat-thalia-hall"
+      "slug": "kylesa-with-yakuza-and-cloud-rat-thalia-hall",
+      "originalSourceMode": "json",
+      "originalFetchedAt": "2026-07-02T13:37:26.782Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "chicago-cultural-alliance-10005020",
@@ -533,13 +440,16 @@
       "sourceUrl": "https://www.chicagoculturalalliance.org/events/",
       "sourceId": "chicago-cultural-alliance",
       "sourceName": "Chicago Cultural Alliance Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
       "metroId": "chicago",
       "themes": [],
-      "slug": "kino-kaffee-und-kuchen-dank-haus-german-american-cultural-center"
+      "slug": "kino-kaffee-und-kuchen-dank-haus-german-american-cultural-center",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "chicago-cultural-alliance-10005319",
@@ -569,7 +479,7 @@
       "sourceUrl": "https://www.chicagoculturalalliance.org/events/",
       "sourceId": "chicago-cultural-alliance",
       "sourceName": "Chicago Cultural Alliance Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -577,7 +487,10 @@
       "themes": [
         "arts-crafts"
       ],
-      "slug": "puerto-rican-arts-alliance-studio-arts-program-chicago-cultural-alliance-events"
+      "slug": "puerto-rican-arts-alliance-studio-arts-program-chicago-cultural-alliance-events",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "forest-preserves-cook-county-family-198969",
@@ -607,7 +520,7 @@
       "sourceUrl": "https://fpdcc.com/events/",
       "sourceId": "forest-preserves-cook-county-family",
       "sourceName": "Forest Preserves of Cook County Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:45:59.644Z",
@@ -617,7 +530,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "campus-block-party-camp-shabbona-woods"
+      "slug": "campus-block-party-camp-shabbona-woods",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-06-25T23:45:59.644Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "chicago-cultural-alliance-10005858",
@@ -648,7 +564,7 @@
       "sourceUrl": "https://www.chicagoculturalalliance.org/events/",
       "sourceId": "chicago-cultural-alliance",
       "sourceName": "Chicago Cultural Alliance Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -657,7 +573,10 @@
         "arts-crafts",
         "music-performance"
       ],
-      "slug": "constructing-jathi-choreography-with-harini-nilakantan-kalapriya-studio"
+      "slug": "constructing-jathi-choreography-with-harini-nilakantan-kalapriya-studio",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "schaumburg-library-family-16230964",
@@ -689,7 +608,7 @@
       "sourceUrl": "https://schaumburg.libnet.info/events",
       "sourceId": "schaumburg-library-family",
       "sourceName": "Schaumburg Township District Library Events",
-      "sourceMode": "communico-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "communico-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:45:59.644Z",
@@ -697,7 +616,10 @@
       "themes": [
         "story-time"
       ],
-      "slug": "afternoon-movie-the-lorax-hoffman-estates-branch-meeting-room"
+      "slug": "afternoon-movie-the-lorax-hoffman-estates-branch-meeting-room",
+      "originalSourceMode": "communico-events",
+      "originalFetchedAt": "2026-06-25T23:45:59.644Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "thalia-hall-chicago-rx-bandits-and-the-battle-begun-20th-anniversary-tour-with-catbite-supporting-7023c13897",
@@ -728,7 +650,7 @@
       "sourceUrl": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
       "sourceId": "thalia-hall-chicago",
       "sourceName": "Thalia Hall",
-      "sourceMode": "json",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json",
       "verified": false,
       "fetchedAt": "2026-07-02T13:37:26.782Z",
@@ -736,7 +658,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "rx-bandits-and-the-battle-begun-20th-anniversary-tour-with-catbite-supporting-thalia-hall"
+      "slug": "rx-bandits-and-the-battle-begun-20th-anniversary-tour-with-catbite-supporting-thalia-hall",
+      "originalSourceMode": "json",
+      "originalFetchedAt": "2026-07-02T13:37:26.782Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "chicago-parks-family-sunday-market-at-jefferson-6d8501f71c",
@@ -804,7 +729,7 @@
       "sourceUrl": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
       "sourceId": "thalia-hall-chicago",
       "sourceName": "Thalia Hall",
-      "sourceMode": "json",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json",
       "verified": false,
       "fetchedAt": "2026-07-02T13:37:26.782Z",
@@ -812,7 +737,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "we-rock-chicago-end-of-camp-extravaganza-thalia-hall"
+      "slug": "we-rock-chicago-end-of-camp-extravaganza-thalia-hall",
+      "originalSourceMode": "json",
+      "originalFetchedAt": "2026-07-02T13:37:26.782Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "schaumburg-library-family-15920340",
@@ -844,7 +772,7 @@
       "sourceUrl": "https://schaumburg.libnet.info/events",
       "sourceId": "schaumburg-library-family",
       "sourceName": "Schaumburg Township District Library Events",
-      "sourceMode": "communico-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "communico-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:45:59.644Z",
@@ -852,7 +780,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "town-square-concert-the-jolly-ringwolds-central-library-town-square"
+      "slug": "town-square-concert-the-jolly-ringwolds-central-library-town-square",
+      "originalSourceMode": "communico-events",
+      "originalFetchedAt": "2026-06-25T23:45:59.644Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "elk-grove-village-library-family-16863653",
@@ -882,7 +813,7 @@
       "sourceUrl": "https://egvpl.libnet.info/events",
       "sourceId": "elk-grove-village-library-family",
       "sourceName": "Elk Grove Village Public Library Events",
-      "sourceMode": "communico-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "communico-events",
       "verified": true,
       "fetchedAt": "2026-07-02T12:23:33.413Z",
@@ -890,7 +821,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "live-at-the-concerts-library-booth-elk-grove-village-public-library-elk-grove-village-library-family-16863653"
+      "slug": "live-at-the-concerts-library-booth-elk-grove-village-public-library",
+      "originalSourceMode": "communico-events",
+      "originalFetchedAt": "2026-07-02T12:23:33.413Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "thalia-hall-chicago-sold-out-red-vox-ft-special-guests-super-guitar-bros-presented-by-thalia-hall-and-kickstand-productions-f1e053c6a4",
@@ -921,7 +855,7 @@
       "sourceUrl": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
       "sourceId": "thalia-hall-chicago",
       "sourceName": "Thalia Hall",
-      "sourceMode": "json",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json",
       "verified": false,
       "fetchedAt": "2026-07-02T13:37:26.782Z",
@@ -929,7 +863,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "sold-out-red-vox-ft-special-guests-super-guitar-bros-presented-by-thalia-hall-and-kickstand-productions-thalia-hall"
+      "slug": "sold-out-red-vox-ft-special-guests-super-guitar-bros-presented-by-thalia-hall-and-kickstand-productions-thalia-hall",
+      "originalSourceMode": "json",
+      "originalFetchedAt": "2026-07-02T13:37:26.782Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "forest-preserves-cook-county-family-198575",
@@ -960,7 +897,7 @@
       "sourceUrl": "https://fpdcc.com/events/",
       "sourceId": "forest-preserves-cook-county-family",
       "sourceName": "Forest Preserves of Cook County Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:45:59.644Z",
@@ -968,7 +905,10 @@
       "themes": [
         "animals-nature"
       ],
-      "slug": "women-s-night-out-full-moon-empowerment-river-trail-nature-center"
+      "slug": "women-s-night-out-full-moon-empowerment-river-trail-nature-center",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-06-25T23:45:59.644Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "thalia-hall-chicago-sold-out-audrey-hobert-lollapalooza-aftershow-81c0acd5d3",
@@ -999,7 +939,7 @@
       "sourceUrl": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
       "sourceId": "thalia-hall-chicago",
       "sourceName": "Thalia Hall",
-      "sourceMode": "json",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json",
       "verified": false,
       "fetchedAt": "2026-07-02T13:37:26.782Z",
@@ -1007,7 +947,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "sold-out-audrey-hobert-lollapalooza-aftershow-thalia-hall"
+      "slug": "sold-out-audrey-hobert-lollapalooza-aftershow-thalia-hall",
+      "originalSourceMode": "json",
+      "originalFetchedAt": "2026-07-02T13:37:26.782Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "schaumburg-library-family-16233300",
@@ -1039,7 +982,7 @@
       "sourceUrl": "https://schaumburg.libnet.info/events",
       "sourceId": "schaumburg-library-family",
       "sourceName": "Schaumburg Township District Library Events",
-      "sourceMode": "communico-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "communico-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:45:59.644Z",
@@ -1048,7 +991,10 @@
         "arts-crafts",
         "music-performance"
       ],
-      "slug": "town-square-event-istvan-his-imaginary-band-central-library-town-square"
+      "slug": "town-square-event-istvan-his-imaginary-band-central-library-town-square",
+      "originalSourceMode": "communico-events",
+      "originalFetchedAt": "2026-06-25T23:45:59.644Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "thalia-hall-chicago-sold-out-haute-freddy-lollapalooza-aftershow-with-valencia-grace-994fba113b",
@@ -1079,7 +1025,7 @@
       "sourceUrl": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
       "sourceId": "thalia-hall-chicago",
       "sourceName": "Thalia Hall",
-      "sourceMode": "json",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json",
       "verified": false,
       "fetchedAt": "2026-07-02T13:37:26.782Z",
@@ -1087,7 +1033,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "sold-out-haute-freddy-lollapalooza-aftershow-with-valencia-grace-thalia-hall"
+      "slug": "sold-out-haute-freddy-lollapalooza-aftershow-with-valencia-grace-thalia-hall",
+      "originalSourceMode": "json",
+      "originalFetchedAt": "2026-07-02T13:37:26.782Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "forest-preserves-cook-county-family-198860",
@@ -1118,7 +1067,7 @@
       "sourceUrl": "https://fpdcc.com/events/",
       "sourceId": "forest-preserves-cook-county-family",
       "sourceName": "Forest Preserves of Cook County Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:45:59.644Z",
@@ -1126,7 +1075,10 @@
       "themes": [
         "animals-nature"
       ],
-      "slug": "hummingbird-trivia-sagawau-environmental-learning-center"
+      "slug": "hummingbird-trivia-sagawau-environmental-learning-center",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-06-25T23:45:59.644Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "chicago-cultural-alliance-10005021",
@@ -1157,13 +1109,16 @@
       "sourceUrl": "https://www.chicagoculturalalliance.org/events/",
       "sourceId": "chicago-cultural-alliance",
       "sourceName": "Chicago Cultural Alliance Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
       "metroId": "chicago",
       "themes": [],
-      "slug": "kino-kaffee-und-kuchen-dank-haus-german-american-cultural-center-chicago-cultural-alliance-10005021"
+      "slug": "kino-kaffee-und-kuchen-dank-haus-german-american-cultural-center-chicago-cultural-alliance-10005021",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "chicago-cultural-alliance-10005320",
@@ -1193,7 +1148,7 @@
       "sourceUrl": "https://www.chicagoculturalalliance.org/events/",
       "sourceId": "chicago-cultural-alliance",
       "sourceName": "Chicago Cultural Alliance Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -1201,7 +1156,10 @@
       "themes": [
         "arts-crafts"
       ],
-      "slug": "puerto-rican-arts-alliance-studio-arts-program-chicago-cultural-alliance-events-chicago-cultural-alliance-10005320"
+      "slug": "puerto-rican-arts-alliance-studio-arts-program-chicago-cultural-alliance-events-chicago-cultural-alliance-10005320",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "chicago-cultural-alliance-10005859",
@@ -1232,7 +1190,7 @@
       "sourceUrl": "https://www.chicagoculturalalliance.org/events/",
       "sourceId": "chicago-cultural-alliance",
       "sourceName": "Chicago Cultural Alliance Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -1241,7 +1199,10 @@
         "arts-crafts",
         "music-performance"
       ],
-      "slug": "constructing-jathi-choreography-with-harini-nilakantan-kalapriya-studio-chicago-cultural-alliance-10005859"
+      "slug": "constructing-jathi-choreography-with-harini-nilakantan-kalapriya-studio-chicago-cultural-alliance-10005859",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "thalia-hall-chicago-amber-mark-lollapalooza-aftershow-with-ric-wilson-0f5fbdc8c8",
@@ -1272,7 +1233,7 @@
       "sourceUrl": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
       "sourceId": "thalia-hall-chicago",
       "sourceName": "Thalia Hall",
-      "sourceMode": "json",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json",
       "verified": false,
       "fetchedAt": "2026-07-05T20:20:55.552Z",
@@ -1280,7 +1241,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "amber-mark-lollapalooza-aftershow-with-ric-wilson-thalia-hall"
+      "slug": "amber-mark-lollapalooza-aftershow-with-ric-wilson-thalia-hall",
+      "originalSourceMode": "json",
+      "originalFetchedAt": "2026-07-05T20:20:55.552Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "schaumburg-library-family-16434336",
@@ -1312,7 +1276,7 @@
       "sourceUrl": "https://schaumburg.libnet.info/events",
       "sourceId": "schaumburg-library-family",
       "sourceName": "Schaumburg Township District Library Events",
-      "sourceMode": "communico-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "communico-events",
       "verified": true,
       "fetchedAt": "2026-06-25T23:45:59.644Z",
@@ -1321,7 +1285,10 @@
         "music-performance",
         "animals-nature"
       ],
-      "slug": "as-you-like-it-meineke-park-meineke-park"
+      "slug": "as-you-like-it-meineke-park-meineke-park",
+      "originalSourceMode": "communico-events",
+      "originalFetchedAt": "2026-06-25T23:45:59.644Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "thalia-hall-chicago-all-presented-by-thalia-hall-riot-fest-with-snodgrass-stevensons-and-all-my-senses-d80f50998f",
@@ -1352,7 +1319,7 @@
       "sourceUrl": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
       "sourceId": "thalia-hall-chicago",
       "sourceName": "Thalia Hall",
-      "sourceMode": "json",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json",
       "verified": false,
       "fetchedAt": "2026-07-12T19:12:58.538Z",
@@ -1360,7 +1327,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "all-presented-by-thalia-hall-riot-fest-with-snodgrass-stevensons-and-all-my-senses-thalia-hall"
+      "slug": "all-presented-by-thalia-hall-riot-fest-with-snodgrass-stevensons-and-all-my-senses-thalia-hall",
+      "originalSourceMode": "json",
+      "originalFetchedAt": "2026-07-12T19:12:58.538Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "chicago-cultural-alliance-10005022",
@@ -1391,13 +1361,16 @@
       "sourceUrl": "https://www.chicagoculturalalliance.org/events/",
       "sourceId": "chicago-cultural-alliance",
       "sourceName": "Chicago Cultural Alliance Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
       "metroId": "chicago",
       "themes": [],
-      "slug": "kino-kaffee-und-kuchen-dank-haus-german-american-cultural-center-chicago-cultural-alliance-10005022"
+      "slug": "kino-kaffee-und-kuchen-dank-haus-german-american-cultural-center-chicago-cultural-alliance-10005022",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "chicago-cultural-alliance-10005321",
@@ -1427,7 +1400,7 @@
       "sourceUrl": "https://www.chicagoculturalalliance.org/events/",
       "sourceId": "chicago-cultural-alliance",
       "sourceName": "Chicago Cultural Alliance Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -1435,7 +1408,10 @@
       "themes": [
         "arts-crafts"
       ],
-      "slug": "puerto-rican-arts-alliance-studio-arts-program-chicago-cultural-alliance-events-chicago-cultural-alliance-10005321"
+      "slug": "puerto-rican-arts-alliance-studio-arts-program-chicago-cultural-alliance-events-chicago-cultural-alliance-10005321",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "chicago-cultural-alliance-10005860",
@@ -1466,7 +1442,7 @@
       "sourceUrl": "https://www.chicagoculturalalliance.org/events/",
       "sourceId": "chicago-cultural-alliance",
       "sourceName": "Chicago Cultural Alliance Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -1475,7 +1451,10 @@
         "arts-crafts",
         "music-performance"
       ],
-      "slug": "constructing-jathi-choreography-with-harini-nilakantan-kalapriya-studio-chicago-cultural-alliance-10005860"
+      "slug": "constructing-jathi-choreography-with-harini-nilakantan-kalapriya-studio-chicago-cultural-alliance-10005860",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "thalia-hall-chicago-motel-breakfast-there-s-always-this-an-mb-farewell-with-fellow-kinsmen-and-shannon-baker-188d0fd867",
@@ -1506,7 +1485,7 @@
       "sourceUrl": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
       "sourceId": "thalia-hall-chicago",
       "sourceName": "Thalia Hall",
-      "sourceMode": "json",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json",
       "verified": false,
       "fetchedAt": "2026-07-12T19:12:58.538Z",
@@ -1515,7 +1494,10 @@
         "music-performance",
         "food-markets"
       ],
-      "slug": "motel-breakfast-there-s-always-this-an-mb-farewell-with-fellow-kinsmen-and-shannon-baker-thalia-hall"
+      "slug": "motel-breakfast-there-s-always-this-an-mb-farewell-with-fellow-kinsmen-and-shannon-baker-thalia-hall",
+      "originalSourceMode": "json",
+      "originalFetchedAt": "2026-07-12T19:12:58.538Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "chicago-parks-family-sunday-market-at-jefferson-1275926ed5",
@@ -1584,7 +1566,7 @@
       "sourceUrl": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
       "sourceId": "thalia-hall-chicago",
       "sourceName": "Thalia Hall",
-      "sourceMode": "json",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json",
       "verified": false,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -1592,7 +1574,49 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "steel-pulse-reggae-against-racism-tour-with-dj-slacky-j-thalia-hall"
+      "slug": "steel-pulse-reggae-against-racism-tour-with-dj-slacky-j-thalia-hall",
+      "originalSourceMode": "json",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
+    },
+    {
+      "id": "chicago-museum-family-legendary-late-hours-f00d1bd7fe",
+      "baseId": null,
+      "title": "Legendary Late Hours",
+      "description": "The Field Museum and Riot Fest are partnering up for a righteous Museum takeover from 5pm-9pm on August 11th, complete with music and some seriously sick specimens, to get you geared up for Riot Fest 2026. Our fossils are older than dirt and larger than life. Come dig in with the scientists that dig up our fossils. This event is part of our Legendary Late Ho",
+      "venue": "Field Museum Events",
+      "city": "Chicago",
+      "neighborhood": "Chicago",
+      "lat": 41.8781,
+      "lon": -87.6298,
+      "category": "Museum",
+      "daysOfWeek": [
+        2
+      ],
+      "timeWindow": "Morning",
+      "startDateTime": "2026-08-11T14:00:00.000Z",
+      "endDateTime": "2026-08-12T02:00:00.000Z",
+      "ageBands": [
+        "school-age"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "cost": "$",
+      "url": "https://www.fieldmuseum.org/events/legendary-late-hours-2026-08-11",
+      "sourceUrl": "https://www.fieldmuseum.org/our-events",
+      "sourceId": "chicago-museum-family",
+      "sourceName": "Field Museum Events",
+      "sourceMode": "next-data-events",
+      "extractionMethod": "next-data-events",
+      "verified": true,
+      "fetchedAt": "2026-07-22T22:57:11.353Z",
+      "metroId": "chicago",
+      "themes": [
+        "stem",
+        "music-performance"
+      ],
+      "slug": "legendary-late-hours-field-museum-events"
     },
     {
       "id": "chicago-cultural-alliance-59328",
@@ -1623,7 +1647,7 @@
       "sourceUrl": "https://www.chicagoculturalalliance.org/events/",
       "sourceId": "chicago-cultural-alliance",
       "sourceName": "Chicago Cultural Alliance Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -1633,7 +1657,10 @@
         "music-performance",
         "festivals-community"
       ],
-      "slug": "get-lit-summer-book-fair-american-writers-museum"
+      "slug": "get-lit-summer-book-fair-american-writers-museum",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "thalia-hall-chicago-agalloch-with-barren-heir-and-john-haughm-solo-36ac2bd974",
@@ -1664,7 +1691,7 @@
       "sourceUrl": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
       "sourceId": "thalia-hall-chicago",
       "sourceName": "Thalia Hall",
-      "sourceMode": "json",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json",
       "verified": false,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -1672,7 +1699,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "agalloch-with-barren-heir-and-john-haughm-solo-thalia-hall"
+      "slug": "agalloch-with-barren-heir-and-john-haughm-solo-thalia-hall",
+      "originalSourceMode": "json",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "chicago-cultural-alliance-10004842",
@@ -1703,13 +1733,16 @@
       "sourceUrl": "https://www.chicagoculturalalliance.org/events/",
       "sourceId": "chicago-cultural-alliance",
       "sourceName": "Chicago Cultural Alliance Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
       "metroId": "chicago",
       "themes": [],
-      "slug": "neighborhood-nights-dank-haus-german-american-cultural-center"
+      "slug": "neighborhood-nights-dank-haus-german-american-cultural-center",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "chicago-cultural-alliance-10011605",
@@ -1740,7 +1773,7 @@
       "sourceUrl": "https://www.chicagoculturalalliance.org/events/",
       "sourceId": "chicago-cultural-alliance",
       "sourceName": "Chicago Cultural Alliance Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -1748,7 +1781,10 @@
       "themes": [
         "animals-nature"
       ],
-      "slug": "48th-mid-america-bonsai-exhibition-chicago-botanic-garden"
+      "slug": "48th-mid-america-bonsai-exhibition-chicago-botanic-garden",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "thalia-hall-chicago-fiddlehead-in-the-round-with-narrow-head-knumears-and-the-sissy-boys-presented-by-thalia-hall-and-riot-fest-f1647fabf1",
@@ -1779,7 +1815,7 @@
       "sourceUrl": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
       "sourceId": "thalia-hall-chicago",
       "sourceName": "Thalia Hall",
-      "sourceMode": "json",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json",
       "verified": false,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -1787,7 +1823,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "fiddlehead-in-the-round-with-narrow-head-knumears-and-the-sissy-boys-presented-by-thalia-hall-and-riot-fest-thalia-hall"
+      "slug": "fiddlehead-in-the-round-with-narrow-head-knumears-and-the-sissy-boys-presented-by-thalia-hall-and-riot-fest-thalia-hall",
+      "originalSourceMode": "json",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "chicago-cultural-alliance-10011606",
@@ -1818,7 +1857,7 @@
       "sourceUrl": "https://www.chicagoculturalalliance.org/events/",
       "sourceId": "chicago-cultural-alliance",
       "sourceName": "Chicago Cultural Alliance Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -1826,7 +1865,10 @@
       "themes": [
         "animals-nature"
       ],
-      "slug": "48th-mid-america-bonsai-exhibition-chicago-botanic-garden-chicago-cultural-alliance-10011606"
+      "slug": "48th-mid-america-bonsai-exhibition-chicago-botanic-garden-chicago-cultural-alliance-10011606",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "forest-preserves-cook-county-family-198862",
@@ -1857,7 +1899,7 @@
       "sourceUrl": "https://fpdcc.com/events/",
       "sourceId": "forest-preserves-cook-county-family",
       "sourceName": "Forest Preserves of Cook County Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-02T12:23:33.413Z",
@@ -1868,7 +1910,10 @@
         "animals-nature",
         "festivals-community"
       ],
-      "slug": "hummingbird-fest-sagawau-environmental-learning-center"
+      "slug": "hummingbird-fest-sagawau-environmental-learning-center",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-02T12:23:33.413Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "chicago-cultural-alliance-10005023",
@@ -1899,13 +1944,16 @@
       "sourceUrl": "https://www.chicagoculturalalliance.org/events/",
       "sourceId": "chicago-cultural-alliance",
       "sourceName": "Chicago Cultural Alliance Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
       "metroId": "chicago",
       "themes": [],
-      "slug": "kino-kaffee-und-kuchen-dank-haus-german-american-cultural-center-chicago-cultural-alliance-10005023"
+      "slug": "kino-kaffee-und-kuchen-dank-haus-german-american-cultural-center-chicago-cultural-alliance-10005023",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "chicago-cultural-alliance-10005322",
@@ -1935,7 +1983,7 @@
       "sourceUrl": "https://www.chicagoculturalalliance.org/events/",
       "sourceId": "chicago-cultural-alliance",
       "sourceName": "Chicago Cultural Alliance Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -1943,7 +1991,10 @@
       "themes": [
         "arts-crafts"
       ],
-      "slug": "puerto-rican-arts-alliance-studio-arts-program-chicago-cultural-alliance-events-chicago-cultural-alliance-10005322"
+      "slug": "puerto-rican-arts-alliance-studio-arts-program-chicago-cultural-alliance-events-chicago-cultural-alliance-10005322",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "chicago-cultural-alliance-10005861",
@@ -1974,7 +2025,7 @@
       "sourceUrl": "https://www.chicagoculturalalliance.org/events/",
       "sourceId": "chicago-cultural-alliance",
       "sourceName": "Chicago Cultural Alliance Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -1983,7 +2034,10 @@
         "arts-crafts",
         "music-performance"
       ],
-      "slug": "constructing-jathi-choreography-with-harini-nilakantan-kalapriya-studio-chicago-cultural-alliance-10005861"
+      "slug": "constructing-jathi-choreography-with-harini-nilakantan-kalapriya-studio-chicago-cultural-alliance-10005861",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "thalia-hall-chicago-club-1bd-chicago-ft-dj-david-hunny-bee-9435de04b0",
@@ -2014,7 +2068,7 @@
       "sourceUrl": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
       "sourceId": "thalia-hall-chicago",
       "sourceName": "Thalia Hall",
-      "sourceMode": "json",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json",
       "verified": false,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -2022,7 +2076,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "club-1bd-chicago-ft-dj-david-hunny-bee-thalia-hall"
+      "slug": "club-1bd-chicago-ft-dj-david-hunny-bee-thalia-hall",
+      "originalSourceMode": "json",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "chicago-cultural-alliance-10011607",
@@ -2053,7 +2110,7 @@
       "sourceUrl": "https://www.chicagoculturalalliance.org/events/",
       "sourceId": "chicago-cultural-alliance",
       "sourceName": "Chicago Cultural Alliance Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -2061,7 +2118,10 @@
       "themes": [
         "animals-nature"
       ],
-      "slug": "48th-mid-america-bonsai-exhibition-chicago-botanic-garden-chicago-cultural-alliance-10011607"
+      "slug": "48th-mid-america-bonsai-exhibition-chicago-botanic-garden-chicago-cultural-alliance-10011607",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "thalia-hall-chicago-citizen-with-anxious-hotline-tnt-and-rocket-0e60a461eb",
@@ -2092,7 +2152,7 @@
       "sourceUrl": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
       "sourceId": "thalia-hall-chicago",
       "sourceName": "Thalia Hall",
-      "sourceMode": "json",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json",
       "verified": false,
       "fetchedAt": "2026-07-20T22:26:27.403Z",
@@ -2100,7 +2160,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "citizen-with-anxious-hotline-tnt-and-rocket-thalia-hall"
+      "slug": "citizen-with-anxious-hotline-tnt-and-rocket-thalia-hall",
+      "originalSourceMode": "json",
+      "originalFetchedAt": "2026-07-20T22:26:27.403Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "schaumburg-library-family-16491356",
@@ -2132,7 +2195,7 @@
       "sourceUrl": "https://schaumburg.libnet.info/events",
       "sourceId": "schaumburg-library-family",
       "sourceName": "Schaumburg Township District Library Events",
-      "sourceMode": "communico-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "communico-events",
       "verified": true,
       "fetchedAt": "2026-07-12T19:12:58.538Z",
@@ -2140,7 +2203,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "duoremi-concert-central-library-workshop"
+      "slug": "duoremi-concert-central-library-workshop",
+      "originalSourceMode": "communico-events",
+      "originalFetchedAt": "2026-07-12T19:12:58.538Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "forest-preserves-cook-county-family-198737",
@@ -2171,13 +2237,16 @@
       "sourceUrl": "https://fpdcc.com/events/",
       "sourceId": "forest-preserves-cook-county-family",
       "sourceName": "Forest Preserves of Cook County Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-12T19:12:58.538Z",
       "metroId": "chicago",
       "themes": [],
-      "slug": "naturalist-night-out-senses-spears-woods"
+      "slug": "naturalist-night-out-senses-spears-woods",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-12T19:12:58.538Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "chicago-museum-family-field-faire-a-knight-at-the-museum-60a52def73",
@@ -2286,7 +2355,7 @@
       "sourceUrl": "https://schaumburg.libnet.info/events",
       "sourceId": "schaumburg-library-family",
       "sourceName": "Schaumburg Township District Library Events",
-      "sourceMode": "communico-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "communico-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -2295,7 +2364,10 @@
         "animals-nature",
         "food-markets"
       ],
-      "slug": "pop-up-library-at-the-farmer-s-market-trickster-parking-lot-trickster-parking-lot-schaumburg-library-family-16828109"
+      "slug": "pop-up-library-at-the-farmer-s-market-trickster-parking-lot-trickster-parking-lot-schaumburg-library-family-16828109",
+      "originalSourceMode": "communico-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "forest-preserves-cook-county-family-198322",
@@ -2326,7 +2398,7 @@
       "sourceUrl": "https://fpdcc.com/events/",
       "sourceId": "forest-preserves-cook-county-family",
       "sourceName": "Forest Preserves of Cook County Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -2335,7 +2407,10 @@
         "music-performance",
         "animals-nature"
       ],
-      "slug": "busse-night-ride-busse-lake-boating-center"
+      "slug": "busse-night-ride-busse-lake-boating-center",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "forest-preserves-cook-county-family-198325",
@@ -2366,7 +2441,7 @@
       "sourceUrl": "https://fpdcc.com/events/",
       "sourceId": "forest-preserves-cook-county-family",
       "sourceName": "Forest Preserves of Cook County Events",
-      "sourceMode": "tribe-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "tribe-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -2378,7 +2453,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "art-in-nature-festival-crabtree-nature-center"
+      "slug": "art-in-nature-festival-crabtree-nature-center",
+      "originalSourceMode": "tribe-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     },
     {
       "id": "schaumburg-library-family-16232307",
@@ -2410,7 +2488,7 @@
       "sourceUrl": "https://schaumburg.libnet.info/events",
       "sourceId": "schaumburg-library-family",
       "sourceName": "Schaumburg Township District Library Events",
-      "sourceMode": "communico-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "communico-events",
       "verified": true,
       "fetchedAt": "2026-07-19T04:52:36.944Z",
@@ -2419,167 +2497,10 @@
         "music-performance",
         "festivals-community"
       ],
-      "slug": "village-of-schaumburg-s-70th-anniversary-exhibit-central-library"
-    },
-    {
-      "id": "chicago-jazz-festival-2026-09-03",
-      "baseId": null,
-      "title": "Chicago Jazz Festival 2026",
-      "description": "Four days of free performances at Millennium Park over Labor Day weekend, featuring Dee Dee Bridgewater & Bill Charlap Duo, Robert Glasper, M.E.B. (Miles Electric Band) and Paquito D'Rivera.",
-      "venue": "Millennium Park – Jay Pritzker Pavilion, 201 E. Randolph St.",
-      "city": "Chicago",
-      "neighborhood": "Loop / Millennium Park",
-      "lat": 41.8826,
-      "lon": -87.6226,
-      "category": "Festival",
-      "daysOfWeek": [
-        4
-      ],
-      "timeWindow": "Afternoon",
-      "startDateTime": "2026-09-03T22:00:00.000Z",
-      "endDateTime": "2026-09-07T02:00:00.000Z",
-      "ageBands": [
-        "preschool",
-        "school-age"
-      ],
-      "audiences": [
-        "adults"
-      ],
-      "cost": "Free",
-      "url": "https://www.chicagojazz.com/post/city-of-chicago-announces-2026-chicago-jazz-festival-lineup-sept-3-6-featuring-dee-dee-bridgewater",
-      "sourceUrl": "https://www.chicagojazz.com/post/city-of-chicago-announces-2026-chicago-jazz-festival-lineup-sept-3-6-featuring-dee-dee-bridgewater",
-      "sourceId": "chicago-jazz-festival-2026",
-      "sourceName": "Chicago Jazz Festival 2026",
-      "sourceMode": "official-text-event",
-      "extractionMethod": "official-text-event",
-      "verified": true,
-      "fetchedAt": "2026-07-20T22:26:27.403Z",
-      "metroId": "chicago",
-      "themes": [
-        "music-performance",
-        "festivals-community"
-      ],
-      "slug": "chicago-jazz-festival-2026-millennium-park-jay-pritzker-pavilion-201-e-randolph-st"
-    },
-    {
-      "id": "thalia-hall-chicago-sanctum-dark-music-festival-c4a2e075df",
-      "baseId": null,
-      "title": "Sanctum Dark Music Festival",
-      "description": "",
-      "venue": "Thalia Hall",
-      "city": "Chicago",
-      "neighborhood": "Chicago",
-      "lat": 41.8497,
-      "lon": -87.6559,
-      "category": "Music",
-      "daysOfWeek": [
-        5
-      ],
-      "timeWindow": "Evening",
-      "startDateTime": "2026-10-31T00:00:00.000Z",
-      "endDateTime": "2026-10-31T01:00:00.000Z",
-      "ageBands": [
-        "preschool",
-        "school-age"
-      ],
-      "audiences": [
-        "adults"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.ticketweb.com/event/sanctum-dark-music-festival-thalia-hall-tickets/14250534",
-      "sourceUrl": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
-      "sourceId": "thalia-hall-chicago",
-      "sourceName": "Thalia Hall",
-      "sourceMode": "json",
-      "extractionMethod": "json",
-      "verified": false,
-      "fetchedAt": "2026-07-20T22:26:27.403Z",
-      "metroId": "chicago",
-      "themes": [
-        "music-performance",
-        "festivals-community"
-      ],
-      "slug": "sanctum-dark-music-festival-thalia-hall"
-    },
-    {
-      "id": "thalia-hall-chicago-sanctum-dark-music-festival-2-day-pass-bbee774ac1",
-      "baseId": null,
-      "title": "Sanctum Dark Music Festival - 2 DAY PASS",
-      "description": "",
-      "venue": "Thalia Hall",
-      "city": "Chicago",
-      "neighborhood": "Chicago",
-      "lat": 41.8497,
-      "lon": -87.6559,
-      "category": "Music",
-      "daysOfWeek": [
-        5
-      ],
-      "timeWindow": "Evening",
-      "startDateTime": "2026-10-31T00:00:00.000Z",
-      "endDateTime": "2026-11-01T04:59:00.000Z",
-      "ageBands": [
-        "preschool",
-        "school-age"
-      ],
-      "audiences": [
-        "adults"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.ticketweb.com/event/sanctum-dark-music-festival-thalia-hall-tickets/14250554",
-      "sourceUrl": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
-      "sourceId": "thalia-hall-chicago",
-      "sourceName": "Thalia Hall",
-      "sourceMode": "json",
-      "extractionMethod": "json",
-      "verified": false,
-      "fetchedAt": "2026-07-20T22:26:27.403Z",
-      "metroId": "chicago",
-      "themes": [
-        "music-performance",
-        "festivals-community"
-      ],
-      "slug": "sanctum-dark-music-festival-2-day-pass-thalia-hall"
-    },
-    {
-      "id": "thalia-hall-chicago-sanctum-dark-music-festival-88146b32d2",
-      "baseId": null,
-      "title": "Sanctum Dark Music Festival",
-      "description": "",
-      "venue": "Thalia Hall",
-      "city": "Chicago",
-      "neighborhood": "Chicago",
-      "lat": 41.8497,
-      "lon": -87.6559,
-      "category": "Music",
-      "daysOfWeek": [
-        6
-      ],
-      "timeWindow": "Evening",
-      "startDateTime": "2026-11-01T00:00:00.000Z",
-      "endDateTime": "2026-11-01T01:00:00.000Z",
-      "ageBands": [
-        "preschool",
-        "school-age"
-      ],
-      "audiences": [
-        "adults"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.ticketweb.com/event/sanctum-dark-music-festival-thalia-hall-tickets/14250544",
-      "sourceUrl": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
-      "sourceId": "thalia-hall-chicago",
-      "sourceName": "Thalia Hall",
-      "sourceMode": "json",
-      "extractionMethod": "json",
-      "verified": false,
-      "fetchedAt": "2026-07-20T22:26:27.403Z",
-      "metroId": "chicago",
-      "themes": [
-        "music-performance",
-        "festivals-community"
-      ],
-      "slug": "sanctum-dark-music-festival-thalia-hall-thalia-hall-chicago-sanctum-dark-music-festival-88146b32d2"
+      "slug": "village-of-schaumburg-s-70th-anniversary-exhibit-central-library",
+      "originalSourceMode": "communico-events",
+      "originalFetchedAt": "2026-07-19T04:52:36.944Z",
+      "restoredAt": "2026-07-22T22:57:11.353Z"
     }
   ]
 }
