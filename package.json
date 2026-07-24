@@ -30,6 +30,7 @@
     "places:usage": "node scripts/places-usage.mjs",
     "places:enrich:next": "node scripts/enrich-next.mjs && npm run deploy:data",
     "match:places:osm": "node scripts/match-google-places-osm.mjs",
+    "posters:weekend": "node scripts/generate-weekend-posters.mjs",
     "validate:data": "node scripts/validate-data.mjs",
     "validate:data:all": "node scripts/validate-data.mjs --all",
     "validate:events": "node scripts/validate-events.mjs && node scripts/audit-event-slugs.mjs",

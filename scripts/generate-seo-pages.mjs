@@ -123,6 +123,27 @@ const A = IS_ADULTS
       withWhom: "with the kids",
     };
 const OG_IMAGE = envValue("VITE_APP_OG_IMAGE", `${SITE}/og-image.png`);
+
+// Per-metro weekend highlight posters (scripts/generate-weekend-posters.mjs).
+// A poster is only used when its recorded weekend matches the weekend this
+// build is rendering — a stale poster silently drops off instead of showing
+// wrong dates. Kids brand only: the posters carry FamHop branding.
+const WEEKEND_POSTERS_DIR = path.join(ROOT, "public", "weekend-posters");
+let weekendPosterManifest;
+function weekendPosterFor(metroId, saturdayKey) {
+  if (IS_ADULTS) return null;
+  if (weekendPosterManifest === undefined) {
+    try {
+      weekendPosterManifest = JSON.parse(fs.readFileSync(path.join(WEEKEND_POSTERS_DIR, "manifest.json"), "utf8"));
+    } catch {
+      weekendPosterManifest = null;
+    }
+  }
+  const entry = weekendPosterManifest?.posters?.[metroId];
+  if (!entry || entry.saturdayKey !== saturdayKey) return null;
+  if (!fs.existsSync(path.join(WEEKEND_POSTERS_DIR, entry.file))) return null;
+  return `/weekend-posters/${entry.file}`;
+}
 const POLLS_API = envValue("VITE_POLLS_API").replace(/\/$/, "");
 const GOOGLE_CLIENT_ID = envValue("VITE_GOOGLE_CLIENT_ID");
 // Google Search Console ownership verification. Optional: set
@@ -666,6 +687,9 @@ ${IS_ADULTS ? ".wg-nav{background:linear-gradient(rgba(243,240,250,.98),rgba(243
 .wg-chip b{font-family:var(--font-display);font-weight:700;color:var(--accent-strong);}
 .wg-chip--free{border-color:#bfe3cc;background:#e5f4ea;color:#1c6b3f;}
 .wg-chip--free b{color:#1c6b3f;}
+.wg-poster{margin:44px auto;max-width:430px;text-align:center;}
+.wg-poster img{width:100%;height:auto;border-radius:18px;box-shadow:0 18px 44px rgba(27,25,22,.18);}
+.wg-poster figcaption{color:var(--muted);font-size:13px;font-weight:600;margin-top:10px;}
 @media (max-width:760px){
   .wg-marquee{grid-template-columns:1fr;grid-template-rows:190px repeat(4,148px);}
   .mq--hero{grid-row:auto;}
@@ -3677,6 +3701,15 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     timeZone: activeMetro.timezone || "America/Los_Angeles",
   });
 
+  const posterRel = weekendPosterFor(activeMetro.id, weekend.saturdayKey);
+  const posterUrl = posterRel ? `${SITE}${posterRel}` : null;
+  const posterHtml = posterRel
+    ? `<figure class="wg-poster">
+      <a href="${posterRel}" target="_blank" rel="noopener"><img src="${posterRel}" alt="${esc(metroLabel())} family events this weekend (${esc(rangeLabel)}) — highlights poster" width="1080" height="1350" loading="lazy"></a>
+      <figcaption>This weekend at a glance — save or share it.</figcaption>
+    </figure>`
+    : "";
+
   const marqueeHtml = renderWeekendMarquee(headliners, lookup);
   const topCatPhrase = topCategories
     .slice(0, 3)
@@ -3709,6 +3742,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
       ${daySections.join("")}
     </section>
     ${editorialBuckets.length ? renderWeekendEditorialBuckets(editorialBuckets) : ""}
+    ${posterHtml}
     ${renderNewsletterSignup()}
     <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a 3-stop day with ${BRAND}</a></p>
     ${renderWeekendFilterScript("en")}
@@ -3724,6 +3758,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
         name: `${metroLabel()} weekend guide`,
         description,
         isPartOf: { "@id": `${metroUrl("")}#website` },
+        ...(posterUrl ? { image: posterUrl } : {}),
         about: {
           "@type": "Place",
           name: metroLabel(),
@@ -3774,7 +3809,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     title,
     description,
     canonical,
-    ogImage: OG_IMAGE,
+    ogImage: posterUrl || OG_IMAGE,
     jsonLd,
     breadcrumb: [
       { name: BRAND, url: metroUrl("") },

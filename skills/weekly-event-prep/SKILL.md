@@ -105,6 +105,7 @@ npm run validate:events:all      # if it names a metro, regenerate that metro's 
 `npm run seo:audit` scans **dist/**, so it is meaningless on a stale build. Always:
 
 ```bash
+npm run posters:weekend          # weekend highlight posters (gitignored PNGs; this-weekend pages embed them + use as og:image)
 npm run build                    # full FamHop build (~11k pages)
 npm run seo:audit                # MUST be 0 errors, 0 warnings
 npm run seo:i18n-check
