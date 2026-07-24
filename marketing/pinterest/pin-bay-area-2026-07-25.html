@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --marigold: #F6A21D;
+    --marigold-deep: #E08A00;
+    --ink: #2A1B06;
+    --cream: #FFF7E8;
+    --tomato: #E4572E;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1000px; height: 1500px;
+    background:
+      radial-gradient(1200px 600px at 85% -10%, #FFC14F 0%, transparent 60%),
+      var(--marigold);
+    font-family: "Nunito Sans", sans-serif;
+    color: var(--ink);
+    overflow: hidden;
+    position: relative;
+  }
+  .sun-dots {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(var(--marigold-deep) 2.4px, transparent 2.6px);
+    background-size: 46px 46px;
+    opacity: .25;
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 34%);
+            mask-image: linear-gradient(180deg, #000 0%, transparent 34%);
+  }
+  .page { position: relative; padding: 72px 70px 0; height: 100%; display: flex; flex-direction: column; }
+
+  .eyebrow {
+    font-weight: 800; font-size: 26px; letter-spacing: .24em;
+    display: flex; align-items: center; gap: 18px;
+  }
+  .eyebrow::after { content: ""; flex: 1; height: 3px; background: var(--ink); opacity: .8; border-radius: 2px; }
+
+  h1 {
+    font-family: "Fredoka", sans-serif;
+    margin-top: 34px;
+    font-size: 84px; line-height: 1.06; font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  h1 .free {
+    font-weight: 700; color: var(--cream);
+    background: var(--ink);
+    padding: 0 20px 6px; border-radius: 18px;
+    display: inline-block; transform: rotate(-1.5deg);
+  }
+  .metro {
+    font-family: "Fredoka", sans-serif;
+    font-size: 104px; font-weight: 700; line-height: 1;
+    margin-top: 10px;
+    position: relative; display: inline-block;
+  }
+  .metro em {
+    font-style: normal; position: relative; z-index: 1;
+  }
+  .metro .sweep {
+    position: absolute; left: -14px; right: -14px; bottom: 6px; height: 44px;
+    background: var(--cream); z-index: 0; border-radius: 8px;
+    transform: skewX(-8deg);
+  }
+  .dates {
+    margin-top: 26px; font-weight: 800; font-size: 34px; letter-spacing: .08em;
+  }
+
+  .card {
+    margin-top: 44px;
+    background: var(--cream);
+    border-radius: 28px;
+    border: 4px solid var(--ink);
+    box-shadow: 10px 12px 0 rgba(42,27,6,.35);
+    padding: 48px 38px 14px;
+    position: relative;
+  }
+  .row {
+    display: flex; align-items: center; gap: 26px;
+    padding: 21px 0;
+  }
+  .row + .row { border-top: 3px dashed rgba(42,27,6,.22); }
+  .chip {
+    font-family: "Fredoka", sans-serif;
+    flex: 0 0 108px; text-align: center;
+    background: var(--ink); color: var(--cream);
+    border-radius: 14px; padding: 10px 0 12px;
+    font-size: 30px; font-weight: 600; letter-spacing: .06em;
+  }
+  .what { min-width: 0; }
+  .what b { display: block; font-size: 33px; font-weight: 800; line-height: 1.15; }
+  .what span { display: block; margin-top: 5px; font-size: 24px; font-weight: 700; opacity: .72; }
+
+  .ticket {
+    position: absolute; top: -40px; right: 30px;
+    background: var(--tomato); color: var(--cream);
+    font-family: "Fredoka", sans-serif; font-weight: 700;
+    font-size: 40px; letter-spacing: .1em;
+    padding: 16px 34px;
+    border-radius: 16px;
+    border: 4px solid var(--ink);
+    transform: rotate(4deg);
+    box-shadow: 6px 8px 0 rgba(42,27,6,.35);
+  }
+  .ticket small { display: block; font-family: "Nunito Sans", sans-serif; font-size: 17px; font-weight: 800; letter-spacing: .22em; }
+
+  .cta {
+    margin-top: auto;
+    background: var(--ink); color: var(--cream);
+    margin-left: -70px; margin-right: -70px;
+    padding: 34px 70px 40px;
+    display: flex; align-items: center; justify-content: space-between; gap: 30px;
+  }
+  .cta .domain { font-family: "Fredoka", sans-serif; font-size: 38px; font-weight: 600; white-space: nowrap; }
+  .cta .domain i { font-style: normal; color: #FFC14F; }
+  .cta .note { text-align: right; font-size: 19px; font-weight: 700; line-height: 1.35; opacity: .85; max-width: 340px; }
+</style>
+</head>
+<body>
+  <div class="sun-dots"></div>
+  <div class="page">
+    <div class="eyebrow">FAMHOP · THIS WEEKEND</div>
+    <h1>5 <span class="free">FREE</span> things<br>to do with kids</h1>
+    <div class="metro"><span class="sweep"></span><em>BAY AREA</em></div>
+    <div class="dates">JULY 24–26 · 2026</div>
+
+    <div class="card">
+      <div class="ticket">ALL FREE<small>NO TICKETS NEEDED</small></div>
+      <div class="row">
+        <div class="chip">FRI</div>
+        <div class="what"><b>Rene y Familia — kids' show</b><span>Yerba Buena Children's Garden, SF · 11 am &amp; noon</span></div>
+      </div>
+      <div class="row">
+        <div class="chip">SAT</div>
+        <div class="what"><b>Circus Bella: AH HA! outdoor circus</b><span>Burlingame Town Square · 1 &amp; 3 pm</span></div>
+      </div>
+      <div class="row">
+        <div class="chip">SAT</div>
+        <div class="what"><b>YBG ChoreoFest — outdoor dance festival</b><span>Yerba Buena Gardens, SF · 2 pm</span></div>
+      </div>
+      <div class="row">
+        <div class="chip">S+S</div>
+        <div class="what"><b>Museum of Craft &amp; Design free weekend</b><span>Dogpatch, SF · 12–5 pm both days</span></div>
+      </div>
+      <div class="row">
+        <div class="chip">SUN</div>
+        <div class="what"><b>Circus Bella at Union Square</b><span>Union Square, SF · 1 &amp; 3 pm</span></div>
+      </div>
+    </div>
+
+    <div class="cta">
+      <div class="domain">famhop.com<i>/bay-area</i></div>
+      <div class="note">Every event verified on the organizer's official page</div>
+    </div>
+  </div>
+</body>
+</html>

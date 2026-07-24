@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dusk: #21456B;
+    --dusk-deep: #16324F;
+    --ink: #12233A;
+    --cream: #FFF4DC;
+    --marigold: #F6A21D;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1000px; height: 1500px;
+    background:
+      radial-gradient(1100px 560px at 15% -8%, #35608F 0%, transparent 62%),
+      var(--dusk);
+    font-family: "Nunito Sans", sans-serif;
+    color: var(--cream);
+    overflow: hidden;
+    position: relative;
+  }
+  .stars {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(#A8C4E0 1.8px, transparent 2px);
+    background-size: 62px 62px;
+    opacity: .35;
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 36%);
+            mask-image: linear-gradient(180deg, #000 0%, transparent 36%);
+  }
+  .page { position: relative; padding: 72px 70px 0; height: 100%; display: flex; flex-direction: column; }
+
+  .eyebrow {
+    font-weight: 800; font-size: 26px; letter-spacing: .24em;
+    display: flex; align-items: center; gap: 18px;
+  }
+  .eyebrow::after { content: ""; flex: 1; height: 3px; background: var(--marigold); border-radius: 2px; }
+
+  h1 {
+    font-family: "Fredoka", sans-serif;
+    margin-top: 34px;
+    font-size: 80px; line-height: 1.08; font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  h1 .free {
+    font-weight: 700; color: var(--ink);
+    background: var(--marigold);
+    padding: 0 20px 6px; border-radius: 18px;
+    display: inline-block; transform: rotate(-1.5deg);
+  }
+  .metro {
+    font-family: "Fredoka", sans-serif;
+    font-size: 96px; font-weight: 700; line-height: 1;
+    margin-top: 12px;
+    position: relative; display: inline-block;
+  }
+  .metro .sweep {
+    position: absolute; left: -14px; right: -14px; bottom: 6px; height: 42px;
+    background: var(--marigold); z-index: 0; border-radius: 8px;
+    transform: skewX(-8deg); opacity: .95;
+  }
+  .metro em { font-style: normal; position: relative; z-index: 1; }
+  .dates { margin-top: 26px; font-weight: 800; font-size: 34px; letter-spacing: .08em; color: #CFE0F2; }
+
+  .card {
+    margin-top: 46px;
+    background: var(--cream);
+    color: var(--ink);
+    border-radius: 28px;
+    border: 4px solid var(--ink);
+    box-shadow: 10px 12px 0 rgba(6,16,29,.5);
+    padding: 48px 38px 14px;
+    position: relative;
+  }
+  .row { display: flex; align-items: center; gap: 26px; padding: 23px 0; }
+  .row + .row { border-top: 3px dashed rgba(18,35,58,.22); }
+  .chip {
+    font-family: "Fredoka", sans-serif;
+    flex: 0 0 108px; text-align: center;
+    background: var(--ink); color: var(--cream);
+    border-radius: 14px; padding: 10px 0 12px;
+    font-size: 30px; font-weight: 600; letter-spacing: .06em;
+  }
+  .what { min-width: 0; }
+  .what b { display: block; font-size: 33px; font-weight: 800; line-height: 1.15; }
+  .what span { display: block; margin-top: 5px; font-size: 24px; font-weight: 700; opacity: .72; }
+
+  .ticket {
+    position: absolute; top: -40px; right: 30px;
+    background: var(--marigold); color: var(--ink);
+    font-family: "Fredoka", sans-serif; font-weight: 700;
+    font-size: 40px; letter-spacing: .1em;
+    padding: 16px 34px;
+    border-radius: 16px;
+    border: 4px solid var(--ink);
+    transform: rotate(4deg);
+    box-shadow: 6px 8px 0 rgba(6,16,29,.5);
+  }
+  .ticket small { display: block; font-family: "Nunito Sans", sans-serif; font-size: 17px; font-weight: 800; letter-spacing: .22em; }
+
+  .cta {
+    margin-top: auto;
+    background: var(--ink); color: var(--cream);
+    margin-left: -70px; margin-right: -70px;
+    padding: 34px 70px 40px;
+    display: flex; align-items: center; justify-content: space-between; gap: 30px;
+  }
+  .cta .domain { font-family: "Fredoka", sans-serif; font-size: 36px; font-weight: 600; white-space: nowrap; }
+  .cta .domain i { font-style: normal; color: var(--marigold); }
+  .cta .note { text-align: right; font-size: 19px; font-weight: 700; line-height: 1.35; opacity: .85; max-width: 340px; }
+</style>
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="page">
+    <div class="eyebrow">FAMHOP · FREE CONCERT WEEK</div>
+    <h1>4 <span class="free">FREE</span> outdoor concerts<br>for the whole family</h1>
+    <div class="metro"><span class="sweep"></span><em>LOS ANGELES</em></div>
+    <div class="dates">JULY 24–29 · 2026</div>
+
+    <div class="card">
+      <div class="ticket">ALL FREE<small>BRING A PICNIC</small></div>
+      <div class="row">
+        <div class="chip">FRI</div>
+        <div class="what"><b>Long Beach Municipal Band: John Williams night</b><span>El Dorado Park West, Long Beach · 6:30 pm</span></div>
+      </div>
+      <div class="row">
+        <div class="chip">SAT</div>
+        <div class="what"><b>KCRW Summer Nights — Mariachi El Bronx</b><span>Grand Performances, Downtown LA · 6 pm</span></div>
+      </div>
+      <div class="row">
+        <div class="chip">SAT</div>
+        <div class="what"><b>Marina del Rey Summer Concert: Tyrese</b><span>Burton Chace Park, Marina del Rey · 7 pm</span></div>
+      </div>
+      <div class="row">
+        <div class="chip">WED</div>
+        <div class="what"><b>Legends of Vinyl — Municipal Band encore</b><span>Los Cerritos Park, Long Beach · 6:30 pm</span></div>
+      </div>
+    </div>
+
+    <div class="cta">
+      <div class="domain">famhop.com<i>/los-angeles</i></div>
+      <div class="note">Every event verified on the organizer's official page</div>
+    </div>
+  </div>
+</body>
+</html>
