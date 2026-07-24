@@ -1111,6 +1111,7 @@ function main() {
   }
 
   const totalLocalizedPages = IS_ADULTS ? 0 : generateLocalizedWeekendPages();
+  generateTrustPages();
 
   // D3 hard backstop: the proactive filters above should already keep these
   // out, but the build fails outright if a kids-content URL reaches the
@@ -4921,6 +4922,128 @@ function renderLangSwitcher(routeKey, currentLocale) {
 }
 
 // ---------------------------------------------------------------------------
+// Trust pages (/about/, /how-we-verify/) — E-E-A-T signals added 2026-07-23
+// after the unconfirmed Jul 18-19 update demoted the site. Two single pages,
+// not a page type at scale (SEO invariant), linked sitewide from the static
+// footer so neither is an orphan. Copy states only what the pipeline actually
+// does — the verification claims mirror skills/grounded-event-discovery.
+// ---------------------------------------------------------------------------
+
+function generateTrustPages() {
+  const audienceNoun = IS_ADULTS ? "adults" : "families";
+  const thingsNoun = IS_ADULTS ? "local events and nightlife spots" : "family events and kid-friendly spots";
+  const metroCount = metroConfig.metros.length;
+
+  const aboutCanonical = `${SITE}/about/`;
+  const verifyCanonical = `${SITE}/how-we-verify/`;
+
+  const aboutBody = `
+<p>${esc(BRAND)} helps ${audienceNoun} find ${thingsNoun} across ${metroCount} U.S. metro areas.
+Every listing links back to the organizer's own page, and every event shows its real dates and times —
+when an event ends, its listing is retired.</p>
+<h2>Where the listings come from</h2>
+<p>${esc(BRAND)} aggregates official sources only: organizer, venue, library, parks-department and
+government event calendars. We do not republish scraped guesses from third-party aggregators. The
+full process is described on <a href="/how-we-verify/">How we verify listings</a>.</p>
+<h2>Independence</h2>
+<p>${esc(BRAND)} is independently built and maintained. Listings are free: no organizer pays to be
+included, no listing is sponsored, and we sell no tickets. Place data is &copy; OpenStreetMap
+contributors (ODbL); event listings come from the public sources described above.</p>
+<h2>What ${esc(BRAND)} is not</h2>
+<p>We are not a ticket vendor and we are not affiliated with the venues and organizers we list.
+Details can change after publication — always confirm on the organizer's linked page before heading out.</p>`;
+
+  const aboutHtml = renderShell({
+    title: `About ${BRAND}`,
+    description: `What ${BRAND} is, where its ${thingsNoun} come from, and how the service is run.`,
+    canonical: aboutCanonical,
+    ogImage: OG_IMAGE,
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      "@id": `${aboutCanonical}#webpage`,
+      url: aboutCanonical,
+      name: `About ${BRAND}`,
+      isPartOf: { "@id": `${SITE}/#website` },
+      about: {
+        "@type": "Organization",
+        "@id": `${SITE}/#org`,
+        name: BRAND,
+        url: `${SITE}/`,
+        logo: `${SITE}/icon-512.png`,
+      },
+    },
+    breadcrumb: [
+      { name: BRAND, url: `${SITE}/` },
+      { name: "About", url: aboutCanonical },
+    ],
+    h1: `About ${BRAND}`,
+    eyebrow: "Who we are",
+    body: aboutBody,
+  });
+  writePage("about/index.html", aboutHtml);
+  sitemapEntries.push({
+    loc: aboutCanonical,
+    lastmod: trackedLastmod(aboutCanonical, aboutHtml),
+    changefreq: "monthly",
+    priority: 0.3,
+  });
+
+  const verifyBody = `
+<p>Every event on ${esc(BRAND)} traces back to an official source. This page describes the pipeline
+so you know exactly what a listing means.</p>
+<h2>Official sources only</h2>
+<p>Recurring listings come from structured calendars published by the organizers themselves —
+libraries, parks departments, museums, venues and city governments. One-off events are added only
+after the date, time and venue are confirmed on the organizer's own page. Aggregator posts,
+social-media mentions and search snippets are never treated as facts.</p>
+<h2>Kept current</h2>
+<ul>
+<li>Source calendars are re-ingested on a regular schedule, metro by metro.</li>
+<li>Ended events are removed daily; their pages are retired rather than left to go stale.</li>
+<li>Every event page links to the organizer's page it was verified against.</li>
+</ul>
+<h2>When sources break</h2>
+<p>If an organizer's calendar stops responding or changes format, the affected listings fall back to
+the last verified data and the source is flagged for repair — broken sources are fixed or retired,
+not silently re-guessed.</p>
+<h2>Limits</h2>
+<p>Organizers reschedule and cancel. A listing means the event was verified on an official page at
+ingestion time, not a guarantee it will run — the organizer link on each page is the final word.</p>`;
+
+  const verifyHtml = renderShell({
+    title: `How ${BRAND} verifies listings`,
+    description: `${BRAND}'s editorial policy: official organizer sources only, verified dates, daily removal of ended events.`,
+    canonical: verifyCanonical,
+    ogImage: OG_IMAGE,
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "@id": `${verifyCanonical}#webpage`,
+      url: verifyCanonical,
+      name: `How ${BRAND} verifies listings`,
+      isPartOf: { "@id": `${SITE}/#website` },
+      publisher: { "@id": `${SITE}/#org` },
+    },
+    breadcrumb: [
+      { name: BRAND, url: `${SITE}/` },
+      { name: "How we verify listings", url: verifyCanonical },
+    ],
+    h1: `How ${BRAND} verifies listings`,
+    eyebrow: "Editorial policy",
+    body: verifyBody,
+  });
+  writePage("how-we-verify/index.html", verifyHtml);
+  sitemapEntries.push({
+    loc: verifyCanonical,
+    lastmod: trackedLastmod(verifyCanonical, verifyHtml),
+    changefreq: "monthly",
+    priority: 0.3,
+  });
+
+  return 2;
+}
+
 // Localized (i18n) weekend guide pages
 // ---------------------------------------------------------------------------
 
@@ -5272,6 +5395,7 @@ ${renderStaticAuthScript()}
 <footer class="famhop-footer">
   <p>© ${BRAND} · ${metroTag()}.</p>
   <p>Spot data © OpenStreetMap contributors (ODbL). Event listings from configured public sources.</p>
+  <p><a href="/about/">About ${esc(BRAND)}</a> · <a href="/how-we-verify/">How we verify listings</a></p>
 </footer>
 ${bodyEnd}
 </body>
