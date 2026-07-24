@@ -14,3 +14,12 @@
 /bayarea/city/* /bay-area/city/:splat 301
 /bayarea/category/* /bay-area/category/:splat 301
 /bayarea/this-weekend/ /bay-area/this-weekend/ 301
+
+# 2026-07-24: the Minuteman Library Crawl pages re-slugged when marquee priority
+# brought them back into the build (libcal-suffixed slugs -> deduped short slugs).
+# The old main-lobby URL ranks pos ~7 for the site's TOP query ("minuteman library
+# crawl 2026", 82 impr/14d) — 301 the equity to the new pages instead of 410ing it.
+/boston/event/minuteman-library-crawl-main-lobby-other-newton-free-library-libcal-17063987/ /boston/event/minuteman-library-crawl-main-lobby-other/ 301
+/boston/event/minuteman-library-crawl-off-site-newton-free-library-libcal-17063985/ /boston/event/minuteman-library-crawl-off-site/ 301
+/boston/event/minuteman-library-crawl-off-site-newton-free-library-libcal-17063988/ /boston/event/minuteman-library-crawl-off-site/ 301
+/boston/event/minuteman-library-crawl-off-site-newton-free-library-libcal-17063989/ /boston/event/minuteman-library-crawl-off-site/ 301

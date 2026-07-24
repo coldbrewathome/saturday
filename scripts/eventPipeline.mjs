@@ -41,7 +41,11 @@ export const DEFAULT_WINDOW_DAYS = 45;
 // longer planning window (ingest) and page-cap priority (SEO build). Scale
 // signals mirror generate-seo-pages' headlinerScore, minus the too-broad
 // "celebration".
-const MARQUEE_RE = /\bparade\b|firework|drone show|\bfair\b|festival|\bfiesta\b|carnival|street fest|pow ?wow/i;
+// "library crawl" added 2026-07-24: the Minuteman Library Crawl was the site's
+// top search query (82 impressions/14d at pos 7) while its event pages sat
+// capped out of the build — an annual multi-venue tradition searched weeks
+// ahead is exactly what the marquee slot-priority exists for.
+const MARQUEE_RE = /\bparade\b|firework|drone show|\bfair\b|festival|\bfiesta\b|carnival|street fest|pow ?wow|library crawl/i;
 export function isMarqueeEvent(event) {
   if (!event) return false;
   if (event.category === "Festival") return true;

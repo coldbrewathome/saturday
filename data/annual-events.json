@@ -2,39 +2,200 @@
   "_comment": "Curated recurring ANNUAL events that earn an evergreen page at /{metro}/annual/{slug}/ (kids build only). These pages hold search rank year-round ('<name> 2027' queries start weeks before dates are announced) while dated event pages come and go with the 410 lifecycle. `match` is a case-insensitive regex tested against live event titles to cross-link the current year's event page when it exists. Add entries during weekly prep when a verified one-off is clearly an annual tradition; keep descriptions evergreen (no years, no dates beyond the typical month).",
   "metros": {
     "bay-area": [
-      { "slug": "hayes-valley-carnival", "title": "Hayes Valley Carnival", "month": "July", "venue": "Patricia's Green & PROXY", "city": "San Francisco", "match": "hayes valley carnival", "description": "A free neighborhood carnival that has run for over a century in Hayes Valley: games and prizes along Hayes Street, food, and a one-ring circus performance on the PROXY stage. One of San Francisco's oldest continuous community traditions." },
-      { "slug": "bastille-day-sf", "title": "Bastille Day SF Festival", "month": "July", "venue": "Embarcadero Plaza", "city": "San Francisco", "match": "bastille day", "description": "The Bay Area's largest celebration of France's national day: French food, music, petanque games, a waiters' race, and family activities on Embarcadero Plaza, held the weekend closest to July 14." },
-      { "slug": "japan-day-sf", "title": "Japan Day", "month": "July", "venue": "SF Japantown", "city": "San Francisco", "match": "japan day", "description": "Japantown's summer cultural festival from GenRyu Arts: taiko drumming, awa odori street dance, karate demonstrations, and hands-on origami and calligraphy workshops around the outdoor stage at Post and Laguna." },
-      { "slug": "teddy-bear-picnic-fairyland", "title": "Teddy Bear Picnic Day at Fairyland", "month": "July", "venue": "Children's Fairyland", "city": "Oakland", "match": "teddy bear picnic", "description": "Children's Fairyland invites every kid to bring their favorite stuffed animal for a day of rides, storytimes, live shows, and the fluffiest picnic in Oakland — a mid-summer Fairyland tradition." },
-      { "slug": "alameda-county-fair", "title": "Alameda County Fair", "month": "June–July", "venue": "Alameda County Fairgrounds", "city": "Pleasanton", "match": "alameda county fair", "description": "One of the Bay Area's biggest county fairs: carnival rides, livestock barns, horse racing, concerts, and fair food across several weeks at the Pleasanton fairgrounds." }
+      {
+        "slug": "hayes-valley-carnival",
+        "title": "Hayes Valley Carnival",
+        "month": "July",
+        "venue": "Patricia's Green & PROXY",
+        "city": "San Francisco",
+        "match": "hayes valley carnival",
+        "description": "A free neighborhood carnival that has run for over a century in Hayes Valley: games and prizes along Hayes Street, food, and a one-ring circus performance on the PROXY stage. One of San Francisco's oldest continuous community traditions."
+      },
+      {
+        "slug": "bastille-day-sf",
+        "title": "Bastille Day SF Festival",
+        "month": "July",
+        "venue": "Embarcadero Plaza",
+        "city": "San Francisco",
+        "match": "bastille day",
+        "description": "The Bay Area's largest celebration of France's national day: French food, music, petanque games, a waiters' race, and family activities on Embarcadero Plaza, held the weekend closest to July 14."
+      },
+      {
+        "slug": "japan-day-sf",
+        "title": "Japan Day",
+        "month": "July",
+        "venue": "SF Japantown",
+        "city": "San Francisco",
+        "match": "japan day",
+        "description": "Japantown's summer cultural festival from GenRyu Arts: taiko drumming, awa odori street dance, karate demonstrations, and hands-on origami and calligraphy workshops around the outdoor stage at Post and Laguna."
+      },
+      {
+        "slug": "teddy-bear-picnic-fairyland",
+        "title": "Teddy Bear Picnic Day at Fairyland",
+        "month": "July",
+        "venue": "Children's Fairyland",
+        "city": "Oakland",
+        "match": "teddy bear picnic",
+        "description": "Children's Fairyland invites every kid to bring their favorite stuffed animal for a day of rides, storytimes, live shows, and the fluffiest picnic in Oakland — a mid-summer Fairyland tradition."
+      },
+      {
+        "slug": "alameda-county-fair",
+        "title": "Alameda County Fair",
+        "month": "June–July",
+        "venue": "Alameda County Fairgrounds",
+        "city": "Pleasanton",
+        "match": "alameda county fair",
+        "description": "One of the Bay Area's biggest county fairs: carnival rides, livestock barns, horse racing, concerts, and fair food across several weeks at the Pleasanton fairgrounds."
+      }
     ],
     "chicago": [
-      { "slug": "fiesta-del-sol", "title": "Fiesta del Sol", "month": "July", "venue": "Cermak Road, Pilsen", "city": "Chicago", "match": "fiesta del sol", "description": "The largest free Latino festival in the country, filling a mile of Cermak Road in Pilsen with live entertainment, food, carnival rides, and a dedicated children's area every summer for over 50 years." },
-      { "slug": "chinatown-summer-fair", "title": "Chinatown Summer Fair", "month": "July", "venue": "Wentworth Avenue", "city": "Chicago", "match": "chinatown summer fair", "description": "Chinatown's signature street fair: a lion dance procession, kung fu demonstrations, restaurant samplings, cultural performances, and a children's area along Wentworth Avenue." },
-      { "slug": "chicago-gospel-music-festival", "title": "Chicago Gospel Music Festival", "month": "July", "venue": "Millennium Park", "city": "Chicago", "match": "gospel music festival", "description": "A free weekend of national gospel headliners and local choirs at the Jay Pritzker Pavilion in Millennium Park — family-friendly and one of the city's longest-running free music festivals." }
+      {
+        "slug": "fiesta-del-sol",
+        "title": "Fiesta del Sol",
+        "month": "July",
+        "venue": "Cermak Road, Pilsen",
+        "city": "Chicago",
+        "match": "fiesta del sol",
+        "description": "The largest free Latino festival in the country, filling a mile of Cermak Road in Pilsen with live entertainment, food, carnival rides, and a dedicated children's area every summer for over 50 years."
+      },
+      {
+        "slug": "chinatown-summer-fair",
+        "title": "Chinatown Summer Fair",
+        "month": "July",
+        "venue": "Wentworth Avenue",
+        "city": "Chicago",
+        "match": "chinatown summer fair",
+        "description": "Chinatown's signature street fair: a lion dance procession, kung fu demonstrations, restaurant samplings, cultural performances, and a children's area along Wentworth Avenue."
+      },
+      {
+        "slug": "chicago-gospel-music-festival",
+        "title": "Chicago Gospel Music Festival",
+        "month": "July",
+        "venue": "Millennium Park",
+        "city": "Chicago",
+        "match": "gospel music festival",
+        "description": "A free weekend of national gospel headliners and local choirs at the Jay Pritzker Pavilion in Millennium Park — family-friendly and one of the city's longest-running free music festivals."
+      }
     ],
     "seattle": [
-      { "slug": "bite-of-seattle", "title": "Bite of Seattle", "month": "July", "venue": "Seattle Center", "city": "Seattle", "match": "bite of seattle", "description": "Seattle's summer food festival at Seattle Center: hundreds of food vendors, dozens of musical acts, and free admission, running since 1982." },
-      { "slug": "seafair-torchlight-parade", "title": "Seafair Torchlight Parade", "month": "July", "venue": "Seattle Waterfront", "city": "Seattle", "match": "torchlight parade", "description": "Seafair's signature evening parade: illuminated floats, marching bands, drill teams, and dragon dancers along the waterfront — a Seattle summer tradition since 1950." },
-      { "slug": "whidbey-island-fair", "title": "Whidbey Island Fair", "month": "July", "venue": "Island County Fairgrounds", "city": "Langley", "match": "whidbey island fair", "description": "A century-old island county fair in Langley: 4-H animal shows, carnival rides, live music, and a small-town Saturday parade." },
-      { "slug": "seattle-outdoor-theater-festival", "title": "Seattle Outdoor Theater Festival", "month": "July", "venue": "Volunteer Park", "city": "Seattle", "match": "outdoor theater festival", "description": "A free weekend of outdoor performance in Volunteer Park — a dozen-plus theater companies playing Shakespeare, family shows, and youth workshops across the lawns." }
+      {
+        "slug": "bite-of-seattle",
+        "title": "Bite of Seattle",
+        "month": "July",
+        "venue": "Seattle Center",
+        "city": "Seattle",
+        "match": "bite of seattle",
+        "description": "Seattle's summer food festival at Seattle Center: hundreds of food vendors, dozens of musical acts, and free admission, running since 1982."
+      },
+      {
+        "slug": "seafair-torchlight-parade",
+        "title": "Seafair Torchlight Parade",
+        "month": "July",
+        "venue": "Seattle Waterfront",
+        "city": "Seattle",
+        "match": "torchlight parade",
+        "description": "Seafair's signature evening parade: illuminated floats, marching bands, drill teams, and dragon dancers along the waterfront — a Seattle summer tradition since 1950."
+      },
+      {
+        "slug": "whidbey-island-fair",
+        "title": "Whidbey Island Fair",
+        "month": "July",
+        "venue": "Island County Fairgrounds",
+        "city": "Langley",
+        "match": "whidbey island fair",
+        "description": "A century-old island county fair in Langley: 4-H animal shows, carnival rides, live music, and a small-town Saturday parade."
+      },
+      {
+        "slug": "seattle-outdoor-theater-festival",
+        "title": "Seattle Outdoor Theater Festival",
+        "month": "July",
+        "venue": "Volunteer Park",
+        "city": "Seattle",
+        "match": "outdoor theater festival",
+        "description": "A free weekend of outdoor performance in Volunteer Park — a dozen-plus theater companies playing Shakespeare, family shows, and youth workshops across the lawns."
+      }
     ],
     "new-york-city": [
-      { "slug": "thunderbird-american-indian-powwow", "title": "Thunderbird American Indian Powwow", "month": "July", "venue": "Queens County Farm Museum", "city": "Queens", "match": "thunderbird american indian powwow", "description": "New York's largest and longest-running powwow: intertribal dance competitions with dancers from dozens of Indian Nations, plus Native art, craft, and food vendors on the Queens Farm meadow." }
+      {
+        "slug": "thunderbird-american-indian-powwow",
+        "title": "Thunderbird American Indian Powwow",
+        "month": "July",
+        "venue": "Queens County Farm Museum",
+        "city": "Queens",
+        "match": "thunderbird american indian powwow",
+        "description": "New York's largest and longest-running powwow: intertribal dance competitions with dancers from dozens of Indian Nations, plus Native art, craft, and food vendors on the Queens Farm meadow."
+      }
     ],
     "los-angeles": [
-      { "slug": "alondra-park-hoolaulea", "title": "Alondra Park Ho'olaule'a", "month": "July", "venue": "Alondra Park", "city": "Lawndale", "match": "ho'olaule'a|hoolaulea", "description": "California's largest free Hawaiian festival: live hula, island music, traditional food, and cultural booths filling Alondra Park each summer." }
+      {
+        "slug": "alondra-park-hoolaulea",
+        "title": "Alondra Park Ho'olaule'a",
+        "month": "July",
+        "venue": "Alondra Park",
+        "city": "Lawndale",
+        "match": "ho'olaule'a|hoolaulea",
+        "description": "California's largest free Hawaiian festival: live hula, island music, traditional food, and cultural booths filling Alondra Park each summer."
+      }
     ],
     "boston": [
-      { "slug": "puerto-rican-festival-ma", "title": "Puerto Rican Festival of Massachusetts", "month": "July", "venue": "Franklin Park", "city": "Boston", "match": "puerto rican festival", "description": "A multi-day celebration of Puerto Rican culture in Franklin Park: live performances, traditional food, carnival rides, and family activities, drawing tens of thousands each summer." },
-      { "slug": "revere-beach-sand-sculpting", "title": "Revere Beach International Sand Sculpting Festival", "month": "July", "venue": "Revere Beach", "city": "Revere", "match": "sand sculpting", "description": "The East Coast's largest sand sculpting festival: world-class sculptors compete on America's first public beach, with a kids' zone, food vendors, and evening fireworks." }
+      {
+        "slug": "puerto-rican-festival-ma",
+        "title": "Puerto Rican Festival of Massachusetts",
+        "month": "July",
+        "venue": "Franklin Park",
+        "city": "Boston",
+        "match": "puerto rican festival",
+        "description": "A multi-day celebration of Puerto Rican culture in Franklin Park: live performances, traditional food, carnival rides, and family activities, drawing tens of thousands each summer."
+      },
+      {
+        "slug": "revere-beach-sand-sculpting",
+        "title": "Revere Beach International Sand Sculpting Festival",
+        "month": "July",
+        "venue": "Revere Beach",
+        "city": "Revere",
+        "match": "sand sculpting",
+        "description": "The East Coast's largest sand sculpting festival: world-class sculptors compete on America's first public beach, with a kids' zone, food vendors, and evening fireworks."
+      },
+      {
+        "slug": "minuteman-library-crawl",
+        "title": "Minuteman Library Crawl",
+        "month": "August",
+        "venue": "Minuteman Library Network libraries",
+        "city": "Newton",
+        "match": "minuteman library crawl",
+        "description": "A week-long summer scavenger hunt across the Minuteman Library Network: pick up a free passport at any participating library, then visit libraries across Greater Boston on their featured crawl days, find each library's hidden clue, and collect stamps. Completed passports enter a grand-prize drawing. Around two dozen libraries take part, from Arlington and Watertown to Natick, Needham and Newton — a free, all-ages tradition that turns library-hopping into a family road trip."
+      }
     ],
     "atlanta": [
-      { "slug": "atlanta-ice-cream-festival", "title": "Atlanta Ice Cream & Wellness Festival", "month": "July", "venue": "Piedmont Park", "city": "Atlanta", "match": "ice cream.*festival", "description": "A free summer Saturday in Piedmont Park combining ice cream vendors with family fitness: live music, yoga and Zumba sessions, wellness screenings, and children's activities." }
+      {
+        "slug": "atlanta-ice-cream-festival",
+        "title": "Atlanta Ice Cream & Wellness Festival",
+        "month": "July",
+        "venue": "Piedmont Park",
+        "city": "Atlanta",
+        "match": "ice cream.*festival",
+        "description": "A free summer Saturday in Piedmont Park combining ice cream vendors with family fitness: live music, yoga and Zumba sessions, wellness screenings, and children's activities."
+      }
     ],
     "austin": [
-      { "slug": "zilker-summer-musical", "title": "Zilker Summer Musical", "month": "July–August", "venue": "Zilker Hillside Theater", "city": "Austin", "match": "zilker summer musical|singin' in the rain", "description": "Austin's free outdoor summer musical tradition since 1959: a full Broadway-style production on the Zilker Hillside Theater lawn, Thursday through Sunday nights all summer. Bring a blanket and picnic." },
-      { "slug": "brick-rodeo", "title": "Brick Rodeo", "month": "July", "venue": "Kalahari Resorts", "city": "Round Rock", "match": "brick rodeo", "description": "The Texas LEGO fan convention: hundreds of custom builds and displays from fan builders, with public exhibition days for families." }
+      {
+        "slug": "zilker-summer-musical",
+        "title": "Zilker Summer Musical",
+        "month": "July–August",
+        "venue": "Zilker Hillside Theater",
+        "city": "Austin",
+        "match": "zilker summer musical|singin' in the rain",
+        "description": "Austin's free outdoor summer musical tradition since 1959: a full Broadway-style production on the Zilker Hillside Theater lawn, Thursday through Sunday nights all summer. Bring a blanket and picnic."
+      },
+      {
+        "slug": "brick-rodeo",
+        "title": "Brick Rodeo",
+        "month": "July",
+        "venue": "Kalahari Resorts",
+        "city": "Round Rock",
+        "match": "brick rodeo",
+        "description": "The Texas LEGO fan convention: hundreds of custom builds and displays from fan builders, with public exhibition days for families."
+      }
     ]
   }
 }
