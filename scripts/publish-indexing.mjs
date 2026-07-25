@@ -214,12 +214,23 @@ async function main() {
                     loc === "https://trymosey.com/" ||
                     loc.endsWith("/this-weekend/") ||
                     /this-weekend\/?$/i.test(loc);
-                    
+
+      // Evergreen high-value, low-volume pages: annual-event guides (hold rank
+      // year-round for "<event> 202X") and the trust pages (E-E-A-T). Added
+      // 2026-07-24: there are only ~30 of them, but the old filter only caught
+      // them via isNew, and the sort put them BEHIND all 4,839 events in a
+      // 200/day queue — so they never got submitted and URL inspection showed
+      // "Discovered - crawled never" (e.g. the Minuteman annual page, which must
+      // be crawled before crawl week Aug 3). Prioritized right after hubs below.
+      const isEvergreen = /\/annual\//.test(loc) ||
+                          /\/about\/?$/.test(loc) ||
+                          /\/how-we-verify\/?$/.test(loc);
+
       const isNew = lastmod === todayStr || lastmod === yesterdayStr;
       const isEvent = loc.includes("/event/");
 
-      if (isHub || isNew || isEvent) {
-        urls.push({ loc, lastmod, isHub });
+      if (isHub || isEvergreen || isNew || isEvent) {
+        urls.push({ loc, lastmod, isHub, isEvergreen });
       }
     }
   }
@@ -228,12 +239,19 @@ async function main() {
 
   // Sort candidate URLs:
   // 1. Hubs first (highest priority)
-  // 2. Events over spots (timely content)
-  // 3. Non-hubs with no history (never submitted)
-  // 4. Non-hubs with oldest submission date first (rolling queue)
+  // 2. Evergreen guides + trust pages (only ~30; would otherwise starve behind
+  //    thousands of events). Once submitted they gain a history date and rotate
+  //    to the back of their own tier (oldest-first, step 4), so this costs the
+  //    quota ~30 slots once, not every day.
+  // 3. Events over spots (timely content)
+  // 4. Non-hubs with no history (never submitted)
+  // 5. Non-hubs with oldest submission date first (rolling queue)
   urls.sort((a, b) => {
     if (a.isHub && !b.isHub) return -1;
     if (!a.isHub && b.isHub) return 1;
+
+    if (a.isEvergreen && !b.isEvergreen) return -1;
+    if (!a.isEvergreen && b.isEvergreen) return 1;
 
     const aIsEvent = a.loc.includes("/event/");
     const bIsEvent = b.loc.includes("/event/");
