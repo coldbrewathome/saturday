@@ -1995,6 +1995,30 @@ function spotContentScore(spot) {
   return score;
 }
 
+// 2026-07-24 spot-index curation (user-authorized quality prune, post Jul 18-19
+// update demotion): 90 days of GSC showed the current spot corpus earning 8
+// clicks across 1,797 pages — templated stubs dragging the domain's quality
+// average while events earn the traffic. Pages in data/spot-index-keep.json
+// (>=1 click or >=10 impressions) stay indexed; the rest keep serving 200 for
+// app use but carry noindex and leave the sitemap. FAIL OPEN: no keep file →
+// every spot stays indexable — a build must never mass-noindex by accident.
+// Kids build only; Mosey is parked and untouched.
+const SPOT_INDEX_KEEP = (() => {
+  if (IS_ADULTS) return null;
+  try {
+    const parsed = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "spot-index-keep.json"), "utf8"));
+    const keep = Array.isArray(parsed?.keep) ? parsed.keep.filter(Boolean) : null;
+    return keep && keep.length > 0 ? new Set(keep) : null;
+  } catch {
+    return null;
+  }
+})();
+
+function spotIsIndexable(canonical) {
+  if (!SPOT_INDEX_KEEP) return true;
+  return SPOT_INDEX_KEEP.has(canonical.replace(SITE, ""));
+}
+
 function generateSpotPages(items, spotSlugLookup, generatedCitySlugs, featuredSpotIds = new Set()) {
   const all = new Map();
   const pinnedSlugs = pinnedSpotSlugsForMetro(activeMetro.id);
@@ -2079,10 +2103,12 @@ function generateSpotPages(items, spotSlugLookup, generatedCitySlugs, featuredSp
     `;
 
     const jsonLd = buildSpotJsonLd(spot, canonical);
+    const indexable = spotIsIndexable(canonical);
     const html = renderShell({
       title,
       description,
       canonical,
+      noindex: !indexable,
       ogImage: heroImage || OG_IMAGE,
       jsonLd,
       breadcrumb: [
@@ -2097,12 +2123,14 @@ function generateSpotPages(items, spotSlugLookup, generatedCitySlugs, featuredSp
 
     writeMetroPage(`spot/${slug}/index.html`, html);
 
-    sitemapEntries.push({
-      loc: canonical,
-      lastmod: (spot.updatedAt && spot.updatedAt > TEMPLATE_UPDATED_AT) ? spot.updatedAt : TEMPLATE_UPDATED_AT,
-      changefreq: "weekly",
-      priority: 0.6,
-    });
+    if (indexable) {
+      sitemapEntries.push({
+        loc: canonical,
+        lastmod: (spot.updatedAt && spot.updatedAt > TEMPLATE_UPDATED_AT) ? spot.updatedAt : TEMPLATE_UPDATED_AT,
+        changefreq: "weekly",
+        priority: 0.6,
+      });
+    }
   }
   return new Set(seen.keys());
 }

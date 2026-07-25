@@ -64,6 +64,11 @@ const report = {
 const fileToCanonicalMap = new Map();
 const canonicalToFileMap = new Map();
 const aliasPaths = new Set();
+// Pages that carry a bare noindex (no refresh) — e.g. the 2026-07-24 spot-index
+// curation: served at 200 for app use, deliberately noindexed and OUT of the
+// sitemap. Consistent state; the inconsistent (error) state is noindex + IN
+// the sitemap, checked below.
+const noindexPaths = new Set();
 
 // We will extract siteUrl from sitemap.xml if it exists, otherwise default
 let siteUrl = "";
@@ -97,6 +102,7 @@ for (const filePath of htmlFiles) {
     /<meta\s+http-equiv="refresh"\s+content="\d+\s*;\s*url=/i.test(html) &&
     /<meta\s+name="robots"\s+content="[^"]*noindex/i.test(html);
   if (isAliasPage) aliasPaths.add(relPath);
+  if (/<meta\s+name="robots"\s+content="[^"]*noindex/i.test(html)) noindexPaths.add(relPath);
 
   // A. Check for unreplaced build placeholders
   const placeholderMatches = html.match(/%[A-Z0-9_]+%/g);
@@ -355,7 +361,7 @@ if (fs.existsSync(SITEMAP_PATH)) {
       ["bayarea", "la", "nyc", "dfw", "philly", "sandiego", "dc", "dmv", "newyork", "newyorkcity", "losangeles", "fort-worth", "washington", "oahu", "south-florida", "dallas"].includes(parts[0]);
     const isLegacyAlias = aliasPaths.has(relPath);
 
-    if (!isMetroAlias && !isLegacyAlias) {
+    if (!isMetroAlias && !isLegacyAlias && !noindexPaths.has(relPath)) {
       if (!sitemapUrls.includes(canonical)) {
         report.errors++;
         report.sitemapIssues.push({
@@ -363,6 +369,16 @@ if (fs.existsSync(SITEMAP_PATH)) {
           file: relPath
         });
       }
+    }
+    // The inconsistent state: a noindexed page advertised in the sitemap tells
+    // Google to crawl a page we told it to forget — the keep-list and the
+    // sitemap push must agree.
+    if (noindexPaths.has(relPath) && !isLegacyAlias && sitemapUrls.includes(canonical)) {
+      report.errors++;
+      report.sitemapIssues.push({
+        error: `Noindexed page advertised in sitemap: ${canonical}`,
+        file: relPath
+      });
     }
   }
 } else {
