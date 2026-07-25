@@ -30,17 +30,15 @@ fi
 # Run the indexing script using Node.js directly (FamHop / famhop.com)
 /opt/homebrew/bin/node scripts/publish-indexing.mjs >> tmp/local-indexing.log 2>&1
 
-# Now do Mosey (trymosey.com), which was NEVER submitted before 2026-07-14. Rebuild adults so
-# dist/sitemap.xml becomes Mosey's, then submit. Both brands share leafy-acumen's ~200/day
-# Indexing API quota, but publish-indexing.mjs dedupes against data/indexing-history.json, so a
-# normal day only submits each brand's genuinely new/modified URLs. dist/ is left as Mosey's;
-# the next run's FamHop rebuild at the top makes it unambiguous again.
-echo "Rebuilding Mosey so dist/sitemap.xml is trymosey's..." >> tmp/local-indexing.log
-if /opt/homebrew/bin/npm run build:adults >> tmp/local-indexing.log 2>&1; then
-  /opt/homebrew/bin/node scripts/publish-indexing.mjs >> tmp/local-indexing.log 2>&1
-else
-  echo "Mosey build FAILED — skipping Mosey indexing (FamHop already submitted above)" >> tmp/local-indexing.log
-fi
+# Mosey (trymosey.com) submission is SKIPPED as of 2026-07-24. Both brands share
+# leafy-acumen's ~200/day Indexing API quota, and FamHop (thousands of rotating
+# events) submits a full 200 every day above — so the quota is always exhausted
+# before Mosey ran, and Mosey's submission was ~190 guaranteed HTTP 429s daily.
+# That flood buried real failures in the log AND wasted a full adults rebuild.
+# Mosey is parked (near-zero impressions), so it forfeits nothing. RE-ENABLE by
+# restoring the rebuild+submit here (and cap FamHop below 200 to leave headroom)
+# only when Mosey is un-parked and worth indexing.
+echo "Mosey indexing SKIPPED (parked; shared quota spent by FamHop) — see cron script." >> tmp/local-indexing.log
 
 # Log end time
 echo "=== Indexing job finished at $(date) ===" >> tmp/local-indexing.log
