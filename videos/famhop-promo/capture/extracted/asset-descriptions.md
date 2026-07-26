@@ -1,0 +1,66 @@
+# Asset Descriptions
+
+⚠️  GEMINI_API_KEY not set — descriptions below are catalog-derived (alt text, headings, section context, filename) instead of Vision-generated. To get richer Vision descriptions on the next capture, set GEMINI_API_KEY (or GOOGLE_API_KEY) and re-run.
+
+The `logo-<hash>.svg` filename prefix is a structural hint (DOM said this SVG was inside a `<header>`, home-link `<a>`, or had an aria-label matching the page brand). To pick the actual brand logo without Vision, open the `logo-*` candidates in a previewer or rasterize them with `sharp` before referencing — composing a fake logo ships off-brand in the final video.
+
+- browse-viewport.png — 28KB, browse viewport
+- favicon.svg — 0KB, favicon
+- hero-1.png — 28KB, hero 1
+- hero-10.png — 19KB, hero 10
+- hero-11.png — 17KB, hero 11
+- hero-12.png — 17KB, hero 12
+- hero-13.png — 13KB, hero 13
+- hero-14.png — 12KB, hero 14
+- hero-15.png — 20KB, hero 15
+- hero-16.png — 13KB, hero 16
+- hero-17.png — 10KB, hero 17
+- hero-2.png — 25KB, hero 2
+- hero-3.png — 11KB, hero 3
+- hero-4.png — 15KB, hero 4
+- hero-5.png — 10KB, hero 5
+- hero-6.png — 21KB, hero 6
+- hero-7.png — 22KB, hero 7
+- hero-8.png — 17KB, hero 8
+- hero-9.png — 11KB, hero 9
+- montereybayaquariumbackview.jpg — 268KB, montereybayaquariumbackview
+- nationalsteinbeckcentre.jpg — 222KB, nationalsteinbeckcentre
+- neary-rodriguez-adobe.jpg — 6538KB, neary rodriguez adobe
+- og-image.png — 39KB, og image
+- photo-1464822759023-fed622ff2c3b.jpg — 236KB, in: featured-card-thumb, above fold, photo 1464822759023 fed622ff2c3b
+- photo-1469474968028-56623f02e42e.jpg — 116KB, in: featured-card-thumb, above fold, photo 1469474968028 56623f02e42e
+- photo-1500530855697-b586d89ba3ee.jpg — 396KB, in: featured-card-thumb, above fold, photo 1500530855697 b586d89ba3ee
+- photo-1502082553048-f009c37129b9.jpg — 306KB, in: featured-card-thumb, above fold, photo 1502082553048 f009c37129b9
+- photo-1554907984-15263bfd63bd.jpg — 220KB, in: featured-card-thumb, above fold, photo 1554907984 15263bfd63bd
+- photo-1565299624946-b28f40a0ae38.jpg — 422KB, in: featured-card-thumb, above fold, photo 1565299624946 b28f40a0ae38
+- vasona-20park.jpg — 488KB, vasona 20park
+- svgs/logo-217efa6e.svg — logo 217efa6e
+- svgs/logo-33b5e38d.svg — logo 33b5e38d
+- svgs/logo-f8292a20.svg — logo f8292a20
+- svgs/svg-1056de57.svg — svg 1056de57
+- svgs/svg-33b5e38d.svg — svg 33b5e38d
+- svgs/svg-38dcef77.svg — svg 38dcef77
+- svgs/svg-4fc3c3f5.svg — svg 4fc3c3f5
+- svgs/svg-6687157b.svg — svg 6687157b
+- svgs/svg-70c2cbbb.svg — svg 70c2cbbb
+- svgs/svg-7e2ae7b2.svg — svg 7e2ae7b2
+- svgs/svg-89c7fde1.svg — svg 89c7fde1
+- svgs/svg-972cd564-2.svg — svg 972cd564 2
+- svgs/svg-972cd564-3.svg — svg 972cd564 3
+- svgs/svg-972cd564.svg — svg 972cd564
+- svgs/svg-9bb7378a-2.svg — svg 9bb7378a 2
+- svgs/svg-9bb7378a.svg — svg 9bb7378a
+- svgs/svg-9cfd523b.svg — svg 9cfd523b
+- svgs/svg-9e0a5fb6.svg — svg 9e0a5fb6
+- svgs/svg-c27a6d5a-10.svg — svg c27a6d5a 10
+- svgs/svg-c27a6d5a-2.svg — svg c27a6d5a 2
+- svgs/svg-c27a6d5a-3.svg — svg c27a6d5a 3
+- svgs/svg-c27a6d5a-4.svg — svg c27a6d5a 4
+- svgs/svg-c27a6d5a-5.svg — svg c27a6d5a 5
+- svgs/svg-c27a6d5a-6.svg — svg c27a6d5a 6
+- svgs/svg-c27a6d5a-7.svg — svg c27a6d5a 7
+- svgs/svg-c27a6d5a-8.svg — svg c27a6d5a 8
+- svgs/svg-c27a6d5a-9.svg — svg c27a6d5a 9
+- svgs/svg-c27a6d5a.svg — svg c27a6d5a
+- svgs/svg-f00d70a1.svg — svg f00d70a1
+- svgs/svg-fad58a0d.svg — svg fad58a0d

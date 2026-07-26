@@ -1,0 +1,181 @@
+<template>
+  <style>
+    @font-face{font-family:'Bricolage Grotesque';src:url('assets/fonts/bricolage-grotesque-400_800.woff2') format('woff2');font-weight:400 800;font-style:normal;font-display:block;}
+    @font-face{font-family:'JetBrains Mono';src:url('assets/fonts/jetbrains-mono-400.woff2') format('woff2');font-weight:100 800;font-style:normal;font-display:block;}
+    @font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/plus-jakarta-sans-400.woff2') format('woff2');font-weight:200 800;font-style:normal;font-display:block;}
+
+    #root{width:1920px;height:1080px;position:relative;overflow:hidden;--accent:#DD6A1A;color:#1B1916;font-family:'Plus Jakarta Sans',sans-serif;}
+
+    /* ground */
+    .f01-g{position:absolute;inset:0;background:#FAF5EB;}
+
+    /* frame-chrome — mono topbar + meta footer */
+    .f01-mono{font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:.06em;text-transform:uppercase;line-height:1.3;}
+    .f01-top{position:absolute;left:64px;right:64px;top:56px;display:flex;justify-content:space-between;align-items:center;}
+    .f01-pill{border:3px solid #1B1916;border-radius:999px;padding:5px 22px;background:#FAF5EB;}
+    .f01-meta{position:absolute;left:64px;right:64px;top:842px;display:flex;justify-content:space-between;align-items:center;}
+
+    /* the tab wall — ink-bordered blocks, three depth layers by color-block contrast */
+    .f01-tabs{position:absolute;left:96px;top:138px;width:1728px;height:430px;}
+    .f01-tab{position:absolute;background:#F2EAD9;border:4px solid #1B1916;border-radius:0;padding:12px 18px;
+      font-family:'JetBrains Mono',monospace;font-size:21px;line-height:1.3;white-space:nowrap;color:#1B1916;
+      z-index:3;transform-origin:50% 50%;will-change:transform;}
+    .f01-tab[data-depth="1"]{background:#FAF5EB;z-index:2;}
+    .f01-tab[data-depth="2"]{background:#FAF5EB;border-color:#4A453F;color:#4A453F;z-index:1;}
+    /* the one hard offset shadow on the frame — orange + ink, zero blur */
+    .f01-tab.f01-seed{background:#E8B547;box-shadow:24px 24px 0 #DD6A1A,24px 24px 0 4px #1B1916;z-index:5;}
+    /* rear plane of the opening cluster */
+    .f01-tab.f01-back{z-index:2;}
+
+    /* payoff */
+    .f01-d{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;line-height:.9;letter-spacing:-.01em;white-space:nowrap;}
+    .f01-payoff{position:absolute;left:96px;top:570px;}
+    .f01-l1{font-size:165px;}
+    .f01-l2{font-size:124px;transform-origin:0% 50%;will-change:transform;}
+    .f01-count{display:inline-block;color:#DD6A1A;font-variant-numeric:tabular-nums;transform-origin:0% 100%;will-change:transform;}
+    .f01-word{display:inline-block;will-change:transform;}
+  </style>
+
+  <div data-hf-id="hf-rgyl" id="root" data-composition-id="01-47-tabs" data-width="1920" data-height="1080" data-duration="5.5">
+    <div data-hf-id="hf-1qyf" class="clip f01-g" data-start="0" data-duration="5.5" data-track-index="0"></div>
+
+    <div data-hf-id="hf-mbb7" class="clip f01-top f01-mono" data-start="0" data-duration="5.5" data-track-index="1">
+      <span data-hf-id="hf-zw6z">01 · the problem</span><span data-hf-id="hf-oa4r" class="f01-pill">Saturday · 9:02 AM</span>
+    </div>
+
+    <div data-hf-id="hf-nfh4" class="clip f01-tabs" id="f01-wall" data-start="0" data-duration="5.5" data-track-index="2">
+      <div data-hf-id="hf-rznw" class="f01-tab f01-seed" style="left:0px;top:0px">kid friendly near me</div>
+      <div data-hf-id="hf-jnfs" class="f01-tab f01-back" style="left:360px;top:44px">toddler activities saturday</div>
+      <div data-hf-id="hf-9xrz" class="f01-tab" style="left:820px;top:0px">is it raining sunday</div>
+      <div data-hf-id="hf-u16m" class="f01-tab f01-back" style="left:1200px;top:52px">museum free days</div>
+      <div data-hf-id="hf-viu9" class="f01-tab" style="left:120px;top:112px">indoor play 3 year old</div>
+      <div data-hf-id="hf-o3i1" class="f01-tab" data-depth="1" style="left:560px;top:150px">city events calendar</div>
+      <div data-hf-id="hf-6jqh" class="f01-tab" data-depth="2" style="left:1000px;top:110px">birthday party ideas</div>
+      <div data-hf-id="hf-29mt" class="f01-tab" data-depth="1" style="left:1380px;top:156px">what time does it open</div>
+      <div data-hf-id="hf-4yeg" class="f01-tab" style="left:0px;top:224px">free things to do with kids</div>
+      <div data-hf-id="hf-gjo2" class="f01-tab" data-depth="1" style="left:470px;top:262px">rainy day activities bay area</div>
+      <div data-hf-id="hf-yt0j" class="f01-tab" data-depth="2" style="left:980px;top:224px">story time library</div>
+      <div data-hf-id="hf-hnzh" class="f01-tab" data-depth="1" style="left:1320px;top:268px">splash pad hours</div>
+      <div data-hf-id="hf-qq9j" class="f01-tab" data-depth="2" style="left:180px;top:336px">stroller friendly hike</div>
+      <div data-hf-id="hf-k2n6" class="f01-tab" style="left:640px;top:374px">pumpkin patch near me</div>
+      <div data-hf-id="hf-teau" class="f01-tab" data-depth="2" style="left:1120px;top:336px">is the zoo open monday</div>
+      <div data-hf-id="hf-t6os" class="f01-tab" data-depth="1" style="left:1460px;top:380px">cheap kids classes</div>
+    </div>
+
+    <div data-hf-id="hf-kixy" class="clip f01-payoff" data-start="0" data-duration="5.5" data-track-index="3" data-layout-allow-overlap="">
+      <div data-hf-id="hf-rq1t" class="f01-d f01-l1"><span data-hf-id="hf-dsdg" class="f01-count" id="f01-count">47</span> <span data-hf-id="hf-1bur" class="f01-word" id="f01-word">tabs.</span></div>
+      <div data-hf-id="hf-48f0" class="f01-d f01-l2" id="f01-l2">Still no plan.</div>
+    </div>
+
+    <div data-hf-id="hf-xtbs" class="clip f01-meta f01-mono" data-start="0" data-duration="5.5" data-track-index="4">
+      <span data-hf-id="hf-fcsu">famhop</span><span data-hf-id="hf-ppjs">01 • 08</span>
+    </div>
+  </div>
+
+  <script>
+    window.__timelines = window.__timelines || {};
+    (function () {
+      var scope = document.querySelector('[data-composition-id="01-47-tabs"]') || document;
+      var tl = gsap.timeline({ paused: true });
+      window.__timelines["01-47-tabs"] = tl;
+
+      /* ---- one tempo grid drives every beat ---- */
+      var PULSE = 0.5, ORIGIN = 0.1;
+      var B = [0, 2, 5, 7, 8].map(function (n) { return ORIGIN + PULSE * n; });
+      /* B[0] 0.10 cluster · B[1] 1.10 fling+fill · B[2] 2.60 count · B[3] 3.60 "tabs." · B[4] 4.10 slam */
+
+      var CX = 960, CY = 540;            // frame centre
+      var OX = 96,  OY = 138;            // .f01-tabs origin
+      var CHAR = 12.6, PADW = 44, CH = 59; // JetBrains Mono advance @21px · h-padding+borders · chip height
+
+      var wall  = scope.querySelector('#f01-wall');
+      var chips = Array.prototype.slice.call(scope.querySelectorAll('.f01-tab'));
+
+      var DEPTH_SCALE = [1, 0.97, 0.94];
+      var DEPTH = [0,0,0,0,0, 1,2,1, 0,1,2,1, 2,0,2,1];
+
+      /* home centre of every chip, from its authored left/top (no layout measurement) */
+      chips.forEach(function (el) {
+        var w = el.textContent.length * CHAR + PADW;
+        el.__hx = OX + parseFloat(el.style.left) + w / 2;
+        el.__hy = OY + parseFloat(el.style.top) + CH / 2;
+      });
+
+      /* ---- Scene 1 (B[0]) — five chips puncture in as a tight centred cluster, 2 depth planes ---- */
+      var CLUSTER = [[-89, -60], [72, -26], [-105, 21], [96, 48], [-5, 75]];
+      var CLUSTER_SCALE = [1, 0.86, 1, 0.86, 1];
+
+      for (var i = 0; i < 5; i++) {
+        var el = chips[i];
+        el.__dx = CX + CLUSTER[i][0] - el.__hx;
+        el.__dy = CY + CLUSTER[i][1] - el.__hy;
+        tl.fromTo(el,
+          { x: el.__dx, y: el.__dy, scale: 0, opacity: 0 },
+          { x: el.__dx, y: el.__dy, scale: CLUSTER_SCALE[i], opacity: 1, duration: 0.5, ease: "power3.out" },
+          B[0] + i * 0.06);
+      }
+
+      /* ---- Scene 2 (B[1]) — the cluster flings outward to its wall marks ---- */
+      for (var j = 0; j < 5; j++) {
+        tl.to(chips[j],
+          { x: 0, y: 0, scale: DEPTH_SCALE[DEPTH[j]], duration: 1.1, ease: "expo.out" },
+          B[1] + j * 0.05);
+      }
+
+      /* ...while the rest puncture in behind, radiating the last 28% out from the same centre */
+      var SPREAD = 0.72;
+      for (var k = 5; k < chips.length; k++) {
+        var c = chips[k], s = DEPTH_SCALE[DEPTH[k]];
+        tl.fromTo(c,
+          { x: (CX - c.__hx) * (1 - SPREAD), y: (CY - c.__hy) * (1 - SPREAD), scale: s * 0.6, opacity: 0 },
+          { x: 0, y: 0, scale: s, opacity: 1, duration: 0.6, ease: "power3.out" },
+          B[1] + 0.05 + (k - 5) * 0.075);
+      }
+
+      /* ---- Scene 3 (B[2]) — the counter climbs 12 -> 47, growing with the value ---- */
+      var counter = scope.querySelector('#f01-count');
+      var word    = scope.querySelector('#f01-word');
+      var line2   = scope.querySelector('#f01-l2');
+      var COUNT_DUR = 1.0;
+      var START_SCALE = 82 / 165;          // START_SIZE / END_SIZE, END_SIZE static in CSS
+      var count = { v: 12 };
+
+      tl.fromTo(counter,
+        { opacity: 0, x: -70 },
+        { opacity: 1, x: 0, duration: 0.55, ease: "circ.out" },
+        B[2]);
+      tl.to(count,
+        { v: 47, duration: COUNT_DUR, ease: "power3.out",
+          onUpdate: function () { counter.textContent = String(Math.round(count.v)); } },
+        B[2]);
+      tl.fromTo(counter,
+        { scale: START_SCALE },
+        { scale: 1, duration: COUNT_DUR, ease: "power3.out" },
+        B[2]);
+
+      /* "TABS." lands beside it at the top of the climb */
+      tl.fromTo(word,
+        { opacity: 0, x: 120 },
+        { opacity: 1, x: 0, duration: 0.45, ease: "expo.out" },
+        B[3]);
+
+      /* ---- Scene 4 (B[4]) — the slam, and the wall steps back in weight ---- */
+      tl.fromTo(line2,
+        { opacity: 0, y: -34, scale: 1.22 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "power4.out" },
+        B[4]);
+      tl.to(wall, { opacity: 0.62, duration: 0.6, ease: "power2.out" }, B[4]);
+
+      /* held read — bounded jitter on two rear chips, phase 0 -> 2PI so it settles at 0 */
+      var rearA = chips[6], rearB = chips[14];
+      var phase = { p: 0 };
+      tl.to(phase,
+        { p: Math.PI * 2, duration: 2.8, ease: "none",
+          onUpdate: function () {
+            gsap.set(rearA, { y: Math.sin(phase.p) * 2.2 });
+            gsap.set(rearB, { y: Math.sin(phase.p * 2) * 1.8 });
+          } },
+        2.7);
+    })();
+  </script>
+</template>

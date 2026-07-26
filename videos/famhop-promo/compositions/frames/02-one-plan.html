@@ -1,0 +1,335 @@
+<template>
+  <style>
+    @font-face{font-family:'Bricolage Grotesque';src:url('assets/fonts/bricolage-grotesque-400_800.woff2') format('woff2');font-weight:400 800;font-style:normal;font-display:block;}
+    @font-face{font-family:'JetBrains Mono';src:url('assets/fonts/jetbrains-mono-400.woff2') format('woff2');font-weight:100 800;font-style:normal;font-display:block;}
+    @font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/plus-jakarta-sans-400.woff2') format('woff2');font-weight:200 800;font-style:normal;font-display:block;}
+
+    #root{width:1920px;height:1080px;position:relative;overflow:hidden;--accent:#DD6A1A;color:#1B1916;font-family:'Plus Jakarta Sans',sans-serif;}
+
+    .f02-g{position:absolute;inset:0;background:#FAF5EB;}
+
+    /* frame-chrome — matched to frame 01 so the cut doesn't shift it */
+    .f02-mono{font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:.06em;text-transform:uppercase;line-height:1.3;}
+    .f02-top{position:absolute;left:64px;right:64px;top:56px;display:flex;justify-content:space-between;align-items:center;}
+    .f02-pill{border:3px solid #1B1916;border-radius:999px;padding:5px 22px;background:#FAF5EB;}
+    .f02-meta{position:absolute;left:64px;right:64px;top:842px;display:flex;justify-content:space-between;align-items:center;}
+
+    /* — frame 01's wall, inherited whole: same positions, same three depth
+         planes, same yellow hard-shadow seed chip, same 0.62 wall opacity — */
+    .f02-tabs{position:absolute;left:96px;top:138px;width:1728px;height:430px;opacity:.62;}
+    .f02-tabw{position:absolute;z-index:3;}
+    .f02-tabw[data-back]{z-index:2;}
+    .f02-tabw[data-depth="1"]{z-index:2;}
+    .f02-tabw[data-depth="2"]{z-index:1;}
+    .f02-tabw[data-seed]{z-index:5;}
+    .f02-tab{background:#F2EAD9;border:4px solid #1B1916;border-radius:0;padding:12px 18px;
+      font-family:'JetBrains Mono',monospace;font-size:21px;line-height:1.3;white-space:nowrap;color:#1B1916;
+      transform-origin:50% 50%;will-change:transform;}
+    .f02-tabw[data-depth="1"] .f02-tab{background:#FAF5EB;}
+    .f02-tabw[data-depth="2"] .f02-tab{background:#FAF5EB;border-color:#4A453F;color:#4A453F;}
+    .f02-tabw[data-seed] .f02-tab{background:#E8B547;box-shadow:24px 24px 0 #DD6A1A,24px 24px 0 4px #1B1916;}
+
+    /* frame 01's payoff, inherited at full strength — the nearest plane */
+    .f02-payoffw{position:absolute;left:96px;top:570px;}
+    .f02-payoff{transform-origin:864px 67px;will-change:transform;}
+    .f02-pd{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;line-height:.9;letter-spacing:-.01em;white-space:nowrap;}
+    .f02-pl1{font-size:165px;}
+    .f02-pl2{font-size:124px;}
+
+    .f02-d{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;line-height:.9;letter-spacing:-.01em;text-align:center;}
+    .f02-head{position:absolute;left:0;right:0;top:168px;font-size:154px;}
+
+    /* — the one chip all sixteen become; morphs into the card footprint — */
+    .f02-seedw{position:absolute;left:844px;top:610px;width:232px;height:53px;}
+    .f02-seed{position:absolute;inset:0;background:#F2EAD9;border:4px solid #1B1916;}
+    .f02-seed-old{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;}
+    .f02-seed-old i{display:block;height:7px;background:#1B1916;}
+
+    .f02-card{position:absolute;left:410px;top:512px;width:1100px;height:250px;box-sizing:border-box;background:#F2EAD9;border:4px solid #1B1916;padding:30px 36px;overflow:hidden;}
+    .f02-kick{background:#1B1916;color:#FAF5EB;display:inline-block;padding:6px 16px;font-family:'JetBrains Mono',monospace;font-size:22px;letter-spacing:.14em;text-transform:uppercase;}
+    .f02-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:56px;line-height:1.0;margin-top:20px;}
+
+    .f02-wm{position:absolute;left:768px;top:762px;width:384px;height:120px;display:block;overflow:visible;}
+    .f02-wm path,.f02-wm circle{fill-opacity:0;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;}
+    .f02-wm path{stroke:#1B1916;}
+    .f02-wm circle{stroke:#DD6A1A;}
+  </style>
+
+  <div data-hf-id="hf-i56n" id="root" data-composition-id="02-one-plan" data-width="1920" data-height="1080" data-duration="5.4">
+
+    <div data-hf-id="hf-eg4d" class="clip f02-g" data-start="0" data-duration="5.4" data-track-index="0"></div>
+
+    <div data-hf-id="hf-9idt" class="clip f02-tabs" data-start="0" data-duration="5.4" data-track-index="1">
+      <div data-hf-id="hf-kl1v" class="f02-tabw" data-i="1" data-ly="a" data-seed="" data-dx="722" data-dy="469" data-bx=".839" data-by=".545" style="left:0px;top:0px"><div data-hf-id="hf-o6pd" class="f02-tab">kid friendly near me</div></div>
+      <div data-hf-id="hf-1hyz" class="f02-tabw" data-i="2" data-ly="b" data-back="" data-dx="312" data-dy="425" data-bx=".592" data-by=".806" style="left:360px;top:44px"><div data-hf-id="hf-lf9q" class="f02-tab">toddler activities saturday</div></div>
+      <div data-hf-id="hf-v3j0" class="f02-tabw" data-i="3" data-ly="b" data-dx="-104" data-dy="469" data-bx=".217" data-by=".976" style="left:820px;top:0px"><div data-hf-id="hf-6can" class="f02-tab">is it raining sunday</div></div>
+      <div data-hf-id="hf-xcau" class="f02-tabw" data-i="4" data-ly="a" data-back="" data-dx="-459" data-dy="417" data-bx=".740" data-by=".673" style="left:1200px;top:52px"><div data-hf-id="hf-u4sj" class="f02-tab">museum free days</div></div>
+      <div data-hf-id="hf-odhz" class="f02-tabw" data-i="5" data-ly="a" data-dx="583" data-dy="357" data-bx=".853" data-by=".522" style="left:120px;top:112px"><div data-hf-id="hf-0o3c" class="f02-tab">indoor play 3 year old</div></div>
+      <div data-hf-id="hf-avgi" class="f02-tabw" data-i="6" data-ly="c" data-depth="1" data-dx="156" data-dy="319" style="left:560px;top:150px"><div data-hf-id="hf-zxsc" class="f02-tab">city events calendar</div></div>
+      <div data-hf-id="hf-g3zi" class="f02-tabw" data-i="7" data-ly="b" data-depth="2" data-dx="-284" data-dy="359" data-bx=".620" data-by=".784" style="left:1000px;top:110px"><div data-hf-id="hf-d9ij" class="f02-tab">birthday party ideas</div></div>
+      <div data-hf-id="hf-w2h2" class="f02-tabw" data-i="8" data-ly="a" data-depth="1" data-dx="-677" data-dy="313" data-bx=".908" data-by=".420" style="left:1380px;top:156px"><div data-hf-id="hf-4tr1" class="f02-tab">what time does it open</div></div>
+      <div data-hf-id="hf-7w21" class="f02-tabw" data-i="9" data-ly="a" data-dx="672" data-dy="245" data-bx=".939" data-by=".343" style="left:0px;top:224px"><div data-hf-id="hf-mawa" class="f02-tab">free things to do with kids</div></div>
+      <div data-hf-id="hf-cgj3" class="f02-tabw" data-i="10" data-ly="c" data-depth="1" data-dx="189" data-dy="207" style="left:470px;top:262px"><div data-hf-id="hf-ofk7" class="f02-tab">rainy day activities bay area</div></div>
+      <div data-hf-id="hf-p5tw" class="f02-tabw" data-i="11" data-ly="c" data-depth="2" data-dx="-251" data-dy="245" style="left:980px;top:224px"><div data-hf-id="hf-1lar" class="f02-tab">story time library</div></div>
+      <div data-hf-id="hf-x3yu" class="f02-tabw" data-i="12" data-ly="a" data-depth="1" data-dx="-579" data-dy="201" data-bx=".945" data-by=".328" style="left:1320px;top:268px"><div data-hf-id="hf-62hj" class="f02-tab">splash pad hours</div></div>
+      <div data-hf-id="hf-mj61" class="f02-tabw" data-i="13" data-ly="b" data-depth="2" data-dx="523" data-dy="133" data-bx=".969" data-by=".246" style="left:180px;top:336px"><div data-hf-id="hf-35yj" class="f02-tab">stroller friendly hike</div></div>
+      <div data-hf-id="hf-75jo" class="f02-tabw" data-i="14" data-ly="c" data-dx="70" data-dy="95" style="left:640px;top:374px"><div data-hf-id="hf-63iw" class="f02-tab">pumpkin patch near me</div></div>
+      <div data-hf-id="hf-g0ht" class="f02-tabw" data-i="15" data-ly="b" data-depth="2" data-dx="-417" data-dy="133" data-bx=".953" data-by=".304" style="left:1120px;top:336px"><div data-hf-id="hf-jmvh" class="f02-tab">is the zoo open monday</div></div>
+      <div data-hf-id="hf-nbky" class="f02-tabw" data-i="16" data-ly="a" data-depth="1" data-dx="-731" data-dy="89" data-bx=".993" data-by=".121" style="left:1460px;top:380px"><div data-hf-id="hf-xj4e" class="f02-tab">cheap kids classes</div></div>
+    </div>
+
+    <div data-hf-id="hf-gcs8" class="clip f02-payoffw" data-start="0" data-duration="5.4" data-track-index="2">
+      <div data-hf-id="hf-4uko" class="f02-payoff" data-layout-allow-overlap="">
+        <div data-hf-id="hf-9m9v" class="f02-pd f02-pl1"><span data-hf-id="hf-32ls" style="color:#DD6A1A">47</span> tabs.</div>
+        <div data-hf-id="hf-vk9a" class="f02-pd f02-pl2">Still no plan.</div>
+      </div>
+    </div>
+
+    <div data-hf-id="hf-f4wl" class="clip f02-card" data-start="0" data-duration="5.4" data-track-index="3">
+      <span data-hf-id="hf-5uws" class="f02-kick">This weekend’s plan, ready to go</span>
+      <div data-hf-id="hf-5fbc" class="f02-title">Palo Alto rainy-day: animals, art &amp; ice cream</div>
+    </div>
+
+    <div data-hf-id="hf-y0q0" class="clip f02-seedw" data-start="0" data-duration="5.4" data-track-index="4">
+      <div data-hf-id="hf-i23u" class="f02-seed">
+        <div data-hf-id="hf-mufq" class="f02-seed-old"><i data-hf-id="hf-13jz" style="width:132px"></i><i data-hf-id="hf-08or" style="width:84px"></i></div>
+      </div>
+    </div>
+
+    <div data-hf-id="hf-89h2" class="clip f02-d f02-head" data-start="0" data-duration="5.4" data-track-index="5" data-layout-allow-overlap="">
+      <div data-hf-id="hf-qqag" id="f02-l1">One tap.</div>
+      <div data-hf-id="hf-cfzy" id="f02-l2" style="color:#DD6A1A">One plan.</div>
+    </div>
+
+    <div data-hf-id="hf-mb33" class="clip f02-wmw" data-start="0" data-duration="5.4" data-track-index="6">
+      <svg data-hf-id="hf-o9mi" class="f02-wm" viewBox="0 0 320.4 100" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+        <g data-hf-id="hf-dtgc" transform="translate(0 76) scale(0.1 -0.1)">
+          <g data-hf-id="hf-g1zz" fill="currentColor">
+            <path data-hf-id="hf-sgra" id="f02-wm-f" d="M81 0V515Q81 571 102.5 611.5Q124 652 163.5 674.5Q203 697 256 697Q284 697 305.5 693.5Q327 690 339 688V541Q331 543 320.5 545.5Q310 548 294 548Q268 548 256.0 533.5Q244 519 244 488V0ZM328 320H18V469H328Z" />
+            <path data-hf-id="hf-jx8e" id="f02-wm-a" d="M196 -13Q144 -13 104.0 7.5Q64 28 41.5 65.5Q19 103 19 151Q19 203 43.5 239.5Q68 276 108.5 295.5Q149 315 198 315Q271 315 317.0 281.5Q363 248 377 183L311 198V309Q311 334 293.0 352.0Q275 370 237 370Q210 370 175.0 363.0Q140 356 101 337L55 452Q99 474 152.0 488.5Q205 503 262 503Q331 503 378.5 478.0Q426 453 450.0 407.5Q474 362 474 300V0H338L307 97L377 119Q362 58 317.5 22.5Q273 -13 196 -13ZM251 97Q279 97 296.0 112.0Q313 127 313 151Q313 174 296.0 189.0Q279 204 251 204Q221 204 204.5 189.0Q188 174 188 151Q188 127 204.5 112.0Q221 97 251 97Z" transform="translate(317 0)" />
+            <path data-hf-id="hf-p4m9" id="f02-wm-m" d="M48 0V490H168L200 389L141 395Q166 423 198.5 447.5Q231 472 270.0 487.5Q309 503 352 503Q400 503 429.5 486.0Q459 469 475.0 440.5Q491 412 497.5 376.0Q504 340 504 301V0H342V282Q342 320 330.0 332.0Q318 344 299 344Q272 344 246.5 329.5Q221 315 195 289L160 370H210V0ZM634 0V282Q634 320 622.5 332.0Q611 344 592 344Q566 344 540.0 329.5Q514 315 488 289L435 395Q460 423 492.5 447.5Q525 472 564.0 487.5Q603 503 645 503Q693 503 723.0 486.0Q753 469 769.0 440.5Q785 412 791.0 376.0Q797 340 797 301V0Z" transform="translate(800 0)" />
+            <path data-hf-id="hf-zyg2" id="f02-wm-h" d="M48 0V681H210V0ZM352 0V282Q352 320 340.0 332.0Q328 344 305 344Q288 344 269.0 337.5Q250 331 231.5 318.5Q213 306 195 289L141 395Q166 423 199.5 447.5Q233 472 272.5 487.5Q312 503 356 503Q405 503 436.0 486.0Q467 469 484.0 440.5Q501 412 507.5 376.0Q514 340 514 301V0Z" transform="translate(1607 0)" />
+          </g>
+          <circle data-hf-id="hf-vznt" id="f02-wm-o" cx="2411.5" cy="245" r="269.9" fill="var(--accent)" />
+          <g data-hf-id="hf-s7oj" fill="currentColor" transform="translate(2662 0)">
+            <path data-hf-id="hf-vem6" id="f02-wm-p" d="M326 -13Q262 -13 215.0 16.0Q168 45 142.0 102.0Q116 159 116 245Q116 325 142.5 382.5Q169 440 216.5 471.5Q264 503 327 503Q394 503 444.5 469.5Q495 436 523.5 378.0Q552 320 552 245Q552 170 523.0 111.5Q494 53 442.5 20.0Q391 -13 326 -13ZM48 -190V490H168L210 356H201V144H210V-190ZM295 143Q334 143 360.5 171.5Q387 200 387 245Q387 289 360.5 318.5Q334 348 295 348Q256 348 229.0 318.5Q202 289 202 245Q202 200 229.0 171.5Q256 143 295 143Z" />
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <div data-hf-id="hf-1xuk" class="clip f02-top f02-mono" data-start="0" data-duration="5.4" data-track-index="7">
+      <span data-hf-id="hf-5wsp">02 · the answer</span><span data-hf-id="hf-ji1u" class="f02-pill">famhop</span>
+    </div>
+
+    <div data-hf-id="hf-8ikf" class="clip f02-meta f02-mono" data-start="0" data-duration="5.4" data-track-index="8">
+      <span data-hf-id="hf-fznu">the answer</span><span data-hf-id="hf-qvf7">02 • 08</span>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+      window.__timelines["02-one-plan"] = tl;
+
+      /* ===============================================================
+         SCENE 1 (0.00–1.00) — THE CRUSH. The signature beat.
+         Frame 01 hands the frame over with its wall at opacity 0.62,
+         chips at their authored positions and per-depth resting scales
+         (1 / 0.97 / 0.94), the yellow hard-shadow seed chip top-left,
+         and the payoff type at full strength. All of it is reproduced
+         here, so the hard cut is invisible — then the whole frame
+         collapses on ONE point: the plan card's centre, (960, 637).
+
+         Four planes, nearest first: the payoff type sweeps out, then
+         the wall's three depth layers at three velocities. Each plane
+         carries a velocity-blur envelope on its own window and ease
+         (motion-blur-streak), and shrinks while shedding opacity as it
+         travels (scale-swap-transition).
+         =============================================================== */
+      var DEPTH_SCALE = { "0": 1, "1": 0.97, "2": 0.94 };
+      var LAYER = {
+        a: { start: 0.12, dur: 0.54, blur: 22 },   // near / fastest — longest travel
+        b: { start: 0.22, dur: 0.58, blur: 14 },   // mid
+        c: { start: 0.32, dur: 0.58, blur: 0 }     // far / slowest — shortest travel
+      };
+      var chips = gsap.utils.toArray(".f02-tabw");
+
+      // Hold frame 01's inherited wall opacity so nothing can re-base it.
+      tl.fromTo(".f02-tabs", { opacity: 0.62 }, { opacity: 0.62, duration: 0.01, ease: "none" }, 0);
+
+      // Plane 0 — the payoff type: nearest to camera, so it is swept out
+      // first and clears the stage for the wall behind it. Its
+      // transform-origin IS the convergence point in local coordinates
+      // (864, 67 == 960, 637 on the frame), so a pure scale collapses it
+      // exactly onto the spot the chips are heading for, whatever the type
+      // measures. A depth move, so the blur is symmetric and rides an
+      // unscaled wrapper (screen-space smear, not a shrinking one).
+      tl.fromTo(".f02-payoff",
+        { scale: 1, opacity: 1 },
+        { scale: 0.10, opacity: 0, duration: 0.46, ease: "power2.in" }, 0.08);
+      tl.fromTo(".f02-payoffw",
+        { filter: "blur(0px)" },
+        { filter: "blur(20px)", duration: 0.46, ease: "power1.in" }, 0.08);
+
+      // Planes 1–3 — the wall.
+      chips.forEach(function (w) {
+        var L = LAYER[w.dataset.ly];
+        var s0 = DEPTH_SCALE[w.dataset.depth || "0"];   // frame 01's resting depth scale
+        // Anticipation — one breath before the suction, from the inherited scale.
+        tl.fromTo(w.firstElementChild,
+          { scale: s0 }, { scale: s0 * 1.04, duration: 0.12, ease: "power2.out" }, 0);
+        // Travel rides the wrapper so the blur below stays in screen space.
+        tl.fromTo(w,
+          { x: 0, y: 0 },
+          { x: parseFloat(w.dataset.dx), y: parseFloat(w.dataset.dy),
+            duration: L.dur, ease: "power2.in" },
+          L.start);
+        // Shrink + fade ride the chip itself.
+        tl.fromTo(w.firstElementChild,
+          { scale: s0 * 1.04, opacity: 1 },
+          { scale: s0 * 0.32, opacity: 0, duration: L.dur, ease: "power2.in", immediateRender: false },
+          L.start);
+      });
+
+      // Directional blur: one SVG filter per fast chip, stdDeviation written
+      // on that chip's own travel axis. Built here (not in markup) so the
+      // primitives can't be case-mangled by a serializer round-trip.
+      var NS = "http://www.w3.org/2000/svg";
+      var stage = document.querySelector(".f02-tabs");
+      var defs = document.createElementNS(NS, "svg");
+      defs.setAttribute("aria-hidden", "true");
+      defs.style.cssText = "position:absolute;left:0;top:0;width:0;height:0;overflow:hidden";
+      stage.appendChild(defs);
+
+      ["a", "b"].forEach(function (k) {
+        var group = chips.filter(function (c) { return c.dataset.ly === k && c.dataset.bx; });
+        if (!group.length) return;
+        var nodes = [], ax = [];
+        group.forEach(function (c) {
+          var f = document.createElementNS(NS, "filter");
+          f.setAttribute("id", "f02-ff-" + c.dataset.i);
+          f.setAttribute("x", "-120%");
+          f.setAttribute("y", "-200%");
+          f.setAttribute("width", "340%");
+          f.setAttribute("height", "500%");
+          var b = document.createElementNS(NS, "feGaussianBlur");
+          b.setAttribute("in", "SourceGraphic");
+          b.setAttribute("stdDeviation", "0 0");   // seeded sharp — t=0 must be crisp
+          f.appendChild(b);
+          defs.appendChild(f);
+          c.style.filter = "url(#f02-ff-" + c.dataset.i + ")";
+          nodes.push(b);
+          ax.push([parseFloat(c.dataset.bx), parseFloat(c.dataset.by)]);
+        });
+        var p = { v: 0 };
+        var write = function () {
+          for (var i = 0; i < nodes.length; i++) {
+            nodes[i].setAttribute("stdDeviation",
+              (p.v * ax[i][0]).toFixed(2) + " " + (p.v * ax[i][1]).toFixed(2));
+          }
+        };
+        write();
+        // Same window as the travel; an accelerating departure, so peak blur
+        // lands at peak speed, right as the chip dies on the point.
+        tl.fromTo(p, { v: 0 },
+          { v: LAYER[k].blur, duration: LAYER[k].dur, ease: "power1.in", onUpdate: write },
+          LAYER[k].start);
+      });
+
+      /* ===============================================================
+         SCENE 2 (0.54–2.10) — sixteen become one, one becomes the plan.
+         The seed is a single chip-sized surface standing where the wall
+         died. card-morph-anchor scales it (uniform scale, never w/h)
+         into the card's exact footprint; the seam onto the real card is
+         an INVERSE ZOOM-THROUGH — the seed recedes and blurs, hard cut
+         at peak blur, the card arrives oversized and retracts into the
+         focal plane. That reads as "arriving at".
+         =============================================================== */
+      var SEED_W = 232, CARD_W = 1100;
+      var END_SCALE = CARD_W / SEED_W;             // 4.741 — the seed is aspect-matched
+      var CUT = 1.62, PEAK = 18;                   // big surface → 18px, identical both sides
+
+      tl.fromTo(".f02-seed",
+        { scale: 0.28, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.34, ease: "power3.out" }, 0.54);
+
+      tl.fromTo(".f02-seed", { scale: 1 },
+        { scale: END_SCALE, duration: 0.54, ease: "power2.inOut", immediateRender: false }, 0.90);
+      // Old content clears over the first ~40% of the morph.
+      tl.fromTo(".f02-seed-old", { opacity: 1 },
+        { opacity: 0, duration: 0.22, ease: "power1.in" }, 0.90);
+
+      // Phase 1 — the seed recedes, blur and opacity ramp to the cut values.
+      tl.fromTo(".f02-seed", { scale: END_SCALE },
+        { scale: END_SCALE * 0.8, duration: 0.18, ease: "power3.in", immediateRender: false }, 1.44);
+      tl.fromTo(".f02-seedw", { filter: "blur(0px)" },
+        { filter: "blur(" + PEAK + "px)", duration: 0.18, ease: "power3.in", immediateRender: false }, 1.44);
+      tl.fromTo(".f02-seedw", { opacity: 1 },
+        { opacity: 0.15, duration: 0.18, ease: "none" }, 1.44);
+      // Phase 2 — the hard cut, at matched blur and opacity.
+      tl.fromTo(".f02-seedw", { opacity: 0.15 },
+        { opacity: 0, duration: 0.02, ease: "none", immediateRender: false }, CUT);
+
+      // The card is held out of sight until the cut, then phase 3: it arrives
+      // oversized, as if from just behind the camera, and retracts.
+      tl.fromTo(".f02-card", { opacity: 0 }, { opacity: 0, duration: 0.01, ease: "none" }, 0);
+      tl.fromTo(".f02-card",
+        { opacity: 0.15, scale: 1.25, filter: "blur(" + PEAK + "px)" },
+        { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.48, ease: "expo.out", immediateRender: false },
+        CUT);
+      // Inner content reads only once the container has settled.
+      tl.fromTo(".f02-title", { opacity: 0, y: 24 },
+        { opacity: 1, y: 0, duration: 0.40, ease: "power3.out" }, 1.90);
+
+      /* ===============================================================
+         SCENE 3 (2.16–3.33) — kinetic-beat-slam on ONE tempo grid.
+         Every hit reads its time from PULSE; each phrase gets its own
+         entrance axis and its own ease.
+         =============================================================== */
+      var PULSE = 0.27, BASE = 2.16;
+      var BEATS = [BASE, BASE + 2 * PULSE, BASE + 3 * PULSE];
+
+      tl.fromTo("#f02-l1",
+        { scale: 1.28, opacity: 0, filter: "blur(14px)" },
+        { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.42, ease: "power4.out" },
+        BEATS[0]);
+      tl.fromTo("#f02-l2",
+        { x: -280, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.40, ease: "expo.out" },
+        BEATS[1]);
+      // The inverted ink kicker wipes in along its own width.
+      tl.fromTo(".f02-kick",
+        { clipPath: "inset(0% 100% 0% 0%)" },
+        { clipPath: "inset(0% 0% 0% 0%)", duration: 0.36, ease: "power3.out" },
+        BEATS[2]);
+
+      /* ===============================================================
+         SCENE 4 (3.24–4.70) — the wordmark draws itself on, stroke by
+         stroke (svg-path-draw on measured getTotalLength), the letters
+         fill, and the pin-o takes accent-orange LAST. Then held: no
+         drift, no breathing.
+         =============================================================== */
+      var STROKES = ["#f02-wm-f", "#f02-wm-a", "#f02-wm-m", "#f02-wm-h", "#f02-wm-o", "#f02-wm-p"];
+      var DRAW = BASE + 4 * PULSE, SEG = 0.26, STAG = 0.13;
+
+      STROKES.forEach(function (sel, i) {
+        var el = document.querySelector(sel);
+        var len = el.getTotalLength() * 1.02;      // slight overestimate never clips the end
+        el.style.strokeDasharray = len;
+        el.style.strokeDashoffset = len;
+        tl.fromTo(sel, { strokeDashoffset: len },
+          { strokeDashoffset: 0, duration: i === 4 ? 0.24 : SEG, ease: "power2.out" },
+          DRAW + i * STAG);
+      });
+
+      ["#f02-wm-f", "#f02-wm-a", "#f02-wm-m", "#f02-wm-h", "#f02-wm-p"].forEach(function (sel, i) {
+        tl.fromTo(sel, { fillOpacity: 0 },
+          { fillOpacity: 1, duration: 0.24, ease: "power1.out" }, 4.02 + i * 0.035);
+      });
+      tl.fromTo("#f02-wm-o", { fillOpacity: 0 },
+        { fillOpacity: 1, duration: 0.30, ease: "power1.out" }, 4.40);
+    })();
+  </script>
+</template>

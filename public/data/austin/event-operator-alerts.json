@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "austin",
-  "generatedAt": "2026-07-23T02:00:22.141Z",
-  "alertCount": 18,
+  "generatedAt": "2026-07-26T23:31:46.704Z",
+  "alertCount": 16,
   "alerts": [
     {
       "severity": "critical",
@@ -11,20 +11,22 @@
       "sourceName": "Austin Public Library",
       "sourceType": "html",
       "url": "https://library.austintexas.gov/events/calendar",
-      "status": "fetch-error",
+      "status": "blocked",
       "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
+      "reason": "challenge page returned instead of event content",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://library.austintexas.gov/events/calendar",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "blocked",
+          "reason": "challenge page returned instead of event content",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -43,7 +45,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://thinkeryaustin.org/visit-us/",
@@ -68,7 +70,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://www.thestoryoftexas.com/visit/calendar",
@@ -93,7 +95,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://www.lbjlibrary.org/events",
@@ -118,7 +120,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://blantonmuseum.org/events/",
@@ -143,7 +145,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://www.umlaufsculpture.org/events",
@@ -156,24 +158,25 @@
     {
       "severity": "warning",
       "metroId": "austin",
-      "sourceId": "round-rock-library-libcal",
-      "sourceName": "Round Rock Public Library",
-      "sourceType": "libcal",
-      "url": "https://roundrocktexas.libcal.com/calendar/libraryevents?cid=19825&cal=19825",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
+      "sourceId": "pflugerville-library",
+      "sourceName": "Pflugerville Public Library",
+      "sourceType": "librarycalendar",
+      "url": "https://pflugerville.librarycalendar.com/events/month",
+      "status": "ok-last-known-good",
+      "issueType": "zero-in-window",
+      "reason": "source produced no live events; using last-known-good future events",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 56,
+      "recoveredEvents": 1,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 56,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
-          "url": "https://roundrocktexas.libcal.com/calendar/libraryevents?cid=19825&cal=19825",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "url": "https://pflugerville.librarycalendar.com/events/month",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -192,7 +195,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://redriverculturaldistrict.org/hot-summer-nights/",
@@ -217,62 +220,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://www.starspangledfest.com/july-4",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html;charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "austin",
-      "sourceId": "thinkery-steam-sundays-2026-07-19-src",
-      "sourceName": "STEAM Sundays: Summer Edition",
-      "sourceType": "officialTextEvents",
-      "url": "https://thinkeryaustin.org/steam-sunday/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
-      "fetches": [
-        {
-          "url": "https://thinkeryaustin.org/steam-sunday/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "austin",
-      "sourceId": "texas-science-museum-free-fourth-sunday-2026-07-26-src",
-      "sourceName": "H-E-B Free Fourth Sunday",
-      "sourceType": "officialTextEvents",
-      "url": "https://sciencemuseum.utexas.edu/events/h-e-b-free-fourth-sunday/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
-      "fetches": [
-        {
-          "url": "https://sciencemuseum.utexas.edu/events/h-e-b-free-fourth-sunday/",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
         }
       ]
     },
@@ -291,7 +245,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://stubbsaustin.com/concert-calendar/",
@@ -316,7 +270,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://mohawkaustin.com/calendar",
@@ -341,7 +295,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://continentalclub.com/austin-tx/",
@@ -366,7 +320,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://antonesnightclub.com/calendar/",
@@ -391,7 +345,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://acl-live.com/calendar/",
@@ -416,7 +370,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://drafthouse.com/austin/calendar",
@@ -441,7 +395,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://www.capcitycomedy.com/calendar",

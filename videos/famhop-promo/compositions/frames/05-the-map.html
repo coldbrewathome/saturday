@@ -1,0 +1,188 @@
+<template>
+  <style>
+    @font-face{font-family:'Bricolage Grotesque';src:url('assets/fonts/bricolage-grotesque-400_800.woff2') format('woff2');font-weight:400 800;font-style:normal;font-display:block;}
+    @font-face{font-family:'JetBrains Mono';src:url('assets/fonts/jetbrains-mono-400.woff2') format('woff2');font-weight:100 800;font-style:normal;font-display:block;}
+    @font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/plus-jakarta-sans-400.woff2') format('woff2');font-weight:200 800;font-style:normal;font-display:block;}
+
+    #root{width:1920px;height:1080px;position:relative;overflow:hidden;container-type:size;--accent:#DD6A1A;color:#1B1916;font-family:'Plus Jakarta Sans',sans-serif;}
+
+    /* full-bleed ground — a clip layer, never the root */
+    .f05-g{position:absolute;inset:0;background:#FAF5EB;}
+
+    /* ---- mono chrome ---- */
+    .f05-mono{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:400;letter-spacing:.06em;text-transform:uppercase;color:#1B1916;}
+    .f05-top{position:absolute;left:64px;right:64px;top:56px;display:flex;justify-content:space-between;align-items:center;}
+    .f05-pill{background:#FAF5EB;border:3px solid #1B1916;border-radius:999px;padding:5px 22px;letter-spacing:.06em;}
+    .f05-meta{position:absolute;left:64px;right:64px;top:842px;display:flex;justify-content:space-between;color:#4A453F;}
+    .f05-dotrule{color:#1B1916;}
+
+    /* ---- the captured product screen: the "scene" of the virtual camera ---- */
+    .f05-screen{position:absolute;left:96px;top:158px;width:1728px;height:600px;box-sizing:border-box;
+      border:4px solid #1B1916;background:#E8DFCA;overflow:hidden;}
+
+    /* one wrapper carries the whole camera; world coords == source-image pixels */
+    .f05-world{position:absolute;left:50%;top:50%;width:1920px;height:1080px;margin-left:-960px;margin-top:-540px;
+      transform-origin:50% 50%;will-change:transform;}
+
+    /* depth layer 1 — the full product screen, sharp, never dimmed */
+    .f05-plate{position:absolute;left:0;top:0;width:1920px;height:1080px;display:block;z-index:1;}
+
+    /* depth layer 2 — the filter rail only, racks out of focus as it leaves frame */
+    .f05-rail{position:absolute;left:0;top:0;width:288px;height:1080px;overflow:hidden;
+      --dof:0px;filter:blur(var(--dof));will-change:filter;z-index:2;}
+    .f05-rail img{position:absolute;left:0;top:0;width:1920px;height:1080px;display:block;}
+
+    /* depth layer 3 — the focal plane: stays sharp, sits above the blurred rail */
+    .f05-focus{position:absolute;left:0;top:0;width:1920px;height:1080px;z-index:3;overflow:visible;}
+
+    /* ---- the one hard-offset featured block ---- */
+    .f05-marker{position:absolute;left:158px;top:590px;background:#B25368;border:4px solid #1B1916;
+      padding:22px 34px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;
+      font-size:60px;line-height:.92;letter-spacing:-.01em;color:#1B1916;transform-origin:50% 50%;will-change:transform;
+      box-shadow:24px 24px 0 #DD6A1A, 24px 24px 0 4px #1B1916;}
+    .f05-l1{display:block;white-space:nowrap;}
+    .f05-l2{display:block;white-space:nowrap;}
+    .f05-count{display:inline-block;width:172px;text-align:right;font-variant-numeric:tabular-nums;
+      transform-origin:100% 50%;will-change:transform;}
+  </style>
+
+  <div data-hf-id="hf-vj0o" id="root" data-composition-id="05-the-map" data-width="1920" data-height="1080" data-duration="5.5">
+    <div data-hf-id="hf-o4vw" class="clip f05-g" data-start="0" data-duration="5.5" data-track-index="0"></div>
+
+    <div data-hf-id="hf-d0j6" class="clip f05-screen" data-start="0" data-duration="5.5" data-track-index="1">
+      <div data-hf-id="hf-nqpu" class="f05-world" id="f05-world">
+        <img data-hf-id="hf-ppsg" class="f05-plate" src="assets/scroll-000.png" width="1920" height="1080" alt="">
+        <div data-hf-id="hf-9sdi" class="f05-rail" id="f05-rail"><img data-hf-id="hf-xjah" src="assets/scroll-000.png" width="1920" height="1080" alt=""></div>
+        <svg data-hf-id="hf-zgw0" class="f05-focus" viewBox="0 0 1920 1080" width="1920" height="1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g data-hf-id="hf-9iay" id="f05-pings" opacity="0">
+            <circle data-hf-id="hf-s2oq" id="f05-ring-a" cx="838" cy="456" r="86" fill="none" stroke="#DD6A1A" stroke-width="3" />
+            <circle data-hf-id="hf-z52v" id="f05-dot-a" cx="846" cy="453" r="26" fill="none" stroke="#DD6A1A" stroke-width="4.5" />
+            <circle data-hf-id="hf-tdsr" id="f05-dot-b" cx="836" cy="489" r="22" fill="none" stroke="#DD6A1A" stroke-width="3.5" />
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div data-hf-id="hf-lsn7" class="clip f05-top f05-mono" data-start="0" data-duration="5.5" data-track-index="2">
+      <span data-hf-id="hf-of7f" id="f05-toplabel">05 · everything near you</span><span data-hf-id="hf-u6nn" id="f05-pill" class="f05-pill">editor’s picks near this view</span>
+    </div>
+
+    <div data-hf-id="hf-xx8u" class="clip f05-marker" id="f05-marker" data-start="0" data-duration="5.5" data-track-index="3" data-layout-allow-overlap="">
+      <span data-hf-id="hf-3k6h" class="f05-l1"><span data-hf-id="hf-kq9b" class="f05-count" id="f05-count">0</span> spots.</span>
+      <span data-hf-id="hf-9djh" class="f05-l2" id="f05-l2">Bay Area alone.</span>
+    </div>
+
+    <div data-hf-id="hf-mrv6" class="clip f05-meta f05-mono" id="f05-meta" data-start="0" data-duration="5.5" data-track-index="4">
+      <span data-hf-id="hf-lxd7">the real product</span><span data-hf-id="hf-9196">05 <span data-hf-id="hf-lwke" class="f05-dotrule">•</span> 08</span>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+      window.__timelines["05-the-map"] = tl;
+
+      /* ---------------------------------------------------------------
+         VIRTUAL CAMERA (viewport-change, single-wrapper composite form)
+         World coordinates ARE source-image pixels (the world div is a
+         1920x1080 plane centred in the 1720x592 screen block).
+         Centring image point (px,py):  T = -(p - centre) * S
+         --------------------------------------------------------------- */
+      var world = document.getElementById("f05-world");
+      var cam = { scale: 1, x: 0, y: 0 };
+      function applyCamera() {
+        world.style.transform = "translate(" + cam.x + "px, " + cam.y + "px) scale(" + cam.scale + ")";
+      }
+      function pose(px, py, s) {
+        return { scale: s, x: -(px - 960) * s, y: -(py - 540) * s };
+      }
+      // A: framed on the filter rail (rail + chips + the whole cluster in frame)
+      var POSE_A = pose(660, 250, 1.28);
+      // B: mid-flight, rail sliding out to the left
+      var POSE_B = pose(700, 283, 1.32);
+      // C: locked on the clustered pins (rail fully out of frame)
+      var POSE_C = pose(745, 320, 1.36);
+
+      cam.scale = POSE_A.scale; cam.x = POSE_A.x; cam.y = POSE_A.y;
+      applyCamera(); // seed frame 0
+
+      // Scene 1 (0.0-1.45) — the lateral flight begins, accelerating from rest.
+      tl.fromTo(cam,
+        { scale: POSE_A.scale, x: POSE_A.x, y: POSE_A.y },
+        { scale: POSE_B.scale, x: POSE_B.x, y: POSE_B.y, duration: 1.45, ease: "power1.in", onUpdate: applyCamera },
+        0);
+      // Scene 2 (1.45-2.90) — decelerate and lock on the cluster. Nothing after
+      // this: Scene 4 is a dead stop, no back-half re-push, no drift.
+      tl.to(cam,
+        { scale: POSE_C.scale, x: POSE_C.x, y: POSE_C.y, duration: 1.45, ease: "power2.out", onUpdate: applyCamera },
+        1.45);
+
+      /* Depth-of-field: only the filter rail racks out of focus, on the same
+         window as the camera move ("blur the cluster while pushing in").
+         The map itself is the evidence — it is never blurred or dimmed. */
+      tl.fromTo("#f05-rail", { "--dof": "0px" }, { "--dof": "9px", duration: 1.4, ease: "power2.inOut" }, 0.5);
+
+      /* ---- mono chrome, paced in behind the moving camera ---- */
+      tl.fromTo("#f05-toplabel", { opacity: 0, y: -14 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 0.2);
+      tl.fromTo("#f05-pill", { opacity: 0, scale: 0.82 }, { opacity: 1, scale: 1, duration: 0.4, ease: "power3.out" }, 0.42);
+      tl.fromTo("#f05-meta", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 0.62);
+
+      /* ---------------------------------------------------------------
+         Scene 2 (1.75-3.15) — svg-icon-enrichment: the cluster badges
+         pulse once as they come into focus. Scale is written through the
+         SVG transform ATTRIBUTE about an explicit centre (never CSS
+         transform-origin, which resolves in bbox-local coords).
+         --------------------------------------------------------------- */
+      tl.fromTo("#f05-pings", { opacity: 0 }, { opacity: 1, duration: 0.32, ease: "power2.out" }, 1.75);
+
+      var ringA = document.getElementById("f05-ring-a");
+      var dotA = document.getElementById("f05-dot-a");
+      var dotB = document.getElementById("f05-dot-b");
+      function pulseAt(el, cx, cy, s) {
+        el.setAttribute("transform", "translate(" + cx + " " + cy + ") scale(" + s + ") translate(" + (-cx) + " " + (-cy) + ")");
+      }
+
+      // Badge "15" — dot halo + outer cluster ring lagging it by pi/2.
+      var pA = { p: 0 };
+      tl.to(pA, {
+        p: Math.PI * 2, duration: 1.2, ease: "none",
+        onUpdate: function () {
+          pulseAt(dotA, 846, 453, 1 + Math.sin(pA.p) * 0.16);
+          pulseAt(ringA, 838, 456, 1 + Math.sin(pA.p + Math.PI / 2) * 0.09);
+          ringA.style.opacity = String(0.5 + Math.sin(pA.p + Math.PI / 2) * 0.4);
+        }
+      }, 1.85);
+
+      // Badge "13" — same pulse, offset in time so the parts never read in sync.
+      var pB = { p: 0 };
+      tl.to(pB, {
+        p: Math.PI * 2, duration: 1.15, ease: "none",
+        onUpdate: function () { pulseAt(dotB, 836, 489, 1 + Math.sin(pB.p) * 0.14); }
+      }, 2.0);
+
+      /* ---------------------------------------------------------------
+         Scene 3 (3.0-4.4) — the berry marker-block lands, carrying the
+         frame's one hard offset shadow, and counts 0 -> 1,582.
+         --------------------------------------------------------------- */
+      tl.fromTo("#f05-marker",
+        { opacity: 0, scale: 0, y: 20 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "expo.out" },
+        3.0);
+
+      var counter = document.getElementById("f05-count");
+      var count = { value: 0 };
+      var COUNT_DUR = 1.3;
+      tl.to(count, {
+        value: 1582, duration: COUNT_DUR, ease: "power3.out",
+        onUpdate: function () { counter.textContent = Math.round(count.value).toLocaleString("en-US"); }
+      }, 3.1);
+      // Visual growth shares the count's window + ease (START 33px / END 60px).
+      tl.fromTo(counter, { scale: 0.55 }, { scale: 1, duration: COUNT_DUR, ease: "power3.out" }, 3.1);
+      // The label lands before the count peaks.
+      tl.fromTo("#f05-l2", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 3.55);
+
+      /* Scene 4 (4.2-5.0) — the frame holds. No exit: the root transition is the exit. */
+    })();
+  </script>
+</template>

@@ -1,33 +1,9 @@
 {
   "schemaVersion": 1,
   "metroId": "washington-dc",
-  "generatedAt": "2026-07-22T23:08:09.504Z",
-  "alertCount": 23,
+  "generatedAt": "2026-07-26T23:27:00.187Z",
+  "alertCount": 10,
   "alerts": [
-    {
-      "severity": "warning",
-      "metroId": "washington-dc",
-      "sourceId": "washington-dc-library-family",
-      "sourceName": "DC Public Library Family Programs",
-      "sourceType": "communicoEvents",
-      "url": "https://dclibrary.libnet.info/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 317,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 317,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
-      "fetches": [
-        {
-          "url": "https://dclibrary.libnet.info/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
     {
       "severity": "warning",
       "metroId": "washington-dc",
@@ -35,20 +11,21 @@
       "sourceName": "DC Department of Parks and Recreation Events",
       "sourceType": "eventList",
       "url": "https://dpr.dc.gov/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok-template-fallback",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": "recurring-template",
       "recoveredEvents": 8,
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
+      "fetchedAt": "2026-07-26T23:27:00.187Z",
       "fetches": [
         {
           "url": "https://dpr.dc.gov/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -59,92 +36,46 @@
       "sourceName": "Smithsonian Family Programs",
       "sourceType": "eventList",
       "url": "https://naturalhistory.si.edu/events/family-programs",
-      "status": "fetch-error",
+      "status": "http-error",
       "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": "recurring-template",
       "recoveredEvents": 4,
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
+      "fetchedAt": "2026-07-26T23:27:00.187Z",
       "fetches": [
         {
           "url": "https://naturalhistory.si.edu/events/family-programs",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
     {
       "severity": "warning",
-      "metroId": "washington-dc",
-      "sourceId": "washington-dc-zoo-family",
-      "sourceName": "National Zoo Events",
-      "sourceType": "nationalZooJsonApi",
-      "url": "https://nationalzoo.si.edu/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 5,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 5,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
-      "fetches": [
-        {
-          "url": "https://nationalzoo.si.edu/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
       "metroId": "washington-dc",
       "sourceId": "ticketmaster-washington-dc-family",
       "sourceName": "Ticketmaster Washington DC Family Events",
       "sourceType": "ticketmaster",
       "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
+      "fetchedAt": "2026-07-26T23:27:00.187Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "washington-dc",
-      "sourceId": "montgomery-county-ag-fair",
-      "sourceName": "Montgomery County Agricultural Fair",
-      "sourceType": "html",
-      "url": "https://mcagfair.com/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 8,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 8,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
-      "fetches": [
-        {
-          "url": "https://mcagfair.com/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=3; queries=1"
         }
       ]
     },
@@ -155,140 +86,21 @@
       "sourceName": "Maryland State Fair",
       "sourceType": "html",
       "url": "https://marylandstatefair.com/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
+      "fetchedAt": "2026-07-26T23:27:00.187Z",
       "fetches": [
         {
           "url": "https://marylandstatefair.com/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "washington-dc",
-      "sourceId": "montgomery-county-md-library-family",
-      "sourceName": "Montgomery County Public Libraries Events",
-      "sourceType": "communicoEvents",
-      "url": "https://mcpl.libnet.info/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 762,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 762,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
-      "fetches": [
-        {
-          "url": "https://mcpl.libnet.info/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "washington-dc",
-      "sourceId": "prince-georges-county-md-library-family",
-      "sourceName": "Prince George's County Memorial Library Events",
-      "sourceType": "communicoEvents",
-      "url": "https://pgcmls.libnet.info/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 590,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 590,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
-      "fetches": [
-        {
-          "url": "https://pgcmls.libnet.info/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "washington-dc",
-      "sourceId": "alexandria-va-library-family",
-      "sourceName": "Alexandria Library Events",
-      "sourceType": "communicoEvents",
-      "url": "https://alexandria.libnet.info/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 171,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 171,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
-      "fetches": [
-        {
-          "url": "https://alexandria.libnet.info/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "washington-dc",
-      "sourceId": "fairfax-county-va-library-family",
-      "sourceName": "Fairfax County Public Library Events",
-      "sourceType": "libcal",
-      "url": "https://librarycalendar.fairfaxcounty.gov/calendar?cid=6524&cal=6524",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 111,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 111,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
-      "fetches": [
-        {
-          "url": "https://librarycalendar.fairfaxcounty.gov/calendar?cid=6524&cal=6524",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "washington-dc",
-      "sourceId": "arlington-va-library-family",
-      "sourceName": "Arlington Public Library Events",
-      "sourceType": "libcal",
-      "url": "https://arlingtonva.libcal.com/calendar/apl/?cid=12881&cal=12881",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 136,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 136,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
-      "fetches": [
-        {
-          "url": "https://arlingtonva.libcal.com/calendar/apl/?cid=12881&cal=12881",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -299,44 +111,46 @@
       "sourceName": "National Building Museum Children & Youth Programs",
       "sourceType": "tribeEvents",
       "url": "https://www.nbm.org/events/",
-      "status": "fetch-error",
+      "status": "http-error",
       "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
+      "fetchedAt": "2026-07-26T23:27:00.187Z",
       "fetches": [
         {
           "url": "https://www.nbm.org/events/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "application/json; charset=UTF-8"
         }
       ]
     },
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "washington-dc",
       "sourceId": "glen-echo-park-pride-family-day-2026",
       "sourceName": "Glen Echo Park Pride Family Day",
       "sourceType": "officialTextEvents",
       "url": "https://glenechopark.org/pridemonth",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
+      "fetchedAt": "2026-07-26T23:27:00.187Z",
       "fetches": [
         {
           "url": "https://glenechopark.org/pridemonth",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -347,92 +161,21 @@
       "sourceName": "Library of Congress National Book Festival",
       "sourceType": "officialTextEvents",
       "url": "https://newsroom.loc.gov/news/library-to-host-26th-national-book-festival-in-august-2026/s/81b2c74b-c263-46cc-b3ed-f91974bf4c8e",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
+      "fetchedAt": "2026-07-26T23:27:00.187Z",
       "fetches": [
         {
           "url": "https://newsroom.loc.gov/news/library-to-host-26th-national-book-festival-in-august-2026/s/81b2c74b-c263-46cc-b3ed-f91974bf4c8e",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "washington-dc",
-      "sourceId": "smithsonian-family-day-america-250-2026-07-25-src",
-      "sourceName": "Smithsonian Family Day: America 250",
-      "sourceType": "officialTextEvents",
-      "url": "https://my.si.edu/events/smithsonian-family-day-202983713",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
-      "fetches": [
-        {
-          "url": "https://my.si.edu/events/smithsonian-family-day-202983713",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "washington-dc",
-      "sourceId": "fraggle-rock-kennedy-center-2026-07-26-src",
-      "sourceName": "Fraggle Rock: Back to the Rock LIVE",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.kennedy-center.org/whats-on/explore-by-genre/young-audiences/2025-2026/fraggle-rock/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "browser fetch failed: page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:302:30), <anonymous>:2:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
-      "fetches": [
-        {
-          "url": "https://www.kennedy-center.org/whats-on/explore-by-genre/young-audiences/2025-2026/fraggle-rock/",
-          "status": "fetch-error",
-          "reason": "browser fetch failed: page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:302:30), <anonymous>:2:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "washington-dc",
-      "sourceId": "pete-the-cat-imagination-stage-2026-07-26-src",
-      "sourceName": "Pete the Cat: A Live Rock Musical",
-      "sourceType": "officialTextEvents",
-      "url": "https://imaginationstage.org/on-our-stages/pete-the-cat-a-live-rock-musical/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "browser fetch failed: page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:302:30), <anonymous>:2:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
-      "fetches": [
-        {
-          "url": "https://imaginationstage.org/on-our-stages/pete-the-cat-a-live-rock-musical/",
-          "status": "fetch-error",
-          "reason": "browser fetch failed: page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:302:30), <anonymous>:2:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          "status": "ok",
+          "httpStatus": 202,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -443,44 +186,21 @@
       "sourceName": "9:30 Club",
       "sourceType": "html",
       "url": "https://www.930.com/events",
-      "status": "fetch-error",
+      "status": "http-error",
       "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
+      "fetchedAt": "2026-07-26T23:27:00.187Z",
       "fetches": [
         {
           "url": "https://www.930.com/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "washington-dc",
-      "sourceId": "dc-improv",
-      "sourceName": "DC Improv",
-      "sourceType": "html",
-      "url": "https://www.dcimprov.com/shows?format=feed&type=rss",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 4,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 4,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
-      "fetches": [
-        {
-          "url": "https://www.dcimprov.com/shows?format=feed&type=rss",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -499,7 +219,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
+      "fetchedAt": "2026-07-26T23:27:00.187Z",
       "fetches": [
         {
           "url": "https://www.unionstage.com/events",
@@ -515,44 +235,21 @@
       "sourceName": "Songbyrd Music House",
       "sourceType": "html",
       "url": "https://www.songbyrddc.com/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
+      "fetchedAt": "2026-07-26T23:27:00.187Z",
       "fetches": [
         {
           "url": "https://www.songbyrddc.com/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "washington-dc",
-      "sourceId": "dc-jazzfest-wharf-2026",
-      "sourceName": "DC JazzFest at The Wharf 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.dcjazzfest.org/event-details/dcjazzfest2026",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:08:09.504Z",
-      "fetches": [
-        {
-          "url": "https://www.dcjazzfest.org/event-details/dcjazzfest2026",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     }

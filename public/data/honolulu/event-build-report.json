@@ -1,42 +1,18 @@
 {
   "schemaVersion": 1,
   "metroId": "honolulu",
-  "generatedAt": "2026-07-23T01:49:54.917Z",
+  "generatedAt": "2026-07-26T23:30:58.261Z",
   "registryPath": "data/event-sources-honolulu.json",
   "outputPath": "public/data/honolulu/events.json",
-  "eventCount": 317,
-  "adultsEventCount": 41,
-  "sourceCount": 14,
-  "liveEventCount": 32,
-  "lastKnownGoodEventCount": 314,
+  "eventCount": 398,
+  "adultsEventCount": 34,
+  "sourceCount": 13,
+  "liveEventCount": 423,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 7,
+  "operatorAlertCount": 6,
   "errors": [],
   "operatorAlerts": [
-    {
-      "severity": "warning",
-      "metroId": "honolulu",
-      "sourceId": "hawaii-state-library",
-      "sourceName": "Hawaii State Public Library System",
-      "sourceType": "tribeEvents",
-      "url": "https://www.librarieshawaii.org/events/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 314,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 314,
-      "fetchedAt": "2026-07-23T01:49:54.917Z",
-      "fetches": [
-        {
-          "url": "https://www.librarieshawaii.org/events/",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
-        }
-      ]
-    },
     {
       "severity": "critical",
       "metroId": "honolulu",
@@ -52,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T01:49:54.917Z",
+      "fetchedAt": "2026-07-26T23:30:58.261Z",
       "fetches": [
         {
           "url": "https://www.bishopmuseum.org/exhibits-and-programs/events/",
@@ -78,7 +54,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T01:49:54.917Z",
+      "fetchedAt": "2026-07-26T23:30:58.261Z",
       "fetches": [
         {
           "url": "https://honolulumuseum.org/events/",
@@ -103,7 +79,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T01:49:54.917Z",
+      "fetchedAt": "2026-07-26T23:30:58.261Z",
       "fetches": [
         {
           "url": "https://www.honoluluzoo.org/experiences-events/",
@@ -128,7 +104,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T01:49:54.917Z",
+      "fetchedAt": "2026-07-26T23:30:58.261Z",
       "fetches": [
         {
           "url": "https://calendar.google.com/calendar/ical/hawaii.edu_ur7iq68mqshu5q73n79rmb4jrk%40group.calendar.google.com/public/basic.ics",
@@ -153,7 +129,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T01:49:54.917Z",
+      "fetchedAt": "2026-07-26T23:30:58.261Z",
       "fetches": [
         {
           "url": "https://www.kualoa.com/activities/",
@@ -178,7 +154,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T01:49:54.917Z",
+      "fetchedAt": "2026-07-26T23:30:58.261Z",
       "fetches": [
         {
           "url": "https://www.alohacomedyclub.com/calendar",
@@ -211,21 +187,24 @@
       "city": "Honolulu",
       "metroId": "honolulu",
       "category": "Library",
-      "status": "fetch-error",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 396,
       "fallbackEvents": 0,
-      "eventCount": 314,
+      "eventCount": 396,
       "fetches": [
         {
           "url": "https://www.librarieshawaii.org/events/",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=400; pages=8"
         }
       ],
-      "reason": "This operation was aborted",
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 314,
-      "recoveryMode": "last-known-good"
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=400; pages=8",
+      "rejectedLiveEvents": 3,
+      "extractedEvents": 399,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "bishop-museum",
@@ -317,9 +296,9 @@
       "metroId": "honolulu",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://www.discoverycenterhawaii.org/event-list",
@@ -330,7 +309,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 0,
       "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -416,33 +395,6 @@
       "recoveryMode": null
     },
     {
-      "id": "waimea-valley-summer-concert-2026-07-25-src",
-      "name": "Waimea Valley Summer Concert Series",
-      "url": "https://www.waimeavalley.net/events",
-      "sourceType": "officialTextEvents",
-      "city": "Haleiwa",
-      "metroId": "honolulu",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 1,
-      "fallbackEvents": 0,
-      "eventCount": 1,
-      "fetches": [
-        {
-          "url": "https://www.waimeavalley.net/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html;charset=utf-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
       "id": "the-republik-hi",
       "name": "The Republik",
       "url": "https://jointherepublik.com/upcoming-events/",
@@ -502,21 +454,21 @@
       "metroId": "honolulu",
       "category": "Theater",
       "status": "ok",
-      "liveEvents": 24,
+      "liveEvents": 19,
       "fallbackEvents": 0,
-      "eventCount": 24,
+      "eventCount": 19,
       "fetches": [
         {
           "url": "https://blaisdellcenter.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=186; pages=2"
+          "contentType": "application/json; source=tribe-events; events=179; pages=2"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=186; pages=2",
-      "rejectedLiveEvents": 147,
-      "extractedEvents": 171,
+      "contentType": "application/json; source=tribe-events; events=179; pages=2",
+      "rejectedLiveEvents": 144,
+      "extractedEvents": 163,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -537,13 +489,13 @@
           "url": "https://improvhi.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=5; pages=1"
+          "contentType": "application/json; source=tribe-events; events=4; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=5; pages=1",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 5,
+      "contentType": "application/json; source=tribe-events; events=4; pages=1",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 4,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     }

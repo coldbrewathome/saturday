@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "seattle",
-  "generatedAt": "2026-07-22T22:56:39.162Z",
+  "generatedAt": "2026-07-26T23:23:27.934Z",
   "registryPath": "data/event-sources-seattle.json",
   "outputPath": "public/data/seattle/events.json",
-  "eventCount": 482,
-  "adultsEventCount": 33,
-  "sourceCount": 38,
-  "liveEventCount": 507,
+  "eventCount": 450,
+  "adultsEventCount": 32,
+  "sourceCount": 32,
+  "liveEventCount": 476,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
   "operatorAlertCount": 15,
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:56:39.162Z",
+      "fetchedAt": "2026-07-26T23:23:27.934Z",
       "fetches": [
         {
           "url": "https://www.zoo.org/events?cgid=1",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:56:39.162Z",
+      "fetchedAt": "2026-07-26T23:23:27.934Z",
       "fetches": [
         {
           "url": "https://pacificsciencecenter.org/events/",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:56:39.162Z",
+      "fetchedAt": "2026-07-26T23:23:27.934Z",
       "fetches": [
         {
           "url": "https://www.seattleaquarium.org/explore-the-aquarium/programs/toddler-time/",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:56:39.162Z",
+      "fetchedAt": "2026-07-26T23:23:27.934Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -128,13 +128,37 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:56:39.162Z",
+      "fetchedAt": "2026-07-26T23:23:27.934Z",
       "fetches": [
         {
           "url": "https://www.thefair.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "seattle",
+      "sourceId": "sno-isle-all-events",
+      "sourceName": "Sno-Isle Libraries Events",
+      "sourceType": "biblioevents",
+      "url": "https://sno-isle.bibliocommons.com/v2/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-26T23:23:27.934Z",
+      "fetches": [
+        {
+          "url": "https://sno-isle.bibliocommons.com/v2/events",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ]
     },
@@ -153,7 +177,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:56:39.162Z",
+      "fetchedAt": "2026-07-26T23:23:27.934Z",
       "fetches": [
         {
           "url": "https://www.seattlecenter.com/events/featured-events/festal/indigenous-people-festival",
@@ -178,63 +202,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:56:39.162Z",
+      "fetchedAt": "2026-07-26T23:23:27.934Z",
       "fetches": [
         {
           "url": "https://www.enumclawexpo.com/p/king-county-fair",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "seattle",
-      "sourceId": "seattle-chinatown-seafair-parade-2026-07-19-src",
-      "sourceName": "Chinatown Seafair Parade",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.seattlechinesechamber.org/chinatown-parade.html",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:56:39.162Z",
-      "fetches": [
-        {
-          "url": "https://www.seattlechinesechamber.org/chinatown-parade.html",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "seattle",
-      "sourceId": "bite-of-seattle-2026-07-24-src",
-      "sourceName": "Bite of Seattle",
-      "sourceType": "officialTextEvents",
-      "url": "https://biteofseattle.com/",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:56:39.162Z",
-      "fetches": [
-        {
-          "url": "https://biteofseattle.com/",
-          "status": "http-error",
-          "httpStatus": 403,
-          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -253,7 +227,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:56:39.162Z",
+      "fetchedAt": "2026-07-26T23:23:27.934Z",
       "fetches": [
         {
           "url": "https://www.neumos.com/events",
@@ -278,7 +252,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:56:39.162Z",
+      "fetchedAt": "2026-07-26T23:23:27.934Z",
       "fetches": [
         {
           "url": "https://www.thecrocodile.com/events",
@@ -303,7 +277,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:56:39.162Z",
+      "fetchedAt": "2026-07-26T23:23:27.934Z",
       "fetches": [
         {
           "url": "https://www.tractortavern.com/events",
@@ -328,7 +302,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:56:39.162Z",
+      "fetchedAt": "2026-07-26T23:23:27.934Z",
       "fetches": [
         {
           "url": "https://www.sunsettavern.com/events",
@@ -353,7 +327,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:56:39.162Z",
+      "fetchedAt": "2026-07-26T23:23:27.934Z",
       "fetches": [
         {
           "url": "https://www.comedyunderground.com/calendar",
@@ -378,10 +352,35 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:56:39.162Z",
+      "fetchedAt": "2026-07-26T23:23:27.934Z",
       "fetches": [
         {
           "url": "https://www.nectarlounge.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "seattle",
+      "sourceId": "timber-music-fest-2026",
+      "sourceName": "Timber! Outdoor Music Festival 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://timbermusicfest.com/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-26T23:23:27.934Z",
+      "fetches": [
+        {
+          "url": "https://timbermusicfest.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -413,9 +412,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 20,
+      "liveEvents": 18,
       "fallbackEvents": 0,
-      "eventCount": 20,
+      "eventCount": 18,
       "fetches": [
         {
           "url": "https://kcls.bibliocommons.com/v2/events?programs=6092fc2d8910133a0055a335",
@@ -427,7 +426,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 20,
+      "extractedEvents": 18,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -440,9 +439,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 176,
+      "liveEvents": 174,
       "fallbackEvents": 0,
-      "eventCount": 176,
+      "eventCount": 174,
       "fetches": [
         {
           "url": "https://www.trumba.com/calendars/kalendaro.json?filterview=SeriesStoryTime",
@@ -454,7 +453,7 @@
       "httpStatus": 200,
       "contentType": "application/json;charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 176,
+      "extractedEvents": 174,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -467,9 +466,9 @@
       "metroId": "seattle",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 32,
+      "liveEvents": 22,
       "fallbackEvents": 0,
-      "eventCount": 32,
+      "eventCount": 22,
       "fetches": [
         {
           "url": "https://seattlechildrensmuseum.org/calendar/",
@@ -480,8 +479,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 74,
-      "extractedEvents": 106,
+      "rejectedLiveEvents": 87,
+      "extractedEvents": 109,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -708,22 +707,19 @@
       "city": "Bothell",
       "metroId": "seattle",
       "category": "Library",
-      "status": "ok",
-      "liveEvents": 13,
+      "status": "fetch-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 13,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://sno-isle.bibliocommons.com/v2/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 13,
+      "reason": "This operation was aborted",
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -736,21 +732,21 @@
       "metroId": "seattle",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 27,
+      "liveEvents": 29,
       "fallbackEvents": 0,
-      "eventCount": 27,
+      "eventCount": 29,
       "fetches": [
         {
           "url": "https://bellevuebotanical.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=95; pages=1"
+          "contentType": "application/json; source=tribe-events; events=94; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=95; pages=1",
-      "rejectedLiveEvents": 66,
-      "extractedEvents": 93,
+      "contentType": "application/json; source=tribe-events; events=94; pages=1",
+      "rejectedLiveEvents": 63,
+      "extractedEvents": 92,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -763,9 +759,9 @@
       "metroId": "seattle",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 198,
+      "liveEvents": 197,
       "fallbackEvents": 0,
-      "eventCount": 198,
+      "eventCount": 197,
       "fetches": [
         {
           "url": "https://www.trumba.com/calendars/sea_campus.json",
@@ -777,7 +773,7 @@
       "httpStatus": 200,
       "contentType": "application/json;charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 198,
+      "extractedEvents": 197,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -940,167 +936,6 @@
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 4,
       "extractedEvents": 4,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "seattle-chinatown-seafair-parade-2026-07-19-src",
-      "name": "Chinatown Seafair Parade",
-      "url": "https://www.seattlechinesechamber.org/chinatown-parade.html",
-      "sourceType": "officialTextEvents",
-      "city": "Seattle",
-      "metroId": "seattle",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.seattlechinesechamber.org/chinatown-parade.html",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "bite-of-seattle-2026-07-24-src",
-      "name": "Bite of Seattle",
-      "url": "https://biteofseattle.com/",
-      "sourceType": "officialTextEvents",
-      "city": "Seattle",
-      "metroId": "seattle",
-      "category": "Festival",
-      "status": "http-error",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://biteofseattle.com/",
-          "status": "http-error",
-          "httpStatus": 403,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 403,
-      "contentType": "text/html; charset=UTF-8",
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "whidbey-island-fair-2026-07-23-src",
-      "name": "Whidbey Island Fair",
-      "url": "https://www.whidbeyislandfair.com/",
-      "sourceType": "officialTextEvents",
-      "city": "Langley",
-      "metroId": "seattle",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 1,
-      "fallbackEvents": 0,
-      "eventCount": 1,
-      "fetches": [
-        {
-          "url": "https://www.whidbeyislandfair.com/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html;charset=utf-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "seattle-art-fair-2026-07-23-src",
-      "name": "Seattle Art Fair",
-      "url": "https://seattleartfair.com/",
-      "sourceType": "officialTextEvents",
-      "city": "Seattle",
-      "metroId": "seattle",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 1,
-      "fallbackEvents": 0,
-      "eventCount": 1,
-      "fetches": [
-        {
-          "url": "https://seattleartfair.com/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "seattle-outdoor-theater-festival-2026-07-25-src",
-      "name": "Seattle Outdoor Theater Festival",
-      "url": "https://greenstage.org/",
-      "sourceType": "officialTextEvents",
-      "city": "Seattle",
-      "metroId": "seattle",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 1,
-      "fallbackEvents": 0,
-      "eventCount": 1,
-      "fetches": [
-        {
-          "url": "https://greenstage.org/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "seafair-torchlight-parade-2026-07-25-src",
-      "name": "Seafair Torchlight Parade",
-      "url": "https://www.seafair.org/torchlight-parade/",
-      "sourceType": "officialTextEvents",
-      "city": "Seattle",
-      "metroId": "seattle",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 1,
-      "fallbackEvents": 0,
-      "eventCount": 1,
-      "fetches": [
-        {
-          "url": "https://www.seafair.org/torchlight-parade/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1380,9 +1215,9 @@
       "metroId": "seattle",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://timbermusicfest.com/",
@@ -1393,7 +1228,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null

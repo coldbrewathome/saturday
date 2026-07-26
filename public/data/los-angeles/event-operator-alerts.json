@@ -1,34 +1,9 @@
 {
   "schemaVersion": 1,
   "metroId": "los-angeles",
-  "generatedAt": "2026-07-23T02:50:06.775Z",
-  "alertCount": 16,
+  "generatedAt": "2026-07-26T23:34:49.615Z",
+  "alertCount": 18,
   "alerts": [
-    {
-      "severity": "warning",
-      "metroId": "los-angeles",
-      "sourceId": "nhm-family-calendar",
-      "sourceName": "Natural History Museums of Los Angeles County",
-      "sourceType": "officialTextEvents",
-      "url": "https://nhm.org/calendar",
-      "status": "ok-last-known-good",
-      "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 70,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 70,
-      "fetchedAt": "2026-07-23T02:50:06.775Z",
-      "fetches": [
-        {
-          "url": "https://nhm.org/calendar",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
     {
       "severity": "critical",
       "metroId": "los-angeles",
@@ -44,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:50:06.775Z",
+      "fetchedAt": "2026-07-26T23:34:49.615Z",
       "fetches": [
         {
           "url": "https://www.petersen.org/events",
@@ -70,7 +45,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:50:06.775Z",
+      "fetchedAt": "2026-07-26T23:34:49.615Z",
       "fetches": [
         {
           "url": "https://www.nortonsimon.org/calendar",
@@ -95,7 +70,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:50:06.775Z",
+      "fetchedAt": "2026-07-26T23:34:49.615Z",
       "fetches": [
         {
           "url": "https://www.huntington.org/calendar",
@@ -120,7 +95,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:50:06.775Z",
+      "fetchedAt": "2026-07-26T23:34:49.615Z",
       "fetches": [
         {
           "url": "https://grandparkla.org/events/",
@@ -145,13 +120,37 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:50:06.775Z",
+      "fetchedAt": "2026-07-26T23:34:49.615Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "application/json; source=ticketmaster; events=1; queries=1"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "la-county-fair",
+      "sourceName": "LA County Fair",
+      "sourceType": "html",
+      "url": "https://fairplex.com/upcoming-events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 7,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 7,
+      "fetchedAt": "2026-07-26T23:34:49.615Z",
+      "fetches": [
+        {
+          "url": "https://fairplex.com/upcoming-events",
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -170,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:50:06.775Z",
+      "fetchedAt": "2026-07-26T23:34:49.615Z",
       "fetches": [
         {
           "url": "https://ocfair.com/oc-fair/",
@@ -195,13 +194,65 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:50:06.775Z",
+      "fetchedAt": "2026-07-26T23:34:49.615Z",
       "fetches": [
         {
           "url": "https://grandparkla.org/blockparty/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "toddler-tuesdays-travelin-storytime-session1-montana-branch-2026-07-28-src",
+      "sourceName": "Toddler Tuesdays: A Travelin' Storytime — Santa Monica Montana Branch",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.santamonica.gov/events/4rsgnbp91faj7yc7sf4fddf9xc/202607281030",
+      "status": "blocked",
+      "issueType": "fetch-failed",
+      "reason": "challenge page returned instead of event content",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-26T23:34:49.615Z",
+      "fetches": [
+        {
+          "url": "https://www.santamonica.gov/events/4rsgnbp91faj7yc7sf4fddf9xc/202607281030",
+          "status": "blocked",
+          "reason": "challenge page returned instead of event content",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "toddler-tuesdays-travelin-storytime-session2-montana-branch-2026-07-28-src",
+      "sourceName": "Toddler Tuesdays: A Travelin' Storytime (Session 2) — Santa Monica Montana Branch",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.santamonica.gov/events/4sbby9zqkdejr37n64n3wbfz4w/202607281130",
+      "status": "blocked",
+      "issueType": "fetch-failed",
+      "reason": "challenge page returned instead of event content",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-26T23:34:49.615Z",
+      "fetches": [
+        {
+          "url": "https://www.santamonica.gov/events/4sbby9zqkdejr37n64n3wbfz4w/202607281130",
+          "status": "blocked",
+          "reason": "challenge page returned instead of event content",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -220,7 +271,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:50:06.775Z",
+      "fetchedAt": "2026-07-26T23:34:49.615Z",
       "fetches": [
         {
           "url": "https://www.troubadour.com/events",
@@ -245,7 +296,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:50:06.775Z",
+      "fetchedAt": "2026-07-26T23:34:49.615Z",
       "fetches": [
         {
           "url": "https://www.theelrey.com/events",
@@ -270,7 +321,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:50:06.775Z",
+      "fetchedAt": "2026-07-26T23:34:49.615Z",
       "fetches": [
         {
           "url": "https://www.theroxy.com/events",
@@ -295,7 +346,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:50:06.775Z",
+      "fetchedAt": "2026-07-26T23:34:49.615Z",
       "fetches": [
         {
           "url": "https://thecomedystore.com/calendar/",
@@ -320,7 +371,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:50:06.775Z",
+      "fetchedAt": "2026-07-26T23:34:49.615Z",
       "fetches": [
         {
           "url": "https://www.laughfactory.com/shows",
@@ -345,7 +396,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:50:06.775Z",
+      "fetchedAt": "2026-07-26T23:34:49.615Z",
       "fetches": [
         {
           "url": "https://improv.com/hollywood/calendar/",
@@ -370,7 +421,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:50:06.775Z",
+      "fetchedAt": "2026-07-26T23:34:49.615Z",
       "fetches": [
         {
           "url": "https://www.ticketmaster.com/the-wiltern-tickets-los-angeles/venue/73790",
@@ -396,7 +447,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:50:06.775Z",
+      "fetchedAt": "2026-07-26T23:34:49.615Z",
       "fetches": [
         {
           "url": "https://www.theregenttheater.com/events",

@@ -1,0 +1,234 @@
+<template>
+  <style>
+    @font-face{font-family:'Bricolage Grotesque';src:url('assets/fonts/bricolage-grotesque-400_800.woff2') format('woff2');font-weight:400 800;font-style:normal;font-display:block;}
+    @font-face{font-family:'JetBrains Mono';src:url('assets/fonts/jetbrains-mono-400.woff2') format('woff2');font-weight:100 800;font-style:normal;font-display:block;}
+    @font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/plus-jakarta-sans-400.woff2') format('woff2');font-weight:200 800;font-style:normal;font-display:block;}
+
+    #root{width:1920px;height:1080px;position:relative;overflow:hidden;--accent:#DD6A1A;color:#1B1916;font-family:'Plus Jakarta Sans',sans-serif;}
+    #root *{box-sizing:border-box;}
+
+    /* depth plane 1 — the cream ground (full-bleed clip, never on #root) */
+    .f04-g{position:absolute;inset:0;background:#FAF5EB;}
+
+    /* mono chrome */
+    .f04-mono{font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:.06em;text-transform:uppercase;}
+    .f04-top{position:absolute;left:64px;right:64px;top:56px;display:flex;justify-content:space-between;align-items:center;}
+    .f04-pill{border:3px solid #1B1916;border-radius:999px;padding:5px 22px;}
+    .f04-meta{position:absolute;left:64px;right:64px;top:848px;display:flex;justify-content:space-between;}
+
+    .f04-head{position:absolute;left:96px;top:142px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;font-size:120px;line-height:.9;letter-spacing:-.01em;}
+
+    /* depth plane 2 — the inspector panel (left column of the 45/55 split) */
+    .f04-panel{position:absolute;left:96px;top:284px;width:844px;height:428px;border:4px solid #1B1916;background:#F2EAD9;display:flex;flex-direction:column;justify-content:center;gap:52px;padding:0 30px;}
+    .f04-lab{font-family:'JetBrains Mono',monospace;font-size:21px;letter-spacing:.14em;text-transform:uppercase;color:#4A453F;margin-bottom:20px;}
+    .f04-row{display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px;}
+    .f04-chip{position:relative;display:inline-flex;align-items:center;border:4px solid #1B1916;background:#FAF5EB;color:#1B1916;padding:11px 22px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;font-size:28px;line-height:1.12;}
+    /* hard-edged shockwave on the release — creative-mode has zero blur/glow */
+    .f04-ring{position:absolute;inset:-4px;border:4px solid #1B1916;opacity:0;pointer-events:none;}
+
+    /* depth plane 3 — the bound surface, lifted on the frame's ONE hard offset shadow.
+       The shell is the anchor: it never moves; only its skins crossfade. */
+    .f04-card{position:absolute;left:988px;top:284px;width:836px;height:428px;border:4px solid #1B1916;background:#F2EAD9;box-shadow:24px 24px 0 #DD6A1A, 24px 24px 0 4px #1B1916;}
+    /* one plan = one complete pre-styled skin at pixel-identical geometry */
+    .f04-skin{position:absolute;inset:0;opacity:0;}
+    .f04-skin-a{opacity:1;}
+    .f04-media{position:absolute;left:0;top:0;width:100%;height:214px;border-bottom:4px solid #1B1916;overflow:hidden;background:#E8DFCA;}
+    .f04-media img{display:block;width:100%;height:100%;object-fit:cover;}
+    .f04-tag{position:absolute;left:22px;bottom:22px;background:#8C3F51;color:#FAF5EB;border:3px solid #1B1916;padding:5px 14px;font-family:'JetBrains Mono',monospace;font-size:20px;letter-spacing:.12em;text-transform:uppercase;}
+    .f04-ctitle{position:absolute;left:30px;top:240px;width:768px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;font-size:44px;line-height:.94;letter-spacing:-.01em;}
+    .f04-cstops{position:absolute;left:30px;top:380px;width:768px;min-width:640px;font-family:'JetBrains Mono',monospace;font-size:21px;letter-spacing:.02em;color:#4A453F;white-space:nowrap;}
+
+    .f04-cta{position:absolute;left:988px;top:758px;border:4px solid #1B1916;background:#DD6A1A;color:#1B1916;padding:13px 28px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;font-size:36px;line-height:1.05;}
+  </style>
+
+  <div data-hf-id="hf-x5zb" id="root" data-composition-id="04-make-it-mine" data-width="1920" data-height="1080" data-duration="5.5">
+    <div data-hf-id="hf-o6wt" class="clip f04-g" data-start="0" data-duration="5.5" data-track-index="0"></div>
+
+    <div data-hf-id="hf-jlti" class="clip f04-top f04-mono" id="f04-top" data-start="0" data-duration="5.5" data-track-index="1">
+      <span data-hf-id="hf-r0zj">04 · tune it</span><span data-hf-id="hf-605l" class="f04-pill">your kid, your day</span>
+    </div>
+
+    <div data-hf-id="hf-47h5" class="clip f04-head" id="f04-head" data-start="0" data-duration="5.5" data-track-index="2">Make it mine.</div>
+
+    <div data-hf-id="hf-xtm0" class="clip f04-panel" id="f04-panel" data-start="0" data-duration="5.5" data-track-index="3">
+      <div data-hf-id="hf-p7be" id="f04-grp-day">
+        <div data-hf-id="hf-x7vq" class="f04-lab">Day type</div>
+        <div data-hf-id="hf-pdxx" class="f04-row">
+          <span data-hf-id="hf-ho75" class="f04-chip">Low-effort day</span>
+          <span data-hf-id="hf-1nwu" class="f04-chip" id="f04-chip-day">Active day<i data-hf-id="hf-l957" class="f04-ring" id="f04-ring-day"></i></span>
+          <span data-hf-id="hf-g602" class="f04-chip">Food day</span>
+          <span data-hf-id="hf-wsc4" class="f04-chip">Museum · library day</span>
+        </div>
+      </div>
+      <div data-hf-id="hf-j7j1" id="f04-grp-age">
+        <div data-hf-id="hf-4274" class="f04-lab">Age group</div>
+        <div data-hf-id="hf-4mbt" class="f04-row">
+          <span data-hf-id="hf-d4el" class="f04-chip">0–2</span>
+          <span data-hf-id="hf-58fe" class="f04-chip" id="f04-chip-age">3–5<i data-hf-id="hf-4fqg" class="f04-ring" id="f04-ring-age"></i></span>
+          <span data-hf-id="hf-xmu6" class="f04-chip">6–10</span>
+          <span data-hf-id="hf-lsqq" class="f04-chip">10+</span>
+        </div>
+      </div>
+    </div>
+
+    <div data-hf-id="hf-ff6p" class="clip f04-card" id="f04-card" data-start="0" data-duration="5.5" data-track-index="4">
+      <div data-hf-id="hf-cdme" class="f04-skin f04-skin-a" id="f04-skin-a">
+        <div data-hf-id="hf-6lz1" class="f04-media">
+          <img data-hf-id="hf-vxev" src="assets/photo-1554907984-15263bfd63bd.jpg" alt="">
+          <span data-hf-id="hf-dbg3" class="f04-tag">Museum day · Palo Alto</span>
+        </div>
+        <div data-hf-id="hf-xw0v" class="f04-ctitle">Palo Alto rainy-day: animals, art &amp; ice cream</div>
+        <div data-hf-id="hf-r8ua" class="f04-cstops">Junior Museum → Color Me Mine → Tin Pot Creamery</div>
+      </div>
+      <div data-hf-id="hf-8jbb" class="f04-skin" id="f04-skin-b">
+        <div data-hf-id="hf-9k9d" class="f04-media">
+          <img data-hf-id="hf-tsq5" id="f04-photo-b" src="assets/photo-1502082553048-f009c37129b9.jpg" alt="">
+          <span data-hf-id="hf-5mvo" class="f04-tag">Active day · San Jose</span>
+        </div>
+        <div data-hf-id="hf-80wg" class="f04-ctitle">San Jose energy-burner: farm, trampolines &amp; pancakes</div>
+        <div data-hf-id="hf-8jmt" class="f04-cstops" id="f04-stops-b">Emma Prusch Park → Raging Waters → Bill’s Cafe</div>
+      </div>
+    </div>
+
+    <div data-hf-id="hf-tgjv" class="clip f04-cta" id="f04-cta" data-start="0" data-duration="5.5" data-track-index="5">+ Make it mine</div>
+
+    <div data-hf-id="hf-v1p9" class="clip f04-meta f04-mono" id="f04-meta" data-start="0" data-duration="5.5" data-track-index="6">
+      <span data-hf-id="hf-fu3u">pick two chips, the plan re-forms</span><span data-hf-id="hf-vqp1">04 • 08</span>
+    </div>
+  </div>
+
+  <script>
+    window.__timelines = window.__timelines || {};
+    (function () {
+      var ID = "04-make-it-mine";
+      var tl = gsap.timeline({ paused: true });
+      window.__timelines[ID] = tl;
+
+      var R = document.querySelector('[data-composition-id="' + ID + '"]');
+      if (!R) return;
+      var q = function (s) { return R.querySelector(s); };
+      var qa = function (s) { return Array.prototype.slice.call(R.querySelectorAll(s)); };
+
+      var DUR = 5;
+
+      /* ONE tempo grid drives every beat — no scattered hand-tuned offsets. */
+      var PULSE = 0.26;
+      var B = function (n) { return Math.round(PULSE * n * 1000) / 1000; };
+
+      var CREAM = "#FAF5EB", INK = "#1B1916", ORANGE = "#DD6A1A";
+
+      /* press-release-spring */
+      var PRESS_DUR = 0.18, RELEASE_DUR = 0.52, PRESS_SCALE = 0.9, BOUNCE = 2.2;
+      /* theme-crossfade-morph */
+      var MORPH_DUR = 0.34;
+
+      var PICK1 = B(6);                  /* 1.56 — the day-type chip presses     */
+      var REL1  = PICK1 + PRESS_DUR;     /* 1.74 — release === the card re-forms */
+      var PICK2 = B(11);                 /* 2.86 — the age chip presses          */
+      var REL2  = PICK2 + PRESS_DUR;     /* 3.04 — release === the stops re-write*/
+
+      /* ---------- Scene 1 (0.0–1.0) — the slam, then the two columns ---------- */
+
+      tl.fromTo([q("#f04-top"), q("#f04-meta")],
+        { opacity: 0 },
+        { opacity: 1, duration: 0.32, ease: "power2.out" }, B(0));
+
+      /* kinetic-beat-slam: the single phrase hits on grid beat 0, growing from its
+         left edge so the upper-left anchor never drifts. */
+      tl.fromTo(q("#f04-head"),
+        { scale: 1.38, filter: "blur(10px)", opacity: 0, transformOrigin: "0% 50%" },
+        { scale: 1, filter: "blur(0px)", opacity: 1, duration: 0.52, ease: "power4.out" }, B(0));
+
+      tl.fromTo(q("#f04-panel"),
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, B(1));
+
+      tl.fromTo(q("#f04-card"),
+        { opacity: 0, x: 56, scale: 0.97 },
+        { opacity: 1, x: 0, scale: 1, duration: 0.56, ease: "expo.out" }, B(1));
+
+      tl.fromTo(qa("#f04-grp-day .f04-lab, #f04-grp-day .f04-chip"),
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.34, ease: "power3.out", stagger: 0.055 }, B(2));
+
+      tl.fromTo(qa("#f04-grp-age .f04-lab, #f04-grp-age .f04-chip"),
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.34, ease: "power3.out", stagger: 0.055 }, B(3));
+
+      /* ---------- Scenes 2+3 — the couple: pick and re-form share ONE beat ---------- */
+
+      var chipDay = q("#f04-chip-day");
+
+      /* press: linear compression (input) */
+      tl.to(chipDay, { scale: PRESS_SCALE, duration: PRESS_DUR, ease: "power1.in" }, PICK1);
+      /* release: spring recovery (output). Adjacency at PICK1+PRESS_DUR gives state continuity. */
+      tl.to(chipDay, { scale: 1, duration: RELEASE_DUR, ease: "back.out(" + BOUNCE + ")" }, REL1);
+      /* the pick LANDS — accent-orange filled state, an instant snap, no cursor drawn */
+      tl.set(chipDay, { backgroundColor: ORANGE, color: INK }, REL1);
+      tl.fromTo(q("#f04-ring-day"),
+        { scale: 1, opacity: 0.85 },
+        { scale: 1.5, opacity: 0, duration: 0.46, ease: "power2.out" }, REL1);
+
+      /* control-target-sync: the bound card answers at the SAME position as the release.
+         theme-crossfade-morph does the swap — opacity only, both skins complete and
+         pixel-aligned, the shell (the anchor) untouched. */
+      tl.to(q("#f04-skin-a"),
+        { opacity: 0, duration: MORPH_DUR, ease: "power2.inOut" }, REL1);
+      tl.fromTo(q("#f04-skin-b"),
+        { opacity: 0 },
+        { opacity: 1, duration: MORPH_DUR, ease: "power2.inOut" }, REL1);
+
+      /* the re-formed photo settles with a slow drift once the morph has landed */
+      tl.fromTo(q("#f04-photo-b"),
+        { scale: 1 },
+        { scale: 1.05, duration: DUR - (REL1 + MORPH_DUR), ease: "none" }, REL1 + MORPH_DUR);
+
+      /* ---------- Scene 4 — the age pick, discrete couple ---------- */
+
+      var chipAge = q("#f04-chip-age");
+      tl.to(chipAge, { scale: PRESS_SCALE, duration: PRESS_DUR, ease: "power1.in" }, PICK2);
+      tl.to(chipAge, { scale: 1, duration: RELEASE_DUR, ease: "back.out(" + BOUNCE + ")" }, REL2);
+      tl.fromTo(q("#f04-ring-age"),
+        { scale: 1, opacity: 0.85 },
+        { scale: 1.5, opacity: 0, duration: 0.46, ease: "power2.out" }, REL2);
+
+      /* ONE threshold array carries BOTH sides — the chip's filled state and the card's
+         stop line — so control and target cannot desync. Entry 0 mirrors the loaded DOM.
+         discrete-text-sequence: instant state replacement, reverse-searched each frame. */
+      var stopsEl = q("#f04-stops-b");
+      var STEPS = [
+        { t: 0,           bg: CREAM,  fg: INK,   stops: "Emma Prusch Park → Raging Waters → Bill’s Cafe" },
+        { t: REL2,        bg: ORANGE, fg: INK,   stops: "Emma Prusch Park → ··· → Bill’s Cafe" },
+        { t: REL2 + 0.26, bg: ORANGE, fg: INK,   stops: "Emma Prusch Park → Sky High → Bill’s Cafe" }
+      ];
+      var stepAt = function (time) {
+        for (var i = STEPS.length - 1; i >= 0; i--) { if (time >= STEPS[i].t) return STEPS[i]; }
+        return STEPS[0];
+      };
+      var driver = { t: 0 };
+      var lastStep = null;
+      tl.to(driver, {
+        t: DUR,
+        duration: DUR,
+        ease: "none",
+        onUpdate: function () {
+          var s = stepAt(driver.t);
+          if (s === lastStep) return;
+          stopsEl.textContent = s.stops;
+          gsap.set(chipAge, { backgroundColor: s.bg, color: s.fg });
+          lastStep = s;
+        }
+      }, 0);
+
+      /* the rewritten line lands with a single settle (no repeat/yoyo) */
+      tl.to(stopsEl, { scale: 1.05, duration: 0.14, ease: "power2.out", transformOrigin: "0% 50%" }, REL2 + 0.26);
+      tl.to(stopsEl, { scale: 1, duration: 0.24, ease: "power2.inOut" }, REL2 + 0.4);
+
+      /* ---------- Scene 5 — the CTA lands under the card, then the frame holds ---------- */
+
+      tl.fromTo(q("#f04-cta"),
+        { opacity: 0, y: 34, scale: 0.92 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.44, ease: "back.out(1.7)" }, B(16));
+    })();
+  </script>
+</template>

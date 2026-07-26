@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" integrity="sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2" crossorigin="anonymous"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #FAF5EB;
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="40.5"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div
+        id="el-01-47-tabs"
+        class="scene"
+        data-composition-id="01-47-tabs"
+        data-composition-src="compositions/frames/01-47-tabs.html"
+        data-start="0"
+        data-duration="5.5"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-01-47-tabs-voice"
+        src="assets/voice/01.wav"
+        data-start="0"
+        data-duration="5.5"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-02-one-plan"
+        class="scene"
+        data-composition-id="02-one-plan"
+        data-composition-src="compositions/frames/02-one-plan.html"
+        data-start="5.5"
+        data-duration="5.4"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-02-one-plan-voice"
+        src="assets/voice/02.wav"
+        data-start="5.5"
+        data-duration="5"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-03-the-plan"
+        class="scene"
+        data-composition-id="03-the-plan"
+        data-composition-src="compositions/frames/03-the-plan.html"
+        data-start="10.5"
+        data-duration="6"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-03-the-plan-voice"
+        src="assets/voice/03.wav"
+        data-start="10.5"
+        data-duration="5.5"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-04-make-it-mine"
+        class="scene"
+        data-composition-id="04-make-it-mine"
+        data-composition-src="compositions/frames/04-make-it-mine.html"
+        data-start="16"
+        data-duration="5.5"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-04-make-it-mine-voice"
+        src="assets/voice/04.wav"
+        data-start="16"
+        data-duration="5"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-05-the-map"
+        class="scene"
+        data-composition-id="05-the-map"
+        data-composition-src="compositions/frames/05-the-map.html"
+        data-start="21"
+        data-duration="5.5"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-05-the-map-voice"
+        src="assets/voice/05.wav"
+        data-start="21"
+        data-duration="5"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-06-16-metros"
+        class="scene"
+        data-composition-id="06-16-metros"
+        data-composition-src="compositions/frames/06-16-metros.html"
+        data-start="26"
+        data-duration="5.5"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-06-16-metros-voice"
+        src="assets/voice/06.wav"
+        data-start="26"
+        data-duration="5"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-07-every-friday"
+        class="scene"
+        data-composition-id="07-every-friday"
+        data-composition-src="compositions/frames/07-every-friday.html"
+        data-start="31"
+        data-duration="5.1"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-07-every-friday-voice"
+        src="assets/voice/07.wav"
+        data-start="31"
+        data-duration="4.5"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-08-closer"
+        class="scene"
+        data-composition-id="08-closer"
+        data-composition-src="compositions/frames/08-closer.html"
+        data-start="35.5"
+        data-duration="5"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-08-closer-voice"
+        src="assets/voice/08.wav"
+        data-start="35.5"
+        data-duration="5"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <!-- BGM -->
+      <audio
+        id="el-bgm"
+        src="assets/bgm/famhop-underscore.wav"
+        data-start="0"
+        data-duration="40.5"
+        data-track-index="11"
+        data-volume="0.2"
+      ></audio>
+
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+      // ── frame transitions (injected by transitions.mjs) ──
+      (function () { var tl = window.__timelines["main"];
+        tl.to("#el-02-one-plan", { scale: 2.5, opacity: 0, filter: "blur(8px)", duration: 0.4, ease: "power3.in" }, 10.5);
+        tl.fromTo("#el-03-the-plan", { scale: 0.5, opacity: 0, filter: "blur(8px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.4, ease: "power3.out" }, 10.5);
+        tl.to("#el-03-the-plan", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 16);
+        tl.fromTo("#el-04-make-it-mine", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 16);
+        tl.to("#el-04-make-it-mine", { x: -1920, duration: 0.5, ease: "power3.inOut" }, 21);
+        tl.fromTo("#el-05-the-map", { x: 1920, opacity: 1 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, 21);
+        tl.to("#el-05-the-map", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 26);
+        tl.fromTo("#el-06-16-metros", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 26);
+        tl.to("#el-06-16-metros", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 31);
+        tl.fromTo("#el-07-every-friday", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 31);
+        tl.to("#el-07-every-friday", { filter: "blur(10px)", scale: 1.03, opacity: 0, duration: 0.6, ease: "power2.inOut" }, 35.5);
+        tl.fromTo("#el-08-closer", { filter: "blur(10px)", scale: 0.97, opacity: 0 }, { filter: "blur(0px)", scale: 1, opacity: 1, duration: 0.6, ease: "power2.inOut" }, 35.5);
+        tl.to({}, { duration: 40.5 }, 0); // full-span anchor — main.duration() == composition total (Studio master duration)
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,128 @@
+<template>
+  <style>
+    @font-face{font-family:'Bricolage Grotesque';src:url('assets/fonts/bricolage-grotesque-400_800.woff2') format('woff2');font-weight:400 800;font-style:normal;font-display:block;}
+    @font-face{font-family:'JetBrains Mono';src:url('assets/fonts/jetbrains-mono-400.woff2') format('woff2');font-weight:100 800;font-style:normal;font-display:block;}
+    @font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/plus-jakarta-sans-400.woff2') format('woff2');font-weight:200 800;font-style:normal;font-display:block;}
+
+    #root{width:1920px;height:1080px;position:relative;overflow:hidden;container-type:size;--accent:#DD6A1A;color:#FAF5EB;font-family:'Plus Jakarta Sans',sans-serif;}
+
+    /* the single forest-green plate of the run */
+    .f08-g{position:absolute;inset:0;background:#2D5043;}
+
+    /* mono chrome — cream variant */
+    .f08-mono{font-family:'JetBrains Mono',monospace;font-size:1.25cqw;letter-spacing:.06em;text-transform:uppercase;color:#FAF5EB;}
+    .f08-top{position:absolute;left:64px;right:64px;top:56px;display:flex;justify-content:space-between;align-items:center;}
+    .f08-pill{border:0.2cqw solid #FAF5EB;border-radius:999px;padding:5px 22px;}
+    .f08-meta{position:absolute;left:64px;right:64px;top:842px;display:flex;justify-content:space-between;align-items:center;}
+    .f08-dot{width:0.5cqw;height:0.5cqw;border-radius:50%;background:#FAF5EB;}
+
+    /* tagline — Bricolage 800 uppercase, 0.92 lh */
+    .f08-head{position:absolute;left:0;right:0;top:170px;text-align:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;font-size:6.8cqw;line-height:.92;letter-spacing:-.01em;}
+    .f08-line{display:block;width:fit-content;margin:0 auto;}
+
+    /* the wordmark lockup — inlined SVG, currentColor cream, pin-o on --accent */
+    .f08-mark{position:absolute;left:660px;top:588px;width:600px;height:150px;display:flex;align-items:center;justify-content:center;color:#FAF5EB;}
+    .f08-logo{height:150px;width:auto;display:block;overflow:visible;}
+    .f08-logo path{fill:currentColor;fill-opacity:0;stroke:currentColor;stroke-width:14;stroke-linejoin:round;stroke-linecap:round;}
+    .f08-logo circle{fill-opacity:0;stroke:currentColor;stroke-width:14;}
+
+    .f08-url{position:absolute;left:0;right:0;top:742px;text-align:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;font-size:3.45cqw;line-height:.92;letter-spacing:-.01em;}
+
+    /* the closing seal — berry, cream ring, brand −6deg */
+    .f08-stamp{position:absolute;left:1500px;top:150px;width:280px;height:280px;background:#B25368;border:0.4cqw solid #FAF5EB;transform:rotate(-6deg);display:flex;align-items:center;justify-content:center;}
+    .f08-ring{position:absolute;inset:18px;border:0.16cqw solid #FAF5EB;border-radius:50%;}
+    .f08-stamp span{position:relative;text-align:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;font-size:2.2cqw;line-height:.9;}
+  </style>
+
+  <div data-hf-id="hf-hahh" id="root" data-composition-id="08-closer" data-width="1920" data-height="1080" data-duration="5">
+    <div data-hf-id="hf-yqy1" class="clip f08-g" data-start="0" data-duration="5" data-track-index="0"></div>
+
+    <div data-hf-id="hf-cguk" class="clip f08-top f08-mono" data-start="0" data-duration="5" data-track-index="1">
+      <span data-hf-id="hf-o7vm">08 · go</span><span data-hf-id="hf-h7cs" class="f08-pill">famhop</span>
+    </div>
+
+    <div data-hf-id="hf-pzlx" class="clip f08-stamp" data-start="0" data-duration="5" data-track-index="2">
+      <i data-hf-id="hf-fso5" class="f08-ring"></i><span data-hf-id="hf-48wc">16<br data-hf-id="hf-x5px">metros</span>
+    </div>
+
+    <div data-hf-id="hf-ocl9" class="clip f08-head" data-start="0" data-duration="5" data-track-index="3" data-layout-allow-overlap="">
+      <span data-hf-id="hf-rxxq" class="f08-line" id="f08-l1">Plan ·</span>
+      <span data-hf-id="hf-s7tv" class="f08-line" id="f08-l2">Hop ·</span>
+      <span data-hf-id="hf-lbs5" class="f08-line" id="f08-l3">Repeat.</span>
+    </div>
+
+    <div data-hf-id="hf-du5j" class="clip f08-mark" data-start="0" data-duration="5" data-track-index="4">
+      <svg data-hf-id="hf-4for" class="f08-logo" viewBox="0 0 320.4 100" aria-hidden="true"><g data-hf-id="hf-dtgc" transform="translate(0 76) scale(0.1 -0.1)"><g data-hf-id="hf-g1zz" fill="currentColor"><path data-hf-id="hf-rbzc" id="f08-ltr-f" d="M81 0V515Q81 571 102.5 611.5Q124 652 163.5 674.5Q203 697 256 697Q284 697 305.5 693.5Q327 690 339 688V541Q331 543 320.5 545.5Q310 548 294 548Q268 548 256.0 533.5Q244 519 244 488V0ZM328 320H18V469H328Z" /><path data-hf-id="hf-zpic" id="f08-ltr-a" d="M196 -13Q144 -13 104.0 7.5Q64 28 41.5 65.5Q19 103 19 151Q19 203 43.5 239.5Q68 276 108.5 295.5Q149 315 198 315Q271 315 317.0 281.5Q363 248 377 183L311 198V309Q311 334 293.0 352.0Q275 370 237 370Q210 370 175.0 363.0Q140 356 101 337L55 452Q99 474 152.0 488.5Q205 503 262 503Q331 503 378.5 478.0Q426 453 450.0 407.5Q474 362 474 300V0H338L307 97L377 119Q362 58 317.5 22.5Q273 -13 196 -13ZM251 97Q279 97 296.0 112.0Q313 127 313 151Q313 174 296.0 189.0Q279 204 251 204Q221 204 204.5 189.0Q188 174 188 151Q188 127 204.5 112.0Q221 97 251 97Z" transform="translate(317 0)" /><path data-hf-id="hf-btpz" id="f08-ltr-m" d="M48 0V490H168L200 389L141 395Q166 423 198.5 447.5Q231 472 270.0 487.5Q309 503 352 503Q400 503 429.5 486.0Q459 469 475.0 440.5Q491 412 497.5 376.0Q504 340 504 301V0H342V282Q342 320 330.0 332.0Q318 344 299 344Q272 344 246.5 329.5Q221 315 195 289L160 370H210V0ZM634 0V282Q634 320 622.5 332.0Q611 344 592 344Q566 344 540.0 329.5Q514 315 488 289L435 395Q460 423 492.5 447.5Q525 472 564.0 487.5Q603 503 645 503Q693 503 723.0 486.0Q753 469 769.0 440.5Q785 412 791.0 376.0Q797 340 797 301V0Z" transform="translate(800 0)" /><path data-hf-id="hf-ud6k" id="f08-ltr-h" d="M48 0V681H210V0ZM352 0V282Q352 320 340.0 332.0Q328 344 305 344Q288 344 269.0 337.5Q250 331 231.5 318.5Q213 306 195 289L141 395Q166 423 199.5 447.5Q233 472 272.5 487.5Q312 503 356 503Q405 503 436.0 486.0Q467 469 484.0 440.5Q501 412 507.5 376.0Q514 340 514 301V0Z" transform="translate(1607 0)" /></g><circle data-hf-id="hf-wnz2" id="f08-pin" cx="2411.5" cy="245" r="269.9" fill="var(--accent)" /><g data-hf-id="hf-s7oj" fill="currentColor" transform="translate(2662 0)"><path data-hf-id="hf-t0ho" id="f08-ltr-p" d="M326 -13Q262 -13 215.0 16.0Q168 45 142.0 102.0Q116 159 116 245Q116 325 142.5 382.5Q169 440 216.5 471.5Q264 503 327 503Q394 503 444.5 469.5Q495 436 523.5 378.0Q552 320 552 245Q552 170 523.0 111.5Q494 53 442.5 20.0Q391 -13 326 -13ZM48 -190V490H168L210 356H201V144H210V-190ZM295 143Q334 143 360.5 171.5Q387 200 387 245Q387 289 360.5 318.5Q334 348 295 348Q256 348 229.0 318.5Q202 289 202 245Q202 200 229.0 171.5Q256 143 295 143Z" /></g></g></svg>
+    </div>
+
+    <div data-hf-id="hf-bsrs" class="clip f08-url" data-start="0" data-duration="5" data-track-index="5">famhop.com</div>
+
+    <div data-hf-id="hf-9klj" class="clip f08-meta f08-mono" data-start="0" data-duration="5" data-track-index="6">
+      <span data-hf-id="hf-9ilm">the one green plate of the run</span>
+      <span data-hf-id="hf-j4w4" style="display:flex;align-items:center;gap:14px;">08<i data-hf-id="hf-7ctg" class="f08-dot"></i>08</span>
+    </div>
+  </div>
+
+  <script>
+    window.__timelines = window.__timelines || {};
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+
+      /* ONE tempo grid drives every reveal (kinetic-beat-slam). */
+      var PULSE = 0.2;
+      var BEATS = [PULSE * 2, PULSE * 5, PULSE * 8, PULSE * 11, PULSE * 18]; // 0.4 1.0 1.6 2.2 3.6
+
+      /* Scene 1 (0.0-0.4) — green plate, cream chrome and the berry stamp are already seated. */
+
+      /* Scene 2 (0.4-2.2) — one tagline line per beat, a distinct axis + ease on each hit. */
+      tl.fromTo("#f08-l1",
+        { scale: 1.42, filter: "blur(12px)", opacity: 0 },
+        { scale: 1, filter: "blur(0px)", opacity: 1, duration: 0.46, ease: "power4.out" }, BEATS[0]);
+      tl.fromTo("#f08-l2",
+        { x: -300, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.42, ease: "expo.out" }, BEATS[1]);
+      tl.fromTo("#f08-l3",
+        { y: 78, rotation: 4, opacity: 0 },
+        { y: 0, rotation: 0, opacity: 1, duration: 0.5, ease: "circ.out" }, BEATS[2]);
+
+      /* Scene 3 (2.2-3.6) — the wordmark writes itself on, glyph by glyph (svg-path-draw). */
+      var DRAW = 0.34, STAGGER = 0.22, FILL = 0.2;
+      var glyphs = ["f08-ltr-f", "f08-ltr-a", "f08-ltr-m", "f08-ltr-h", "f08-ltr-p"];
+      glyphs.forEach(function (id, i) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        var len = el.getTotalLength() * 1.02; // measured, over-estimated so nothing clips
+        el.style.strokeDasharray = String(len);
+        var at = BEATS[3] + i * STAGGER;
+        tl.fromTo(el,
+          { strokeDashoffset: len },
+          { strokeDashoffset: 0, duration: DRAW, ease: "power2.out" }, at);
+        tl.fromTo(el,
+          { fillOpacity: 0 },
+          { fillOpacity: 1, duration: FILL, ease: "power1.out" }, at + 0.24);
+      });
+
+      /* the pin-o rings out, then fills accent-orange last */
+      var pin = document.getElementById("f08-pin");
+      if (pin) {
+        var plen = pin.getTotalLength() * 1.02;
+        pin.style.strokeDasharray = String(plen);
+        var pinAt = BEATS[3] + 0.9;
+        tl.fromTo(pin,
+          { strokeDashoffset: plen },
+          { strokeDashoffset: 0, duration: 0.24, ease: "none" }, pinAt);
+        tl.fromTo(pin,
+          { fillOpacity: 0 },
+          { fillOpacity: 1, duration: 0.24, ease: "power1.out" }, pinAt + 0.18);
+        tl.to(pin, { strokeOpacity: 0, duration: 0.2, ease: "power1.out" }, pinAt + 0.2);
+      }
+
+      /* Scene 4 (3.6-5.0) — the URL lands on one beat, then a full hold to the last frame. */
+      tl.fromTo(".f08-url",
+        { y: 46, scale: 0.95, opacity: 0 },
+        { y: 0, scale: 1, opacity: 1, duration: 0.5, ease: "power3.out" }, BEATS[4]);
+
+      window.__timelines["08-closer"] = tl;
+    })();
+  </script>
+</template>

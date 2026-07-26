@@ -1,9 +1,58 @@
 {
   "schemaVersion": 1,
   "metroId": "chicago",
-  "generatedAt": "2026-07-22T22:57:11.353Z",
-  "alertCount": 26,
+  "generatedAt": "2026-07-26T23:24:06.145Z",
+  "alertCount": 15,
   "alerts": [
+    {
+      "severity": "warning",
+      "metroId": "chicago",
+      "sourceId": "chicago-library-family",
+      "sourceName": "Chicago Public Library Family Programs",
+      "sourceType": "biblioevents",
+      "url": "https://chipublib.bibliocommons.com/v2/events?audiences=53f250153860d10000000010",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "recurring-template",
+      "recoveredEvents": 8,
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-26T23:24:06.145Z",
+      "fetches": [
+        {
+          "url": "https://chipublib.bibliocommons.com/v2/events?audiences=53f250153860d10000000010",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "chicago",
+      "sourceId": "dupage-county-fair",
+      "sourceName": "DuPage County Fair",
+      "sourceType": "html",
+      "url": "https://dupagecountyfair.org/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-26T23:24:06.145Z",
+      "fetches": [
+        {
+          "url": "https://dupagecountyfair.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
     {
       "severity": "warning",
       "metroId": "chicago",
@@ -19,7 +68,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
+      "fetchedAt": "2026-07-26T23:24:06.145Z",
       "fetches": [
         {
           "url": "https://www.lcfairgrounds.com/events",
@@ -30,122 +79,27 @@
       ]
     },
     {
-      "severity": "warning",
-      "metroId": "chicago",
-      "sourceId": "evanston-library-family",
-      "sourceName": "Evanston Public Library Events",
-      "sourceType": "biblioevents",
-      "url": "https://evanstonlibrary.bibliocommons.com/v2/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 4,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 4,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
-      "fetches": [
-        {
-          "url": "https://evanstonlibrary.bibliocommons.com/v2/events",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "chicago",
-      "sourceId": "schaumburg-library-family",
-      "sourceName": "Schaumburg Township District Library Events",
-      "sourceType": "communicoEvents",
-      "url": "https://schaumburg.libnet.info/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 173,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 173,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
-      "fetches": [
-        {
-          "url": "https://schaumburg.libnet.info/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "chicago",
-      "sourceId": "downers-grove-library-family",
-      "sourceName": "Downers Grove Public Library Events",
-      "sourceType": "communicoEvents",
-      "url": "https://downersgrove.libnet.info/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 83,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 83,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
-      "fetches": [
-        {
-          "url": "https://downersgrove.libnet.info/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "chicago",
-      "sourceId": "elk-grove-village-library-family",
-      "sourceName": "Elk Grove Village Public Library Events",
-      "sourceType": "communicoEvents",
-      "url": "https://egvpl.libnet.info/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 125,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 125,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
-      "fetches": [
-        {
-          "url": "https://egvpl.libnet.info/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
       "severity": "critical",
       "metroId": "chicago",
       "sourceId": "oak-park-library-family",
       "sourceName": "Oak Park Public Library Events",
       "sourceType": "librarycalendar",
       "url": "https://oakpark.librarycalendar.com/events/month",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
+      "fetchedAt": "2026-07-26T23:24:06.145Z",
       "fetches": [
         {
           "url": "https://oakpark.librarycalendar.com/events/month",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -156,44 +110,21 @@
       "sourceName": "Naperville Public Library Events",
       "sourceType": "librarycalendar",
       "url": "https://napervillepl.librarycalendar.com/events/month",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
+      "fetchedAt": "2026-07-26T23:24:06.145Z",
       "fetches": [
         {
           "url": "https://napervillepl.librarycalendar.com/events/month",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "chicago",
-      "sourceId": "forest-preserves-cook-county-family",
-      "sourceName": "Forest Preserves of Cook County Events",
-      "sourceType": "tribeEvents",
-      "url": "https://fpdcc.com/events/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 159,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 159,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
-      "fetches": [
-        {
-          "url": "https://fpdcc.com/events/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -204,140 +135,46 @@
       "sourceName": "Morton Arboretum Arbor Evenings Summer Concerts",
       "sourceType": "officialTextEvents",
       "url": "https://mortonarb.org/explore/activities/events/arbor-evenings/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
+      "fetchedAt": "2026-07-26T23:24:06.145Z",
       "fetches": [
         {
           "url": "https://mortonarb.org/explore/activities/events/arbor-evenings/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "chicago",
       "sourceId": "kane-county-fair-2026",
       "sourceName": "Kane County Fair 2026",
       "sourceType": "officialTextEvents",
       "url": "https://www.kanecountyfair.com/Fair-Information",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
+      "fetchedAt": "2026-07-26T23:24:06.145Z",
       "fetches": [
         {
           "url": "https://www.kanecountyfair.com/Fair-Information",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "chicago",
-      "sourceId": "foam-fun-fest-2026-07-20-src",
-      "sourceName": "Foam Fun Fest",
-      "sourceType": "officialTextEvents",
-      "url": "https://wonder-works.org/foam-fun-fest/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
-      "fetches": [
-        {
-          "url": "https://wonder-works.org/foam-fun-fest/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "chicago",
-      "sourceId": "fiesta-del-sol-2026-07-23-src",
-      "sourceName": "Fiesta Del Sol",
-      "sourceType": "officialTextEvents",
-      "url": "https://fiestadelsol.org/festival",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
-      "fetches": [
-        {
-          "url": "https://fiestadelsol.org/festival",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "chicago",
-      "sourceId": "chicago-gospel-music-festival-2026-07-24-src",
-      "sourceName": "Chicago Gospel Music Festival",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.choosechicago.com/articles/festivals-special-events/chicago-gospel-music-festival/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
-      "fetches": [
-        {
-          "url": "https://www.choosechicago.com/articles/festivals-special-events/chicago-gospel-music-festival/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "chicago",
-      "sourceId": "chinatown-summer-fair-2026-07-25-src",
-      "sourceName": "Chinatown Summer Fair",
-      "sourceType": "officialTextEvents",
-      "url": "https://ccc-foundation.org/summer-fair/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "browser fetch failed: page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:302:30), <anonymous>:2:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
-      "fetches": [
-        {
-          "url": "https://ccc-foundation.org/summer-fair/",
-          "status": "fetch-error",
-          "reason": "browser fetch failed: page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:302:30), <anonymous>:2:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=UTF-8"
         }
       ]
     },
@@ -348,20 +185,21 @@
       "sourceName": "Metro Chicago",
       "sourceType": "html",
       "url": "https://metrochicago.com/shows/",
-      "status": "fetch-error",
+      "status": "http-error",
       "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
+      "fetchedAt": "2026-07-26T23:24:06.145Z",
       "fetches": [
         {
           "url": "https://metrochicago.com/shows/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -372,20 +210,21 @@
       "sourceName": "Empty Bottle",
       "sourceType": "html",
       "url": "https://www.emptybottle.com/events/",
-      "status": "fetch-error",
+      "status": "http-error",
       "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
+      "fetchedAt": "2026-07-26T23:24:06.145Z",
       "fetches": [
         {
           "url": "https://www.emptybottle.com/events/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html;charset=utf-8"
         }
       ]
     },
@@ -396,20 +235,21 @@
       "sourceName": "Lincoln Hall",
       "sourceType": "html",
       "url": "https://www.lh-st.com/events",
-      "status": "fetch-error",
+      "status": "http-error",
       "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
+      "fetchedAt": "2026-07-26T23:24:06.145Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -420,68 +260,21 @@
       "sourceName": "Schubas Tavern",
       "sourceType": "html",
       "url": "https://www.lh-st.com/events",
-      "status": "fetch-error",
+      "status": "http-error",
       "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
+      "fetchedAt": "2026-07-26T23:24:06.145Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "chicago",
-      "sourceId": "thalia-hall-chicago",
-      "sourceName": "Thalia Hall",
-      "sourceType": "html",
-      "url": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 16,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 16,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
-      "fetches": [
-        {
-          "url": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "chicago",
-      "sourceId": "second-city-chicago",
-      "sourceName": "The Second City",
-      "sourceType": "html",
-      "url": "https://www.secondcity.com/show-finder/chicago",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
-      "fetches": [
-        {
-          "url": "https://www.secondcity.com/show-finder/chicago",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -492,20 +285,21 @@
       "sourceName": "Zanies Comedy Club",
       "sourceType": "html",
       "url": "https://chicago.zanies.com/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
+      "fetchedAt": "2026-07-26T23:24:06.145Z",
       "fetches": [
         {
           "url": "https://chicago.zanies.com/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -516,92 +310,46 @@
       "sourceName": "The Hideout",
       "sourceType": "html",
       "url": "https://www.hideoutchicago.com/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
+      "fetchedAt": "2026-07-26T23:24:06.145Z",
       "fetches": [
         {
           "url": "https://www.hideoutchicago.com/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
     {
       "severity": "warning",
       "metroId": "chicago",
-      "sourceId": "chicago-cultural-alliance",
-      "sourceName": "Chicago Cultural Alliance Events",
-      "sourceType": "tribeEvents",
-      "url": "https://www.chicagoculturalalliance.org/events/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 18,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 18,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
-      "fetches": [
-        {
-          "url": "https://www.chicagoculturalalliance.org/events/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "chicago",
       "sourceId": "chicago-millennium-park-summer-music-2026",
       "sourceName": "Millennium Park Summer Music Series 2026",
       "sourceType": "officialTextEvents",
       "url": "https://www.choosechicago.com/articles/festivals-special-events/millennium-park-summer-music-series/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
+      "fetchedAt": "2026-07-26T23:24:06.145Z",
       "fetches": [
         {
           "url": "https://www.choosechicago.com/articles/festivals-special-events/millennium-park-summer-music-series/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "chicago",
-      "sourceId": "chicago-jazz-festival-2026",
-      "sourceName": "Chicago Jazz Festival 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.chicagojazz.com/post/city-of-chicago-announces-2026-chicago-jazz-festival-lineup-sept-3-6-featuring-dee-dee-bridgewater",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
-      "fetches": [
-        {
-          "url": "https://www.chicagojazz.com/post/city-of-chicago-announces-2026-chicago-jazz-festival-lineup-sept-3-6-featuring-dee-dee-bridgewater",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -612,20 +360,21 @@
       "sourceName": "Chicago Blues Festival 2026",
       "sourceType": "officialTextEvents",
       "url": "https://www.choosechicago.com/articles/festivals-special-events/chicago-blues-festival/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T22:57:11.353Z",
+      "fetchedAt": "2026-07-26T23:24:06.145Z",
       "fetches": [
         {
           "url": "https://www.choosechicago.com/articles/festivals-special-events/chicago-blues-festival/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     }

@@ -1,33 +1,9 @@
 {
   "schemaVersion": 1,
   "metroId": "atlanta",
-  "generatedAt": "2026-07-22T23:23:44.409Z",
-  "alertCount": 34,
+  "generatedAt": "2026-07-26T23:27:48.048Z",
+  "alertCount": 12,
   "alerts": [
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "atlanta-library-family",
-      "sourceName": "Fulton County Library Family Events",
-      "sourceType": "biblioevents",
-      "url": "https://fulcolibrary.bibliocommons.com/v2/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "recurring-template",
-      "recoveredEvents": 8,
-      "liveEvents": 0,
-      "fallbackEvents": 8,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://fulcolibrary.bibliocommons.com/v2/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
     {
       "severity": "warning",
       "metroId": "atlanta",
@@ -35,92 +11,21 @@
       "sourceName": "Atlanta Parks and Recreation Events",
       "sourceType": "eventList",
       "url": "https://www.atlantaga.gov/government/departments/parks-recreation/events",
-      "status": "fetch-error",
+      "status": "http-error",
       "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": "recurring-template",
       "recoveredEvents": 8,
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
+      "fetchedAt": "2026-07-26T23:27:48.048Z",
       "fetches": [
         {
           "url": "https://www.atlantaga.gov/government/departments/parks-recreation/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "atlanta-museum-family",
-      "sourceName": "Children's Museum of Atlanta Program Calendar",
-      "sourceType": "cmaProgramEvents",
-      "url": "https://childrensmuseumatlanta.org/program-calendar/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 56,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 56,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://childrensmuseumatlanta.org/program-calendar/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "atlanta-zoo-family",
-      "sourceName": "Zoo Atlanta Events",
-      "sourceType": "zooAtlantaEvents",
-      "url": "https://zooatlanta.org/visit/events/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "browser fetch failed: page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:302:30), <anonymous>:2:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 5,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 5,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://zooatlanta.org/visit/events/",
-          "status": "fetch-error",
-          "reason": "browser fetch failed: page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:302:30), <anonymous>:2:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "ticketmaster-atlanta-family",
-      "sourceName": "Ticketmaster Atlanta Family Events",
-      "sourceType": "ticketmaster",
-      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -131,20 +36,21 @@
       "sourceName": "North Georgia State Fair",
       "sourceType": "html",
       "url": "https://www.northgeorgiastatefair.com/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
+      "fetchedAt": "2026-07-26T23:27:48.048Z",
       "fetches": [
         {
           "url": "https://www.northgeorgiastatefair.com/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -155,212 +61,21 @@
       "sourceName": "Gwinnett County Fair",
       "sourceType": "html",
       "url": "https://www.gwinnettcountyfair.com/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
+      "fetchedAt": "2026-07-26T23:27:48.048Z",
       "fetches": [
         {
           "url": "https://www.gwinnettcountyfair.com/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "dekalb-library-family",
-      "sourceName": "DeKalb County Public Library Events",
-      "sourceType": "communicoEvents",
-      "url": "https://dekalb.libnet.info/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 219,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 219,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://dekalb.libnet.info/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "gwinnett-library-family",
-      "sourceName": "Gwinnett County Public Library Events",
-      "sourceType": "communicoEvents",
-      "url": "https://gwinnettpl.libnet.info/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 28,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 28,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://gwinnettpl.libnet.info/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "atlanta-botanical-garden",
-      "sourceName": "Atlanta Botanical Garden Events",
-      "sourceType": "tribeEvents",
-      "url": "https://atlantabg.org/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 67,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 67,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://atlantabg.org/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "visit-marietta-events",
-      "sourceName": "Visit Marietta Events Calendar",
-      "sourceType": "tribeEvents",
-      "url": "https://www.visitmariettaga.com/events/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 161,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 161,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://www.visitmariettaga.com/events/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "awesome-alpharetta-family",
-      "sourceName": "Awesome Alpharetta Family Fun Events",
-      "sourceType": "tribeEvents",
-      "url": "https://www.awesomealpharetta.com/calendar/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 47,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 47,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://www.awesomealpharetta.com/calendar/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "piedmont-park-conservancy",
-      "sourceName": "Piedmont Park Conservancy Events",
-      "sourceType": "tribeEvents",
-      "url": "https://piedmontpark.org/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 27,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 27,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://piedmontpark.org/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "atlanta-history-center-events",
-      "sourceName": "Atlanta History Center Events",
-      "sourceType": "tribeEvents",
-      "url": "https://www.atlantahistorycenter.com/events/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 9,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 9,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://www.atlantahistorycenter.com/events/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "atlanta",
-      "sourceId": "atlanta-beltline-lantern-parade-2026",
-      "sourceName": "Atlanta BeltLine Lantern Parade 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://beltline.org/art/lantern-parade/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://beltline.org/art/lantern-parade/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -371,188 +86,96 @@
       "sourceName": "Marietta 4th In The Park Celebration 2026",
       "sourceType": "officialTextEvents",
       "url": "https://www.mariettaga.gov/194/Fourth-of-July-Celebration",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
+      "fetchedAt": "2026-07-26T23:27:48.048Z",
       "fetches": [
         {
           "url": "https://www.mariettaga.gov/194/Fourth-of-July-Celebration",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "atlanta",
       "sourceId": "stone-mountain-fantastic-fourth-2026",
       "sourceName": "Stone Mountain Fantastic Fourth Celebration 2026",
       "sourceType": "officialTextEvents",
       "url": "https://stonemountainpark.com/activities/events/atlanta-4th-of-july-fireworks-at-stone-mountain-park/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
+      "fetchedAt": "2026-07-26T23:27:48.048Z",
       "fetches": [
         {
           "url": "https://stonemountainpark.com/activities/events/atlanta-4th-of-july-fireworks-at-stone-mountain-park/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "atlanta",
       "sourceId": "united-church-back-to-school-bash-2026",
       "sourceName": "United Church Back to School Bash (July 18)",
       "sourceType": "officialTextEvents",
       "url": "https://www.eventbrite.com/e/back-to-school-bash-tickets-1991385968037",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "browser fetch failed: page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:302:30), <anonymous>:2:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
+      "fetchedAt": "2026-07-26T23:27:48.048Z",
       "fetches": [
         {
           "url": "https://www.eventbrite.com/e/back-to-school-bash-tickets-1991385968037",
-          "status": "fetch-error",
-          "reason": "browser fetch failed: page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:302:30), <anonymous>:2:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "atlanta",
       "sourceId": "fulton-sheriff-back-to-school-bash-2026",
       "sourceName": "Fulton County Sheriff's Office Back to School Bash (July 18)",
       "sourceType": "officialTextEvents",
       "url": "https://www.eventbrite.com/e/fulton-county-sheriffs-office-back-to-school-bash-tickets-1990976298705",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "browser fetch failed: page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:302:30), <anonymous>:2:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
+      "fetchedAt": "2026-07-26T23:27:48.048Z",
       "fetches": [
         {
           "url": "https://www.eventbrite.com/e/fulton-county-sheriffs-office-back-to-school-bash-tickets-1990976298705",
-          "status": "fetch-error",
-          "reason": "browser fetch failed: page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:302:30), <anonymous>:2:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "atlanta-ice-cream-wellness-festival-2026-07-25-src",
-      "sourceName": "Atlanta Ice Cream & Wellness Festival",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.atlantaicecreamfestival.com/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://www.atlantaicecreamfestival.com/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "zoo-atlanta-kids-night-out-2026-07-25-src",
-      "sourceName": "Zoo Atlanta Kids Night Out: Small But Mighty",
-      "sourceType": "officialTextEvents",
-      "url": "https://zooatlanta.org/program/kids-night-out/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://zooatlanta.org/program/kids-night-out/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "southern-museum-railroad-rendezvous-2026-07-25-src",
-      "sourceName": "Railroad Rendezvous at Southern Museum",
-      "sourceType": "officialTextEvents",
-      "url": "https://southernmuseum.org/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://southernmuseum.org/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "acworth-big-rig-bash-2026-07-25-src",
-      "sourceName": "Acworth Big Rig Back-to-School Bash",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.acworth.com/big-rig-bash/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://www.acworth.com/big-rig-bash/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -563,20 +186,21 @@
       "sourceName": "Terminal West",
       "sourceType": "html",
       "url": "https://www.terminalwestatl.com/events",
-      "status": "fetch-error",
+      "status": "http-error",
       "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
+      "fetchedAt": "2026-07-26T23:27:48.048Z",
       "fetches": [
         {
           "url": "https://www.terminalwestatl.com/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
         }
       ]
     },
@@ -587,20 +211,21 @@
       "sourceName": "Variety Playhouse",
       "sourceType": "html",
       "url": "https://www.varietyplayhouse.com/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
+      "fetchedAt": "2026-07-26T23:27:48.048Z",
       "fetches": [
         {
           "url": "https://www.varietyplayhouse.com/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html"
         }
       ]
     },
@@ -611,116 +236,21 @@
       "sourceName": "The EARL",
       "sourceType": "html",
       "url": "https://www.badearl.com/calendar",
-      "status": "fetch-error",
+      "status": "http-error",
       "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
+      "fetchedAt": "2026-07-26T23:27:48.048Z",
       "fetches": [
         {
           "url": "https://www.badearl.com/calendar",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "atlanta",
-      "sourceId": "the-masquerade-atl",
-      "sourceName": "The Masquerade",
-      "sourceType": "html",
-      "url": "https://www.masqueradeatlanta.com/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://www.masqueradeatlanta.com/events",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "laughing-skull-atl",
-      "sourceName": "Laughing Skull Lounge",
-      "sourceType": "html",
-      "url": "https://laughingskulllounge.com/events/?ical=1",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 29,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 29,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://laughingskulllounge.com/events/?ical=1",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "dad-garage-atl",
-      "sourceName": "Dad's Garage Theatre",
-      "sourceType": "html",
-      "url": "https://www.dadsgarage.com/shows",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 5,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 5,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://www.dadsgarage.com/shows",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "punchline-comedy-atl",
-      "sourceName": "The Punchline Comedy Club",
-      "sourceType": "tribeEvents",
-      "url": "https://www.punchline.com/events/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 28,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 28,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://www.punchline.com/events/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -731,44 +261,21 @@
       "sourceName": "Ponce City Market Events",
       "sourceType": "tribeEvents",
       "url": "https://www.poncecitymarket.com/events/",
-      "status": "fetch-error",
+      "status": "http-error",
       "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 39,
+      "recoveredEvents": 33,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 39,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
+      "lastKnownGoodEvents": 33,
+      "fetchedAt": "2026-07-26T23:27:48.048Z",
       "fetches": [
         {
           "url": "https://www.poncecitymarket.com/events/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "atlanta",
-      "sourceId": "shaky-knees-2026",
-      "sourceName": "Shaky Knees Festival 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.shakykneesfestival.com/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://www.shakykneesfestival.com/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "http-error",
+          "httpStatus": 502,
+          "contentType": "application/json; charset=utf-8"
         }
       ]
     },
@@ -779,44 +286,21 @@
       "sourceName": "Atlanta Food & Wine Festival 2026",
       "sourceType": "officialTextEvents",
       "url": "https://atlfoodandwinefestival.com/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
+      "fetchedAt": "2026-07-26T23:27:48.048Z",
       "fetches": [
         {
           "url": "https://atlfoodandwinefestival.com/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "atlanta",
-      "sourceId": "dragon-con-2026",
-      "sourceName": "Dragon Con 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.dragoncon.org/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-22T23:23:44.409Z",
-      "fetches": [
-        {
-          "url": "https://www.dragoncon.org/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     }

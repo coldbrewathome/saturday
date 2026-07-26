@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "bay-area",
-  "generatedAt": "2026-07-23T02:46:17.676Z",
+  "generatedAt": "2026-07-26T23:32:26.622Z",
   "registryPath": "data/event-sources.json",
   "outputPath": "public/data/bay-area/events.json",
-  "eventCount": 3199,
-  "adultsEventCount": 266,
+  "eventCount": 3146,
+  "adultsEventCount": 251,
   "sourceCount": 135,
-  "liveEventCount": 3406,
-  "lastKnownGoodEventCount": 2,
+  "liveEventCount": 3326,
+  "lastKnownGoodEventCount": 16,
   "fallbackEventCount": 68,
-  "operatorAlertCount": 57,
+  "operatorAlertCount": 58,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://berkeleypubliclibrary.libnet.info/event/16568040",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.alamedafree.org/Events-directory",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.redwoodcity.org/departments/library/events",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.srpubliclibrary.org/events",
@@ -128,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.calacademy.org/whats-happening",
@@ -153,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.exploratorium.edu/visit/calendar",
@@ -178,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://bayareadiscoverymuseum.org/events/",
@@ -203,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.habitot.org/visit",
@@ -228,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://curiodyssey.org/visit",
@@ -253,7 +253,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.cdm.org/calendar/",
@@ -278,7 +278,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.thetech.org/visit",
@@ -303,10 +303,59 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.lawrencehallofscience.org/visit",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "bay-area",
+      "sourceId": "chabot-space",
+      "sourceName": "Chabot Space & Science Center",
+      "sourceType": "html",
+      "url": "https://chabotspace.org/programs/calendar-view/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 14,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 14,
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
+      "fetches": [
+        {
+          "url": "https://chabotspace.org/programs/calendar-view/",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "bay-area",
+      "sourceId": "randall-museum",
+      "sourceName": "Randall Museum",
+      "sourceType": "html",
+      "url": "https://randallmuseum.org/events-calendar/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
+      "fetches": [
+        {
+          "url": "https://randallmuseum.org/events-calendar/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -328,7 +377,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.aquariumofthebay.org/visit",
@@ -353,7 +402,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.oaklandzoo.org/events",
@@ -378,7 +427,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.sfzoo.org/visit",
@@ -403,7 +452,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://happyhollow.org/",
@@ -428,7 +477,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.fws.gov/refuge/don-edwards-san-francisco-bay/visit-us",
@@ -453,7 +502,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.eventbrite.com/o/san-mateo-county-parks-department-8207188966",
@@ -478,7 +527,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.famsf.org/events/family-art-making-0",
@@ -509,7 +558,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://sfcherryblossom.org/",
@@ -540,7 +589,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://carnavalsanfrancisco.org/faq/",
@@ -565,7 +614,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.sunnyvaleartandwine.com/",
@@ -596,7 +645,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.sfmta.com/reports/union-street-festival-2026",
@@ -621,7 +670,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.sfmta.com/index.php/travel-updates/festa-coloniale-italiana-saturday-sunday-june-6-7-2026",
@@ -646,7 +695,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.savenature.org/events",
@@ -671,7 +720,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.sanleandro.org/852/Cherry-Festival",
@@ -696,7 +745,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.sfbaymsi.org/world-oceans-day",
@@ -721,7 +770,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.lomamaroutpost.org/community-events/community-la-honda-fair",
@@ -746,7 +795,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.hiller.org/event/bubble_bonanza-2/2026-06-07/",
@@ -783,7 +832,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.eventbrite.com/e/mosaic-festival-silicon-valley-2026-tickets-1984812266920",
@@ -808,7 +857,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.vivacallesj.org/",
@@ -833,7 +882,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://sfciviccenter.org/event/san-francisco-pride/",
@@ -858,7 +907,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.stanfordpowwow.com/",
@@ -883,7 +932,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://hmbwineandjazzfest.com/",
@@ -908,7 +957,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.tap-sf.org/tacf",
@@ -933,7 +982,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://svmbc.org/activities/sor/",
@@ -958,7 +1007,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.kumuhulaassociation.com/mayday",
@@ -983,7 +1032,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://berkeleyca.gov/community-recreation/events/mothers-day-hats-and-high-tea-0",
@@ -1008,7 +1057,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://goldengateparkband.org/calendar",
@@ -1033,7 +1082,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.redwoodcity.org/residents/redwood-city-events/children-s-events/almost-mothers-day-kids-concert",
@@ -1058,7 +1107,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.gilroygardens.org/calendar-hours/",
@@ -1089,7 +1138,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://sunsetmercantilesf.com/innersunsetflea/",
@@ -1114,7 +1163,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.ncry.org/",
@@ -1145,7 +1194,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.ebparks.org/parks/ardenwood",
@@ -1170,7 +1219,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://alamedacountyfair.com/",
@@ -1195,13 +1244,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://sanmateocountyfair.com/daily-schedules/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -1220,13 +1269,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://marinfair.org/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -1245,7 +1294,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://thefair.org/",
@@ -1270,7 +1319,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.cityofnapa.org/calendar.aspx?view=list",
@@ -1301,7 +1350,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://calperformances.org/performances/family/",
@@ -1326,7 +1375,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://japanweeksf.com/",
@@ -1351,7 +1400,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.theeastcut.org/event/circus-bella-presents-ah-ha/",
@@ -1376,38 +1425,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://sundaystreetssf.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "bay-area",
-      "sourceId": "sjpl-family-fun-magic-show-perry-yan-2026-07-23-src",
-      "sourceName": "Family Fun Magic Show (SJPL Cambrian)",
-      "sourceType": "officialTextEvents",
-      "url": "https://sjpl.bibliocommons.com/v2/events?startDate=2026-07-23&endDate=2026-07-23",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
-      "fetches": [
-        {
-          "url": "https://sjpl.bibliocommons.com/v2/events?startDate=2026-07-23&endDate=2026-07-23",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -1426,7 +1450,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://gamh.com/calendar",
@@ -1451,7 +1475,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://theuctheatre.org/events/",
@@ -1476,7 +1500,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:46:17.676Z",
+      "fetchedAt": "2026-07-26T23:32:26.622Z",
       "fetches": [
         {
           "url": "https://www.ebparks.org/calendar",
@@ -1511,21 +1535,21 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 921,
+      "liveEvents": 920,
       "fallbackEvents": 0,
-      "eventCount": 921,
+      "eventCount": 920,
       "fetches": [
         {
           "url": "https://sfpl.org/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; source=sfpl-events; pages=32"
+          "contentType": "text/html; source=sfpl-events; pages=30"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; source=sfpl-events; pages=32",
-      "rejectedLiveEvents": 239,
-      "extractedEvents": 1160,
+      "contentType": "text/html; source=sfpl-events; pages=30",
+      "rejectedLiveEvents": 196,
+      "extractedEvents": 1116,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1538,9 +1562,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 17,
+      "liveEvents": 18,
       "fallbackEvents": 0,
-      "eventCount": 17,
+      "eventCount": 18,
       "fetches": [
         {
           "url": "https://oaklandlibrary.bibliocommons.com/v2/events?audiences=60af9e2d8509742400e6e8ed",
@@ -1552,7 +1576,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 17,
+      "extractedEvents": 18,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1565,21 +1589,21 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 197,
+      "liveEvents": 181,
       "fallbackEvents": 0,
-      "eventCount": 197,
+      "eventCount": 181,
       "fetches": [
         {
           "url": "https://berkeleypubliclibrary.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=280; locations=8"
+          "contentType": "application/json; source=communico-events; events=269; locations=8"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=280; locations=8",
-      "rejectedLiveEvents": 3,
-      "extractedEvents": 200,
+      "contentType": "application/json; source=communico-events; events=269; locations=8",
+      "rejectedLiveEvents": 6,
+      "extractedEvents": 187,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1645,9 +1669,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 63,
+      "liveEvents": 60,
       "fallbackEvents": 0,
-      "eventCount": 63,
+      "eventCount": 60,
       "fetches": [
         {
           "url": "https://sanmateopublic.libcal.com/calendar/adults-teens?cid=16089&t=g&d=0000-00-00&cal=16089&inc=0",
@@ -1659,7 +1683,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 88,
-      "extractedEvents": 151,
+      "extractedEvents": 148,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1672,9 +1696,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 15,
+      "liveEvents": 13,
       "fallbackEvents": 0,
-      "eventCount": 15,
+      "eventCount": 13,
       "fetches": [
         {
           "url": "https://smcl.bibliocommons.com/v2/events",
@@ -1686,7 +1710,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 15,
+      "extractedEvents": 13,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1726,9 +1750,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 20,
+      "liveEvents": 19,
       "fallbackEvents": 0,
-      "eventCount": 20,
+      "eventCount": 19,
       "fetches": [
         {
           "url": "https://paloalto.bibliocommons.com/v2/events?audiences=59a6e0705e7f62711a36e6ab",
@@ -1740,7 +1764,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 20,
+      "extractedEvents": 19,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1753,9 +1777,9 @@
       "metroId": "bay-area",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 10,
+      "liveEvents": 6,
       "fallbackEvents": 0,
-      "eventCount": 10,
+      "eventCount": 6,
       "fetches": [
         {
           "url": "https://www.paloalto.gov/Departments/Community-Services/Arts-Sciences/Palo-Alto-Childrens-Theatre",
@@ -1778,7 +1802,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 20,
+      "rejectedLiveEvents": 24,
       "extractedEvents": 30,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -1792,9 +1816,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 62,
+      "liveEvents": 60,
       "fallbackEvents": 0,
-      "eventCount": 62,
+      "eventCount": 60,
       "fetches": [
         {
           "url": "https://mountainview.libcal.com/calendar?cid=-1&t=g&d=0000-00-00&cal=-1&inc=0",
@@ -1805,8 +1829,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 84,
-      "extractedEvents": 146,
+      "rejectedLiveEvents": 77,
+      "extractedEvents": 137,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1846,9 +1870,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 9,
+      "liveEvents": 8,
       "fallbackEvents": 0,
-      "eventCount": 9,
+      "eventCount": 8,
       "fetches": [
         {
           "url": "https://sccl.bibliocommons.com/v2/events?locations=CA",
@@ -1860,7 +1884,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 9,
+      "extractedEvents": 8,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1873,9 +1897,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 12,
+      "liveEvents": 13,
       "fallbackEvents": 0,
-      "eventCount": 12,
+      "eventCount": 13,
       "fetches": [
         {
           "url": "https://sccl.bibliocommons.com/v2/events?locations=CU",
@@ -1887,7 +1911,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 12,
+      "extractedEvents": 13,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1900,9 +1924,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 12,
+      "liveEvents": 11,
       "fallbackEvents": 0,
-      "eventCount": 12,
+      "eventCount": 11,
       "fetches": [
         {
           "url": "https://sccl.bibliocommons.com/v2/events?locations=GI",
@@ -1914,7 +1938,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 12,
+      "extractedEvents": 11,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1954,9 +1978,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 12,
+      "liveEvents": 11,
       "fallbackEvents": 0,
-      "eventCount": 12,
+      "eventCount": 11,
       "fetches": [
         {
           "url": "https://sccl.bibliocommons.com/v2/events?locations=MI",
@@ -1968,7 +1992,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 12,
+      "extractedEvents": 11,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1981,9 +2005,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 14,
+      "liveEvents": 17,
       "fallbackEvents": 0,
-      "eventCount": 14,
+      "eventCount": 17,
       "fetches": [
         {
           "url": "https://sccl.bibliocommons.com/v2/events?locations=MH",
@@ -1995,7 +2019,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 14,
+      "extractedEvents": 17,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -2008,9 +2032,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 11,
+      "liveEvents": 8,
       "fallbackEvents": 0,
-      "eventCount": 11,
+      "eventCount": 8,
       "fetches": [
         {
           "url": "https://sccl.bibliocommons.com/v2/events?locations=SA",
@@ -2022,7 +2046,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 11,
+      "extractedEvents": 8,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -2089,9 +2113,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 14,
+      "liveEvents": 12,
       "fallbackEvents": 0,
-      "eventCount": 14,
+      "eventCount": 12,
       "fetches": [
         {
           "url": "https://events.sonomalibrary.org/events/list?language=en",
@@ -2102,8 +2126,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 12,
-      "extractedEvents": 26,
+      "rejectedLiveEvents": 11,
+      "extractedEvents": 23,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -2116,9 +2140,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 11,
+      "liveEvents": 8,
       "fallbackEvents": 0,
-      "eventCount": 11,
+      "eventCount": 8,
       "fetches": [
         {
           "url": "https://aclibrary.bibliocommons.com/v2/events",
@@ -2130,7 +2154,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 11,
+      "extractedEvents": 8,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -2170,9 +2194,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 7,
+      "liveEvents": 4,
       "fallbackEvents": 0,
-      "eventCount": 7,
+      "eventCount": 4,
       "fetches": [
         {
           "url": "https://ccclib.bibliocommons.com/v2/events",
@@ -2184,7 +2208,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 7,
+      "extractedEvents": 4,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -2197,9 +2221,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 13,
+      "liveEvents": 11,
       "fallbackEvents": 0,
-      "eventCount": 13,
+      "eventCount": 11,
       "fetches": [
         {
           "url": "https://www.ci.richmond.ca.us/calendar.aspx?CID=17&view=list",
@@ -2211,7 +2235,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 13,
+      "extractedEvents": 11,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -2436,24 +2460,21 @@
       "city": "Oakland",
       "metroId": "bay-area",
       "category": "Museum",
-      "status": "ok",
-      "liveEvents": 16,
+      "status": "fetch-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 16,
+      "eventCount": 14,
       "fetches": [
         {
           "url": "https://chabotspace.org/programs/calendar-view/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 27,
-      "extractedEvents": 43,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "reason": "This operation was aborted",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 14,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "hiller-aviation",
@@ -2491,9 +2512,9 @@
       "metroId": "bay-area",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://randallmuseum.org/events-calendar/",
@@ -2504,8 +2525,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 3,
-      "extractedEvents": 6,
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -2625,21 +2646,21 @@
       "metroId": "bay-area",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 61,
+      "liveEvents": 145,
       "fallbackEvents": 0,
-      "eventCount": 61,
+      "eventCount": 145,
       "fetches": [
         {
           "url": "https://fairyland.org/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=248; pages=5"
+          "contentType": "application/json; source=tribe-events; events=328; pages=7"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=248; pages=5",
+      "contentType": "application/json; source=tribe-events; events=328; pages=7",
       "rejectedLiveEvents": 19,
-      "extractedEvents": 80,
+      "extractedEvents": 164,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -2652,9 +2673,9 @@
       "metroId": "bay-area",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 84,
+      "liveEvents": 90,
       "fallbackEvents": 0,
-      "eventCount": 84,
+      "eventCount": 90,
       "fetches": [
         {
           "url": "https://www.ebparks.org/calendar",
@@ -2665,7 +2686,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; source=drupal-views-ajax",
-      "rejectedLiveEvents": 33,
+      "rejectedLiveEvents": 27,
       "extractedEvents": 117,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -2760,9 +2781,9 @@
       "metroId": "bay-area",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 14,
+      "liveEvents": 17,
       "fallbackEvents": 0,
-      "eventCount": 14,
+      "eventCount": 17,
       "fetches": [
         {
           "url": "https://www.openspace.org/get-involved/events-activities",
@@ -2809,8 +2830,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 32,
-      "extractedEvents": 46,
+      "rejectedLiveEvents": 33,
+      "extractedEvents": 50,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -2851,9 +2872,9 @@
       "metroId": "bay-area",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 35,
+      "liveEvents": 32,
       "fallbackEvents": 0,
-      "eventCount": 35,
+      "eventCount": 32,
       "fetches": [
         {
           "url": "https://sfrecpark.org/calendar.aspx?view=list",
@@ -2871,7 +2892,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 35,
+      "extractedEvents": 32,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -2943,21 +2964,21 @@
       "metroId": "bay-area",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 14,
+      "liveEvents": 12,
       "fallbackEvents": 0,
-      "eventCount": 14,
+      "eventCount": 12,
       "fetches": [
         {
           "url": "https://museumca.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=22; pages=1"
+          "contentType": "application/json; source=tribe-events; events=20; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=22; pages=1",
+      "contentType": "application/json; source=tribe-events; events=20; pages=1",
       "rejectedLiveEvents": 8,
-      "extractedEvents": 22,
+      "extractedEvents": 20,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -3030,9 +3051,9 @@
       "metroId": "bay-area",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 9,
+      "liveEvents": 7,
       "fallbackEvents": 0,
-      "eventCount": 9,
+      "eventCount": 7,
       "fetches": [
         {
           "url": "https://ybgfestival.org/childrens-garden-series/",
@@ -3044,7 +3065,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 9,
+      "extractedEvents": 7,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -3090,9 +3111,9 @@
       "metroId": "bay-area",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 22,
+      "liveEvents": 20,
       "fallbackEvents": 0,
-      "eventCount": 22,
+      "eventCount": 20,
       "fetches": [
         {
           "url": "https://ybgfestival.org/venue/greatlawn/",
@@ -3104,7 +3125,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 22,
+      "extractedEvents": 20,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -3513,21 +3534,21 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 303,
+      "liveEvents": 301,
       "fallbackEvents": 0,
-      "eventCount": 303,
+      "eventCount": 301,
       "fetches": [
         {
           "url": "https://solanolibrary.communico.co/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=444; locations=14"
+          "contentType": "application/json; source=communico-events; events=440; locations=14"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=444; locations=14",
-      "rejectedLiveEvents": 4,
-      "extractedEvents": 307,
+      "contentType": "application/json; source=communico-events; events=440; locations=14",
+      "rejectedLiveEvents": 8,
+      "extractedEvents": 309,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -3540,9 +3561,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 86,
+      "liveEvents": 75,
       "fallbackEvents": 0,
-      "eventCount": 86,
+      "eventCount": 75,
       "fetches": [
         {
           "url": "https://www.library.sunnyvale.ca.gov/events/calendar-month-view",
@@ -3559,7 +3580,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 59,
+      "rejectedLiveEvents": 70,
       "extractedEvents": 145,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -3573,9 +3594,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 133,
+      "liveEvents": 109,
       "fallbackEvents": 0,
-      "eventCount": 133,
+      "eventCount": 109,
       "fetches": [
         {
           "url": "https://www.sclibrary.org/calendar/events",
@@ -3592,7 +3613,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 95,
+      "rejectedLiveEvents": 119,
       "extractedEvents": 228,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -3621,21 +3642,21 @@
       "metroId": "bay-area",
       "category": "Ticketed",
       "status": "ok",
-      "liveEvents": 22,
+      "liveEvents": 17,
       "fallbackEvents": 0,
-      "eventCount": 22,
+      "eventCount": 17,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=22; queries=3"
+          "contentType": "application/json; source=ticketmaster; events=17; queries=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=ticketmaster; events=22; queries=3",
+      "contentType": "application/json; source=ticketmaster; events=17; queries=3",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 22,
+      "extractedEvents": 17,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -3648,9 +3669,9 @@
       "metroId": "bay-area",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 395,
+      "liveEvents": 386,
       "fallbackEvents": 0,
-      "eventCount": 395,
+      "eventCount": 386,
       "fetches": [
         {
           "url": "https://events.stanford.edu/",
@@ -3661,8 +3682,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=localist-events; events=500; pages=5",
-      "rejectedLiveEvents": 69,
-      "extractedEvents": 464,
+      "rejectedLiveEvents": 72,
+      "extractedEvents": 458,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -4127,11 +4148,11 @@
           "url": "https://sanmateocountyfair.com/daily-schedules/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "text/html; charset=utf-8"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
+      "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 7,
       "extractedEvents": 7,
       "lastKnownGoodEvents": 0,
@@ -4154,11 +4175,11 @@
           "url": "https://marinfair.org/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "text/html; charset=utf-8"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
+      "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
@@ -4200,21 +4221,21 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 152,
+      "liveEvents": 133,
       "fallbackEvents": 0,
-      "eventCount": 152,
+      "eventCount": 133,
       "fetches": [
         {
           "url": "https://santacruzpl.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=406; locations=15"
+          "contentType": "application/json; source=communico-events; events=391; locations=15"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=406; locations=15",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 153,
+      "contentType": "application/json; source=communico-events; events=391; locations=15",
+      "rejectedLiveEvents": 6,
+      "extractedEvents": 139,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -4227,21 +4248,21 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 100,
+      "liveEvents": 97,
       "fallbackEvents": 0,
-      "eventCount": 100,
+      "eventCount": 97,
       "fetches": [
         {
           "url": "https://napalibrary.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=195; locations=6"
+          "contentType": "application/json; source=communico-events; events=196; locations=6"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=195; locations=6",
-      "rejectedLiveEvents": 5,
-      "extractedEvents": 105,
+      "contentType": "application/json; source=communico-events; events=196; locations=6",
+      "rejectedLiveEvents": 4,
+      "extractedEvents": 101,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -4254,9 +4275,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 40,
+      "liveEvents": 37,
       "fallbackEvents": 0,
-      "eventCount": 40,
+      "eventCount": 37,
       "fetches": [
         {
           "url": "https://montereypl.libcal.com/calendar/events?cid=10382&t=g&d=0000-00-00&cal=10382&inc=0",
@@ -4267,8 +4288,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 96,
-      "extractedEvents": 136,
+      "rejectedLiveEvents": 94,
+      "extractedEvents": 131,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -4281,9 +4302,9 @@
       "metroId": "bay-area",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 49,
+      "liveEvents": 39,
       "fallbackEvents": 0,
-      "eventCount": 49,
+      "eventCount": 39,
       "fetches": [
         {
           "url": "https://www.watsonville.gov/calendar.aspx?CID=23&view=list",
@@ -4301,7 +4322,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 1,
-      "extractedEvents": 50,
+      "extractedEvents": 40,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -4314,9 +4335,9 @@
       "metroId": "bay-area",
       "category": "Community",
       "status": "ok",
-      "liveEvents": 16,
+      "liveEvents": 14,
       "fallbackEvents": 0,
-      "eventCount": 16,
+      "eventCount": 14,
       "fetches": [
         {
           "url": "https://www.srcity.org/calendar.aspx?view=list",
@@ -4334,7 +4355,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 16,
+      "extractedEvents": 14,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -4347,9 +4368,9 @@
       "metroId": "bay-area",
       "category": "Community",
       "status": "ok",
-      "liveEvents": 6,
+      "liveEvents": 5,
       "fallbackEvents": 0,
-      "eventCount": 6,
+      "eventCount": 5,
       "fetches": [
         {
           "url": "https://www.cityofconcord.org/calendar.aspx?view=list",
@@ -4367,7 +4388,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 6,
+      "extractedEvents": 5,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -4446,9 +4467,9 @@
       "metroId": "bay-area",
       "category": "Community",
       "status": "ok",
-      "liveEvents": 5,
+      "liveEvents": 4,
       "fallbackEvents": 0,
-      "eventCount": 5,
+      "eventCount": 4,
       "fetches": [
         {
           "url": "https://www.losaltosca.gov/calendar.aspx?CID=14&view=list",
@@ -4466,7 +4487,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 5,
+      "extractedEvents": 4,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -4479,9 +4500,9 @@
       "metroId": "bay-area",
       "category": "Community",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://www.cityofsanmateo.org/calendar.aspx?view=list",
@@ -4499,7 +4520,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 3,
+      "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -4512,21 +4533,21 @@
       "metroId": "bay-area",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 41,
+      "liveEvents": 36,
       "fallbackEvents": 0,
-      "eventCount": 41,
+      "eventCount": 36,
       "fetches": [
         {
           "url": "https://ybgfestival.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=41; pages=1"
+          "contentType": "application/json; source=tribe-events; events=36; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=41; pages=1",
+      "contentType": "application/json; source=tribe-events; events=36; pages=1",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 41,
+      "extractedEvents": 36,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -4566,9 +4587,9 @@
       "metroId": "bay-area",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 14,
+      "liveEvents": 12,
       "fallbackEvents": 0,
-      "eventCount": 14,
+      "eventCount": 12,
       "fetches": [
         {
           "url": "https://www.presidiotheatre.org/shows",
@@ -4579,7 +4600,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 58,
+      "rejectedLiveEvents": 60,
       "extractedEvents": 72,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -4693,90 +4714,9 @@
       "recoveryMode": null
     },
     {
-      "id": "sf-mcd-free-summer-weekend-2026-07-25-src",
-      "name": "Museum of Craft and Design",
-      "url": "https://sfmcd.org/",
-      "sourceType": "officialTextEvents",
-      "city": "San Francisco",
-      "metroId": "bay-area",
-      "category": "Museum",
-      "status": "ok",
-      "liveEvents": 1,
-      "fallbackEvents": 0,
-      "eventCount": 1,
-      "fetches": [
-        {
-          "url": "https://sfmcd.org/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "circus-bella-ah-ha-burlingame-2026-07-25-src",
-      "name": "Circus Bella: AH HA! (Burlingame)",
-      "url": "https://www.circusbella.org/press-schedule-by-date",
-      "sourceType": "officialTextEvents",
-      "city": "Burlingame",
-      "metroId": "bay-area",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 1,
-      "fallbackEvents": 0,
-      "eventCount": 1,
-      "fetches": [
-        {
-          "url": "https://www.circusbella.org/press-schedule-by-date",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html;charset=utf-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "circus-bella-ah-ha-union-square-2026-07-26-src",
-      "name": "Circus Bella: AH HA! (Union Square)",
-      "url": "https://www.circusbella.org/press-schedule-by-date",
-      "sourceType": "officialTextEvents",
-      "city": "San Francisco",
-      "metroId": "bay-area",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 1,
-      "fallbackEvents": 0,
-      "eventCount": 1,
-      "fetches": [
-        {
-          "url": "https://www.circusbella.org/press-schedule-by-date",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html;charset=utf-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "ybg-rene-y-familia-kids-show-2026-07-24-src",
-      "name": "Yerba Buena Gardens Festival: Rene y Familia",
-      "url": "https://ybgfestival.org/event/rene-y-familia-2026-1/",
+      "id": "ybg-festival-unique-derique-11am-2026-07-31-src",
+      "name": "Unique Derique (Kids' Show) at Yerba Buena Gardens Festival",
+      "url": "https://ybgfestival.org/event/unique-derique-2026-1/",
       "sourceType": "officialTextEvents",
       "city": "San Francisco",
       "metroId": "bay-area",
@@ -4787,7 +4727,7 @@
       "eventCount": 1,
       "fetches": [
         {
-          "url": "https://ybgfestival.org/event/rene-y-familia-2026-1/",
+          "url": "https://ybgfestival.org/event/unique-derique-2026-1/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -4801,36 +4741,36 @@
       "recoveryMode": null
     },
     {
-      "id": "sjpl-family-fun-magic-show-perry-yan-2026-07-23-src",
-      "name": "Family Fun Magic Show (SJPL Cambrian)",
-      "url": "https://sjpl.bibliocommons.com/v2/events?startDate=2026-07-23&endDate=2026-07-23",
+      "id": "ybg-festival-unique-derique-12pm-2026-07-31-src",
+      "name": "Unique Derique (Kids' Show, noon) at Yerba Buena Gardens Festival",
+      "url": "https://ybgfestival.org/event/unique-derique-2026-2/",
       "sourceType": "officialTextEvents",
-      "city": "San Jose",
+      "city": "San Francisco",
       "metroId": "bay-area",
-      "category": "Library",
+      "category": "Music",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
-          "url": "https://sjpl.bibliocommons.com/v2/events?startDate=2026-07-23&endDate=2026-07-23",
+          "url": "https://ybgfestival.org/event/unique-derique-2026-2/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
+          "contentType": "text/html; charset=UTF-8"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; charset=utf-8",
+      "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
     {
-      "id": "ybg-choreofest-2026-07-25-src",
-      "name": "Yerba Buena Gardens Festival: YBG ChoreoFest",
-      "url": "https://ybgfestival.org/event/yerba-buena-gardens-choreofest-2026-day-one/",
+      "id": "ybg-festival-choreofest-day-two-2026-08-01-src",
+      "name": "YBG ChoreoFest (Day Two) at Yerba Buena Gardens",
+      "url": "https://ybgfestival.org/event/yerba-buena-gardens-choreofest-day-two/",
       "sourceType": "officialTextEvents",
       "city": "San Francisco",
       "metroId": "bay-area",
@@ -4841,7 +4781,7 @@
       "eventCount": 1,
       "fetches": [
         {
-          "url": "https://ybgfestival.org/event/yerba-buena-gardens-choreofest-2026-day-one/",
+          "url": "https://ybgfestival.org/event/yerba-buena-gardens-choreofest-day-two/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -4849,6 +4789,87 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "ybg-festival-color-your-mind-2026-08-02-src",
+      "name": "Color Your Mind at Yerba Buena Gardens Festival",
+      "url": "https://ybgfestival.org/event/color-your-mind-2026/",
+      "sourceType": "officialTextEvents",
+      "city": "San Francisco",
+      "metroId": "bay-area",
+      "category": "Music",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://ybgfestival.org/event/color-your-mind-2026/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "oakland-library-ricky-roo-puppet-show-2026-07-27-src",
+      "name": "Ricky Roo and Friends Puppet Show — Oakland Main Library",
+      "url": "https://oaklandlibrary.bibliocommons.com/events/search/index",
+      "sourceType": "officialTextEvents",
+      "city": "Oakland",
+      "metroId": "bay-area",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://oaklandlibrary.bibliocommons.com/events/search/index",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "oakland-library-duncan-playful-circus-2026-07-27-src",
+      "name": "Duncan Playful Circus — Oakland Public Library",
+      "url": "https://oaklandlibrary.bibliocommons.com/events/search/index",
+      "sourceType": "officialTextEvents",
+      "city": "Oakland",
+      "metroId": "bay-area",
+      "category": "Library",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://oaklandlibrary.bibliocommons.com/events/search/index",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
@@ -4944,9 +4965,9 @@
       "metroId": "bay-area",
       "category": "Comedy",
       "status": "ok",
-      "liveEvents": 35,
+      "liveEvents": 36,
       "fallbackEvents": 0,
-      "eventCount": 35,
+      "eventCount": 36,
       "fetches": [
         {
           "url": "https://www.punchlinecomedyclub.com/shows",
@@ -4957,7 +4978,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 0,
       "extractedEvents": 36,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -4971,9 +4992,9 @@
       "metroId": "bay-area",
       "category": "Comedy",
       "status": "ok",
-      "liveEvents": 33,
+      "liveEvents": 32,
       "fallbackEvents": 0,
-      "eventCount": 33,
+      "eventCount": 32,
       "fetches": [
         {
           "url": "https://www.cobbscomedy.com/shows",
@@ -4984,7 +5005,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 3,
+      "rejectedLiveEvents": 4,
       "extractedEvents": 36,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -5052,9 +5073,9 @@
       "metroId": "bay-area",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://www.ticketweb.com/venue/bimbo-s-365-club-san-francisco-ca/10052",
@@ -5065,7 +5086,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html;charset=UTF-8",
-      "rejectedLiveEvents": 18,
+      "rejectedLiveEvents": 17,
       "extractedEvents": 20,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -5106,9 +5127,9 @@
       "metroId": "bay-area",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 27,
+      "liveEvents": 29,
       "fallbackEvents": 0,
-      "eventCount": 27,
+      "eventCount": 29,
       "fetches": [
         {
           "url": "https://cdn.dnalounge.com/calendar/dnalounge.ics",
@@ -5119,7 +5140,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/calendar; charset=utf-8",
-      "rejectedLiveEvents": 89,
+      "rejectedLiveEvents": 87,
       "extractedEvents": 116,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -5133,9 +5154,9 @@
       "metroId": "bay-area",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 7,
+      "liveEvents": 4,
       "fallbackEvents": 0,
-      "eventCount": 7,
+      "eventCount": 4,
       "fetches": [
         {
           "url": "https://www.verdiclub.net/calendar/?ical=1",
@@ -5147,7 +5168,7 @@
       "httpStatus": 200,
       "contentType": "text/calendar; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 7,
+      "extractedEvents": 4,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -5160,9 +5181,9 @@
       "metroId": "bay-area",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 45,
+      "liveEvents": 39,
       "fallbackEvents": 0,
-      "eventCount": 45,
+      "eventCount": 39,
       "fetches": [
         {
           "url": "https://ybgfestival.org/events/",
@@ -5173,8 +5194,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 4,
-      "extractedEvents": 49,
+      "rejectedLiveEvents": 3,
+      "extractedEvents": 42,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -5187,9 +5208,9 @@
       "metroId": "bay-area",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 7,
+      "liveEvents": 6,
       "fallbackEvents": 0,
-      "eventCount": 7,
+      "eventCount": 6,
       "fetches": [
         {
           "url": "https://www.sfmoma.org/events/",
@@ -5201,7 +5222,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 3,
-      "extractedEvents": 10,
+      "extractedEvents": 9,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -5214,9 +5235,9 @@
       "metroId": "bay-area",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 4,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://www.calacademy.org/nightlife",
@@ -5228,7 +5249,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 4,
+      "extractedEvents": 3,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -5249,13 +5270,13 @@
           "url": "https://museumca.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=7; pages=1"
+          "contentType": "application/json; source=tribe-events; events=6; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=7; pages=1",
-      "rejectedLiveEvents": 2,
-      "extractedEvents": 7,
+      "contentType": "application/json; source=tribe-events; events=6; pages=1",
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 6,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     }

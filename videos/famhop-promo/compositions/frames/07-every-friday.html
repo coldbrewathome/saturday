@@ -1,0 +1,118 @@
+<template>
+  <style>
+    @font-face{font-family:'Bricolage Grotesque';src:url('assets/fonts/bricolage-grotesque-400_800.woff2') format('woff2');font-weight:400 800;font-style:normal;font-display:block;}
+    @font-face{font-family:'JetBrains Mono';src:url('assets/fonts/jetbrains-mono-400.woff2') format('woff2');font-weight:100 800;font-style:normal;font-display:block;}
+    @font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/plus-jakarta-sans-400.woff2') format('woff2');font-weight:200 800;font-style:normal;font-display:block;}
+
+    #root{width:1920px;height:1080px;position:relative;overflow:hidden;--accent:#DD6A1A;color:#1B1916;font-family:'Plus Jakarta Sans',sans-serif;}
+
+    /* ground — full-bleed cream, its own clip layer (never on #root) */
+    .f07-g{position:absolute;inset:0;background:#FAF5EB;}
+
+    /* frame-chrome: mono topbar + meta footer, 64px (3.3cqw) inset */
+    .f07-mono{font-family:'JetBrains Mono',monospace;font-weight:400;font-size:24px;line-height:1.2;letter-spacing:.06em;text-transform:uppercase;}
+    .f07-top{position:absolute;left:64px;right:64px;top:56px;display:flex;justify-content:space-between;align-items:center;}
+    .f07-pill{border:3px solid #1B1916;border-radius:999px;padding:5px 22px;}
+    .f07-meta{position:absolute;left:64px;right:64px;top:842px;display:flex;justify-content:space-between;align-items:center;}
+
+    /* focal: two-line claim, Bricolage Grotesque 800 uppercase, fit-to-measure at 77.5cqw */
+    .f07-head{position:absolute;left:180px;right:180px;top:280px;text-align:center;
+      font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;
+      font-size:146px;line-height:.9;letter-spacing:-.01em;
+      transform-origin:50% 50%;will-change:transform,opacity;}
+    .f07-l{white-space:nowrap;}
+    #f07-num{display:inline-block;color:#B25368;transform-origin:50% 65%;will-change:transform;}
+
+    /* the payoff beat — accent-orange, ~3x smaller than the claim */
+    .f07-subwrap{position:absolute;left:0;right:0;top:660px;text-align:center;}
+    #f07-sub{display:inline-block;
+      font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;
+      font-size:48px;line-height:1;letter-spacing:-.01em;color:#DD6A1A;
+      transform-origin:50% 50%;will-change:transform,filter,opacity;}
+  </style>
+
+  <div data-hf-id="hf-q16f" id="root" data-composition-id="07-every-friday" data-width="1920" data-height="1080" data-duration="5.1">
+    <div data-hf-id="hf-gqoo" class="clip f07-g" data-start="0" data-duration="5.1" data-track-index="0"></div>
+
+    <div data-hf-id="hf-95eq" class="clip f07-top f07-mono" data-start="0" data-duration="5.1" data-track-index="1">
+      <span data-hf-id="hf-9jwd">07 · or don’t look at all</span><span data-hf-id="hf-2ec4" class="f07-pill">every friday</span>
+    </div>
+
+    <div data-hf-id="hf-udc3" class="clip f07-head" data-start="0" data-duration="5.1" data-track-index="2" data-layout-allow-overlap="">
+      <div data-hf-id="hf-lu23" class="f07-l"><span data-hf-id="hf-la4z" id="f07-num">5</span> family things to do,</div>
+      <div data-hf-id="hf-hb52" class="f07-l">every Friday.</div>
+    </div>
+
+    <div data-hf-id="hf-2yx2" class="clip f07-subwrap" data-start="0" data-duration="5.1" data-track-index="3">
+      <span data-hf-id="hf-kuk6" id="f07-sub">Zero tabs.</span>
+    </div>
+
+    <div data-hf-id="hf-u4np" class="clip f07-meta f07-mono" data-start="0" data-duration="5.1" data-track-index="4">
+      <span data-hf-id="hf-x41g">held still — the one breather</span><span data-hf-id="hf-cizy">07 • 08</span>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+
+      var D = 4.5;
+      // One tempo grid drives both moves — nothing is hand-offset.
+      var PULSE = 0.4;
+      var BEATS = [PULSE * 0, PULSE * 3]; // 0.00 claim settles · 1.20 "ZERO TABS." lands
+
+      // Scene 1 (0.0-1.2s) — spring-pop-entrance, calm-settle variation.
+      // One restrained slide-up + scale grow on a long power3 tail, zero overshoot.
+      tl.fromTo(
+        ".f07-head",
+        { y: 46, scale: 0.94, opacity: 0 },
+        { y: 0, scale: 1, opacity: 1, duration: 0.95, ease: "power3.out" },
+        BEATS[0]
+      );
+
+      // Scene 2 (1.2-2.2s) — kinetic-beat-slam, single phrase on the grid:
+      // scale+blur slam with a hard power4 attack, resolved crisp by 1.70s.
+      tl.fromTo(
+        "#f07-sub",
+        { scale: 1.42, filter: "blur(10px)", opacity: 0 },
+        { scale: 1, filter: "blur(0px)", opacity: 1, duration: 0.5, ease: "power4.out" },
+        BEATS[1]
+      );
+
+      // Scene 3 (2.2-4.5s) — deliberate hold. The run's breather: no camera, no third
+      // reveal. sine-wave-loop (onUpdate form) at the LOW end of its range, on the
+      // numeral only, with a settle-and-fade tail so the frame is static at handoff.
+      var IDLE_START = 2.2;
+      var IDLE_DUR = D - IDLE_START; // 2.3s
+      var CYCLES = 1.15;             // period = 2.0s
+      var Y_AMP = 2.5;               // px
+      var S_AMP = 0.01;
+      var FADE_FRAC = 0.2;
+      var TWO_PI_C = Math.PI * 2 * CYCLES;
+      var num = null;
+      var phase = { p: 0 };
+
+      tl.to(
+        phase,
+        {
+          p: TWO_PI_C,
+          duration: IDLE_DUR,
+          ease: "none", // sine itself is the curve
+          onUpdate: function () {
+            if (!num) num = document.getElementById("f07-num");
+            if (!num) return;
+            var t = phase.p / TWO_PI_C;                          // 0 -> 1 across idle
+            var env = t < 1 - FADE_FRAC ? 1 : (1 - t) / FADE_FRAC;
+            var s = Math.sin(phase.p) * env;                     // sin(0)=0 -> no jump off the settle
+            num.style.transform =
+              "translateY(" + s * Y_AMP + "px) scale(" + (1 + s * S_AMP) + ")";
+          }
+        },
+        IDLE_START
+      );
+
+      window.__timelines["07-every-friday"] = tl;
+    })();
+  </script>
+</template>

@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "austin",
-  "generatedAt": "2026-07-23T02:00:22.141Z",
+  "generatedAt": "2026-07-26T23:31:46.704Z",
   "registryPath": "data/event-sources-austin.json",
   "outputPath": "public/data/austin/events.json",
-  "eventCount": 89,
+  "eventCount": 87,
   "adultsEventCount": 6,
-  "sourceCount": 29,
-  "liveEventCount": 39,
-  "lastKnownGoodEventCount": 57,
+  "sourceCount": 24,
+  "liveEventCount": 93,
+  "lastKnownGoodEventCount": 1,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 18,
+  "operatorAlertCount": 16,
   "errors": [],
   "operatorAlerts": [
     {
@@ -20,20 +20,22 @@
       "sourceName": "Austin Public Library",
       "sourceType": "html",
       "url": "https://library.austintexas.gov/events/calendar",
-      "status": "fetch-error",
+      "status": "blocked",
       "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
+      "reason": "challenge page returned instead of event content",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://library.austintexas.gov/events/calendar",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "blocked",
+          "reason": "challenge page returned instead of event content",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -52,7 +54,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://thinkeryaustin.org/visit-us/",
@@ -77,7 +79,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://www.thestoryoftexas.com/visit/calendar",
@@ -102,7 +104,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://www.lbjlibrary.org/events",
@@ -127,7 +129,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://blantonmuseum.org/events/",
@@ -152,7 +154,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://www.umlaufsculpture.org/events",
@@ -165,24 +167,25 @@
     {
       "severity": "warning",
       "metroId": "austin",
-      "sourceId": "round-rock-library-libcal",
-      "sourceName": "Round Rock Public Library",
-      "sourceType": "libcal",
-      "url": "https://roundrocktexas.libcal.com/calendar/libraryevents?cid=19825&cal=19825",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
+      "sourceId": "pflugerville-library",
+      "sourceName": "Pflugerville Public Library",
+      "sourceType": "librarycalendar",
+      "url": "https://pflugerville.librarycalendar.com/events/month",
+      "status": "ok-last-known-good",
+      "issueType": "zero-in-window",
+      "reason": "source produced no live events; using last-known-good future events",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 56,
+      "recoveredEvents": 1,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 56,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
-          "url": "https://roundrocktexas.libcal.com/calendar/libraryevents?cid=19825&cal=19825",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "url": "https://pflugerville.librarycalendar.com/events/month",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -201,7 +204,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://redriverculturaldistrict.org/hot-summer-nights/",
@@ -226,62 +229,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://www.starspangledfest.com/july-4",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html;charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "austin",
-      "sourceId": "thinkery-steam-sundays-2026-07-19-src",
-      "sourceName": "STEAM Sundays: Summer Edition",
-      "sourceType": "officialTextEvents",
-      "url": "https://thinkeryaustin.org/steam-sunday/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
-      "fetches": [
-        {
-          "url": "https://thinkeryaustin.org/steam-sunday/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "austin",
-      "sourceId": "texas-science-museum-free-fourth-sunday-2026-07-26-src",
-      "sourceName": "H-E-B Free Fourth Sunday",
-      "sourceType": "officialTextEvents",
-      "url": "https://sciencemuseum.utexas.edu/events/h-e-b-free-fourth-sunday/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
-      "fetches": [
-        {
-          "url": "https://sciencemuseum.utexas.edu/events/h-e-b-free-fourth-sunday/",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
         }
       ]
     },
@@ -300,7 +254,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://stubbsaustin.com/concert-calendar/",
@@ -325,7 +279,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://mohawkaustin.com/calendar",
@@ -350,7 +304,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://continentalclub.com/austin-tx/",
@@ -375,7 +329,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://antonesnightclub.com/calendar/",
@@ -400,7 +354,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://acl-live.com/calendar/",
@@ -425,7 +379,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://drafthouse.com/austin/calendar",
@@ -450,7 +404,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-23T02:00:22.141Z",
+      "fetchedAt": "2026-07-26T23:31:46.704Z",
       "fetches": [
         {
           "url": "https://www.capcitycomedy.com/calendar",
@@ -484,18 +438,22 @@
       "city": "Austin",
       "metroId": "austin",
       "category": "Library",
-      "status": "fetch-error",
+      "status": "blocked",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://library.austintexas.gov/events/calendar",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "blocked",
+          "reason": "challenge page returned instead of event content",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "reason": "This operation was aborted",
+      "reason": "challenge page returned instead of event content",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
       "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -617,21 +575,21 @@
       "metroId": "austin",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 13,
+      "liveEvents": 9,
       "fallbackEvents": 0,
-      "eventCount": 13,
+      "eventCount": 9,
       "fetches": [
         {
           "url": "https://zilkergarden.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=19; pages=1"
+          "contentType": "application/json; source=tribe-events; events=15; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=19; pages=1",
+      "contentType": "application/json; source=tribe-events; events=15; pages=1",
       "rejectedLiveEvents": 6,
-      "extractedEvents": 19,
+      "extractedEvents": 15,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -671,9 +629,9 @@
       "metroId": "austin",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 6,
+      "liveEvents": 5,
       "fallbackEvents": 0,
-      "eventCount": 6,
+      "eventCount": 5,
       "fetches": [
         {
           "url": "https://cedarparkpl.librarycalendar.com/events/month",
@@ -684,8 +642,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 2,
-      "extractedEvents": 8,
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 6,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -697,10 +655,10 @@
       "city": "Pflugerville",
       "metroId": "austin",
       "category": "Library",
-      "status": "ok",
-      "liveEvents": 5,
+      "status": "ok-last-known-good",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 5,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://pflugerville.librarycalendar.com/events/month",
@@ -711,10 +669,11 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 2,
-      "extractedEvents": 7,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "rejectedLiveEvents": 6,
+      "extractedEvents": 6,
+      "lastKnownGoodEvents": 1,
+      "recoveryMode": "last-known-good",
+      "reason": "source produced no live events; using last-known-good future events"
     },
     {
       "id": "hays-public-library",
@@ -725,9 +684,9 @@
       "metroId": "austin",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 5,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 5,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://hays.librarycalendar.com/events/month",
@@ -739,7 +698,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 5,
+      "extractedEvents": 3,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -751,21 +710,24 @@
       "city": "Round Rock",
       "metroId": "austin",
       "category": "Library",
-      "status": "fetch-error",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 69,
       "fallbackEvents": 0,
-      "eventCount": 56,
+      "eventCount": 69,
       "fetches": [
         {
           "url": "https://roundrocktexas.libcal.com/calendar/libraryevents?cid=19825&cal=19825",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json"
         }
       ],
-      "reason": "This operation was aborted",
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 56,
-      "recoveryMode": "last-known-good"
+      "httpStatus": 200,
+      "contentType": "application/json",
+      "rejectedLiveEvents": 85,
+      "extractedEvents": 154,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "hot-summer-nights-2026",
@@ -817,138 +779,6 @@
       "httpStatus": 200,
       "contentType": "text/html;charset=utf-8",
       "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "zilker-summer-musical-singin-in-the-rain-2026-src",
-      "name": "Zilker Summer Musical: Singin' in the Rain",
-      "url": "https://zilker.org/sitr2026/",
-      "sourceType": "officialTextEvents",
-      "city": "Austin",
-      "metroId": "austin",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 1,
-      "fallbackEvents": 0,
-      "eventCount": 1,
-      "fetches": [
-        {
-          "url": "https://zilker.org/sitr2026/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "buda-summer-musical-wizard-of-oz-2026-src",
-      "name": "Buda Summer Musical: The Wizard of Oz",
-      "url": "https://www.budaamphitheater.com/summer-musical",
-      "sourceType": "officialTextEvents",
-      "city": "Buda",
-      "metroId": "austin",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 1,
-      "fallbackEvents": 0,
-      "eventCount": 1,
-      "fetches": [
-        {
-          "url": "https://www.budaamphitheater.com/summer-musical",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html;charset=utf-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "thinkery-steam-sundays-2026-07-19-src",
-      "name": "STEAM Sundays: Summer Edition",
-      "url": "https://thinkeryaustin.org/steam-sunday/",
-      "sourceType": "officialTextEvents",
-      "city": "Austin",
-      "metroId": "austin",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://thinkeryaustin.org/steam-sunday/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "texas-science-museum-free-fourth-sunday-2026-07-26-src",
-      "name": "H-E-B Free Fourth Sunday",
-      "url": "https://sciencemuseum.utexas.edu/events/h-e-b-free-fourth-sunday/",
-      "sourceType": "officialTextEvents",
-      "city": "Austin",
-      "metroId": "austin",
-      "category": "Festival",
-      "status": "fetch-error",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 1,
-      "fetches": [
-        {
-          "url": "https://sciencemuseum.utexas.edu/events/h-e-b-free-fourth-sunday/",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
-        }
-      ],
-      "reason": "This operation was aborted",
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "recoveryMode": "last-known-good"
-    },
-    {
-      "id": "brick-rodeo-kalahari-2026-07-25-src",
-      "name": "Brick Rodeo",
-      "url": "https://brickrodeo.com/",
-      "sourceType": "officialTextEvents",
-      "city": "Round Rock",
-      "metroId": "austin",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 1,
-      "fallbackEvents": 0,
-      "eventCount": 1,
-      "fetches": [
-        {
-          "url": "https://brickrodeo.com/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null

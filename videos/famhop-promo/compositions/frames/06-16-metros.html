@@ -1,0 +1,212 @@
+<template>
+  <style>
+    @font-face{font-family:'Bricolage Grotesque';src:url('assets/fonts/bricolage-grotesque-400_800.woff2') format('woff2');font-weight:400 800;font-style:normal;font-display:block;}
+    @font-face{font-family:'JetBrains Mono';src:url('assets/fonts/jetbrains-mono-400.woff2') format('woff2');font-weight:100 800;font-style:normal;font-display:block;}
+    @font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/plus-jakarta-sans-400.woff2') format('woff2');font-weight:200 800;font-style:normal;font-display:block;}
+
+    #root{width:1920px;height:1080px;position:relative;overflow:hidden;--accent:#DD6A1A;color:#1B1916;font-family:'Plus Jakarta Sans',sans-serif;container-type:size;}
+
+    .f06-g{position:absolute;inset:0;background:#FAF5EB;}
+
+    .f06-mono{font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:.06em;text-transform:uppercase;}
+    .f06-top{position:absolute;left:64px;right:64px;top:56px;display:flex;justify-content:space-between;align-items:center;opacity:0;}
+    .f06-pill{border:3px solid #1B1916;border-radius:999px;padding:5px 22px;}
+    .f06-meta{position:absolute;left:64px;right:64px;top:842px;display:flex;justify-content:space-between;color:#4A453F;opacity:0;}
+
+    .f06-head{position:absolute;left:0;right:0;top:150px;text-align:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;font-size:80px;line-height:.92;letter-spacing:-.01em;}
+    .f06-w{display:inline-block;opacity:0;}
+
+    .f06-cells{position:absolute;left:96px;top:282px;width:1728px;display:flex;gap:28px;}
+    .f06-cell{flex:1;border:4px solid #1B1916;padding:32px;transform-origin:50% 50%;opacity:0;}
+    .f06-n{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:123px;line-height:.88;font-variant-numeric:tabular-nums;display:block;transform-origin:0% 50%;}
+    .f06-l{font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:.06em;text-transform:uppercase;margin-top:14px;opacity:0;}
+    .f06-c1{background:#2D5043;color:#FAF5EB;}
+    .f06-c2{background:#B25368;color:#FAF5EB;}
+    .f06-c3{background:#DD6A1A;color:#FAF5EB;}
+
+    .f06-mh-wrap{position:relative;display:inline-block;}
+    .f06-mh-text{position:relative;z-index:1;}
+    .f06-mh-svg{position:absolute;left:0;bottom:-13px;width:100%;height:18px;z-index:0;overflow:visible;}
+    .f06-mh-path{stroke-dasharray:1;stroke-dashoffset:1;}
+
+    .f06-metros{position:absolute;left:96px;top:566px;width:1728px;display:flex;flex-wrap:wrap;gap:12px 14px;}
+    .f06-m{border:3px solid #1B1916;border-radius:999px;padding:8px 20px;font-family:'JetBrains Mono',monospace;font-size:24px;text-transform:uppercase;letter-spacing:.04em;opacity:0;}
+  </style>
+
+  <div data-hf-id="hf-004p" id="root" data-composition-id="06-16-metros" data-width="1920" data-height="1080" data-duration="5.5">
+    <div data-hf-id="hf-3mav" class="clip f06-g" data-start="0" data-duration="5.5" data-track-index="0"></div>
+
+    <div data-hf-id="hf-ah5w" class="clip f06-top f06-mono" data-start="0" data-duration="5.5" data-track-index="1">
+      <span data-hf-id="hf-vuk8">06 · coverage</span><span data-hf-id="hf-0jlm" class="f06-pill">choose your metro</span>
+    </div>
+
+    <div data-hf-id="hf-8dum" class="clip f06-head" data-start="0" data-duration="5.5" data-track-index="2"><span data-hf-id="hf-bwrs" class="f06-w">Not</span> <span data-hf-id="hf-hg5d" class="f06-w">just</span> <span data-hf-id="hf-av0l" class="f06-w">one</span> <span data-hf-id="hf-p7lu" class="f06-w">city.</span></div>
+
+    <div data-hf-id="hf-sbpk" class="clip f06-cells" data-start="0" data-duration="5.5" data-track-index="3">
+      <div data-hf-id="hf-019m" class="f06-cell f06-c1"><div data-hf-id="hf-jzo7" class="f06-n" id="f06-n1">0</div><div data-hf-id="hf-7u3p" class="f06-l">metros</div></div>
+      <div data-hf-id="hf-w35l" class="f06-cell f06-c2"><div data-hf-id="hf-7jx6" class="f06-n" id="f06-n2">0</div><div data-hf-id="hf-4xlq" class="f06-l">events</div></div>
+      <div data-hf-id="hf-vbhs" class="f06-cell f06-c3"><div data-hf-id="hf-iul9" class="f06-n" id="f06-n3">0</div><div data-hf-id="hf-cyjv" class="f06-l"><span data-hf-id="hf-l15w" class="f06-mh-wrap"><span data-hf-id="hf-88gb" class="f06-mh-text">this week</span><svg data-hf-id="hf-mrjc" class="f06-mh-svg" viewBox="0 0 300 18" preserveAspectRatio="none" aria-hidden="true"><path data-hf-id="hf-108o" id="f06-underline" class="f06-mh-path" pathLength="1" d="M0,11 Q50,3 100,11 Q150,19 200,11 Q250,3 300,11" fill="none" stroke="#FAF5EB" stroke-width="4" stroke-linecap="round" /></svg></span></div></div>
+    </div>
+
+    <div data-hf-id="hf-2088" class="clip f06-metros" data-start="0" data-duration="5.5" data-track-index="4">
+      <span data-hf-id="hf-b6n8" class="f06-m">Bay Area</span><span data-hf-id="hf-vhec" class="f06-m">Los Angeles</span><span data-hf-id="hf-xf4f" class="f06-m">New York City</span><span data-hf-id="hf-q01b" class="f06-m">Seattle</span><span data-hf-id="hf-ophz" class="f06-m">Chicago</span><span data-hf-id="hf-64le" class="f06-m">Dallas–Fort Worth</span><span data-hf-id="hf-dojt" class="f06-m">Houston</span><span data-hf-id="hf-e298" class="f06-m">Washington DC</span><span data-hf-id="hf-xacc" class="f06-m">Atlanta</span><span data-hf-id="hf-a4ey" class="f06-m">Philadelphia</span><span data-hf-id="hf-57g0" class="f06-m">Miami</span><span data-hf-id="hf-blhg" class="f06-m">Phoenix</span><span data-hf-id="hf-nxyk" class="f06-m">Boston</span><span data-hf-id="hf-ch51" class="f06-m">San Diego</span><span data-hf-id="hf-yamf" class="f06-m">Honolulu</span><span data-hf-id="hf-qlpv" class="f06-m">Austin</span>
+    </div>
+
+    <div data-hf-id="hf-by44" class="clip f06-meta f06-mono" data-start="0" data-duration="5.5" data-track-index="5">
+      <span data-hf-id="hf-u7kr">current, not archived</span><span data-hf-id="hf-fi2v">06 • 08</span>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+      window.__timelines["06-16-metros"] = tl;
+
+      var root = document.querySelector('[data-composition-id="06-16-metros"]');
+      var F = 1 / 60;
+
+      /* ---- chrome: topbar in immediately, meta footer as the closing whisper ---- */
+      tl.fromTo(root.querySelector(".f06-top"), { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power2.out" }, 0);
+
+      /* ================= Scene 1 (0.0–1.0s) — "NOT JUST ONE CITY." assembles word by word
+         dynamic-content-sequencing: per-word dwell computed from content length, reduced ONCE
+         into a flat TIMELINE; a single linear driver swaps DOM only on entry transitions. ==== */
+      var WORD_ELS = gsap.utils.toArray(root.querySelectorAll(".f06-w"));
+      var BASE_DURATION = 0.10;
+      var SEC_PER_CHAR = 0.035;
+      var HEAD_T0 = 0.03;
+
+      var cumulative = 0;
+      var WORD_TIMELINE = WORD_ELS.map(function (el) {
+        var dur = BASE_DURATION + el.textContent.length * SEC_PER_CHAR;
+        var start = cumulative;
+        cumulative += dur;
+        return { el: el, start: start, end: cumulative };
+      });
+      var HEAD_TOTAL = cumulative; /* ≈0.92s */
+
+      function wordIndexAt(time) {
+        for (var i = WORD_TIMELINE.length - 1; i >= 0; i--) {
+          if (time >= WORD_TIMELINE[i].start) return i;
+        }
+        return -1;
+      }
+
+      var headDriver = { t: 0 };
+      var lastWordIndex = -2;
+
+      tl.set(WORD_ELS, { opacity: 0 }, 0);
+      tl.to(
+        headDriver,
+        {
+          t: HEAD_TOTAL,
+          duration: HEAD_TOTAL,
+          ease: "none",
+          onUpdate: function () {
+            var idx = wordIndexAt(headDriver.t);
+            if (idx === lastWordIndex) return; /* transition-only DOM writes */
+            lastWordIndex = idx;
+            for (var i = 0; i < WORD_TIMELINE.length; i++) {
+              WORD_TIMELINE[i].el.style.opacity = i <= idx ? "1" : "0";
+            }
+          }
+        },
+        HEAD_T0
+      );
+
+      /* ================= Scene 2 (1.0–2.4s) — three ink-bordered cells land left to right
+         spring-pop-entrance (scale 0→1, power3.out, no overshoot) + counting-dynamic-scale
+         (proxy value + transform scale sharing one position / duration / ease).
+         Counts are paced so 1,007 — the biggest figure — is the LAST to finish. ============ */
+      var CELLS = gsap.utils.toArray(root.querySelectorAll(".f06-cell"));
+      var LABELS = gsap.utils.toArray(root.querySelectorAll(".f06-l"));
+      var POP_DUR = 0.55;
+      var CELL_AT = [1.0, 1.15, 1.3];
+      var Y_RISE = 24;
+
+      CELLS.forEach(function (el, i) {
+        tl.fromTo(
+          el,
+          { scale: 0, opacity: 0, y: Y_RISE },
+          { scale: 1, opacity: 1, y: 0, duration: POP_DUR, ease: "power3.out" },
+          CELL_AT[i]
+        );
+      });
+
+      /* value, count duration — 16 lands 2.05, 554 lands 2.50, 1,007 lands 2.70 */
+      var STATS = [
+        { id: "f06-n1", value: 16, dur: 1.05 },
+        { id: "f06-n2", value: 1007, dur: 1.55 },
+        { id: "f06-n3", value: 554, dur: 1.2 }
+      ];
+      var START_SCALE = 0.55; /* START_SIZE / END_SIZE */
+      var COUNT_EASE = "power3.out";
+
+      STATS.forEach(function (stat, i) {
+        var el = root.querySelector("#" + stat.id);
+        var state = { value: 0 };
+        tl.to(
+          state,
+          {
+            value: stat.value,
+            duration: stat.dur,
+            ease: COUNT_EASE,
+            onUpdate: function () {
+              el.textContent = Math.round(state.value).toLocaleString("en-US");
+            }
+          },
+          CELL_AT[i]
+        );
+        tl.fromTo(
+          el,
+          { scale: START_SCALE },
+          { scale: 1, duration: stat.dur, ease: COUNT_EASE },
+          CELL_AT[i]
+        );
+      });
+
+      /* labels arrive before their count peaks */
+      LABELS.forEach(function (el, i) {
+        tl.fromTo(
+          el,
+          { opacity: 0, y: 10 },
+          { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" },
+          CELL_AT[i] + 0.25
+        );
+      });
+
+      /* ================= Scene 3 (2.4–4.2s) — the 16 metro pills populate in reading order
+         waterfall-entry: binary opacity via tl.set + y whip on power4.out; travel/duration vary
+         by weight (long names heavier), and the gaps SHRINK across the cascade so the last snaps. */
+      var PILLS = gsap.utils.toArray(root.querySelectorAll(".f06-m"));
+      var mt = 2.4;
+      PILLS.forEach(function (el, i) {
+        var len = el.textContent.length;
+        var y = len >= 12 ? 72 : len >= 8 ? 46 : 36;
+        var d = len >= 12 ? 0.18 : len >= 8 ? 0.15 : 0.12;
+        tl.set(el, { opacity: 1, y: y }, mt);
+        tl.to(el, { y: 0, duration: d, ease: "power4.out" }, mt);
+        var overlapFrames = Math.min(5, 0.5 + i * 0.3);
+        mt += d - overlapFrames * F;
+      });
+
+      /* ================= Scene 4 (4.2–5.0s) — the freshness claim gets marked, then stillness
+         css-marker-patterns / scribble mode: a wavy underline draws itself under "THIS WEEK"
+         via stroke-dashoffset (pathLength=1, so the draw is layout-independent). ============ */
+      tl.fromTo(
+        root.querySelector("#f06-underline"),
+        { strokeDashoffset: 1 },
+        { strokeDashoffset: 0, duration: 0.52, ease: "power1.inOut" },
+        4.18
+      );
+
+      tl.fromTo(
+        root.querySelector(".f06-meta"),
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: 0.42, ease: "power2.out" },
+        4.3
+      );
+    })();
+  </script>
+</template>
