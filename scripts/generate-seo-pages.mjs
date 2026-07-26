@@ -1112,6 +1112,7 @@ function main() {
       events: distinctEvents,
       eventLookup: weekendEventLookup,
       hasWeekendGuide: wroteThisWeekend,
+      annualEntries: ANNUAL_EVENTS[metro.id] || [],
     });
 
     const slugHistory = readEventSlugHistory(metro);
@@ -1832,6 +1833,7 @@ function replaceMetroShellCopy(html, title, description, extras = {}) {
     events = [],
     eventLookup = null,
     hasWeekendGuide = true,
+    annualEntries = [],
   } = extras;
   const area = metroLabel();
   // h1 targets the head keyword; the brand suffix stays in <title> only.
@@ -1868,6 +1870,16 @@ function replaceMetroShellCopy(html, title, description, extras = {}) {
   // every anchor resolves to a prerendered page.
   const cityLinks = cities.map(
     (c) => `<a href="${metroPath(`city/${slugify(c.name)}/`)}">${esc(c.name)}</a>`,
+  );
+
+  // Annual/evergreen page links. The metro hub is crawled daily (verified 2026-07-26
+  // via URL inspection); the annual pages are long-lived and rankable but were
+  // "Discovered - crawled never" because NOTHING crawled linked them and the Google
+  // Indexing API does not process Event-schema pages (confirmed empirically —
+  // pages submitted daily, never crawled). Internal links from the crawled hub are
+  // the valid discovery path (see ~/Projects/seo-ops/SEO-POLICY.md).
+  const annualLinks = (annualEntries || []).map(
+    (e) => `<a href="${metroPath(`annual/${e.slug}/`)}">${esc(e.title)}</a>`,
   );
 
   // Soonest upcoming events that actually got a prerendered page (eventLookup
@@ -1916,6 +1928,11 @@ function replaceMetroShellCopy(html, title, description, extras = {}) {
         ${eventItems.length ? `<section>
           <h2>Upcoming ${A.eventsAdj}events in ${esc(area)}</h2>
           <ul>${eventItems.join("\n          ")}</ul>
+        </section>` : ""}
+        ${annualLinks.length ? `<section>
+          <h2>Annual traditions in ${esc(area)}</h2>
+          <nav><a href="${metroPath("annual/")}">All annual events</a>
+          ${annualLinks.join("\n          ")}</nav>
         </section>` : ""}
         <noscript><p><strong>Heads-up:</strong> ${esc(BRAND)} is an interactive planner. Please enable JavaScript to plan, share and vote.</p></noscript>
       </div>`;
