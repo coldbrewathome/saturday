@@ -90,9 +90,13 @@ To resolve sitemap crawl budget issues and automate search engine indexation:
 
 Audited 2026-07-11 against GSC and the Google URL Inspection API. These are conclusions, not guesses — re-verify before overriding.
 
+**METRICS FIRST — NEVER KILL A HIGH-TRAFFIC PAGE (user directive 2026-07-25; full policy `~/Projects/seo-ops/SEO-POLICY.md`).** Before you remove / delete / noindex / redirect / prune / consolidate / move ANY page, pull its 90-day GSC clicks + impressions and SHOW them to the user first. A page with meaningful traffic STAYS — it is a hard-won ranking asset you cannot cheaply rebuild. Outdated ≠ removable: refresh/evergreen a stale high-traffic page in place (same URL), never let it decay. This overrides the "pruning low-value pages is a traffic lever" note below — pruning is only for pages you have SHOWN the user are low/zero-traffic. (The 2026-07-24 spot prune qualified: 8 clicks across 1,797 pages, verified; but even that class needs metrics shown first going forward.)
+
 **Event pages are the traffic.** They earn ~85% of clicks; a dated local event ranks in ~13 days with no backlinks. The spot directory earns ~nothing (25 clicks/mo across 4,953 pages) — don't invest there.
 
 **Crawl budget is the binding constraint.** The domain is young (registered 2026-05-09) with zero backlinks, so Google crawls very little: pre-fix, 2 of 3 event pages had *never* been fetched. Every published URL competes for that budget, which makes pruning low-value pages a traffic lever rather than hygiene. Before adding a new page type at scale, ask what it displaces.
+
+**The Google Indexing API does NOT index famhop pages — stop relying on it.** Verified 2026-07-26 (Google docs + URL inspection): the Indexing API only processes `JobPosting`/`BroadcastEvent` markup; famhop events are `Event` schema, so submissions return a fake "success" and are never crawled (event pages submitted daily via the 9 AM cron sat "Discovered/unknown — crawled never"). Out-of-spec use also risks access revocation. The valid Google levers here are: fresh sitemap, **internal links from the daily-crawled metro hubs** (that's why the hub seo-shell now links /annual/ pages — the rankable long-lived pages were otherwise undiscoverable), and manual GSC "Request Indexing". IndexNow (on deploy) is valid but Bing/DDG-only. Full policy: `~/Projects/seo-ops/SEO-POLICY.md`.
 
 **Never emit `aggregateRating` (or any third-party rating) in JSON-LD.** It previously republished Google Places' ratings as our own — a Google structured-data policy violation *and* a Maps Platform terms violation, with no rich result to show for it (Google won't render stars for ratings you didn't collect). Removed in `30d71a5` from both brands. Do not restore it, for Mosey or FamHop.
 
