@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
   "metroId": "bay-area",
-  "generatedAt": "2026-07-26T23:32:26.622Z",
+  "generatedAt": "2026-07-27T01:06:15.735Z",
   "source": {
     "name": "Bay Area event source registry",
     "registryPath": "data/event-sources.json",
-    "sourceCount": 134,
+    "sourceCount": 144,
     "attribution": "Official source pages and configured public event feeds"
   },
   "coverage": {
@@ -152,7 +152,7 @@
       "Marin"
     ]
   },
-  "count": 251,
+  "count": 263,
   "events": [
     {
       "id": "santa-rosa-rec-santa-rosa-downtown-farmers-market-76cfd55605",
@@ -530,7 +530,7 @@
       "sourceUrl": "https://oaklandlibrary.bibliocommons.com/events/search/index",
       "sourceId": "oakland-library-duncan-playful-circus-2026-07-27-src",
       "sourceName": "Duncan Playful Circus — Oakland Public Library",
-      "sourceMode": "official-text-event",
+      "sourceMode": "last-known-good",
       "extractionMethod": "official-text-event",
       "verified": true,
       "fetchedAt": "2026-07-26T23:32:26.622Z",
@@ -538,7 +538,10 @@
       "themes": [
         "music-performance"
       ],
-      "slug": "duncan-playful-circus-oakland-public-library-oakland-public-library-eastmont-branch"
+      "slug": "duncan-playful-circus-oakland-public-library-oakland-public-library-eastmont-branch",
+      "originalSourceMode": "official-text-event",
+      "originalFetchedAt": "2026-07-26T23:32:26.622Z",
+      "restoredAt": "2026-07-27T01:06:15.735Z"
     },
     {
       "id": "dna-lounge-monday-night-hubba-szandora-s-birthday-092940a4de",
@@ -1628,7 +1631,7 @@
       "slug": "space-week-festival-day-1-chabot-space-science-center",
       "originalSourceMode": "html",
       "originalFetchedAt": "2026-07-02T12:18:00.269Z",
-      "restoredAt": "2026-07-26T23:32:26.622Z"
+      "restoredAt": "2026-07-27T01:06:15.735Z"
     },
     {
       "id": "dna-lounge-shallowsky-5ad5579946",
@@ -1975,6 +1978,51 @@
       "slug": "chris-porter-punch-line-comedy-club-san-francisco-punch-line-sf-chris-porter-7523deeccc"
     },
     {
+      "id": "fremont-festival-of-the-arts-2026-08-01",
+      "baseId": null,
+      "title": "Fremont Festival of the Arts (Saturday)",
+      "description": "Free two-day street festival in Downtown Fremont organized by the Fremont Chamber of Commerce, with artisan shopping, food, live music stages, and a kids' play area.",
+      "venue": "Downtown Fremont",
+      "city": "Fremont",
+      "neighborhood": "Downtown Fremont",
+      "lat": 37.5485,
+      "lon": -121.9886,
+      "category": "Festival",
+      "daysOfWeek": [
+        6
+      ],
+      "timeWindow": "Morning",
+      "startDateTime": "2026-08-01T17:00:00.000Z",
+      "endDateTime": "2026-08-02T01:00:00.000Z",
+      "ageBands": [
+        "toddler",
+        "preschool",
+        "school-age",
+        "tween"
+      ],
+      "audiences": [
+        "kids",
+        "adults"
+      ],
+      "cost": "Free",
+      "url": "https://www.fremontfestival.net/",
+      "sourceUrl": "https://www.fremontfestival.net/",
+      "sourceId": "fremont-festival-of-the-arts-2026-08-01-src",
+      "sourceName": "Fremont Festival of the Arts (Saturday)",
+      "sourceMode": "official-text-event",
+      "extractionMethod": "official-text-event",
+      "verified": true,
+      "fetchedAt": "2026-07-27T01:01:25.357Z",
+      "metroId": "bay-area",
+      "themes": [
+        "arts-crafts",
+        "music-performance",
+        "food-markets",
+        "festivals-community"
+      ],
+      "slug": "fremont-festival-of-the-arts-saturday-downtown-fremont"
+    },
+    {
       "id": "chabot-space-space-week-festival-day-1-7ce6f4bc08",
       "baseId": null,
       "title": "Space Week Festival – Day 1",
@@ -2014,7 +2062,139 @@
       "slug": "space-week-festival-day-1-chabot-space-science-center-chabot-space-space-week-festival-day-1-7ce6f4bc08",
       "originalSourceMode": "json-ld",
       "originalFetchedAt": "2026-07-02T12:18:00.269Z",
-      "restoredAt": "2026-07-26T23:32:26.622Z"
+      "restoredAt": "2026-07-27T01:06:15.735Z"
+    },
+    {
+      "id": "nihonmachi-street-fair-2026-08-01",
+      "baseId": null,
+      "title": "52nd Annual Nihonmachi Street Fair (Saturday)",
+      "description": "Free two-day AANHPI cultural street fair in Japantown on Post Street and Osaka Way. Children's World kids area, two live performance stages (Summer of Love Stage and Our Community Our Pride Stage), Asian artisan marketplace, Food Fest, and Doggie World.",
+      "venue": "Japantown, Post Street",
+      "city": "San Francisco",
+      "neighborhood": "Japantown",
+      "lat": 37.7796,
+      "lon": -122.4156,
+      "category": "Festival",
+      "daysOfWeek": [
+        6
+      ],
+      "timeWindow": "Morning",
+      "startDateTime": "2026-08-01T18:00:00.000Z",
+      "endDateTime": "2026-08-02T01:00:00.000Z",
+      "ageBands": [
+        "toddler",
+        "preschool",
+        "school-age",
+        "tween"
+      ],
+      "audiences": [
+        "kids",
+        "adults"
+      ],
+      "cost": "Free",
+      "url": "https://www.nihonmachistreetfair.org/",
+      "sourceUrl": "https://www.nihonmachistreetfair.org/",
+      "sourceId": "nihonmachi-street-fair-2026-08-01-src",
+      "sourceName": "52nd Annual Nihonmachi Street Fair (Saturday)",
+      "sourceMode": "official-text-event",
+      "extractionMethod": "official-text-event",
+      "verified": true,
+      "fetchedAt": "2026-07-27T01:01:25.357Z",
+      "metroId": "bay-area",
+      "themes": [
+        "arts-crafts",
+        "music-performance",
+        "food-markets",
+        "festivals-community"
+      ],
+      "slug": "52nd-annual-nihonmachi-street-fair-saturday-japantown-post-street"
+    },
+    {
+      "id": "watsonville-strawberry-festival-2026-08-01",
+      "baseId": null,
+      "title": "Watsonville Strawberry Festival (Saturday)",
+      "description": "Free family festival in historic downtown Watsonville with live entertainment, carnival rides, kids' activities, local artisans, and strawberry-infused food from pizza and tacos to churros and shortcake.",
+      "venue": "Historic Downtown Watsonville",
+      "city": "Watsonville",
+      "neighborhood": "Historic Downtown Watsonville",
+      "lat": 37.7749,
+      "lon": -122.4194,
+      "category": "Festival",
+      "daysOfWeek": [
+        6
+      ],
+      "timeWindow": "Morning",
+      "startDateTime": "2026-08-01T18:00:00.000Z",
+      "endDateTime": "2026-08-02T03:00:00.000Z",
+      "ageBands": [
+        "toddler",
+        "preschool",
+        "school-age",
+        "tween"
+      ],
+      "audiences": [
+        "kids",
+        "adults"
+      ],
+      "cost": "Free",
+      "url": "https://www.watsonville.gov/Calendar.aspx?EID=7429",
+      "sourceUrl": "https://www.watsonville.gov/Calendar.aspx?EID=7429",
+      "sourceId": "watsonville-strawberry-festival-2026-08-01-src",
+      "sourceName": "Watsonville Strawberry Festival (Saturday)",
+      "sourceMode": "official-text-event",
+      "extractionMethod": "official-text-event",
+      "verified": true,
+      "fetchedAt": "2026-07-27T01:01:25.357Z",
+      "metroId": "bay-area",
+      "themes": [
+        "arts-crafts",
+        "food-markets",
+        "festivals-community"
+      ],
+      "slug": "watsonville-strawberry-festival-saturday-historic-downtown-watsonville"
+    },
+    {
+      "id": "jerry-day-mclaren-park-2026-08-01",
+      "baseId": null,
+      "title": "Jerry Day 2026 at Jerry Garcia Amphitheater",
+      "description": "Free 24th-anniversary outdoor music festival honoring Jerry Garcia at the Jerry Garcia Amphitheater in McLaren Park, presented by Friends of JGA with Avenue Greenlight and Grants for the Arts. 2026 lineup includes Melvin Seals & JGB with Jazz Mafia, Stu Allen & Mars Hotel, and Spencer Krenz & Friends. Organizers describe the festival as family friendly.",
+      "venue": "Jerry Garcia Amphitheater, McLaren Park",
+      "city": "San Francisco",
+      "neighborhood": "Excelsior",
+      "lat": 37.7796,
+      "lon": -122.4156,
+      "category": "Live Music",
+      "daysOfWeek": [
+        6
+      ],
+      "timeWindow": "Morning",
+      "startDateTime": "2026-08-01T18:30:00.000Z",
+      "endDateTime": "2026-08-02T00:45:00.000Z",
+      "ageBands": [
+        "preschool",
+        "school-age",
+        "tween"
+      ],
+      "audiences": [
+        "kids",
+        "adults"
+      ],
+      "cost": "Free",
+      "url": "https://www.jerryday.org/jerry-day-events.html",
+      "sourceUrl": "https://www.jerryday.org/jerry-day-events.html",
+      "sourceId": "jerry-day-mclaren-park-2026-08-01-src",
+      "sourceName": "Jerry Day 2026 at Jerry Garcia Amphitheater",
+      "sourceMode": "official-text-event",
+      "extractionMethod": "official-text-event",
+      "verified": true,
+      "fetchedAt": "2026-07-27T01:01:25.357Z",
+      "metroId": "bay-area",
+      "themes": [
+        "arts-crafts",
+        "music-performance",
+        "festivals-community"
+      ],
+      "slug": "jerry-day-2026-at-jerry-garcia-amphitheater-jerry-garcia-amphitheater-mclaren-park"
     },
     {
       "id": "ybgfestival-great-lawn-poetry-workshop-with-nia-pearl-638770bc0f",
@@ -2056,6 +2236,50 @@
         "festivals-community"
       ],
       "slug": "poetry-workshop-with-nia-pearl-great-lawn-yerba-buena-gardens"
+    },
+    {
+      "id": "fiesta-en-el-parque-presidio-tunnel-tops-2026-08-01",
+      "baseId": null,
+      "title": "Fiesta en el Parque at Presidio Tunnel Tops",
+      "description": "Free family celebration of Latin culture at Presidio Tunnel Tops East Meadow, in its fourth year: salsa, merengue, and cumbia dance classes, arts and crafts, face painting, lawn games, and live performances with Golden Gate Bridge views. Presented by Telemundo 48 / NBC Bay Area with the Presidio Trust.",
+      "venue": "Presidio Tunnel Tops, East Meadow",
+      "city": "San Francisco",
+      "neighborhood": "Presidio",
+      "lat": 37.7796,
+      "lon": -122.4156,
+      "category": "Festival",
+      "daysOfWeek": [
+        6
+      ],
+      "timeWindow": "Afternoon",
+      "startDateTime": "2026-08-01T20:00:00.000Z",
+      "endDateTime": "2026-08-01T23:00:00.000Z",
+      "ageBands": [
+        "toddler",
+        "preschool",
+        "school-age",
+        "tween"
+      ],
+      "audiences": [
+        "kids",
+        "adults"
+      ],
+      "cost": "Free",
+      "url": "https://presidio.gov/explore/events/fiesta-en-el-parque-3",
+      "sourceUrl": "https://presidio.gov/explore/events/fiesta-en-el-parque-3",
+      "sourceId": "fiesta-en-el-parque-presidio-tunnel-tops-2026-08-01-src",
+      "sourceName": "Fiesta en el Parque at Presidio Tunnel Tops",
+      "sourceMode": "official-text-event",
+      "extractionMethod": "official-text-event",
+      "verified": true,
+      "fetchedAt": "2026-07-27T01:01:25.357Z",
+      "metroId": "bay-area",
+      "themes": [
+        "arts-crafts",
+        "music-performance",
+        "festivals-community"
+      ],
+      "slug": "fiesta-en-el-parque-at-presidio-tunnel-tops-presidio-tunnel-tops-east-meadow"
     },
     {
       "id": "ybg-festival-choreofest-day-two-2026-08-01",
@@ -2180,7 +2404,7 @@
       "slug": "space-week-festival-day-2-chabot-space-science-center",
       "originalSourceMode": "html",
       "originalFetchedAt": "2026-07-02T12:18:00.269Z",
-      "restoredAt": "2026-07-26T23:32:26.622Z"
+      "restoredAt": "2026-07-27T01:06:15.735Z"
     },
     {
       "id": "punch-line-sf-chris-porter-d00abc515c",
@@ -2488,6 +2712,51 @@
       "slug": "steve-o-crash-burn-cobb-s-comedy-club-cobbs-comedy-steve-o-crash-burn-2033a22fda"
     },
     {
+      "id": "fremont-festival-of-the-arts-2026-08-02",
+      "baseId": null,
+      "title": "Fremont Festival of the Arts (Sunday)",
+      "description": "Day two of the free Downtown Fremont street festival: artisan shopping, food, live music, and kids' activities.",
+      "venue": "Downtown Fremont",
+      "city": "Fremont",
+      "neighborhood": "Downtown Fremont",
+      "lat": 37.5485,
+      "lon": -121.9886,
+      "category": "Festival",
+      "daysOfWeek": [
+        0
+      ],
+      "timeWindow": "Morning",
+      "startDateTime": "2026-08-02T17:00:00.000Z",
+      "endDateTime": "2026-08-03T01:00:00.000Z",
+      "ageBands": [
+        "toddler",
+        "preschool",
+        "school-age",
+        "tween"
+      ],
+      "audiences": [
+        "kids",
+        "adults"
+      ],
+      "cost": "Free",
+      "url": "https://www.fremontfestival.net/",
+      "sourceUrl": "https://www.fremontfestival.net/",
+      "sourceId": "fremont-festival-of-the-arts-2026-08-02-src",
+      "sourceName": "Fremont Festival of the Arts (Sunday)",
+      "sourceMode": "official-text-event",
+      "extractionMethod": "official-text-event",
+      "verified": true,
+      "fetchedAt": "2026-07-27T01:01:25.357Z",
+      "metroId": "bay-area",
+      "themes": [
+        "arts-crafts",
+        "music-performance",
+        "food-markets",
+        "festivals-community"
+      ],
+      "slug": "fremont-festival-of-the-arts-sunday-downtown-fremont"
+    },
+    {
       "id": "chabot-space-space-week-festival-day-2-d388c14e65",
       "baseId": null,
       "title": "Space Week Festival – Day 2",
@@ -2527,7 +2796,52 @@
       "slug": "space-week-festival-day-2-chabot-space-science-center-chabot-space-space-week-festival-day-2-d388c14e65",
       "originalSourceMode": "json-ld",
       "originalFetchedAt": "2026-07-02T12:18:00.269Z",
-      "restoredAt": "2026-07-26T23:32:26.622Z"
+      "restoredAt": "2026-07-27T01:06:15.735Z"
+    },
+    {
+      "id": "nihonmachi-street-fair-2026-08-02",
+      "baseId": null,
+      "title": "52nd Annual Nihonmachi Street Fair (Sunday)",
+      "description": "Day two of the free AANHPI cultural street fair in Japantown. Children's World kids area, two live performance stages, Asian artisan marketplace, and Food Fest along Post Street and Osaka Way.",
+      "venue": "Japantown, Post Street",
+      "city": "San Francisco",
+      "neighborhood": "Japantown",
+      "lat": 37.7796,
+      "lon": -122.4156,
+      "category": "Festival",
+      "daysOfWeek": [
+        0
+      ],
+      "timeWindow": "Morning",
+      "startDateTime": "2026-08-02T18:00:00.000Z",
+      "endDateTime": "2026-08-03T01:00:00.000Z",
+      "ageBands": [
+        "toddler",
+        "preschool",
+        "school-age",
+        "tween"
+      ],
+      "audiences": [
+        "kids",
+        "adults"
+      ],
+      "cost": "Free",
+      "url": "https://www.nihonmachistreetfair.org/",
+      "sourceUrl": "https://www.nihonmachistreetfair.org/",
+      "sourceId": "nihonmachi-street-fair-2026-08-02-src",
+      "sourceName": "52nd Annual Nihonmachi Street Fair (Sunday)",
+      "sourceMode": "official-text-event",
+      "extractionMethod": "official-text-event",
+      "verified": true,
+      "fetchedAt": "2026-07-27T01:01:25.357Z",
+      "metroId": "bay-area",
+      "themes": [
+        "arts-crafts",
+        "music-performance",
+        "food-markets",
+        "festivals-community"
+      ],
+      "slug": "52nd-annual-nihonmachi-street-fair-sunday-japantown-post-street"
     },
     {
       "id": "santa-rosa-rec-santa-rosa-downtown-farmers-market-ed9ea3f520",
@@ -2567,6 +2881,49 @@
         "food-markets"
       ],
       "slug": "santa-rosa-downtown-farmers-market-courthouse-square-santa-rosa-rec-santa-rosa-downtown-farmers-market-ed9ea3f520"
+    },
+    {
+      "id": "watsonville-strawberry-festival-2026-08-02",
+      "baseId": null,
+      "title": "Watsonville Strawberry Festival (Sunday)",
+      "description": "Day two of the free downtown Watsonville festival: live entertainment, carnival rides, kids' activities, artisans, and strawberry treats.",
+      "venue": "Historic Downtown Watsonville",
+      "city": "Watsonville",
+      "neighborhood": "Historic Downtown Watsonville",
+      "lat": 37.7749,
+      "lon": -122.4194,
+      "category": "Festival",
+      "daysOfWeek": [
+        0
+      ],
+      "timeWindow": "Morning",
+      "startDateTime": "2026-08-02T18:00:00.000Z",
+      "endDateTime": "2026-08-03T02:00:00.000Z",
+      "ageBands": [
+        "toddler",
+        "preschool",
+        "school-age",
+        "tween"
+      ],
+      "audiences": [
+        "kids",
+        "adults"
+      ],
+      "cost": "Free",
+      "url": "https://www.watsonville.gov/Calendar.aspx?EID=7430",
+      "sourceUrl": "https://www.watsonville.gov/Calendar.aspx?EID=7430",
+      "sourceId": "watsonville-strawberry-festival-2026-08-02-src",
+      "sourceName": "Watsonville Strawberry Festival (Sunday)",
+      "sourceMode": "official-text-event",
+      "extractionMethod": "official-text-event",
+      "verified": true,
+      "fetchedAt": "2026-07-27T01:01:25.357Z",
+      "metroId": "bay-area",
+      "themes": [
+        "arts-crafts",
+        "festivals-community"
+      ],
+      "slug": "watsonville-strawberry-festival-sunday-historic-downtown-watsonville"
     },
     {
       "id": "ybgfestival-great-lawn-color-your-mind-4a8e5d917b",
@@ -3732,6 +4089,49 @@
       "slug": "mark-normand-cobb-s-comedy-club-cobbs-comedy-mark-normand-5bda06ac35"
     },
     {
+      "id": "sonoma-county-fair-2026-08-07",
+      "baseId": null,
+      "title": "Sonoma County Fair Opening Day",
+      "description": "Opening day of the Sonoma County Fair at the Sonoma County Fair and Event Center in Santa Rosa, with carnival rides, exhibits, food, and entertainment. Kids 5 and under are free; children 12 and under get free general admission on the fair's designated kids' days.",
+      "venue": "Sonoma County Fair and Event Center",
+      "city": "Santa Rosa",
+      "neighborhood": "Santa Rosa",
+      "lat": 38.4404,
+      "lon": -122.7141,
+      "category": "Fair",
+      "daysOfWeek": [
+        5
+      ],
+      "timeWindow": "Afternoon",
+      "startDateTime": "2026-08-07T19:00:00.000Z",
+      "endDateTime": "2026-08-08T05:00:00.000Z",
+      "ageBands": [
+        "toddler",
+        "preschool",
+        "school-age",
+        "tween"
+      ],
+      "audiences": [
+        "kids",
+        "adults"
+      ],
+      "cost": "Children 5 and under free; kid",
+      "url": "https://sonomacountyfair.com/pages/carnival",
+      "sourceUrl": "https://sonomacountyfair.com/pages/carnival",
+      "sourceId": "sonoma-county-fair-2026-08-07-src",
+      "sourceName": "Sonoma County Fair Opening Day",
+      "sourceMode": "official-text-event",
+      "extractionMethod": "official-text-event",
+      "verified": true,
+      "fetchedAt": "2026-07-27T01:01:25.357Z",
+      "metroId": "bay-area",
+      "themes": [
+        "food-markets",
+        "festivals-community"
+      ],
+      "slug": "sonoma-county-fair-opening-day-sonoma-county-fair-and-event-center"
+    },
+    {
       "id": "mountain-view-library-16357818",
       "baseId": null,
       "title": "Pages and Paws Reading Buddy",
@@ -4316,6 +4716,52 @@
         "food-markets"
       ],
       "slug": "foodwise-demos-on-hiatus-through-august-8-foodwise-ferry-plaza-farmers-market"
+    },
+    {
+      "id": "gravenstein-apple-fair-2026-08-08",
+      "baseId": null,
+      "title": "Gravenstein Apple Fair (Saturday)",
+      "description": "Sonoma County Farm Trails' annual apple harvest fair at Ragle Ranch Park, running since 1973: all things apple, local food and drink, regional music, ag-inspired activities for all ages, and an Artisan Tasting Grove. 95% zero waste; proceeds benefit the nonprofit Sonoma County Farm Trails.",
+      "venue": "Ragle Ranch Regional Park",
+      "city": "Sebastopol",
+      "neighborhood": "Sebastopol",
+      "lat": 37.7749,
+      "lon": -122.4194,
+      "category": "Festival",
+      "daysOfWeek": [
+        6
+      ],
+      "timeWindow": "Morning",
+      "startDateTime": "2026-08-08T17:00:00.000Z",
+      "endDateTime": "2026-08-09T01:00:00.000Z",
+      "ageBands": [
+        "toddler",
+        "preschool",
+        "school-age",
+        "tween"
+      ],
+      "audiences": [
+        "kids",
+        "adults"
+      ],
+      "cost": "Kids 5 and under free; kids 6-",
+      "url": "https://gravensteinapplefair.com/visiting/faq/",
+      "sourceUrl": "https://gravensteinapplefair.com/visiting/faq/",
+      "sourceId": "gravenstein-apple-fair-2026-08-08-src",
+      "sourceName": "Gravenstein Apple Fair (Saturday)",
+      "sourceMode": "official-text-event",
+      "extractionMethod": "official-text-event",
+      "verified": true,
+      "fetchedAt": "2026-07-27T01:06:15.735Z",
+      "metroId": "bay-area",
+      "themes": [
+        "arts-crafts",
+        "music-performance",
+        "animals-nature",
+        "food-markets",
+        "festivals-community"
+      ],
+      "slug": "gravenstein-apple-fair-saturday-ragle-ranch-regional-park"
     },
     {
       "id": "ybgfestival-great-lawn-pistahan-cd957603a4",
@@ -7405,6 +7851,49 @@
       "slug": "dance-outdoors-with-rhythm-motion-crepe-myrtle-garden-yerba-buena-gardens-yerba-buena-gardens-festival-26422"
     },
     {
+      "id": "santa-clara-county-fair-2026",
+      "baseId": null,
+      "title": "Santa Clara County Fair",
+      "description": "The annual Santa Clara County Fair at the fairgrounds on Tully Road: carnival rides, farm animals and livestock exhibits, food vendors, and live entertainment for the whole family. Runs Wednesday August 19 through Sunday August 23; daily hours to be announced on the fair website.",
+      "venue": "Santa Clara County Fairgrounds",
+      "city": "San Jose",
+      "neighborhood": "Tully",
+      "lat": 37.312,
+      "lon": -121.8558,
+      "category": "Festival",
+      "daysOfWeek": [
+        3
+      ],
+      "timeWindow": "Afternoon",
+      "startDateTime": "2026-08-19T19:00:00.000Z",
+      "endDateTime": "2026-08-24T05:00:00.000Z",
+      "ageBands": [
+        "preschool",
+        "school-age",
+        "tween"
+      ],
+      "audiences": [
+        "kids",
+        "adults"
+      ],
+      "cost": "$",
+      "url": "https://thefair.org/",
+      "sourceUrl": "https://thefair.org/",
+      "sourceId": "santa-clara-county-fair-2026-src",
+      "sourceName": "Santa Clara County Fair 2026",
+      "sourceMode": "official-text-event",
+      "extractionMethod": "official-text-event",
+      "verified": true,
+      "fetchedAt": "2026-07-27T01:01:25.357Z",
+      "metroId": "bay-area",
+      "themes": [
+        "animals-nature",
+        "food-markets",
+        "festivals-community"
+      ],
+      "slug": "santa-clara-county-fair-santa-clara-county-fairgrounds"
+    },
+    {
       "id": "punch-line-sf-andy-haynes-7848fdf251",
       "baseId": null,
       "title": "Andy Haynes",
@@ -9264,6 +9753,47 @@
         "festivals-community"
       ],
       "slug": "mountain-view-art-wine-festival-castro-street-mountain-view-art-wine-2026-09-13"
+    },
+    {
+      "id": "viva-callesj-2026-09-13",
+      "baseId": null,
+      "title": "Viva CalleSJ",
+      "description": "Free open-streets event for walking, biking, skating, rolling, and community connection.",
+      "venue": "Viva CalleSJ route",
+      "city": "San Jose",
+      "neighborhood": "San Jose",
+      "lat": 37.3387,
+      "lon": -121.8853,
+      "category": "Festival",
+      "daysOfWeek": [
+        0
+      ],
+      "timeWindow": "Morning",
+      "startDateTime": "2026-09-13T17:00:00.000Z",
+      "endDateTime": "2026-09-13T22:00:00.000Z",
+      "ageBands": [
+        "preschool",
+        "school-age",
+        "tween"
+      ],
+      "audiences": [
+        "all"
+      ],
+      "cost": "Free",
+      "url": "https://www.vivacallesj.org/",
+      "sourceUrl": "https://www.vivacallesj.org/",
+      "sourceId": "viva-callesj",
+      "sourceName": "Viva CalleSJ",
+      "sourceMode": "official-text-event",
+      "extractionMethod": "official-text-event",
+      "verified": true,
+      "fetchedAt": "2026-07-27T00:46:50.004Z",
+      "metroId": "bay-area",
+      "themes": [
+        "active-outdoors",
+        "festivals-community"
+      ],
+      "slug": "viva-callesj-viva-callesj-route"
     },
     {
       "id": "sfpl-workshop-mid-autumn-festival-lanterns-b6145e3e18",

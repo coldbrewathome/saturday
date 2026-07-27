@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "atlanta",
-  "generatedAt": "2026-07-26T23:27:48.048Z",
-  "alertCount": 12,
+  "generatedAt": "2026-07-27T00:35:04.049Z",
+  "alertCount": 10,
   "alerts": [
     {
       "severity": "warning",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
+      "fetchedAt": "2026-07-27T00:35:04.049Z",
       "fetches": [
         {
           "url": "https://www.atlantaga.gov/government/departments/parks-recreation/events",
@@ -44,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
+      "fetchedAt": "2026-07-27T00:35:04.049Z",
       "fetches": [
         {
           "url": "https://www.northgeorgiastatefair.com/",
@@ -69,35 +69,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
+      "fetchedAt": "2026-07-27T00:35:04.049Z",
       "fetches": [
         {
           "url": "https://www.gwinnettcountyfair.com/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "atlanta",
-      "sourceId": "marietta-4th-in-the-park-2026",
-      "sourceName": "Marietta 4th In The Park Celebration 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.mariettaga.gov/194/Fourth-of-July-Celebration",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
-      "fetches": [
-        {
-          "url": "https://www.mariettaga.gov/194/Fourth-of-July-Celebration",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -119,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
+      "fetchedAt": "2026-07-27T00:35:04.049Z",
       "fetches": [
         {
           "url": "https://stonemountainpark.com/activities/events/atlanta-4th-of-july-fireworks-at-stone-mountain-park/",
@@ -144,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
+      "fetchedAt": "2026-07-27T00:35:04.049Z",
       "fetches": [
         {
           "url": "https://www.eventbrite.com/e/back-to-school-bash-tickets-1991385968037",
@@ -169,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
+      "fetchedAt": "2026-07-27T00:35:04.049Z",
       "fetches": [
         {
           "url": "https://www.eventbrite.com/e/fulton-county-sheriffs-office-back-to-school-bash-tickets-1990976298705",
@@ -194,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
+      "fetchedAt": "2026-07-27T00:35:04.049Z",
       "fetches": [
         {
           "url": "https://www.terminalwestatl.com/events",
@@ -219,7 +194,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
+      "fetchedAt": "2026-07-27T00:35:04.049Z",
       "fetches": [
         {
           "url": "https://www.varietyplayhouse.com/events",
@@ -244,38 +219,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
+      "fetchedAt": "2026-07-27T00:35:04.049Z",
       "fetches": [
         {
           "url": "https://www.badearl.com/calendar",
           "status": "http-error",
           "httpStatus": 404,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "ponce-city-market-atl",
-      "sourceName": "Ponce City Market Events",
-      "sourceType": "tribeEvents",
-      "url": "https://www.poncecitymarket.com/events/",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 33,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 33,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
-      "fetches": [
-        {
-          "url": "https://www.poncecitymarket.com/events/",
-          "status": "http-error",
-          "httpStatus": 502,
-          "contentType": "application/json; charset=utf-8"
         }
       ]
     },
@@ -294,7 +244,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
+      "fetchedAt": "2026-07-27T00:35:04.049Z",
       "fetches": [
         {
           "url": "https://atlfoodandwinefestival.com/",

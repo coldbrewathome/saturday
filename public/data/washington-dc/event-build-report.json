@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "metroId": "washington-dc",
-  "generatedAt": "2026-07-26T23:27:00.187Z",
+  "generatedAt": "2026-07-27T00:34:18.563Z",
   "registryPath": "data/event-sources-washington-dc.json",
   "outputPath": "public/data/washington-dc/events.json",
-  "eventCount": 2091,
-  "adultsEventCount": 33,
+  "eventCount": 2079,
+  "adultsEventCount": 34,
   "sourceCount": 21,
-  "liveEventCount": 2093,
-  "lastKnownGoodEventCount": 0,
+  "liveEventCount": 2076,
+  "lastKnownGoodEventCount": 5,
   "fallbackEventCount": 12,
   "operatorAlertCount": 10,
   "errors": [],
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:00.187Z",
+      "fetchedAt": "2026-07-27T00:34:18.563Z",
       "fetches": [
         {
           "url": "https://dpr.dc.gov/events",
@@ -53,13 +53,37 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:00.187Z",
+      "fetchedAt": "2026-07-27T00:34:18.563Z",
       "fetches": [
         {
           "url": "https://naturalhistory.si.edu/events/family-programs",
           "status": "http-error",
           "httpStatus": 403,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "washington-dc",
+      "sourceId": "washington-dc-zoo-family",
+      "sourceName": "National Zoo Events",
+      "sourceType": "nationalZooJsonApi",
+      "url": "https://nationalzoo.si.edu/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 5,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 5,
+      "fetchedAt": "2026-07-27T00:34:18.563Z",
+      "fetches": [
+        {
+          "url": "https://nationalzoo.si.edu/events",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ]
     },
@@ -78,7 +102,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:00.187Z",
+      "fetchedAt": "2026-07-27T00:34:18.563Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -103,7 +127,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:00.187Z",
+      "fetchedAt": "2026-07-27T00:34:18.563Z",
       "fetches": [
         {
           "url": "https://marylandstatefair.com/",
@@ -128,7 +152,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:00.187Z",
+      "fetchedAt": "2026-07-27T00:34:18.563Z",
       "fetches": [
         {
           "url": "https://www.nbm.org/events/",
@@ -153,37 +177,12 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:00.187Z",
+      "fetchedAt": "2026-07-27T00:34:18.563Z",
       "fetches": [
         {
           "url": "https://glenechopark.org/pridemonth",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "washington-dc",
-      "sourceId": "loc-national-book-festival-2026",
-      "sourceName": "Library of Congress National Book Festival",
-      "sourceType": "officialTextEvents",
-      "url": "https://newsroom.loc.gov/news/library-to-host-26th-national-book-festival-in-august-2026/s/81b2c74b-c263-46cc-b3ed-f91974bf4c8e",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:00.187Z",
-      "fetches": [
-        {
-          "url": "https://newsroom.loc.gov/news/library-to-host-26th-national-book-festival-in-august-2026/s/81b2c74b-c263-46cc-b3ed-f91974bf4c8e",
-          "status": "ok",
-          "httpStatus": 202,
           "contentType": "text/html; charset=UTF-8"
         }
       ]
@@ -203,7 +202,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:00.187Z",
+      "fetchedAt": "2026-07-27T00:34:18.563Z",
       "fetches": [
         {
           "url": "https://www.930.com/events",
@@ -228,7 +227,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:00.187Z",
+      "fetchedAt": "2026-07-27T00:34:18.563Z",
       "fetches": [
         {
           "url": "https://www.unionstage.com/events",
@@ -252,7 +251,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:00.187Z",
+      "fetchedAt": "2026-07-27T00:34:18.563Z",
       "fetches": [
         {
           "url": "https://www.songbyrddc.com/events",
@@ -295,13 +294,13 @@
           "url": "https://dclibrary.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=1259; locations=27"
+          "contentType": "application/json; source=communico-events; events=1274; locations=27"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=1259; locations=27",
-      "rejectedLiveEvents": 5,
-      "extractedEvents": 300,
+      "contentType": "application/json; source=communico-events; events=1274; locations=27",
+      "rejectedLiveEvents": 9,
+      "extractedEvents": 304,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -366,24 +365,21 @@
       "city": "Washington",
       "metroId": "washington-dc",
       "category": "Zoo",
-      "status": "ok",
-      "liveEvents": 9,
+      "status": "fetch-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 9,
+      "eventCount": 5,
       "fetches": [
         {
           "url": "https://nationalzoo.si.edu/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/vnd.api+json; source=national-zoo-jsonapi; events=31"
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "application/vnd.api+json; source=national-zoo-jsonapi; events=31",
-      "rejectedLiveEvents": 238,
-      "extractedEvents": 247,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "reason": "This operation was aborted",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 5,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "ticketmaster-washington-dc-family",
@@ -475,21 +471,21 @@
       "metroId": "washington-dc",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 747,
+      "liveEvents": 740,
       "fallbackEvents": 0,
-      "eventCount": 747,
+      "eventCount": 740,
       "fetches": [
         {
           "url": "https://mcpl.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=1406; locations=23"
+          "contentType": "application/json; source=communico-events; events=1431; locations=23"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=1406; locations=23",
-      "rejectedLiveEvents": 19,
-      "extractedEvents": 766,
+      "contentType": "application/json; source=communico-events; events=1431; locations=23",
+      "rejectedLiveEvents": 32,
+      "extractedEvents": 772,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -510,13 +506,13 @@
           "url": "https://pgcmls.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=845; locations=23"
+          "contentType": "application/json; source=communico-events; events=878; locations=23"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=845; locations=23",
-      "rejectedLiveEvents": 22,
-      "extractedEvents": 601,
+      "contentType": "application/json; source=communico-events; events=878; locations=23",
+      "rejectedLiveEvents": 49,
+      "extractedEvents": 628,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -529,20 +525,20 @@
       "metroId": "washington-dc",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 157,
+      "liveEvents": 155,
       "fallbackEvents": 0,
-      "eventCount": 157,
+      "eventCount": 155,
       "fetches": [
         {
           "url": "https://alexandria.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=293; locations=12"
+          "contentType": "application/json; source=communico-events; events=297; locations=12"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=293; locations=12",
-      "rejectedLiveEvents": 1,
+      "contentType": "application/json; source=communico-events; events=297; locations=12",
+      "rejectedLiveEvents": 3,
       "extractedEvents": 158,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -657,27 +653,27 @@
     {
       "id": "loc-national-book-festival-2026",
       "name": "Library of Congress National Book Festival",
-      "url": "https://newsroom.loc.gov/news/library-to-host-26th-national-book-festival-in-august-2026/s/81b2c74b-c263-46cc-b3ed-f91974bf4c8e",
+      "url": "https://www.loc.gov/events/2026-national-book-festival/",
       "sourceType": "officialTextEvents",
       "city": "Washington",
       "metroId": "washington-dc",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
-          "url": "https://newsroom.loc.gov/news/library-to-host-26th-national-book-festival-in-august-2026/s/81b2c74b-c263-46cc-b3ed-f91974bf4c8e",
+          "url": "https://www.loc.gov/events/2026-national-book-festival/",
           "status": "ok",
-          "httpStatus": 202,
+          "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "httpStatus": 202,
+      "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

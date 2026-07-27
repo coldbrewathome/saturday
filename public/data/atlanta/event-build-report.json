@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "atlanta",
-  "generatedAt": "2026-07-26T23:27:48.048Z",
+  "generatedAt": "2026-07-27T00:35:04.049Z",
   "registryPath": "data/event-sources-atlanta.json",
   "outputPath": "public/data/atlanta/events.json",
-  "eventCount": 548,
-  "adultsEventCount": 222,
-  "sourceCount": 31,
-  "liveEventCount": 626,
-  "lastKnownGoodEventCount": 33,
+  "eventCount": 541,
+  "adultsEventCount": 226,
+  "sourceCount": 30,
+  "liveEventCount": 660,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 8,
-  "operatorAlertCount": 12,
+  "operatorAlertCount": 10,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
+      "fetchedAt": "2026-07-27T00:35:04.049Z",
       "fetches": [
         {
           "url": "https://www.atlantaga.gov/government/departments/parks-recreation/events",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
+      "fetchedAt": "2026-07-27T00:35:04.049Z",
       "fetches": [
         {
           "url": "https://www.northgeorgiastatefair.com/",
@@ -78,35 +78,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
+      "fetchedAt": "2026-07-27T00:35:04.049Z",
       "fetches": [
         {
           "url": "https://www.gwinnettcountyfair.com/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "atlanta",
-      "sourceId": "marietta-4th-in-the-park-2026",
-      "sourceName": "Marietta 4th In The Park Celebration 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.mariettaga.gov/194/Fourth-of-July-Celebration",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
-      "fetches": [
-        {
-          "url": "https://www.mariettaga.gov/194/Fourth-of-July-Celebration",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -128,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
+      "fetchedAt": "2026-07-27T00:35:04.049Z",
       "fetches": [
         {
           "url": "https://stonemountainpark.com/activities/events/atlanta-4th-of-july-fireworks-at-stone-mountain-park/",
@@ -153,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
+      "fetchedAt": "2026-07-27T00:35:04.049Z",
       "fetches": [
         {
           "url": "https://www.eventbrite.com/e/back-to-school-bash-tickets-1991385968037",
@@ -178,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
+      "fetchedAt": "2026-07-27T00:35:04.049Z",
       "fetches": [
         {
           "url": "https://www.eventbrite.com/e/fulton-county-sheriffs-office-back-to-school-bash-tickets-1990976298705",
@@ -203,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
+      "fetchedAt": "2026-07-27T00:35:04.049Z",
       "fetches": [
         {
           "url": "https://www.terminalwestatl.com/events",
@@ -228,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
+      "fetchedAt": "2026-07-27T00:35:04.049Z",
       "fetches": [
         {
           "url": "https://www.varietyplayhouse.com/events",
@@ -253,38 +228,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
+      "fetchedAt": "2026-07-27T00:35:04.049Z",
       "fetches": [
         {
           "url": "https://www.badearl.com/calendar",
           "status": "http-error",
           "httpStatus": 404,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "ponce-city-market-atl",
-      "sourceName": "Ponce City Market Events",
-      "sourceType": "tribeEvents",
-      "url": "https://www.poncecitymarket.com/events/",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 33,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 33,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
-      "fetches": [
-        {
-          "url": "https://www.poncecitymarket.com/events/",
-          "status": "http-error",
-          "httpStatus": 502,
-          "contentType": "application/json; charset=utf-8"
         }
       ]
     },
@@ -303,7 +253,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:48.048Z",
+      "fetchedAt": "2026-07-27T00:35:04.049Z",
       "fetches": [
         {
           "url": "https://atlfoodandwinefestival.com/",
@@ -391,9 +341,9 @@
       "metroId": "atlanta",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 40,
+      "liveEvents": 36,
       "fallbackEvents": 0,
-      "eventCount": 40,
+      "eventCount": 36,
       "fetches": [
         {
           "url": "https://childrensmuseumatlanta.org/program-calendar/",
@@ -405,7 +355,7 @@
       "httpStatus": 200,
       "contentType": "application/json; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 40,
+      "extractedEvents": 36,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -534,13 +484,13 @@
           "url": "https://dekalb.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=559; locations=25"
+          "contentType": "application/json; source=communico-events; events=561; locations=25"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=559; locations=25",
-      "rejectedLiveEvents": 2,
-      "extractedEvents": 180,
+      "contentType": "application/json; source=communico-events; events=561; locations=25",
+      "rejectedLiveEvents": 3,
+      "extractedEvents": 181,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -561,11 +511,11 @@
           "url": "https://gwinnettpl.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=654; locations=17"
+          "contentType": "application/json; source=communico-events; events=673; locations=17"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=654; locations=17",
+      "contentType": "application/json; source=communico-events; events=673; locations=17",
       "rejectedLiveEvents": 0,
       "extractedEvents": 25,
       "lastKnownGoodEvents": 0,
@@ -607,9 +557,9 @@
       "metroId": "atlanta",
       "category": "Community",
       "status": "ok",
-      "liveEvents": 165,
+      "liveEvents": 163,
       "fallbackEvents": 0,
-      "eventCount": 165,
+      "eventCount": 163,
       "fetches": [
         {
           "url": "https://www.visitmariettaga.com/events/",
@@ -620,7 +570,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 32,
+      "rejectedLiveEvents": 34,
       "extractedEvents": 197,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -634,21 +584,21 @@
       "metroId": "atlanta",
       "category": "Community",
       "status": "ok",
-      "liveEvents": 42,
+      "liveEvents": 41,
       "fallbackEvents": 0,
-      "eventCount": 42,
+      "eventCount": 41,
       "fetches": [
         {
           "url": "https://www.awesomealpharetta.com/calendar/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=67; pages=2"
+          "contentType": "application/json; source=tribe-events; events=66; pages=2"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=67; pages=2",
+      "contentType": "application/json; source=tribe-events; events=66; pages=2",
       "rejectedLiveEvents": 24,
-      "extractedEvents": 66,
+      "extractedEvents": 65,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -730,33 +680,6 @@
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "marietta-4th-in-the-park-2026",
-      "name": "Marietta 4th In The Park Celebration 2026",
-      "url": "https://www.mariettaga.gov/194/Fourth-of-July-Celebration",
-      "sourceType": "officialTextEvents",
-      "city": "Marietta",
-      "metroId": "atlanta",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.mariettaga.gov/194/Fourth-of-July-Celebration",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1010,21 +933,21 @@
       "metroId": "atlanta",
       "category": "Comedy",
       "status": "ok",
-      "liveEvents": 27,
+      "liveEvents": 24,
       "fallbackEvents": 0,
-      "eventCount": 27,
+      "eventCount": 24,
       "fetches": [
         {
           "url": "https://www.punchline.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=156; pages=4"
+          "contentType": "application/json; source=tribe-events; events=153; pages=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=156; pages=4",
+      "contentType": "application/json; source=tribe-events; events=153; pages=4",
       "rejectedLiveEvents": 129,
-      "extractedEvents": 156,
+      "extractedEvents": 153,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1036,23 +959,24 @@
       "city": "Atlanta",
       "metroId": "atlanta",
       "category": "Market",
-      "status": "http-error",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 44,
       "fallbackEvents": 0,
-      "eventCount": 33,
+      "eventCount": 44,
       "fetches": [
         {
           "url": "https://www.poncecitymarket.com/events/",
-          "status": "http-error",
-          "httpStatus": 502,
-          "contentType": "application/json; charset=utf-8"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=200; pages=4"
         }
       ],
-      "httpStatus": 502,
-      "contentType": "application/json; charset=utf-8",
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 33,
-      "recoveryMode": "last-known-good"
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=200; pages=4",
+      "rejectedLiveEvents": 122,
+      "extractedEvents": 166,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "shaky-knees-2026",

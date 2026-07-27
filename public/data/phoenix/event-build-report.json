@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "phoenix",
-  "generatedAt": "2026-07-26T23:29:41.141Z",
+  "generatedAt": "2026-07-27T00:37:00.475Z",
   "registryPath": "data/event-sources-phoenix.json",
   "outputPath": "public/data/phoenix/events.json",
-  "eventCount": 638,
+  "eventCount": 631,
   "adultsEventCount": 43,
-  "sourceCount": 16,
-  "liveEventCount": 664,
+  "sourceCount": 15,
+  "liveEventCount": 657,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 8,
+  "operatorAlertCount": 7,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,38 +28,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:29:41.141Z",
+      "fetchedAt": "2026-07-27T00:37:00.475Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "application/json; source=ticketmaster; events=1; queries=1"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "phoenix",
-      "sourceId": "vineyard-north-phoenix-bts-giveaway-2026",
-      "sourceName": "Vineyard Church North Phoenix Back to School Giveaway (July 18)",
-      "sourceType": "officialTextEvents",
-      "url": "https://vineyardnorthphoenix.com/backtoschool/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:29:41.141Z",
-      "fetches": [
-        {
-          "url": "https://vineyardnorthphoenix.com/backtoschool/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -78,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:29:41.141Z",
+      "fetchedAt": "2026-07-27T00:37:00.475Z",
       "fetches": [
         {
           "url": "https://www.crescentphx.com/events",
@@ -103,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:29:41.141Z",
+      "fetchedAt": "2026-07-27T00:37:00.475Z",
       "fetches": [
         {
           "url": "https://www.therebellounge.com/events",
@@ -128,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:29:41.141Z",
+      "fetchedAt": "2026-07-27T00:37:00.475Z",
       "fetches": [
         {
           "url": "https://www.marqueetheatreaz.com/calendar/",
@@ -153,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:29:41.141Z",
+      "fetchedAt": "2026-07-27T00:37:00.475Z",
       "fetches": [
         {
           "url": "https://phoenix.standuplive.com/events",
@@ -178,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:29:41.141Z",
+      "fetchedAt": "2026-07-27T00:37:00.475Z",
       "fetches": [
         {
           "url": "https://houseofcomedy.net/scottsdale",
@@ -203,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:29:41.141Z",
+      "fetchedAt": "2026-07-27T00:37:00.475Z",
       "fetches": [
         {
           "url": "https://www.theniletheater.com/events",
@@ -238,9 +213,9 @@
       "metroId": "phoenix",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 275,
+      "liveEvents": 277,
       "fallbackEvents": 0,
-      "eventCount": 275,
+      "eventCount": 277,
       "fetches": [
         {
           "url": "https://calendar.phoenixpubliclibrary.org/calendar/",
@@ -251,8 +226,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 275,
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 278,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -292,21 +267,21 @@
       "metroId": "phoenix",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 189,
+      "liveEvents": 183,
       "fallbackEvents": 0,
-      "eventCount": 189,
+      "eventCount": 183,
       "fetches": [
         {
           "url": "https://childrensmuseumofphoenix.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=201; pages=5"
+          "contentType": "application/json; source=tribe-events; events=195; pages=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=201; pages=5",
+      "contentType": "application/json; source=tribe-events; events=195; pages=4",
       "rejectedLiveEvents": 7,
-      "extractedEvents": 196,
+      "extractedEvents": 190,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -400,9 +375,9 @@
       "metroId": "phoenix",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 161,
+      "liveEvents": 158,
       "fallbackEvents": 0,
-      "eventCount": 161,
+      "eventCount": 158,
       "fetches": [
         {
           "url": "https://dbg.org/events/",
@@ -413,35 +388,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 36,
+      "rejectedLiveEvents": 39,
       "extractedEvents": 197,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "vineyard-north-phoenix-bts-giveaway-2026",
-      "name": "Vineyard Church North Phoenix Back to School Giveaway (July 18)",
-      "url": "https://vineyardnorthphoenix.com/backtoschool/",
-      "sourceType": "officialTextEvents",
-      "city": "Glendale",
-      "metroId": "phoenix",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://vineyardnorthphoenix.com/backtoschool/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

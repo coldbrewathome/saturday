@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "houston",
-  "generatedAt": "2026-07-26T23:26:22.504Z",
+  "generatedAt": "2026-07-27T01:10:36.302Z",
   "registryPath": "data/event-sources-houston.json",
   "outputPath": "public/data/houston/events.json",
-  "eventCount": 502,
-  "adultsEventCount": 49,
-  "sourceCount": 20,
-  "liveEventCount": 539,
+  "eventCount": 534,
+  "adultsEventCount": 50,
+  "sourceCount": 21,
+  "liveEventCount": 570,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 8,
-  "operatorAlertCount": 10,
+  "operatorAlertCount": 9,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:26:22.504Z",
+      "fetchedAt": "2026-07-27T01:10:36.302Z",
       "fetches": [
         {
           "url": "https://www.discoverygreen.com/event-category/parks-play/",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:26:22.504Z",
+      "fetchedAt": "2026-07-27T01:10:36.302Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:26:22.504Z",
+      "fetchedAt": "2026-07-27T01:10:36.302Z",
       "fetches": [
         {
           "url": "https://www.fortbendcountyfair.com/",
@@ -103,37 +103,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:26:22.504Z",
+      "fetchedAt": "2026-07-27T01:10:36.302Z",
       "fetches": [
         {
           "url": "https://www.houstontx.gov/july4/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "houston",
-      "sourceId": "hmns-second-saturday-shark-week-2026",
-      "sourceName": "HMNS Second Saturday: Shark Week",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.hmns.org/visit/events/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:26:22.504Z",
-      "fetches": [
-        {
-          "url": "https://www.hmns.org/visit/events/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
         }
       ]
     },
@@ -152,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:26:22.504Z",
+      "fetchedAt": "2026-07-27T01:10:36.302Z",
       "fetches": [
         {
           "url": "https://www.eventbrite.com/e/braeswood-church-community-health-fair-tickets-1988591906925",
@@ -177,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:26:22.504Z",
+      "fetchedAt": "2026-07-27T01:10:36.302Z",
       "fetches": [
         {
           "url": "https://www.whiteoakmusichall.com/events",
@@ -202,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:26:22.504Z",
+      "fetchedAt": "2026-07-27T01:10:36.302Z",
       "fetches": [
         {
           "url": "https://www.warehouselive.com/events",
@@ -226,7 +202,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:26:22.504Z",
+      "fetchedAt": "2026-07-27T01:10:36.302Z",
       "fetches": [
         {
           "url": "https://www.thesecretgrouphtx.com/calendar",
@@ -250,7 +226,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:26:22.504Z",
+      "fetchedAt": "2026-07-27T01:10:36.302Z",
       "fetches": [
         {
           "url": "https://improv.com/houston/calendar/",
@@ -553,30 +529,6 @@
       "recoveryMode": null
     },
     {
-      "id": "hmns-second-saturday-shark-week-2026",
-      "name": "HMNS Second Saturday: Shark Week",
-      "url": "https://www.hmns.org/visit/events/",
-      "sourceType": "officialTextEvents",
-      "city": "Houston",
-      "metroId": "houston",
-      "category": "Museum",
-      "status": "fetch-error",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.hmns.org/visit/events/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ],
-      "reason": "fetch failed",
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
       "id": "braeswood-church-health-fair-2026",
       "name": "Braeswood Church Community Health Fair - Branch Forest (July 18)",
       "url": "https://www.eventbrite.com/e/braeswood-church-community-health-fair-tickets-1988591906925",
@@ -600,6 +552,60 @@
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 1,
       "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "houston-mayors-back-2-school-health-fair-2026-08-01-src",
+      "name": "Mayor's Back 2 School & Health Fair",
+      "url": "https://houstontx.gov/btsf/",
+      "sourceType": "officialTextEvents",
+      "city": "Houston",
+      "metroId": "houston",
+      "category": "Community",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://houstontx.gov/btsf/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "buffalo-bayou-partnership",
+      "name": "Buffalo Bayou Partnership Events",
+      "url": "https://buffalobayou.org/events/",
+      "sourceType": "tribeEvents",
+      "city": "Houston",
+      "metroId": "houston",
+      "category": "Outdoors",
+      "status": "ok",
+      "liveEvents": 31,
+      "fallbackEvents": 0,
+      "eventCount": 31,
+      "fetches": [
+        {
+          "url": "https://buffalobayou.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=47; pages=1"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=47; pages=1",
+      "rejectedLiveEvents": 15,
+      "extractedEvents": 46,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -767,21 +773,21 @@
       "metroId": "houston",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 5,
+      "liveEvents": 4,
       "fallbackEvents": 0,
-      "eventCount": 5,
+      "eventCount": 4,
       "fetches": [
         {
           "url": "https://www.eurekaheights.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=5; pages=1"
+          "contentType": "application/json; source=tribe-events; events=4; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=5; pages=1",
+      "contentType": "application/json; source=tribe-events; events=4; pages=1",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 5,
+      "extractedEvents": 4,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     }

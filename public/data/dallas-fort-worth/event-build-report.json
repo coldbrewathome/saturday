@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "dallas-fort-worth",
-  "generatedAt": "2026-07-26T23:25:39.686Z",
+  "generatedAt": "2026-07-27T00:33:24.225Z",
   "registryPath": "data/event-sources-dallas-fort-worth.json",
   "outputPath": "public/data/dallas-fort-worth/events.json",
-  "eventCount": 698,
+  "eventCount": 696,
   "adultsEventCount": 129,
-  "sourceCount": 27,
-  "liveEventCount": 821,
+  "sourceCount": 26,
+  "liveEventCount": 819,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 4,
-  "operatorAlertCount": 7,
+  "operatorAlertCount": 6,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:25:39.686Z",
+      "fetchedAt": "2026-07-27T00:33:24.225Z",
       "fetches": [
         {
           "url": "https://www.perotmuseum.org/events/",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:25:39.686Z",
+      "fetchedAt": "2026-07-27T00:33:24.225Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -78,37 +78,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:25:39.686Z",
+      "fetchedAt": "2026-07-27T00:33:24.225Z",
       "fetches": [
         {
           "url": "https://www.fairparkdallas.com/events/detail/2026-state-fair-of-texas",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "dallas-fort-worth",
-      "sourceId": "dfw-fort-worths-fourth-2026",
-      "sourceName": "Fort Worth's Fourth (July 4, 2026)",
-      "sourceType": "officialTextEvents",
-      "url": "https://fortworthsfourth.com/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:25:39.686Z",
-      "fetches": [
-        {
-          "url": "https://fortworthsfourth.com/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
         }
       ]
     },
@@ -127,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:25:39.686Z",
+      "fetchedAt": "2026-07-27T00:33:24.225Z",
       "fetches": [
         {
           "url": "https://www.treesdallas.com/events",
@@ -152,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:25:39.686Z",
+      "fetchedAt": "2026-07-27T00:33:24.225Z",
       "fetches": [
         {
           "url": "https://www.tulipsftw.com/events",
@@ -177,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:25:39.686Z",
+      "fetchedAt": "2026-07-27T00:33:24.225Z",
       "fetches": [
         {
           "url": "https://www.fairparkdallas.com/events",
@@ -374,21 +350,21 @@
       "metroId": "dallas-fort-worth",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 222,
+      "liveEvents": 220,
       "fallbackEvents": 0,
-      "eventCount": 222,
+      "eventCount": 220,
       "fetches": [
         {
           "url": "https://plano.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=389; locations=6"
+          "contentType": "application/json; source=communico-events; events=397; locations=6"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=389; locations=6",
-      "rejectedLiveEvents": 5,
-      "extractedEvents": 227,
+      "contentType": "application/json; source=communico-events; events=397; locations=6",
+      "rejectedLiveEvents": 11,
+      "extractedEvents": 231,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -611,30 +587,6 @@
       "contentType": "application/json; source=tribe-events; events=1; pages=1",
       "rejectedLiveEvents": 0,
       "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "dfw-fort-worths-fourth-2026",
-      "name": "Fort Worth's Fourth (July 4, 2026)",
-      "url": "https://fortworthsfourth.com/",
-      "sourceType": "officialTextEvents",
-      "city": "Fort Worth",
-      "metroId": "dallas-fort-worth",
-      "category": "Festival",
-      "status": "fetch-error",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://fortworthsfourth.com/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ],
-      "reason": "fetch failed",
-      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

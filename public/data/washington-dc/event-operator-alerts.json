@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "metroId": "washington-dc",
-  "generatedAt": "2026-07-26T23:27:00.187Z",
+  "generatedAt": "2026-07-27T00:34:18.563Z",
   "alertCount": 10,
   "alerts": [
     {
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:00.187Z",
+      "fetchedAt": "2026-07-27T00:34:18.563Z",
       "fetches": [
         {
           "url": "https://dpr.dc.gov/events",
@@ -44,13 +44,37 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:00.187Z",
+      "fetchedAt": "2026-07-27T00:34:18.563Z",
       "fetches": [
         {
           "url": "https://naturalhistory.si.edu/events/family-programs",
           "status": "http-error",
           "httpStatus": 403,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "washington-dc",
+      "sourceId": "washington-dc-zoo-family",
+      "sourceName": "National Zoo Events",
+      "sourceType": "nationalZooJsonApi",
+      "url": "https://nationalzoo.si.edu/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 5,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 5,
+      "fetchedAt": "2026-07-27T00:34:18.563Z",
+      "fetches": [
+        {
+          "url": "https://nationalzoo.si.edu/events",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ]
     },
@@ -69,7 +93,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:00.187Z",
+      "fetchedAt": "2026-07-27T00:34:18.563Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -94,7 +118,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:00.187Z",
+      "fetchedAt": "2026-07-27T00:34:18.563Z",
       "fetches": [
         {
           "url": "https://marylandstatefair.com/",
@@ -119,7 +143,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:00.187Z",
+      "fetchedAt": "2026-07-27T00:34:18.563Z",
       "fetches": [
         {
           "url": "https://www.nbm.org/events/",
@@ -144,37 +168,12 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:00.187Z",
+      "fetchedAt": "2026-07-27T00:34:18.563Z",
       "fetches": [
         {
           "url": "https://glenechopark.org/pridemonth",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "washington-dc",
-      "sourceId": "loc-national-book-festival-2026",
-      "sourceName": "Library of Congress National Book Festival",
-      "sourceType": "officialTextEvents",
-      "url": "https://newsroom.loc.gov/news/library-to-host-26th-national-book-festival-in-august-2026/s/81b2c74b-c263-46cc-b3ed-f91974bf4c8e",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:00.187Z",
-      "fetches": [
-        {
-          "url": "https://newsroom.loc.gov/news/library-to-host-26th-national-book-festival-in-august-2026/s/81b2c74b-c263-46cc-b3ed-f91974bf4c8e",
-          "status": "ok",
-          "httpStatus": 202,
           "contentType": "text/html; charset=UTF-8"
         }
       ]
@@ -194,7 +193,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:00.187Z",
+      "fetchedAt": "2026-07-27T00:34:18.563Z",
       "fetches": [
         {
           "url": "https://www.930.com/events",
@@ -219,7 +218,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:00.187Z",
+      "fetchedAt": "2026-07-27T00:34:18.563Z",
       "fetches": [
         {
           "url": "https://www.unionstage.com/events",
@@ -243,7 +242,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-26T23:27:00.187Z",
+      "fetchedAt": "2026-07-27T00:34:18.563Z",
       "fetches": [
         {
           "url": "https://www.songbyrddc.com/events",
