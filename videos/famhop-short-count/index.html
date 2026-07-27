@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+
+      @font-face{font-family:'Bricolage Grotesque';src:url('assets/fonts/bricolage-grotesque-400_800.woff2') format('woff2');font-weight:400 800;font-style:normal;font-display:block;}
+      @font-face{font-family:'JetBrains Mono';src:url('assets/fonts/jetbrains-mono-400.woff2') format('woff2');font-weight:100 800;font-style:normal;font-display:block;}
+      @font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/plus-jakarta-sans-400.woff2') format('woff2');font-weight:200 800;font-style:normal;font-display:block;}
+
+      #root{
+        position:relative;width:1080px;height:1920px;overflow:hidden;
+        --cream:#FAF5EB; --ink:#1B1916; --accent:#DD6A1A; --sun:#E8B547; --muted:#4A453F; --mutedi:#C9C2B6;
+        font-family:'Plus Jakarta Sans',sans-serif;color:#1B1916;
+      }
+
+      .scene{position:absolute;inset:0;width:1080px;height:1920px;overflow:hidden;}
+      .pnl{position:absolute;inset:0;background:var(--cream);transform-origin:50% 100%;}
+      .inv .pnl{background:var(--ink);}
+      .inv{color:var(--cream);}
+
+      .mono{font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.10em;text-transform:uppercase;}
+      .disp{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:-.015em;line-height:.94;}
+
+      .chrome{position:absolute;left:72px;right:72px;top:150px;display:flex;justify-content:space-between;align-items:center;font-size:28px;}
+      .chrome .r{color:var(--muted);}
+      .inv .chrome .r{color:var(--mutedi);}
+      .mark{display:inline-flex;align-items:center;gap:14px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:38px;letter-spacing:-.02em;text-transform:lowercase;}
+      .mark i{display:block;width:26px;height:26px;background:var(--accent);border-radius:7px;}
+
+      /* --- big number scenes ------------------------------------------------ */
+      .huge{position:absolute;left:72px;right:72px;top:430px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:280px;line-height:.82;letter-spacing:-.05em;color:var(--accent);}
+      .under{position:absolute;left:72px;right:72px;top:790px;font-size:100px;}
+      .tl{display:block;}
+      .tc{display:block;}
+
+      .hlwrap{position:relative;display:inline-block;}
+      .hlbar{position:absolute;left:-18px;right:-18px;top:-6px;bottom:2px;background:var(--sun);transform-origin:0% 50%;}
+      .hltx{position:relative;color:var(--ink);}
+
+      .slabwrap{position:absolute;left:72px;top:1210px;display:inline-block;}
+      .slab{position:absolute;inset:0;background:var(--ink);transform-origin:0% 50%;}
+      .inv .slab{background:var(--sun);}
+      .slabtx{position:relative;display:block;padding:14px 34px 22px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:56px;text-transform:uppercase;letter-spacing:-.01em;color:var(--cream);}
+      .inv .slabtx{color:var(--ink);}
+
+      .note{position:absolute;left:72px;top:1430px;font-family:'JetBrains Mono',monospace;font-size:34px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+      .inv .note{color:var(--mutedi);}
+
+      /* --- metro ledger ------------------------------------------------------ */
+      .lhead{position:absolute;left:72px;right:72px;top:300px;font-size:96px;}
+      .lsub{position:absolute;left:72px;top:430px;font-family:'JetBrains Mono',monospace;font-size:32px;letter-spacing:.10em;text-transform:uppercase;color:var(--muted);}
+      .ledger{position:absolute;left:72px;right:72px;top:500px;}
+      .row{position:relative;display:flex;justify-content:space-between;align-items:baseline;height:62px;border-bottom:2px solid rgba(27,25,22,.16);}
+      .rname{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:46px;text-transform:uppercase;letter-spacing:-.01em;}
+      .rnum{font-family:'JetBrains Mono',monospace;font-size:42px;color:var(--accent);}
+
+      /* --- proof -------------------------------------------------------------- */
+      .pstat{position:absolute;left:72px;right:72px;top:430px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:220px;line-height:.84;letter-spacing:-.04em;color:var(--accent);}
+      .pline{position:absolute;left:72px;right:72px;top:740px;font-size:78px;}
+
+      /* --- cta ---------------------------------------------------------------- */
+      .ctamark{position:absolute;left:72px;top:900px;display:inline-flex;align-items:center;gap:24px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:150px;letter-spacing:-.03em;text-transform:lowercase;color:var(--cream);}
+      .ctamark i{display:block;width:72px;height:72px;background:var(--accent);border-radius:18px;}
+      .ctaurl{position:absolute;left:72px;top:1120px;display:inline-block;}
+      .ctaurltx{position:relative;display:block;padding:22px 36px 26px;font-family:'JetBrains Mono',monospace;font-size:56px;letter-spacing:.01em;color:var(--ink);}
+      .ctakick{position:absolute;left:72px;right:72px;top:430px;font-size:88px;}
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="28" data-width="1080" data-height="1920" data-fps="30">
+
+      <!-- ======================= 00 · THE NUMBER ======================= -->
+      <div id="s0" class="scene clip" data-start="0" data-duration="5" data-track-index="0">
+        <div class="pnl" id="s0-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">jul 27 &ndash; aug 2</span></div>
+        <div class="disp huge" id="s0-count">0</div>
+        <div class="disp under" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="s0-u1">things to do</span></span>
+          <span class="tl"><span class="tc" id="s0-u2">with the kids</span></span>
+        </div>
+        <div class="slabwrap" id="s0-slabwrap"><span class="slab" id="s0-slab"></span><span class="slabtx" id="s0-slabtx">next week</span></div>
+        <div class="note" id="s0-note">Across 16 US metros</div>
+      </div>
+
+      <!-- ======================= 01 · THE FREE SHARE ======================= -->
+      <div id="s1" class="scene clip inv" data-start="5" data-duration="3.6" data-track-index="0">
+        <div class="pnl" id="s1-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">jul 27 &ndash; aug 2</span></div>
+        <div class="disp huge" id="s1-n">2,109</div>
+        <div class="disp under" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="s1-u1">of them cost</span></span>
+        </div>
+        <div class="disp" id="s1-free" style="position:absolute;left:72px;top:930px;font-size:190px;">
+          <span class="hlwrap"><span class="hlbar" id="s1-hl"></span><span class="hltx" id="s1-hltx">nothing</span></span>
+        </div>
+        <div class="note" id="s1-note">Free admission, per the venue&rsquo;s own listing</div>
+      </div>
+
+      <!-- ======================= 02 · THE LEDGER ======================= -->
+      <div id="s2" class="scene clip" data-start="8.6" data-duration="10.4" data-track-index="0">
+        <div class="pnl" id="s2-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">next week</span></div>
+        <div class="disp lhead" id="s2-head">16 metros</div>
+        <div class="lsub" id="s2-sub">Family events, Mon Jul 27 &ndash; Sun Aug 2</div>
+        <div class="ledger">
+          <div class="row" id="s2-r1"><span class="rname">Bay Area</span><span class="rnum">895</span></div>
+          <div class="row" id="s2-r2"><span class="rname">Washington DC</span><span class="rnum">547</span></div>
+          <div class="row" id="s2-r3"><span class="rname">Los Angeles</span><span class="rnum">546</span></div>
+          <div class="row" id="s2-r4"><span class="rname">Philadelphia</span><span class="rnum">536</span></div>
+          <div class="row" id="s2-r5"><span class="rname">New York City</span><span class="rnum">483</span></div>
+          <div class="row" id="s2-r6"><span class="rname">Miami</span><span class="rnum">391</span></div>
+          <div class="row" id="s2-r7"><span class="rname">Houston</span><span class="rnum">328</span></div>
+          <div class="row" id="s2-r8"><span class="rname">Dallas&ndash;Fort Worth</span><span class="rnum">266</span></div>
+          <div class="row" id="s2-r9"><span class="rname">Chicago</span><span class="rnum">253</span></div>
+          <div class="row" id="s2-r10"><span class="rname">Phoenix</span><span class="rnum">215</span></div>
+          <div class="row" id="s2-r11"><span class="rname">Honolulu</span><span class="rnum">167</span></div>
+          <div class="row" id="s2-r12"><span class="rname">Atlanta</span><span class="rnum">164</span></div>
+          <div class="row" id="s2-r13"><span class="rname">Seattle</span><span class="rnum">132</span></div>
+          <div class="row" id="s2-r14"><span class="rname">Boston</span><span class="rnum">125</span></div>
+          <div class="row" id="s2-r15"><span class="rname">San Diego</span><span class="rnum">88</span></div>
+          <div class="row" id="s2-r16"><span class="rname">Austin</span><span class="rnum">27</span></div>
+        </div>
+      </div>
+
+      <!-- ======================= 03 · PROVENANCE ======================= -->
+      <div id="s3" class="scene clip inv" data-start="19" data-duration="3.6" data-track-index="0">
+        <div class="pnl" id="s3-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">where it comes from</span></div>
+        <div class="disp pstat" id="s3-n">1,344</div>
+        <div class="disp pline" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="s3-l1">venues.</span></span>
+          <span class="tl"><span class="tc" id="s3-l2">every listing links</span></span>
+          <span class="tl"><span class="tc" id="s3-l3">back to the venue&rsquo;s</span></span>
+          <span class="tl"><span class="tc" id="s3-l4">own page.</span></span>
+        </div>
+      </div>
+
+      <!-- ======================= 04 · CTA ======================= -->
+      <div id="s4" class="scene clip inv" data-start="22.6" data-duration="5.4" data-track-index="0">
+        <div class="pnl" id="s4-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">free to use</span></div>
+        <div class="disp ctakick" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="s4-k1">pick your city.</span></span>
+          <span class="tl"><span class="tc" id="s4-k2">plan the weekend.</span></span>
+        </div>
+        <div class="ctamark" id="s4-mark"><i></i>famhop</div>
+        <div class="slabwrap ctaurl" id="s4-urlwrap">
+          <span class="slab" id="s4-url"></span>
+          <span class="ctaurltx" id="s4-urltx">famhop.com</span>
+        </div>
+      </div>
+
+      <!-- ============================ AUDIO ============================
+        Narration written to fit these windows; every clip is shorter than
+        the beat it sits on. Do not re-time frames from voice length.
+      ================================================================= -->
+      <audio id="vo1" src="assets/voice/01.mp3" data-start="0.2" data-duration="4.37" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo2" src="assets/voice/02.mp3" data-start="5.2" data-duration="2.09" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo3" src="assets/voice/03.mp3" data-start="8.9" data-duration="9.2" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo4" src="assets/voice/04.mp3" data-start="19.2" data-duration="2.51" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo5" src="assets/voice/05.mp3" data-start="22.9" data-duration="3.48" data-track-index="10" data-volume="1"></audio>
+      <audio id="bgm" src="assets/bgm/famhop-underscore.mp3" data-start="0" data-duration="28" data-track-index="11" data-volume="0.14"></audio>
+    </div>
+
+    <script>
+      (function () {
+        var tl = gsap.timeline({ paused: true });
+
+        function comma(n) {
+          var s = String(Math.round(n));
+          var out = '';
+          for (var i = 0; i < s.length; i++) {
+            if (i > 0 && (s.length - i) % 3 === 0) out += ',';
+            out += s[i];
+          }
+          return out;
+        }
+
+        /* ---------------------------------------------------------------
+           00 (0 - 5.0). The count-up is the hook, so it starts 0.24s in
+           and lands in 1.5s - long enough to read as a tally, short
+           enough that the final figure is on screen before a thumb moves.
+           The tween drives a proxy object and writes text on update, so
+           it renders identically at any seek position.
+        --------------------------------------------------------------- */
+        var proxy = { v: 0 };
+        var countEl = document.getElementById('s0-count');
+        tl.fromTo('#s0-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.30, ease: 'power3.out' }, 0);
+        tl.fromTo('#s0-count', { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.32, ease: 'power4.out' }, 0.16);
+        tl.fromTo(proxy, { v: 0 }, {
+          v: 5163, duration: 1.5, ease: 'power2.out', snap: { v: 1 },
+          onUpdate: function () { countEl.textContent = comma(proxy.v); }
+        }, 0.24);
+        tl.fromTo('#s0-u1', { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 1.06);
+        tl.fromTo('#s0-u2', { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 1.20);
+        tl.fromTo('#s0-slab', { scaleX: 0 }, { scaleX: 1, duration: 0.38, ease: 'power3.out' }, 1.60);
+        tl.fromTo('#s0-slabtx', { opacity: 0 }, { opacity: 1, duration: 0.01 }, 1.90);
+        tl.fromTo('#s0-note', { opacity: 0, x: -36 }, { opacity: 1, x: 0, duration: 0.42, ease: 'power3.out' }, 2.10);
+
+        /* ---------------------------------------------------------------
+           01 (5.0 - 8.6). Same figure grammar, inverted ground: the
+           second number reads as a subset of the first because it lands
+           in exactly the same spot.
+        --------------------------------------------------------------- */
+        tl.fromTo('#s1-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.30, ease: 'power3.out' }, 5.0);
+        tl.fromTo('#s1-n', { opacity: 0, y: 60, scale: 0.86 }, { opacity: 1, y: 0, scale: 1, duration: 0.38, ease: 'power4.out' }, 5.14);
+        tl.fromTo('#s1-u1', { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 5.46);
+        tl.fromTo('#s1-hl', { scaleX: 0 }, { scaleX: 1, duration: 0.42, ease: 'power2.out' }, 5.76);
+        tl.fromTo('#s1-hltx', { opacity: 0 }, { opacity: 1, duration: 0.01 }, 6.12);
+        tl.fromTo('#s1-note', { opacity: 0, x: -36 }, { opacity: 1, x: 0, duration: 0.42, ease: 'power3.out' }, 6.40);
+
+        /* ---------------------------------------------------------------
+           02 (8.6 - 19.0). Sixteen rows on a 0.17s stagger fill the
+           ledger in 2.7s, then the frame holds for ~6s so the whole
+           column is legible - this is the beat viewers pause on.
+        --------------------------------------------------------------- */
+        tl.fromTo('#s2-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.30, ease: 'power3.out' }, 8.6);
+        tl.fromTo('#s2-head', { opacity: 0, y: 52 }, { opacity: 1, y: 0, duration: 0.40, ease: 'power4.out' }, 8.74);
+        tl.fromTo('#s2-sub', { opacity: 0, x: -32 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, 8.92);
+        var ROW_AT = 9.12, ROW_STEP = 0.17;
+        for (var r = 1; r <= 16; r++) {
+          tl.fromTo('#s2-r' + r, { opacity: 0, x: -44 }, { opacity: 1, x: 0, duration: 0.34, ease: 'power3.out' }, ROW_AT + (r - 1) * ROW_STEP);
+        }
+
+        /* ---------------------------------------------------------------
+           03 (19.0 - 22.6) provenance, 04 (22.6 - 28.0) the address.
+           The URL slab is the last thing to move; the frame is still on
+           famhop.com for the final 3.2s.
+        --------------------------------------------------------------- */
+        tl.fromTo('#s3-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.30, ease: 'power3.out' }, 19.0);
+        tl.fromTo('#s3-n', { opacity: 0, y: 60, scale: 0.86 }, { opacity: 1, y: 0, scale: 1, duration: 0.38, ease: 'power4.out' }, 19.14);
+        ['#s3-l1', '#s3-l2', '#s3-l3', '#s3-l4'].forEach(function (sel, i) {
+          tl.fromTo(sel, { opacity: 0, y: 42 }, { opacity: 1, y: 0, duration: 0.38, ease: 'expo.out' }, 19.46 + i * 0.13);
+        });
+
+        tl.fromTo('#s4-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.30, ease: 'power3.out' }, 22.6);
+        tl.fromTo('#s4-k1', { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 22.78);
+        tl.fromTo('#s4-k2', { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 22.92);
+        tl.fromTo('#s4-mark', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.44, ease: 'power4.out' }, 23.30);
+        tl.fromTo('#s4-url', { scaleX: 0 }, { scaleX: 1, duration: 0.40, ease: 'power3.out' }, 23.70);
+        tl.fromTo('#s4-urltx', { opacity: 0 }, { opacity: 1, duration: 0.01 }, 24.02);
+
+        window.__timelines = window.__timelines || {};
+        window.__timelines['main'] = tl;
+      })();
+    </script>
+  </body>
+</html>

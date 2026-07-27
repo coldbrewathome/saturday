@@ -1715,3 +1715,24 @@ test("isMarqueeEvent flags searched-ahead event classes, not commodity programmi
   }
   assert.equal(isMarqueeEvent(null), false);
 });
+
+test("extractHtmlEvents never publishes a bare date header as a title (Getty whats-on)", () => {
+  const html = `
+    <article class="event-card">
+      <h3>Aug 1 and 2, 2026</h3>
+      <a href="/event/garden-concerts">Garden Concerts for Kids: family music on the lawn</a>
+      <time datetime="2026-08-01T16:00:00-07:00">Aug 1</time>
+      <p>Free outdoor concert event for kids and families.</p>
+    </article>
+    <article class="event-card">
+      <h3>Saturday, Aug 29, 2026</h3>
+      <time datetime="2026-08-29T15:00:00-07:00">Aug 29</time>
+      <p>Saturday, Aug 29, 2026. Free family event screening, kids welcome.</p>
+    </article>
+  `;
+  const events = extractHtmlEvents(html, source);
+  const titles = events.map((e) => e.title);
+  const dateOnly = /^(?:(?:mon|tues?|wednes|thurs?|fri|satur|sun)day,?\s+)?(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?\s+\d{1,2}(?:\s*(?:and|&|,|through|to|[-–])\s*\d{1,2})*(?:,?\s*20\d{2})?$/i;
+  assert.ok(!titles.some((t) => dateOnly.test(t.trim())), JSON.stringify(titles));
+  assert.ok(titles.includes("Garden Concerts for Kids: family music on the lawn"), JSON.stringify(titles));
+});

@@ -674,12 +674,30 @@ function hasFamilySignal(text) {
   return FAMILY_TERMS.some((term) => lower.includes(term));
 }
 
-function bestTitleFromBlock(block, links, fallbackText) {
-  const heading =
-    block.match(/<h[1-4][^>]*>([\s\S]*?)<\/h[1-4]>/i)?.[1] ||
-    links.find((link) => isEventish(link.text))?.text ||
-    fallbackText.split(/[.|•]/)[0];
-  return stripUnsafeText(heading, 120);
+// Some venue calendars (Getty's whats-on) render bare date headers as
+// headings ("Aug 1 and 2, 2026", "Saturday, Aug 29, 2026"); a title that is
+// nothing but a date is never a real event title.
+const DATE_ONLY_TITLE_RE = new RegExp(
+  "^(?:(?:mon|tues?|wednes|thurs?|fri|satur|sun)day,?\\s+)?" +
+  "(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\\.?\\s+\\d{1,2}" +
+  "(?:\\s*(?:and|&|,|through|to|[-–])\\s*\\d{1,2})*" +
+  "(?:,?\\s*20\\d{2})?$|^\\d{1,2}[/.]\\d{1,2}[/.]\\d{2,4}$",
+  "i",
+);
+
+export function bestTitleFromBlock(block, links, fallbackText) {
+  const candidates = [
+    block.match(/<h[1-4][^>]*>([\s\S]*?)<\/h[1-4]>/i)?.[1],
+    links.find((link) => isEventish(link.text))?.text,
+    fallbackText.split(/[.|•]/)[0],
+  ];
+  for (const candidate of candidates) {
+    if (!candidate) continue;
+    const title = stripUnsafeText(candidate, 120);
+    if (!title || DATE_ONLY_TITLE_RE.test(title.trim())) continue;
+    return title;
+  }
+  return "";
 }
 
 function datetimeFromBlock(block, timezoneOffset = DEFAULT_TIMEZONE_OFFSET) {

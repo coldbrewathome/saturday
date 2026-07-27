@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+
+      @font-face{font-family:'Bricolage Grotesque';src:url('assets/fonts/bricolage-grotesque-400_800.woff2') format('woff2');font-weight:400 800;font-style:normal;font-display:block;}
+      @font-face{font-family:'JetBrains Mono';src:url('assets/fonts/jetbrains-mono-400.woff2') format('woff2');font-weight:100 800;font-style:normal;font-display:block;}
+      @font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/plus-jakarta-sans-400.woff2') format('woff2');font-weight:200 800;font-style:normal;font-display:block;}
+
+      #root{
+        position:relative;width:1080px;height:1920px;overflow:hidden;
+        --cream:#FAF5EB; --ink:#1B1916; --accent:#DD6A1A; --sun:#E8B547; --muted:#4A453F; --mutedi:#C9C2B6;
+        font-family:'Plus Jakarta Sans',sans-serif;color:#1B1916;
+      }
+
+      .scene{position:absolute;inset:0;width:1080px;height:1920px;overflow:hidden;}
+      .pnl{position:absolute;inset:0;background:var(--cream);transform-origin:50% 100%;}
+      .inv .pnl{background:var(--ink);}
+      .inv{color:var(--cream);}
+
+      .mono{font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.10em;text-transform:uppercase;}
+      .disp{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:-.015em;line-height:.94;}
+
+      .chrome{position:absolute;left:72px;right:72px;top:150px;display:flex;justify-content:space-between;align-items:center;font-size:28px;}
+      .chrome .r{color:var(--muted);}
+      .inv .chrome .r{color:var(--mutedi);}
+      .mark{display:inline-flex;align-items:center;gap:14px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:38px;letter-spacing:-.02em;text-transform:lowercase;}
+      .mark i{display:block;width:26px;height:26px;background:var(--accent);border-radius:7px;}
+
+      /* --- stop ------------------------------------------------------------- */
+      .stopno{position:absolute;right:72px;top:296px;font-family:'JetBrains Mono',monospace;font-size:32px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+      .time{position:absolute;left:72px;top:262px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:132px;line-height:.86;letter-spacing:-.035em;color:var(--accent);text-transform:uppercase;}
+      .stitle{position:absolute;left:72px;right:72px;top:470px;font-size:92px;}
+      .tl{display:block;}
+      .tc{display:block;}
+      .rule{position:absolute;left:72px;top:880px;width:936px;height:6px;background:var(--ink);transform-origin:0% 50%;}
+      .venue{position:absolute;left:72px;right:72px;top:934px;font-weight:800;font-size:46px;line-height:1.15;}
+      .boro{position:absolute;left:72px;right:72px;top:1010px;font-family:'JetBrains Mono',monospace;font-size:32px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+      .plus{position:absolute;left:560px;top:1396px;background:var(--sun);border:5px solid var(--ink);border-radius:999px;padding:8px 34px 14px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:62px;text-transform:uppercase;color:var(--ink);letter-spacing:-.01em;}
+
+      /* --- persistent running total ------------------------------------------ */
+      .totlab{position:absolute;left:72px;top:1286px;font-family:'JetBrains Mono',monospace;font-size:30px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+      .tot{position:absolute;left:72px;top:1348px;font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:170px;line-height:1;letter-spacing:-.04em;color:var(--ink);}
+      .totrule{position:absolute;left:72px;top:1262px;width:936px;height:4px;background:rgba(27,25,22,.22);transform-origin:0% 50%;}
+      .foot{position:absolute;left:72px;top:1620px;font-family:'JetBrains Mono',monospace;font-size:30px;letter-spacing:.08em;color:var(--muted);}
+
+      /* --- hook / cta shared -------------------------------------------------- */
+      .hookstack{position:absolute;left:72px;right:72px;top:430px;font-size:100px;}
+      .slabwrap{position:absolute;left:72px;top:1180px;display:inline-block;}
+      .slab{position:absolute;inset:0;background:var(--ink);transform-origin:0% 50%;}
+      .inv .slab{background:var(--sun);}
+      .slabtx{position:relative;display:block;padding:14px 34px 22px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:70px;text-transform:uppercase;letter-spacing:-.01em;color:var(--cream);}
+      .inv .slabtx{color:var(--ink);}
+      .hookdate{position:absolute;left:72px;top:1420px;font-family:'JetBrains Mono',monospace;font-size:38px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+
+      .ctastat{position:absolute;left:72px;right:72px;top:400px;font-size:94px;}
+      .big{color:var(--accent);}
+      .hlwrap{position:relative;display:inline-block;}
+      .hlbar{position:absolute;left:-16px;right:-16px;top:-4px;bottom:4px;background:var(--sun);transform-origin:0% 50%;}
+      .hltx{position:relative;color:var(--ink);}
+      .ctafree{position:absolute;left:72px;top:880px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:76px;text-transform:uppercase;letter-spacing:-.01em;}
+      .ctamark{position:absolute;left:72px;top:1110px;display:inline-flex;align-items:center;gap:24px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:136px;letter-spacing:-.03em;text-transform:lowercase;color:var(--cream);}
+      .ctamark i{display:block;width:66px;height:66px;background:var(--accent);border-radius:16px;}
+      .ctaurl{position:absolute;left:72px;top:1320px;display:inline-block;}
+      .ctaurltx{position:relative;display:block;padding:20px 30px 24px;font-family:"JetBrains Mono",monospace;font-size:34px;letter-spacing:.01em;color:var(--ink);}
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1080" data-height="1920" data-fps="30">
+
+      <!-- ============================ HOOK ============================ -->
+      <div id="s0" class="scene clip" data-start="0" data-duration="3" data-track-index="0">
+        <div class="pnl" id="s0-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">new york city</span></div>
+        <div class="disp hookstack" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="s0-a">one saturday</span></span>
+          <span class="tl"><span class="tc" id="s0-b">in new york city</span></span>
+          <span class="tl"><span class="tc" id="s0-c">with the kids.</span></span>
+        </div>
+        <div class="slabwrap" id="s0-slabwrap"><span class="slab" id="s0-slab"></span><span class="slabtx" id="s0-slabtx">total cost: $0</span></div>
+        <div class="hookdate" id="s0-date">Saturday, August 1</div>
+      </div>
+
+      <!-- ============================ STOPS ============================ -->
+      <div id="p1" class="scene clip" data-start="3" data-duration="3.6" data-track-index="0">
+        <div class="pnl" id="p1-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">$0 saturday</span></div>
+        <div class="time" id="p1-time">8:00 am</div>
+        <div class="stopno" id="p1-no">Stop 01 / 06</div>
+        <div class="disp stitle" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="p1-t1">greenmarket at</span></span>
+          <span class="tl"><span class="tc" id="p1-t2">grand army plaza</span></span>
+        </div>
+        <div class="rule" id="p1-rule"></div>
+        <div class="venue" id="p1-v">Prospect Park</div>
+        <div class="boro" id="p1-b">Brooklyn</div>
+        <div class="plus" id="p1-plus">+ $0</div>
+      </div>
+
+      <div id="p2" class="scene clip" data-start="6.6" data-duration="3.6" data-track-index="0">
+        <div class="pnl" id="p2-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">$0 saturday</span></div>
+        <div class="time" id="p2-time">10:00 am</div>
+        <div class="stopno" id="p2-no">Stop 02 / 06</div>
+        <div class="disp stitle" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="p2-t1">nature</span></span>
+          <span class="tl"><span class="tc" id="p2-t2">exploration</span></span>
+        </div>
+        <div class="rule" id="p2-rule"></div>
+        <div class="venue" id="p2-v">Prospect Park</div>
+        <div class="boro" id="p2-b">Brooklyn</div>
+        <div class="plus" id="p2-plus">+ $0</div>
+      </div>
+
+      <div id="p3" class="scene clip" data-start="10.2" data-duration="3.6" data-track-index="0">
+        <div class="pnl" id="p3-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">$0 saturday</span></div>
+        <div class="time" id="p3-time">12:00 pm</div>
+        <div class="stopno" id="p3-no">Stop 03 / 06</div>
+        <div class="disp stitle" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="p3-t1">pop-up</span></span>
+          <span class="tl"><span class="tc" id="p3-t2">audubon ii</span></span>
+        </div>
+        <div class="rule" id="p3-rule"></div>
+        <div class="venue" id="p3-v">Prospect Park</div>
+        <div class="boro" id="p3-b">Brooklyn</div>
+        <div class="plus" id="p3-plus">+ $0</div>
+      </div>
+
+      <div id="p4" class="scene clip" data-start="13.8" data-duration="3.6" data-track-index="0">
+        <div class="pnl" id="p4-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">$0 saturday</span></div>
+        <div class="time" id="p4-time">1:00 pm</div>
+        <div class="stopno" id="p4-no">Stop 04 / 06</div>
+        <div class="disp stitle" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="p4-t1">park open</span></span>
+          <span class="tl"><span class="tc" id="p4-t2">studio</span></span>
+        </div>
+        <div class="rule" id="p4-rule"></div>
+        <div class="venue" id="p4-v">Washington Square Park</div>
+        <div class="boro" id="p4-b">Manhattan</div>
+        <div class="plus" id="p4-plus">+ $0</div>
+      </div>
+
+      <div id="p5" class="scene clip" data-start="17.4" data-duration="3.6" data-track-index="0">
+        <div class="pnl" id="p5-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">$0 saturday</span></div>
+        <div class="time" id="p5-time">3:00 pm</div>
+        <div class="stopno" id="p5-no">Stop 05 / 06</div>
+        <div class="disp stitle" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="p5-t1">summer on</span></span>
+          <span class="tl"><span class="tc" id="p5-t2">the hudson:</span></span>
+          <span class="tl"><span class="tc" id="p5-t3">story hour</span></span>
+        </div>
+        <div class="rule" id="p5-rule"></div>
+        <div class="venue" id="p5-v">Riverside Park, W 102nd Street</div>
+        <div class="boro" id="p5-b">Manhattan</div>
+        <div class="plus" id="p5-plus">+ $0</div>
+      </div>
+
+      <div id="p6" class="scene clip" data-start="21" data-duration="3.6" data-track-index="0">
+        <div class="pnl" id="p6-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">$0 saturday</span></div>
+        <div class="time" id="p6-time">8:00 pm</div>
+        <div class="stopno" id="p6-no">Stop 06 / 06</div>
+        <div class="disp stitle" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="p6-t1">movie night:</span></span>
+          <span class="tl"><span class="tc" id="p6-t2">zootopia 2</span></span>
+        </div>
+        <div class="rule" id="p6-rule"></div>
+        <div class="venue" id="p6-v">Randall&rsquo;s Island Park</div>
+        <div class="boro" id="p6-b">Manhattan</div>
+        <div class="plus" id="p6-plus">+ $0</div>
+      </div>
+
+      <!-- ================ PERSISTENT RUNNING TOTAL (over the stops) ============ -->
+      <div id="tot" class="scene clip" data-start="3" data-duration="21.6" data-track-index="2">
+        <div class="totrule" id="tot-rule"></div>
+        <div class="totlab" id="tot-lab">Running total</div>
+        <div class="tot" id="tot-val">$0</div>
+        <div class="foot">famhop.com/new-york-city/this-weekend</div>
+      </div>
+
+      <!-- ============================ CTA ============================ -->
+      <div id="cta" class="scene clip inv" data-start="24.6" data-duration="5.4" data-track-index="0">
+        <div class="pnl" id="cta-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">16 metros &middot; free</span></div>
+        <div class="disp ctastat" data-layout-allow-overlap>
+          <span class="tl"><span class="tc big" id="cta-n">483</span></span>
+          <span class="tl"><span class="tc" id="cta-l2">nyc family events</span></span>
+          <span class="tl"><span class="tc" id="cta-l3">next week</span></span>
+        </div>
+        <div class="ctafree">
+          <span class="hlwrap"><span class="hlbar" id="cta-hl"></span><span class="hltx" id="cta-hltx">467 of them free</span></span>
+        </div>
+        <div class="ctamark" id="cta-mark"><i></i>famhop</div>
+        <div class="slabwrap ctaurl" id="cta-urlwrap">
+          <span class="slab" id="cta-url"></span>
+          <span class="ctaurltx" id="cta-urltx">famhop.com/new-york-city/this-weekend</span>
+        </div>
+      </div>
+
+      <!-- ============================ AUDIO ============================
+        Narration written to fit these windows; every clip is shorter than
+        the beat it sits on. Do not re-time frames from voice length.
+      ================================================================= -->
+      <audio id="vo1" src="assets/voice/01.mp3" data-start="0.1" data-duration="2.69" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo2" src="assets/voice/02.mp3" data-start="3.2" data-duration="2.28" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo3" src="assets/voice/03.mp3" data-start="6.8" data-duration="2.55" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo4" src="assets/voice/04.mp3" data-start="13.9" data-duration="2.55" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo5" src="assets/voice/05.mp3" data-start="17.5" data-duration="2.18" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo6" src="assets/voice/06.mp3" data-start="21.1" data-duration="2.69" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo7" src="assets/voice/07.mp3" data-start="24.9" data-duration="3.99" data-track-index="10" data-volume="1"></audio>
+      <audio id="bgm" src="assets/bgm/famhop-underscore.mp3" data-start="0" data-duration="30" data-track-index="11" data-volume="0.14"></audio>
+    </div>
+
+    <script>
+      (function () {
+        var tl = gsap.timeline({ paused: true });
+
+        /* ---------------------------------------------------------------
+           HOOK (0 - 3.0). Three lines, then the ink slab states the price
+           up front - the promise the next 21s has to keep.
+        --------------------------------------------------------------- */
+        tl.fromTo('#s0-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.32, ease: 'power3.out' }, 0);
+        [['#s0-a', 0.16], ['#s0-b', 0.30], ['#s0-c', 0.44]].forEach(function (p) {
+          tl.fromTo(p[0], { opacity: 0, y: 48 }, { opacity: 1, y: 0, duration: 0.42, ease: 'expo.out' }, p[1]);
+        });
+        tl.fromTo('#s0-slab', { scaleX: 0 }, { scaleX: 1, duration: 0.40, ease: 'power3.out' }, 0.92);
+        tl.fromTo('#s0-slabtx', { opacity: 0 }, { opacity: 1, duration: 0.01 }, 1.24);
+        tl.fromTo('#s0-date', { opacity: 0, x: -36 }, { opacity: 1, x: 0, duration: 0.42, ease: 'power3.out' }, 1.46);
+
+        /* ---------------------------------------------------------------
+           THE RUNNING TOTAL (3.0 - 24.6) lives on its own track above the
+           stops and never re-animates. That is the joke: six stops land on
+           top of it and the figure never moves off $0.
+        --------------------------------------------------------------- */
+        tl.fromTo('#tot-rule', { scaleX: 0 }, { scaleX: 1, duration: 0.42, ease: 'power3.out' }, 3.10);
+        tl.fromTo('#tot-lab', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.34, ease: 'power3.out' }, 3.30);
+        tl.fromTo('#tot-val', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.40, ease: 'power4.out' }, 3.44);
+
+        /* ---------------------------------------------------------------
+           STOPS (3.0 - 24.6). One beat map replayed six times: clock time
+           first (it is the spine), then the title, then where. The "+ $0"
+           chip pops last, next to the total it fails to change.
+        --------------------------------------------------------------- */
+        var STOPS = [
+          { at: 3.0,  id: 'p1', chunks: 2 },
+          { at: 6.6,  id: 'p2', chunks: 2 },
+          { at: 10.2, id: 'p3', chunks: 2 },
+          { at: 13.8, id: 'p4', chunks: 2 },
+          { at: 17.4, id: 'p5', chunks: 3 },
+          { at: 21.0, id: 'p6', chunks: 2 }
+        ];
+
+        STOPS.forEach(function (s) {
+          var t = s.at;
+          var p = '#' + s.id;
+          tl.fromTo(p + '-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.28, ease: 'power3.out' }, t);
+          tl.fromTo(p + '-time', { opacity: 0, y: 56, scale: 0.84 }, { opacity: 1, y: 0, scale: 1, duration: 0.30, ease: 'power4.out' }, t + 0.12);
+          tl.fromTo(p + '-no', { opacity: 0, x: 36 }, { opacity: 1, x: 0, duration: 0.32, ease: 'power3.out' }, t + 0.22);
+          for (var i = 0; i < s.chunks; i++) {
+            tl.fromTo(p + '-t' + (i + 1), { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.42, ease: 'expo.out' }, t + 0.34 + i * 0.13);
+          }
+          tl.fromTo(p + '-rule', { scaleX: 0 }, { scaleX: 1, duration: 0.40, ease: 'power3.out' }, t + 0.78);
+          tl.fromTo(p + '-v', { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, t + 0.90);
+          tl.fromTo(p + '-b', { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, t + 1.00);
+          tl.fromTo(p + '-plus', { opacity: 0, scale: 0.6, y: 26 }, { opacity: 1, scale: 1, y: 0, duration: 0.36, ease: 'back.out(2.6)' }, t + 1.30);
+        });
+
+        /* ---------------------------------------------------------------
+           CTA (24.6 - 30.0). Same closing grammar as the sibling shorts so
+           the three cuts read as one channel.
+        --------------------------------------------------------------- */
+        var T = 24.6;
+        tl.fromTo('#cta-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.34, ease: 'power3.out' }, T);
+        tl.fromTo('#cta-n', { opacity: 0, y: 70, scale: 0.80 }, { opacity: 1, y: 0, scale: 1, duration: 0.40, ease: 'power4.out' }, T + 0.16);
+        tl.fromTo('#cta-l2', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, T + 0.44);
+        tl.fromTo('#cta-l3', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, T + 0.58);
+        tl.fromTo('#cta-hl', { scaleX: 0 }, { scaleX: 1, duration: 0.44, ease: 'power2.out' }, T + 0.86);
+        tl.fromTo('#cta-hltx', { opacity: 0 }, { opacity: 1, duration: 0.01 }, T + 1.24);
+        tl.fromTo('#cta-mark', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.42, ease: 'power4.out' }, T + 1.40);
+        tl.fromTo('#cta-url', { scaleX: 0 }, { scaleX: 1, duration: 0.40, ease: 'power3.out' }, T + 1.68);
+        tl.fromTo('#cta-urltx', { opacity: 0 }, { opacity: 1, duration: 0.01 }, T + 2.00);
+
+        window.__timelines = window.__timelines || {};
+        window.__timelines['main'] = tl;
+      })();
+    </script>
+  </body>
+</html>

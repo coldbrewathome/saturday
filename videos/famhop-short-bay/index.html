@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+
+      @font-face{font-family:'Bricolage Grotesque';src:url('assets/fonts/bricolage-grotesque-400_800.woff2') format('woff2');font-weight:400 800;font-style:normal;font-display:block;}
+      @font-face{font-family:'JetBrains Mono';src:url('assets/fonts/jetbrains-mono-400.woff2') format('woff2');font-weight:100 800;font-style:normal;font-display:block;}
+      @font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/plus-jakarta-sans-400.woff2') format('woff2');font-weight:200 800;font-style:normal;font-display:block;}
+
+      #root{
+        position:relative;width:1080px;height:1920px;overflow:hidden;
+        --cream:#FAF5EB; --ink:#1B1916; --accent:#DD6A1A; --sun:#E8B547; --muted:#4A453F; --mutedi:#C9C2B6;
+        font-family:'Plus Jakarta Sans',sans-serif;color:#1B1916;
+      }
+
+      .scene{position:absolute;inset:0;width:1080px;height:1920px;overflow:hidden;}
+      .pnl{position:absolute;inset:0;background:var(--cream);transform-origin:50% 100%;}
+      .inv .pnl{background:var(--ink);}
+      .inv{color:var(--cream);}
+
+      .mono{font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.10em;text-transform:uppercase;}
+      .disp{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:-.015em;line-height:.94;}
+
+      /* --- top chrome --------------------------------------------------- */
+      .chrome{position:absolute;left:72px;right:72px;top:150px;display:flex;justify-content:space-between;align-items:center;font-size:28px;}
+      .chrome .r{color:var(--muted);}
+      .inv .chrome .r{color:var(--mutedi);}
+      .mark{display:inline-flex;align-items:center;gap:14px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:38px;letter-spacing:-.02em;text-transform:lowercase;}
+      .mark i{display:block;width:26px;height:26px;background:var(--accent);border-radius:7px;}
+
+      /* --- event card ----------------------------------------------------- */
+      .num{position:absolute;left:72px;top:250px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:180px;line-height:.8;color:var(--accent);letter-spacing:-.04em;}
+      .tag{position:absolute;right:72px;top:280px;display:flex;align-items:center;gap:20px;}
+      .pill{background:var(--sun);border:5px solid var(--ink);border-radius:999px;padding:8px 30px 12px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:44px;text-transform:uppercase;color:var(--ink);letter-spacing:-.01em;}
+      .cat{font-family:'JetBrains Mono',monospace;font-size:28px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+      .inv .cat{color:var(--mutedi);}
+
+      .title{position:absolute;left:72px;right:72px;top:520px;font-size:104px;}
+      /* Title chunks are block-level on purpose: the display line-height is
+         below 1, and an inline-block under negative leading is pushed out of
+         its own line box, which makes adjacent lines overlap. */
+      .tl{display:block;}
+      .tc{display:block;}
+
+      .rule{position:absolute;left:72px;top:1010px;width:936px;height:6px;background:var(--ink);transform-origin:0% 50%;}
+      .inv .rule{background:var(--cream);}
+
+      .venue{position:absolute;left:72px;right:72px;top:1064px;font-weight:800;font-size:46px;line-height:1.15;}
+      .city{position:absolute;left:72px;right:72px;top:1146px;font-family:'JetBrains Mono',monospace;font-size:32px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+      .inv .city{color:var(--mutedi);}
+
+      .slabwrap{position:absolute;left:72px;top:1250px;display:inline-block;}
+      .slab{position:absolute;inset:0;background:var(--ink);transform-origin:0% 50%;}
+      .inv .slab{background:var(--sun);}
+      .slabtx{position:relative;display:block;padding:14px 34px 22px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:58px;text-transform:uppercase;letter-spacing:-.01em;color:var(--cream);}
+      .inv .slabtx{color:var(--ink);}
+
+      .ticks{position:absolute;left:72px;top:1560px;display:flex;gap:14px;}
+      .tick{width:146px;height:12px;background:rgba(27,25,22,.18);position:relative;overflow:hidden;}
+      .inv .tick{background:rgba(250,245,235,.24);}
+      .tick span{position:absolute;inset:0;background:var(--accent);transform-origin:0% 50%;}
+      .tick.done span{transform:scaleX(1);}
+      .tick.todo span{transform:scaleX(0);}
+
+      .foot{position:absolute;left:72px;top:1626px;font-family:'JetBrains Mono',monospace;font-size:30px;letter-spacing:.08em;color:var(--muted);}
+      .inv .foot{color:var(--mutedi);}
+
+      /* --- hook ------------------------------------------------------------ */
+      .hookstack{position:absolute;left:72px;right:72px;top:440px;}
+      .h1{font-size:212px;line-height:.82;color:var(--accent);}
+      .h2{margin-top:30px;font-size:100px;}
+      .hookslab{position:absolute;left:72px;top:1200px;display:inline-block;}
+      .hookdate{position:absolute;left:72px;top:1440px;font-family:'JetBrains Mono',monospace;font-size:38px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+
+      /* --- cta -------------------------------------------------------------- */
+      .ctastat{position:absolute;left:72px;right:72px;top:400px;font-size:94px;}
+      .big{color:var(--accent);}
+      .hlwrap{position:relative;display:inline-block;}
+      .hlbar{position:absolute;left:-16px;right:-16px;top:-4px;bottom:4px;background:var(--sun);transform-origin:0% 50%;}
+      .hltx{position:relative;color:var(--ink);}
+      .ctafree{position:absolute;left:72px;top:880px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:76px;text-transform:uppercase;letter-spacing:-.01em;}
+      .ctamark{position:absolute;left:72px;top:1110px;display:inline-flex;align-items:center;gap:24px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:136px;letter-spacing:-.03em;text-transform:lowercase;color:var(--cream);}
+      .ctamark i{display:block;width:66px;height:66px;background:var(--accent);border-radius:16px;}
+      .ctaurl{position:absolute;left:72px;top:1320px;display:inline-block;}
+      .ctaurltx{position:relative;display:block;padding:20px 32px 24px;font-family:'JetBrains Mono',monospace;font-size:44px;letter-spacing:.01em;color:var(--ink);}
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1080" data-height="1920" data-fps="30">
+
+      <!-- ============================ 00 · HOOK ============================ -->
+      <div id="s0" class="scene clip" data-start="0" data-duration="3" data-track-index="0">
+        <div class="pnl" id="s0-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">bay area</span></div>
+        <div class="hookstack">
+          <div class="disp h1" id="s0-h1">6 free</div>
+          <div class="disp h2"><span class="tc" id="s0-a">things to do</span></div>
+          <div class="disp h2"><span class="tc" id="s0-b">with the kids</span></div>
+          <div class="disp h2"><span class="tc" id="s0-c">in the bay area</span></div>
+        </div>
+        <div class="hookslab slabwrap" id="s0-slabwrap">
+          <span class="slab" id="s0-slab"></span>
+          <span class="slabtx" id="s0-slabtx">this weekend</span>
+        </div>
+        <div class="hookdate" id="s0-date">Sat Aug 1 &rarr; Sun Aug 2</div>
+      </div>
+
+      <!-- ============================ 01 ============================ -->
+      <div id="c1" class="scene clip" data-start="3" data-duration="3.6" data-track-index="0">
+        <div class="pnl" id="c1-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">bay area</span></div>
+        <div class="disp num" id="c1-num">01</div>
+        <div class="tag" id="c1-tag"><span class="cat">Festival</span><span class="pill">Free</span></div>
+        <div class="disp title" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="c1-t1">52nd annual</span></span>
+          <span class="tl"><span class="tc" id="c1-t2">nihonmachi</span></span>
+          <span class="tl"><span class="tc" id="c1-t3">street fair</span></span>
+        </div>
+        <div class="rule" id="c1-rule"></div>
+        <div class="venue" id="c1-v">Japantown, Post Street</div>
+        <div class="city" id="c1-c">San Francisco</div>
+        <div class="slabwrap" id="c1-slabwrap"><span class="slab" id="c1-slab"></span><span class="slabtx" id="c1-slabtx">Sat + Sun &middot; 11:00 am</span></div>
+        <div class="ticks">
+          <span class="tick"><span id="c1-k"></span></span>
+          <span class="tick todo"><span></span></span>
+          <span class="tick todo"><span></span></span>
+          <span class="tick todo"><span></span></span>
+          <span class="tick todo"><span></span></span>
+          <span class="tick todo"><span></span></span>
+        </div>
+        <div class="foot">famhop.com/bay-area/this-weekend</div>
+      </div>
+
+      <!-- ============================ 02 ============================ -->
+      <div id="c2" class="scene clip inv" data-start="6.6" data-duration="3.6" data-track-index="0">
+        <div class="pnl" id="c2-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">bay area</span></div>
+        <div class="disp num" id="c2-num">02</div>
+        <div class="tag" id="c2-tag"><span class="cat">Festival</span><span class="pill">Free</span></div>
+        <div class="disp title" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="c2-t1">fremont</span></span>
+          <span class="tl"><span class="tc" id="c2-t2">festival</span></span>
+          <span class="tl"><span class="tc" id="c2-t3">of the arts</span></span>
+        </div>
+        <div class="rule" id="c2-rule"></div>
+        <div class="venue" id="c2-v">Downtown Fremont</div>
+        <div class="city" id="c2-c">Fremont</div>
+        <div class="slabwrap" id="c2-slabwrap"><span class="slab" id="c2-slab"></span><span class="slabtx" id="c2-slabtx">Sat + Sun &middot; 10:00 am</span></div>
+        <div class="ticks">
+          <span class="tick done"><span></span></span>
+          <span class="tick"><span id="c2-k"></span></span>
+          <span class="tick todo"><span></span></span>
+          <span class="tick todo"><span></span></span>
+          <span class="tick todo"><span></span></span>
+          <span class="tick todo"><span></span></span>
+        </div>
+        <div class="foot">famhop.com/bay-area/this-weekend</div>
+      </div>
+
+      <!-- ============================ 03 ============================ -->
+      <div id="c3" class="scene clip" data-start="10.2" data-duration="3.6" data-track-index="0">
+        <div class="pnl" id="c3-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">bay area</span></div>
+        <div class="disp num" id="c3-num">03</div>
+        <div class="tag" id="c3-tag"><span class="cat">Museum</span><span class="pill">Free</span></div>
+        <div class="disp title" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="c3-t1">space week</span></span>
+          <span class="tl"><span class="tc" id="c3-t2">festival</span></span>
+        </div>
+        <div class="rule" id="c3-rule"></div>
+        <div class="venue" id="c3-v">Chabot Space &amp; Science Center</div>
+        <div class="city" id="c3-c">Oakland</div>
+        <div class="slabwrap" id="c3-slabwrap"><span class="slab" id="c3-slab"></span><span class="slabtx" id="c3-slabtx">Sat + Sun &middot; 10:00 am</span></div>
+        <div class="ticks">
+          <span class="tick done"><span></span></span>
+          <span class="tick done"><span></span></span>
+          <span class="tick"><span id="c3-k"></span></span>
+          <span class="tick todo"><span></span></span>
+          <span class="tick todo"><span></span></span>
+          <span class="tick todo"><span></span></span>
+        </div>
+        <div class="foot">famhop.com/bay-area/this-weekend</div>
+      </div>
+
+      <!-- ============================ 04 ============================ -->
+      <div id="c4" class="scene clip inv" data-start="13.8" data-duration="3.6" data-track-index="0">
+        <div class="pnl" id="c4-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">bay area</span></div>
+        <div class="disp num" id="c4-num">04</div>
+        <div class="tag" id="c4-tag"><span class="cat">Festival</span><span class="pill">Free</span></div>
+        <div class="disp title" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="c4-t1">watsonville</span></span>
+          <span class="tl"><span class="tc" id="c4-t2">strawberry</span></span>
+          <span class="tl"><span class="tc" id="c4-t3">festival</span></span>
+        </div>
+        <div class="rule" id="c4-rule"></div>
+        <div class="venue" id="c4-v">Historic Downtown Watsonville</div>
+        <div class="city" id="c4-c">Watsonville</div>
+        <div class="slabwrap" id="c4-slabwrap"><span class="slab" id="c4-slab"></span><span class="slabtx" id="c4-slabtx">Sat + Sun &middot; 11:00 am</span></div>
+        <div class="ticks">
+          <span class="tick done"><span></span></span>
+          <span class="tick done"><span></span></span>
+          <span class="tick done"><span></span></span>
+          <span class="tick"><span id="c4-k"></span></span>
+          <span class="tick todo"><span></span></span>
+          <span class="tick todo"><span></span></span>
+        </div>
+        <div class="foot">famhop.com/bay-area/this-weekend</div>
+      </div>
+
+      <!-- ============================ 05 ============================ -->
+      <div id="c5" class="scene clip" data-start="17.4" data-duration="3.6" data-track-index="0">
+        <div class="pnl" id="c5-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">bay area</span></div>
+        <div class="disp num" id="c5-num">05</div>
+        <div class="tag" id="c5-tag"><span class="cat">Live Music</span><span class="pill">Free</span></div>
+        <div class="disp title" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="c5-t1">jerry day</span></span>
+          <span class="tl"><span class="tc" id="c5-t2">2026</span></span>
+        </div>
+        <div class="rule" id="c5-rule"></div>
+        <div class="venue" id="c5-v">Jerry Garcia Amphitheater, McLaren Park</div>
+        <div class="city" id="c5-c">San Francisco</div>
+        <div class="slabwrap" id="c5-slabwrap"><span class="slab" id="c5-slab"></span><span class="slabtx" id="c5-slabtx">Sat &middot; 11:30 am</span></div>
+        <div class="ticks">
+          <span class="tick done"><span></span></span>
+          <span class="tick done"><span></span></span>
+          <span class="tick done"><span></span></span>
+          <span class="tick done"><span></span></span>
+          <span class="tick"><span id="c5-k"></span></span>
+          <span class="tick todo"><span></span></span>
+        </div>
+        <div class="foot">famhop.com/bay-area/this-weekend</div>
+      </div>
+
+      <!-- ============================ 06 ============================ -->
+      <div id="c6" class="scene clip inv" data-start="21" data-duration="3.6" data-track-index="0">
+        <div class="pnl" id="c6-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">bay area</span></div>
+        <div class="disp num" id="c6-num">06</div>
+        <div class="tag" id="c6-tag"><span class="cat">Festival</span><span class="pill">Free</span></div>
+        <div class="disp title" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="c6-t1">color</span></span>
+          <span class="tl"><span class="tc" id="c6-t2">your mind</span></span>
+        </div>
+        <div class="rule" id="c6-rule"></div>
+        <div class="venue" id="c6-v">Yerba Buena Gardens</div>
+        <div class="city" id="c6-c">San Francisco</div>
+        <div class="slabwrap" id="c6-slabwrap"><span class="slab" id="c6-slab"></span><span class="slabtx" id="c6-slabtx">Sun &middot; 12:00 pm</span></div>
+        <div class="ticks">
+          <span class="tick done"><span></span></span>
+          <span class="tick done"><span></span></span>
+          <span class="tick done"><span></span></span>
+          <span class="tick done"><span></span></span>
+          <span class="tick done"><span></span></span>
+          <span class="tick"><span id="c6-k"></span></span>
+        </div>
+        <div class="foot">famhop.com/bay-area/this-weekend</div>
+      </div>
+
+      <!-- ============================ CTA ============================ -->
+      <div id="cta" class="scene clip inv" data-start="24.6" data-duration="5.4" data-track-index="0">
+        <div class="pnl" id="cta-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">16 metros &middot; free</span></div>
+        <div class="disp ctastat" data-layout-allow-overlap>
+          <span class="tl"><span class="tc big" id="cta-n">895</span></span>
+          <span class="tl"><span class="tc" id="cta-l2">bay area family</span></span>
+          <span class="tl"><span class="tc" id="cta-l3">events next week</span></span>
+        </div>
+        <div class="ctafree">
+          <span class="hlwrap"><span class="hlbar" id="cta-hl"></span><span class="hltx" id="cta-hltx">435 of them free</span></span>
+        </div>
+        <div class="ctamark" id="cta-mark"><i></i>famhop</div>
+        <div class="slabwrap ctaurl" id="cta-urlwrap">
+          <span class="slab" id="cta-url"></span>
+          <span class="ctaurltx" id="cta-urltx">famhop.com/bay-area/this-weekend</span>
+        </div>
+      </div>
+
+      <!-- ============================ AUDIO ============================
+        Narration was written to fit these windows, not the other way round -
+        every clip is shorter than the beat it sits on. Do not re-time the
+        frames from measured voice length; the frames came first.
+      ================================================================= -->
+      <audio id="vo1" src="assets/voice/01.mp3" data-start="0.1" data-duration="1.91" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo2" src="assets/voice/02.mp3" data-start="3.2" data-duration="3.21" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo3" src="assets/voice/03.mp3" data-start="10.4" data-duration="2.88" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo4" src="assets/voice/04.mp3" data-start="17.6" data-duration="3.02" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo5" src="assets/voice/05.mp3" data-start="24.9" data-duration="4.65" data-track-index="10" data-volume="1"></audio>
+      <audio id="bgm" src="assets/bgm/famhop-underscore.mp3" data-start="0" data-duration="30" data-track-index="11" data-volume="0.14"></audio>
+    </div>
+
+    <script>
+      (function () {
+        var tl = gsap.timeline({ paused: true });
+
+        /* ---------------------------------------------------------------
+           HOOK (0 - 3.0). The ground wipes up, the oversized "6 FREE"
+           pops, three lines waterfall from below, then the ink slab
+           sweeps left-to-right under them.
+        --------------------------------------------------------------- */
+        tl.fromTo('#s0-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.34, ease: 'power3.out' }, 0);
+        tl.fromTo('#s0-h1', { opacity: 0, y: 70, scale: 0.86 }, { opacity: 1, y: 0, scale: 1, duration: 0.42, ease: 'power4.out' }, 0.16);
+        [['#s0-a', 0.52], ['#s0-b', 0.66], ['#s0-c', 0.80]].forEach(function (p) {
+          tl.fromTo(p[0], { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, p[1]);
+        });
+        tl.fromTo('#s0-slab', { scaleX: 0 }, { scaleX: 1, duration: 0.38, ease: 'power3.out' }, 1.10);
+        tl.fromTo('#s0-slabtx', { opacity: 0 }, { opacity: 1, duration: 0.01 }, 1.40);
+        tl.fromTo('#s0-date', { opacity: 0, x: -36 }, { opacity: 1, x: 0, duration: 0.44, ease: 'power3.out' }, 1.56);
+
+        /* ---------------------------------------------------------------
+           CARDS (3.0 - 24.6). Six identical beat maps, one per event.
+           The offsets are authored once and replayed at each card's start
+           so the rhythm is literally the same card to card - that
+           repetition is what makes a list Short readable at scroll speed.
+        --------------------------------------------------------------- */
+        var CARDS = [
+          { at: 3.0,  id: 'c1', chunks: 3 },
+          { at: 6.6,  id: 'c2', chunks: 3 },
+          { at: 10.2, id: 'c3', chunks: 2 },
+          { at: 13.8, id: 'c4', chunks: 3 },
+          { at: 17.4, id: 'c5', chunks: 2 },
+          { at: 21.0, id: 'c6', chunks: 2 }
+        ];
+        var CHUNK_STEP = 0.13;
+
+        CARDS.forEach(function (c) {
+          var t = c.at;
+          var p = '#' + c.id;
+          tl.fromTo(p + '-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.30, ease: 'power3.out' }, t);
+          tl.fromTo(p + '-num', { opacity: 0, y: 64, scale: 0.78 }, { opacity: 1, y: 0, scale: 1, duration: 0.26, ease: 'power4.out' }, t + 0.14);
+          tl.fromTo(p + '-tag', { opacity: 0, scale: 0.72 }, { opacity: 1, scale: 1, duration: 0.30, ease: 'back.out(2.2)' }, t + 0.22);
+          for (var i = 0; i < c.chunks; i++) {
+            tl.fromTo(p + '-t' + (i + 1), { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.42, ease: 'expo.out' }, t + 0.32 + i * CHUNK_STEP);
+          }
+          tl.fromTo(p + '-rule', { scaleX: 0 }, { scaleX: 1, duration: 0.40, ease: 'power3.out' }, t + 0.80);
+          tl.fromTo(p + '-v', { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, t + 0.92);
+          tl.fromTo(p + '-c', { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, t + 1.02);
+          tl.fromTo(p + '-slab', { scaleX: 0 }, { scaleX: 1, duration: 0.34, ease: 'power3.out' }, t + 1.18);
+          tl.fromTo(p + '-slabtx', { opacity: 0 }, { opacity: 1, duration: 0.01 }, t + 1.46);
+          /* the live tick fills across the card's own dwell, so the row of
+             ticks doubles as a progress bar for the whole list */
+          tl.fromTo(p + '-k', { scaleX: 0 }, { scaleX: 1, duration: 3.2, ease: 'none' }, t + 0.3);
+        });
+
+        /* ---------------------------------------------------------------
+           CTA (24.6 - 30.0). The count is the payoff, the marker bar
+           lands under "free", and the URL slab moves last so the frame
+           holds still on the address for the final 3.4s.
+        --------------------------------------------------------------- */
+        var T = 24.6;
+        tl.fromTo('#cta-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.34, ease: 'power3.out' }, T);
+        tl.fromTo('#cta-n', { opacity: 0, y: 70, scale: 0.80 }, { opacity: 1, y: 0, scale: 1, duration: 0.40, ease: 'power4.out' }, T + 0.16);
+        tl.fromTo('#cta-l2', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, T + 0.44);
+        tl.fromTo('#cta-l3', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, T + 0.58);
+        tl.fromTo('#cta-hl', { scaleX: 0 }, { scaleX: 1, duration: 0.44, ease: 'power2.out' }, T + 0.86);
+        tl.fromTo('#cta-hltx', { opacity: 0 }, { opacity: 1, duration: 0.01 }, T + 1.24);
+        tl.fromTo('#cta-mark', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.42, ease: 'power4.out' }, T + 1.40);
+        tl.fromTo('#cta-url', { scaleX: 0 }, { scaleX: 1, duration: 0.40, ease: 'power3.out' }, T + 1.68);
+        tl.fromTo('#cta-urltx', { opacity: 0 }, { opacity: 1, duration: 0.01 }, T + 2.00);
+
+        window.__timelines = window.__timelines || {};
+        window.__timelines['main'] = tl;
+      })();
+    </script>
+  </body>
+</html>
