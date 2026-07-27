@@ -59,7 +59,13 @@ function normalizeProposal(raw, metro) {
   if (nested) {
     p.requiredText = nested.requiredText || raw.requiredText;
     p.url = raw.url || nested.url;
+    // Agents put the SOURCE id (ending -src) at the top level; raw spreads
+    // over nested, so the event config would inherit it and the written
+    // source id would become "...-src-src" with "-src" leaking into event
+    // page slugs. The nested entry's own id is the event id.
+    if (nested.id) p.id = nested.id;
   }
+  if (typeof p.id === "string" && p.id.endsWith("-src")) p.id = p.id.slice(0, -4);
   const date = (p.date || String(nested?.startDateTime || "").slice(0, 10) || "").slice(0, 10);
   const endDate = (p.endDate || String(nested?.endDateTime || "").slice(0, 10) || date).slice(0, 10);
   const tz = TZ[metro] || "-07:00";
