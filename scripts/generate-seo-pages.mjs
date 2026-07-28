@@ -3743,16 +3743,22 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
   // refreshed weekly. Surface our top headliners into the title/description;
   // the H1 stays query-shaped.
   const headliners = pickWeekendHeadliners(upcoming, lookup);
+  // Only genuinely marquee events may lend their NAME to the title/intro —
+  // a storytime or trivia night in the title reads amateur next to the
+  // generic fallback ("Hummingbird Trivia & more..." shipped 2026-07-27).
+  const nameworthy = (e) => isMarqueeEvent(e) || headlinerScore(e) >= 6.5;
+  const cleanEventName = (e) => (e.title || "").split(/[—:|·(]/)[0].split(" - ")[0].trim();
   const headlineNames = IS_ADULTS ? [] : headliners
-    .map((e) => (e.title || "").split(/[—:|·(]/)[0].trim())
+    .filter(nameworthy)
+    .map(cleanEventName)
     .filter((n) => n.length >= 8 && n.length <= 42 && n.includes(" "))
     .slice(0, 2);
   const title = IS_ADULTS
     ? `${guideH1} | ${BRAND}`
-    : headlineNames.length >= 2
+    : headlineNames.length >= 1
       ? `${headlineNames.join(", ")} & more: ${guideH1} (${rangeLabel}) | ${BRAND}`
       : `${guideH1} (${rangeLabel}) | ${BRAND}`;
-  const picksPhrase = headlineNames.length >= 2
+  const picksPhrase = headlineNames.length >= 1
     ? `This weekend's top picks: ${headlineNames.join(" and ")}. `
     : "";
   const description = `${picksPhrase}A timeline weekend guide to ${IS_ADULTS ? "things to do" : "family-friendly events"} in ${metroLabel()} from ${weekendLabel} through ${sundayLabel}: ${upcoming.length} events with times, venues, details, and official links. Build a 3-stop plan with ${BRAND}.`.slice(
@@ -3803,15 +3809,15 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
   // torn down 2026-07-27): a short conversational paragraph naming this
   // weekend's marquee events with their day and city, ahead of the stats.
   const tzIntro = activeMetro.timezone || "America/Los_Angeles";
-  const introPicks = IS_ADULTS ? [] : headliners.map((e) => {
-    const name = (e.title || "").split(/[—:|·(]/)[0].trim();
+  const introPicks = IS_ADULTS ? [] : headliners.filter(nameworthy).map((e) => {
+    const name = cleanEventName(e);
     const day = e.startDateTime
       ? new Date(e.startDateTime).toLocaleDateString("en-US", { weekday: "long", timeZone: tzIntro })
       : "";
     const where = e.city || e.neighborhood || "";
     return { name, day, where, slug: lookup.get(e) };
   }).filter((p) => p.slug && p.name.length >= 8 && p.name.length <= 60 && p.name.includes(" ")).slice(0, 4);
-  const introHtml = introPicks.length >= 2
+  const introHtml = introPicks.length >= 1
     ? `<p class="wg-intro">The weekend of ${esc(rangeLabel)} brings ${introPicks.slice(0, 2).map((p) =>
         `<a href="${metroPath(`event/${p.slug}/`)}">${esc(p.name)}</a>${p.where ? ` in ${esc(p.where)}` : ""}${p.day ? ` (${esc(p.day)})` : ""}`,
       ).join(" and ")}${introPicks.length > 2 ? `, plus ${introPicks.slice(2).map((p) =>
@@ -3945,7 +3951,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
       { name: BRAND, url: metroUrl("") },
       { name: "Weekend guide", url: canonical },
     ],
-    h1: headlineNames.length >= 2 ? `${headlineNames.join(", ")} & more: ${guideH1}` : guideH1,
+    h1: headlineNames.length >= 1 ? `${headlineNames.join(", ")} & more: ${guideH1}` : guideH1,
     eyebrow: metroTag(),
     body,
     hreflangLinks,
