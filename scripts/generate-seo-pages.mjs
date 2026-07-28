@@ -654,6 +654,16 @@ a:hover{text-decoration:underline}
 .timeline-official{font-size:11.5px;font-weight:700;color:var(--muted);text-decoration:none;white-space:nowrap;}
 .timeline-official:hover{color:var(--accent-strong);}
 .event-chip{display:inline-block;background:var(--chip-bg);border:1px solid var(--chip-border);border-radius:999px;color:var(--chip-ink);font-size:11px;font-weight:900;letter-spacing:.07em;padding:3px 8px;text-transform:uppercase;}
+/* Share bar + embed-snippet backlink block */
+.wg-share{margin:26px 0;padding:18px;background:var(--surface);border:1px solid var(--line);border-radius:14px;}
+.wg-share h2{margin:0 0 6px;}
+.wg-share-sub{color:var(--muted);font-size:14px;margin:0 0 12px;max-width:62ch;}
+.share-row{display:flex;flex-wrap:wrap;gap:8px;}
+.share-btn{display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface,#fff);border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;cursor:pointer;}
+.share-btn:hover{border-color:var(--accent-strong);color:var(--accent-strong);}
+.share-embed{margin-top:12px;font-size:14px;}
+.share-embed summary{cursor:pointer;font-weight:700;}
+.share-embed textarea{width:100%;font-family:monospace;font-size:12.5px;padding:8px;border:1px solid var(--line);border-radius:8px;margin-top:8px;}
 /* Weekend guide hero + marquee (this-weekend page) */
 .wg-lede{font-size:17px;color:#44403a;max-width:58ch;margin:0 0 14px;}
 .wg-lede b{color:var(--ink);}
@@ -2362,6 +2372,7 @@ function generateAnnualEventPages(distinctEvents, eventSlugLookup, eventSlugs) {
         <div><dt>Where</dt><dd>${esc(entry.venue)}, ${esc(entry.city)}</dd></div>
       </dl>
       ${liveHtml}
+      ${IS_ADULTS ? "" : renderShareBar(canonical, `${entry.title} — ${entry.city} annual guide`, null)}
       <p class="see-also">More <a href="${metroPath("annual/")}">annual events in ${esc(metroLabel())}</a>.</p>
     `;
     const html = renderShell({
@@ -3916,6 +3927,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     ${posterHtml}
     ${lookAheadHtml}
     ${planAheadHtml}
+    ${IS_ADULTS ? "" : renderShareBar(canonical, `${guideH1} (${rangeLabel})`, posterUrl)}
     ${renderNewsletterSignup()}
     <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a 3-stop day with ${BRAND}</a></p>
     ${renderWeekendFilterScript("en")}
@@ -4701,6 +4713,35 @@ function pickWeekendHighlights(events, eventSlugLookup) {
     if (picked.length >= 6) break;
   }
   return picked;
+}
+
+// Share bar + copyable link/embed snippet. The embed textarea is the
+// backlink generator: parent groups, blogs, and newsletters paste a
+// ready-made anchor that links back to the guide's permanent URL.
+function renderShareBar(canonical, shareTitle, posterUrl) {
+  const u = encodeURIComponent(canonical);
+  const t = encodeURIComponent(shareTitle);
+  const embedSnippet = `<a href="${canonical}">${shareTitle} — ${BRAND}</a>`;
+  return `<section class="wg-share" aria-label="Share this guide">
+    <h2>Share this guide</h2>
+    <p class="wg-share-sub">Know a parent group, school newsletter, or local blog that needs weekend plans? Send it along — this page updates every week at the same link.</p>
+    <div class="share-row">
+      <button class="share-btn" data-share-native hidden>Share…</button>
+      <button class="share-btn" data-share-copy data-url="${esc(canonical)}">Copy link</button>
+      <a class="share-btn" rel="noopener nofollow" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=${u}">Facebook</a>
+      <a class="share-btn" rel="noopener nofollow" target="_blank" href="https://twitter.com/intent/tweet?url=${u}&amp;text=${t}">X</a>
+      <a class="share-btn" rel="noopener nofollow" target="_blank" href="https://wa.me/?text=${t}%20${u}">WhatsApp</a>
+      ${posterUrl ? `<a class="share-btn" rel="noopener nofollow" target="_blank" href="https://pinterest.com/pin/create/button/?url=${u}&amp;media=${encodeURIComponent(posterUrl)}&amp;description=${t}">Pinterest</a>` : ""}
+      <a class="share-btn" href="mailto:?subject=${t}&amp;body=${t}%0A${u}">Email</a>
+    </div>
+    <details class="share-embed">
+      <summary>Bloggers &amp; newsletters: copy a ready-made link</summary>
+      <p>Paste this into your site or newsletter (HTML):</p>
+      <textarea readonly rows="2">${esc(embedSnippet)}</textarea>
+      <p>Or plain text: ${esc(shareTitle)} — ${esc(canonical)}</p>
+    </details>
+  </section>
+  <script>(function(){var n=document.querySelector("[data-share-native]");if(n&&navigator.share){n.hidden=false;n.addEventListener("click",function(){navigator.share({title:document.title,url:location.href}).catch(function(){})});}var c=document.querySelector("[data-share-copy]");if(c&&navigator.clipboard){c.addEventListener("click",function(){navigator.clipboard.writeText(c.getAttribute("data-url")).then(function(){c.textContent="Copied!";setTimeout(function(){c.textContent="Copy link"},1500)})});}var ta=document.querySelector(".share-embed textarea");if(ta){ta.addEventListener("click",function(){ta.select()});}})();</script>`;
 }
 
 function renderWeekendDaySection(dayKey, events, eventSlugLookup, locale = "en") {
