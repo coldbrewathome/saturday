@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "honolulu",
-  "generatedAt": "2026-07-27T01:09:47.983Z",
+  "generatedAt": "2026-07-28T02:14:10.753Z",
   "registryPath": "data/event-sources-honolulu.json",
   "outputPath": "public/data/honolulu/events.json",
-  "eventCount": 401,
-  "adultsEventCount": 34,
-  "sourceCount": 16,
-  "liveEventCount": 424,
+  "eventCount": 407,
+  "adultsEventCount": 39,
+  "sourceCount": 18,
+  "liveEventCount": 430,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
   "operatorAlertCount": 6,
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-27T01:09:47.983Z",
+      "fetchedAt": "2026-07-28T02:14:10.753Z",
       "fetches": [
         {
           "url": "https://www.bishopmuseum.org/exhibits-and-programs/events/",
@@ -54,7 +54,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-27T01:09:47.983Z",
+      "fetchedAt": "2026-07-28T02:14:10.753Z",
       "fetches": [
         {
           "url": "https://honolulumuseum.org/events/",
@@ -79,7 +79,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-27T01:09:47.983Z",
+      "fetchedAt": "2026-07-28T02:14:10.753Z",
       "fetches": [
         {
           "url": "https://www.honoluluzoo.org/experiences-events/",
@@ -104,7 +104,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-27T01:09:47.983Z",
+      "fetchedAt": "2026-07-28T02:14:10.753Z",
       "fetches": [
         {
           "url": "https://calendar.google.com/calendar/ical/hawaii.edu_ur7iq68mqshu5q73n79rmb4jrk%40group.calendar.google.com/public/basic.ics",
@@ -129,7 +129,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-27T01:09:47.983Z",
+      "fetchedAt": "2026-07-28T02:14:10.753Z",
       "fetches": [
         {
           "url": "https://www.kualoa.com/activities/",
@@ -154,7 +154,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-27T01:09:47.983Z",
+      "fetchedAt": "2026-07-28T02:14:10.753Z",
       "fetches": [
         {
           "url": "https://www.alohacomedyclub.com/calendar",
@@ -188,9 +188,9 @@
       "metroId": "honolulu",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 396,
+      "liveEvents": 398,
       "fallbackEvents": 0,
-      "eventCount": 396,
+      "eventCount": 398,
       "fetches": [
         {
           "url": "https://www.librarieshawaii.org/events/",
@@ -201,8 +201,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=400; pages=8",
-      "rejectedLiveEvents": 3,
-      "extractedEvents": 399,
+      "rejectedLiveEvents": 2,
+      "extractedEvents": 400,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -472,6 +472,60 @@
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "kcc-farmers-market-2026-08-01-src",
+      "name": "KCC Farmers' Market",
+      "url": "https://hfbf.org/farmers-markets/kcc/",
+      "sourceType": "officialTextEvents",
+      "city": "Honolulu",
+      "metroId": "honolulu",
+      "category": "Market",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://hfbf.org/farmers-markets/kcc/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "duke-kahanamoku-oceanfest-opening-ceremony-2026-08-14-src",
+      "name": "Duke Kahanamoku OceanFest: Opening Ceremony",
+      "url": "https://dukekahanamokuoceanfest.com/events/",
+      "sourceType": "officialTextEvents",
+      "city": "Honolulu",
+      "metroId": "honolulu",
+      "category": "Outdoors",
+      "status": "ok",
+      "liveEvents": 3,
+      "fallbackEvents": 0,
+      "eventCount": 3,
+      "fetches": [
+        {
+          "url": "https://dukekahanamokuoceanfest.com/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 3,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
