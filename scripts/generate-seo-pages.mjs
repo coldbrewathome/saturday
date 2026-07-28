@@ -3798,6 +3798,51 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     .map((c) => `${c.label.toLowerCase()} (${c.count})`)
     .join(", ");
   const ledeHtml = `<b>${upcoming.length} ${A.eventsAdj}events</b> across ${cityCounts.size} ${esc(metroLabel())} cities this weekend — <b>${freeCount} likely free</b>.${topCatPhrase ? ` Biggest clusters: ${esc(topCatPhrase)}.` : ""}`;
+
+  // Editorial intro in the shape the ranking pages use (Mommy Poppins et al.,
+  // torn down 2026-07-27): a short conversational paragraph naming this
+  // weekend's marquee events with their day and city, ahead of the stats.
+  const tzIntro = activeMetro.timezone || "America/Los_Angeles";
+  const introPicks = IS_ADULTS ? [] : headliners.map((e) => {
+    const name = (e.title || "").split(/[—:|·(]/)[0].trim();
+    const day = e.startDateTime
+      ? new Date(e.startDateTime).toLocaleDateString("en-US", { weekday: "long", timeZone: tzIntro })
+      : "";
+    const where = e.city || e.neighborhood || "";
+    return { name, day, where, slug: lookup.get(e) };
+  }).filter((p) => p.slug && p.name.length >= 8 && p.name.length <= 60 && p.name.includes(" ")).slice(0, 4);
+  const introHtml = introPicks.length >= 2
+    ? `<p class="wg-intro">The weekend of ${esc(rangeLabel)} brings ${introPicks.slice(0, 2).map((p) =>
+        `<a href="${metroPath(`event/${p.slug}/`)}">${esc(p.name)}</a>${p.where ? ` in ${esc(p.where)}` : ""}${p.day ? ` (${esc(p.day)})` : ""}`,
+      ).join(" and ")}${introPicks.length > 2 ? `, plus ${introPicks.slice(2).map((p) =>
+        `<a href="${metroPath(`event/${p.slug}/`)}">${esc(p.name)}</a>`,
+      ).join(" and ")}` : ""}. Every listing below comes from the organizer's own calendar, with times, venues, and official links — and the free ones are marked.</p>`
+    : "";
+
+  // Evergreen cross-links: the weekend guide is the most-visited prerendered
+  // page, so let it feed crawl discovery of the metro's annual pages the same
+  // way the hub does (they were "Discovered - crawled never" without links).
+  // Next three months (excluding the mostly-spent current one), soonest first.
+  const monthRank = (() => {
+    const m = now.getMonth();
+    const rank = new Map();
+    for (const k of [1, 2, 3]) {
+      rank.set(new Date(now.getFullYear(), m + k, 1).toLocaleDateString("en-US", { month: "long" }), k);
+    }
+    return rank;
+  })();
+  const annualForMetro = IS_ADULTS ? [] : (ANNUAL_EVENTS[activeMetro.id] || [])
+    .filter((e) => monthRank.has(e.month))
+    .sort((a, b) => monthRank.get(a.month) - monthRank.get(b.month))
+    .slice(0, 6);
+  const planAheadHtml = annualForMetro.length
+    ? `<section class="wg-plan-ahead" aria-label="Plan ahead">
+      <h2>Plan ahead: ${esc(metroLabel())} traditions coming up</h2>
+      <nav class="wg-annual-links">${annualForMetro.map((e) =>
+        `<a href="${metroPath(`annual/${e.slug}/`)}">${esc(e.title)} (${esc(e.month)})</a>`,
+      ).join("\n        ")}</nav>
+    </section>`
+    : "";
   const navHtml = `<nav class="wg-nav" aria-label="Guide sections">
       ${marqueeHtml ? `<a href="#top-picks">Top picks</a>` : ""}
       ${(byDay.get(weekend.saturdayKey) || []).length ? `<a href="#day-sat">Saturday</a>` : ""}
@@ -3808,6 +3853,8 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     </nav>`;
 
   const body = `
+    <p class="wg-updated eyebrow">Updated ${esc(generatedLabel)}</p>
+    ${introHtml}
     <p class="wg-lede">${ledeHtml}</p>
     <div class="wg-stats" aria-label="Weekend snapshot">
       <span class="wg-stat"><b>${upcoming.length}</b> ${A.eventsAdj}events</span>
@@ -3825,6 +3872,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     </section>
     ${editorialBuckets.length ? renderWeekendEditorialBuckets(editorialBuckets) : ""}
     ${posterHtml}
+    ${planAheadHtml}
     ${renderNewsletterSignup()}
     <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a 3-stop day with ${BRAND}</a></p>
     ${renderWeekendFilterScript("en")}
@@ -3897,7 +3945,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
       { name: BRAND, url: metroUrl("") },
       { name: "Weekend guide", url: canonical },
     ],
-    h1: guideH1,
+    h1: headlineNames.length >= 2 ? `${headlineNames.join(", ")} & more: ${guideH1}` : guideH1,
     eyebrow: metroTag(),
     body,
     hreflangLinks,
