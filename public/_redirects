@@ -1,3 +1,10 @@
+# 2026-07-27: consolidate the www duplicate hosts. Both www hostnames serve
+# the full site as 200 and Google indexed www copies (226 impressions on
+# www city pages) despite apex canonicals — a duplicate-content signal the
+# site cannot afford mid quality-reappraisal. Host rules must come first.
+https://www.famhop.com/* https://famhop.com/:splat 301
+https://www.trymosey.com/* https://trymosey.com/:splat 301
+
 # Legacy Bay Area detail URLs that were previously exposed without the
 # metro prefix. Redirect them before the SPA fallback can serve index.html
 # with the root canonical URL.

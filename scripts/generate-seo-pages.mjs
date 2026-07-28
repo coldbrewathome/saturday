@@ -2020,20 +2020,35 @@ function spotContentScore(spot) {
 // app use but carry noindex and leave the sitemap. FAIL OPEN: no keep file →
 // every spot stays indexable — a build must never mass-noindex by accident.
 // Kids build only; Mosey is parked and untouched.
-const SPOT_INDEX_KEEP = (() => {
+function loadIndexKeep(filename) {
   if (IS_ADULTS) return null;
   try {
-    const parsed = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "spot-index-keep.json"), "utf8"));
+    const parsed = JSON.parse(fs.readFileSync(path.join(ROOT, "data", filename), "utf8"));
     const keep = Array.isArray(parsed?.keep) ? parsed.keep.filter(Boolean) : null;
     return keep && keep.length > 0 ? new Set(keep) : null;
   } catch {
     return null;
   }
-})();
+}
+
+const SPOT_INDEX_KEEP = loadIndexKeep("spot-index-keep.json");
+
+// 2026-07-27 city/category curation (same policy gate as the spot prune):
+// 90 days of GSC showed city pages earning 0 clicks across 1,266 URLs and
+// category pages 6 clicks across 899 — together 28% of the sitemap. Pages in
+// the keep files (>=1 click or >=10 impressions) stay indexed; the rest serve
+// 200 with noindex and leave the sitemap. Same fail-open rule: no keep file →
+// everything stays indexable.
+const CITY_INDEX_KEEP = loadIndexKeep("city-index-keep.json");
+const CATEGORY_INDEX_KEEP = loadIndexKeep("category-index-keep.json");
+
+function keepIndexable(keepSet, canonical) {
+  if (!keepSet) return true;
+  return keepSet.has(canonical.replace(SITE, ""));
+}
 
 function spotIsIndexable(canonical) {
-  if (!SPOT_INDEX_KEEP) return true;
-  return SPOT_INDEX_KEEP.has(canonical.replace(SITE, ""));
+  return keepIndexable(SPOT_INDEX_KEEP, canonical);
 }
 
 function generateSpotPages(items, spotSlugLookup, generatedCitySlugs, featuredSpotIds = new Set()) {
@@ -3350,17 +3365,20 @@ function generateCityPages(spotItems, eventItems, spotSlugLookup, eventSlugLooku
       headExtra,
       bodyEnd,
       mainClass,
+      noindex: !keepIndexable(CITY_INDEX_KEEP, canonical),
     });
 
     writeMetroPage(`city/${slug}/index.html`, html);
     slugs.add(slug);
 
-    sitemapEntries.push({
-      loc: canonical,
-      lastmod: trackedLastmod(canonical, html),
-      changefreq: "daily",
-      priority: 0.8,
-    });
+    if (keepIndexable(CITY_INDEX_KEEP, canonical)) {
+      sitemapEntries.push({
+        loc: canonical,
+        lastmod: trackedLastmod(canonical, html),
+        changefreq: "daily",
+        priority: 0.8,
+      });
+    }
   }
   return { slugs, cities };
 }
@@ -3471,17 +3489,20 @@ function generateCategoryPages(spotItems, eventItems, spotSlugLookup, eventSlugL
       h1: pageName,
       eyebrow: metroTag(),
       body,
+      noindex: !keepIndexable(CATEGORY_INDEX_KEEP, canonical),
     });
 
     writeMetroPage(`category/${cat.slug}/index.html`, html);
     slugs.add(cat.slug);
 
-    sitemapEntries.push({
-      loc: canonical,
-      lastmod: trackedLastmod(canonical, html),
-      changefreq: "daily",
-      priority: 0.85,
-    });
+    if (keepIndexable(CATEGORY_INDEX_KEEP, canonical)) {
+      sitemapEntries.push({
+        loc: canonical,
+        lastmod: trackedLastmod(canonical, html),
+        changefreq: "daily",
+        priority: 0.85,
+      });
+    }
   }
   return slugs;
 }
@@ -3596,17 +3617,20 @@ function generateCityCategoryPages(spotItems, eventItems, spotSlugLookup, eventS
         h1: pageName,
         eyebrow: metroTag(),
         body,
+        noindex: !keepIndexable(CITY_INDEX_KEEP, canonical),
       });
 
       writeMetroPage(`city/${citySlug}/category/${cat.slug}/index.html`, html);
       slugs.add(`${citySlug}/category/${cat.slug}`);
 
-      sitemapEntries.push({
-        loc: canonical,
-        lastmod: trackedLastmod(canonical, html),
-        changefreq: "daily",
-        priority: 0.7,
-      });
+      if (keepIndexable(CITY_INDEX_KEEP, canonical)) {
+        sitemapEntries.push({
+          loc: canonical,
+          lastmod: trackedLastmod(canonical, html),
+          changefreq: "daily",
+          priority: 0.7,
+        });
+      }
     }
   }
   return slugs;
@@ -3714,10 +3738,24 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     timeZone: activeMetro.timezone || "America/Los_Angeles",
   });
   const rangeLabel = formatWeekendRange(weekend.saturday, weekend.sunday, activeMetro.timezone);
+  // The pages that own this SERP (Mommy Poppins, New York Family, Bay Area
+  // Kid Fun) all lead the headline with this weekend's NAMED marquee events,
+  // refreshed weekly. Surface our top headliners into the title/description;
+  // the H1 stays query-shaped.
+  const headliners = pickWeekendHeadliners(upcoming, lookup);
+  const headlineNames = IS_ADULTS ? [] : headliners
+    .map((e) => (e.title || "").split(/[—:|·(]/)[0].trim())
+    .filter((n) => n.length >= 8 && n.length <= 42 && n.includes(" "))
+    .slice(0, 2);
   const title = IS_ADULTS
     ? `${guideH1} | ${BRAND}`
-    : `${guideH1} (${rangeLabel}) | ${BRAND}`;
-  const description = `A timeline weekend guide to ${IS_ADULTS ? "things to do" : "family-friendly events"} in ${metroLabel()} from ${weekendLabel} through ${sundayLabel}: ${upcoming.length} events with times, venues, details, and official links. Build a 3-stop plan with ${BRAND}.`.slice(
+    : headlineNames.length >= 2
+      ? `${headlineNames.join(", ")} & more: ${guideH1} (${rangeLabel}) | ${BRAND}`
+      : `${guideH1} (${rangeLabel}) | ${BRAND}`;
+  const picksPhrase = headlineNames.length >= 2
+    ? `This weekend's top picks: ${headlineNames.join(" and ")}. `
+    : "";
+  const description = `${picksPhrase}A timeline weekend guide to ${IS_ADULTS ? "things to do" : "family-friendly events"} in ${metroLabel()} from ${weekendLabel} through ${sundayLabel}: ${upcoming.length} events with times, venues, details, and official links. Build a 3-stop plan with ${BRAND}.`.slice(
     0,
     300,
   );
@@ -3733,7 +3771,6 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
   const cityCounts = countBy(upcoming, (event) => event.city || event.neighborhood || metroLabel());
   const topCategories = topCountLabels(categoryCounts, 4);
   const freeCount = upcoming.filter(eventLikelyFree).length;
-  const headliners = pickWeekendHeadliners(upcoming, lookup);
   const planPresets = buildWeekendPlanPresets(upcoming, lookup);
   const editorialBuckets = buildWeekendEditorialBuckets(upcoming, lookup);
   const daySections = [weekend.saturdayKey, weekend.sundayKey]

@@ -33,3 +33,38 @@ Notes / decisions made autonomously:
 2. Board dropdown does not reliably default to "Weekend with Kids" — it carries over whatever board was used last (session or prior run). Every pin's board was explicitly set via the board picker search rather than relying on the default, to avoid mis-posting to the wrong board.
 3. Posting pace: ~80-90 seconds between each pin's publish and the next pin's upload start, per the "space pins ~2 minutes apart" guidance.
 4. No boards were missing, so board-creation step was skipped entirely.
+
+---
+ADDENDUM — 2026-07-27 evening (scheduled task fired again, same day)
+
+famhop-pinterest-daily ran again this evening (~6:00pm PT). Before generating or
+posting anything, checked pins-queue/2026-07-27.json and found all 33 pins still
+marked "pending" — contradicting the "33/33 posted" claim above. Investigated
+instead of re-posting blindly, since duplicate-posting 33 pins to a live business
+account would be a real problem.
+
+Root cause: the queue file was never re-saved with "posted" status after the
+2026-07-26 posting run — a bookkeeping gap in that run, not a posting failure.
+
+Verified against live Pinterest (pinterest.com/hopwithfamhop/_saved/): every
+board's pin count matches this summary's claimed deltas exactly — Weekend with
+Kids = 66 (matches 53→66), All Pins = 110 (matches "expected 110"), Washington DC
+= 3, DFW = 2, Honolulu & Oahu = 2, Philly = 2, etc. Every board's most recent pin
+showed a "23h"/"1d" freshness badge — consistent with one posting run last night
+and nothing since. All 17 required boards still exist; none were missing.
+
+Conclusion: the 33 pins are genuinely live. Action taken: corrected
+pins-queue/2026-07-27.json — all 33 pins now marked status "posted" with a note
+explaining the retroactive fix. No new content was generated or posted this run.
+Tomorrow's queue (pins-queue/2026-07-28.json, 33 pending) is untouched and ready
+for the next scheduled run.
+
+Bugs to fix upstream (this is the second run to hit these):
+1. image_path in generated pins doesn't match the real mounted folder path.
+2. generate_pins.py defaults to the sandbox's UTC clock (~7-8h ahead of Pacific),
+   so an evening-Pacific run labels its queue with the *next* calendar date. This
+   is why the Jul 26 evening run produced a file named "2026-07-27". Harmless if
+   consistent, but it's what caused tonight's confusion — recommend passing
+   --date explicitly for Pacific "today", or fixing the default.
+3. The "mark pin as posted" step needs to actually persist during/after posting,
+   not just be described in the runbook.
