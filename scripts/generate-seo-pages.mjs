@@ -3748,20 +3748,28 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
   // generic fallback ("Hummingbird Trivia & more..." shipped 2026-07-27).
   const nameworthy = (e) => isMarqueeEvent(e) || headlinerScore(e) >= 6.5;
   const cleanEventName = (e) => (e.title || "").split(/[—:|·(]/)[0].split(" - ")[0].trim();
-  const headlineNames = IS_ADULTS ? [] : headliners
+  const namePool = IS_ADULTS ? [] : headliners
     .filter(nameworthy)
     .map(cleanEventName)
     .filter((n) => n.length >= 8 && n.length <= 42 && n.includes(" "))
-    .slice(0, 2);
+    .slice(0, 4);
+  const headlineNames = namePool.slice(0, 2);
+  // Atlanta SERP trick (Mommy Poppins): title and H1 deliberately name
+  // DIFFERENT marquee events, doubling the event-name surface one URL
+  // ranks for. H1 falls back to the title names when only 2 qualify.
+  const h1Names = namePool.length >= 4 ? namePool.slice(2, 4) : headlineNames;
+  const countLede = `${upcoming.length} things to do with kids this weekend in ${metroLabel()}`;
   const title = IS_ADULTS
     ? `${guideH1} | ${BRAND}`
     : headlineNames.length >= 1
       ? `${headlineNames.join(", ")} & more: ${guideH1} (${rangeLabel}) | ${BRAND}`
-      : `${guideH1} (${rangeLabel}) | ${BRAND}`;
+      : upcoming.length >= 20
+        ? `${countLede} (${rangeLabel}) | ${BRAND}`
+        : `${guideH1} (${rangeLabel}) | ${BRAND}`;
   const picksPhrase = headlineNames.length >= 1
     ? `This weekend's top picks: ${headlineNames.join(" and ")}. `
     : "";
-  const description = `${picksPhrase}A timeline weekend guide to ${IS_ADULTS ? "things to do" : "family-friendly events"} in ${metroLabel()} from ${weekendLabel} through ${sundayLabel}: ${upcoming.length} events with times, venues, details, and official links. Build a 3-stop plan with ${BRAND}.`.slice(
+  const description = `${picksPhrase}A timeline weekend guide to ${IS_ADULTS ? "things to do" : "family-friendly events"} in ${metroLabel()} from ${weekendLabel} through ${sundayLabel}: ${upcoming.length} events with times, venues, details, and official links. Updated weekly. Build a 3-stop plan with ${BRAND}.`.slice(
     0,
     300,
   );
@@ -3841,6 +3849,34 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     .filter((e) => monthRank.has(e.month))
     .sort((a, b) => monthRank.get(a.month) - monthRank.get(b.month))
     .slice(0, 6);
+  // "Next weekend" teaser (4 of 7 metro SERP winners run a forward calendar
+  // on the same URL). Marquee events only, 3-14 days out, linked.
+  const weekendEndMs = weekend.sunday.getTime() + 36 * 3600 * 1000;
+  const seenAheadTitles = new Set();
+  const lookAhead = IS_ADULTS ? [] : eventItems
+    .filter((e) => {
+      if (!e.startDateTime || !isMarqueeEvent(e) || !lookup.get(e)) return false;
+      const t = new Date(e.startDateTime).getTime();
+      return t > weekendEndMs && t < weekendEndMs + 14 * 86400 * 1000;
+    })
+    .sort((a, b) => (a.startDateTime || "").localeCompare(b.startDateTime || ""))
+    .filter((e) => {
+      const key = cleanEventName(e).toLowerCase();
+      if (!key || seenAheadTitles.has(key)) return false;
+      seenAheadTitles.add(key);
+      return true;
+    })
+    .slice(0, 4);
+  const lookAheadHtml = lookAhead.length
+    ? `<section class="wg-look-ahead" aria-label="Coming up">
+      <h2>Coming up after this weekend</h2>
+      <nav class="wg-annual-links">${lookAhead.map((e) => {
+        const d = new Date(e.startDateTime).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: tzIntro });
+        return `<a href="${metroPath(`event/${lookup.get(e)}/`)}">${esc(cleanEventName(e))} (${esc(d)})</a>`;
+      }).join("\n        ")}</nav>
+    </section>`
+    : "";
+
   const planAheadHtml = annualForMetro.length
     ? `<section class="wg-plan-ahead" aria-label="Plan ahead">
       <h2>Plan ahead: ${esc(metroLabel())} traditions coming up</h2>
@@ -3878,6 +3914,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     </section>
     ${editorialBuckets.length ? renderWeekendEditorialBuckets(editorialBuckets) : ""}
     ${posterHtml}
+    ${lookAheadHtml}
     ${planAheadHtml}
     ${renderNewsletterSignup()}
     <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a 3-stop day with ${BRAND}</a></p>
@@ -3951,7 +3988,11 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
       { name: BRAND, url: metroUrl("") },
       { name: "Weekend guide", url: canonical },
     ],
-    h1: headlineNames.length >= 1 ? `${headlineNames.join(", ")} & more: ${guideH1}` : guideH1,
+    h1: h1Names.length >= 1
+      ? `${h1Names.join(", ")} & more: ${guideH1} (${rangeLabel})`
+      : upcoming.length >= 20 && !IS_ADULTS
+        ? `${countLede} (${rangeLabel})`
+        : `${guideH1} (${rangeLabel})`,
     eyebrow: metroTag(),
     body,
     hreflangLinks,
@@ -4073,7 +4114,7 @@ function writeWeekendSubPage({ rel, heading, placeName, events, weekend, lookup 
   const rangeLabel = formatWeekendRange(weekend.saturday, weekend.sunday, activeMetro.timezone);
   const title = `${heading} (${rangeLabel}) | ${BRAND}`;
   const freeCount = events.filter(eventLikelyFree).length;
-  const description = `${heading}: ${events.length} dated family events for ${rangeLabel}, with times, venues, costs, and official links. Build a 3-stop plan with ${BRAND}.`.slice(
+  const description = `${heading}: ${events.length} dated family events for ${rangeLabel}, with times, venues, costs, and official links. Updated weekly. Build a 3-stop plan with ${BRAND}.`.slice(
     0,
     300,
   );
