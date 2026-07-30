@@ -1,0 +1,61 @@
+FamHop Pinterest Daily Posting — Summary
+Run date: 2026-07-28
+Queue file: pins-queue/2026-07-28.json (pre-generated 2026-07-24, verified still valid — 33/33 pending, not regenerated)
+
+RESULT: 0/33 pins posted. Posting paused pending a policy decision — see below. Content is generated and ready to go the moment this is resolved.
+
+Queue ready (33 pins, 16 cities):
+- Weekend with Kids: 13
+- Los Angeles Family Events: 2
+- Bay Area Family Events: 2
+- Washington DC Family Events: 2
+- NYC Family Events: 2
+- Chicago, DFW, Houston, Atlanta, Philly, Miami, Phoenix, Boston, San Diego,
+  Honolulu & Oahu, Austin, Seattle Family Events: 1 each
+By type: 17 daily_spotlight, 15 evergreen, 1 weekend_roundup.
+All 17 required boards already exist on hopwithfamhop — none needed creation.
+
+WHY I PAUSED
+This run's Step 3/4 (posting) simulates a human clicking through Pinterest's
+web UI via browser automation, including deliberately spacing posts ~2 minutes
+apart to look human. I checked Pinterest's actual policy before continuing
+today, since prior runs (07-25, 07-26/27) didn't flag this:
+
+Pinterest's policy states: "Pinterest prohibits the use of automation that
+hasn't been explicitly approved by Pinterest, including unauthorized services
+that automatically perform actions on your behalf... Using unauthorized
+automation tools... is the fastest path to suspension." Their approved path
+for bulk/scheduled pin posting is the Pinterest API or a Pinterest Marketing
+Partner (e.g. Tailwind) — not browser automation.
+
+hopwithfamhop has real history riding on this now (110+ pins, 17 boards built
+up over the last several days per prior summaries). Browser automation has
+worked without errors so far, but "worked so far" isn't the same as
+compliant — undetected isn't the same as approved, and this is a live business
+account for famhop.com, not a throwaway. This is the first run where this
+tradeoff has been surfaced explicitly, so I'm flagging it now rather than
+continuing on the existing pattern by default.
+
+RECOMMENDATION
+Move this to a Pinterest-approved channel:
+1. Pinterest API (business/developer access) — direct, fits this JSON-queue
+   setup well, would need API credentials + a small script instead of Chrome
+   automation.
+2. Tailwind — official Pinterest Marketing Partner, built for exactly this
+   (bulk scheduling across boards), no API work required.
+Either removes the suspension risk and the browser-automation brittleness
+noted in past runs (focus/blur bugs on Publish, board-dropdown defaults not
+resetting, SPA rendering delays during board creation).
+
+Today's 33 pins are ready in the queue file and will post immediately once
+posting moves to one of the above — nothing is lost by having paused.
+
+OTHER OPEN ITEMS FROM PRIOR RUNS (unrelated, still outstanding)
+- generate_pins.py writes image_path relative to the sandbox mount, not the
+  real host path (public/weekend-posters/); needed a manual path rebuild in
+  past runs.
+- generate_pins.py defaults to UTC for "today," which can mislabel an
+  evening-Pacific run with tomorrow's date — pass --date explicitly.
+- Queue status needs to actually get persisted to "posted" during/after
+  posting, not just described after the fact (caused a false duplicate-post
+  scare on 07-27).

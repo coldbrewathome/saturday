@@ -26,7 +26,7 @@ SCRIPT_DIR = Path(__file__).parent
 CONFIG_PATH = SCRIPT_DIR / "config.json"
 QUEUE_DIR = SCRIPT_DIR / "pins-queue"
 POSTED_DIR = SCRIPT_DIR / "pins-posted"
-POSTERS_DIR = SCRIPT_DIR.parent.parent / "public" / "weekend-posters"
+POSTERS_DIR = SCRIPT_DIR.parent.parent.parent / "public" / "weekend-posters"
 
 
 def load_config():

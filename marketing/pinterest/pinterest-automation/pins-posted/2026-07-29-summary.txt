@@ -1,0 +1,84 @@
+FamHop Pinterest Daily Posting — Summary
+Run date: 2026-07-29 (Wednesday)
+Queue file: pins-queue/2026-07-29.json (regenerated fresh this run — 33/33 pending)
+
+RESULT: 0/33 pins posted. Posting paused for a second consecutive day — see below.
+Content is generated and ready to go the moment this is resolved.
+
+QUEUE READY (33 pins, 16 cities):
+- Weekend with Kids: 13
+- NYC Family Events: 2
+- Los Angeles Family Events: 2
+- Washington DC Family Events: 2
+- Bay Area Family Events: 2
+- Chicago, DFW, Houston, Atlanta, Philly, Miami, Phoenix, Boston, San Diego,
+  Honolulu & Oahu, Austin, Seattle Family Events: 1 each
+By type: 18 daily_spotlight, 15 evergreen.
+No Pinterest board check or creation was performed this run (see below — no
+Pinterest/Chrome contact happened at all today).
+
+WHY POSTING IS STILL PAUSED
+Yesterday's run (2026-07-28) paused before posting after concluding that
+Pinterest prohibits browser automation for publishing content, flagging
+suspension risk to this live business account. Before deciding whether to
+proceed today, I independently re-verified that claim with two fresh web
+searches against Pinterest's own policy pages rather than taking the prior
+run's word for it:
+
+- Pinterest Terms of Service: prohibits "scraping, collecting, searching,
+  copying or otherwise accessing data from Pinterest in unauthorized ways
+  using automated means without express prior permission."
+- Pinterest Developer Guidelines: forbid "any automated means or form of
+  scraping or data extraction to access information from Pinterest, except
+  as expressly permitted," and state that automated/scheduled Pin
+  publishing must go through the official Pinterest API or a certified
+  Marketing Partner (e.g. Tailwind) — not browser automation.
+- General guidance on suspensions: unauthorized automation tools (auto-
+  pinners, bots) are consistently cited as one of the fastest paths to
+  account suspension, with sophisticated detection on Pinterest's side.
+
+Sources:
+- https://policy.pinterest.com/en/terms-of-service
+- https://policy.pinterest.com/en/developer-guidelines
+- https://policy.pinterest.com/en/community-guidelines
+- https://help.pinterest.com/en-gb/article/account-suspension
+
+This confirms yesterday's finding rather than overturning it. I did not
+create boards or publish pins via Chrome automation today — hopwithfamhop
+has real history riding on this (110+ pins, 17 boards built up over the
+last several days), and continuing would be a knowing ToS violation with a
+hard-to-reverse downside if it triggered a suspension.
+
+WHAT I DID DO THIS RUN
+1. Regenerated today's pin queue (local content only, no Pinterest
+   contact) — 33 pins, with fresh event counts pulled from the latest
+   poster manifest (updated 2026-07-28, previously the queue was using
+   counts from 2026-07-24).
+2. Fixed the image_path bug flagged in both prior summaries: generate_pins.py
+   computed the weekend-poster directory two levels up from the script
+   instead of three, so it never resolved to the real
+   ~/Projects/saturday/public/weekend-posters/ location. Corrected to the
+   right relative depth (verified against the actual mounted folder
+   structure). Doesn't affect today's run since no upload happened, but
+   removes the manual path workaround noted in the 07-27 and 07-28 runs
+   for whenever posting resumes.
+3. Did not open Chrome/Pinterest at all — skipped the board-existence
+   check too, since it serves no purpose while posting stays paused.
+
+DECISION NEEDED
+Two days of ready content is now stacked up unpublished (33 pins from
+07-28 + 33 from 07-29 = 66). To unblock, one of:
+1. Set up the Pinterest API (business/developer access) — fits this
+   JSON-queue pipeline well; needs API credentials plus a small posting
+   script in place of Chrome automation.
+2. Use a Pinterest-approved Marketing Partner (e.g. Tailwind) for bulk/
+   scheduled posting — no API work required on your end.
+3. Explicitly instruct me to proceed via browser automation anyway,
+   accepting the suspension risk — I won't take that step on a live
+   business account without a clear go-ahead.
+4. Pause the famhop-pinterest-daily scheduled task until one of the above
+   is in place, so it stops generating unpostable content every day.
+
+Both ready queues (pins-queue/2026-07-28.json, pins-queue/2026-07-29.json)
+will post immediately once posting moves to an approved channel — nothing
+is lost by having paused.
