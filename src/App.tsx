@@ -6102,6 +6102,8 @@ function App({ metro }: AppProps) {
             <a href="/about/">About {APP_BRAND}</a>
             <span aria-hidden="true">·</span>
             <a href="/how-we-verify/">How we verify listings</a>
+            <span aria-hidden="true">·</span>
+            <a href="/privacy/">Privacy</a>
           </div>
         </div>
       </footer>

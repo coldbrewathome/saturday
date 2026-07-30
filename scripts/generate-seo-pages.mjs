@@ -5175,8 +5175,8 @@ function renderLangSwitcher(routeKey, currentLocale) {
 }
 
 // ---------------------------------------------------------------------------
-// Trust pages (/about/, /how-we-verify/) — E-E-A-T signals added 2026-07-23
-// after the unconfirmed Jul 18-19 update demoted the site. Two single pages,
+// Trust pages (/about/, /how-we-verify/, /privacy/) — E-E-A-T signals added 2026-07-23
+// after the unconfirmed Jul 18-19 update demoted the site. Three single pages,
 // not a page type at scale (SEO invariant), linked sitewide from the static
 // footer so neither is an orphan. Copy states only what the pipeline actually
 // does — the verification claims mirror skills/grounded-event-discovery.
@@ -5294,7 +5294,121 @@ ingestion time, not a guarantee it will run — the organizer link on each page 
     priority: 0.3,
   });
 
-  return 2;
+  // Privacy policy — states only what the code actually does: GA4 in the app
+  // shell, cookieless first-party counters (sendMetric), digest email signup,
+  // optional Google sign-in + synced saves, optional geolocation (rounded,
+  // device-side sort + weather fetch), localStorage prefs, and the third
+  // parties the pages load (Cloudflare, Google, OSM tiles). Update this page
+  // whenever a new collection point or third-party script ships.
+  const privacyCanonical = `${SITE}/privacy/`;
+  const privacyContact = `privacy@${new URL(SITE).hostname}`;
+  const privacyEffective = "July 29, 2026";
+
+  const privacyChildren = IS_ADULTS
+    ? `<p>${esc(BRAND)} is intended for adults. It is not directed to children, and we do not
+knowingly collect personal information from anyone under 18.</p>`
+    : `<p>${esc(BRAND)} is written for parents and caregivers planning outings. It is not directed
+to children, and we do not knowingly collect personal information from children under 13. The
+optional age-range preference on the digest signup describes the outings you want to see, not a
+child's identity. If you believe a child has submitted personal information, email
+<a href="mailto:${privacyContact}">${privacyContact}</a> and we will delete it.</p>`;
+
+  const privacyBody = `
+<p>This page explains what information ${esc(BRAND)} (${esc(SITE.replace("https://", ""))})
+collects, how it is used, and the choices you have. Effective ${privacyEffective}.</p>
+<h2>What we collect</h2>
+<h3>Information you give us</h3>
+<ul>
+<li><strong>Friday digest signup:</strong> your email address, plus the metro and any preferences
+(such as an age range) you choose, and the page you signed up from. Used only to send the digest.</li>
+<li><strong>Optional sign-in:</strong> if you sign in with Google, we receive your name, email
+address and profile picture from Google, and we store the spots, events and plans you save so they
+sync across your devices. Sign-in is never required to browse.</li>
+</ul>
+<h3>Information collected automatically</h3>
+<ul>
+<li><strong>Analytics:</strong> we use Google Analytics, which sets cookies and collects usage data
+(pages viewed, approximate location derived from IP, device type) under
+<a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's
+privacy policy</a>.</li>
+<li><strong>Our own counters:</strong> the app sends us small, cookieless usage signals (a feature
+name and a metro, e.g. "digest prompt shown · bay-area"). They contain no name, email or precise
+location.</li>
+<li><strong>Server logs:</strong> our hosting provider (Cloudflare) processes IP addresses and
+request data to deliver pages and prevent abuse.</li>
+</ul>
+<h3>Location (optional)</h3>
+<p>If you tap "sort by nearest" and allow the browser prompt, your rounded coordinates are used on
+your device to sort listings and are sent to our weather endpoint to show a local forecast. They
+are saved on your device, not to an account profile, and we do not build location histories.</p>
+<h3>On-device storage</h3>
+<p>Preferences such as map position, language, dismissed prompts, visit counts and saved items are
+kept in your browser's local storage. Clearing site data in your browser removes them.</p>
+<h2>Third-party services</h2>
+<p>Pages load services from Cloudflare (hosting/CDN), Google (Analytics; Fonts; Identity Services
+if you use sign-in) and OpenStreetMap tile servers (the map). Each receives the network requests
+needed to work — typically your IP address and the resource requested — under its own privacy
+policy. ${esc(BRAND)} shows no ads and sells no tickets.</p>
+<h2>How we use information</h2>
+<p>To run the service, send the digest you asked for, sync your saved items, understand which
+features help, and keep the service secure. <strong>We do not sell personal information, and we do
+not share it for cross-context behavioral advertising.</strong></p>
+<h2>Sharing</h2>
+<p>Personal information goes only to the service providers named above, acting on our behalf, or
+where the law requires disclosure. There are no other recipients.</p>
+<h2>Children</h2>
+${privacyChildren}
+<h2>Retention</h2>
+<p>Digest emails are kept until you unsubscribe. Account data is kept until you ask us to delete
+it. Usage counters are aggregated and contain no personal identifiers.</p>
+<h2>Your choices</h2>
+<ul>
+<li>Every digest includes an unsubscribe link that works immediately.</li>
+<li>Block or clear cookies in your browser, or use Google's
+<a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">Analytics
+opt-out</a>.</li>
+<li>Revoke the location permission in your browser at any time.</li>
+<li>Email <a href="mailto:${privacyContact}">${privacyContact}</a> to access or delete your
+account data or digest subscription.</li>
+</ul>
+<h2>Where we operate</h2>
+<p>${esc(BRAND)} is operated from the United States and intended for users in the United States.</p>
+<h2>Changes</h2>
+<p>If this policy changes, we will update this page and its effective date.</p>
+<h2>Contact</h2>
+<p><a href="mailto:${privacyContact}">${privacyContact}</a></p>`;
+
+  const privacyHtml = renderShell({
+    title: `${BRAND} privacy policy`,
+    description: `What information ${BRAND} collects, how it is used, and the choices you have.`,
+    canonical: privacyCanonical,
+    ogImage: OG_IMAGE,
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "@id": `${privacyCanonical}#webpage`,
+      url: privacyCanonical,
+      name: `${BRAND} privacy policy`,
+      isPartOf: { "@id": `${SITE}/#website` },
+      publisher: { "@id": `${SITE}/#org` },
+    },
+    breadcrumb: [
+      { name: BRAND, url: `${SITE}/` },
+      { name: "Privacy", url: privacyCanonical },
+    ],
+    h1: `${BRAND} privacy policy`,
+    eyebrow: "Privacy",
+    body: privacyBody,
+  });
+  writePage("privacy/index.html", privacyHtml);
+  sitemapEntries.push({
+    loc: privacyCanonical,
+    lastmod: trackedLastmod(privacyCanonical, privacyHtml),
+    changefreq: "monthly",
+    priority: 0.3,
+  });
+
+  return 3;
 }
 
 // Localized (i18n) weekend guide pages
@@ -5648,7 +5762,7 @@ ${renderStaticAuthScript()}
 <footer class="famhop-footer">
   <p>© ${BRAND} · ${metroTag()}.</p>
   <p>Spot data © OpenStreetMap contributors (ODbL). Event listings from configured public sources.</p>
-  <p><a href="/about/">About ${esc(BRAND)}</a> · <a href="/how-we-verify/">How we verify listings</a></p>
+  <p><a href="/about/">About ${esc(BRAND)}</a> · <a href="/how-we-verify/">How we verify listings</a> · <a href="/privacy/">Privacy</a></p>
 </footer>
 ${bodyEnd}
 </body>
