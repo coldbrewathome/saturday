@@ -1809,6 +1809,20 @@ function App({ metro }: AppProps) {
     setIsHopNowOpen(true);
     trackMetric("hop_now_opened", metro.id);
   };
+  // Static SEO pages link their topbar "Hop now" as #/browse?hopnow=1 (the
+  // sheet is modal state, not a route). Open it once on arrival and normalize
+  // the hash so a refresh doesn't reopen it.
+  useEffect(() => {
+    if (!window.location.hash.includes("hopnow")) return;
+    openHopNow();
+    window.history.replaceState(
+      window.history.state,
+      "",
+      `${window.location.pathname}${window.location.search}#/browse`,
+    );
+    // Mount-only by design: reacting to later hash edits would reopen the sheet.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [newSpot, setNewSpot] = useState<NewSpotForm>(emptyNewSpot);
 
   useEffect(() => {

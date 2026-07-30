@@ -534,6 +534,15 @@ a:hover{text-decoration:underline}
 .famhop-brand:hover{text-decoration:none;}
 .famhop-mark{align-items:center;display:inline-flex;flex:0 0 auto;justify-content:center;}
 .famhop-wordmark{color:var(--ink);font-family:var(--font-display);font-size:1.15rem;font-weight:700;letter-spacing:-.02em;line-height:1;margin:0;}
+.famhop-logotype{display:block;height:1em;width:auto;}
+.famhop-wordmark-text{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0;}
+.hop-now-button{align-items:center;background:var(--accent);border:0;border-radius:999px;box-shadow:0 1px 2px rgba(0,0,0,.08);color:#fff;cursor:pointer;display:inline-flex;flex:0 0 auto;font:700 .78rem/1 var(--font-ui);gap:6px;padding:8px 14px;text-decoration:none;transition:background .15s ease,transform .08s ease;}
+.hop-now-button:hover{background:var(--accent-strong);text-decoration:none;color:#fff;}
+.hop-now-button:active{transform:translateY(1px);}
+.hop-now-button svg{height:14px;width:14px;}
+.topbar-hop{margin-left:8px;}
+@media (max-width:820px){.topbar-hop .hop-now-label{display:none;}.topbar-hop{padding:8px 10px;}}
+@media (max-width:640px){.topbar-hop{display:none;}}
 .famhop-metro{align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;display:inline-flex;flex:0 0 auto;gap:6px;padding:7px 10px 7px 12px;}
 .famhop-metro-prefix{color:var(--muted);font-size:.78rem;font-weight:500;line-height:normal;}
 .famhop-metro select{appearance:none;-webkit-appearance:none;background-color:transparent;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='%236b7280' d='M0 0h10L5 6z'/></svg>");background-position:right 0 center;background-repeat:no-repeat;border:0;color:var(--ink);cursor:pointer;font:inherit;font-family:var(--font-display);font-size:.88rem;font-weight:700;letter-spacing:-.01em;line-height:normal;outline:0;overflow:hidden;padding:0 16px 0 0;width:140px;min-width:140px;max-width:140px;text-overflow:ellipsis;white-space:nowrap;}
@@ -1353,8 +1362,20 @@ function topbarIcon(name) {
   return `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${paths[name] || ""}</svg>`;
 }
 
+// Mirrors the SPA topbar marks in App.tsx — keep in sync when the app logo
+// changes (FamHop: sun over two hills; Mosey: stroll-to-pin).
 function brandMarkSvg() {
-  return `<svg width="22" height="22" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="var(--brand)"></rect><path d="M 14 46 Q 32 18 50 46" stroke="#fff" stroke-width="3" stroke-dasharray="3 4" stroke-linecap="round" fill="none"></path><circle cx="14" cy="46" r="3.5" fill="#fff"></circle><circle cx="50" cy="46" r="3.5" fill="#fff"></circle><circle cx="32" cy="24" r="9" fill="#fff"></circle><circle cx="29.5" cy="21.5" r="2.4" fill="var(--brand)" opacity=".55"></circle></svg>`;
+  if (IS_ADULTS) {
+    return `<svg width="22" height="22" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="var(--accent)"></rect><g transform="scale(0.125)" fill="#fff"><circle cx="162" cy="372" r="17"></circle><circle cx="200" cy="344" r="14.5"></circle><circle cx="224" cy="306" r="12"></circle><circle cx="246" cy="272" r="10"></circle><path d="M300 150 C 256 150 221 185 221 228 C 221 289 300 360 300 360 C 300 360 379 289 379 228 C 379 185 344 150 300 150 Z"></path></g><circle cx="37.5" cy="28.25" r="3.75" fill="var(--accent)"></circle></svg>`;
+  }
+  return `<svg width="22" height="22" viewBox="0 0 64 64" aria-hidden="true"><defs><clipPath id="famhop-static-tile"><rect width="64" height="64" rx="14"></rect></clipPath></defs><rect width="64" height="64" rx="14" fill="#FAEDC9"></rect><g clip-path="url(#famhop-static-tile)"><circle cx="30" cy="25" r="10.5" fill="var(--accent)"></circle><path d="M-8 66 Q22 4 52 66 Z" fill="#2D5043"></path><path d="M16 66 Q46 14 76 66 Z" fill="#1F3A2F"></path></g></svg>`;
+}
+
+// FamHop wordmark as outlines (same paths as App.tsx) so the static shell
+// matches the SPA without waiting on a webfont; hidden text kept for crawlers.
+function brandWordmarkHtml() {
+  if (IS_ADULTS) return `<span class="famhop-wordmark">${esc(BRAND)}</span>`;
+  return `<span class="famhop-wordmark"><svg class="famhop-logotype" viewBox="0 0 320.4 100" aria-hidden="true"><g transform="translate(0 76) scale(0.1 -0.1)"><g fill="currentColor"><path d="M81 0V515Q81 571 102.5 611.5Q124 652 163.5 674.5Q203 697 256 697Q284 697 305.5 693.5Q327 690 339 688V541Q331 543 320.5 545.5Q310 548 294 548Q268 548 256.0 533.5Q244 519 244 488V0ZM328 320H18V469H328Z"></path><path d="M196 -13Q144 -13 104.0 7.5Q64 28 41.5 65.5Q19 103 19 151Q19 203 43.5 239.5Q68 276 108.5 295.5Q149 315 198 315Q271 315 317.0 281.5Q363 248 377 183L311 198V309Q311 334 293.0 352.0Q275 370 237 370Q210 370 175.0 363.0Q140 356 101 337L55 452Q99 474 152.0 488.5Q205 503 262 503Q331 503 378.5 478.0Q426 453 450.0 407.5Q474 362 474 300V0H338L307 97L377 119Q362 58 317.5 22.5Q273 -13 196 -13ZM251 97Q279 97 296.0 112.0Q313 127 313 151Q313 174 296.0 189.0Q279 204 251 204Q221 204 204.5 189.0Q188 174 188 151Q188 127 204.5 112.0Q221 97 251 97Z" transform="translate(317 0)"></path><path d="M48 0V490H168L200 389L141 395Q166 423 198.5 447.5Q231 472 270.0 487.5Q309 503 352 503Q400 503 429.5 486.0Q459 469 475.0 440.5Q491 412 497.5 376.0Q504 340 504 301V0H342V282Q342 320 330.0 332.0Q318 344 299 344Q272 344 246.5 329.5Q221 315 195 289L160 370H210V0ZM634 0V282Q634 320 622.5 332.0Q611 344 592 344Q566 344 540.0 329.5Q514 315 488 289L435 395Q460 423 492.5 447.5Q525 472 564.0 487.5Q603 503 645 503Q693 503 723.0 486.0Q753 469 769.0 440.5Q785 412 791.0 376.0Q797 340 797 301V0Z" transform="translate(800 0)"></path><path d="M48 0V681H210V0ZM352 0V282Q352 320 340.0 332.0Q328 344 305 344Q288 344 269.0 337.5Q250 331 231.5 318.5Q213 306 195 289L141 395Q166 423 199.5 447.5Q233 472 272.5 487.5Q312 503 356 503Q405 503 436.0 486.0Q467 469 484.0 440.5Q501 412 507.5 376.0Q514 340 514 301V0Z" transform="translate(1607 0)"></path></g><circle cx="2411.5" cy="245" r="269.9" fill="var(--accent)"></circle><g fill="currentColor" transform="translate(2662 0)"><path d="M326 -13Q262 -13 215.0 16.0Q168 45 142.0 102.0Q116 159 116 245Q116 325 142.5 382.5Q169 440 216.5 471.5Q264 503 327 503Q394 503 444.5 469.5Q495 436 523.5 378.0Q552 320 552 245Q552 170 523.0 111.5Q494 53 442.5 20.0Q391 -13 326 -13ZM48 -190V490H168L210 356H201V144H210V-190ZM295 143Q334 143 360.5 171.5Q387 200 387 245Q387 289 360.5 318.5Q334 348 295 348Q256 348 229.0 318.5Q202 289 202 245Q202 200 229.0 171.5Q256 143 295 143Z"></path></g></g></svg><span class="famhop-wordmark-text">${esc(BRAND)}</span></span>`;
 }
 
 function activeMetroStorageKey(suffix) {
@@ -1368,7 +1389,7 @@ function renderStaticTopbar({ guideCurrent = false } = {}) {
   return `<header class="famhop-topbar">
   <a class="famhop-brand" href="${metroPath("")}" aria-label="${esc(BRAND)} home">
     <span class="famhop-mark">${brandMarkSvg()}</span>
-    <span class="famhop-wordmark">${esc(BRAND)}</span>
+    ${brandWordmarkHtml()}
   </a>
   <label class="famhop-metro" title="Browsing ${esc(activeMetro.label || metroLabel())}">
     <span class="famhop-metro-prefix">in</span>
@@ -1381,6 +1402,7 @@ function renderStaticTopbar({ guideCurrent = false } = {}) {
     <a href="${metroPath(guideRel)}"${guideCurrent ? ` aria-current="page"` : ""}>${topbarIcon("guide")}<span>Guide</span></a>
     <a href="${metroPath("")}#/plans">${topbarIcon("plans")}<span>Plans</span><em class="tab-count" data-static-plan-count>0</em></a>
   </nav>
+  <a class="hop-now-button topbar-hop" href="${metroPath("")}#/browse?hopnow=1" title="Things to do right now"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg><span class="hop-now-label">Hop now</span></a>
   <div class="famhop-topbar-spacer"></div>
   <div class="famhop-auth" data-static-auth data-app-href="${metroPath("")}">
     <div class="signin-wrap" data-static-signin>
