@@ -215,7 +215,14 @@ export default defineConfig(({ mode }) => {
           // Without this denylist the SW served index.html for "Guide" et al.,
           // bouncing the user into the SPA browse view (regression fix).
           navigateFallback: `${base}index.html`,
-          navigateFallbackDenylist: [/^\/[^/]+\/.+/, /^\/api\//],
+          // Single-segment static trust pages (/about/, /how-we-verify/,
+          // /privacy/) must also bypass the shell — without this entry the SW
+          // served index.html for them and the SPA bounced to browse.
+          navigateFallbackDenylist: [
+            /^\/[^/]+\/.+/,
+            /^\/api\//,
+            /^\/(about|how-we-verify|privacy)\/?$/,
+          ],
           runtimeCaching: [
             {
               // Per-metro weekend feed (kids + adults). Rotates ~weekly, so
