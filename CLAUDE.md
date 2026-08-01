@@ -78,13 +78,10 @@ If the user says "deploy" without specifying, default to both kids and adults (t
 
 ## Google Indexing API & Automation
 
-To resolve sitemap crawl budget issues and automate search engine indexation:
-- **Core Script**: `npm run publish:indexing` (runs [publish-indexing.mjs](file:///Users/kning/Projects/saturday/scripts/publish-indexing.mjs)) reads `dist/sitemap.xml`, prioritizes hub pages, filters for new/modified events, and submits up to 200 URLs/day (quota limit) to the Google Indexing API.
+**DISABLED 2026-08-01 — the Indexing API is a verified no-op for `Event` schema** (see "SEO invariants" below: submissions return fake success, pages are never crawled). The daily 9:00 AM launchd cron that ran `publish-indexing.mjs` was unloaded and its plist removed from `~/Library/LaunchAgents/`. Do not re-enable it. History retained:
+- **Core Script**: `npm run publish:indexing` (runs [publish-indexing.mjs](file:///Users/kning/Projects/saturday/scripts/publish-indexing.mjs)) reads `dist/sitemap.xml`, prioritizes hub pages, filters for new/modified events, and submits up to 200 URLs/day (quota limit) to the Google Indexing API. Useless for famhop events; kept only for any future JobPosting/BroadcastEvent content.
 - **History**: Submission timestamps are saved in [indexing-history.json](file:///Users/kning/Projects/saturday/data/indexing-history.json) to maintain a rolling queue.
-- **Single owner (since 2026-07-22): the local cron.** The GitHub workflows no longer run the publisher — when `refresh-data` also submitted (3:17 AM PT) it burned the quota first and committed a history the local cron never pulled, so the 9:00 AM run re-submitted duplicates until it 429'd. Do not re-add the cloud publish step without removing the local cron.
-- **macOS Scheduler (Local)**: A launchd agent runs [local-indexing-cron.sh](file:///Users/kning/Projects/saturday/scripts/local-indexing-cron.sh) daily at 9:00 AM using local `gcloud` ADC credentials. It submits FamHop first, then Mosey, deduping via the local history file.
-  - Setup: run [setup-local-cron.sh](file:///Users/kning/Projects/saturday/scripts/setup-local-cron.sh) to copy the plist configuration to `~/Library/LaunchAgents/` and load it.
-  - Logs: written to [local-indexing.log](file:///Users/kning/Projects/saturday/tmp/local-indexing.log).
+- [local-indexing-cron.sh](file:///Users/kning/Projects/saturday/scripts/local-indexing-cron.sh) + [setup-local-cron.sh](file:///Users/kning/Projects/saturday/scripts/setup-local-cron.sh) remain as the historical reinstall path — don't use them.
 
 ## SEO invariants
 

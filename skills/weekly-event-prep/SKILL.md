@@ -8,13 +8,10 @@ Everything here was validated in production on 2026-07-12. Follow the order — 
 
 ```bash
 cd ~/Projects/saturday
-tail -8 tmp/local-indexing.log        # expect "Successful: 200 / Failed: 0" on the last run
 git status --short                    # know what's dirty before you start
 ```
 
-- If indexing shows 403 `ACCESS_TOKEN_SCOPE_INSUFFICIENT`: the gcloud ADC was re-minted without the indexing scope. Fix (user-interactive):
-  `gcloud auth application-default login --scopes=https://www.googleapis.com/auth/indexing,https://www.googleapis.com/auth/webmasters,https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/userinfo.email,openid`
-- Quota note: the Indexing API allows 200 URLs/day per quota project; the 9:00 cron consumes all of it. Don't burn it manually.
+- Indexing: **the 9:00 cron was disabled 2026-08-01** — the Google Indexing API is a verified no-op for `Event` schema (see SEO-POLICY.md "Indexing & ranking reality"), so daily submissions returned fake successes and were never crawled. Google levers are sitemap freshness + hub internal links + manual GSC Request Indexing (~10/day, UI); IndexNow (Bing) still fires on deploy. Do not re-enable the cron; `scripts/setup-local-cron.sh` only exists as the historical reinstall path.
 
 ## 1. Pull search-demand priorities (5 min)
 
@@ -125,7 +122,7 @@ npm run deploy:kids && npm run deploy:adults    # sequential — they share dist
 
 Liveness (raw HTML, not browser): famhop.com/ and one metro hub return 200 with `seo-shell:start`; each newly added event URL returns 200. Deploy pins per `CLAUDE.md` Deploy section.
 
-Indexing: nothing manual needed — the 9:00 cron picks up changed `<lastmod>` values and submits within the 200/day quota.
+Indexing: nothing manual needed beyond the sitemap deploy + GSC Request Indexing rounds (the cron that auto-submitted to the Indexing API is disabled since 2026-08-01 — it was a verified no-op for Event schema).
 
 ## 8. Report
 
