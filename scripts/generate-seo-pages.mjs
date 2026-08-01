@@ -27,6 +27,7 @@ import {
 } from "./lib/brandSafety.mjs";
 import { ADULT_OVERRIDE_RE, KIDS_CONTENT_RE } from "./lib/adultAudience.mjs";
 import { isMarqueeEvent, kidsEventBrandSafetyViolation } from "./eventPipeline.mjs";
+import { ENDED_GRACE_MS } from "../functions/_detail-guard.mjs";
 import {
   defaultLocale,
   supportedLocales,
@@ -227,6 +228,22 @@ function isEventPastForSeo(event, now = new Date()) {
   return start < now.getTime();
 }
 
+// Post-end grace window (mirrors functions/[[path]].ts, which serves ended
+// event pages with 200 for ENDED_GRACE_MS before the 410): an event that
+// ended within the window and already had a prerendered page keeps getting
+// re-rendered, so a redeploy doesn't delete the asset the request-time guard
+// is still serving. B3 above still holds for anything else — no *new* page
+// is ever minted for an ended event.
+function endedWithinSeoGrace(event, now = new Date()) {
+  const end = event?.endDateTime
+    ? Date.parse(event.endDateTime)
+    : event?.startDateTime
+      ? Date.parse(event.startDateTime)
+      : NaN;
+  if (!Number.isFinite(end)) return false;
+  return now.getTime() < end + ENDED_GRACE_MS;
+}
+
 // D1 backstop: an adults-build event page must never carry kids-content in
 // its title unless the text also carries an explicit adult-only override —
 // mirrors qualifiesForAdultFeed's title rule without re-running its full
@@ -243,7 +260,7 @@ function eventFailsAdultsD1(event) {
 // SEO_PRIORITY_UNTIL (YYYY-MM-DD) force-includes every event on/before that
 // date, then fills the remaining budget by soonest. Default empty = unchanged.
 const SEO_PRIORITY_UNTIL = process.env.SEO_PRIORITY_UNTIL || "";
-function capEventsForPages(events) {
+function capEventsForPages(events, eventSlugLookup = null) {
   if (events.length <= MAX_EVENT_PAGES_PER_METRO && !SEO_PRIORITY_UNTIL) return events;
   const FAR = "9999"; // undated (recurring) events sort last → dropped first
   const sorted = [...events].sort((a, b) =>
@@ -253,11 +270,26 @@ function capEventsForPages(events) {
   // the 120-day ingest window exists for, and sorting by soonest date alone
   // would let a flood of near-term weekday events crowd a September fair out
   // of the budget. SEO_PRIORITY_UNTIL force-includes by date on top of that.
+  //
+  // Hysteresis (stability): a still-live event whose page shipped in the
+  // previous build (its canonical URL is in data/seo-lastmod.json) keeps its
+  // slot ahead of new candidates. Re-picking the cap from scratch each build
+  // dropped hundreds of still-live URLs while adding others (served sitemap
+  // swung 5,903→8,351→6,756 on consecutive days), re-teaching Google the
+  // inventory is unstable. With hysteresis the prerendered set shrinks only
+  // by genuine endings and grows only by new events filling freed budget —
+  // slots recycle as held events end, so new events are never crowded out
+  // permanently.
+  const previouslyPublished = (e) => {
+    const slug = eventSlugLookup?.get(e);
+    return Boolean(slug && lastmodStore[metroUrl(`event/${slug}/`)]);
+  };
   const priority = [];
   const rest = [];
   for (const e of sorted) {
     const forced =
       isMarqueeEvent(e) ||
+      previouslyPublished(e) ||
       (SEO_PRIORITY_UNTIL && (e.startDateTime || FAR).slice(0, 10) <= SEO_PRIORITY_UNTIL);
     (forced ? priority : rest).push(e);
   }
@@ -356,8 +388,23 @@ try {
   lastmodStore = {};
 }
 const lastmodStoreNext = {};
+// Hash only the page's content region — <main> for template pages, the
+// <!--seo-shell:*--> block for SPA-shell hubs — never the full document.
+// Hashing the full HTML meant any sitewide chrome/template commit (fonts,
+// topbar, footer, head JSON-LD with its per-build verifiedAt) re-stamped
+// every lastmod at once (4,192 of 4,297 live URLs shared one date), teaching
+// Google to distrust the signal entirely. Falls back to the full string for
+// pages with neither region.
+function lastmodContentSignature(html) {
+  const text = String(html);
+  const main = /<main[\s\S]*?<\/main>/i.exec(text);
+  if (main) return main[0];
+  const shell = /<!--seo-shell:start-->[\s\S]*?<!--seo-shell:end-->/.exec(text);
+  if (shell) return shell[0];
+  return text;
+}
 function trackedLastmod(url, content) {
-  const hash = crypto.createHash("sha1").update(String(content)).digest("hex").slice(0, 16);
+  const hash = crypto.createHash("sha1").update(lastmodContentSignature(content)).digest("hex").slice(0, 16);
   const prev = lastmodStore[url];
   const date = prev && prev.h === hash && prev.d ? prev.d : today();
   lastmodStoreNext[url] = { h: hash, d: date };
@@ -1091,7 +1138,7 @@ function main() {
     // Dedupe before the cap so the per-metro budget is spent on distinct
     // events, not on repeat occurrences of the same one.
     const distinctEvents = dedupeEventOccurrences(events, eventSlugLookup);
-    const eventSlugs = generateEventPages(capEventsForPages(distinctEvents), eventsDoc?.generatedAt, eventSlugLookup, citySlugsPre);
+    const eventSlugs = generateEventPages(capEventsForPages(distinctEvents, eventSlugLookup), eventsDoc?.generatedAt, eventSlugLookup, citySlugsPre);
     generatedEventSlugsByMetro.set(metro.id, eventSlugs);
 
     if (!IS_ADULTS) {
@@ -1131,7 +1178,11 @@ function main() {
       events: distinctEvents,
       eventLookup: weekendEventLookup,
       hasWeekendGuide: wroteThisWeekend,
-      annualEntries: ANNUAL_EVENTS[metro.id] || [],
+      // Annual pages are kids-build-only (generateAnnualEventPages returns 0
+      // for IS_ADULTS), so the adults hub must not link 16 nonexistent
+      // /annual/ URLs that render as the shell — mirrors the gate in
+      // generateThisWeekendPage's annualForMetro.
+      annualEntries: IS_ADULTS ? [] : (ANNUAL_EVENTS[metro.id] || []),
     });
 
     const slugHistory = readEventSlugHistory(metro);
@@ -1794,7 +1845,48 @@ function generateRootAppShellPage() {
       return `<li><a href="${esc(href)}"><strong>${esc(label)}</strong><p>${esc(metroCardBlurb(label))}</p></a></li>`;
     })
     .join("");
-  const shellContent = `${SHELL_STYLE}
+  // The adults (Mosey) homepage was a 95-word "choose your metro" stub with a
+  // single content link; GSC excluded / as "Alternate page" after the Jun 14
+  // crawl. Server-render a real homepage instead: a substantive intro plus
+  // static entry points into the catalog (hub, weekend guide, categories,
+  // cities, about), widening the internal link graph beyond the single
+  // /bay-area/ funnel. Every href below is verified present in the adults
+  // sitemap. Kids keeps the metro chooser.
+  const shellContent = IS_ADULTS
+    ? `${SHELL_STYLE}
+      <div class="seo-shell">
+        <header>
+          <h1>${esc(title)}</h1>
+          <p>${esc(description)}</p>
+        </header>
+        <section>
+          <h2>Find your spot in the Bay Area</h2>
+          <p>${esc(BRAND)} is a free hangout planner for the San Francisco Bay Area. Pick a vibe — chill, foodie, active, or music &amp; culture — and ${esc(BRAND)} builds a 3-stop hangout from real places: coffee shops worth lingering in, cocktail bars and breweries, parks and waterfront walks, museums, bookstores, and live music rooms. Share the plan with friends and everyone can vote Yes, Maybe, or Skip on each stop, so the group actually settles on where to go.</p>
+          <p>Events come straight from official venue and organizer calendars — music venues, museums, breweries, and festivals — so listings show real dates, times, and ticket links. Coverage spans San Francisco, the East Bay, the Peninsula, the South Bay, and the North Bay. Browse everything on the <a href="/bay-area/">Bay Area hangout planner</a>, or jump to <a href="/bay-area/this-weekend/">things to do in the Bay Area this weekend</a> for a guide that refreshes every week.</p>
+        </section>
+        <section>
+          <h2>Browse by category</h2>
+          <ul>
+            <li><a href="/bay-area/category/bars/">Bars &amp; nightlife</a> — cocktail bars, breweries, wine bars, and late-night spots.</li>
+            <li><a href="/bay-area/category/food/">Food &amp; drink</a> — restaurants, cafes, and food halls for a meal out or a casual hang.</li>
+            <li><a href="/bay-area/category/music/">Live music</a> — concerts and gigs pulled from official venue calendars.</li>
+            <li><a href="/bay-area/category/museum/">Museums &amp; galleries</a> — current shows, late nights, and member events.</li>
+            <li><a href="/bay-area/category/outdoors/">Parks &amp; outdoors</a> — trails, gardens, and outdoor hangs around the bay.</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Browse by city</h2>
+          <ul>
+            <li><a href="/bay-area/city/san-francisco/">Things to do in San Francisco</a></li>
+            <li><a href="/bay-area/city/oakland/">Things to do in Oakland</a></li>
+            <li><a href="/bay-area/city/san-jose/">Things to do in San Jose</a></li>
+            <li><a href="/bay-area/city/berkeley/">Things to do in Berkeley</a></li>
+          </ul>
+        </section>
+        <p>New here? Read more <a href="/about/">about ${esc(BRAND)}</a> and how listings are sourced.</p>
+        <noscript><p><strong>Heads-up:</strong> ${esc(BRAND)} is an interactive planner. Please enable JavaScript to plan, share and vote.</p></noscript>
+      </div>`
+    : `${SHELL_STYLE}
       <div class="seo-shell">
         <header>
           <h1>${esc(title)}</h1>
@@ -2485,18 +2577,22 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
   for (const event of items) {
     const candidate = eventSlugLookup.get(event);
     if (!candidate) continue;
+    const canonical = metroUrl(`event/${candidate}/`);
     // B3: never mint an "upcoming"-copy page for an event that has already
     // ended, regardless of feed staleness — checked against the actual build
     // time, not the feed's self-reported generatedAt (a stale feed's
     // generatedAt would make every event in it look fresh relative to itself).
-    if (isEventPastForSeo(event)) continue;
+    // One exception (endedWithinSeoGrace): an event that ended inside the
+    // 14-day grace window and shipped a page in the previous build keeps it,
+    // so a redeploy doesn't delete the asset the detail guard is serving 200
+    // through the grace period — the guard 410s it at end+14d regardless.
+    if (isEventPastForSeo(event) && !(endedWithinSeoGrace(event) && lastmodStore[canonical])) continue;
     // D3 backstop: adults build never mints a kids-content slug or a page
     // that fails the D1 title/override rule.
     if (violatesAdultsSlugGate(candidate, event.title) || (IS_ADULTS && eventFailsAdultsD1(event))) continue;
     // A3 backstop: kids build never mints a page for a blocklisted-venue event.
     if (!IS_ADULTS && kidsEventBrandSafetyViolation(event, activeMetro?.id)) continue;
 
-    const canonical = metroUrl(`event/${candidate}/`);
     const cityName = event.city || event.neighborhood || metroLabel();
     const citySlug = cityName ? slugify(cityName) : "";
     const showCityLink = citySlug && generatedCitySlugs && generatedCitySlugs.has(citySlug);
@@ -5784,7 +5880,8 @@ ${renderStaticAuthScript()}
 <footer class="famhop-footer">
   <p>© ${BRAND} · ${metroTag()}.</p>
   <p>Spot data © OpenStreetMap contributors (ODbL). Event listings from configured public sources.</p>
-  <p><a href="/about/">About ${esc(BRAND)}</a> · <a href="/how-we-verify/">How we verify listings</a> · <a href="/privacy/">Privacy</a></p>
+  <p><a href="/about/">About ${esc(BRAND)}</a> · <a href="/how-we-verify/">How we verify listings</a> · <a href="/privacy/">Privacy</a></p>${IS_ADULTS ? "" : `
+  <p>Planning an adults night out in the Bay Area? Try <a href="https://trymosey.com/bay-area/">Mosey</a>.</p>`}
 </footer>
 ${bodyEnd}
 </body>

@@ -95,6 +95,7 @@ import {
 import {
   METROS,
   legacyMetroDataPath,
+  metroCanonicalOverride,
   metroDataPath,
   metroShareBase,
   metroStorageKey,
@@ -1471,14 +1472,20 @@ function App({ metro }: AppProps) {
   }), [metro]);
   const shareBaseUrl = useMemo(() => metroShareBase(metro), [metro]);
   useEffect(() => {
+    // Prerendered pages (homepage + metro hubs) ship crafted titles,
+    // descriptions, and a correct self-canonical; rewriting them on
+    // hydration handed Google conflicting signals (homepage canonical →
+    // /bay-area, slashless hub canonicals) that folded hubs out of the
+    // index. When the static self-canonical is present, leave the entire
+    // head alone — title and description included.
+    const canonicalUrl = metroCanonicalOverride(metro);
+    if (!canonicalUrl) return;
     const title = APP_AUDIENCE === "adults"
       ? `${APP_BRAND} — Things to do in ${metro.label}`
       : `${APP_BRAND} — ${metro.label} Family Events & Kid-Friendly Spots`;
     const description = APP_AUDIENCE === "adults"
       ? `${APP_BRAND} helps you find good places to hang out in ${metro.label} — cafes, bars, parks, music, and local events. Pick a vibe, get a 3-stop hangout, and share with friends to vote.`
       : `${APP_BRAND} helps families find ${metro.label} kid-friendly spots, family events, parks, libraries, museums, and weekend plans.`;
-    const canonicalUrl = new URL(metro.canonicalPath, window.location.origin)
-      .toString();
 
     document.title = title;
     document
@@ -6118,6 +6125,14 @@ function App({ metro }: AppProps) {
             <a href="/how-we-verify/">How we verify listings</a>
             <span aria-hidden="true">·</span>
             <a href="/privacy/">Privacy</a>
+            {APP_AUDIENCE === "kids" && (
+              <>
+                <span aria-hidden="true">·</span>
+                <a href="https://trymosey.com/bay-area/">
+                  Planning an adults night out? Try Mosey
+                </a>
+              </>
+            )}
           </div>
         </div>
       </footer>

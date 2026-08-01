@@ -10,9 +10,14 @@
 //
 // Behavior:
 // - Real prerendered page → env.ASSETS passthrough, untouched.
-// - Missing event page whose slug is a past YYYY-MM-DD or is in the metro's
-//   ended-slug catalog → HTTP 410 with a small branded "event ended" page,
-//   soft-landing links to upcoming events, x-robots-tag: noindex.
+// - Ended event still inside the 14-day grace window (_detail-guard.mjs
+//   ENDED_GRACE_MS) → the prerendered page keeps serving with 200 (it shows
+//   full past-tense event info); with no prerendered page, the branded
+//   "event ended" page serves with 200 instead of 410.
+// - Missing event page whose slug is a past YYYY-MM-DD (beyond grace) or is
+//   in the metro's ended-slug catalog → HTTP 410 with a small branded
+//   "event ended" page, soft-landing links to upcoming events,
+//   x-robots-tag: noindex.
 // - Missing event page whose slug the catalog has never recorded → HTTP 404
 //   (real not-found, noindex) instead of a soft-404 200 shell.
 // - Missing event page that IS a live (capped-out) event, or any missing spot
@@ -60,15 +65,15 @@ function softLandingHtml(metro: string, upcoming: UpcomingLink[]): string {
 function detailMissPage(
   host: string,
   metro: string,
-  status: 404 | 410,
+  status: 200 | 404 | 410,
   upcoming: UpcomingLink[],
 ): Response {
   const brand = brandForHost(host);
-  const heading = status === 410 ? "This event has ended" : "Event not found";
+  const heading = status === 404 ? "Event not found" : "This event has ended";
   const lead =
-    status === 410
-      ? "The event at this link is no longer scheduled. It happened in the past or was removed by the organizer."
-      : "We couldn&#39;t find an event at this link. It may have been moved, or the address may be mistyped.";
+    status === 404
+      ? "We couldn&#39;t find an event at this link. It may have been moved, or the address may be mistyped."
+      : "The event at this link is no longer scheduled. It happened in the past or was removed by the organizer.";
   const html = `<!doctype html>
 <html lang="en">
 <head>
@@ -131,6 +136,10 @@ export async function onRequest(context: Context): Promise<Response> {
       if (disposition === "gone") {
         return detailMissPage(url.hostname, detail.metro, 410, catalog?.upcoming ?? []);
       }
+      // "ended-grace" intentionally falls through: the prerendered page keeps
+      // serving with 200 for 14 days after the event ends (full past-tense
+      // event info, JSON-LD endDate in the past), so ranked pages get their
+      // earn-out instead of a 410 at the exact end instant.
     }
     return asset;
   }
@@ -144,6 +153,12 @@ export async function onRequest(context: Context): Promise<Response> {
   const upcoming = catalog?.upcoming ?? [];
   if (disposition === "gone") {
     return detailMissPage(url.hostname, detail.metro, 410, upcoming);
+  }
+  if (disposition === "ended-grace") {
+    // No prerendered asset (capped-out, or a redeploy dropped it): the
+    // branded ended page with its soft-landing links serves with 200 through
+    // the grace window; the 410 lands when grace elapses.
+    return detailMissPage(url.hostname, detail.metro, 200, upcoming);
   }
   if (disposition === "not-found") {
     return detailMissPage(url.hostname, detail.metro, 404, upcoming);

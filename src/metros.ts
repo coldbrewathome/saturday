@@ -116,3 +116,22 @@ export function metroStorageKey(metro: MetroConfig, suffix: string): string {
 export function metroShareBase(metro: MetroConfig): string {
   return `${window.location.origin}${metro.canonicalPath}`;
 }
+
+// Prerendered pages (scripts/generate-seo-pages.mjs) ship a correct,
+// self-referencing canonical (`${origin}${pathname}`) plus crafted titles and
+// descriptions. Hydration must leave that head alone: rewriting it swapped
+// the static canonical for the slashless metros.json canonicalPath — and on
+// "/" pointed the homepage at the default metro — which Google read as
+// conflicting signals and folded /bay-area/ into /. Returns the trailing-slash
+// canonical URL to apply on a genuine client-side render (SW shell fallback
+// under a metro path), or null when the document head must not be touched.
+export function metroCanonicalOverride(metro: MetroConfig): string | null {
+  const { origin, pathname } = window.location;
+  const prerendered = document
+    .querySelector('link[rel="canonical"]')
+    ?.getAttribute("href");
+  if (prerendered === `${origin}${pathname}`) return null;
+  // The homepage never claims a metro canonical, whatever the head holds.
+  if (pathname === "/") return null;
+  return `${origin}${metro.canonicalPath.replace(/\/+$/, "")}/`;
+}

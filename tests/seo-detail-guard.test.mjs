@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
+  ENDED_GRACE_MS,
   missingPageDisposition,
   parseDetailPath,
   slugEndedAfterMs,
@@ -47,17 +48,30 @@ test("returns null for undated or impossible-date slugs", () => {
 const NOW = Date.UTC(2026, 5, 10, 18); // 2026-06-10T18:00Z
 
 test("past-dated event slug with no prerendered page is gone (410)", () => {
+  // Slug date May 25 → ended after May 27; the 14-day post-end grace ran out
+  // at Jun 10 00:00Z, so by NOW (Jun 10 18:00Z) the 410 has landed.
   assert.equal(
     missingPageDisposition("event", "canoga-park-memorial-day-parade-2026-05-25", NOW),
     "gone",
   );
 });
 
-test("yesterday's event stays within the grace window", () => {
+test("yesterday's event stays within the start-day grace window", () => {
   assert.equal(missingPageDisposition("event", "concert-2026-06-09", NOW), "noindex-shell");
-  // ...but is gone once the grace window has fully elapsed.
+  // Once the start-day window elapses, the event enters the 14-day post-end
+  // grace ("ended-grace": real 200 page, kept in the sitemap)...
+  const endedAfter = Date.UTC(2026, 5, 11);
   assert.equal(
     missingPageDisposition("event", "concert-2026-06-09", Date.UTC(2026, 5, 11, 0, 1)),
+    "ended-grace",
+  );
+  // ...and is gone only when the post-end grace has fully elapsed.
+  assert.equal(
+    missingPageDisposition("event", "concert-2026-06-09", endedAfter + ENDED_GRACE_MS - 1),
+    "ended-grace",
+  );
+  assert.equal(
+    missingPageDisposition("event", "concert-2026-06-09", endedAfter + ENDED_GRACE_MS),
     "gone",
   );
 });
@@ -145,26 +159,71 @@ test("a live multi-day event with a future liveEnds stays noindex-shell, not gon
   );
 });
 
-test("a live multi-day event is gone once nowMs passes its liveEnds instant", () => {
+test("a live multi-day event enters ended-grace at its liveEnds instant, gone after 14 days", () => {
+  const end = Date.UTC(2026, 7, 30); // ends Aug 30
   const catalog = {
     liveSet: new Set(["summer-exhibition-2026-07-01"]),
-    liveEnds: { "summer-exhibition-2026-07-01": Date.UTC(2026, 7, 30) },
+    liveEnds: { "summer-exhibition-2026-07-01": end },
     endedSet: new Set(),
   };
   assert.equal(
     missingPageDisposition("event", "summer-exhibition-2026-07-01", Date.UTC(2026, 8, 1), catalog),
+    "ended-grace",
+  );
+  assert.equal(
+    missingPageDisposition("event", "summer-exhibition-2026-07-01", end + ENDED_GRACE_MS, catalog),
     "gone",
   );
 });
 
 test("liveEnds is honored even for a slug catalog also lists as live (liveEnds wins over liveSet)", () => {
+  const end = Date.UTC(2026, 5, 1, 12);
   const catalog = {
     liveSet: new Set(["one-off-2026-06-01"]),
-    liveEnds: { "one-off-2026-06-01": Date.UTC(2026, 5, 1, 12) },
+    liveEnds: { "one-off-2026-06-01": end },
     endedSet: new Set(),
   };
   assert.equal(
     missingPageDisposition("event", "one-off-2026-06-01", Date.UTC(2026, 5, 1, 13), catalog),
+    "ended-grace",
+  );
+  assert.equal(
+    missingPageDisposition("event", "one-off-2026-06-01", end + ENDED_GRACE_MS, catalog),
+    "gone",
+  );
+});
+
+// --- 14-day post-end grace window (famhop-3) --------------------------------
+// Pre-grace, pages 410'd at the exact end instant — right as they ranked.
+// "ended-grace" keeps the URL serving 200 (and listed in the sitemap filter)
+// through end+14d; the eventual 410 stays.
+
+test("a dated slug in the ended catalog gets grace while its date is recent", () => {
+  const catalog = {
+    liveSet: new Set(),
+    liveEnds: {},
+    endedSet: new Set(["parade-2026-06-05"]),
+  };
+  const endedAfter = slugEndedAfterMs("parade-2026-06-05");
+  // Jun 10: inside slug-date + 2d + 14d grace → ended-grace, not gone.
+  assert.equal(
+    missingPageDisposition("event", "parade-2026-06-05", NOW, catalog),
+    "ended-grace",
+  );
+  assert.equal(
+    missingPageDisposition("event", "parade-2026-06-05", endedAfter + ENDED_GRACE_MS, catalog),
+    "gone",
+  );
+});
+
+test("a future-dated slug that vanished from the feed (cancelled) is gone immediately, no grace", () => {
+  const catalog = {
+    liveSet: new Set(),
+    liveEnds: {},
+    endedSet: new Set(["festival-2026-07-04"]),
+  };
+  assert.equal(
+    missingPageDisposition("event", "festival-2026-07-04", NOW, catalog),
     "gone",
   );
 });

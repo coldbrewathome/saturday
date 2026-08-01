@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { collectEventMetros, filterEndedEventUrls } from "../functions/_sitemap-filter.mjs";
+import { ENDED_GRACE_MS } from "../functions/_detail-guard.mjs";
 
 const NOW = Date.UTC(2026, 6, 18); // 2026-07-18
 
@@ -34,17 +35,22 @@ test("collects only metros that have event URLs", () => {
 
 // --- filterEndedEventUrls ----------------------------------------------------
 
-test("drops an event past its liveEnds instant, keeps a live one", () => {
+test("drops an event past liveEnds + grace, keeps live and in-grace ones", () => {
   const gone = "https://famhop.com/bay-area/event/baby-bounce-dixon-library/";
+  const graced = "https://famhop.com/bay-area/event/toddler-art-lab/";
   const live = "https://famhop.com/bay-area/event/storytime-suisun/";
-  const xml = sitemap(urlBlock(gone), urlBlock(live));
+  const xml = sitemap(urlBlock(gone), urlBlock(graced), urlBlock(live));
   const catalogs = new Map([
     [
       "bay-area",
       catalog({
-        liveSet: new Set(["baby-bounce-dixon-library", "storytime-suisun"]),
+        liveSet: new Set(["baby-bounce-dixon-library", "toddler-art-lab", "storytime-suisun"]),
         liveEnds: {
-          "baby-bounce-dixon-library": NOW - 1000,
+          "baby-bounce-dixon-library": NOW - ENDED_GRACE_MS - 1000,
+          // Ended, but inside the 14-day grace window: the page still serves
+          // 200, so the URL must stay listed (famhop-3 — sitemap and page
+          // status can never disagree).
+          "toddler-art-lab": NOW - 1000,
           "storytime-suisun": NOW + 1000,
         },
       }),
@@ -52,6 +58,7 @@ test("drops an event past its liveEnds instant, keeps a live one", () => {
   ]);
   const out = filterEndedEventUrls(xml, NOW, catalogs);
   assert.ok(!out.includes(gone));
+  assert.ok(out.includes(graced));
   assert.ok(out.includes(live));
 });
 
@@ -62,13 +69,18 @@ test("drops an event in the ended set", () => {
   assert.ok(!out.includes("reptile-roundup"));
 });
 
-test("no catalog: falls back to the slug-date heuristic", () => {
-  const past = "https://famhop.com/miami/event/parade-2026-07-10/";
+test("no catalog: falls back to the slug-date heuristic (with post-end grace)", () => {
+  const longPast = "https://famhop.com/miami/event/parade-2026-06-10/";
+  const recentPast = "https://famhop.com/miami/event/parade-2026-07-10/";
   const future = "https://famhop.com/miami/event/parade-2026-07-30/";
   const undated = "https://famhop.com/miami/event/weekly-storytime/";
-  const xml = sitemap(urlBlock(past), urlBlock(future), urlBlock(undated));
+  const xml = sitemap(urlBlock(longPast), urlBlock(recentPast), urlBlock(future), urlBlock(undated));
   const out = filterEndedEventUrls(xml, NOW, new Map());
-  assert.ok(!out.includes(past));
+  // Jun 10 + 2d start-day window + 14d grace elapsed well before Jul 18.
+  assert.ok(!out.includes(longPast));
+  // Jul 10 + 2d puts the end at Jul 12 — Jul 18 is inside the grace window,
+  // so the URL stays listed while the page still serves 200.
+  assert.ok(out.includes(recentPast));
   assert.ok(out.includes(future));
   assert.ok(out.includes(undated));
 });
