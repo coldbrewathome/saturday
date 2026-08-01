@@ -13,6 +13,11 @@ import "./styles.css";
 // overrides (e.g. a violet accent for the adults app) can hang off it.
 document.documentElement.setAttribute("data-app-audience", APP_AUDIENCE);
 
+// Deploy-verification stamp: bumping this string forces a new hashed bundle
+// URL, which is also the recovery path when a CDN edge has cached a stale
+// response under an asset URL (seen 2026-08-01 on trymosey.com).
+document.documentElement.setAttribute("data-build", "2026-08-01a");
+
 // Count this load toward the install-banner visit gate (ADR 05 §c). The
 // beforeinstallprompt listener is attached as a side effect of this import.
 recordVisit();
