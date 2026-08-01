@@ -9,7 +9,10 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const M = JSON.parse(readFileSync(join(HERE, "shorts-2026-08-01", "manifest.json"), "utf8"));
+const PICKS = JSON.parse(readFileSync(join(HERE, "weekend-picks.json"), "utf8"));
+const SHORTS_DIR = "shorts-" + PICKS.weekend.saturday;
+const M = JSON.parse(readFileSync(join(HERE, SHORTS_DIR, "manifest.json"), "utf8"));
+const FILE_TAG = "aug" + Number(PICKS.weekend.saturday.slice(8));
 
 const SEARCH_TERMS = {
   "bay-area": ["things to do with kids bay area", "free things to do san francisco", "bay area events this weekend", "san francisco with kids", "oakland with kids"],
@@ -41,12 +44,19 @@ const HASHTAG = {
 const out = [];
 out.push(`# FamHop metro Shorts — weekend of Sat ${M.weekend.saturday} / Sun ${M.weekend.sunday}`);
 out.push("");
-out.push(`Files: \`videos/delivery-2026-08-01/famhop-<metro>-aug1.mp4\` · 1080×1920 · H.264 · 30fps.`);
-out.push(`Sources: \`videos/shorts-2026-08-01/<metro>/\` — rebuild any of them with`);
+out.push(`Files: \`videos/delivery-${PICKS.weekend.saturday}/famhop-<metro>-${FILE_TAG}.mp4\` · 1080×1920 · H.264 · 30fps.`);
+out.push(`Sources: \`videos/${SHORTS_DIR}/<metro>/\` — rebuild any of them with`);
 out.push("`node videos/pick-weekend-events.mjs && node videos/build-metro-shorts.mjs`.");
 out.push("");
-out.push("**Every cut expires Sun Aug 2, 2026.** The cards name dated events and the closing");
+const sunday = new Date(M.weekend.sunday + "T12:00:00Z");
+const expiry = `Sun ${sunday.toLocaleString("en-US", { month: "short", timeZone: "UTC" })} ${sunday.getUTCDate()}, ${sunday.getUTCFullYear()}`;
+out.push(`**Every cut expires ${expiry}.** The cards name dated events and the closing`);
 out.push("stat is a one-week count. Re-cut weekly; do not leave these up.");
+out.push("");
+out.push("Each cut shows five picks, then proves it is showing a fraction: a dot per");
+out.push("event in that metro this week with the five you just saw lit, a real filter");
+out.push("cascade, and the address. The description lists every pick, including the ones");
+out.push("the video did not show.");
 out.push("");
 out.push("## Shared form settings (identical for all 16)");
 out.push("");
@@ -73,7 +83,7 @@ for (const m of M.metros) {
 
   out.push("---");
   out.push("");
-  out.push(`## ${m.name} — \`famhop-${m.id}-aug1.mp4\` (${m.duration}s, ${m.cards} cards${m.allFree ? ", all free" : `, ${m.freeCards}/${m.cards} free`})`);
+  out.push(`## ${m.name} — \`famhop-${m.id}-${FILE_TAG}.mp4\` (${m.duration}s, ${m.cards} cards${m.allFree ? ", all free" : `, ${m.freeCards}/${m.cards} free`})`);
   out.push("");
   out.push(`**Title (${title.length} chars)**`);
   out.push("```");
@@ -93,8 +103,12 @@ for (const m of M.metros) {
     out.push(`${mark} · ${p.title} — ${p.venue}, ${p.city} — ${day} ${p.time} — ${p.cost}${p.ages ? ` — ${p.ages}` : ""}`);
   }
   out.push("");
+  // Only quote the deep filter count where it is actually a selling number;
+  // a metro on the plan payoff would be quoting "1", which sells nothing.
   const c = m.cascade;
-  out.push(`${m.name} this week: ${c[0].n} family events · ${c[1].n} free · ${c[3].n} free ${c[2].chip.toLowerCase()} mornings.`);
+  out.push(m.payoff === "filter"
+    ? `${m.name} this week: ${c[0].n} family events · ${c[1].n} free · ${c[3].n} free ${c[2].chip.toLowerCase()} mornings.`
+    : `${m.name} this week: ${c[0].n} family events, ${c[1].n} of them free.`);
   out.push(`Filter by age, cost and time of day, then turn what you pick into one mapped day.`);
   out.push(`Free to use across 16 U.S. metros: https://famhop.com`);
   out.push(`Or get 5 picks by email every Friday morning, free.`);
@@ -109,10 +123,10 @@ for (const m of M.metros) {
   out.push("");
   out.push("**Pinned comment**");
   out.push("```");
-  out.push(`All ${m.cards} come straight from the venues' own calendars. The other ${m.weekTotal - m.cards} ${m.name} family events this week: ${url}`);
+  out.push(`These ${m.cards} come straight from the venues' own calendars — and they're ${m.cards} of ${m.weekTotal} on this week. The rest, filterable by your kid's age: ${url}`);
   out.push("```");
   out.push("");
 }
 
-writeFileSync(join(HERE, "shorts-2026-08-01", "YOUTUBE-METADATA.md"), out.join("\n"));
-console.log("wrote videos/shorts-2026-08-01/YOUTUBE-METADATA.md");
+writeFileSync(join(HERE, SHORTS_DIR, "YOUTUBE-METADATA.md"), out.join("\n"));
+console.log(`wrote videos/${SHORTS_DIR}/YOUTUBE-METADATA.md`);

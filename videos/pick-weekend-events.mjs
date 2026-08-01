@@ -91,11 +91,15 @@ const dayKey = (iso, tz) =>
 const dayName = (iso, tz) =>
   new Intl.DateTimeFormat("en-US", { timeZone: tz, weekday: "short" }).format(new Date(iso));
 // A midnight local start is an all-day marker in these feeds, not a listing
-// that actually begins at 12am. Say "All day" rather than print a wrong time.
+// that actually begins at 12am. Same for any pre-6am start — those are
+// UTC-stamped local times from sources without a timezone (Fairplex), and no
+// real kids listing starts at 3am. Say "All day" rather than print a wrong time.
 const clock = (iso, tz) => {
   const t = new Intl.DateTimeFormat("en-US", { timeZone: tz, hour: "numeric", minute: "2-digit" })
     .format(new Date(iso)).toLowerCase().replace(/\s/g, " ");
-  return t === "12:00 am" ? "All day" : t;
+  const h = Number(new Intl.DateTimeFormat("en-US", { timeZone: tz, hour: "numeric", hour12: false })
+    .format(new Date(iso)));
+  return h < 6 ? "All day" : t;
 };
 
 const sunOf = (sat) => {

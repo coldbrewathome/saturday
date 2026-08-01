@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+
+      @font-face{font-family:'Bricolage Grotesque';src:url('assets/fonts/bricolage-grotesque-400_800.woff2') format('woff2');font-weight:400 800;font-style:normal;font-display:block;}
+      @font-face{font-family:'JetBrains Mono';src:url('assets/fonts/jetbrains-mono-400.woff2') format('woff2');font-weight:100 800;font-style:normal;font-display:block;}
+      @font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/plus-jakarta-sans-400.woff2') format('woff2');font-weight:200 800;font-style:normal;font-display:block;}
+
+      #root{
+        position:relative;width:1080px;height:1920px;overflow:hidden;
+        --cream:#FAF5EB; --ink:#1B1916; --accent:#DD6A1A; --sun:#E8B547; --muted:#4A453F; --mutedi:#C9C2B6;
+        font-family:'Plus Jakarta Sans',sans-serif;color:#1B1916;
+      }
+
+      .scene{position:absolute;inset:0;width:1080px;height:1920px;overflow:hidden;}
+      /* A cream base under every scene: the panel wipes are 0.3s of scaleY, and
+         without a floor beneath them the frame shows through to black. */
+      .basefill{position:absolute;inset:0;background:var(--cream);}
+      .pnl{position:absolute;inset:0;background:var(--cream);transform-origin:50% 100%;}
+      .inv .pnl{background:var(--ink);}
+      .inv{color:var(--cream);}
+
+      .mono{font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.10em;text-transform:uppercase;}
+      .disp{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:-.015em;line-height:.94;}
+
+      .chrome{position:absolute;left:72px;right:72px;top:150px;display:flex;justify-content:space-between;align-items:center;font-size:28px;}
+      .chrome .r{color:var(--muted);}
+      .inv .chrome .r{color:var(--mutedi);}
+      .mark{display:inline-flex;align-items:center;gap:14px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:38px;letter-spacing:-.02em;text-transform:lowercase;}
+      .mark i{display:block;width:26px;height:26px;background:var(--accent);border-radius:7px;}
+
+      .num{position:absolute;left:72px;top:250px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:180px;line-height:.8;color:var(--accent);letter-spacing:-.04em;}
+      .tag{position:absolute;right:72px;top:280px;display:flex;align-items:center;gap:20px;}
+      .pill{background:var(--sun);border:5px solid var(--ink);border-radius:999px;padding:8px 30px 12px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:40px;text-transform:uppercase;color:var(--ink);letter-spacing:-.01em;white-space:nowrap;}
+      .cat{font-family:'JetBrains Mono',monospace;font-size:26px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+      .inv .cat{color:var(--mutedi);}
+
+      .title{position:absolute;left:72px;right:72px;top:500px;}
+      /* Block-level on purpose: the display line-height is below 1, and an
+         inline-block under negative leading escapes its own line box. */
+      .tl{display:block;}
+      .tc{display:block;}
+
+      .rule{position:absolute;left:72px;top:1010px;width:936px;height:6px;background:var(--ink);transform-origin:0% 50%;}
+      .inv .rule{background:var(--cream);}
+
+      .venue{position:absolute;left:72px;right:72px;top:1064px;font-weight:800;line-height:1.15;}
+      .city{position:absolute;left:72px;right:72px;top:1170px;font-family:'JetBrains Mono',monospace;font-size:32px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+      .inv .city{color:var(--mutedi);}
+
+      .slabwrap{position:absolute;left:72px;top:1250px;display:inline-block;}
+      .slab{position:absolute;inset:0;background:var(--ink);transform-origin:0% 50%;}
+      .inv .slab{background:var(--sun);}
+      .slabtx{position:relative;display:block;padding:14px 34px 22px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:54px;text-transform:uppercase;letter-spacing:-.01em;color:var(--cream);white-space:nowrap;}
+      .inv .slabtx{color:var(--ink);}
+
+      .ticks{position:absolute;left:72px;top:1560px;display:flex;gap:14px;}
+      .tick{height:12px;background:rgba(27,25,22,.18);position:relative;overflow:hidden;}
+      .inv .tick{background:rgba(250,245,235,.24);}
+      .tick span{position:absolute;inset:0;background:var(--accent);transform-origin:0% 50%;}
+      .tick.done span{transform:scaleX(1);}
+      .tick.todo span{transform:scaleX(0);}
+
+      .foot{position:absolute;left:72px;top:1626px;font-family:'JetBrains Mono',monospace;font-size:28px;letter-spacing:.06em;color:var(--muted);}
+      .inv .foot{color:var(--mutedi);}
+
+      .hookstack{position:absolute;left:72px;right:72px;top:440px;}
+      .h1{font-size:212px;line-height:.82;color:var(--accent);}
+      .h2{margin-top:30px;}
+      .hookslab{position:absolute;left:72px;top:1200px;display:inline-block;}
+      .hookdate{position:absolute;left:72px;top:1440px;font-family:'JetBrains Mono',monospace;font-size:36px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+
+      /* card: the running "n of N" is the whole persuasion engine - by card
+         five the viewer has felt that they are seeing about one percent. */
+      .ofn{position:absolute;left:72px;top:446px;font-family:'JetBrains Mono',monospace;font-size:30px;letter-spacing:.10em;text-transform:uppercase;color:var(--accent);}
+      .ages{position:absolute;right:72px;top:446px;font-family:'JetBrains Mono',monospace;font-size:30px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+      .inv .ages{color:var(--mutedi);}
+
+      /* gap beat */
+      .gaphead{position:absolute;left:72px;top:300px;font-size:104px;}
+      /* Each dot occupies exactly one cell: width + 2x margin = cell, and the
+         wrapper is cols*cell wide, so flex-wrap lands cols per row. */
+      .gridwrap{position:absolute;left:72px;top:452px;display:flex;flex-wrap:wrap;align-content:flex-start;}
+      .dot{display:block;border-radius:50%;background:rgba(250,245,235,.22);width:var(--dotw);height:var(--dotw);margin:var(--dotm);flex:0 0 auto;}
+      .dot.lit{background:var(--accent);}
+      .gapline{position:absolute;left:72px;right:72px;top:1120px;}
+
+      /* payoff beat */
+      .payhead{position:absolute;left:72px;top:300px;font-family:'JetBrains Mono',monospace;font-size:34px;letter-spacing:.10em;text-transform:uppercase;color:var(--muted);}
+      .paynum{position:absolute;left:72px;top:390px;font-size:250px;line-height:.84;color:var(--accent);}
+      .chiprow{position:absolute;left:72px;right:72px;top:730px;display:flex;flex-wrap:wrap;gap:18px;}
+      .chip{background:var(--sun);border:5px solid var(--ink);border-radius:999px;padding:8px 28px 14px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:44px;text-transform:uppercase;color:var(--ink);letter-spacing:-.01em;white-space:nowrap;}
+      .payplan{position:absolute;left:72px;right:72px;top:380px;font-size:112px;}
+      .paytail{position:absolute;left:72px;right:72px;top:940px;font-weight:800;font-size:46px;line-height:1.2;color:var(--muted);}
+
+      .ctakick{position:absolute;left:72px;right:72px;top:380px;font-size:132px;}
+      .ctanews{position:absolute;left:72px;right:72px;top:1500px;font-family:'JetBrains Mono',monospace;font-size:32px;letter-spacing:.06em;color:var(--mutedi);}
+      .big{color:var(--accent);}
+      .hlwrap{position:relative;display:inline-block;}
+      .hlbar{position:absolute;left:-16px;right:-16px;top:-4px;bottom:4px;background:var(--sun);transform-origin:0% 50%;}
+      .hltx{position:relative;color:var(--ink);}
+      .ctafree{position:absolute;left:72px;top:880px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:-.01em;}
+      .ctamark{position:absolute;left:72px;top:1110px;display:inline-flex;align-items:center;gap:24px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:136px;letter-spacing:-.03em;text-transform:lowercase;color:var(--cream);}
+      .ctamark i{display:block;width:66px;height:66px;background:var(--accent);border-radius:16px;}
+      .ctaurl{position:absolute;left:72px;top:1320px;display:inline-block;}
+      .ctaurltx{position:relative;display:block;padding:20px 30px 24px;font-family:'JetBrains Mono',monospace;font-size:42px;letter-spacing:.01em;color:var(--ink);}
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="33" data-width="1080" data-height="1920" data-fps="30">
+
+      <div id="base" class="scene clip" data-start="0" data-duration="33" data-track-index="0">
+        <div class="basefill"></div>
+      </div>
+
+      <div id="s0" class="scene clip" data-start="0" data-duration="2.8" data-track-index="1">
+        <div class="pnl" id="s0-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">boston</span></div>
+        <div class="hookstack" data-layout-allow-overlap>
+          <div class="disp h1" id="s0-h1">5 things</div>
+          <div class="disp h2" style="font-size:100px"><span class="tc" id="s0-l1">to do with kids</span></div>
+          <div class="disp h2" style="font-size:100px"><span class="tc" id="s0-l2">in boston</span></div>
+        </div>
+        <div class="hookslab slabwrap" id="s0-slabwrap">
+          <span class="slab" id="s0-slab"></span>
+          <span class="slabtx" id="s0-slabtx">this weekend</span>
+        </div>
+        <div class="hookdate" id="s0-date">Sat Aug 8 → Sun Aug 9</div>
+      </div>
+
+      <div id="c1" class="scene clip" data-start="2.8" data-duration="3.4" data-track-index="1">
+        <div class="pnl" id="c1-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">boston</span></div>
+        <div class="disp num" id="c1-num">01</div>
+        <div class="tag" id="c1-tag"><span class="cat">Live Music</span><span class="pill">Free</span></div>
+        <div class="ofn" id="c1-of">1 of 157 this week</div>
+        <div class="ages" id="c1-ages">Ages 6–13</div>
+        <div class="disp title" data-layout-allow-overlap style="font-size:104px">
+          <span class="tl"><span class="tc" id="c1-t1">2026 Charles</span></span>
+          <span class="tl"><span class="tc" id="c1-t2">River Jazz</span></span>
+          <span class="tl"><span class="tc" id="c1-t3">Festival</span></span>
+        </div>
+        <div class="rule" id="c1-rule"></div>
+        <div class="venue" id="c1-v" style="font-size:46px">DCR Hatch Memorial Shell</div>
+        <div class="city" id="c1-c">Boston</div>
+        <div class="slabwrap" id="c1-slabwrap"><span class="slab" id="c1-slab"></span><span class="slabtx" id="c1-slabtx">Sat &middot; 12:00 pm</span></div>
+        <div class="ticks">
+          <span class="tick" style="width:176px"><span id="c1-k"></span></span>
+          <span class="tick todo" style="width:176px"><span></span></span>
+          <span class="tick todo" style="width:176px"><span></span></span>
+          <span class="tick todo" style="width:176px"><span></span></span>
+          <span class="tick todo" style="width:176px"><span></span></span>
+        </div>
+        <div class="foot">famhop.com/boston/this-weekend</div>
+      </div>
+
+      <div id="c2" class="scene clip inv" data-start="6.199999999999999" data-duration="3.4" data-track-index="1">
+        <div class="pnl" id="c2-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">boston</span></div>
+        <div class="disp num" id="c2-num">02</div>
+        <div class="tag" id="c2-tag"><span class="cat">Market</span><span class="pill">Free</span></div>
+        <div class="ofn" id="c2-of">2 of 157 this week</div>
+        <div class="ages" id="c2-ages">Ages 3–10</div>
+        <div class="disp title" data-layout-allow-overlap style="font-size:104px">
+          <span class="tl"><span class="tc" id="c2-t1">SoWa Open Market</span></span>
+        </div>
+        <div class="rule" id="c2-rule"></div>
+        <div class="venue" id="c2-v" style="font-size:46px">SoWa Open Market</div>
+        <div class="city" id="c2-c">Boston</div>
+        <div class="slabwrap" id="c2-slabwrap"><span class="slab" id="c2-slab"></span><span class="slabtx" id="c2-slabtx">Sun &middot; 11:00 am</span></div>
+        <div class="ticks">
+          <span class="tick done" style="width:176px"><span></span></span>
+          <span class="tick" style="width:176px"><span id="c2-k"></span></span>
+          <span class="tick todo" style="width:176px"><span></span></span>
+          <span class="tick todo" style="width:176px"><span></span></span>
+          <span class="tick todo" style="width:176px"><span></span></span>
+        </div>
+        <div class="foot">famhop.com/boston/this-weekend</div>
+      </div>
+
+      <div id="c3" class="scene clip" data-start="9.6" data-duration="3.4" data-track-index="1">
+        <div class="pnl" id="c3-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">boston</span></div>
+        <div class="disp num" id="c3-num">03</div>
+        <div class="tag" id="c3-tag"><span class="cat">Library</span><span class="pill">Free</span></div>
+        <div class="ofn" id="c3-of">3 of 157 this week</div>
+        <div class="ages" id="c3-ages">Ages 3–10</div>
+        <div class="disp title" data-layout-allow-overlap style="font-size:104px">
+          <span class="tl"><span class="tc" id="c3-t1">Park Sounds:</span></span>
+          <span class="tl"><span class="tc" id="c3-t2">Robyn Byrde</span></span>
+        </div>
+        <div class="rule" id="c3-rule"></div>
+        <div class="venue" id="c3-v" style="font-size:46px">Joan Lorentz Park</div>
+        <div class="city" id="c3-c">Cambridge</div>
+        <div class="slabwrap" id="c3-slabwrap"><span class="slab" id="c3-slab"></span><span class="slabtx" id="c3-slabtx">Sat &middot; 2:00 pm</span></div>
+        <div class="ticks">
+          <span class="tick done" style="width:176px"><span></span></span>
+          <span class="tick done" style="width:176px"><span></span></span>
+          <span class="tick" style="width:176px"><span id="c3-k"></span></span>
+          <span class="tick todo" style="width:176px"><span></span></span>
+          <span class="tick todo" style="width:176px"><span></span></span>
+        </div>
+        <div class="foot">famhop.com/boston/this-weekend</div>
+      </div>
+
+      <div id="c4" class="scene clip inv" data-start="13" data-duration="3.4" data-track-index="1">
+        <div class="pnl" id="c4-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">boston</span></div>
+        <div class="disp num" id="c4-num">04</div>
+        <div class="tag" id="c4-tag"><span class="cat">Museum</span><span class="pill">Check listing</span></div>
+        <div class="ofn" id="c4-of">4 of 157 this week</div>
+        <div class="ages" id="c4-ages">Ages 6–10</div>
+        <div class="disp title" data-layout-allow-overlap style="font-size:104px">
+          <span class="tl"><span class="tc" id="c4-t1">Colorful Tape</span></span>
+          <span class="tl"><span class="tc" id="c4-t2">Collage</span></span>
+        </div>
+        <div class="rule" id="c4-rule"></div>
+        <div class="venue" id="c4-v" style="font-size:46px">Boston Children's Museum Events</div>
+        <div class="city" id="c4-c">Boston</div>
+        <div class="slabwrap" id="c4-slabwrap"><span class="slab" id="c4-slab"></span><span class="slabtx" id="c4-slabtx">Sat + Sun &middot; all day</span></div>
+        <div class="ticks">
+          <span class="tick done" style="width:176px"><span></span></span>
+          <span class="tick done" style="width:176px"><span></span></span>
+          <span class="tick done" style="width:176px"><span></span></span>
+          <span class="tick" style="width:176px"><span id="c4-k"></span></span>
+          <span class="tick todo" style="width:176px"><span></span></span>
+        </div>
+        <div class="foot">famhop.com/boston/this-weekend</div>
+      </div>
+
+      <div id="c5" class="scene clip" data-start="16.4" data-duration="3.4" data-track-index="1">
+        <div class="pnl" id="c5-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">boston</span></div>
+        <div class="disp num" id="c5-num">05</div>
+        <div class="tag" id="c5-tag"><span class="cat">Museum</span><span class="pill">Check listing</span></div>
+        <div class="ofn" id="c5-of">5 of 157 this week</div>
+        <div class="ages" id="c5-ages">Ages 6–10</div>
+        <div class="disp title" data-layout-allow-overlap style="font-size:104px">
+          <span class="tl"><span class="tc" id="c5-t1">Curiosity</span></span>
+          <span class="tl"><span class="tc" id="c5-t2">Kitchen</span></span>
+        </div>
+        <div class="rule" id="c5-rule"></div>
+        <div class="venue" id="c5-v" style="font-size:46px">Boston Children's Museum Events</div>
+        <div class="city" id="c5-c">Boston</div>
+        <div class="slabwrap" id="c5-slabwrap"><span class="slab" id="c5-slab"></span><span class="slabtx" id="c5-slabtx">Sat + Sun &middot; 10:00 am</span></div>
+        <div class="ticks">
+          <span class="tick done" style="width:176px"><span></span></span>
+          <span class="tick done" style="width:176px"><span></span></span>
+          <span class="tick done" style="width:176px"><span></span></span>
+          <span class="tick done" style="width:176px"><span></span></span>
+          <span class="tick" style="width:176px"><span id="c5-k"></span></span>
+        </div>
+        <div class="foot">famhop.com/boston/this-weekend</div>
+      </div>
+
+      <!-- GAP: the reason to click. Five dots are lit; the rest of the wall is
+           what a 30-second video structurally cannot show you. -->
+      <div id="gap" class="scene clip inv" data-start="19.8" data-duration="4" data-track-index="1">
+        <div class="pnl" id="gap-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">boston</span></div>
+        <div class="disp gaphead" id="gap-head">you&rsquo;ve seen 5.</div>
+        <div class="gridwrap" id="gap-grid" style="width:864px;--dotw:31px;--dotm:11px"><span class="dot lit" id="g1"></span><span class="dot lit" id="g2"></span><span class="dot lit" id="g3"></span><span class="dot lit" id="g4"></span><span class="dot lit" id="g5"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+        <div class="disp gapline" data-layout-allow-overlap style="font-size:78px">
+          <span class="tl"><span class="tc" id="gap-l1">boston has 157 this</span></span>
+          <span class="tl"><span class="tc" id="gap-l2">week</span></span>
+        </div>
+      </div>
+
+      <!-- PAYOFF: what the site does that a list cannot. -->
+      <div id="pay" class="scene clip" data-start="23.8" data-duration="4.6" data-track-index="1">
+        <div class="pnl" id="pay-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">narrow it down</span></div>
+        <div class="payhead mono" id="pay-head">157 is too many. so:</div>
+        <div class="disp paynum" id="pay-num">157</div>
+        <div class="chiprow">
+          <span class="chip" id="pay-chip1">Free</span>
+          <span class="chip" id="pay-chip2">School age (6-10)</span>
+          <span class="chip" id="pay-chip3">Morning</span>
+        </div>
+        <div class="paytail" id="pay-tail">Filter by age, cost and time of day &mdash; on the site.</div>
+      </div>
+
+      <div id="cta" class="scene clip inv" data-start="28.4" data-duration="4.6" data-track-index="1">
+        <div class="pnl" id="cta-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">16 metros &middot; free</span></div>
+        <div class="disp ctakick" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="cta-k1">see the</span></span>
+          <span class="tl"><span class="tc big" id="cta-k2">other 152</span></span>
+        </div>
+        <div class="ctamark" id="cta-mark"><i></i>famhop</div>
+        <div class="slabwrap ctaurl" id="cta-urlwrap">
+          <span class="slab" id="cta-url"></span>
+          <span class="ctaurltx" id="cta-urltx">famhop.com/boston/this-weekend</span>
+        </div>
+        <div class="ctanews" id="cta-news">Or get 5 by email every Friday. Free.</div>
+      </div>
+
+      <!-- narration written to fit these windows; never re-time frames from voice length -->
+      <audio id="vo1" src="assets/voice/01.mp3" data-start="0.1" data-duration="2.04" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo2" src="assets/voice/02.mp3" data-start="3" data-duration="3.48" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo3" src="assets/voice/03.mp3" data-start="20.1" data-duration="3.16" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo4" src="assets/voice/04.mp3" data-start="24.15" data-duration="3.20" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo5" src="assets/voice/cta.mp3" data-start="28.75" data-duration="4.78" data-track-index="10" data-volume="1"></audio>
+      <audio id="bgm" src="assets/bgm/famhop-underscore.mp3" data-start="0" data-duration="33.00" data-track-index="11" data-volume="0.14"></audio>
+    </div>
+
+    <script>
+      (function () {
+        var tl = gsap.timeline({ paused: true });
+
+        tl.fromTo('#s0-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.34, ease: 'power3.out' }, 0);
+        tl.fromTo('#s0-h1', { opacity: 0, y: 70, scale: 0.86 }, { opacity: 1, y: 0, scale: 1, duration: 0.42, ease: 'power4.out' }, 0.16);
+        tl.fromTo('#s0-l1', { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 0.52);
+        tl.fromTo('#s0-l2', { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 0.66);
+        tl.fromTo('#s0-slab', { scaleX: 0 }, { scaleX: 1, duration: 0.38, ease: 'power3.out' }, 1.10);
+        tl.fromTo('#s0-slabtx', { opacity: 0 }, { opacity: 1, duration: 0.01 }, 1.40);
+        tl.fromTo('#s0-date', { opacity: 0, x: -36 }, { opacity: 1, x: 0, duration: 0.44, ease: 'power3.out' }, 1.56);
+
+        /* One beat map replayed per card - identical rhythm card to card is
+           what makes a list Short readable at scroll speed. */
+        var CARDS = [
+          { at: 2.8, id: 'c1', chunks: 3 },
+          { at: 6.199999999999999, id: 'c2', chunks: 1 },
+          { at: 9.6, id: 'c3', chunks: 2 },
+          { at: 13, id: 'c4', chunks: 2 },
+          { at: 16.4, id: 'c5', chunks: 2 }
+        ];
+        CARDS.forEach(function (c) {
+          var t = c.at, p = '#' + c.id;
+          tl.fromTo(p + '-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.30, ease: 'power3.out' }, t);
+          tl.fromTo(p + '-num', { opacity: 0, y: 64, scale: 0.78 }, { opacity: 1, y: 0, scale: 1, duration: 0.26, ease: 'power4.out' }, t + 0.14);
+          tl.fromTo(p + '-tag', { opacity: 0, scale: 0.72 }, { opacity: 1, scale: 1, duration: 0.30, ease: 'back.out(2.2)' }, t + 0.22);
+          for (var i = 0; i < c.chunks; i++) {
+            tl.fromTo(p + '-t' + (i + 1), { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.42, ease: 'expo.out' }, t + 0.32 + i * 0.13);
+          }
+          tl.fromTo(p + '-rule', { scaleX: 0 }, { scaleX: 1, duration: 0.40, ease: 'power3.out' }, t + 0.80);
+          tl.fromTo(p + '-v', { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, t + 0.92);
+          tl.fromTo(p + '-c', { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, t + 1.02);
+          tl.fromTo(p + '-slab', { scaleX: 0 }, { scaleX: 1, duration: 0.34, ease: 'power3.out' }, t + 1.18);
+          tl.fromTo(p + '-slabtx', { opacity: 0 }, { opacity: 1, duration: 0.01 }, t + 1.46);
+          tl.fromTo(p + '-of', { opacity: 0, x: -28 }, { opacity: 1, x: 0, duration: 0.32, ease: 'power3.out' }, t + 0.30);
+          tl.fromTo(p + '-ages', { opacity: 0, x: 28 }, { opacity: 1, x: 0, duration: 0.32, ease: 'power3.out' }, t + 0.38);
+          tl.fromTo(p + '-k', { scaleX: 0 }, { scaleX: 1, duration: 3.0, ease: 'none' }, t + 0.3);
+        });
+
+        /* GAP (19.8) - the wall arrives first, then the five you just saw
+           light up inside it. One tween for the wall, five for the dots: the
+           other 152 are deliberately never animated. */
+        var G = 19.8;
+        tl.fromTo('#gap-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.32, ease: 'power3.out' }, G);
+        tl.fromTo('#gap-head', { opacity: 0, y: 48 }, { opacity: 1, y: 0, duration: 0.40, ease: 'power4.out' }, G + 0.14);
+        tl.fromTo('#gap-grid', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.62, ease: 'power2.out' }, G + 0.44);
+        tl.fromTo('#g1', { scale: 0.3 }, { scale: 1, duration: 0.34, ease: 'back.out(3)' }, G + 0.92);
+        tl.fromTo('#g2', { scale: 0.3 }, { scale: 1, duration: 0.34, ease: 'back.out(3)' }, G + 1.01);
+        tl.fromTo('#g3', { scale: 0.3 }, { scale: 1, duration: 0.34, ease: 'back.out(3)' }, G + 1.10);
+        tl.fromTo('#g4', { scale: 0.3 }, { scale: 1, duration: 0.34, ease: 'back.out(3)' }, G + 1.19);
+        tl.fromTo('#g5', { scale: 0.3 }, { scale: 1, duration: 0.34, ease: 'back.out(3)' }, G + 1.28);
+        tl.fromTo('#gap-l1', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, G + 1.52);
+        tl.fromTo('#gap-l2', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, G + 1.65);
+
+        /* PAYOFF (23.8) */
+        var P = 23.8;
+        tl.fromTo('#pay-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.32, ease: 'power3.out' }, P);
+        tl.fromTo('#pay-head', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.34, ease: 'power3.out' }, P + 0.14);
+        tl.fromTo('#pay-num', { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.34, ease: 'power4.out' }, P + 0.30);
+        /* Each step is a real count, one filter deeper. Set-and-pop rather than
+           a tween, so every rendered frame shows a number that is actually true. */
+        var STEPS = [157, 18, 16, 13];
+        var numEl = document.getElementById('pay-num');
+        [1, 2, 3].forEach(function (i) {
+          var at = P + 0.86 + (i - 1) * 0.62;
+          tl.call(function () { numEl.textContent = STEPS[i]; }, null, at);
+          tl.fromTo('#pay-num', { scale: 0.86 }, { scale: 1, duration: 0.26, ease: 'back.out(2.4)' }, at);
+          tl.fromTo('#pay-chip' + i, { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.28, ease: 'back.out(2.6)' }, at);
+        });
+        /* Seeking backwards has to restore the first count too. */
+        tl.call(function () { numEl.textContent = STEPS[0]; }, null, P);
+        tl.fromTo('#pay-tail', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.38, ease: 'power3.out' }, P + 2.90);
+
+        var T = 28.4;
+        tl.fromTo('#cta-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.34, ease: 'power3.out' }, T);
+        tl.fromTo('#cta-k1', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, T + 0.16);
+        tl.fromTo('#cta-k2', { opacity: 0, y: 60, scale: 0.86 }, { opacity: 1, y: 0, scale: 1, duration: 0.42, ease: 'power4.out' }, T + 0.32);
+        tl.fromTo('#cta-mark', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.42, ease: 'power4.out' }, T + 0.86);
+        tl.fromTo('#cta-url', { scaleX: 0 }, { scaleX: 1, duration: 0.40, ease: 'power3.out' }, T + 1.18);
+        tl.fromTo('#cta-urltx', { opacity: 0 }, { opacity: 1, duration: 0.01 }, T + 1.50);
+        tl.fromTo('#cta-news', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.38, ease: 'power3.out' }, T + 1.74);
+
+        window.__timelines = window.__timelines || {};
+        window.__timelines['main'] = tl;
+      })();
+    </script>
+  </body>
+</html>
