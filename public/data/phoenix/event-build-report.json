@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "phoenix",
-  "generatedAt": "2026-07-27T00:37:00.475Z",
+  "generatedAt": "2026-08-01T05:30:43.307Z",
   "registryPath": "data/event-sources-phoenix.json",
   "outputPath": "public/data/phoenix/events.json",
-  "eventCount": 631,
-  "adultsEventCount": 43,
-  "sourceCount": 15,
-  "liveEventCount": 657,
+  "eventCount": 575,
+  "adultsEventCount": 50,
+  "sourceCount": 17,
+  "liveEventCount": 602,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
   "operatorAlertCount": 7,
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-27T00:37:00.475Z",
+      "fetchedAt": "2026-08-01T05:30:43.307Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-27T00:37:00.475Z",
+      "fetchedAt": "2026-08-01T05:30:43.307Z",
       "fetches": [
         {
           "url": "https://www.crescentphx.com/events",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-27T00:37:00.475Z",
+      "fetchedAt": "2026-08-01T05:30:43.307Z",
       "fetches": [
         {
           "url": "https://www.therebellounge.com/events",
@@ -89,21 +89,21 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "phoenix",
       "sourceId": "marquee-theatre-tempe",
       "sourceName": "Marquee Theatre",
       "sourceType": "html",
       "url": "https://www.marqueetheatreaz.com/calendar/",
       "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-27T00:37:00.475Z",
+      "fetchedAt": "2026-08-01T05:30:43.307Z",
       "fetches": [
         {
           "url": "https://www.marqueetheatreaz.com/calendar/",
@@ -128,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-27T00:37:00.475Z",
+      "fetchedAt": "2026-08-01T05:30:43.307Z",
       "fetches": [
         {
           "url": "https://phoenix.standuplive.com/events",
@@ -153,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-27T00:37:00.475Z",
+      "fetchedAt": "2026-08-01T05:30:43.307Z",
       "fetches": [
         {
           "url": "https://houseofcomedy.net/scottsdale",
@@ -178,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-27T00:37:00.475Z",
+      "fetchedAt": "2026-08-01T05:30:43.307Z",
       "fetches": [
         {
           "url": "https://www.theniletheater.com/events",
@@ -213,9 +213,9 @@
       "metroId": "phoenix",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 277,
+      "liveEvents": 256,
       "fallbackEvents": 0,
-      "eventCount": 277,
+      "eventCount": 256,
       "fetches": [
         {
           "url": "https://calendar.phoenixpubliclibrary.org/calendar/",
@@ -226,8 +226,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 278,
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 256,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -267,21 +267,21 @@
       "metroId": "phoenix",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 183,
+      "liveEvents": 149,
       "fallbackEvents": 0,
-      "eventCount": 183,
+      "eventCount": 149,
       "fetches": [
         {
           "url": "https://childrensmuseumofphoenix.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=195; pages=4"
+          "contentType": "application/json; source=tribe-events; events=161; pages=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=195; pages=4",
+      "contentType": "application/json; source=tribe-events; events=161; pages=4",
       "rejectedLiveEvents": 7,
-      "extractedEvents": 190,
+      "extractedEvents": 156,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -307,8 +307,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 7,
-      "extractedEvents": 11,
+      "rejectedLiveEvents": 6,
+      "extractedEvents": 10,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -375,9 +375,9 @@
       "metroId": "phoenix",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 158,
+      "liveEvents": 153,
       "fallbackEvents": 0,
-      "eventCount": 158,
+      "eventCount": 153,
       "fetches": [
         {
           "url": "https://dbg.org/events/",
@@ -388,8 +388,62 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 39,
+      "rejectedLiveEvents": 44,
       "extractedEvents": 197,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "hot-wheels-monster-trucks-live-glendale-2026-08-08-src",
+      "name": "Hot Wheels Monster Trucks Live Glow-N-Fire",
+      "url": "https://hotwheelsmonstertruckslive.com/event/glendale-az-2026/",
+      "sourceType": "officialTextEvents",
+      "city": "Glendale",
+      "metroId": "phoenix",
+      "category": "Ticketed",
+      "status": "ok",
+      "liveEvents": 2,
+      "fallbackEvents": 0,
+      "eventCount": 2,
+      "fetches": [
+        {
+          "url": "https://hotwheelsmonstertruckslive.com/event/glendale-az-2026/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 2,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "xfinity-us-gymnastics-championships-2026-08-08-src",
+      "name": "Xfinity U.S. Gymnastics Championships",
+      "url": "https://xfinitychampionships.com/info/",
+      "sourceType": "officialTextEvents",
+      "city": "Phoenix",
+      "metroId": "phoenix",
+      "category": "Ticketed",
+      "status": "ok",
+      "liveEvents": 2,
+      "fallbackEvents": 0,
+      "eventCount": 2,
+      "fetches": [
+        {
+          "url": "https://xfinitychampionships.com/info/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -429,9 +483,9 @@
       "metroId": "phoenix",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 25,
+      "liveEvents": 26,
       "fallbackEvents": 0,
-      "eventCount": 25,
+      "eventCount": 26,
       "fetches": [
         {
           "url": "https://www.thevanburenphx.com/shows",
@@ -442,7 +496,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 11,
+      "rejectedLiveEvents": 10,
       "extractedEvents": 36,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -496,8 +550,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

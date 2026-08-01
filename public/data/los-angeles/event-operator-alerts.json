@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "metroId": "los-angeles",
-  "generatedAt": "2026-07-28T02:02:21.793Z",
+  "generatedAt": "2026-08-01T05:19:10.526Z",
   "alertCount": 15,
   "alerts": [
     {
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:02:21.793Z",
+      "fetchedAt": "2026-08-01T05:19:10.526Z",
       "fetches": [
         {
           "url": "https://www.petersen.org/events",
@@ -27,6 +27,31 @@
           "reason": "challenge page returned instead of event content",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "griffith-observatory",
+      "sourceName": "Griffith Observatory",
+      "sourceType": "html",
+      "url": "https://griffithobservatory.lacity.gov/events/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-01T05:19:10.526Z",
+      "fetches": [
+        {
+          "url": "https://griffithobservatory.lacity.gov/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -45,7 +70,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:02:21.793Z",
+      "fetchedAt": "2026-08-01T05:19:10.526Z",
       "fetches": [
         {
           "url": "https://www.nortonsimon.org/calendar",
@@ -70,7 +95,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:02:21.793Z",
+      "fetchedAt": "2026-08-01T05:19:10.526Z",
       "fetches": [
         {
           "url": "https://www.huntington.org/calendar",
@@ -95,7 +120,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:02:21.793Z",
+      "fetchedAt": "2026-08-01T05:19:10.526Z",
       "fetches": [
         {
           "url": "https://grandparkla.org/events/",
@@ -120,7 +145,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:02:21.793Z",
+      "fetchedAt": "2026-08-01T05:19:10.526Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -145,35 +170,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:02:21.793Z",
+      "fetchedAt": "2026-08-01T05:19:10.526Z",
       "fetches": [
         {
           "url": "https://ocfair.com/oc-fair/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "los-angeles",
-      "sourceId": "grand-park-block-party-2026",
-      "sourceName": "Gloria Molina Grand Park's Summer Block Party (July 4)",
-      "sourceType": "officialTextEvents",
-      "url": "https://grandparkla.org/blockparty/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:02:21.793Z",
-      "fetches": [
-        {
-          "url": "https://grandparkla.org/blockparty/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -195,7 +195,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:02:21.793Z",
+      "fetchedAt": "2026-08-01T05:19:10.526Z",
       "fetches": [
         {
           "url": "https://www.troubadour.com/events",
@@ -220,7 +220,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:02:21.793Z",
+      "fetchedAt": "2026-08-01T05:19:10.526Z",
       "fetches": [
         {
           "url": "https://www.theelrey.com/events",
@@ -245,7 +245,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:02:21.793Z",
+      "fetchedAt": "2026-08-01T05:19:10.526Z",
       "fetches": [
         {
           "url": "https://www.theroxy.com/events",
@@ -270,7 +270,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:02:21.793Z",
+      "fetchedAt": "2026-08-01T05:19:10.526Z",
       "fetches": [
         {
           "url": "https://thecomedystore.com/calendar/",
@@ -295,7 +295,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:02:21.793Z",
+      "fetchedAt": "2026-08-01T05:19:10.526Z",
       "fetches": [
         {
           "url": "https://www.laughfactory.com/shows",
@@ -320,7 +320,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:02:21.793Z",
+      "fetchedAt": "2026-08-01T05:19:10.526Z",
       "fetches": [
         {
           "url": "https://improv.com/hollywood/calendar/",
@@ -345,7 +345,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:02:21.793Z",
+      "fetchedAt": "2026-08-01T05:19:10.526Z",
       "fetches": [
         {
           "url": "https://www.ticketmaster.com/the-wiltern-tickets-los-angeles/venue/73790",
@@ -371,7 +371,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:02:21.793Z",
+      "fetchedAt": "2026-08-01T05:19:10.526Z",
       "fetches": [
         {
           "url": "https://www.theregenttheater.com/events",

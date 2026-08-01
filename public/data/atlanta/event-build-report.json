@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "atlanta",
-  "generatedAt": "2026-07-28T02:15:11.496Z",
+  "generatedAt": "2026-08-01T05:23:51.667Z",
   "registryPath": "data/event-sources-atlanta.json",
   "outputPath": "public/data/atlanta/events.json",
-  "eventCount": 515,
-  "adultsEventCount": 240,
+  "eventCount": 627,
+  "adultsEventCount": 267,
   "sourceCount": 30,
-  "liveEventCount": 648,
+  "liveEventCount": 775,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 8,
-  "operatorAlertCount": 10,
+  "operatorAlertCount": 8,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,13 +28,38 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:15:11.496Z",
+      "fetchedAt": "2026-08-01T05:23:51.667Z",
       "fetches": [
         {
           "url": "https://www.atlantaga.gov/government/departments/parks-recreation/events",
           "status": "http-error",
           "httpStatus": 404,
           "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "atlanta",
+      "sourceId": "ticketmaster-atlanta-family",
+      "sourceName": "Ticketmaster Atlanta Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-01T05:23:51.667Z",
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=3; queries=1"
         }
       ]
     },
@@ -53,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:15:11.496Z",
+      "fetchedAt": "2026-08-01T05:23:51.667Z",
       "fetches": [
         {
           "url": "https://www.northgeorgiastatefair.com/",
@@ -78,85 +103,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:15:11.496Z",
+      "fetchedAt": "2026-08-01T05:23:51.667Z",
       "fetches": [
         {
           "url": "https://www.gwinnettcountyfair.com/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "stone-mountain-fantastic-fourth-2026",
-      "sourceName": "Stone Mountain Fantastic Fourth Celebration 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://stonemountainpark.com/activities/events/atlanta-4th-of-july-fireworks-at-stone-mountain-park/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:15:11.496Z",
-      "fetches": [
-        {
-          "url": "https://stonemountainpark.com/activities/events/atlanta-4th-of-july-fireworks-at-stone-mountain-park/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "united-church-back-to-school-bash-2026",
-      "sourceName": "United Church Back to School Bash (July 18)",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.eventbrite.com/e/back-to-school-bash-tickets-1991385968037",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:15:11.496Z",
-      "fetches": [
-        {
-          "url": "https://www.eventbrite.com/e/back-to-school-bash-tickets-1991385968037",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "fulton-sheriff-back-to-school-bash-2026",
-      "sourceName": "Fulton County Sheriff's Office Back to School Bash (July 18)",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.eventbrite.com/e/fulton-county-sheriffs-office-back-to-school-bash-tickets-1990976298705",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:15:11.496Z",
-      "fetches": [
-        {
-          "url": "https://www.eventbrite.com/e/fulton-county-sheriffs-office-back-to-school-bash-tickets-1990976298705",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -178,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:15:11.496Z",
+      "fetchedAt": "2026-08-01T05:23:51.667Z",
       "fetches": [
         {
           "url": "https://www.terminalwestatl.com/events",
@@ -203,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:15:11.496Z",
+      "fetchedAt": "2026-08-01T05:23:51.667Z",
       "fetches": [
         {
           "url": "https://www.varietyplayhouse.com/events",
@@ -228,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:15:11.496Z",
+      "fetchedAt": "2026-08-01T05:23:51.667Z",
       "fetches": [
         {
           "url": "https://www.badearl.com/calendar",
@@ -253,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:15:11.496Z",
+      "fetchedAt": "2026-08-01T05:23:51.667Z",
       "fetches": [
         {
           "url": "https://atlfoodandwinefestival.com/",
@@ -288,9 +238,9 @@
       "metroId": "atlanta",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 6,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 6,
       "fetches": [
         {
           "url": "https://fulcolibrary.bibliocommons.com/v2/events",
@@ -302,7 +252,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 3,
+      "extractedEvents": 6,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -341,9 +291,9 @@
       "metroId": "atlanta",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 32,
+      "liveEvents": 166,
       "fallbackEvents": 0,
-      "eventCount": 32,
+      "eventCount": 166,
       "fetches": [
         {
           "url": "https://childrensmuseumatlanta.org/program-calendar/",
@@ -354,8 +304,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 32,
+      "rejectedLiveEvents": 21,
+      "extractedEvents": 187,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -395,21 +345,21 @@
       "metroId": "atlanta",
       "category": "Ticketed",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=4; queries=1"
+          "contentType": "application/json; source=ticketmaster; events=3; queries=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=ticketmaster; events=4; queries=1",
+      "contentType": "application/json; source=ticketmaster; events=3; queries=1",
       "rejectedLiveEvents": 1,
-      "extractedEvents": 2,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -476,21 +426,21 @@
       "metroId": "atlanta",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 156,
+      "liveEvents": 125,
       "fallbackEvents": 0,
-      "eventCount": 156,
+      "eventCount": 125,
       "fetches": [
         {
           "url": "https://dekalb.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=510; locations=25"
+          "contentType": "application/json; source=communico-events; events=467; locations=25"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=510; locations=25",
+      "contentType": "application/json; source=communico-events; events=467; locations=25",
       "rejectedLiveEvents": 1,
-      "extractedEvents": 157,
+      "extractedEvents": 126,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -503,21 +453,21 @@
       "metroId": "atlanta",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 24,
+      "liveEvents": 22,
       "fallbackEvents": 0,
-      "eventCount": 24,
+      "eventCount": 22,
       "fetches": [
         {
           "url": "https://gwinnettpl.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=663; locations=17"
+          "contentType": "application/json; source=communico-events; events=696; locations=17"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=663; locations=17",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 24,
+      "contentType": "application/json; source=communico-events; events=696; locations=17",
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 23,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -530,20 +480,20 @@
       "metroId": "atlanta",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 64,
+      "liveEvents": 67,
       "fallbackEvents": 0,
-      "eventCount": 64,
+      "eventCount": 67,
       "fetches": [
         {
           "url": "https://atlantabg.org/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=140; pages=3"
+          "contentType": "application/json; source=tribe-events; events=139; pages=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=140; pages=3",
-      "rejectedLiveEvents": 65,
+      "contentType": "application/json; source=tribe-events; events=139; pages=3",
+      "rejectedLiveEvents": 62,
       "extractedEvents": 129,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -557,9 +507,9 @@
       "metroId": "atlanta",
       "category": "Community",
       "status": "ok",
-      "liveEvents": 164,
+      "liveEvents": 174,
       "fallbackEvents": 0,
-      "eventCount": 164,
+      "eventCount": 174,
       "fetches": [
         {
           "url": "https://www.visitmariettaga.com/events/",
@@ -570,8 +520,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 33,
-      "extractedEvents": 197,
+      "rejectedLiveEvents": 22,
+      "extractedEvents": 196,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -584,21 +534,21 @@
       "metroId": "atlanta",
       "category": "Community",
       "status": "ok",
-      "liveEvents": 39,
+      "liveEvents": 35,
       "fallbackEvents": 0,
-      "eventCount": 39,
+      "eventCount": 35,
       "fetches": [
         {
           "url": "https://www.awesomealpharetta.com/calendar/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=64; pages=2"
+          "contentType": "application/json; source=tribe-events; events=58; pages=2"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=64; pages=2",
-      "rejectedLiveEvents": 24,
-      "extractedEvents": 63,
+      "contentType": "application/json; source=tribe-events; events=58; pages=2",
+      "rejectedLiveEvents": 22,
+      "extractedEvents": 57,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -611,21 +561,21 @@
       "metroId": "atlanta",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 32,
+      "liveEvents": 31,
       "fallbackEvents": 0,
-      "eventCount": 32,
+      "eventCount": 31,
       "fetches": [
         {
           "url": "https://piedmontpark.org/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=56; pages=2"
+          "contentType": "application/json; source=tribe-events; events=53; pages=2"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=56; pages=2",
-      "rejectedLiveEvents": 24,
-      "extractedEvents": 56,
+      "contentType": "application/json; source=tribe-events; events=53; pages=2",
+      "rejectedLiveEvents": 22,
+      "extractedEvents": 53,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -638,21 +588,21 @@
       "metroId": "atlanta",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 7,
+      "liveEvents": 6,
       "fallbackEvents": 0,
-      "eventCount": 7,
+      "eventCount": 6,
       "fetches": [
         {
           "url": "https://www.atlantahistorycenter.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=16; pages=1"
+          "contentType": "application/json; source=tribe-events; events=15; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=16; pages=1",
+      "contentType": "application/json; source=tribe-events; events=15; pages=1",
       "rejectedLiveEvents": 9,
-      "extractedEvents": 16,
+      "extractedEvents": 15,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -684,20 +634,20 @@
       "recoveryMode": null
     },
     {
-      "id": "stone-mountain-fantastic-fourth-2026",
-      "name": "Stone Mountain Fantastic Fourth Celebration 2026",
-      "url": "https://stonemountainpark.com/activities/events/atlanta-4th-of-july-fireworks-at-stone-mountain-park/",
+      "id": "artsxchange-midsummer-family-fun-festival-2026-08-01-src",
+      "name": "2026 Midsummer Family Fun Festival at ArtsXchange",
+      "url": "https://www.artsxchange.org/upcomingevents",
       "sourceType": "officialTextEvents",
-      "city": "Stone Mountain",
+      "city": "East Point",
       "metroId": "atlanta",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
-          "url": "https://stonemountainpark.com/activities/events/atlanta-4th-of-july-fireworks-at-stone-mountain-park/",
+          "url": "https://www.artsxchange.org/upcomingevents",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -705,26 +655,26 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 0,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
     {
-      "id": "united-church-back-to-school-bash-2026",
-      "name": "United Church Back to School Bash (July 18)",
-      "url": "https://www.eventbrite.com/e/back-to-school-bash-tickets-1991385968037",
+      "id": "ghanafest-atlanta-2026-08-08-src",
+      "name": "GhanaFest Atlanta 2026",
+      "url": "https://gadangmega.org/events/40-ghanafest-2026",
       "sourceType": "officialTextEvents",
-      "city": "Atlanta",
+      "city": "Brookhaven",
       "metroId": "atlanta",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
-          "url": "https://www.eventbrite.com/e/back-to-school-bash-tickets-1991385968037",
+          "url": "https://gadangmega.org/events/40-ghanafest-2026",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -732,34 +682,34 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 0,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
     {
-      "id": "fulton-sheriff-back-to-school-bash-2026",
-      "name": "Fulton County Sheriff's Office Back to School Bash (July 18)",
-      "url": "https://www.eventbrite.com/e/fulton-county-sheriffs-office-back-to-school-bash-tickets-1990976298705",
+      "id": "dragon-con-parade-2026-09-05-src",
+      "name": "Annual Dragon Con Parade",
+      "url": "https://www.dragoncon.org/things-to-do/parade/",
       "sourceType": "officialTextEvents",
       "city": "Atlanta",
       "metroId": "atlanta",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
-          "url": "https://www.eventbrite.com/e/fulton-county-sheriffs-office-back-to-school-bash-tickets-1990976298705",
+          "url": "https://www.dragoncon.org/things-to-do/parade/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
+          "contentType": "text/html; charset=UTF-8"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -865,8 +815,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 8,
-      "extractedEvents": 9,
+      "rejectedLiveEvents": 7,
+      "extractedEvents": 8,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -933,21 +883,21 @@
       "metroId": "atlanta",
       "category": "Comedy",
       "status": "ok",
-      "liveEvents": 24,
+      "liveEvents": 27,
       "fallbackEvents": 0,
-      "eventCount": 24,
+      "eventCount": 27,
       "fetches": [
         {
           "url": "https://www.punchline.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=155; pages=4"
+          "contentType": "application/json; source=tribe-events; events=149; pages=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=155; pages=4",
-      "rejectedLiveEvents": 131,
-      "extractedEvents": 155,
+      "contentType": "application/json; source=tribe-events; events=149; pages=3",
+      "rejectedLiveEvents": 122,
+      "extractedEvents": 149,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -960,9 +910,9 @@
       "metroId": "atlanta",
       "category": "Market",
       "status": "ok",
-      "liveEvents": 59,
+      "liveEvents": 70,
       "fallbackEvents": 0,
-      "eventCount": 59,
+      "eventCount": 70,
       "fetches": [
         {
           "url": "https://www.poncecitymarket.com/events/",
@@ -973,8 +923,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 110,
-      "extractedEvents": 169,
+      "rejectedLiveEvents": 101,
+      "extractedEvents": 171,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

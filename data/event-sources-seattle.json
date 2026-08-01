@@ -140,7 +140,21 @@
       "sourceType": "ticketmaster",
       "trust": "commercial",
       "enabled": false,
-      "requiresEnv": "TICKETMASTER_API_KEY"
+      "requiresEnv": "TICKETMASTER_API_KEY",
+      "lat": 47.6062,
+      "lon": -122.3321,
+      "radiusMiles": 45,
+      "ticketmasterQueries": [
+        {
+          "classificationName": "Family"
+        },
+        {
+          "classificationName": "Children's Theatre"
+        },
+        {
+          "keyword": "family"
+        }
+      ]
     },
     {
       "id": "washington-state-fair",
@@ -149,10 +163,37 @@
       "city": "Puyallup",
       "neighborhood": "Puyallup",
       "category": "Festival",
-      "sourceType": "html",
+      "sourceType": "officialTextEvents",
       "trust": "official",
       "lat": 47.1985,
-      "lon": -122.4331
+      "lon": -122.4331,
+      "officialTextEvents": [
+        {
+          "id": "washington-state-fair-2026",
+          "title": "Washington State Fair",
+          "description": "The 2026 Washington State Fair in Puyallup, the state's largest fair: carnival rides, rodeo, farm animals, live music, scones, and family entertainment across 24 days.",
+          "venue": "Washington State Fair Events Center",
+          "neighborhood": "Puyallup",
+          "startDateTime": "2026-09-04T10:00:00-07:00",
+          "endDateTime": "2026-09-27T22:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Ticketed",
+          "url": "https://www.thefair.com/",
+          "requiredText": [
+            "Washington State Fair",
+            "September 4-27",
+            "Puyallup"
+          ]
+        }
+      ]
     },
     {
       "id": "evergreen-state-fair",
@@ -215,46 +256,6 @@
       "trust": "official",
       "lat": 47.6553,
       "lon": -122.3035
-    },
-    {
-      "id": "festal-indigenous-people-festival-2026",
-      "name": "Festál: Indigenous People Festival",
-      "url": "https://www.seattlecenter.com/events/featured-events/festal/indigenous-people-festival",
-      "city": "Seattle",
-      "neighborhood": "Seattle Center",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 47.6221,
-      "lon": -122.354,
-      "officialTextEvents": [
-        {
-          "id": "festal-indigenous-people-festival-2026",
-          "title": "Festál: Indigenous People Festival",
-          "description": "Free Seattle Center Festál cultural festival celebrating Native cultures through song, dance, performances, art, food, and indigenous knowledge sharing, with over 70 vendors and a drag story time. Presented in partnership with Seattle Indian Health Board.",
-          "venue": "Seattle Center Armory",
-          "neighborhood": "Seattle Center",
-          "startDateTime": "2026-06-13T11:00:00-07:00",
-          "endDateTime": "2026-06-13T17:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "audiences": [
-            "kids",
-            "adults"
-          ],
-          "cost": "Free",
-          "url": "https://www.seattlecenter.com/events/featured-events/festal/indigenous-people-festival",
-          "requiredText": [
-            "Indigenous People Festival",
-            "June 13, 2026",
-            "Armory Food & Event Hall",
-            "free and open to the public"
-          ]
-        }
-      ]
     },
     {
       "id": "festal-tibet-fest-2026",
@@ -417,98 +418,69 @@
       ]
     },
     {
-      "id": "king-county-fair-2026",
-      "name": "King County Fair 2026",
-      "url": "https://www.enumclawexpo.com/p/king-county-fair",
-      "city": "Enumclaw",
-      "neighborhood": "Enumclaw",
+      "id": "seafair-weekend-festival-2026-08-01-src",
+      "name": "Seafair Weekend Festival & Boeing Seafair Air Show",
+      "url": "https://www.seafair.org/seafair-weekend-festival/",
+      "city": "Seattle",
+      "neighborhood": "Genesee Park, Seattle",
       "category": "Festival",
       "sourceType": "officialTextEvents",
       "trust": "official",
-      "lat": 47.206,
-      "lon": -122.003,
+      "lat": 47.5566,
+      "lon": -122.2703,
       "officialTextEvents": [
         {
-          "id": "king-county-fair-2026-07-16",
-          "title": "King County Fair",
-          "description": "The King County Fair returns to the Enumclaw Expo Center July 16-19, 2026, with a carnival and Kid Zone plus mainstage entertainment. Open 10am-10pm Thursday through Saturday and 10am-6pm Sunday.",
-          "venue": "Enumclaw Expo Center",
-          "neighborhood": "Enumclaw",
-          "startDateTime": "2026-07-16T10:00:00-07:00",
-          "endDateTime": "2026-07-16T22:00:00-07:00",
+          "id": "seafair-weekend-festival-2026-08-01",
+          "title": "Seafair Weekend Festival & Boeing Seafair Air Show (Saturday)",
+          "description": "Seattle's signature summer weekend on Lake Washington at Genesee Park: hydroplane racing on the lake and the Boeing Seafair Air Show overhead, headlined by the U.S. Navy Blue Angels flying at 3:30 PM, plus military demonstrations, aerobatic performers, and vintage aircraft. Children under 12 get complimentary general admission.",
+          "venue": "Genesee Park",
+          "neighborhood": "Genesee Park, Seattle",
+          "startDateTime": "2026-08-01T08:30:00-07:00",
+          "endDateTime": "2026-08-01T18:00:00-07:00",
           "ageBands": [
-            "preschool",
             "school-age",
-            "tween"
+            "tween",
+            "teen"
           ],
-          "url": "https://www.enumclawexpo.com/p/king-county-fair",
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Ticketed; children under 12 free general admission",
+          "url": "https://www.seafair.org/seafair-weekend-festival/",
           "requiredText": [
-            "July 16",
-            "2026",
-            "45224 284th Ave SE"
+            "Seafair Weekend",
+            "AUGUST 2, 2026",
+            "8:30AM"
           ]
         },
         {
-          "id": "king-county-fair-2026-07-17",
-          "title": "King County Fair",
-          "description": "The King County Fair returns to the Enumclaw Expo Center July 16-19, 2026, with a carnival and Kid Zone plus mainstage entertainment. Open 10am-10pm Thursday through Saturday and 10am-6pm Sunday.",
-          "venue": "Enumclaw Expo Center",
-          "neighborhood": "Enumclaw",
-          "startDateTime": "2026-07-17T10:00:00-07:00",
-          "endDateTime": "2026-07-17T22:00:00-07:00",
+          "id": "seafair-weekend-festival-2026-08-02",
+          "title": "Seafair Weekend Festival & Boeing Seafair Air Show (Sunday)",
+          "description": "Closing day of Seafair Weekend at Genesee Park on Lake Washington, with hydroplane racing, the Boeing Seafair Air Show, and the U.S. Navy Blue Angels performing at 3:30 PM. Children under 12 get complimentary general admission.",
+          "venue": "Genesee Park",
+          "neighborhood": "Genesee Park, Seattle",
+          "startDateTime": "2026-08-02T08:30:00-07:00",
+          "endDateTime": "2026-08-02T18:00:00-07:00",
           "ageBands": [
-            "preschool",
             "school-age",
-            "tween"
+            "tween",
+            "teen"
           ],
-          "url": "https://www.enumclawexpo.com/p/king-county-fair",
-          "requiredText": [
-            "July 16",
-            "2026",
-            "45224 284th Ave SE"
-          ]
-        },
-        {
-          "id": "king-county-fair-2026-07-18",
-          "title": "King County Fair",
-          "description": "The King County Fair returns to the Enumclaw Expo Center July 16-19, 2026, with a carnival and Kid Zone plus mainstage entertainment. Open 10am-10pm Thursday through Saturday and 10am-6pm Sunday.",
-          "venue": "Enumclaw Expo Center",
-          "neighborhood": "Enumclaw",
-          "startDateTime": "2026-07-18T10:00:00-07:00",
-          "endDateTime": "2026-07-18T22:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
+          "audiences": [
+            "kids",
+            "adults"
           ],
-          "url": "https://www.enumclawexpo.com/p/king-county-fair",
+          "cost": "Ticketed; children under 12 free general admission",
+          "url": "https://www.seafair.org/seafair-weekend-festival/",
           "requiredText": [
-            "July 16",
-            "2026",
-            "45224 284th Ave SE"
-          ]
-        },
-        {
-          "id": "king-county-fair-2026-07-19",
-          "title": "King County Fair",
-          "description": "The King County Fair returns to the Enumclaw Expo Center July 16-19, 2026, with a carnival and Kid Zone plus mainstage entertainment. Open 10am-10pm Thursday through Saturday and 10am-6pm Sunday.",
-          "venue": "Enumclaw Expo Center",
-          "neighborhood": "Enumclaw",
-          "startDateTime": "2026-07-19T10:00:00-07:00",
-          "endDateTime": "2026-07-19T18:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "url": "https://www.enumclawexpo.com/p/king-county-fair",
-          "requiredText": [
-            "July 16",
-            "2026",
-            "45224 284th Ave SE"
+            "Seafair Weekend",
+            "AUGUST 2, 2026",
+            "8:30AM"
           ]
         }
-      ]
+      ],
+      "requiresBrowserContext": true
     }
   ]
 }

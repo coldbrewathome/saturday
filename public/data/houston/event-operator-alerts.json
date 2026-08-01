@@ -1,34 +1,9 @@
 {
   "schemaVersion": 1,
   "metroId": "houston",
-  "generatedAt": "2026-07-28T02:04:50.457Z",
-  "alertCount": 9,
+  "generatedAt": "2026-08-01T05:28:41.319Z",
+  "alertCount": 7,
   "alerts": [
-    {
-      "severity": "warning",
-      "metroId": "houston",
-      "sourceId": "houston-parks-family",
-      "sourceName": "Discovery Green Family Events",
-      "sourceType": "wwcEvents",
-      "url": "https://www.discoverygreen.com/event-category/parks-play/",
-      "status": "ok-template-fallback",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": "recurring-template",
-      "recoveredEvents": 8,
-      "liveEvents": 0,
-      "fallbackEvents": 8,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:04:50.457Z",
-      "fetches": [
-        {
-          "url": "https://www.discoverygreen.com/event-category/parks-play/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; source=wwc-events; events=24; pages=2"
-        }
-      ]
-    },
     {
       "severity": "warning",
       "metroId": "houston",
@@ -44,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:04:50.457Z",
+      "fetchedAt": "2026-08-01T05:28:41.319Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -69,60 +44,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:04:50.457Z",
+      "fetchedAt": "2026-08-01T05:28:41.319Z",
       "fetches": [
         {
           "url": "https://www.fortbendcountyfair.com/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "houston",
-      "sourceId": "freedom-over-texas-2026",
-      "sourceName": "Freedom Over Texas 2026 (City of Houston July 4)",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.houstontx.gov/july4/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:04:50.457Z",
-      "fetches": [
-        {
-          "url": "https://www.houstontx.gov/july4/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "houston",
-      "sourceId": "braeswood-church-health-fair-2026",
-      "sourceName": "Braeswood Church Community Health Fair - Branch Forest (July 18)",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.eventbrite.com/e/braeswood-church-community-health-fair-tickets-1988591906925",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:04:50.457Z",
-      "fetches": [
-        {
-          "url": "https://www.eventbrite.com/e/braeswood-church-community-health-fair-tickets-1988591906925",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -144,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:04:50.457Z",
+      "fetchedAt": "2026-08-01T05:28:41.319Z",
       "fetches": [
         {
           "url": "https://www.whiteoakmusichall.com/events",
@@ -169,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:04:50.457Z",
+      "fetchedAt": "2026-08-01T05:28:41.319Z",
       "fetches": [
         {
           "url": "https://www.warehouselive.com/events",
@@ -193,7 +118,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:04:50.457Z",
+      "fetchedAt": "2026-08-01T05:28:41.319Z",
       "fetches": [
         {
           "url": "https://www.thesecretgrouphtx.com/calendar",
@@ -217,13 +142,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:04:50.457Z",
+      "fetchedAt": "2026-08-01T05:28:41.319Z",
       "fetches": [
         {
           "url": "https://improv.com/houston/calendar/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "houston",
+      "sourceId": "eureka-heights-brewery",
+      "sourceName": "Eureka Heights Brewery",
+      "sourceType": "tribeEvents",
+      "url": "https://www.eurekaheights.com/events/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-01T05:28:41.319Z",
+      "fetches": [
+        {
+          "url": "https://www.eurekaheights.com/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=0; pages=1"
         }
       ]
     }

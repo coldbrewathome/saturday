@@ -154,10 +154,87 @@
       "city": "Timonium",
       "neighborhood": "Timonium",
       "category": "Festival",
-      "sourceType": "html",
+      "sourceType": "officialTextEvents",
       "trust": "official",
       "lat": 39.437,
-      "lon": -76.6199
+      "lon": -76.6199,
+      "officialTextEvents": [
+        {
+          "id": "maryland-state-fair-2026-weekend-1",
+          "title": "Maryland State Fair (Opening Weekend)",
+          "description": "The 2026 Maryland State Fair in Timonium, opening weekend: carnival rides, livestock and 4-H exhibits, agricultural displays, live entertainment, and fair food.",
+          "venue": "Maryland State Fairgrounds",
+          "neighborhood": "Timonium",
+          "startDateTime": "2026-08-27T10:00:00-04:00",
+          "endDateTime": "2026-08-30T22:00:00-04:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Ticketed",
+          "url": "https://marylandstatefair.com/",
+          "requiredText": [
+            "Maryland State Fair",
+            "August 27 - 30",
+            "Timonium"
+          ]
+        },
+        {
+          "id": "maryland-state-fair-2026-weekend-2",
+          "title": "Maryland State Fair (Labor Day Weekend)",
+          "description": "The 2026 Maryland State Fair in Timonium, Labor Day weekend: carnival rides, livestock and 4-H exhibits, agricultural displays, live entertainment, and fair food.",
+          "venue": "Maryland State Fairgrounds",
+          "neighborhood": "Timonium",
+          "startDateTime": "2026-09-03T10:00:00-04:00",
+          "endDateTime": "2026-09-07T22:00:00-04:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Ticketed",
+          "url": "https://marylandstatefair.com/",
+          "requiredText": [
+            "Maryland State Fair",
+            "September 3 - 7",
+            "Timonium"
+          ]
+        },
+        {
+          "id": "maryland-state-fair-2026-weekend-3",
+          "title": "Maryland State Fair (Closing Weekend)",
+          "description": "The 2026 Maryland State Fair in Timonium, closing weekend: carnival rides, livestock and 4-H exhibits, agricultural displays, live entertainment, and fair food.",
+          "venue": "Maryland State Fairgrounds",
+          "neighborhood": "Timonium",
+          "startDateTime": "2026-09-10T10:00:00-04:00",
+          "endDateTime": "2026-09-13T22:00:00-04:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Ticketed",
+          "url": "https://marylandstatefair.com/",
+          "requiredText": [
+            "Maryland State Fair",
+            "September 10-13",
+            "Timonium"
+          ]
+        }
+      ]
     },
     {
       "id": "montgomery-county-md-library-family",
@@ -230,56 +307,29 @@
     {
       "id": "national-building-museum-family",
       "name": "National Building Museum Children & Youth Programs",
-      "url": "https://www.nbm.org/events/",
+      "url": "https://nbm.org/events/",
+      "ticketureBaseUrl": "https://orders.nbm.org/",
       "city": "Washington",
       "neighborhood": "Judiciary Square",
       "category": "Museum",
-      "sourceType": "tribeEvents",
+      "sourceType": "ticketureEvents",
       "trust": "official",
+      "requiresBrowserHeaders": true,
+      "ticketureCategories": [
+        "Family Workshops",
+        "Tours"
+      ],
       "lat": 38.8977,
       "lon": -77.017,
-      "perPage": 100,
-      "maxPages": 4,
-      "categories": 267
-    },
-    {
-      "id": "glen-echo-park-pride-family-day-2026",
-      "name": "Glen Echo Park Pride Family Day",
-      "url": "https://glenechopark.org/pridemonth",
-      "city": "Bethesda",
-      "neighborhood": "Glen Echo",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 38.9685,
-      "lon": -77.1408,
-      "officialTextEvents": [
-        {
-          "id": "glen-echo-pride-family-day-2026",
-          "title": "Pride Family Day",
-          "description": "Family celebration at Glen Echo Park with hands-on arts & crafts, carousel rides, snacks, a family photo backdrop, and the Glen Echo Park Aquarium.",
-          "venue": "Glen Echo Park - Spanish Ballroom",
-          "neighborhood": "Glen Echo",
-          "startDateTime": "2026-06-13T11:00:00-04:00",
-          "endDateTime": "2026-06-13T14:00:00-04:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "audiences": [
-            "kids"
-          ],
-          "cost": "Free",
-          "url": "https://glenechopark.org/pridemonth",
-          "requiredText": [
-            "Pride Family Day",
-            "Saturday, June 13, 2026",
-            "11:00am - 2:00pm",
-            "Spanish Ballroom"
-          ]
-        }
-      ]
+      "defaultAudienceText": "children family kids museum building architecture workshop storytime",
+      "eventList": {
+        "venue": "National Building Museum",
+        "neighborhood": "Judiciary Square",
+        "city": "Washington",
+        "requireFamilySignal": false,
+        "excludePattern": "membership|donation|general admission|birthday part|field trip|summer camp|late night|21\\+",
+        "defaultDurationMinutes": 90
+      }
     },
     {
       "id": "loc-national-book-festival-2026",
@@ -444,6 +494,46 @@
             "Prince William County Fair",
             "July 31",
             "August 8"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "h-street-festival-2026-09-19-src",
+      "name": "2026 H Street Festival",
+      "url": "https://hstreet.org/event/2026-h-street-festival/",
+      "city": "Washington",
+      "neighborhood": "H Street NE, Washington",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 38.9001,
+      "lon": -76.9905,
+      "officialTextEvents": [
+        {
+          "id": "h-street-festival-2026-09-19",
+          "title": "2026 H Street Festival",
+          "description": "One of DC's biggest neighborhood street festivals fills H Street NE for a full day of live music, local vendors, food, art, and family activities, drawing thousands of visitors to the corridor. Presented by H Street Main Street.",
+          "venue": "H Street NE",
+          "neighborhood": "H Street NE, Washington",
+          "startDateTime": "2026-09-19T12:00:00-04:00",
+          "endDateTime": "2026-09-19T19:00:00-04:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween",
+            "teen"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Free",
+          "url": "https://hstreet.org/event/2026-h-street-festival/",
+          "requiredText": [
+            "2026 H Street Festival",
+            "September 19",
+            "H Street NE"
           ]
         }
       ]

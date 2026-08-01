@@ -1,9 +1,34 @@
 {
   "schemaVersion": 1,
   "metroId": "chicago",
-  "generatedAt": "2026-07-28T02:46:36.547Z",
-  "alertCount": 12,
+  "generatedAt": "2026-08-01T05:36:13.911Z",
+  "alertCount": 11,
   "alerts": [
+    {
+      "severity": "warning",
+      "metroId": "chicago",
+      "sourceId": "chicago-zoo-family",
+      "sourceName": "Lincoln Park Zoo Calendar",
+      "sourceType": "tribeEvents",
+      "url": "https://www.lpzoo.org/calendar-events/",
+      "status": "ok-template-fallback",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": "recurring-template",
+      "recoveredEvents": 4,
+      "liveEvents": 0,
+      "fallbackEvents": 4,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-01T05:36:13.911Z",
+      "fetches": [
+        {
+          "url": "https://www.lpzoo.org/calendar-events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=180; pages=4"
+        }
+      ]
+    },
     {
       "severity": "warning",
       "metroId": "chicago",
@@ -19,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:46:36.547Z",
+      "fetchedAt": "2026-08-01T05:36:13.911Z",
       "fetches": [
         {
           "url": "https://www.lcfairgrounds.com/events",
@@ -44,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:46:36.547Z",
+      "fetchedAt": "2026-08-01T05:36:13.911Z",
       "fetches": [
         {
           "url": "https://oakpark.librarycalendar.com/events/month",
@@ -69,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:46:36.547Z",
+      "fetchedAt": "2026-08-01T05:36:13.911Z",
       "fetches": [
         {
           "url": "https://napervillepl.librarycalendar.com/events/month",
@@ -82,25 +107,25 @@
     {
       "severity": "warning",
       "metroId": "chicago",
-      "sourceId": "kane-county-fair-2026",
-      "sourceName": "Kane County Fair 2026",
+      "sourceId": "big-trucks-barrington-park-district-2026-08-01-src",
+      "sourceName": "Big Trucks at Ron Beese Park",
       "sourceType": "officialTextEvents",
-      "url": "https://www.kanecountyfair.com/Fair-Information",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
+      "url": "https://www.barringtonparkdistrict.org/events-trips/",
+      "status": "ok-last-known-good",
+      "issueType": "zero-extracted",
+      "reason": "source produced no live events; using last-known-good future events",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:46:36.547Z",
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-08-01T05:36:13.911Z",
       "fetches": [
         {
-          "url": "https://www.kanecountyfair.com/Fair-Information",
+          "url": "https://www.barringtonparkdistrict.org/events-trips/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html;charset=UTF-8"
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -119,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:46:36.547Z",
+      "fetchedAt": "2026-08-01T05:36:13.911Z",
       "fetches": [
         {
           "url": "https://metrochicago.com/shows/",
@@ -144,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:46:36.547Z",
+      "fetchedAt": "2026-08-01T05:36:13.911Z",
       "fetches": [
         {
           "url": "https://www.emptybottle.com/events/",
@@ -169,7 +194,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:46:36.547Z",
+      "fetchedAt": "2026-08-01T05:36:13.911Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
@@ -194,7 +219,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:46:36.547Z",
+      "fetchedAt": "2026-08-01T05:36:13.911Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
@@ -219,7 +244,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:46:36.547Z",
+      "fetchedAt": "2026-08-01T05:36:13.911Z",
       "fetches": [
         {
           "url": "https://chicago.zanies.com/events",
@@ -244,63 +269,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:46:36.547Z",
+      "fetchedAt": "2026-08-01T05:36:13.911Z",
       "fetches": [
         {
           "url": "https://www.hideoutchicago.com/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "chicago",
-      "sourceId": "chicago-millennium-park-summer-music-2026",
-      "sourceName": "Millennium Park Summer Music Series 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.choosechicago.com/articles/festivals-special-events/millennium-park-summer-music-series/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:46:36.547Z",
-      "fetches": [
-        {
-          "url": "https://www.choosechicago.com/articles/festivals-special-events/millennium-park-summer-music-series/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "chicago",
-      "sourceId": "chicago-blues-festival-2026",
-      "sourceName": "Chicago Blues Festival 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.choosechicago.com/articles/festivals-special-events/chicago-blues-festival/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:46:36.547Z",
-      "fetches": [
-        {
-          "url": "https://www.choosechicago.com/articles/festivals-special-events/chicago-blues-festival/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
         }
       ]
     }

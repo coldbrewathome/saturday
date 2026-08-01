@@ -799,6 +799,8 @@ function cleanDateText(value) {
 
 function parseMonthDay(rawDate, now) {
   const clean = cleanDateText(rawDate);
+  const iso = clean.match(/\b(20\d{2})-(\d{2})-(\d{2})\b/);
+  if (iso) return new Date(Date.UTC(Number(iso[1]), Number(iso[2]) - 1, Number(iso[3])));
   const match = clean.match(new RegExp(`\\b(${MONTH_PATTERN})\\s+(\\d{1,2})(?:,\\s*(20\\d{2}))?`, "i"));
   if (!match) return null;
   const month = MONTH_INDEX[match[1].replace(/\./g, "").toLowerCase()];

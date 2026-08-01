@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "atlanta",
-  "generatedAt": "2026-07-28T02:15:11.496Z",
-  "alertCount": 10,
+  "generatedAt": "2026-08-01T05:23:51.667Z",
+  "alertCount": 8,
   "alerts": [
     {
       "severity": "warning",
@@ -19,13 +19,38 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:15:11.496Z",
+      "fetchedAt": "2026-08-01T05:23:51.667Z",
       "fetches": [
         {
           "url": "https://www.atlantaga.gov/government/departments/parks-recreation/events",
           "status": "http-error",
           "httpStatus": 404,
           "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "atlanta",
+      "sourceId": "ticketmaster-atlanta-family",
+      "sourceName": "Ticketmaster Atlanta Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-01T05:23:51.667Z",
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=3; queries=1"
         }
       ]
     },
@@ -44,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:15:11.496Z",
+      "fetchedAt": "2026-08-01T05:23:51.667Z",
       "fetches": [
         {
           "url": "https://www.northgeorgiastatefair.com/",
@@ -69,85 +94,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:15:11.496Z",
+      "fetchedAt": "2026-08-01T05:23:51.667Z",
       "fetches": [
         {
           "url": "https://www.gwinnettcountyfair.com/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "stone-mountain-fantastic-fourth-2026",
-      "sourceName": "Stone Mountain Fantastic Fourth Celebration 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://stonemountainpark.com/activities/events/atlanta-4th-of-july-fireworks-at-stone-mountain-park/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:15:11.496Z",
-      "fetches": [
-        {
-          "url": "https://stonemountainpark.com/activities/events/atlanta-4th-of-july-fireworks-at-stone-mountain-park/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "united-church-back-to-school-bash-2026",
-      "sourceName": "United Church Back to School Bash (July 18)",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.eventbrite.com/e/back-to-school-bash-tickets-1991385968037",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:15:11.496Z",
-      "fetches": [
-        {
-          "url": "https://www.eventbrite.com/e/back-to-school-bash-tickets-1991385968037",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "fulton-sheriff-back-to-school-bash-2026",
-      "sourceName": "Fulton County Sheriff's Office Back to School Bash (July 18)",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.eventbrite.com/e/fulton-county-sheriffs-office-back-to-school-bash-tickets-1990976298705",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:15:11.496Z",
-      "fetches": [
-        {
-          "url": "https://www.eventbrite.com/e/fulton-county-sheriffs-office-back-to-school-bash-tickets-1990976298705",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -169,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:15:11.496Z",
+      "fetchedAt": "2026-08-01T05:23:51.667Z",
       "fetches": [
         {
           "url": "https://www.terminalwestatl.com/events",
@@ -194,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:15:11.496Z",
+      "fetchedAt": "2026-08-01T05:23:51.667Z",
       "fetches": [
         {
           "url": "https://www.varietyplayhouse.com/events",
@@ -219,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:15:11.496Z",
+      "fetchedAt": "2026-08-01T05:23:51.667Z",
       "fetches": [
         {
           "url": "https://www.badearl.com/calendar",
@@ -244,7 +194,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-07-28T02:15:11.496Z",
+      "fetchedAt": "2026-08-01T05:23:51.667Z",
       "fetches": [
         {
           "url": "https://atlfoodandwinefestival.com/",

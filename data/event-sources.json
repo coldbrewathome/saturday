@@ -217,45 +217,6 @@
       "lon": -122.273
     },
     {
-      "id": "berkeley-library-juneteenth-freedom-day-2026",
-      "name": "Juneteenth Freedom Day at Tarea Hall Pittman South Branch",
-      "url": "https://berkeleypubliclibrary.libnet.info/event/16568040",
-      "city": "Berkeley",
-      "category": "Library",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.8569,
-      "lon": -122.2755,
-      "officialTextEvents": [
-        {
-          "id": "juneteenth-freedom-day-thp-south-2026-06-06",
-          "title": "Juneteenth Freedom Day at Tarea Hall Pittman South Branch",
-          "description": "Berkeley Public Library Juneteenth Freedom Day gathering with art, storytelling, and community activities at the Tarea Hall Pittman South Branch.",
-          "venue": "Tarea Hall Pittman South Branch Library",
-          "neighborhood": "South Berkeley",
-          "startDateTime": "2026-06-06T14:00:00-07:00",
-          "endDateTime": "2026-06-06T16:30:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "audiences": [
-            "kids",
-            "adults"
-          ],
-          "cost": "Free",
-          "url": "https://berkeleypubliclibrary.libnet.info/event/16568040",
-          "requiredText": [
-            "Juneteenth Freedom Day",
-            "Tarea Hall Pittman South Branch",
-            "Saturday, June 06",
-            "2:00pm"
-          ]
-        }
-      ]
-    },
-    {
       "id": "alameda-library",
       "name": "Alameda Free Library",
       "url": "https://www.alamedafree.org/Events-directory",
@@ -671,14 +632,26 @@
     {
       "id": "randall-museum",
       "name": "Randall Museum",
-      "url": "https://randallmuseum.org/events-calendar/",
+      "url": "https://randallmuseum.org/randall-museum-events/",
+      "apiUrl": "https://randallmuseum.org/wp-admin/admin-ajax.php",
       "city": "San Francisco",
       "category": "Museum",
-      "sourceType": "html",
+      "sourceType": "eventOnEvents",
       "trust": "official",
+      "requiresBrowserHeaders": true,
+      "eventOnDirection": "next",
+      "eventOnAjaxType": "dv",
       "lat": 37.7648,
       "lon": -122.4385,
-      "defaultAudienceText": "family kids animals science art drop-in workshop"
+      "defaultAudienceText": "family kids animals science art drop-in workshop",
+      "eventList": {
+        "venue": "Randall Museum",
+        "neighborhood": "Corona Heights",
+        "city": "San Francisco",
+        "requireFamilySignal": false,
+        "excludePattern": "museum closed|private rental|staff only",
+        "defaultDurationMinutes": 60
+      }
     },
     {
       "id": "aquarium-of-the-bay",
@@ -943,180 +916,6 @@
       "notes": "Official WordPress Tribe Events API; category 6 is OMCA's Family category."
     },
     {
-      "id": "sf-cherry-blossom",
-      "name": "Northern California Cherry Blossom Festival",
-      "url": "https://sfcherryblossom.org/faqs/",
-      "urls": [
-        "https://sfcherryblossom.org/",
-        "https://sfcherryblossom.org/faqs/"
-      ],
-      "city": "San Francisco",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.7854,
-      "lon": -122.4293,
-      "officialTextEvents": [
-        {
-          "id": "sf-cherry-blossom-childrens-village-2026-04-11",
-          "title": "Children's Cherry Blossom Village",
-          "description": "Children's area at the Northern California Cherry Blossom Festival in Japantown.",
-          "venue": "Post Street between Fillmore and Webster",
-          "neighborhood": "Japantown",
-          "startDateTime": "2026-04-11T11:00:00-07:00",
-          "endDateTime": "2026-04-11T16:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://sfcherryblossom.org/faqs/",
-          "requiredText": [
-            "Children",
-            "4/11, 12, 18",
-            "11am-4pm"
-          ]
-        },
-        {
-          "id": "sf-cherry-blossom-childrens-village-2026-04-12",
-          "title": "Children's Cherry Blossom Village",
-          "description": "Children's area at the Northern California Cherry Blossom Festival in Japantown.",
-          "venue": "Post Street between Fillmore and Webster",
-          "neighborhood": "Japantown",
-          "startDateTime": "2026-04-12T11:00:00-07:00",
-          "endDateTime": "2026-04-12T16:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://sfcherryblossom.org/faqs/",
-          "requiredText": [
-            "Children",
-            "4/11, 12, 18",
-            "11am-4pm"
-          ]
-        },
-        {
-          "id": "sf-cherry-blossom-childrens-village-2026-04-18",
-          "title": "Children's Cherry Blossom Village",
-          "description": "Children's area at the Northern California Cherry Blossom Festival in Japantown.",
-          "venue": "Post Street between Fillmore and Webster",
-          "neighborhood": "Japantown",
-          "startDateTime": "2026-04-18T11:00:00-07:00",
-          "endDateTime": "2026-04-18T16:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://sfcherryblossom.org/faqs/",
-          "requiredText": [
-            "Children",
-            "4/11, 12, 18",
-            "11am-4pm"
-          ]
-        },
-        {
-          "id": "sf-cherry-blossom-grand-parade-2026",
-          "title": "Northern California Cherry Blossom Festival Grand Parade",
-          "description": "Grand Parade for the Northern California Cherry Blossom Festival.",
-          "venue": "Japantown parade route",
-          "neighborhood": "Japantown",
-          "startDateTime": "2026-04-19T13:00:00-07:00",
-          "endDateTime": "2026-04-19T15:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://sfcherryblossom.org/faqs/",
-          "requiredText": [
-            "Third Sunday of April",
-            "1:00 to 3:00 PM"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "carnaval-sf",
-      "name": "Carnaval San Francisco",
-      "url": "https://carnavalsanfrancisco.org/faq/",
-      "city": "San Francisco",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.7584,
-      "lon": -122.4121,
-      "officialTextEvents": [
-        {
-          "id": "carnaval-sf-festival-2026-05-23",
-          "title": "Carnaval San Francisco Festival",
-          "description": "Free Mission District festival with stages, vendors, community arts workshops, Kids Zone, Drum Pavilion, and Skate Jam.",
-          "venue": "Harrison Street between 16th and 24th Streets",
-          "neighborhood": "Mission",
-          "startDateTime": "2026-05-23T11:00:00-07:00",
-          "endDateTime": "2026-05-23T18:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "requiredText": [
-            "May 23 & May 24, 2026",
-            "opens at 11 AM",
-            "closes at 6 PM",
-            "Kids Zone"
-          ]
-        },
-        {
-          "id": "carnaval-sf-festival-2026-05-24",
-          "title": "Carnaval San Francisco Festival",
-          "description": "Free Mission District festival with stages, vendors, community arts workshops, Kids Zone, Drum Pavilion, and Skate Jam.",
-          "venue": "Harrison Street between 16th and 24th Streets",
-          "neighborhood": "Mission",
-          "startDateTime": "2026-05-24T11:00:00-07:00",
-          "endDateTime": "2026-05-24T18:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "requiredText": [
-            "May 23 & May 24, 2026",
-            "opens at 11 AM",
-            "closes at 6 PM",
-            "Kids Zone"
-          ]
-        },
-        {
-          "id": "carnaval-sf-grand-parade-2026",
-          "title": "Carnaval San Francisco Grand Parade",
-          "description": "Grand Parade through the Mission District for Carnaval San Francisco.",
-          "venue": "24th Street and Bryant Street",
-          "neighborhood": "Mission",
-          "startDateTime": "2026-05-24T09:30:00-07:00",
-          "endDateTime": "2026-05-24T12:30:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "requiredText": [
-            "Grand Parade",
-            "Sunday, May 24, 2026 at 9:30"
-          ]
-        }
-      ]
-    },
-    {
       "id": "ybgfestival-childrens-garden",
       "name": "Yerba Buena Gardens Festival Children's Garden",
       "url": "https://ybgfestival.org/childrens-garden-series/",
@@ -1132,67 +931,6 @@
         "neighborhood": "SoMa",
         "cost": "Free"
       }
-    },
-    {
-      "id": "sunnyvale-art-wine",
-      "name": "Sunnyvale Art & Wine Festival",
-      "url": "https://www.sunnyvaleartandwine.com/",
-      "urls": [
-        "https://www.sunnyvaleartandwine.com/",
-        "https://www.sunnyvaleartandwine.com/about"
-      ],
-      "city": "Sunnyvale",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.375928,
-      "lon": -122.03054,
-      "officialTextEvents": [
-        {
-          "id": "sunnyvale-art-wine-2026-06-06",
-          "title": "Sunnyvale Art & Wine Festival",
-          "description": "Downtown Sunnyvale festival celebrating 50 years with 200+ fine artists, live music, food and drinks, and family-friendly activities.",
-          "venue": "E. Washington Street and Murphy Street",
-          "neighborhood": "Downtown Sunnyvale",
-          "startDateTime": "2026-06-06T11:00:00-07:00",
-          "endDateTime": "2026-06-06T19:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://www.sunnyvaleartandwine.com/",
-          "requiredPattern": [
-            "June\\s*6\\s*&\\s*7",
-            "Saturday\\s*(?:from|,)?\\s*11(?::00)?\\s*am\\s*(?:to|-)\\s*7(?::00)?\\s*pm",
-            "Sunday\\s*(?:from|,)?\\s*10(?::00)?\\s*am\\s*(?:to|-)\\s*5(?::00)?\\s*pm",
-            "free admission|family-friendly"
-          ]
-        },
-        {
-          "id": "sunnyvale-art-wine-2026-06-07",
-          "title": "Sunnyvale Art & Wine Festival",
-          "description": "Downtown Sunnyvale festival celebrating 50 years with 200+ fine artists, live music, food and drinks, and family-friendly activities.",
-          "venue": "E. Washington Street and Murphy Street",
-          "neighborhood": "Downtown Sunnyvale",
-          "startDateTime": "2026-06-07T10:00:00-07:00",
-          "endDateTime": "2026-06-07T17:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://www.sunnyvaleartandwine.com/",
-          "requiredPattern": [
-            "June\\s*6\\s*&\\s*7",
-            "Saturday\\s*(?:from|,)?\\s*11(?::00)?\\s*am\\s*(?:to|-)\\s*7(?::00)?\\s*pm",
-            "Sunday\\s*(?:from|,)?\\s*10(?::00)?\\s*am\\s*(?:to|-)\\s*5(?::00)?\\s*pm",
-            "free admission|family-friendly"
-          ]
-        }
-      ]
     },
     {
       "id": "ybgfestival-great-lawn",
@@ -1211,414 +949,6 @@
         "cost": "Free",
         "requireEventSignal": false
       }
-    },
-    {
-      "id": "sf-union-street-festival-2026",
-      "name": "Union Street Festival 2026",
-      "url": "https://www.sfmta.com/reports/union-street-festival-2026",
-      "city": "San Francisco",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.7983,
-      "lon": -122.4336,
-      "officialTextEvents": [
-        {
-          "id": "union-street-festival-2026-06-06",
-          "title": "Union Street Festival",
-          "description": "Two-day Marina District street festival on Union Street with neighborhood vendors, food, music, and community activities.",
-          "venue": "Union Street between Fillmore and Gough Streets",
-          "neighborhood": "Marina",
-          "startDateTime": "2026-06-06T11:00:00-07:00",
-          "endDateTime": "2026-06-06T19:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://www.sfmta.com/reports/union-street-festival-2026",
-          "requiredText": [
-            "Union Street Festival",
-            "Union Street between Fillmore and Gough"
-          ],
-          "requiredPattern": [
-            "11\\s*a\\.?m\\.?\\s*to\\s*7\\s*p\\.?m\\.?",
-            "Saturday,\\s*June\\s*6\\s*and\\s*Sunday,\\s*June\\s*7|June\\s*6-7"
-          ]
-        },
-        {
-          "id": "union-street-festival-2026-06-07",
-          "title": "Union Street Festival",
-          "description": "Two-day Marina District street festival on Union Street with neighborhood vendors, food, music, and community activities.",
-          "venue": "Union Street between Fillmore and Gough Streets",
-          "neighborhood": "Marina",
-          "startDateTime": "2026-06-07T11:00:00-07:00",
-          "endDateTime": "2026-06-07T19:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://www.sfmta.com/reports/union-street-festival-2026",
-          "requiredText": [
-            "Union Street Festival",
-            "Union Street between Fillmore and Gough"
-          ],
-          "requiredPattern": [
-            "11\\s*a\\.?m\\.?\\s*to\\s*7\\s*p\\.?m\\.?",
-            "Saturday,\\s*June\\s*6\\s*and\\s*Sunday,\\s*June\\s*7|June\\s*6-7"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "sf-festa-coloniale-italiana-2026",
-      "name": "Festa Coloniale Italiana 2026",
-      "url": "https://www.sfmta.com/index.php/travel-updates/festa-coloniale-italiana-saturday-sunday-june-6-7-2026",
-      "city": "San Francisco",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.801,
-      "lon": -122.4096,
-      "officialTextEvents": [
-        {
-          "id": "festa-coloniale-italiana-2026-06-06",
-          "title": "Festa Coloniale Italiana",
-          "description": "North Beach Italian street festival hosted by the San Francisco Italian Athletic Club.",
-          "venue": "Stockton Street between Union and Filbert Streets",
-          "neighborhood": "North Beach",
-          "startDateTime": "2026-06-06T11:00:00-07:00",
-          "endDateTime": "2026-06-06T18:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://www.sfmta.com/index.php/travel-updates/festa-coloniale-italiana-saturday-sunday-june-6-7-2026",
-          "requiredText": [
-            "Festa Coloniale Italiana",
-            "San Francisco Italian Athletic Club",
-            "Stockton Street between Union and Filbert"
-          ],
-          "requiredPattern": [
-            "Saturday\\s+and\\s+Sunday,\\s+June\\s+6-7",
-            "11\\s*a\\.?m\\.?\\s*to\\s*6\\s*p\\.?m\\.?"
-          ]
-        },
-        {
-          "id": "festa-coloniale-italiana-2026-06-07",
-          "title": "Festa Coloniale Italiana",
-          "description": "North Beach Italian street festival hosted by the San Francisco Italian Athletic Club.",
-          "venue": "Stockton Street between Union and Filbert Streets",
-          "neighborhood": "North Beach",
-          "startDateTime": "2026-06-07T11:00:00-07:00",
-          "endDateTime": "2026-06-07T18:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://www.sfmta.com/index.php/travel-updates/festa-coloniale-italiana-saturday-sunday-june-6-7-2026",
-          "requiredText": [
-            "Festa Coloniale Italiana",
-            "San Francisco Italian Athletic Club",
-            "Stockton Street between Union and Filbert"
-          ],
-          "requiredPattern": [
-            "Saturday\\s+and\\s+Sunday,\\s+June\\s+6-7",
-            "11\\s*a\\.?m\\.?\\s*to\\s*6\\s*p\\.?m\\.?"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "savenature-insectpalooza-2026",
-      "name": "InsectPalooza",
-      "url": "https://www.savenature.org/events",
-      "city": "San Francisco",
-      "category": "Museum",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.7544,
-      "lon": -122.3901,
-      "officialTextEvents": [
-        {
-          "id": "insectpalooza-2026-06-07",
-          "title": "InsectPalooza",
-          "description": "Free family-friendly SaveNature event with hands-on live animals from the Insect Discovery Lab.",
-          "venue": "Minnesota Street Project",
-          "neighborhood": "Dogpatch",
-          "startDateTime": "2026-06-07T12:00:00-07:00",
-          "endDateTime": "2026-06-07T15:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://www.savenature.org/events",
-          "requiredText": [
-            "InsectPalooza",
-            "Sunday, June 7, 2026",
-            "12:00 PM",
-            "3:00 PM",
-            "Minnesota Street Project"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "san-leandro-cherry-festival-2026",
-      "name": "San Leandro Cherry Festival",
-      "url": "https://www.sanleandro.org/852/Cherry-Festival",
-      "city": "San Leandro",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.7249,
-      "lon": -122.1561,
-      "officialTextEvents": [
-        {
-          "id": "san-leandro-cherry-parade-2026-06-06",
-          "title": "San Leandro Cherry Parade",
-          "description": "Community parade kicking off the San Leandro Cherry Festival.",
-          "venue": "San Leandro BART to San Leandro Main Library",
-          "neighborhood": "Downtown San Leandro",
-          "startDateTime": "2026-06-06T10:00:00-07:00",
-          "endDateTime": "2026-06-06T11:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://www.sanleandro.org/852/Cherry-Festival",
-          "requiredPattern": [
-            "SATURDAY,\\s*JUNE\\s*6(?:th)?,\\s*2026",
-            "Parade\\s+from\\s+10\\s*AM\\s*-\\s*11\\s*AM",
-            "Festival\\s+from\\s+11\\s*AM\\s*-\\s*6\\s*PM"
-          ]
-        },
-        {
-          "id": "san-leandro-cherry-festival-2026-06-06",
-          "title": "San Leandro Cherry Festival",
-          "description": "Historic Downtown San Leandro festival with live music, vendors, local food, a fun zone, car show, and fresh cherries.",
-          "venue": "W. Estudillo Avenue",
-          "neighborhood": "Downtown San Leandro",
-          "startDateTime": "2026-06-06T11:00:00-07:00",
-          "endDateTime": "2026-06-06T18:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://www.sanleandro.org/852/Cherry-Festival",
-          "requiredPattern": [
-            "SATURDAY,\\s*JUNE\\s*6(?:th)?,\\s*2026",
-            "Parade\\s+from\\s+10\\s*AM\\s*-\\s*11\\s*AM",
-            "Festival\\s+from\\s+11\\s*AM\\s*-\\s*6\\s*PM"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "world-oceans-day-msi-2026",
-      "name": "World Oceans Day Festival",
-      "url": "https://www.sfbaymsi.org/world-oceans-day",
-      "city": "Redwood City",
-      "category": "Museum",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.5056,
-      "lon": -122.2118,
-      "officialTextEvents": [
-        {
-          "id": "world-oceans-day-msi-2026-06-06",
-          "title": "World Oceans Day Festival",
-          "description": "Marine Science Institute waterfront festival with hands-on marine science, shipboard voyages, performances, exhibitors, and animal encounters.",
-          "venue": "Marine Science Institute",
-          "neighborhood": "Redwood Shores",
-          "startDateTime": "2026-06-06T10:00:00-07:00",
-          "endDateTime": "2026-06-06T15:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "$",
-          "url": "https://www.sfbaymsi.org/world-oceans-day",
-          "requiredText": [
-            "World oceans day festival",
-            "JUNE 6, 2026",
-            "10:00 AM",
-            "3:00 PM",
-            "500 DISCOVERY PKWY"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "la-honda-art-music-fair-2026",
-      "name": "La Honda Art and Music Fair",
-      "url": "https://www.lomamaroutpost.org/community-events/community-la-honda-fair",
-      "city": "La Honda",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.3202,
-      "lon": -122.2745,
-      "officialTextEvents": [
-        {
-          "id": "la-honda-art-music-fair-2026-06-06",
-          "title": "La Honda Art and Music Fair",
-          "description": "Two-day community benefit for the La Honda Educational Foundation with local music, art, food, and community gathering.",
-          "venue": "8865 La Honda Road",
-          "neighborhood": "La Honda",
-          "startDateTime": "2026-06-06T11:00:00-07:00",
-          "endDateTime": "2026-06-07T18:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://www.lomamaroutpost.org/community-events/community-la-honda-fair",
-          "requiredText": [
-            "La Honda Art and Music Fair",
-            "Saturday, June 6, 2026 11:00 AM",
-            "Sunday, June 7, 2026 6:00 PM",
-            "La Honda Educational Foundation",
-            "Free admission"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "hiller-bubble-bonanza-2026",
-      "name": "Bubble Bonanza",
-      "url": "https://www.hiller.org/event/bubble_bonanza-2/2026-06-07/",
-      "urls": [
-        "https://www.hiller.org/event/bubble_bonanza-2/2026-06-07/",
-        "https://www.hiller.org/event/bubble_bonanza-2/2026-06-17/",
-        "https://www.hiller.org/event/bubble_bonanza-2/2026-06-28/"
-      ],
-      "city": "San Carlos",
-      "category": "Museum",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.5129,
-      "lon": -122.2506,
-      "officialTextEvents": [
-        {
-          "id": "hiller-bubble-bonanza-2026-06-07",
-          "title": "Bubble Bonanza",
-          "description": "Hands-on outdoor bubble science stations exploring surface tension, bubble shapes, sizes, and colors.",
-          "venue": "Hiller Aviation Museum",
-          "neighborhood": "San Carlos",
-          "startDateTime": "2026-06-07T10:00:00-07:00",
-          "endDateTime": "2026-06-07T12:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Included with museum admission",
-          "url": "https://www.hiller.org/event/bubble_bonanza-2/2026-06-07/",
-          "requiredText": [
-            "Bubble Bonanza",
-            "June 7, 2026",
-            "10:00 am - 12:00 pm",
-            "Hiller Aviation Museum"
-          ]
-        },
-        {
-          "id": "hiller-bubble-bonanza-2026-06-17",
-          "title": "Bubble Bonanza",
-          "description": "Hands-on outdoor bubble science stations exploring surface tension, bubble shapes, sizes, and colors.",
-          "venue": "Hiller Aviation Museum",
-          "neighborhood": "San Carlos",
-          "startDateTime": "2026-06-17T10:00:00-07:00",
-          "endDateTime": "2026-06-17T12:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Included with museum admission",
-          "url": "https://www.hiller.org/event/bubble_bonanza-2/2026-06-17/",
-          "requiredText": [
-            "Bubble Bonanza",
-            "June 17, 2026",
-            "10:00 am - 12:00 pm",
-            "Hiller Aviation Museum"
-          ]
-        },
-        {
-          "id": "hiller-bubble-bonanza-2026-06-28",
-          "title": "Bubble Bonanza",
-          "description": "Hands-on outdoor bubble science stations exploring surface tension, bubble shapes, sizes, and colors.",
-          "venue": "Hiller Aviation Museum",
-          "neighborhood": "San Carlos",
-          "startDateTime": "2026-06-28T10:00:00-07:00",
-          "endDateTime": "2026-06-28T12:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Included with museum admission",
-          "url": "https://www.hiller.org/event/bubble_bonanza-2/2026-06-28/",
-          "requiredText": [
-            "Bubble Bonanza",
-            "June 28, 2026",
-            "10:00 am - 12:00 pm",
-            "Hiller Aviation Museum"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "mosaic-festival-silicon-valley-2026",
-      "name": "Mosaic Festival Silicon Valley",
-      "url": "https://www.eventbrite.com/e/mosaic-festival-silicon-valley-2026-tickets-1984812266920",
-      "city": "San Jose",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.3199,
-      "lon": -121.8597,
-      "officialTextEvents": [
-        {
-          "id": "mosaic-festival-silicon-valley-2026-06-06",
-          "title": "Mosaic Festival Silicon Valley",
-          "description": "Free Mosaic America and History San Jose festival celebrating multicultural music, dance, arts, vendors, visual art, and activities.",
-          "venue": "History Park",
-          "neighborhood": "Kelley Park",
-          "startDateTime": "2026-06-06T11:00:00-07:00",
-          "endDateTime": "2026-06-06T18:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://www.eventbrite.com/e/mosaic-festival-silicon-valley-2026-tickets-1984812266920",
-          "requiredText": [
-            "Mosaic Festival Silicon Valley 2026",
-            "Mosaic America",
-            "History Park"
-          ],
-          "requiredPattern": [
-            "Saturday,\\s*June\\s*6(?:,\\s*2026)?[\\s\\S]{0,160}11\\s*AM\\s*-\\s*6\\s*PM|June\\s*6[\\s\\S]{0,160}11\\s*AM\\s*-\\s*6\\s*PM"
-          ]
-        }
-      ]
     },
     {
       "id": "stern-grove",
@@ -1897,73 +1227,6 @@
       ]
     },
     {
-      "id": "sf-pride-civic-center",
-      "name": "San Francisco Pride",
-      "url": "https://sfciviccenter.org/event/san-francisco-pride/",
-      "city": "San Francisco",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.7793,
-      "lon": -122.4193,
-      "officialTextEvents": [
-        {
-          "id": "sf-pride-celebration-2026-06-27",
-          "title": "San Francisco Pride Celebration",
-          "description": "Two-day San Francisco Pride celebration in Civic Center with stages, community spaces, vendors, and food.",
-          "venue": "Civic Center",
-          "neighborhood": "Civic Center",
-          "startDateTime": "2026-06-27T11:00:00-07:00",
-          "endDateTime": "2026-06-27T18:00:00-07:00",
-          "ageBands": [
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "requiredText": [
-            "June 27 & 28",
-            "Saturday, June 27, 11am-6pm"
-          ]
-        },
-        {
-          "id": "sf-pride-celebration-2026-06-28",
-          "title": "San Francisco Pride Celebration",
-          "description": "Two-day San Francisco Pride celebration in Civic Center with stages, community spaces, vendors, and food.",
-          "venue": "Civic Center",
-          "neighborhood": "Civic Center",
-          "startDateTime": "2026-06-28T11:00:00-07:00",
-          "endDateTime": "2026-06-28T18:00:00-07:00",
-          "ageBands": [
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "requiredText": [
-            "June 27 & 28",
-            "Sunday, June 28, 11am-6pm"
-          ]
-        },
-        {
-          "id": "sf-pride-parade-2026",
-          "title": "San Francisco Pride Parade",
-          "description": "San Francisco Pride Parade traveling up Market Street from Embarcadero to Civic Center.",
-          "venue": "Market Street",
-          "neighborhood": "Downtown",
-          "startDateTime": "2026-06-28T10:00:00-07:00",
-          "endDateTime": "2026-06-28T14:00:00-07:00",
-          "ageBands": [
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "requiredText": [
-            "Pride Parade is Sunday, June 28 at 10am",
-            "Market Street"
-          ]
-        }
-      ]
-    },
-    {
       "id": "palo-alto-festival-arts",
       "name": "Palo Alto Festival of the Arts",
       "url": "https://www.paloaltochamber.com/festival-of-the-arts-about/",
@@ -2179,303 +1442,6 @@
       "notes": "Official Stanford Localist calendar, narrowed to public arts, museum, tour, workshop, film, performance, and reception event types. The parser requires Everyone or General Public audience and filters out internal academic meetings."
     },
     {
-      "id": "stanford-powwow",
-      "name": "Stanford Powwow",
-      "url": "https://www.stanfordpowwow.com/",
-      "city": "Stanford",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.4275,
-      "lon": -122.1697,
-      "officialTextEvents": [
-        {
-          "id": "stanford-powwow-2026-05-08",
-          "title": "55th Annual Stanford Powwow",
-          "description": "Native American dance, music, food, and information vendors at Eucalyptus Grove. Mother's Day weekend tradition open to the public.",
-          "venue": "Eucalyptus Grove, Stanford University",
-          "neighborhood": "Stanford",
-          "startDateTime": "2026-05-08T19:00:00-07:00",
-          "endDateTime": "2026-05-08T22:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://www.stanfordpowwow.com/",
-          "requiredText": [
-            "Stanford Powwow",
-            "Eucalyptus Grove"
-          ],
-          "requiredAnyPattern": [
-            "May 8",
-            "5/8",
-            "2026-05-08"
-          ]
-        },
-        {
-          "id": "stanford-powwow-2026-05-09",
-          "title": "55th Annual Stanford Powwow",
-          "description": "Saturday day of the Stanford Powwow at Eucalyptus Grove with Grand Entries at 1pm and 7pm.",
-          "venue": "Eucalyptus Grove, Stanford University",
-          "neighborhood": "Stanford",
-          "startDateTime": "2026-05-09T11:00:00-07:00",
-          "endDateTime": "2026-05-09T22:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://www.stanfordpowwow.com/",
-          "requiredText": [
-            "Stanford Powwow",
-            "Eucalyptus Grove"
-          ],
-          "requiredAnyPattern": [
-            "May 9",
-            "5/9",
-            "2026-05-09"
-          ]
-        },
-        {
-          "id": "stanford-powwow-2026-05-10",
-          "title": "55th Annual Stanford Powwow",
-          "description": "Final day (Mother's Day) of the Stanford Powwow at Eucalyptus Grove. Grand Entry at 1pm.",
-          "venue": "Eucalyptus Grove, Stanford University",
-          "neighborhood": "Stanford",
-          "startDateTime": "2026-05-10T11:00:00-07:00",
-          "endDateTime": "2026-05-10T18:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://www.stanfordpowwow.com/",
-          "requiredText": [
-            "Stanford Powwow",
-            "Eucalyptus Grove"
-          ],
-          "requiredAnyPattern": [
-            "May 10",
-            "5/10",
-            "2026-05-10"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "hmb-wine-jazz-festival",
-      "name": "Half Moon Bay Wine & Jazz Festival",
-      "url": "https://hmbwineandjazzfest.com/",
-      "city": "Half Moon Bay",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.4636,
-      "lon": -122.4286,
-      "officialTextEvents": [
-        {
-          "id": "hmb-wine-jazz-2026-05-09",
-          "title": "Half Moon Bay Wine & Jazz Festival",
-          "description": "Fifth annual wine tasting and live jazz on Main Street, with 50 California wineries, food, and a craft beer & cider garden.",
-          "venue": "Main Street, Downtown Half Moon Bay",
-          "neighborhood": "Downtown",
-          "startDateTime": "2026-05-09T12:00:00-07:00",
-          "endDateTime": "2026-05-09T17:00:00-07:00",
-          "ageBands": [
-            "tween"
-          ],
-          "cost": "$68 GA / $175 VIP",
-          "url": "https://hmbwineandjazzfest.com/",
-          "requiredText": [
-            "Half Moon Bay Wine & Jazz",
-            "May 9, 2026",
-            "Main"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "taiwanese-american-cultural-festival",
-      "name": "Taiwanese American Cultural Festival",
-      "url": "https://www.tap-sf.org/tacf",
-      "city": "San Francisco",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.788,
-      "lon": -122.4074,
-      "officialTextEvents": [
-        {
-          "id": "taiwanese-american-cultural-festival-2026-05-09",
-          "title": "Taiwanese American Cultural Festival",
-          "description": "33rd annual Taiwanese American Cultural Festival at Union Square. Vendors, traditional and contemporary performances, Taiwanese food, family-friendly.",
-          "venue": "Union Square",
-          "neighborhood": "Union Square",
-          "startDateTime": "2026-05-09T10:00:00-07:00",
-          "endDateTime": "2026-05-09T16:00:00-07:00",
-          "ageBands": [
-            "toddler",
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://www.tap-sf.org/tacf",
-          "requiredText": [
-            "Taiwanese American Cultural Festival",
-            "Union Square",
-            "May 9"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "svmbc-scout-o-rama",
-      "name": "Scout-O-Rama (Silicon Valley Monterey Bay Council)",
-      "url": "https://svmbc.org/activities/sor/",
-      "city": "San Jose",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.3502,
-      "lon": -121.8804,
-      "officialTextEvents": [
-        {
-          "id": "svmbc-scout-o-rama-2026-05-09",
-          "title": "Scout-O-Rama Community Family Festival",
-          "description": "100+ hands-on family activities at History Park: archery, water rockets, tomahawk throwing, fire trucks, pinewood derby, slacklining, crafts, life-size mazes, plus live entertainment.",
-          "venue": "History Park, San Jose",
-          "neighborhood": "Kelley Park",
-          "startDateTime": "2026-05-09T10:15:00-07:00",
-          "endDateTime": "2026-05-09T16:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "$10 / family",
-          "url": "https://svmbc.org/activities/sor/",
-          "requiredText": [
-            "Scout-O-Rama",
-            "History Park",
-            "May 9"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "berkeley-mothers-day-hat-tea",
-      "name": "Berkeley Mother's Day: Hats and High Tea",
-      "url": "https://berkeleyca.gov/community-recreation/events/mothers-day-hats-and-high-tea-0",
-      "city": "Berkeley",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.8807,
-      "lon": -122.2545,
-      "officialTextEvents": [
-        {
-          "id": "berkeley-mothers-day-hat-tea-2026-05-09",
-          "title": "Mother's Day Hats and High Tea at Berkeley Rose Garden",
-          "description": "Free family-friendly Mother's Day celebration with live jazz, charcuterie, desserts, kids' card-making, bead jewelry, glitter tattoos, and a bubble show at the Berkeley Rose Garden.",
-          "venue": "Berkeley Rose Garden, 1201 Euclid Avenue",
-          "neighborhood": "North Berkeley",
-          "startDateTime": "2026-05-09T14:00:00-07:00",
-          "endDateTime": "2026-05-09T17:00:00-07:00",
-          "ageBands": [
-            "toddler",
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://berkeleyca.gov/community-recreation/events/mothers-day-hats-and-high-tea-0",
-          "requiredText": [
-            "Mother",
-            "Hats",
-            "High Tea",
-            "Berkeley Rose Garden"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "golden-gate-park-band",
-      "name": "Golden Gate Park Band",
-      "url": "https://goldengateparkband.org/calendar",
-      "city": "San Francisco",
-      "category": "Music",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.7702,
-      "lon": -122.4677,
-      "officialTextEvents": [
-        {
-          "id": "golden-gate-park-band-mothers-day-2026-05-10",
-          "title": "Golden Gate Park Band Mother's Day Pops Concert",
-          "description": "Free outdoor concert at the Spreckels Temple of Music in honor of Mother's Day. Works by Leroy Anderson, Gilbert & Sullivan, and a clarinet premiere.",
-          "venue": "Spreckels Temple of Music, Music Concourse, Golden Gate Park",
-          "neighborhood": "Golden Gate Park",
-          "startDateTime": "2026-05-10T13:00:00-07:00",
-          "endDateTime": "2026-05-10T14:30:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "Free",
-          "url": "https://goldengateparkband.org/concerts/",
-          "requiredText": [
-            "Mother",
-            "May 10",
-            "Spreckels Temple of Music"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "gilroy-gardens",
-      "name": "Gilroy Gardens Family Theme Park",
-      "url": "https://www.gilroygardens.org/calendar-hours/",
-      "urls": [
-        "https://www.gilroygardens.org/calendar-hours/",
-        "https://www.gilroygardens.org/mothers-day/"
-      ],
-      "city": "Gilroy",
-      "category": "Park",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.0288,
-      "lon": -121.6212,
-      "officialTextEvents": [
-        {
-          "id": "gilroy-gardens-mothers-day-2026-05-10",
-          "title": "Gilroy Gardens Mother's Day (Mom Free with Child Admission)",
-          "description": "Mom and grandma get in free with the purchase of a child admission. Mother's Day Tea Party on the Creekside Terrace also available.",
-          "venue": "Gilroy Gardens, 3050 Hecker Pass Hwy",
-          "neighborhood": "West Gilroy",
-          "startDateTime": "2026-05-10T10:00:00-07:00",
-          "endDateTime": "2026-05-10T18:00:00-07:00",
-          "ageBands": [
-            "toddler",
-            "preschool",
-            "school-age"
-          ],
-          "cost": "Free for moms (with child admission)",
-          "url": "https://www.gilroygardens.org/mothers-day/",
-          "requiredText": [
-            "Mother",
-            "free",
-            "Gilroy Gardens"
-          ]
-        }
-      ]
-    },
-    {
       "id": "inner-sunset-flea",
       "name": "Inner Sunset Flea Market",
       "url": "https://sunsetmercantilesf.com/innersunsetflea/",
@@ -2562,174 +1528,6 @@
       "trust": "official",
       "lat": 37.6624,
       "lon": -121.8747
-    },
-    {
-      "id": "san-mateo-county-fair",
-      "name": "San Mateo County Fair",
-      "url": "https://sanmateocountyfair.com/daily-schedules/",
-      "city": "San Mateo",
-      "neighborhood": "San Mateo",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.5485,
-      "lon": -122.3127,
-      "officialTextEvents": [
-        {
-          "id": "san-mateo-county-fair-2026-06-06",
-          "title": "San Mateo County Fair",
-          "description": "County fair with carnival rides, exhibits, Fair Farm, food, shopping, entertainment, and concerts.",
-          "venue": "San Mateo County Event Center",
-          "neighborhood": "San Mateo",
-          "startDateTime": "2026-06-06T11:00:00-07:00",
-          "endDateTime": "2026-06-06T22:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "$",
-          "url": "https://sanmateocountyfair.com/",
-          "requiredText": [
-            "Daily Schedules",
-            "June 6",
-            "June 14",
-            "June 8 & 9"
-          ]
-        },
-        {
-          "id": "san-mateo-county-fair-2026-06-07",
-          "title": "San Mateo County Fair",
-          "description": "County fair with carnival rides, exhibits, Fair Farm, food, shopping, entertainment, and concerts.",
-          "venue": "San Mateo County Event Center",
-          "neighborhood": "San Mateo",
-          "startDateTime": "2026-06-07T11:00:00-07:00",
-          "endDateTime": "2026-06-07T22:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "$",
-          "url": "https://sanmateocountyfair.com/",
-          "requiredText": [
-            "Daily Schedules",
-            "June 6",
-            "June 14",
-            "June 8 & 9"
-          ]
-        },
-        {
-          "id": "san-mateo-county-fair-2026-06-10",
-          "title": "San Mateo County Fair",
-          "description": "County fair with carnival rides, exhibits, Fair Farm, food, shopping, entertainment, and concerts.",
-          "venue": "San Mateo County Event Center",
-          "neighborhood": "San Mateo",
-          "startDateTime": "2026-06-10T11:00:00-07:00",
-          "endDateTime": "2026-06-10T22:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "$",
-          "url": "https://sanmateocountyfair.com/",
-          "requiredText": [
-            "Daily Schedules",
-            "June 6",
-            "June 14",
-            "June 8 & 9"
-          ]
-        },
-        {
-          "id": "san-mateo-county-fair-2026-06-11",
-          "title": "San Mateo County Fair",
-          "description": "County fair with carnival rides, exhibits, Fair Farm, food, shopping, entertainment, and concerts.",
-          "venue": "San Mateo County Event Center",
-          "neighborhood": "San Mateo",
-          "startDateTime": "2026-06-11T11:00:00-07:00",
-          "endDateTime": "2026-06-11T22:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "$",
-          "url": "https://sanmateocountyfair.com/",
-          "requiredText": [
-            "Daily Schedules",
-            "June 6",
-            "June 14",
-            "June 8 & 9"
-          ]
-        },
-        {
-          "id": "san-mateo-county-fair-2026-06-12",
-          "title": "San Mateo County Fair",
-          "description": "County fair with carnival rides, exhibits, Fair Farm, food, shopping, entertainment, and concerts.",
-          "venue": "San Mateo County Event Center",
-          "neighborhood": "San Mateo",
-          "startDateTime": "2026-06-12T11:00:00-07:00",
-          "endDateTime": "2026-06-12T22:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "$",
-          "url": "https://sanmateocountyfair.com/",
-          "requiredText": [
-            "Daily Schedules",
-            "June 6",
-            "June 14",
-            "June 8 & 9"
-          ]
-        },
-        {
-          "id": "san-mateo-county-fair-2026-06-13",
-          "title": "San Mateo County Fair",
-          "description": "County fair with carnival rides, exhibits, Fair Farm, food, shopping, entertainment, and concerts.",
-          "venue": "San Mateo County Event Center",
-          "neighborhood": "San Mateo",
-          "startDateTime": "2026-06-13T11:00:00-07:00",
-          "endDateTime": "2026-06-13T22:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "$",
-          "url": "https://sanmateocountyfair.com/",
-          "requiredText": [
-            "Daily Schedules",
-            "June 6",
-            "June 14",
-            "June 8 & 9"
-          ]
-        },
-        {
-          "id": "san-mateo-county-fair-2026-06-14",
-          "title": "San Mateo County Fair",
-          "description": "County fair with carnival rides, exhibits, Fair Farm, food, shopping, entertainment, and concerts.",
-          "venue": "San Mateo County Event Center",
-          "neighborhood": "San Mateo",
-          "startDateTime": "2026-06-14T11:00:00-07:00",
-          "endDateTime": "2026-06-14T22:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "cost": "$",
-          "url": "https://sanmateocountyfair.com/",
-          "requiredText": [
-            "Daily Schedules",
-            "June 6",
-            "June 14",
-            "June 8 & 9"
-          ]
-        }
-      ]
     },
     {
       "id": "marin-county-fair",
@@ -2955,122 +1753,6 @@
       "lon": -122.3933
     },
     {
-      "id": "japan-day-sf-2026",
-      "name": "Japan Day (Japan Week SF)",
-      "url": "https://japanweeksf.com/",
-      "city": "San Francisco",
-      "neighborhood": "Japantown",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.7857,
-      "lon": -122.431,
-      "officialTextEvents": [
-        {
-          "id": "japan-day-sf-2026-07-19",
-          "title": "Japan Day",
-          "description": "Japan Day, the summer cultural festival of SF Japantown presented by GenRyu Arts, with taiko drumming, awa odori dance, Okinawan drumming and dance, karate, and shamisen on the outdoor stage at Post and Laguna, plus hands-on washi ningyo, origami, and shodo calligraphy activities.",
-          "venue": "SF Japantown (outdoor stage at Post and Laguna)",
-          "neighborhood": "Japantown",
-          "startDateTime": "2026-07-19T12:00:00-07:00",
-          "endDateTime": "2026-07-19T17:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "audiences": [
-            "kids",
-            "adults"
-          ],
-          "cost": "Free",
-          "url": "https://japanweeksf.com/",
-          "requiredText": [
-            "Japan Day",
-            "July 19, 2026",
-            "12:00 pm"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "circus-bella-ah-ha-salesforce-park-2026",
-      "name": "Circus Bella AH HA! at Salesforce Park",
-      "url": "https://www.theeastcut.org/event/circus-bella-presents-ah-ha/",
-      "city": "San Francisco",
-      "neighborhood": "East Cut",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.7897,
-      "lon": -122.3972,
-      "officialTextEvents": [
-        {
-          "id": "circus-bella-ah-ha-salesforce-park-2026-07-19",
-          "title": "Circus Bella Presents: AH HA!",
-          "description": "Free, all-ages Circus Bella performance of AH HA!, a 60-minute one-ring circus with acrobats, aerialists, jugglers and clowns backed by the Circus Bella All-Star Band, at the Salesforce Park Amphitheater. Two shows: 1 p.m. (doors 12 p.m.) and 3 p.m. (doors 2:15 p.m.).",
-          "venue": "Salesforce Park Amphitheater (425 Mission St)",
-          "neighborhood": "East Cut",
-          "startDateTime": "2026-07-19T13:00:00-07:00",
-          "endDateTime": "2026-07-19T16:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "audiences": [
-            "kids",
-            "adults"
-          ],
-          "cost": "Free",
-          "url": "https://www.theeastcut.org/event/circus-bella-presents-ah-ha/",
-          "requiredText": [
-            "Circus Bella",
-            "Salesforce Park",
-            "1 p.m."
-          ]
-        }
-      ]
-    },
-    {
-      "id": "sunday-streets-mission-2026",
-      "name": "Sunday Streets: Mission",
-      "url": "https://sundaystreetssf.com/",
-      "city": "San Francisco",
-      "neighborhood": "Mission",
-      "category": "Festival",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.7599,
-      "lon": -122.4213,
-      "officialTextEvents": [
-        {
-          "id": "sunday-streets-mission-2026-07-19",
-          "title": "Sunday Streets: Mission",
-          "description": "Sunday Streets car-free open-streets festival in the Mission District, turning city streets into car-free community space with free active-play games, cultural performances, live music and local businesses. Typically runs 11am to 4pm; check the official site for this date's route and hours.",
-          "venue": "Mission District (Valencia St corridor)",
-          "neighborhood": "Mission",
-          "startDateTime": "2026-07-19T11:00:00-07:00",
-          "endDateTime": "2026-07-19T16:00:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "audiences": [
-            "kids",
-            "adults"
-          ],
-          "cost": "Free",
-          "url": "https://sundaystreetssf.com/",
-          "requiredText": [
-            "Mission",
-            "July 19"
-          ]
-        }
-      ]
-    },
-    {
       "id": "ybg-festival-unique-derique-11am-2026-07-31-src",
       "name": "Unique Derique (Kids' Show) at Yerba Buena Gardens Festival",
       "url": "https://ybgfestival.org/event/unique-derique-2026-1/",
@@ -3225,84 +1907,6 @@
             "Color Your Mind",
             "Aug 2",
             "12:00pm"
-          ]
-        }
-      ],
-      "requiresBrowserContext": true
-    },
-    {
-      "id": "oakland-library-ricky-roo-puppet-show-2026-07-27-src",
-      "name": "Ricky Roo and Friends Puppet Show — Oakland Main Library",
-      "url": "https://oaklandlibrary.bibliocommons.com/events/search/index",
-      "city": "Oakland",
-      "neighborhood": "Downtown Oakland",
-      "category": "Library",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.8078,
-      "lon": -122.267,
-      "officialTextEvents": [
-        {
-          "id": "oakland-library-ricky-roo-puppet-show-2026-07-27",
-          "title": "Ricky Roo and Friends Puppet Show — Oakland Main Library",
-          "description": "Free family puppet show in the Children's Room of the Oakland Main Library, part of the library's summer children's programming.",
-          "venue": "Oakland Public Library — Main Library",
-          "neighborhood": "Downtown Oakland",
-          "startDateTime": "2026-07-27T10:30:00-07:00",
-          "endDateTime": "2026-07-27T11:15:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "audiences": [
-            "kids",
-            "adults"
-          ],
-          "cost": "Free",
-          "url": "https://oaklandlibrary.bibliocommons.com/events/search/index",
-          "requiredText": [
-            "Ricky Roo and Friends",
-            "10:30am"
-          ]
-        }
-      ],
-      "requiresBrowserContext": true
-    },
-    {
-      "id": "oakland-library-duncan-playful-circus-2026-07-27-src",
-      "name": "Duncan Playful Circus — Oakland Public Library",
-      "url": "https://oaklandlibrary.bibliocommons.com/events/search/index",
-      "city": "Oakland",
-      "neighborhood": "Eastmont, Oakland",
-      "category": "Library",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.7752,
-      "lon": -122.178,
-      "officialTextEvents": [
-        {
-          "id": "oakland-library-duncan-playful-circus-2026-07-27",
-          "title": "Duncan Playful Circus — Oakland Public Library",
-          "description": "Free family circus performance at the Oakland Public Library's Eastmont Branch, part of summer children's programming.",
-          "venue": "Oakland Public Library — Eastmont Branch",
-          "neighborhood": "Eastmont, Oakland",
-          "startDateTime": "2026-07-27T13:00:00-07:00",
-          "endDateTime": "2026-07-27T13:45:00-07:00",
-          "ageBands": [
-            "preschool",
-            "school-age",
-            "tween"
-          ],
-          "audiences": [
-            "kids",
-            "adults"
-          ],
-          "cost": "Free",
-          "url": "https://oaklandlibrary.bibliocommons.com/events/search/index",
-          "requiredText": [
-            "Duncan Playful Circus",
-            "1:00pm"
           ]
         }
       ],
@@ -3750,6 +2354,87 @@
           ]
         }
       ]
+    },
+    {
+      "id": "laurel-streetfair-world-music-2026-08-08-src",
+      "name": "25th Annual Laurel StreetFair World Music Festival",
+      "url": "https://www.laureldistrictassociation.org/info",
+      "city": "Oakland",
+      "neighborhood": "Laurel District, Oakland",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 37.7897,
+      "lon": -122.203,
+      "officialTextEvents": [
+        {
+          "id": "laurel-streetfair-world-music-2026-08-08",
+          "title": "25th Annual Laurel StreetFair World Music Festival",
+          "description": "Oakland's Laurel District closes MacArthur Boulevard for a free, all-ages street festival celebrating world music and the diverse cultures of the Bay Area. Two stages of live music plus a Kid's Carnival, roller skating and an art market from Black Cultural Zone, a healing village, and dozens of food, artisan, and nonprofit vendors. Draws 17,000+ neighbors each year.",
+          "venue": "MacArthur Blvd between 35th Ave and Maybelle Ave",
+          "neighborhood": "Laurel District, Oakland",
+          "startDateTime": "2026-08-08T11:00:00-07:00",
+          "endDateTime": "2026-08-08T19:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween",
+            "teen"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Free",
+          "url": "https://www.laureldistrictassociation.org/info",
+          "requiredText": [
+            "The 25th Annual Laurel StreetFair World Music Festival",
+            "AUGUST 8, 2026",
+            "11am"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "live-on-larkin-back-to-school-2026-08-08-src",
+      "name": "Live On Larkin: Back to School Edition",
+      "url": "https://www.eventbrite.com/e/live-on-larkin-tickets-1989346463825",
+      "city": "San Francisco",
+      "neighborhood": "Lower Polk / Tenderloin, San Francisco",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 37.7838,
+      "lon": -122.4166,
+      "officialTextEvents": [
+        {
+          "id": "live-on-larkin-back-to-school-2026-08-08",
+          "title": "Live On Larkin: Back to School Edition",
+          "description": "A free block party on Larkin Street presented by Into The Streets as part of the Larkin Street Revival Project. The back-to-school edition brings live music and performances, free family activities, and food from neighborhood restaurants to a car-free stretch of Larkin between Ellis and Eddy.",
+          "venue": "Larkin Street between Ellis and Eddy",
+          "neighborhood": "Lower Polk / Tenderloin, San Francisco",
+          "startDateTime": "2026-08-08T12:00:00-07:00",
+          "endDateTime": "2026-08-08T17:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween",
+            "teen"
+          ],
+          "audiences": [
+            "kids",
+            "adults"
+          ],
+          "cost": "Free",
+          "url": "https://www.eventbrite.com/e/live-on-larkin-tickets-1989346463825",
+          "requiredText": [
+            "Live On Larkin: Back to School Edition",
+            "Saturday, August 8",
+            "12 PM"
+          ]
+        }
+      ],
+      "requiresBrowserContext": true
     }
   ]
 }
