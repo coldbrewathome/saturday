@@ -1,0 +1,204 @@
+{
+  "_comment": "Curated evergreen-rescue list: EXISTING /{metro}/event/{slug}/ URLs that ranked (90-day GSC clicks+impressions pulled and SHOWN per ~/Projects/seo-ops/SEO-POLICY.md) and then died in the 410 lifecycle. generate-seo-pages.mjs regenerates each as a permanent 200 recap page at the SAME URL (no Event JSON-LD, no date claims beyond lastHeld), and the event-seo-manifest `evergreen` array exempts the slug from the edge guard's 410. Inclusion bar: ranked-and-dead ONLY — metrics shown first, list stays curated, never systemic. `match` is a case-insensitive regex against live event titles to cross-link next year's edition when it is back in the dataset; recurrence \"unverified\" entries must not claim the event returns every year. Note: this list is complementary to data/annual-events.json (/{metro}/annual/ guides) — boston minuteman-library-crawl exists in BOTH (annualSlug cross-references it); the /annual/ page is the year-round guide, the /event/ evergreen page preserves the ranked URL itself.",
+  "metros": {
+    "bay-area": [
+      {
+        "slug": "milpitas-red-white-boom-2026-fireworks-concert-july-4-milpitas-sports-center",
+        "title": "Milpitas Red, White & Boom",
+        "venue": "Milpitas Sports Center",
+        "city": "Milpitas",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "annual",
+        "description": "Milpitas' city-run Fourth of July celebration at the Milpitas Sports Center: an evening of live music and food vendors capped by the city's fireworks show.",
+        "match": "red,?\\s*white\\s*(&|and)\\s*boom"
+      },
+      {
+        "slug": "hillsborough-memorial-day-parade-2026-05-25",
+        "title": "Hillsborough Memorial Day Parade",
+        "venue": "Downtown Hillsborough",
+        "city": "Hillsborough",
+        "month": "May",
+        "lastHeld": "2026",
+        "recurrence": "annual",
+        "description": "Hillsborough's hometown Memorial Day parade and remembrance ceremony — a family-scale Peninsula tradition with local schools, scouts, and veterans' groups marching.",
+        "match": "hillsborough.*memorial day parade"
+      }
+    ],
+    "los-angeles": [
+      {
+        "slug": "canoga-park-memorial-day-parade-2026-05-25",
+        "title": "Canoga Park Memorial Day Parade",
+        "venue": "Sherman Way",
+        "city": "Canoga Park",
+        "month": "May",
+        "lastHeld": "2026",
+        "recurrence": "annual",
+        "description": "The West San Fernando Valley's long-running Memorial Day parade along Sherman Way in Canoga Park, with marching bands, veterans' groups, and community floats.",
+        "match": "canoga park.*memorial day parade"
+      },
+      {
+        "slug": "la-national-cemetery-memorial-day-2026-05-25",
+        "title": "Los Angeles National Cemetery Memorial Day Ceremony",
+        "venue": "Los Angeles National Cemetery",
+        "city": "Los Angeles",
+        "month": "May",
+        "lastHeld": "2026",
+        "recurrence": "annual",
+        "description": "The annual Memorial Day observance at Los Angeles National Cemetery in West LA — a flag-placing and remembrance ceremony honoring the veterans interred there.",
+        "match": "national cemetery.*memorial day"
+      }
+    ],
+    "seattle": [
+      {
+        "slug": "bellevue-family-4th-2026-free-fireworks-festival-at-downtown-park-bellevue-downtown-park",
+        "title": "Bellevue Family 4th",
+        "venue": "Bellevue Downtown Park",
+        "city": "Bellevue",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "annual",
+        "description": "Bellevue's free Fourth of July festival at Downtown Park: an afternoon of family activities, food, and live music leading into the Eastside's biggest fireworks show.",
+        "match": "bellevue family 4th"
+      }
+    ],
+    "houston": [
+      {
+        "slug": "rosenberg-family-4th-celebration-2026-free-july-4th-fireworks-at-seabourne-creek-park-seabourne-creek-nature-park",
+        "title": "Rosenberg Family 4th Celebration",
+        "venue": "Seabourne Creek Nature Park",
+        "city": "Rosenberg",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "annual",
+        "description": "Rosenberg's free Independence Day celebration at Seabourne Creek Nature Park — family activities, food vendors, and live entertainment finished with a fireworks display.",
+        "match": "rosenberg.*family 4th"
+      }
+    ],
+    "austin": [
+      {
+        "slug": "cedar-park-cedar-sparktacular-2026-free-july-4th-festival-fireworks-at-milburn-park-milburn-park-1901-sun-chase-blvd",
+        "title": "Cedar Park Sparktacular",
+        "venue": "Milburn Park",
+        "city": "Cedar Park",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "annual",
+        "description": "Cedar Park's free July 4th festival at Milburn Park: kids' activities, live music, and food trucks through the evening, capped by the city fireworks show.",
+        "match": "sparktacular"
+      }
+    ],
+    "honolulu": [
+      {
+        "slug": "kauai-hospice-concert-in-the-sky-2026-lihue-july-4th-music-fireworks-festival-vidinha-stadium-soccer-fields",
+        "title": "Kauai Hospice Concert in the Sky",
+        "venue": "Vidinha Stadium Soccer Fields",
+        "city": "Lihue",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "annual",
+        "description": "Kauai's signature July 4th benefit for Kauai Hospice at Vidinha Stadium in Lihue — an all-day family festival of live music and food ending with the island's largest fireworks show.",
+        "match": "concert in the sky"
+      }
+    ],
+    "san-diego": [
+      {
+        "slug": "uss-midway-legacy-week-2026-05-23",
+        "title": "USS Midway Legacy Week",
+        "venue": "USS Midway Museum",
+        "city": "San Diego",
+        "month": "May",
+        "lastHeld": "2026",
+        "recurrence": "annual",
+        "description": "The USS Midway Museum's Memorial Day-week program honoring service members, with special ceremonies and commemorative activities aboard the carrier on San Diego's waterfront.",
+        "match": "midway.*legacy week"
+      },
+      {
+        "slug": "fort-rosecrans-memorial-day-2026-05-25",
+        "title": "Fort Rosecrans Memorial Day Ceremony",
+        "venue": "Fort Rosecrans National Cemetery",
+        "city": "San Diego",
+        "month": "May",
+        "lastHeld": "2026",
+        "recurrence": "annual",
+        "description": "The annual Memorial Day ceremony at Fort Rosecrans National Cemetery on Point Loma, one of San Diego's most moving remembrance traditions overlooking the bay.",
+        "match": "fort rosecrans.*memorial day"
+      }
+    ],
+    "new-york-city": [
+      {
+        "slug": "brooklyn-memorial-day-parade-2026-05-25",
+        "title": "Brooklyn Memorial Day Parade",
+        "venue": "Bay Ridge",
+        "city": "Brooklyn",
+        "month": "May",
+        "lastHeld": "2026",
+        "recurrence": "annual",
+        "description": "Bay Ridge's Brooklyn Memorial Day Parade — one of the oldest continuously running Memorial Day parades in the country, marching down Third Avenue with veterans' groups, bands, and local organizations.",
+        "match": "brooklyn memorial day parade"
+      }
+    ],
+    "washington-dc": [
+      {
+        "slug": "carnival-in-de-capital-martin-luther-king-jr-memorial-library-central-library-event-space",
+        "title": "Carnival in DE Capital",
+        "venue": "Martin Luther King Jr. Memorial Library",
+        "city": "Washington",
+        "month": "June",
+        "lastHeld": "2026",
+        "recurrence": "unverified",
+        "description": "A Caribbean carnival celebration at DC's Martin Luther King Jr. Memorial Library — music, dance, and family activities in the central library's event space.",
+        "match": "carnival in de capital"
+      }
+    ],
+    "boston": [
+      {
+        "slug": "boston-dorchester-memorial-day-parade-2026-05-25",
+        "title": "Dorchester Memorial Day Parade",
+        "venue": "Dorchester Avenue",
+        "city": "Dorchester",
+        "month": "May",
+        "lastHeld": "2026",
+        "recurrence": "annual",
+        "description": "Dorchester's neighborhood Memorial Day parade — veterans' groups, marching bands, and community organizations processing along Dorchester Avenue, a Boston tradition for generations.",
+        "match": "dorchester.*memorial day parade"
+      },
+      {
+        "slug": "minuteman-library-crawl-main-lobby-other",
+        "title": "Minuteman Library Crawl",
+        "venue": "Newton Free Library",
+        "city": "Newton",
+        "month": "August",
+        "lastHeld": "2026",
+        "recurrence": "annual",
+        "description": "The Minuteman Library Network's summer library crawl: visit participating libraries across the network, collect stamps, and earn prizes — a free end-of-summer family quest around Greater Boston.",
+        "match": "minuteman library crawl",
+        "annualSlug": "minuteman-library-crawl"
+      }
+    ],
+    "chicago": [
+      {
+        "slug": "palatine-hometown-fest-family-day-2026-july-5-community-park",
+        "title": "Palatine Hometown Fest Family Day",
+        "venue": "Community Park",
+        "city": "Palatine",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "annual",
+        "description": "Family Day at Palatine's Hometown Fest in Community Park — carnival rides, food vendors, live entertainment, and kids' activities during the village's July 4th-weekend festival.",
+        "match": "hometown fest.*family day"
+      },
+      {
+        "slug": "bluey-bash-central-library",
+        "title": "Bluey Bash",
+        "venue": "Central Library",
+        "city": "",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "unverified",
+        "description": "A Bluey-themed library party for preschoolers and their families — games, crafts, dance-alongs, and character fun built around the beloved show.",
+        "match": "bluey bash"
+      }
+    ]
+  }
+}

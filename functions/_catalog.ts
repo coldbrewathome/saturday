@@ -11,6 +11,9 @@ export type MetroCatalog = {
   liveSet: Set<string>;
   liveEnds: Record<string, number>;
   endedSet: Set<string>;
+  // Curated evergreen-rescue slugs (schemaVersion 3 manifests; defaults to
+  // an empty set for older manifests) — exempt from the 410 lifecycle.
+  evergreenSet: Set<string>;
   upcoming: UpcomingLink[];
 };
 
@@ -30,12 +33,14 @@ export async function loadCatalog(env: Env, origin: string, metro: string): Prom
         live?: string[];
         liveEnds?: Record<string, number>;
         ended?: string[];
+        evergreen?: string[];
         upcoming?: UpcomingLink[];
       };
       catalog = {
         liveSet: new Set(Array.isArray(doc.live) ? doc.live : []),
         liveEnds: doc.liveEnds && typeof doc.liveEnds === "object" ? doc.liveEnds : {},
         endedSet: new Set(Array.isArray(doc.ended) ? doc.ended : []),
+        evergreenSet: new Set(Array.isArray(doc.evergreen) ? doc.evergreen : []),
         upcoming: Array.isArray(doc.upcoming) ? doc.upcoming.slice(0, 10) : [],
       };
     }

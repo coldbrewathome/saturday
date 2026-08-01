@@ -5,11 +5,38 @@
 
 // /{metro}/event/{slug}/ or /{metro}/spot/{slug}/ (trailing slash optional).
 const DETAIL_PATH_RE = /^\/([a-z0-9-]+)\/(event|spot)\/([^/]+)\/?$/;
+// Removed/garbage page classes that must serve an honest 404 (noindex)
+// instead of the 200 homepage shell when no prerendered file exists
+// (fresh-1): /{metro}/city/*, /{metro}/category/*,
+// /{metro}/city/*/category/*, and /{metro}/this-weekend/{child}/. The bare
+// /{metro}/this-weekend/ hub is deliberately NOT matched — it always has a
+// prerendered page and stays a plain passthrough.
+const CITY_CATEGORY_PATH_RE = /^\/([a-z0-9-]+)\/city\/([^/]+)\/category\/([^/]+)\/?$/;
+const SECTION_PATH_RE = /^\/([a-z0-9-]+)\/(city|category)\/([^/]+)\/?$/;
+const WEEKEND_CHILD_PATH_RE = /^\/([a-z0-9-]+)\/this-weekend\/([^/]+)\/?$/;
 
 export function parseDetailPath(pathname) {
-  const match = DETAIL_PATH_RE.exec(String(pathname || ""));
-  if (!match) return null;
-  return { metro: match[1], kind: match[2], slug: match[3] };
+  const p = String(pathname || "");
+  const match = DETAIL_PATH_RE.exec(p);
+  if (match) return { metro: match[1], kind: match[2], slug: match[3] };
+  const cityCat = CITY_CATEGORY_PATH_RE.exec(p);
+  if (cityCat) return { metro: cityCat[1], kind: "city-category", slug: `${cityCat[2]}/${cityCat[3]}` };
+  const section = SECTION_PATH_RE.exec(p);
+  if (section) return { metro: section[1], kind: section[2], slug: section[3] };
+  const weekendChild = WEEKEND_CHILD_PATH_RE.exec(p);
+  if (weekendChild) return { metro: weekendChild[1], kind: "weekend-child", slug: weekendChild[2] };
+  return null;
+}
+
+// The fresh-1 page classes above: a shell fallback under these paths becomes
+// a 404; a real prerendered page passes through untouched.
+export function isRemovedSectionKind(kind) {
+  return (
+    kind === "city" ||
+    kind === "category" ||
+    kind === "city-category" ||
+    kind === "weekend-child"
+  );
 }
 
 // Event slugs end in the event's start date, e.g.
@@ -60,23 +87,36 @@ function endedDisposition(endMs, nowMs) {
 //   live capped events (the page is real, just not statically rendered).
 //
 // `catalog` (optional) is the per-metro event-seo-manifest classification:
-//   { liveSet: Set<slug>, liveEnds?: Record<slug, msEpoch>, endedSet: Set<slug> }.
+//   { liveSet: Set<slug>, liveEnds?: Record<slug, msEpoch>, endedSet: Set<slug>,
+//     evergreenSet?: Set<slug> }.
 //   liveSet = slugs in the current dataset; liveEnds = the true end instant
 //   for a live slug (spans the full occurrence run for a deduped multi-date
 //   event) — authoritative over the slug-date+2d heuristic below, which
 //   would otherwise 410 a live multi-day event partway through its run (its
 //   slug carries the *start* date). endedSet = slugs seen in the rolling
-//   slug history but no longer live. When present, `catalog` is authoritative
-//   for the unknown->404 split.
+//   slug history but no longer live. evergreenSet = curated evergreen-rescue
+//   slugs (data/evergreen-events.json) that serve a permanent 200 recap page
+//   and must never 410. When present, `catalog` is authoritative for the
+//   unknown->404 split.
 /**
  * @param {string} kind
  * @param {string} slug
  * @param {number} [nowMs]
- * @param {{liveSet?: Set<string>, liveEnds?: Record<string, number>, endedSet?: Set<string>} | null} [catalog]
+ * @param {{liveSet?: Set<string>, liveEnds?: Record<string, number>, endedSet?: Set<string>, evergreenSet?: Set<string>} | null} [catalog]
  * @returns {"gone"|"ended-grace"|"not-found"|"noindex-shell"}
  */
 export function missingPageDisposition(kind, slug, nowMs = Date.now(), catalog = null) {
   if (kind === "event") {
+    // Evergreen-rescue slugs are never "gone": with the prerendered recap
+    // asset present, [[path]].ts serves it untouched at 200 (it only
+    // overrides on "gone"); if the asset is ever missing the URL degrades to
+    // the noindex shell — fail-safe both ways. Checked FIRST so it beats
+    // BOTH dead paths: endedSet (slugs still in the rolling history) and the
+    // slug-date heuristic (dated slugs already pruned from history). Safe to
+    // order before liveEnds only because the manifest excludes currently-
+    // live slugs from `evergreen` (writeEventSeoManifest keeps that
+    // invariant).
+    if (catalog?.evergreenSet && catalog.evergreenSet.has(slug)) return "noindex-shell";
     if (catalog) {
       const hasLiveEnd = catalog.liveEnds && Object.prototype.hasOwnProperty.call(catalog.liveEnds, slug);
       if (hasLiveEnd) return endedDisposition(catalog.liveEnds[slug], nowMs) ?? "noindex-shell";

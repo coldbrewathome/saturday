@@ -71,4 +71,18 @@ describe("metroCanonicalOverride (prerendered head survives hydration)", () => {
     setCanonical("https://famhop.com/");
     expect(metroCanonicalOverride(atlanta)).toBe("https://famhop.com/atlanta/");
   });
+
+  it("repairs the exact production precached-shell head served under a hub path", () => {
+    // The raw precached-shell head captured from the live SW cache (verified
+    // 2026-07-31): root canonical + shell title under /atlanta/. This branch
+    // is the legacy-SW/offline repair path — only reachable when the
+    // swHubRoutes navigateFallback denylist is bypassed (a SW installed
+    // before the denylist shipped, or an offline fallback) — so the
+    // prerendered network head is otherwise untouched.
+    window.history.pushState(null, "", "/atlanta/");
+    setCanonical("https://famhop.com/");
+    document.title = "FamHop family weekend planner by metro";
+    expect(metroCanonicalOverride(atlanta)).toBe("https://famhop.com/atlanta/");
+    expect(document.title).toBe("FamHop family weekend planner by metro");
+  });
 });

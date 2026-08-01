@@ -80,12 +80,22 @@ const SHELL_TITLE = IS_ADULTS
 const SHELL_DESC = IS_ADULTS
   ? `${BRAND} helps adults find good places to hang out — cafes, bars, parks, music, and local events — solo or with friends, across major U.S. metros.`
   : `${BRAND} helps families find kid-friendly spots, family events, and ready-made weekend plans across major U.S. metros.`;
+// Kids hub titles match the real 90-day query demand ("things to do in X with
+// kids" — 1,161 impr vs ~0 for "family weekend planner"). Deliberately NO
+// "this weekend" phrasing here: /{metro}/this-weekend/ owns that query shape
+// (weekendGuideTitle) and must not be cannibalized. URLs unchanged.
 const metroSeoTitle = (label) =>
-  IS_ADULTS ? `${label} hangout planner | ${BRAND}` : `${label} family weekend planner | ${BRAND}`;
-const metroSeoDesc = (label) =>
+  IS_ADULTS
+    ? `${label} hangout planner | ${BRAND}`
+    : `Things to Do in ${label} with Kids — Family Events & Weekend Planner | ${BRAND}`;
+// `stats` ({events, spots} real per-metro counts) names actual content when
+// the caller has it; the generic sentence stays as the no-stats fallback.
+const metroSeoDesc = (label, stats = null) =>
   IS_ADULTS
     ? `Find good places to hang out in ${label} — cafes, bars, parks, music, and local events — plus ready-made plans with ${BRAND}.`
-    : `Find family-friendly parks, libraries, museums, events, and ready-made weekend plans in ${label} with ${BRAND}.`;
+    : stats
+      ? `${stats.events} family events from official ${label} library, park, and museum calendars, plus ${stats.spots} kid-friendly spots and ready-made weekend plans.`
+      : `Find family-friendly parks, libraries, museums, events, and ready-made weekend plans in ${label} with ${BRAND}.`;
 const metroCardBlurb = (label) =>
   IS_ADULTS
     ? `Browse things to do and good places to hang out in ${label}.`
@@ -352,6 +362,10 @@ const SEO_PINNED_PATHS = readJson(path.join(ROOT, "data", "seo-pinned-paths.json
 // Curated recurring annual events → evergreen /{metro}/annual/{slug}/ pages
 // (kids build only). See the file's _comment for the curation rules.
 const ANNUAL_EVENTS = readJson(path.join(ROOT, "data", "annual-events.json"))?.metros || {};
+// Curated evergreen-rescue list: ranked-then-dead /event/ URLs that keep a
+// permanent 200 recap page at the SAME URL (kids build only). See the file's
+// _comment for the inclusion bar (metrics shown first, never systemic).
+const EVERGREEN_EVENTS = readJson(path.join(ROOT, "data", "evergreen-events.json"))?.metros || {};
 const FREE_CATEGORIES = new Set(["Library", "Park"]);
 function eventLikelyFree(event) {
   if (typeof event.cost === "string" && /free/i.test(event.cost)) return true;
@@ -1088,6 +1102,7 @@ function main() {
   let totalWeekendSubPages = 0;
   let totalEndedEventStubs = 0;
   let totalAnnualPages = 0;
+  let totalEvergreenPages = 0;
   // D3 (kids side): spotPassesQualityGate/generateEventPages already filter
   // these proactively — this is the "the build fails" backstop mirroring the
   // adults-side hard gate below, in case a filter regression ever slips one
@@ -1138,7 +1153,20 @@ function main() {
     // Dedupe before the cap so the per-metro budget is spent on distinct
     // events, not on repeat occurrences of the same one.
     const distinctEvents = dedupeEventOccurrences(events, eventSlugLookup);
-    const eventSlugs = generateEventPages(capEventsForPages(distinctEvents, eventSlugLookup), eventsDoc?.generatedAt, eventSlugLookup, citySlugsPre);
+    // Event -> annual reciprocity (link-4): map this year's live event slug to
+    // its annual entry so the event page can link the evergreen guide. Built
+    // WITHOUT a generated-slug filter (event pages are written before annual
+    // pages, so those slugs don't exist yet) — safe because every annual
+    // entry gets a page unconditionally on the kids build. Kids only: annual
+    // pages don't exist on the Mosey build.
+    const annualByEventSlug = new Map();
+    if (!IS_ADULTS) {
+      for (const entry of ANNUAL_EVENTS[metro.id] || []) {
+        const live = matchAnnualLiveEvent(entry, distinctEvents, eventSlugLookup);
+        if (live && !annualByEventSlug.has(live.slug)) annualByEventSlug.set(live.slug, entry);
+      }
+    }
+    const eventSlugs = generateEventPages(capEventsForPages(distinctEvents, eventSlugLookup), eventsDoc?.generatedAt, eventSlugLookup, citySlugsPre, annualByEventSlug);
     generatedEventSlugsByMetro.set(metro.id, eventSlugs);
 
     if (!IS_ADULTS) {
@@ -1167,17 +1195,24 @@ function main() {
     // their official link instead of a broken internal one.
     const weekendEventLookup = lookupOfGenerated(eventSlugLookup, eventSlugs);
     totalAnnualPages += generateAnnualEventPages(distinctEvents, eventSlugLookup, eventSlugs);
+    totalEvergreenPages += generateEvergreenEventPages(distinctEvents, eventSlugLookup, eventSlugs, allCurrentEventSlugs);
     const wroteThisWeekend = generateThisWeekendPage(events, weekendEventLookup);
+    const wroteFreeWeekend = generateFreeThisWeekendPage(events, weekendEventLookup);
     totalWeekendSubPages +=
-      generateCityWeekendPages(events, weekendEventLookup) +
-      generateFreeThisWeekendPage(events, weekendEventLookup);
+      generateCityWeekendPages(events, weekendEventLookup) + wroteFreeWeekend;
 
     generateMetroAppShellPage(metro, {
       categorySlugs,
       cities,
       events: distinctEvents,
       eventLookup: weekendEventLookup,
+      // Real per-metro spot inventory for the data-driven hub intro (hub-2);
+      // replaces the hard-coded (and for Honolulu false) "1,500+" claim.
+      spots,
       hasWeekendGuide: wroteThisWeekend,
+      // Hub -> free-this-weekend link (link-2): only when this build actually
+      // wrote the page (>= 3 free events gate in generateFreeThisWeekendPage).
+      hasFreeWeekend: wroteFreeWeekend > 0,
       // Annual pages are kids-build-only (generateAnnualEventPages returns 0
       // for IS_ADULTS), so the adults hub must not link 16 nonexistent
       // /annual/ URLs that render as the shell — mirrors the gate in
@@ -1229,7 +1264,7 @@ function main() {
   writeRobotsAndLlms();
 
   console.log(
-    `[seo] wrote ${totalSpotPages} spot pages, ${totalEventPages} event pages, ${totalEndedEventStubs} ended-event stubs, ${totalAnnualPages} annual pages, ${totalCityPages} city pages, ${totalCategoryPages} category pages, ${totalWeekendPages} this-weekend pages, ${totalWeekendSubPages} city/free weekend pages, ${totalLocalizedPages} localized i18n pages, sitemap with ${sitemapEntries.length} URLs.`,
+    `[seo] wrote ${totalSpotPages} spot pages, ${totalEventPages} event pages, ${totalEndedEventStubs} ended-event stubs, ${totalAnnualPages} annual pages, ${totalEvergreenPages} evergreen-rescue pages, ${totalCityPages} city pages, ${totalCategoryPages} category pages, ${totalWeekendPages} this-weekend pages, ${totalWeekendSubPages} city/free weekend pages, ${totalLocalizedPages} localized i18n pages, sitemap with ${sitemapEntries.length} URLs.`,
   );
 }
 
@@ -1759,12 +1794,83 @@ const SHELL_STYLE =
   `.seo-shell nav a{display:inline-block;margin:0 14px 8px 0}` +
   `</style>`;
 
+// hub-1: the hub's fresh-content event list. Prefer THIS WEEKEND's events —
+// headliners first (pickWeekendHeadliners: parades, festivals, free marquee
+// events), then the rest by start time — so the section is genuinely unique
+// per metro and per week instead of 10 interchangeable storytimes. Falls back
+// to the previous soonest-10-upcoming behavior when the weekend set is empty
+// (and then no dated "Updated for the weekend of…" line renders — a stale
+// build week must not claim freshness it doesn't have). The returned list is
+// the single source for BOTH the visible shell section and the hub's ItemList
+// JSON-LD (hub-5), which must mirror on-page content exactly.
+function buildHubEventList(events, eventLookup) {
+  const now = new Date();
+  const weekend = getWeekendDateKeys(now, activeMetro.timezone);
+  // Junk-title guard: needs real words, and must not START with a bare time
+  // range (kills the "10 a.m. – 5 p.m." Burke Museum leak).
+  const titleOk = (t) =>
+    /[a-z]{3,}/i.test(t || "") && !/^\d{1,2}(:\d{2})?\s*(a|p)\.?m\.?/i.test(t || "");
+  const inWeekend = events
+    .filter((e) => {
+      if (!e.startDateTime || !eventLookup?.get(e)) return false;
+      const d = new Date(e.startDateTime);
+      if (!Number.isFinite(d.getTime())) return false;
+      return weekend.keys.has(zonedDateKey(d, activeMetro.timezone));
+    })
+    .sort((a, b) => (a.startDateTime || "").localeCompare(b.startDateTime || ""));
+  const picked = [];
+  // Dedupe by title AND venue — 3x "Family Story Time" at different venues
+  // are distinct legit events and become distinct anchors once venue renders.
+  const seen = new Set();
+  const push = (ev) => {
+    if (picked.length >= 10) return;
+    const slug = eventLookup.get(ev);
+    const title = String(ev.title || "").trim();
+    if (!slug || !titleOk(title)) return;
+    const key = `${title.toLowerCase()}|${String(ev.venue || "").trim().toLowerCase()}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    picked.push({ event: ev, slug });
+  };
+  for (const ev of pickWeekendHeadliners(inWeekend, eventLookup)) push(ev);
+  for (const ev of inWeekend) push(ev);
+  if (picked.length) {
+    return {
+      mode: "weekend",
+      rangeLabel: formatWeekendRange(weekend.saturday, weekend.sunday, activeMetro.timezone),
+      items: picked,
+    };
+  }
+  // Fallback: soonest 10 upcoming events that actually got a prerendered page
+  // (eventLookup is already restricted to generated slugs).
+  const seenSlugs = new Set();
+  const upcomingItems = [];
+  const sorted = [...events].sort((a, b) =>
+    (a.startDateTime || "").localeCompare(b.startDateTime || ""),
+  );
+  for (const ev of sorted) {
+    const slug = eventLookup?.get(ev);
+    if (!slug || seenSlugs.has(slug)) continue;
+    if (!ev.startDateTime || new Date(ev.startDateTime) < now) continue;
+    seenSlugs.add(slug);
+    upcomingItems.push({ event: ev, slug });
+    if (upcomingItems.length >= 10) break;
+  }
+  return { mode: "upcoming", rangeLabel: null, items: upcomingItems };
+}
+
 function generateMetroAppShellPage(metro, extras = {}) {
   const shellPath = path.join(DIST, "index.html");
   if (!fs.existsSync(shellPath)) return;
   const canonical = metroUrl("");
+  const hubEvents = buildHubEventList(extras.events || [], extras.eventLookup || new Map());
+  const nowStats = new Date();
+  const upcomingCount = (extras.events || []).filter(
+    (e) => e.startDateTime && new Date(e.startDateTime) >= nowStats,
+  ).length;
+  const stats = extras.spots ? { spots: extras.spots.length, events: upcomingCount } : null;
   const title = metroSeoTitle(metroLabel());
-  const description = metroSeoDesc(metroLabel()).slice(0, 300);
+  const description = metroSeoDesc(metroLabel(), stats).slice(0, 300);
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -1798,11 +1904,47 @@ function generateMetroAppShellPage(metro, extras = {}) {
           suggestedMaxAge: 14,
         },
       },
+      // hub-5: ItemLists mirroring the visible shell content — plain
+      // ListItem name+url only (same pattern as the root page's #metros
+      // list). Strictly no Event nodes, no aggregateRating, no FAQPage.
+      ...(hubEvents.items.length
+        ? [
+            {
+              "@type": "ItemList",
+              "@id": `${canonical}#events`,
+              name:
+                hubEvents.mode === "weekend"
+                  ? `This weekend in ${metroLabel()}`
+                  : `Upcoming ${A.eventsAdj}events in ${metroLabel()}`,
+              itemListElement: hubEvents.items.map(({ event, slug }, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                name: event.title,
+                url: metroUrl(`event/${slug}/`),
+              })),
+            },
+          ]
+        : []),
+      ...((extras.cities || []).length
+        ? [
+            {
+              "@type": "ItemList",
+              "@id": `${canonical}#cities`,
+              name: `${metroLabel()} cities and towns`,
+              itemListElement: (extras.cities || []).map((c, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                name: c.name,
+                url: metroUrl(`city/${slugify(c.name)}/`),
+              })),
+            },
+          ]
+        : []),
     ],
   };
   let html = fs.readFileSync(shellPath, "utf8");
   html = metro.id === metroConfig.defaultMetro.id ? html : metroText(html);
-  html = replaceMetroShellCopy(html, title, description, extras);
+  html = replaceMetroShellCopy(html, title, description, { ...extras, hubEvents });
   html = html.replace(
     /<script type="application\/ld\+json">[\s\S]*?<\/script>/,
     `<script type="application/ld+json">${safeJsonScript(jsonLd)}</script>`,
@@ -1842,7 +1984,11 @@ function generateRootAppShellPage() {
     .map((metro) => {
       const label = metro.seoName || metro.label || metro.id;
       const href = `${String(metro.canonicalPath || "").replace(/\/+$/, "")}/`;
-      return `<li><a href="${esc(href)}"><strong>${esc(label)}</strong><p>${esc(metroCardBlurb(label))}</p></a></li>`;
+      // link-6: a second, visually secondary deep link per metro (sibling of
+      // the card link, not nested) puts every /{metro}/this-weekend/ page at
+      // depth 1 from the most-crawled URL on the domain. No gate needed:
+      // generateThisWeekendPage always writes the page, even with 0 events.
+      return `<li><a href="${esc(href)}"><strong>${esc(label)}</strong><p>${esc(metroCardBlurb(label))}</p></a> <a class="metro-weekend" href="${esc(`${href}this-weekend/`)}">This weekend &rarr;</a></li>`;
     })
     .join("");
   // The adults (Mosey) homepage was a 95-word "choose your metro" stub with a
@@ -1956,8 +2102,11 @@ function replaceMetroShellCopy(html, title, description, extras = {}) {
     cities = [],
     events = [],
     eventLookup = null,
+    spots = null,
     hasWeekendGuide = true,
+    hasFreeWeekend = false,
     annualEntries = [],
+    hubEvents = null,
   } = extras;
   const area = metroLabel();
   // h1 targets the head keyword; the brand suffix stays in <title> only.
@@ -1987,13 +2136,19 @@ function replaceMetroShellCopy(html, title, description, extras = {}) {
     ...(hasWeekendGuide
       ? [`<a href="${metroPath("this-weekend/")}">${esc(area)} weekend guide</a>`]
       : []),
+    // link-2: hub -> free-this-weekend, only when this build wrote the page.
+    ...(hasFreeWeekend
+      ? [`<a href="${metroPath("free-this-weekend/")}">Free this weekend in ${esc(area)}</a>`]
+      : []),
     ...categoriesList,
   ];
 
   // City hub links — `cities` is exactly the set generateCityPages wrote, so
-  // every anchor resolves to a prerendered page.
+  // every anchor resolves to a prerendered page. Real per-city counts (hub-2)
+  // make each anchor unique, truthful text.
   const cityLinks = cities.map(
-    (c) => `<a href="${metroPath(`city/${slugify(c.name)}/`)}">${esc(c.name)}</a>`,
+    (c) =>
+      `<a href="${metroPath(`city/${slugify(c.name)}/`)}">${esc(c.name)} (${c.spots.length} spots · ${c.events.length} events)</a>`,
   );
 
   // Annual/evergreen page links. The metro hub is crawled daily (verified 2026-07-26
@@ -2002,45 +2157,105 @@ function replaceMetroShellCopy(html, title, description, extras = {}) {
   // Indexing API does not process Event-schema pages (confirmed empirically —
   // pages submitted daily, never crawled). Internal links from the crawled hub are
   // the valid discovery path (see ~/Projects/seo-ops/SEO-POLICY.md).
-  const annualLinks = (annualEntries || []).map(
-    (e) => `<a href="${metroPath(`annual/${e.slug}/`)}">${esc(e.title)}</a>`,
-  );
-
-  // Soonest upcoming events that actually got a prerendered page (eventLookup
-  // is already restricted to generated slugs; capped-out events miss).
-  const now = new Date();
-  const seenEventSlugs = new Set();
-  const eventItems = [];
-  const sortedEvents = [...events].sort((a, b) =>
-    (a.startDateTime || "").localeCompare(b.startDateTime || ""),
-  );
-  for (const ev of sortedEvents) {
-    const slug = eventLookup?.get(ev);
-    if (!slug || seenEventSlugs.has(slug)) continue;
-    if (!ev.startDateTime || new Date(ev.startDateTime) < now) continue;
-    seenEventSlugs.add(slug);
-    const when = formatEventDate(ev);
-    eventItems.push(
-      `<li><a href="${metroPath(`event/${slug}/`)}">${esc(ev.title)}</a>${when ? ` — ${esc(when)}` : ""}</li>`,
+  // hub-3: each entry renders with month, venue/city, and its one-line
+  // description (unique evergreen dated content, and descriptive anchor
+  // context for pages whose only discovery path is this link), sorted by
+  // how soon the tradition comes up relative to the build date.
+  const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const buildMonth = new Date().getMonth();
+  const monthsAway = (name) => {
+    const idx = MONTH_NAMES.indexOf(String(name || ""));
+    return idx < 0 ? 99 : (idx - buildMonth + 12) % 12;
+  };
+  const annualItems = [...(annualEntries || [])]
+    .sort((a, b) => monthsAway(a.month) - monthsAway(b.month))
+    .map(
+      (e) =>
+        `<li><a href="${metroPath(`annual/${e.slug}/`)}">${esc(e.title)}</a> — ${esc(e.month)}, ${esc(e.venue || e.city || area)}.${e.description ? ` ${esc(e.description)}` : ""}</li>`,
     );
-    if (eventItems.length >= 10) break;
+
+  // hub-1: this weekend's events (headliners first), or the soonest-10
+  // upcoming fallback — precomputed by buildHubEventList so the ItemList
+  // JSON-LD in generateMetroAppShellPage mirrors exactly what renders here.
+  const hubList = hubEvents || buildHubEventList(events, eventLookup || new Map());
+  const tzHub = activeMetro.timezone || "America/Los_Angeles";
+  const eventItems = hubList.items.map(({ event, slug }) => {
+    if (hubList.mode === "weekend") {
+      const day = new Date(event.startDateTime).toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "long",
+        day: "numeric",
+        timeZone: tzHub,
+      });
+      const where = [event.venue, event.city || event.neighborhood]
+        .filter(Boolean)
+        .map((part) => esc(part))
+        .join(", ");
+      return `<li><a href="${metroPath(`event/${slug}/`)}">${esc(event.title)}</a>${where ? ` — ${where}` : ""} · ${esc(day)}${event.cost === "Free" ? " · Free" : ""}</li>`;
+    }
+    const when = formatEventDate(event);
+    return `<li><a href="${metroPath(`event/${slug}/`)}">${esc(event.title)}</a>${when ? ` — ${esc(when)}` : ""}</li>`;
+  });
+  const eventsSection = !eventItems.length
+    ? ""
+    : hubList.mode === "weekend"
+      ? `<section>
+          <h2>This weekend in ${esc(area)}</h2>
+          <p>Updated for the weekend of ${esc(hubList.rangeLabel)}.</p>
+          <ul>${eventItems.join("\n          ")}</ul>
+          <p><a href="${metroPath("this-weekend/")}">See the full ${esc(area)} weekend guide &rarr;</a></p>
+        </section>`
+      : `<section>
+          <h2>Upcoming ${A.eventsAdj}events in ${esc(area)}</h2>
+          <ul>${eventItems.join("\n          ")}</ul>
+        </section>`;
+
+  // hub-2 (kids): data-driven unique intro — real counts, top official
+  // sources by event volume, biggest cities — instead of the cross-metro
+  // template (which hard-coded a "1,500+ spots" claim that was false for
+  // Honolulu's 669). The adults branch keeps its original copy untouched.
+  let introHtml;
+  if (!IS_ADULTS && Array.isArray(spots)) {
+    const nowIntro = new Date();
+    const upcomingIntro = events.filter(
+      (e) => e.startDateTime && new Date(e.startDateTime) >= nowIntro,
+    );
+    const sourceCounts = new Map();
+    for (const e of upcomingIntro) {
+      const s = String(e.sourceName || "").trim();
+      if (!s) continue;
+      sourceCounts.set(s, (sourceCounts.get(s) || 0) + 1);
+    }
+    const topSources = [...sourceCounts.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([name]) => name);
+    const topCities = [...cities]
+      .sort((a, b) => b.spots.length + b.events.length - (a.spots.length + a.events.length))
+      .slice(0, 3)
+      .map((c) => `${c.name} (${c.spots.length} spots · ${c.events.length} events)`)
+      .join(", ");
+    introHtml = `<p>${esc(description)}</p>
+          <p>${esc(BRAND)} tracks <b>${spots.length} kid-friendly spots</b> and <b>${upcomingIntro.length} upcoming family events</b>${cities.length ? ` across ${cities.length} ${esc(area)} cities and towns` : ` in ${esc(area)}`}. Most events come straight from official library, parks, and museum calendars${topSources.length ? ` like ${esc(topSources.join(", "))}` : ""} — real dates, times, and official links, refreshed every week.${topCities ? ` Biggest coverage: ${esc(topCities)}.` : ""} Pick a few stops, build a 3-stop ${A.planNoun}, and share a link so ${A.voters} can vote.</p>`;
+  } else {
+    introHtml = `<p>${esc(description)} Search ${IS_ADULTS ? "good spots and upcoming events" : "kid-friendly spots and upcoming family events"}, then build a shareable ${A.planNoun}.</p>`;
   }
 
   const shellContent = `${SHELL_STYLE}
       <div class="seo-shell">
         <header>
           <h1>${esc(h1)}</h1>
-          <p>${esc(description)} Search ${IS_ADULTS ? "good spots and upcoming events" : "1,500+ kid-friendly spots and upcoming family events"}, then build a shareable ${A.planNoun}.</p>
+          ${introHtml}
         </header>
-        <section>
+        ${IS_ADULTS ? `<section>
           <h2>What you can do on ${esc(BRAND)}</h2>
           <ul>
-            <li>Browse ${A.friendlyAdj}${esc(area)} spots: ${IS_ADULTS ? "cafes, bars, restaurants, parks, music and culture" : "parks, libraries, museums, playgrounds, zoos and family farms"}.</li>
-            <li>See upcoming ${A.eventsAdj}events from official calendars.</li>
-            ${IS_ADULTS ? "<li>Filter by vibe: chill, foodie, active, music &amp; culture.</li>" : "<li>Filter by age band: toddler, preschool, school-age and tween.</li>"}
+            <li>Browse ${esc(area)} spots: cafes, bars, restaurants, parks, music and culture.</li>
+            <li>See upcoming events from official calendars.</li>
+            <li>Filter by vibe: chill, foodie, active, music &amp; culture.</li>
             <li>Build a 3-stop plan and share a link so ${A.voters} can vote.</li>
           </ul>
-        </section>
+        </section>` : ""}
         ${browseLinks.length ? `<section>
           <h2>Browse ${esc(area)}</h2>
           <nav>${browseLinks.join("\n          ")}</nav>
@@ -2049,14 +2264,11 @@ function replaceMetroShellCopy(html, title, description, extras = {}) {
           <h2>${esc(area)} cities and towns</h2>
           <nav>${cityLinks.join("\n          ")}</nav>
         </section>` : ""}
-        ${eventItems.length ? `<section>
-          <h2>Upcoming ${A.eventsAdj}events in ${esc(area)}</h2>
-          <ul>${eventItems.join("\n          ")}</ul>
-        </section>` : ""}
-        ${annualLinks.length ? `<section>
+        ${eventsSection}
+        ${annualItems.length ? `<section>
           <h2>Annual traditions in ${esc(area)}</h2>
-          <nav><a href="${metroPath("annual/")}">All annual events</a>
-          ${annualLinks.join("\n          ")}</nav>
+          <nav><a href="${metroPath("annual/")}">All annual events</a></nav>
+          <ul>${annualItems.join("\n          ")}</ul>
         </section>` : ""}
         <noscript><p><strong>Heads-up:</strong> ${esc(BRAND)} is an interactive planner. Please enable JavaScript to plan, share and vote.</p></noscript>
       </div>`;
@@ -2479,6 +2691,14 @@ function generateAnnualEventPages(distinctEvents, eventSlugLookup, eventSlugs) {
     const liveHtml = live
       ? `<p class="cta-row"><a class="cta" href="${metroPath(`event/${live.slug}/`)}">This year's event: ${esc(live.event.title)} &rarr;</a></p>`
       : `<p>Dates for the next edition are usually announced closer to ${esc(entry.month)}. Until then, <a href="${metroPath("this-weekend/")}">see what's on this weekend in ${esc(metroLabel())}</a>.</p>`;
+    // link-3: cross-link the OTHER annual traditions in-metro (2-15 entries,
+    // so a readable "other traditions this year" list, not a farm), keeping
+    // the "All annual events" index link first. One crawled annual page then
+    // propagates discovery to the whole class instead of dead-ending.
+    const siblingLinks = items
+      .filter((s) => s.entry.slug !== entry.slug)
+      .map((s) => `<a href="${metroPath(`annual/${s.entry.slug}/`)}">${esc(s.entry.title)} (${esc(s.entry.month)})</a>`)
+      .join("\n        ");
     const body = `
       <p class="lede">${esc(entry.description)}</p>
       <dl class="meta-grid">
@@ -2487,7 +2707,9 @@ function generateAnnualEventPages(distinctEvents, eventSlugLookup, eventSlugs) {
       </dl>
       ${liveHtml}
       ${IS_ADULTS ? "" : renderShareBar(canonical, `${entry.title} — ${entry.city} annual guide`, null)}
-      <p class="see-also">More <a href="${metroPath("annual/")}">annual events in ${esc(metroLabel())}</a>.</p>
+      <nav class="see-also" aria-label="More annual traditions">
+        <a href="${metroPath("annual/")}">All annual events in ${esc(metroLabel())}</a>${siblingLinks ? `\n        ${siblingLinks}` : ""}
+      </nav>
     `;
     const html = renderShell({
       title,
@@ -2543,6 +2765,71 @@ function generateAnnualEventPages(distinctEvents, eventSlugLookup, eventSlugs) {
   return items.length + 1;
 }
 
+// Evergreen-rescue recap pages (data/evergreen-events.json, kids build only):
+// a curated, bounded set of ranked-then-dead event URLs keep serving a
+// permanent 200 recap at the SAME /event/ URL instead of burning their
+// indexed equity in the yearly 410 lifecycle. renderShell emits
+// BreadcrumbList only — no Event JSON-LD, so the page never claims a live
+// future event. The edge-guard 410 exemption travels via
+// writeEventSeoManifest's `evergreen` array (functions/_detail-guard.mjs).
+function generateEvergreenEventPages(distinctEvents, eventSlugLookup, eventSlugs, liveSlugs) {
+  if (IS_ADULTS) return 0;
+  const entries = EVERGREEN_EVENTS[activeMetro.id] || [];
+  let wrote = 0;
+  for (const entry of entries) {
+    if (!entry?.slug) continue;
+    // Collision guard: while the slug is in the current live dataset (ingest
+    // can re-mint undated slugs like bluey-bash-central-library), the live
+    // page wins — skip entirely.
+    if (liveSlugs.has(entry.slug)) continue;
+    const canonical = metroUrl(`event/${entry.slug}/`);
+    const where = [entry.venue, entry.city].filter(Boolean).join(", ");
+    const title = `${entry.title} — ${entry.city || metroLabel()} | ${BRAND}`;
+    const description = `${entry.title}${where ? ` at ${entry.venue || entry.city}` : ""}: what it is, when it was last held (${entry.month} ${entry.lastHeld}), and where to find this year's ${metroLabel()} family events.`;
+    const isAnnual = entry.recurrence === "annual";
+    // Cross-link this year's edition when it is live AND prerendered.
+    const live = matchAnnualLiveEvent(entry, distinctEvents, eventSlugLookup, eventSlugs);
+    const liveHtml = live
+      ? `<p class="cta-row"><a class="cta" href="${metroPath(`event/${live.slug}/`)}">This year's event: ${esc(live.event.title)} &rarr;</a></p>`
+      : "";
+    const body = `
+      <p class="lede">${esc(entry.description)}</p>
+      <dl class="meta-grid">
+        <div><dt>Last held</dt><dd>${esc(entry.month)} ${esc(entry.lastHeld)}</dd></div>
+        ${where ? `<div><dt>Where</dt><dd>${esc(where)}</dd></div>` : ""}
+      </dl>
+      ${isAnnual
+        ? `<p>${esc(entry.title)} usually returns every ${esc(entry.month)}; this page updates when next year's dates are announced.</p>`
+        : `<p>The organizer has not announced whether ${esc(entry.title)} will return. This page stays up as a record of the event.</p>`}
+      ${liveHtml}
+      <p class="see-also">In the meantime: <a href="${metroPath("this-weekend/")}">what's on this weekend in ${esc(metroLabel())}</a>${entry.annualSlug ? `, the <a href="${metroPath(`annual/${entry.annualSlug}/`)}">${esc(entry.title)} annual guide</a>` : ""}, all <a href="${metroPath("annual/")}">${esc(metroLabel())} annual events</a>, or the <a href="${metroPath("")}">${esc(metroLabel())} family weekend planner</a>.</p>
+    `;
+    const html = renderShell({
+      title,
+      description,
+      canonical,
+      ogImage: OG_IMAGE,
+      breadcrumb: [
+        { name: BRAND, url: metroUrl("") },
+        { name: entry.title, url: canonical },
+      ],
+      h1: entry.title,
+      eyebrow: `${esc(entry.city || metroLabel())} · last held ${esc(entry.month)} ${esc(entry.lastHeld)}`,
+      body,
+    });
+    writeMetroPage(`event/${entry.slug}/index.html`, html);
+    sitemapEntries.push({
+      loc: canonical,
+      // Content-hash lastmod: the date only advances on real change.
+      lastmod: trackedLastmod(canonical, html),
+      changefreq: "monthly",
+      priority: 0.6,
+    });
+    wrote += 1;
+  }
+  return wrote;
+}
+
 function renderRelatedEvents(event, upcomingSorted, eventSlugLookup) {
   const related = pickRelatedEvents(event, upcomingSorted);
   if (!related.length) return "";
@@ -2560,7 +2847,7 @@ function renderRelatedEvents(event, upcomingSorted, eventSlugLookup) {
       </section>`;
 }
 
-function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySlugs) {
+function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySlugs, annualByEventSlug = null) {
   const slugs = new Set();
   // Candidates for the related-events block, mirroring the mint gates below so
   // every rendered link points at a page this same loop will write (items is
@@ -2596,6 +2883,10 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
     const cityName = event.city || event.neighborhood || metroLabel();
     const citySlug = cityName ? slugify(cityName) : "";
     const showCityLink = citySlug && generatedCitySlugs && generatedCitySlugs.has(citySlug);
+    // link-4: matched annual entry — the event class earns most crawls, so a
+    // single link here is the strongest internal discovery signal the annual
+    // pages get (kids only; the map is empty on the adults build).
+    const annualEntry = annualByEventSlug ? annualByEventSlug.get(candidate) || null : null;
     const dateStr = formatEventDate(event);
     const title = `${event.title} — ${cityName}${dateStr ? `, ${dateStr}` : ""} | ${BRAND}`;
     const description = buildEventDescription(event, dateStr);
@@ -2617,6 +2908,7 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
         <a class="cta" href="${metroPath("")}">Plan a day with ${BRAND}</a>
         ${event.url ? `<a class="cta-secondary" rel="noopener nofollow" href="${esc(event.url)}">Event details</a>` : ""}
       </p>
+      ${annualEntry ? `<p class="see-also">This is an annual ${esc(metroLabel())} tradition — see the <a href="${metroPath(`annual/${annualEntry.slug}/`)}">${esc(annualEntry.title)} annual guide</a>.</p>` : ""}
       ${renderRelatedEvents(event, upcomingSorted, eventSlugLookup)}
       ${renderNewsletterSignup({
         source: "event-page",
@@ -2679,9 +2971,16 @@ function generateEndedEventStubs(
   const cutoff = new Date(now);
   cutoff.setUTCDate(cutoff.getUTCDate() - stubDays);
   const cutoffMs = cutoff.getTime();
+  // Evergreen-rescue slugs (kids) keep a real 200 recap page written by
+  // generateEvergreenEventPages — a noindex "ended" stub must never
+  // overwrite it.
+  const evergreenSlugs = new Set(
+    IS_ADULTS ? [] : (EVERGREEN_EVENTS[activeMetro.id] || []).map((e) => e.slug),
+  );
   const eligible = [];
   for (const [slug, entry] of Object.entries(history?.slugs || {})) {
     if (!slug || liveSlugs.has(slug)) continue;
+    if (evergreenSlugs.has(slug)) continue;
     if (entry?.isRecurring) continue;
     const ts = entry?.lastSeenAt ? Date.parse(entry.lastSeenAt) : NaN;
     if (!Number.isFinite(ts) || ts < cutoffMs) continue;
@@ -2744,9 +3043,19 @@ function generateEndedEventStubs(
 //   ended:    slugs in the rolling 90-day history that are no longer live
 //   upcoming: soonest prerendered events, for soft-landing links on 410/404
 function writeEventSeoManifest(metro, events, eventSlugLookup, liveSlugs, prerenderedSlugs, slugHistory) {
+  // Evergreen-rescue slugs (data/evergreen-events.json, kids only): exempt
+  // from the guard's 410 while their recap page serves. Currently-live slugs
+  // are excluded so the live-event paths in _detail-guard.mjs stay
+  // authoritative for them (the exemption ordering depends on this).
+  const evergreen = IS_ADULTS
+    ? []
+    : (EVERGREEN_EVENTS[metro.id] || [])
+        .map((e) => e.slug)
+        .filter((slug) => slug && !liveSlugs.has(slug));
+  const evergreenSet = new Set(evergreen);
   const ended = [];
   for (const slug of Object.keys(slugHistory?.slugs || {})) {
-    if (slug && !liveSlugs.has(slug)) ended.push(slug);
+    if (slug && !liveSlugs.has(slug) && !evergreenSet.has(slug)) ended.push(slug);
   }
   const liveEnds = {};
   for (const ev of events) {
@@ -2765,12 +3074,13 @@ function writeEventSeoManifest(metro, events, eventSlugLookup, liveSlugs, preren
     .slice(0, 10)
     .map(({ ev, slug }) => ({ slug, title: String(ev.title || "").slice(0, 90) }));
   const manifest = {
-    schemaVersion: 2,
+    schemaVersion: 3,
     metroId: metro.id,
     generatedAt: new Date().toISOString(),
     live: [...liveSlugs],
     liveEnds,
     ended,
+    evergreen,
     upcoming,
   };
   const dir = path.join(DIST, "data", metro.id);
@@ -4014,6 +4324,22 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
       ).join("\n        ")}</nav>
     </section>`
     : "";
+  // link-1: de-orphan the /this-weekend/{city}/ pages. weekendCitySelection
+  // is the exact set generateCityWeekendPages writes moments later in main()
+  // from the same events array, so every anchor resolves. Same gate as the
+  // sub-page generator (kids + CITY_WEEKEND_METROS).
+  const weekendCities =
+    !IS_ADULTS && CITY_WEEKEND_METROS.has(activeMetro.id)
+      ? weekendCitySelection(upcoming)
+      : [];
+  const cityNavHtml = weekendCities.length
+    ? `<section class="wg-by-city" aria-label="By city">
+      <h2>This weekend by city</h2>
+      <nav class="wg-city-links" aria-label="By city">${weekendCities.map((c) =>
+        `<a href="${metroPath(`this-weekend/${c.slug}/`)}">${esc(c.name)} (${c.count} events)</a>`,
+      ).join("\n        ")}</nav>
+    </section>`
+    : "";
   const navHtml = `<nav class="wg-nav" aria-label="Guide sections">
       ${marqueeHtml ? `<a href="#top-picks">Top picks</a>` : ""}
       ${(byDay.get(weekend.saturdayKey) || []).length ? `<a href="#day-sat">Saturday</a>` : ""}
@@ -4045,6 +4371,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     ${posterHtml}
     ${lookAheadHtml}
     ${planAheadHtml}
+    ${cityNavHtml}
     ${IS_ADULTS ? "" : renderShareBar(canonical, `${guideH1} (${rangeLabel})`, posterUrl)}
     ${renderNewsletterSignup()}
     <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a 3-stop day with ${BRAND}</a></p>
@@ -4189,11 +4516,10 @@ function weekendEventsFor(eventItems) {
   return { weekend, upcoming };
 }
 
-function generateCityWeekendPages(eventItems, lookup) {
-  if (IS_ADULTS || !CITY_WEEKEND_METROS.has(activeMetro.id)) return 0;
-  const { weekend, upcoming } = weekendEventsFor(eventItems);
-  if (!upcoming.length) return 0;
-
+// link-1: the city set that earns a /this-weekend/{city}/ page, shared
+// between the page generator below and the metro guide's "By city" nav so
+// every rendered anchor resolves to a page written in the same build.
+function weekendCitySelection(upcoming) {
   const byCity = new Map();
   for (const e of upcoming) {
     const name = String(e.city || e.neighborhood || "").trim();
@@ -4201,20 +4527,26 @@ function generateCityWeekendPages(eventItems, lookup) {
     if (!byCity.has(name)) byCity.set(name, []);
     byCity.get(name).push(e);
   }
-  const cities = [...byCity.entries()]
+  return [...byCity.entries()]
     .filter(([, evs]) => evs.length >= MIN_WEEKEND_SUB_PAGE_EVENTS)
     .sort((a, b) => b[1].length - a[1].length)
-    .slice(0, MAX_CITY_WEEKEND_PAGES);
+    .slice(0, MAX_CITY_WEEKEND_PAGES)
+    .map(([name, evs]) => ({ name, slug: slugify(name), events: evs, count: evs.length }))
+    .filter((c) => c.slug);
+}
+
+function generateCityWeekendPages(eventItems, lookup) {
+  if (IS_ADULTS || !CITY_WEEKEND_METROS.has(activeMetro.id)) return 0;
+  const { weekend, upcoming } = weekendEventsFor(eventItems);
+  if (!upcoming.length) return 0;
 
   let wrote = 0;
-  for (const [cityName, cityEvents] of cities) {
-    const slug = slugify(cityName);
-    if (!slug) continue;
+  for (const { name, slug, events } of weekendCitySelection(upcoming)) {
     writeWeekendSubPage({
       rel: `this-weekend/${slug}/`,
-      heading: weekendGuideTitle(cityName),
-      placeName: cityName,
-      events: cityEvents,
+      heading: weekendGuideTitle(name),
+      placeName: name,
+      events,
       weekend,
       lookup,
     });

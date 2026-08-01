@@ -3,6 +3,8 @@ import { loadEnv, type Plugin } from "vite";
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
+import metrosDoc from "./data/metros.json";
+import { swNavigateFallbackDenylist } from "./src/swHubRoutes";
 
 const repositoryName = process.env.GITHUB_REPOSITORY?.split("/")[1];
 const base =
@@ -216,13 +218,16 @@ export default defineConfig(({ mode }) => {
           // bouncing the user into the SPA browse view (regression fix).
           navigateFallback: `${base}index.html`,
           // Single-segment static trust pages (/about/, /how-we-verify/,
-          // /privacy/) must also bypass the shell — without this entry the SW
-          // served index.html for them and the SPA bounced to browse.
-          navigateFallbackDenylist: [
-            /^\/[^/]+\/.+/,
-            /^\/api\//,
-            /^\/(about|how-we-verify|privacy)\/?$/,
-          ],
+          // /privacy/) must also bypass the shell, and so must the metro hubs
+          // (/atlanta/, /nyc, …): they are prerendered pages whose crafted
+          // head must come from the network, not the precached shell (whose
+          // root canonical GSC recorded as a canonical fold). The composed
+          // array lives in src/swHubRoutes.ts so tests/swHubRoutes.test.ts
+          // asserts the exact regexes shipped here.
+          navigateFallbackDenylist: swNavigateFallbackDenylist(
+            metrosDoc.metros,
+            (env.VITE_APP_AUDIENCE || "kids") === "adults" ? "adults" : "kids",
+          ),
           runtimeCaching: [
             {
               // Per-metro weekend feed (kids + adults). Rotates ~weekly, so

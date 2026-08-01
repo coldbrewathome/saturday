@@ -17,6 +17,7 @@ const catalog = (overrides = {}) => ({
   liveSet: new Set(),
   liveEnds: {},
   endedSet: new Set(),
+  evergreenSet: new Set(),
   upcoming: [],
   ...overrides,
 });
@@ -67,6 +68,26 @@ test("drops an event in the ended set", () => {
   const catalogs = new Map([["bay-area", catalog({ endedSet: new Set(["reptile-roundup"]) })]]);
   const out = filterEndedEventUrls(xml, NOW, catalogs);
   assert.ok(!out.includes("reptile-roundup"));
+});
+
+test("keeps an evergreen-rescue URL even when its slug date is long past (dead-3)", () => {
+  const evergreen = "https://famhop.com/bay-area/event/hillsborough-memorial-day-parade-2026-05-25/";
+  const gone = "https://famhop.com/bay-area/event/some-other-fair-2026-05-25/";
+  const xml = sitemap(urlBlock(evergreen), urlBlock(gone));
+  const catalogs = new Map([
+    [
+      "bay-area",
+      catalog({
+        evergreenSet: new Set(["hillsborough-memorial-day-parade-2026-05-25"]),
+      }),
+    ],
+  ]);
+  const out = filterEndedEventUrls(xml, NOW, catalogs);
+  // The filter strips only "gone"; evergreen resolves to "noindex-shell"
+  // (a real 200 recap page is prerendered), so the entry survives while the
+  // non-evergreen twin with the same past date is dropped.
+  assert.ok(out.includes(evergreen));
+  assert.ok(!out.includes(gone));
 });
 
 test("no catalog: falls back to the slug-date heuristic (with post-end grace)", () => {

@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   ENDED_GRACE_MS,
+  isRemovedSectionKind,
   missingPageDisposition,
   parseDetailPath,
   slugEndedAfterMs,
@@ -22,11 +23,54 @@ test("parses metro event and spot detail paths, slash optional", () => {
 });
 
 test("ignores non-detail paths", () => {
+  // The bare this-weekend HUB (no child) always has a prerendered page and
+  // must stay a plain passthrough — only children match (fresh-1).
   assert.equal(parseDetailPath("/bay-area/this-weekend/"), null);
   assert.equal(parseDetailPath("/bay-area/event/"), null);
   assert.equal(parseDetailPath("/bay-area/event/a/b/"), null);
   assert.equal(parseDetailPath("/api/plan"), null);
   assert.equal(parseDetailPath("/"), null);
+});
+
+// --- fresh-1: removed section paths (city/category/this-weekend children) ---
+
+test("parses city, category, city-category, and this-weekend child paths", () => {
+  assert.deepEqual(parseDetailPath("/seattle/city/enumclaw/"), {
+    metro: "seattle",
+    kind: "city",
+    slug: "enumclaw",
+  });
+  assert.deepEqual(parseDetailPath("/bay-area/category/library"), {
+    metro: "bay-area",
+    kind: "category",
+    slug: "library",
+  });
+  assert.deepEqual(parseDetailPath("/los-angeles/city/pasadena/category/festival/"), {
+    metro: "los-angeles",
+    kind: "city-category",
+    slug: "pasadena/festival",
+  });
+  assert.deepEqual(parseDetailPath("/bay-area/this-weekend/morgan-hill/"), {
+    metro: "bay-area",
+    kind: "weekend-child",
+    slug: "morgan-hill",
+  });
+});
+
+test("isRemovedSectionKind covers exactly the fresh-1 classes", () => {
+  for (const kind of ["city", "category", "city-category", "weekend-child"]) {
+    assert.equal(isRemovedSectionKind(kind), true, kind);
+  }
+  assert.equal(isRemovedSectionKind("event"), false);
+  assert.equal(isRemovedSectionKind("spot"), false);
+});
+
+test("section kinds never 410 through missingPageDisposition", () => {
+  assert.equal(missingPageDisposition("city", "enumclaw", Date.UTC(2026, 6, 1)), "noindex-shell");
+  assert.equal(
+    missingPageDisposition("weekend-child", "morgan-hill", Date.UTC(2026, 6, 1)),
+    "noindex-shell",
+  );
 });
 
 // --- slugEndedAfterMs ----------------------------------------------------------
@@ -224,6 +268,55 @@ test("a future-dated slug that vanished from the feed (cancelled) is gone immedi
   };
   assert.equal(
     missingPageDisposition("event", "festival-2026-07-04", NOW, catalog),
+    "gone",
+  );
+});
+
+// --- evergreen-rescue exemption (dead-3) -------------------------------------
+// Curated ranked-then-dead slugs (data/evergreen-events.json → manifest
+// `evergreen`) serve a permanent 200 recap page and must never 410 — the
+// exemption has to beat BOTH dead paths: endedSet (slugs still in the rolling
+// history) and the slug-date heuristic (dated slugs already pruned from it).
+
+const EVERGREEN_NOW = Date.UTC(2026, 7, 1); // 2026-08-01, all dates far past
+
+test("an evergreen dated slug pruned from history is noindex-shell, not gone", () => {
+  const catalog = {
+    liveSet: new Set(),
+    liveEnds: {},
+    endedSet: new Set(),
+    evergreenSet: new Set(["hillsborough-memorial-day-parade-2026-05-25"]),
+  };
+  // Without the exemption, the slug-date heuristic (May 25 + grace, long
+  // elapsed by Aug 1) would say "gone".
+  assert.equal(
+    missingPageDisposition("event", "hillsborough-memorial-day-parade-2026-05-25", EVERGREEN_NOW, catalog),
+    "noindex-shell",
+  );
+});
+
+test("an evergreen undated slug still in the ended history is noindex-shell, not gone", () => {
+  const catalog = {
+    liveSet: new Set(),
+    liveEnds: {},
+    endedSet: new Set(["bluey-bash-central-library"]),
+    evergreenSet: new Set(["bluey-bash-central-library"]),
+  };
+  assert.equal(
+    missingPageDisposition("event", "bluey-bash-central-library", EVERGREEN_NOW, catalog),
+    "noindex-shell",
+  );
+});
+
+test("a non-evergreen ended slug keeps the exact 410 behavior (regression guard)", () => {
+  const catalog = {
+    liveSet: new Set(),
+    liveEnds: {},
+    endedSet: new Set(["some-other-fair-2026-05-25"]),
+    evergreenSet: new Set(["hillsborough-memorial-day-parade-2026-05-25"]),
+  };
+  assert.equal(
+    missingPageDisposition("event", "some-other-fair-2026-05-25", EVERGREEN_NOW, catalog),
     "gone",
   );
 });

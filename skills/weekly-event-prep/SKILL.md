@@ -121,6 +121,8 @@ git add -A && git commit -m "feat(events): weekly prep <window>" && git push ori
 npm run deploy:kids && npm run deploy:adults    # sequential — they share dist/
 ```
 
+**MANDATORY after any build that runs `generate-seo-pages.mjs` (including the gate build in step 6): commit `data/seo-lastmod.json` before the session ends** (explicit path — `git add data/seo-lastmod.json` — per the concurrent-sessions rule). The content-hash `<lastmod>` store only works if it persists across checkouts: a build from a clean clone with an empty/stale store makes `trackedLastmod()` fall back to today() for every URL, re-stamping all ~6,900 lastmods at once — exactly the "Google learns to distrust lastmod" failure the hashing was built to end (it fired once: 6,697/6,802 live sitemap URLs stamped 2026-08-01).
+
 Liveness (raw HTML, not browser): famhop.com/ and one metro hub return 200 with `seo-shell:start`; each newly added event URL returns 200. Deploy pins per `CLAUDE.md` Deploy section.
 
 Indexing: nothing manual needed — the 9:00 cron picks up changed `<lastmod>` values and submits within the 200/day quota.

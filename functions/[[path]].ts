@@ -1,6 +1,8 @@
 // Cloudflare Pages Function guarding /{metro}/event/* and /{metro}/spot/*
-// detail URLs (scoped via public/_routes.json — it is NOT invoked for other
-// paths, so static pages elsewhere keep zero-function serving).
+// detail URLs, plus (fresh-1) /{metro}/city/*, /{metro}/category/* and
+// /{metro}/this-weekend/* (scoped via public/_routes.json — it is NOT
+// invoked for other paths, so static pages elsewhere keep zero-function
+// serving).
 //
 // Why: the build prerenders only capped, quality-gated detail pages and the
 // 20k-file Pages limit forbids ended-event stub files (SEO_MAX_ENDED_STUBS=0).
@@ -24,7 +26,7 @@
 //   page → serve the SPA shell with x-robots-tag: noindex (the shell must
 //   never be indexed under detail URLs; spots/live events can earn a page).
 
-import { missingPageDisposition, parseDetailPath } from "./_detail-guard.mjs";
+import { isRemovedSectionKind, missingPageDisposition, parseDetailPath } from "./_detail-guard.mjs";
 import { loadCatalog, type Env, type UpcomingLink } from "./_catalog";
 
 type Context = { request: Request; env: Env };
@@ -67,12 +69,21 @@ function detailMissPage(
   metro: string,
   status: 200 | 404 | 410,
   upcoming: UpcomingLink[],
+  pageKind: string = "event",
 ): Response {
   const brand = brandForHost(host);
-  const heading = status === 404 ? "Event not found" : "This event has ended";
+  const isEvent = pageKind === "event";
+  const heading =
+    status === 404
+      ? isEvent
+        ? "Event not found"
+        : "Page not found"
+      : "This event has ended";
   const lead =
     status === 404
-      ? "We couldn&#39;t find an event at this link. It may have been moved, or the address may be mistyped."
+      ? isEvent
+        ? "We couldn&#39;t find an event at this link. It may have been moved, or the address may be mistyped."
+        : "We couldn&#39;t find a page at this link. It may have been removed, or the address may be mistyped."
       : "The event at this link is no longer scheduled. It happened in the past or was removed by the organizer.";
   const html = `<!doctype html>
 <html lang="en">
@@ -118,11 +129,23 @@ export async function onRequest(context: Context): Promise<Response> {
   const assetEtag = asset.headers.get("etag");
   const isShellFallback = assetEtag !== null && assetEtag === shell.headers.get("etag");
 
-  // Only events consult the catalog; spots are always noindex-shell/passthrough.
+  // Events consult the catalog for disposition; the fresh-1 section kinds
+  // load it only for the 404 page's soft-landing links. Spots are always
+  // noindex-shell/passthrough.
   const catalog =
-    detail.kind === "event"
+    detail.kind === "event" || isRemovedSectionKind(detail.kind)
       ? await loadCatalog(env, url.origin, detail.metro)
       : null;
+
+  // fresh-1: removed page classes (/{metro}/city/*, /{metro}/category/*,
+  // /{metro}/city/*/category/*, /{metro}/this-weekend/{child}/). A real
+  // prerendered page passes through untouched; the shell fallback becomes an
+  // honest 404 (noindex, branded, soft-landing links) instead of a 200
+  // index,follow homepage duplicate.
+  if (isRemovedSectionKind(detail.kind)) {
+    if (!isShellFallback) return asset;
+    return detailMissPage(url.hostname, detail.metro, 404, catalog?.upcoming ?? [], detail.kind);
+  }
 
   // A real prerendered event page must still be freshness-checked — a page
   // minted before its event ended (or one that ages out between manual
