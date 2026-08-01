@@ -51,6 +51,23 @@ describe("NewsletterCard", () => {
     expect(container).toBeEmptyDOMElement();
   });
 
+  it("sends the stored age band with the subscription", async () => {
+    window.localStorage.setItem("famhop:ageBand", "preschool");
+    render(<NewsletterCard metroId="bay-area" metroLabel="Bay Area" />);
+    await subscribeVia(screen.getByPlaceholderText("you@example.com"));
+    expect(vi.mocked(subscribeNewsletter)).toHaveBeenCalledWith(
+      expect.objectContaining({ ageBand: "preschool" }),
+    );
+  });
+
+  it("omits ageBand when no age was ever picked", async () => {
+    render(<NewsletterCard metroId="bay-area" metroLabel="Bay Area" />);
+    await subscribeVia(screen.getByPlaceholderText("you@example.com"));
+    expect(vi.mocked(subscribeNewsletter)).toHaveBeenCalledWith(
+      expect.objectContaining({ ageBand: undefined }),
+    );
+  });
+
   it("subscribe shows an explicit success state instead of unmounting", async () => {
     render(<NewsletterCard metroId="bay-area" metroLabel="Bay Area" />);
     await subscribeVia(screen.getByPlaceholderText("you@example.com"));

@@ -63,6 +63,31 @@ describe("EventDetailView", () => {
     vi.useRealTimers();
   });
 
+  it("shows the verified trust line with source host for verified events", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-06-10T12:00:00-07:00"));
+    const event = makeEvent({ id: "e1", slug: "storytime" });
+    render(<EventDetailView {...baseProps} events={[event]} slug="storytime" />);
+    expect(screen.getByText("Verified · sfpl.org")).toHaveAttribute(
+      "href",
+      "https://sfpl.org/events/storytime",
+    );
+    expect(screen.getByText("How we verify")).toHaveAttribute(
+      "href",
+      "/how-we-verify/",
+    );
+    vi.useRealTimers();
+  });
+
+  it("omits the trust line for unverified events", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-06-10T12:00:00-07:00"));
+    const event = makeEvent({ id: "e1", slug: "storytime", verified: false });
+    render(<EventDetailView {...baseProps} events={[event]} slug="storytime" />);
+    expect(screen.queryByText(/^Verified ·/)).not.toBeInTheDocument();
+    vi.useRealTimers();
+  });
+
   // E26: a slug that still resolves in the feed but whose event has already
   // ended must show the "ended" state — never live/attendable copy.
   it("shows the ended state for a present-but-past event still in the feed", () => {

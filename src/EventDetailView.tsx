@@ -34,6 +34,17 @@ type Props = {
   shareUrlFor: (slug: string) => string;
 };
 
+// Local copy of App.tsx's sourceHostname — importing the runtime helper from
+// App would create a require cycle (App imports this view).
+function sourceHostname(url: string): string | null {
+  try {
+    const host = new URL(url).hostname.replace(/^www\./, "");
+    return host || null;
+  } catch {
+    return null;
+  }
+}
+
 function formatStart(value?: string | null): string | null {
   if (!value) return null;
   const date = new Date(value);
@@ -292,6 +303,29 @@ export default function EventDetailView({
               {event.venue}
               {event.city ? ` · ${event.city}` : ""}
             </p>
+            {/* Quiet trust line (same framing as plan stops), plus the
+                methodology page — verification is a differentiator, show it. */}
+            {event.verified &&
+              event.url &&
+              (() => {
+                const host = sourceHostname(event.url);
+                if (!host) return null;
+                return (
+                  <p className="event-detail-trust">
+                    <a
+                      className="verified-source"
+                      href={event.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Verified · {host}
+                    </a>
+                    <a className="verified-source" href="/how-we-verify/">
+                      How we verify
+                    </a>
+                  </p>
+                );
+              })()}
           </header>
 
           {event.description && (

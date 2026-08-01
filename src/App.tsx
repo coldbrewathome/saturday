@@ -7,7 +7,6 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Clock3,
   Copy,
   Download,
   ExternalLink,
@@ -102,6 +101,7 @@ import {
   type MetroConfig,
 } from "./metros";
 import EventDetailView from "./EventDetailView";
+import WeekendView from "./WeekendView";
 import InstallBanner from "./InstallBanner";
 import { EVENT_THEMES, isValidThemeId } from "./eventThemes";
 import { isUpcomingEvent, isWeekendWindowDate } from "./eventFreshness";
@@ -654,6 +654,31 @@ function readStoredInterests(): Set<string> {
     // fall through to empty
   }
   return new Set<string>();
+}
+
+// Kids only: persist the age-group filter across sessions — a family's kid
+// ages don't change between visits, so losing the choice on reload throws
+// away the highest-signal personalization input. Global key like interests
+// (ages aren't metro-specific).
+const AGE_BAND_STORAGE_KEY = "famhop:ageBand";
+
+const AGE_PROMPT_DISMISSED_KEY = "famhop:agePromptDismissed";
+
+function readStoredAgeBand(): AgeBand | "any" {
+  try {
+    const raw = window.localStorage.getItem(AGE_BAND_STORAGE_KEY);
+    if (
+      raw === "toddler" ||
+      raw === "preschool" ||
+      raw === "school-age" ||
+      raw === "tween"
+    ) {
+      return raw;
+    }
+  } catch {
+    // fall through to default
+  }
+  return "any";
 }
 
 // Adults (Mosey) only: persist "who you're heading out as" across sessions, like
@@ -1265,12 +1290,18 @@ export function sourceHostname(url: string): string | null {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type AppRoute = {
-  view: "browse" | "plans" | "event";
+  view: "browse" | "plans" | "event" | "weekend";
   planId: string | null;
   eventSlug: string | null;
   /** Spot to open on the map (from a shared `#/spot/<id>` deep link). */
   focusSpotId: string | null;
 };
+
+// Kids land on the decision-first Weekend feed; the map ("Explore") is one
+// tap away. Adults (Mosey) keep the map-first landing — hangout discovery is
+// spontaneous, not weekend-anchored.
+const DEFAULT_VIEW: AppRoute["view"] =
+  APP_AUDIENCE === "kids" ? "weekend" : "browse";
 
 function readAppRoute(): AppRoute {
   const browse: AppRoute = {
@@ -1279,13 +1310,21 @@ function readAppRoute(): AppRoute {
     eventSlug: null,
     focusSpotId: null,
   };
+  const landing: AppRoute = { ...browse, view: DEFAULT_VIEW };
   if (typeof window === "undefined") {
-    return browse;
+    return landing;
   }
   const hash = window.location.hash;
   if (hash.startsWith("#/p/")) {
     // Poll route — main.tsx handles rendering. App still mounts when the user
-    // navigates back, so default to browse.
+    // navigates back, so default to the landing view.
+    return landing;
+  }
+  if (hash.startsWith("#/weekend")) {
+    return { ...browse, view: "weekend" };
+  }
+  // Explicit map request (incl. "#/browse?hopnow=1" from static SEO pages).
+  if (hash.startsWith("#/browse")) {
     return browse;
   }
   // Per ADR-04: the SPA hash route is `#/event/<slug>`. The prerendered SEO
@@ -1331,7 +1370,7 @@ function readAppRoute(): AppRoute {
       focusSpotId: null,
     };
   }
-  return browse;
+  return landing;
 }
 
 function buildAppHash(
@@ -1345,6 +1384,7 @@ function buildAppHash(
   if (view === "plans") {
     return planId ? `#/plans/${encodeURIComponent(planId)}` : "#/plans";
   }
+  if (view === "weekend") return "#/weekend";
   if (view === "browse") return "#/browse";
   return "#/";
 }
@@ -1594,7 +1634,27 @@ function App({ metro }: AppProps) {
   // "All" (no interests → the forYou filter is a no-op anyway).
   const [forYou, setForYou] = useState(() => readStoredInterests().size > 0);
   const [showInterestsPicker, setShowInterestsPicker] = useState(false);
-  const [ageBand, setAgeBand] = useState<AgeBand | "any">("any");
+  const [ageBand, setAgeBand] = useState<AgeBand | "any">(readStoredAgeBand);
+  // First-visit age prompt (kids): shown until the family picks an age band
+  // or explicitly dismisses it. Answered-state needs no extra flag — a stored
+  // band ends the prompt via `ageBand !== "any"`.
+  const [agePromptDismissed, setAgePromptDismissed] = useState(() => {
+    try {
+      return window.localStorage.getItem(AGE_PROMPT_DISMISSED_KEY) === "1";
+    } catch {
+      return false;
+    }
+  });
+  const agePromptVisible =
+    SHOW_AGE_BAND_UI && ageBand === "any" && !agePromptDismissed;
+  function dismissAgePrompt() {
+    setAgePromptDismissed(true);
+    try {
+      window.localStorage.setItem(AGE_PROMPT_DISMISSED_KEY, "1");
+    } catch {
+      // ignore
+    }
+  }
   const [vibe, setVibe] = useState<PlannerVibe>("balanced");
   // Adults (Mosey) only: who you're heading out as — nudges planner scoring.
   const [goingOutMode, setGoingOutMode] = useState<"solo" | "friends" | "date">(
@@ -1653,9 +1713,7 @@ function App({ metro }: AppProps) {
     readStoredArray(storageKeys.deletedPlanIds, []),
   );
   const initialRoute = readAppRoute();
-  const [view, setView] = useState<"browse" | "plans" | "event">(
-    initialRoute.view,
-  );
+  const [view, setView] = useState<AppRoute["view"]>(initialRoute.view);
   const [inferredGeo, setInferredGeo] = useState<{ city: string | null; lat: number | null; lon: number | null } | null>(null);
   const [activePlanId, setActivePlanId] = useState<string | null>(
     initialRoute.planId,
@@ -2033,6 +2091,15 @@ function App({ metro }: AppProps) {
       // best-effort; non-fatal in private mode
     }
   }, [goingOutMode]);
+
+  useEffect(() => {
+    if (!SHOW_AGE_BAND_UI) return;
+    try {
+      window.localStorage.setItem(AGE_BAND_STORAGE_KEY, ageBand);
+    } catch {
+      // best-effort; non-fatal in private mode
+    }
+  }, [ageBand]);
 
   useEffect(() => {
     window.localStorage.setItem(
@@ -4017,6 +4084,17 @@ function App({ metro }: AppProps) {
         </label>
 
         <nav className="topbar-tabs" aria-label="View">
+          {/* Weekend leads: the decision-first feed is the primary surface;
+              the map ("Explore") is the inventory behind it. The old Guide
+              tab exited the SPA to the static page — that page is now linked
+              from inside the Weekend view instead. */}
+          <button
+            className={view === "weekend" ? "active" : ""}
+            onClick={() => setView("weekend")}
+          >
+            <CalendarDays aria-hidden="true" />
+            Weekend
+          </button>
           <button
             className={view === "browse" ? "active" : ""}
             onClick={() => setView("browse")}
@@ -4024,10 +4102,6 @@ function App({ metro }: AppProps) {
             <MapPin aria-hidden="true" />
             Explore
           </button>
-          <a href={weekendGuideHref} title={`${metro.label} weekend guide`}>
-            <Clock3 aria-hidden="true" />
-            Guide
-          </a>
           <button
             className={view === "plans" ? "active" : ""}
             onClick={() => setView("plans")}
@@ -4231,10 +4305,49 @@ function App({ metro }: AppProps) {
           </div>
         </div>
 
+        {/* ── First-visit age prompt (top-center): one tap to personalize
+            everything by kids' ages. Owns the slot until answered or
+            dismissed — the hero and weekend banner yield so the
+            top-center overlays never stack. ── */}
+        {agePromptVisible && (
+          <div
+            className="age-prompt"
+            role="group"
+            aria-label="Show events for your kids' ages"
+          >
+            <span className="age-prompt-label">Kids&rsquo; ages?</span>
+            <div className="segmented compact">
+              {([
+                ["toddler", "0–2"],
+                ["preschool", "3–5"],
+                ["school-age", "6–10"],
+                ["tween", "10+"],
+              ] as const).map(([value, label]) => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => setAgeBand(value)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              className="icon-button age-prompt-dismiss"
+              title="Hide"
+              aria-label="Hide age prompt"
+              onClick={dismissAgePrompt}
+            >
+              <X aria-hidden="true" />
+            </button>
+          </div>
+        )}
+
         {/* ── Plan-first hero (top-center): the advertised "3-stop plan in
             seconds" promise, fulfilled with the top editor's pick. The
             weekend banner yields this slot while the hero is visible. ── */}
-        {heroVisible && heroPick && heroLine && (
+        {!agePromptVisible && heroVisible && heroPick && heroLine && (
           <section
             className={`hero-plan${heroExpanded ? " is-open" : ""}`}
             aria-label="Ready-made plan"
@@ -4318,7 +4431,7 @@ function App({ metro }: AppProps) {
         )}
 
         {/* ── Weekend-guide hook (top-center) ──────────────────────── */}
-        {!heroVisible && weekendGuideStats && eventDateFilter === "all" && (
+        {!agePromptVisible && !heroVisible && weekendGuideStats && eventDateFilter === "all" && (
           <a
             className="weekend-guide-banner"
             href={weekendGuideHref}
@@ -4840,6 +4953,23 @@ function App({ metro }: AppProps) {
                       · {event.timeWindow}
                     </span>
                     {event.cost && <span>{event.cost}</span>}
+                    {/* Quiet trust line, same framing as the plan stops. */}
+                    {event.verified &&
+                      event.url &&
+                      (() => {
+                        const host = sourceHostname(event.url);
+                        if (!host) return null;
+                        return (
+                          <a
+                            className="verified-source"
+                            href={event.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Verified · {host}
+                          </a>
+                        );
+                      })()}
                   </div>
                   <div className="sheet-actions">
                     <button
@@ -5157,6 +5287,29 @@ function App({ metro }: AppProps) {
           );
         })()}
       </main>
+      ) : view === "weekend" ? (
+      <WeekendView
+        events={events}
+        metro={metro}
+        ageBand={ageBand}
+        onAgeBand={setAgeBand}
+        savedEventIds={savedEventIds}
+        onToggleSaved={toggleSavedEvent}
+        planEventIds={activePlan?.eventIds ?? []}
+        onAddToPlan={addEventToPlanOrCreate}
+        onShare={(title, slug) => shareItem(title, eventShareUrl(slug))}
+        featuredPlans={nearbyFeaturedPlans}
+        onUsePlan={forkFeaturedPlan}
+        onOpenMap={() => setView("browse")}
+        guideHref={weekendGuideHref}
+        newsletterSlot={
+          <NewsletterCard
+            metroId={metro.id}
+            metroLabel={metro.label}
+            source="app-weekend"
+          />
+        }
+      />
       ) : view === "event" ? (
       <EventDetailView
         events={events}
@@ -5930,8 +6083,9 @@ function App({ metro }: AppProps) {
 
       {/* Visit-3 engaged-visitor ask: the Friday digest. Replaces the old
           Google sign-in modal (same trigger cadence; sign-in stays in the
-          topbar). Reuses the prompt-card styles. */}
-      {showDigestPrompt && (
+          topbar). Reuses the prompt-card styles. Suppressed on the Weekend
+          view, which carries the same signup inline. */}
+      {showDigestPrompt && view !== "weekend" && (
         <div className="modal-backdrop signin-prompt-backdrop" role="presentation">
           <div
             className="signin-prompt-card"
@@ -6208,9 +6362,13 @@ export function NewsletterCard({
     setError(null);
     setStatus("submitting");
     try {
+      // Age band rides along when the family has picked one — stored on the
+      // subscriber record (worker) so digests can segment by age.
+      const storedAge = SHOW_AGE_BAND_UI ? readStoredAgeBand() : "any";
       await subscribeNewsletter({
         email: trimmed,
         metroId,
+        ageBand: storedAge === "any" ? undefined : storedAge,
         source,
       });
       setStatus("done");
@@ -7046,33 +7204,47 @@ function ShareCardPanel({
   items: PlanItem[];
   metroLabel: string;
 }) {
-  const [status, setStatus] = useState<"idle" | "ready" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "ready" | "shared" | "error">(
+    "idle",
+  );
   const hasItems = items.length > 0;
+  const cardFileName = `${slugifyDownloadName(title || `${APP_BRAND.toLowerCase()}-plan`)}-story.png`;
+  // Mobile share sheets accept image files (→ group chats, Stories directly);
+  // desktop browsers generally don't, so the button only shows where it works.
+  const canShareCardFile =
+    typeof navigator !== "undefined" &&
+    !!navigator.canShare?.({
+      files: [new File([], cardFileName, { type: "image/png" })],
+    });
+
+  async function renderStoryCardBlob(): Promise<Blob> {
+    const canvas = document.createElement("canvas");
+    canvas.width = 1080;
+    canvas.height = 1350;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("Canvas unavailable");
+
+    drawPlanShareCard(ctx, {
+      title: cleanShareTitle(title),
+      metroLabel,
+      items,
+    });
+
+    const blob = await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob(resolve, "image/png"),
+    );
+    if (!blob) throw new Error("Export failed");
+    return blob;
+  }
 
   async function downloadStoryCard() {
     if (!hasItems) return;
     try {
-      const canvas = document.createElement("canvas");
-      canvas.width = 1080;
-      canvas.height = 1350;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) throw new Error("Canvas unavailable");
-
-      drawPlanShareCard(ctx, {
-        title: cleanShareTitle(title),
-        metroLabel,
-        items,
-      });
-
-      const blob = await new Promise<Blob | null>((resolve) =>
-        canvas.toBlob(resolve, "image/png"),
-      );
-      if (!blob) throw new Error("Export failed");
-
+      const blob = await renderStoryCardBlob();
       const href = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = href;
-      link.download = `${slugifyDownloadName(title || `${APP_BRAND.toLowerCase()}-plan`)}-story.png`;
+      link.download = cardFileName;
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -7080,6 +7252,24 @@ function ShareCardPanel({
       setStatus("ready");
       window.setTimeout(() => setStatus("idle"), 1800);
     } catch {
+      setStatus("error");
+    }
+  }
+
+  async function shareStoryCard() {
+    if (!hasItems) return;
+    try {
+      const blob = await renderStoryCardBlob();
+      const file = new File([blob], cardFileName, { type: "image/png" });
+      await navigator.share({
+        files: [file],
+        title: cleanShareTitle(title),
+      });
+      setStatus("shared");
+      window.setTimeout(() => setStatus("idle"), 1800);
+    } catch (e) {
+      // Closing the share sheet rejects with AbortError — not an error state.
+      if ((e as DOMException)?.name === "AbortError") return;
       setStatus("error");
     }
   }
@@ -7093,6 +7283,17 @@ function ShareCardPanel({
           quick marketing post. Instagram does not provide a reliable web share
           URL, so use this card with the native share sheet or upload it there.
         </p>
+        {canShareCardFile && (
+          <button
+            type="button"
+            className="share-quick-link copy"
+            disabled={!hasItems}
+            onClick={shareStoryCard}
+          >
+            <Share2 aria-hidden="true" />
+            {status === "shared" ? "Shared" : "Share card"}
+          </button>
+        )}
         <button
           type="button"
           className="share-quick-link copy"
