@@ -11,6 +11,7 @@ import {
   Download,
   ExternalLink,
   List,
+  Image,
   Mail,
   MapPin,
   MessageCircle,
@@ -25,6 +26,7 @@ import {
   X,
   Zap,
 } from "lucide-react";
+import { toPng } from "html-to-image";
 import {
   type ComponentProps,
   FormEvent,
@@ -103,8 +105,26 @@ import {
 import EventDetailView from "./EventDetailView";
 import WeekendView from "./WeekendView";
 import InstallBanner from "./InstallBanner";
+import OnboardingWizard from "./OnboardingWizard";
+import { PlanCardArt } from "./PlanCardView";
+import { createPlanCard, type PlanCardRecord } from "./planCardApi";
+import {
+  fetchEventTrust,
+  submitCheckin,
+  trustBoost,
+  type EventTrust,
+} from "./checkinApi";
+import CheckinPrompt from "./CheckinPrompt";
+import { computeCheckinCandidates } from "./checkinQueue";
 import { EVENT_THEMES, isValidThemeId } from "./eventThemes";
 import { isUpcomingEvent, isWeekendWindowDate } from "./eventFreshness";
+import {
+  PROFILE_STORAGE_KEY,
+  readStoredProfile,
+  writeStoredProfile,
+  scoreEventForFamily,
+  type FamilyProfile,
+} from "./familyProfile";
 
 type Category =
   | "Outdoors"
@@ -693,6 +713,40 @@ function readStoredGoingOutMode(): "solo" | "friends" | "date" {
     // fall through to default
   }
   return "friends";
+}
+
+// Post-weekend check-ins ("did you go?"). Local map of eventId → answer,
+// which gates the prompt queue; the aggregate + cross-device history live on
+// the worker (submitCheckin / fetchUserCheckins).
+const CHECKINS_STORAGE_KEY = "famhop:checkins";
+
+function readStoredCheckins(): Record<string, { date: string; worthIt: boolean }> {
+  try {
+    const raw = window.localStorage.getItem(CHECKINS_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw) as Record<string, { date?: string; worthIt?: unknown }>;
+      const out: Record<string, { date: string; worthIt: boolean }> = {};
+      for (const [id, entry] of Object.entries(parsed)) {
+        if (entry && typeof entry.worthIt === "boolean") {
+          out[id] = { date: entry.date ?? "", worthIt: entry.worthIt };
+        }
+      }
+      return out;
+    }
+  } catch {
+    // fall through to empty
+  }
+  return {};
+}
+
+function writeStoredCheckins(
+  record: Record<string, { date: string; worthIt: boolean }>,
+): void {
+  try {
+    window.localStorage.setItem(CHECKINS_STORAGE_KEY, JSON.stringify(record));
+  } catch {
+    // ignore
+  }
 }
 
 const unsplash = (id: string) =>
@@ -1655,6 +1709,19 @@ function App({ metro }: AppProps) {
       // ignore
     }
   }
+  // Family profile (kids): first-run wizard collects ages/ZIP/interests/budget/
+  // setting once; the weekend feed and browse ranking re-rank for it. Shows on
+  // first visit only, until a profile exists; re-openable via "Edit profile".
+  const [profile, setProfile] = useState<FamilyProfile | null>(readStoredProfile);
+  const [showProfileWizard, setShowProfileWizard] = useState(
+    () => SHOW_AGE_BAND_UI && !readStoredProfile(),
+  );
+  function completeProfile(next: FamilyProfile) {
+    setProfile(next);
+    writeStoredProfile(next);
+    setShowProfileWizard(false);
+    trackMetric("profile_completed", metro.id);
+  }
   const [vibe, setVibe] = useState<PlannerVibe>("balanced");
   // Adults (Mosey) only: who you're heading out as — nudges planner scoring.
   const [goingOutMode, setGoingOutMode] = useState<"solo" | "friends" | "date">(
@@ -1752,6 +1819,21 @@ function App({ metro }: AppProps) {
     /** True only when the clipboard write actually resolved. */
     copied?: boolean;
   }>({ status: "idle" });
+  // Wrapped-style plan card share: the created record shown in a preview modal,
+  // exported to a PNG via html-to-image, shared as image + #/card/<id> link.
+  const [planCard, setPlanCard] = useState<PlanCardRecord | null>(null);
+  const [planCardBusy, setPlanCardBusy] = useState(false);
+  const [planCardError, setPlanCardError] = useState<string | null>(null);
+  const [planCardCopied, setPlanCardCopied] = useState(false);
+  const planCardRef = useRef<HTMLDivElement | null>(null);
+  // Post-weekend check-ins: local answers gate the prompt queue; aggregate
+  // trust (eventTrust) powers badges + ranking. Set on the weekend view.
+  const [checkins, setCheckins] =
+    useState<Record<string, { date: string; worthIt: boolean }>>(readStoredCheckins);
+  const [checkinPromptIndex, setCheckinPromptIndex] = useState(0);
+  const [eventTrust, setEventTrust] = useState<ReadonlyMap<string, EventTrust>>(
+    new Map(),
+  );
   const [session, setSession] = useState<SessionState | null>(() => readSession());
   const [signInError, setSignInError] = useState<string | null>(null);
   const signInButtonRef = useRef<HTMLDivElement | null>(null);
@@ -1999,6 +2081,63 @@ function App({ metro }: AppProps) {
       active = false;
     };
   }, [dataUrls.events, metro.id]);
+
+  // Aggregate trust scores for the weekend feed: fetch once per upcoming-
+  // event batch (capped), re-fetch when events change.
+  useEffect(() => {
+    if (view !== "weekend") return;
+    let cancelled = false;
+    const now = new Date();
+    const ids = events
+      .filter((e) => isUpcomingEvent(e, now, { timeZone: metro.timezone }))
+      .slice(0, 30)
+      .map((e) => e.id);
+    if (ids.length === 0) return;
+    Promise.all(ids.map((id) => fetchEventTrust(id))).then((results) => {
+      if (cancelled) return;
+      const map = new Map<string, EventTrust>();
+      results.forEach((trust, index) => {
+        if (trust) map.set(ids[index], trust);
+      });
+      setEventTrust(map);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [view, events, metro.id]);
+
+  // Post-weekend check-in queue: saved events from the last ~8 days that have
+  // ended and haven't been answered yet. Prompt window: Sunday 6pm → Tuesday.
+  const checkinCandidates = useMemo(
+    () =>
+      computeCheckinCandidates(
+        events,
+        savedEventIds,
+        checkins,
+        new Date(),
+        metro.timezone,
+      ),
+    [events, savedEventIds, checkins, metro],
+  );
+
+  // The prompt shows one event at a time; index advances on any answer.
+  const currentCheckin =
+    checkinPromptIndex < checkinCandidates.length
+      ? checkinCandidates[checkinPromptIndex]
+      : null;
+
+  function answerCheckin(event: FamilyEvent, went: boolean | null) {
+    const next = { ...checkins, [event.id]: { date: new Date().toISOString(), worthIt: went === true } };
+    writeStoredCheckins(next);
+    setCheckins(next);
+    if (went !== null && session) {
+      // "Worth it" / "skip it" are real feedback → server aggregate. "Didn't
+      // go" only tombstones locally so it never touches the trust score.
+      submitCheckin(event.id, went, session.token).catch(() => {});
+    }
+    setCheckinPromptIndex((i) => i + 1);
+    trackMetric("checkin_answered", metro.id);
+  }
 
   useEffect(() => {
     if (guidePlanConsumedRef.current || events.length === 0) return;
@@ -2443,6 +2582,13 @@ function App({ metro }: AppProps) {
               (plan) => !tombstones.has(plan.id),
             );
           });
+          // Cloud profile wins only when this browser has none yet (the
+          // wizard's own answers are the freshest signal for a given browser).
+          if (!localStorage.getItem(PROFILE_STORAGE_KEY) && serverState.profile) {
+            setProfile(serverState.profile);
+            writeStoredProfile(serverState.profile);
+            setShowProfileWizard(false);
+          }
         }
         setSyncReady(true);
         setSyncStatus("synced");
@@ -2469,6 +2615,7 @@ function App({ metro }: AppProps) {
         plans,
         deletedPlanIds,
         interests: Array.from(preferredThemes),
+        profile,
       })
         .then(() => setSyncStatus("synced"))
         .catch(() => setSyncStatus("error"));
@@ -2484,6 +2631,7 @@ function App({ metro }: AppProps) {
     plans,
     deletedPlanIds,
     preferredThemes,
+    profile,
   ]);
 
   useEffect(() => {
@@ -3742,6 +3890,107 @@ function App({ metro }: AppProps) {
       trackMetric("plan_shared", metro.id);
     } catch (error) {
       setShareState({ status: "error", error: (error as Error).message });
+    }
+  }
+
+  // Wrapped-style plan card: create the server snapshot, show the preview
+  // modal. The image export happens on demand from the modal (sharePlanCardImage)
+  // so the capture runs only when the user actually shares.
+  async function sharePlanAsCard() {
+    if (
+      !activePlan ||
+      (activePlanStops.length === 0 && activePlanEvents.length === 0)
+    ) {
+      return;
+    }
+    if (!API_CONFIGURED) {
+      setPlanCardError("Backend not deployed in this preview.");
+      return;
+    }
+    setPlanCardBusy(true);
+    setPlanCardError(null);
+    setPlanCardCopied(false);
+    const stops: StopSummary[] = [
+      ...activePlanStops.map((spot) => ({
+        id: spot.id,
+        name: spot.name,
+        neighborhood: spot.neighborhood,
+        category: spot.category,
+        imageUrl: spot.imageUrl,
+        cost: spot.cost,
+      })),
+      ...activePlanEvents.map((event) => ({
+        id: event.id,
+        name: event.title,
+        neighborhood: event.neighborhood,
+        category: event.category,
+        cost: event.cost,
+      })),
+    ].slice(0, 3);
+    try {
+      const { cardId } = await createPlanCard({
+        title: activePlan.name || "Untitled plan",
+        metroId: metro.id,
+        stops,
+      });
+      trackMetric("plan_card_created", metro.id);
+      setPlanCard({
+        cardId,
+        metroId: metro.id,
+        title: activePlan.name || "Untitled plan",
+        stops,
+        createdAt: new Date().toISOString(),
+      });
+    } catch {
+      setPlanCardError("Couldn't create the card — try again.");
+    } finally {
+      setPlanCardBusy(false);
+    }
+  }
+
+  // Export the previewed card art to a PNG and share it (image + link) via the
+  // native sheet, or download + copy the link where file sharing is unsupported.
+  async function sharePlanCardImage() {
+    const node = planCardRef.current;
+    if (!node || !planCard) return;
+    setPlanCardBusy(true);
+    try {
+      const dataUrl = await toPng(node, { pixelRatio: 1 });
+      const blob = await (await fetch(dataUrl)).blob();
+      const file = new File([blob], "weekend-plan.png", { type: "image/png" });
+      const url = `${shareBaseUrl}#/card/${planCard.cardId}`;
+      const text = `${planCard.title} — plan it with ${APP_BRAND}`;
+      if (typeof navigator !== "undefined" && navigator.share) {
+        try {
+          if (navigator.canShare?.({ files: [file] })) {
+            await navigator.share({ files: [file], title: planCard.title, text, url });
+          } else {
+            const anchor = document.createElement("a");
+            anchor.href = dataUrl;
+            anchor.download = "weekend-plan.png";
+            anchor.click();
+            const copied = await copyTextToClipboard(text + " " + url);
+            setPlanCardCopied(copied);
+          }
+        } catch (err) {
+          if ((err as Error)?.name !== "AbortError") {
+            const copied = await copyTextToClipboard(text + " " + url);
+            setPlanCardCopied(copied);
+          }
+        }
+      } else {
+        const anchor = document.createElement("a");
+        anchor.href = dataUrl;
+        anchor.download = "weekend-plan.png";
+        anchor.click();
+        const copied = await copyTextToClipboard(text + " " + url);
+        setPlanCardCopied(copied);
+      }
+      trackMetric("plan_card_shared", metro.id);
+    } catch {
+      setPlanCardError("Couldn't export the image — copy the link instead.");
+    } finally {
+      setPlanCardBusy(false);
     }
   }
 
@@ -5302,11 +5551,17 @@ function App({ metro }: AppProps) {
         onUsePlan={forkFeaturedPlan}
         onOpenMap={() => setView("browse")}
         guideHref={weekendGuideHref}
+        profile={profile}
+        homeLocation={userLocation}
+        onEditProfile={() => setShowProfileWizard(true)}
+        trust={eventTrust}
         newsletterSlot={
           <NewsletterCard
             metroId={metro.id}
             metroLabel={metro.label}
             source="app-weekend"
+            profile={profile}
+            savedEventIds={savedEventIds}
           />
         }
       />
@@ -5340,7 +5595,12 @@ function App({ metro }: AppProps) {
             <Plus aria-hidden="true" />
             New plan
           </button>
-          <NewsletterCard metroId={metro.id} metroLabel={metro.label} />
+          <NewsletterCard
+            metroId={metro.id}
+            metroLabel={metro.label}
+            profile={profile}
+            savedEventIds={savedEventIds}
+          />
 
           {plans.length === 0 ? (
             <p className="empty-state">
@@ -5795,6 +6055,21 @@ function App({ metro }: AppProps) {
                       : "Share for voting"}
                 </button>
                 <button
+                  type="button"
+                  className="secondary-button"
+                  disabled={
+                    !API_CONFIGURED ||
+                    (activePlanStops.length === 0 &&
+                      activePlanEvents.length === 0) ||
+                    planCardBusy
+                  }
+                  title="Share this plan as a photo card"
+                  onClick={sharePlanAsCard}
+                >
+                  <Image aria-hidden="true" />
+                  {planCardBusy && !planCard ? "Making card…" : "Share as card"}
+                </button>
+                <button
                   className="danger-button"
                   onClick={() => deletePlan(activePlan.id)}
                 >
@@ -5983,6 +6258,81 @@ function App({ metro }: AppProps) {
       )}
 
       <InstallBanner />
+
+      {showProfileWizard && (
+        <OnboardingWizard
+          onComplete={completeProfile}
+          onDismiss={() => setShowProfileWizard(false)}
+        />
+      )}
+
+      {currentCheckin && !showProfileWizard && (
+        <CheckinPrompt
+          event={currentCheckin}
+          queueLength={checkinCandidates.length}
+          answered={checkinPromptIndex}
+          onAnswer={(went) => answerCheckin(currentCheckin, went)}
+        />
+      )}
+
+      {planCard && (
+        <div
+          className="modal-backdrop plan-card-backdrop"
+          role="presentation"
+          onClick={() => setPlanCard(null)}
+        >
+          <div
+            className="plan-card-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Plan card preview"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="plan-card-modal-head">
+              <strong>Your plan, as a card</strong>
+              <button
+                type="button"
+                className="icon-button"
+                title="Close"
+                aria-label="Close"
+                onClick={() => setPlanCard(null)}
+              >
+                <X aria-hidden="true" />
+              </button>
+            </div>
+            <div className="plan-card-preview" ref={planCardRef}>
+              <PlanCardArt card={planCard} />
+            </div>
+            <div className="plan-card-modal-actions">
+              {planCardCopied && (
+                <span className="plan-card-copied">Link copied</span>
+              )}
+              {planCardError && <span className="plan-card-error">{planCardError}</span>}
+              <button
+                type="button"
+                className="primary-button"
+                disabled={planCardBusy}
+                onClick={sharePlanCardImage}
+              >
+                {planCardBusy ? "Sharing…" : "Share image + link"}
+              </button>
+              <button
+                type="button"
+                className="text-button"
+                disabled={planCardBusy}
+                onClick={async () => {
+                  const copied = await copyTextToClipboard(
+                    `${shareBaseUrl}#/card/${planCard.cardId}`,
+                  );
+                  setPlanCardCopied(copied);
+                }}
+              >
+                Copy link
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showInterestsPicker && (
         <div
@@ -6306,6 +6656,8 @@ export function NewsletterCard({
   heading,
   collapsedLabel,
   bare = false,
+  profile,
+  savedEventIds,
 }: {
   metroId?: string;
   metroLabel?: string;
@@ -6316,6 +6668,11 @@ export function NewsletterCard({
   collapsedLabel?: string;
   /** Form-only — no card chrome, heading, or close (digest modal). */
   bare?: boolean;
+  /** Family profile — rides along on subscribe so digests pick for the
+   * family (ages/interests/budget), not generically. */
+  profile?: FamilyProfile | null;
+  /** Saved event ids at subscribe time — Monday recap check-in asks. */
+  savedEventIds?: string[];
 }) {
   type Status = "idle" | "submitting" | "done" | "hidden";
   const [email, setEmail] = useState("");
@@ -6363,12 +6720,19 @@ export function NewsletterCard({
     setStatus("submitting");
     try {
       // Age band rides along when the family has picked one — stored on the
-      // subscriber record (worker) so digests can segment by age.
+      // subscriber record (worker) so digests can segment by age. The full
+      // family profile (when complete) personalizes the picks themselves.
       const storedAge = SHOW_AGE_BAND_UI ? readStoredAgeBand() : "any";
       await subscribeNewsletter({
         email: trimmed,
         metroId,
         ageBand: storedAge === "any" ? undefined : storedAge,
+        ageBands: profile?.ageBands,
+        zipCode: profile?.zipCode || undefined,
+        interests: profile?.interests,
+        budget: profile?.budget === "any" ? undefined : profile?.budget,
+        setting: profile?.setting === "any" ? undefined : profile?.setting,
+        savedEventIds,
         source,
       });
       setStatus("done");

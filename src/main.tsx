@@ -6,6 +6,7 @@ import { metroFromPath } from "./metros";
 import OpsAlertsView from "./ops/OpsAlertsView";
 import OpsAnalyticsView from "./ops/OpsAnalyticsView";
 import PollView from "./PollView";
+import PlanCardView from "./PlanCardView";
 import { recordVisit } from "./installPrompt";
 import "./styles.css";
 
@@ -32,6 +33,13 @@ function readPollRouteFromHash(): PollRoute {
   return { pollId, embed: route === "embed" || params.get("embed") === "1" };
 }
 
+type PlanCardRoute = string | null;
+
+function readPlanCardRouteFromHash(): PlanCardRoute {
+  const match = window.location.hash.match(/^#\/card\/([\w-]+)$/);
+  return match ? match[1] : null;
+}
+
 function isOpsAlertsHash(): boolean {
   // Accept "#/ops/alerts" and "#/ops/alerts?..." so filter state can ride in
   // a querystring inside the hash without breaking route detection.
@@ -49,6 +57,9 @@ function isOpsAnalyticsHash(): boolean {
 function Root() {
   const [pollRoute, setPollRoute] = useState<PollRoute>(() =>
     readPollRouteFromHash(),
+  );
+  const [planCardId, setPlanCardId] = useState<PlanCardRoute>(() =>
+    readPlanCardRouteFromHash(),
   );
   const [opsAlerts, setOpsAlerts] = useState<boolean>(() => isOpsAlertsHash());
   const [opsAnalytics, setOpsAnalytics] = useState<boolean>(() =>
@@ -70,6 +81,7 @@ function Root() {
   useEffect(() => {
     function handler() {
       setPollRoute(readPollRouteFromHash());
+      setPlanCardId(readPlanCardRouteFromHash());
       setOpsAlerts(isOpsAlertsHash());
       setOpsAnalytics(isOpsAnalyticsHash());
     }
@@ -79,6 +91,9 @@ function Root() {
 
   if (pollRoute) {
     return <PollView pollId={pollRoute.pollId} embed={pollRoute.embed} />;
+  }
+  if (planCardId) {
+    return <PlanCardView cardId={planCardId} />;
   }
   if (opsAlerts) {
     return <OpsAlertsView />;

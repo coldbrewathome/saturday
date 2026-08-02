@@ -35,6 +35,21 @@ export type DigestEvent = {
   url?: string;
   startDateTime?: string;
   endDateTime?: string;
+  // Present in the events.json payload (the pipeline emits them); declared
+  // here so profile matching can use them.
+  ageBands?: string[];
+  themes?: string[];
+};
+
+// Optional per-subscriber family profile (from the in-app first-run wizard).
+// When present, the digest's event picks are re-ranked for the family instead
+// of the generic interestingness order.
+export type SubscriberProfile = {
+  ageBands?: string[];
+  zipCode?: string;
+  interests?: string[];
+  budget?: string;
+  setting?: string;
 };
 
 export type DigestInput = {
@@ -49,6 +64,10 @@ export type DigestInput = {
   // Per-recipient unsubscribe link (built by the send pipeline). When set,
   // the footer renders a one-click unsubscribe link in both HTML and text.
   unsubscribeUrl?: string;
+  // Per-recipient family profile: when present, event picks are re-ranked
+  // for the family (age bands, interests, budget) instead of generic
+  // interestingness.
+  profile?: SubscriberProfile;
 };
 
 export type DigestOutput = {
@@ -70,7 +89,9 @@ export function renderWeekendDigest(input: DigestInput): DigestOutput {
   const weekend = getWeekendWindow(now, input.timezone);
 
   const plans = pickTopPlans(input.plans, MAX_PLANS);
-  const events = pickTopEvents(input.events, weekend, MAX_EVENTS, now);
+  const events = input.profile
+    ? pickProfileEvents(input.events, weekend, MAX_EVENTS, now, input.profile)
+    : pickTopEvents(input.events, weekend, MAX_EVENTS, now);
 
   // The most interesting in-window event headlines the digest — but only
   // when it actually scores as marquee material; a weekend of storytimes
@@ -129,10 +150,12 @@ function pickTopPlans(plans: DigestPlan[], limit: number): DigestPlan[] {
   return [...withEvents, ...rest].slice(0, limit);
 }
 
-function pickTopEvents(
+// Shared windowing + dedupe for both the generic and profile-ranked picks:
+// events in this weekend's Sat/Sun window, earliest occurrence first, then
+// collapsed per recurring series / day-suffix pair.
+function windowEvents(
   events: DigestEvent[],
   weekend: WeekendWindow,
-  limit: number,
   now: Date,
 ): DigestEvent[] {
   if (!Array.isArray(events)) return [];
@@ -170,7 +193,16 @@ function pickTopEvents(
     seen.add(key);
     unique.push(event);
   }
+  return unique;
+}
 
+function pickTopEvents(
+  events: DigestEvent[],
+  weekend: WeekendWindow,
+  limit: number,
+  now: Date,
+): DigestEvent[] {
+  const unique = windowEvents(events, weekend, now);
   // Most interesting first, chronological within a score tie — a Saturday
   // fireworks show must beat five Friday-scheduled storytimes to the top.
   unique.sort((a, b) => {
@@ -180,7 +212,49 @@ function pickTopEvents(
     const bT = Date.parse(b.startDateTime || "") || 0;
     return aT - bT;
   });
+  return unique.slice(0, limit);
+}
 
+// Profile boost on top of generic interestingness: age-band match is the
+// strongest signal (+15), interests add +8 per overlapping theme, and a
+// free-budget profile boosts free events.
+function profileScore(event: DigestEvent, profile: SubscriberProfile): number {
+  let score = 0;
+  const ageBands = profile.ageBands ?? [];
+  if (ageBands.length > 0) {
+    const match = (event.ageBands ?? []).some((b) => ageBands.includes(b));
+    if (match) score += 15;
+    else if ((event.ageBands ?? []).length === 0) score += 5;
+  }
+  const interests = profile.interests ?? [];
+  if (interests.length > 0) {
+    const overlap = (event.themes ?? []).filter((t) => interests.includes(t)).length;
+    score += Math.min(overlap, 2) * 8;
+  }
+  if (profile.budget === "free" && event.cost && /free/i.test(event.cost)) {
+    score += 5;
+  }
+  return score;
+}
+
+export function pickProfileEvents(
+  events: DigestEvent[],
+  weekend: WeekendWindow,
+  limit: number,
+  now: Date,
+  profile: SubscriberProfile,
+): DigestEvent[] {
+  const unique = windowEvents(events, weekend, now);
+  unique.sort((a, b) => {
+    const scoreDiff =
+      scoreEvent(b) +
+      profileScore(b, profile) -
+      (scoreEvent(a) + profileScore(a, profile));
+    if (scoreDiff !== 0) return scoreDiff;
+    const aT = Date.parse(a.startDateTime || "") || 0;
+    const bT = Date.parse(b.startDateTime || "") || 0;
+    return aT - bT;
+  });
   return unique.slice(0, limit);
 }
 
@@ -515,6 +589,175 @@ function renderText(ctx: RenderContext): string {
       : `You're on this list because you signed up at ${ctx.siteBase}/${ctx.metroId}. Reply to opt out.`,
   );
   return lines.join("\n");
+}
+
+// ── Monday recap ──────────────────────────────────────────────────────────
+// Post-weekend follow-up: check-in asks for saved events that just ended,
+// trust scores from families who went, and profile-personalized picks for the
+// weekend ahead. Same voice contract as the Friday digest.
+
+export type MondayRecapInput = {
+  metroId: string;
+  metroLabel: string;
+  timezone: string;
+  /** Saved events from the just-ended weekend (check-in asks). */
+  savedEvents: DigestEvent[];
+  /** Trust aggregates for popular events from the just-ended weekend. */
+  trusted: Array<{ title: string; trustScore: number; url?: string }>;
+  /** Profile-personalized picks for the upcoming weekend (up to 4). */
+  upcoming: DigestEvent[];
+  now?: Date;
+  siteBaseUrl?: string;
+  unsubscribeUrl?: string;
+};
+
+export function renderMondayRecap(input: MondayRecapInput): DigestOutput {
+  const siteBase = (input.siteBaseUrl || DEFAULT_SITE).replace(/\/$/, "");
+  const now = input.now ?? new Date();
+  const weekend = getWeekendWindow(now, input.timezone);
+  const pastWeekend = lastWeekendWindow(now, input.timezone);
+  const topTrusted = input.trusted.slice(0, 3);
+  const upcoming = input.upcoming.slice(0, 4);
+
+  const subject = `✨ How was your weekend? + this weekend in ${input.metroLabel}`;
+
+  const checkinAsk = (event: DigestEvent) => {
+    const meta = eventMetaLine(event, input.timezone);
+    const link = `${siteBase}/${input.metroId}?checkin=1`;
+    return `<li style="margin-bottom:14px;"><a href="${esc(link)}" style="color:#0a4d8c;text-decoration:none;font-weight:600;">Did you go to ${esc(event.title)}?</a><div style="color:#555;font-size:14px;margin-top:4px;">${esc(meta)}</div></li>`;
+  };
+
+  const savedBlock = input.savedEvents.length
+    ? `<ul style="padding-left:20px;margin:0 0 24px;">${input.savedEvents.map(checkinAsk).join("")}</ul>`
+    : `<p style="color:#666;margin:0 0 24px;">Nothing saved last weekend — tap the bookmark on anything that catches your eye and we'll check in on it after the weekend.</p>`;
+
+  const trustedBlock = topTrusted.length
+    ? `<ul style="padding-left:20px;margin:0 0 24px;">${topTrusted
+        .map(
+          (t) =>
+            `<li style="margin-bottom:10px;"><span style="font-weight:700;color:#1a7f37;">${t.trustScore}%</span> of families said <span style="font-weight:600;">${esc(t.title)}</span> was worth it${t.url ? ` — <a href="${esc(t.url)}" style="color:#0a4d8c;">see it</a>` : ""}.</li>`,
+        )
+        .join("")}</ul>`
+    : `<p style="color:#666;margin:0 0 24px;">Not enough families have checked in yet — be the first to rate an event after you go.</p>`;
+
+  const upcomingBlock = upcoming.length
+    ? `<ul style="padding-left:20px;margin:0 0 24px;">${upcoming
+        .map((event) => {
+          const meta = eventMetaLine(event, input.timezone);
+          const title = event.url
+            ? `<a href="${esc(event.url)}" style="color:#0a4d8c;text-decoration:none;font-weight:600;">${esc(event.title)}</a>`
+            : `<span style="font-weight:600;">${esc(event.title)}</span>`;
+          return `<li style="margin-bottom:12px;">${title}${meta ? `<div style="color:#555;font-size:14px;margin-top:4px;">${esc(meta)}</div>` : ""}</li>`;
+        })
+        .join("")}</ul>`
+    : `<p style="color:#666;margin:0 0 24px;">It's a quiet one on the calendar — perfect excuse for a park morning.</p>`;
+
+  const preheader = input.savedEvents.length
+    ? `${input.savedEvents.length} event${input.savedEvents.length === 1 ? "" : "s"} to check in on, plus ${upcoming.length ? "what's coming up" : "a fresh look"} this weekend.`
+    : `Check in on your saved events and see what's coming up in ${input.metroLabel}.`;
+
+  const html = `<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"/><title>${esc(input.metroLabel)} weekend recap</title></head>
+<body style="margin:0;padding:24px;background:#f7f5f1;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#222;line-height:1.5;">
+<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">${esc(preheader)}</div>
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:12px;padding:28px;">
+<tr><td>
+<p style="font-size:13px;color:#888;text-transform:uppercase;letter-spacing:0.06em;margin:0 0 4px;">FamHop weekend recap</p>
+<h1 style="font-size:24px;margin:0 0 4px;">How was ${esc(input.metroLabel)}'s weekend? 🧡</h1>
+<p style="color:#666;margin:0 0 20px;">${esc(pastWeekend.label)} is in the books — tell us how it went, see what other families loved, and get a head start on ${esc(weekend.label)}.</p>
+
+<h2 style="font-size:18px;margin:0 0 12px;">📬 Did you go?</h2>
+${savedBlock}
+
+<h2 style="font-size:18px;margin:0 0 12px;">💬 What other families loved</h2>
+${trustedBlock}
+
+<h2 style="font-size:18px;margin:0 0 12px;">🎪 Coming up this weekend</h2>
+${upcomingBlock}
+
+<p style="margin:0 0 24px;"><a href="${esc(siteBase)}/${input.metroId}/this-weekend/" style="display:inline-block;background:#f59e0b;color:#ffffff;font-weight:700;text-decoration:none;border-radius:999px;padding:10px 20px;">Start planning ${esc(weekend.label)} &rarr;</a></p>
+
+<p style="color:#444;margin:0 0 24px;">See you next weekend! 🧡<br/>— The FamHop crew</p>
+
+<p style="font-size:13px;color:#888;margin:24px 0 0;">You're on this list because you signed up at <a href="${esc(siteBase)}/${input.metroId}" style="color:#888;">famhop.com/${esc(input.metroId)}</a>. ${
+    input.unsubscribeUrl
+      ? `<a href="${esc(input.unsubscribeUrl)}" style="color:#888;">Unsubscribe with one click</a>.`
+      : `Reply to this email if you want off — we'll take care of it.`
+  }</p>
+</td></tr>
+</table>
+</body>
+</html>`;
+
+  const lines: string[] = [];
+  lines.push(`How was ${input.metroLabel}'s weekend? (${pastWeekend.label})`);
+  lines.push("Tell us how it went, see what other families loved, and get a head start on the weekend ahead.");
+  lines.push("");
+  lines.push("DID YOU GO?");
+  if (input.savedEvents.length === 0) {
+    lines.push("  (nothing saved last weekend — bookmark events to get these asks)");
+  } else {
+    input.savedEvents.forEach((event) => {
+      const meta = eventMetaLine(event, input.timezone);
+      lines.push(`  * Did you go to ${event.title}?`);
+      if (meta) lines.push(`    ${meta}`);
+      lines.push(`    Check in: ${siteBase}/${input.metroId}?checkin=1`);
+    });
+  }
+  lines.push("");
+  lines.push("WHAT OTHER FAMILIES LOVED");
+  if (topTrusted.length === 0) {
+    lines.push("  (not enough check-ins yet — be the first to rate an event)");
+  } else {
+    topTrusted.forEach((t) => {
+      lines.push(`  * ${t.trustScore}% said ${t.title} was worth it${t.url ? ` — ${t.url}` : ""}`);
+    });
+  }
+  lines.push("");
+  lines.push(`COMING UP THIS WEEKEND (${weekend.label})`);
+  if (upcoming.length === 0) {
+    lines.push("  (a quiet weekend on the calendar — perfect for a park morning)");
+  } else {
+    upcoming.forEach((event, i) => {
+      const meta = eventMetaLine(event, input.timezone);
+      lines.push(`  ${i + 1}. ${event.title}${meta ? ` — ${meta}` : ""}`);
+      if (event.url) lines.push(`     ${event.url}`);
+    });
+  }
+  lines.push("");
+  lines.push(`Start planning: ${siteBase}/${input.metroId}/this-weekend/`);
+  lines.push("");
+  lines.push("See you next weekend! — The FamHop crew");
+  lines.push("");
+  lines.push(
+    input.unsubscribeUrl
+      ? `You're on this list because you signed up at ${siteBase}/${input.metroId}. Unsubscribe: ${input.unsubscribeUrl}`
+      : `You're on this list because you signed up at ${siteBase}/${input.metroId}. Reply to opt out.`,
+  );
+
+  return {
+    subject,
+    html,
+    text: lines.join("\n"),
+    planCount: 0,
+    eventCount: input.savedEvents.length + upcoming.length,
+  };
+}
+
+// The weekend window that just ended: [Sat, Sun] where Sun is the most recent
+// Sunday at-or-before `now` (Monday send → yesterday + the day before).
+export function lastWeekendWindow(now: Date, timezone: string): WeekendWindow {
+  const today = zonedDateParts(now, timezone);
+  const dow = weekdayNumber(today.weekday);
+  const sun = addDaysToYmd(today, -dow);
+  const sat = addDaysToYmd(sun, -1);
+  return {
+    saturdayKey: ymdKey(sat),
+    sundayKey: ymdKey(sun),
+    label: formatWeekendLabel(sat, sun),
+    timezone,
+  };
 }
 
 function esc(value: string): string {

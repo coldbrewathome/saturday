@@ -7282,3 +7282,508 @@ a.weekend-card-title:hover {
     bottom: 154px;
   }
 }
+
+/* ── Family profile wizard (first-run onboarding) ───────────────────────── */
+.profile-wizard-backdrop {
+  z-index: 1100;
+}
+
+.profile-wizard-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  max-width: 460px;
+  padding: 28px 26px 22px;
+  position: relative;
+  width: min(460px, 100%);
+}
+
+.profile-wizard-skip {
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  font: 600 0.8rem/1 var(--font-ui);
+  padding: 4px;
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  cursor: pointer;
+}
+
+.profile-wizard-step {
+  animation: profile-step-in 0.25s ease both;
+}
+
+@keyframes profile-step-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profile-wizard-step .eyebrow {
+  color: var(--accent);
+  font: 700 0.72rem/1 var(--font-ui);
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.profile-wizard-step h2 {
+  font: 700 1.35rem/1.15 var(--font-display);
+  margin: 0 0 8px;
+}
+
+.profile-wizard-hint {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+  margin: 0 0 18px;
+}
+
+.profile-wizard-chips {
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.profile-wizard-chips button {
+  align-items: center;
+  display: inline-flex;
+  gap: 5px;
+}
+
+.profile-wizard-themes button {
+  min-height: 36px;
+  padding: 8px 12px;
+  white-space: normal;
+}
+
+.profile-wizard-field {
+  display: block;
+  margin: 0 0 18px;
+}
+
+.profile-wizard-field > span {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.profile-wizard-field input {
+  background: var(--surface-strong);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font: 500 0.95rem/1 var(--font-ui);
+  min-height: 42px;
+  padding: 9px 12px;
+  width: 100%;
+}
+
+.profile-wizard-row {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 18px;
+}
+
+.profile-wizard-row-label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.profile-wizard-actions {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.profile-wizard-actions .text-button {
+  align-items: center;
+  display: inline-flex;
+  gap: 4px;
+}
+
+.profile-wizard-dots {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.profile-wizard-dots span {
+  background: var(--line);
+  border-radius: 999px;
+  height: 6px;
+  transition: background 0.2s ease, width 0.2s ease;
+  width: 6px;
+}
+
+.profile-wizard-dots span.active {
+  background: var(--accent);
+  width: 18px;
+}
+
+/* "Edit profile" affordance on the weekend hero. */
+.weekend-edit-profile {
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  display: inline-flex;
+  font: 600 0.78rem/1 var(--font-ui);
+  gap: 6px;
+  margin-top: 12px;
+  padding: 7px 12px;
+  cursor: pointer;
+}
+
+.weekend-edit-profile:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+@media (max-width: 480px) {
+  .profile-wizard-card {
+    padding: 24px 18px 18px;
+  }
+  .profile-wizard-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Plan cards (Wrapped-style shareable plan art) ───────────────────────── */
+/* The art is a fixed 1080px-wide composition so html-to-image exports a
+   predictable image; container-relative (cqw) units keep it responsive when
+   rendered smaller on the public page. */
+.plan-card-art {
+  background: var(--bg);
+  container-type: inline-size;
+  overflow: hidden;
+  width: 1080px;
+}
+
+.plan-card-hero {
+  background: linear-gradient(135deg, var(--accent-strong), var(--accent));
+  color: #fff;
+  padding: 5.5cqw 5cqw 5cqw;
+}
+
+.plan-card-eyebrow {
+  display: block;
+  font: 700 2.4cqw/1 var(--font-ui);
+  letter-spacing: 0.1em;
+  opacity: 0.85;
+  text-transform: uppercase;
+}
+
+.plan-card-title {
+  font: 800 6.6cqw/1.1 var(--font-display);
+  margin: 2.4cqw 0 0;
+}
+
+.plan-card-stops {
+  display: grid;
+  gap: 3.4cqw;
+  list-style: none;
+  margin: 0;
+  padding: 4.4cqw 5cqw;
+}
+
+.plan-card-stop {
+  border-radius: 3.4cqw;
+  overflow: hidden;
+  position: relative;
+}
+
+.plan-card-stop-img,
+.plan-card-stop-fallback {
+  aspect-ratio: 16 / 9;
+  display: block;
+  object-fit: cover;
+  width: 100%;
+}
+
+.plan-card-stop-fallback {
+  background: linear-gradient(135deg, var(--blue), var(--forest));
+}
+
+.plan-card-stop-overlay {
+  background: linear-gradient(to top, rgba(15, 20, 18, 0.82), rgba(15, 20, 18, 0) 62%);
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1cqw;
+  left: 0;
+  padding: 3.2cqw;
+  position: absolute;
+  right: 0;
+}
+
+.plan-card-stop-index {
+  align-items: center;
+  background: var(--sun);
+  border-radius: 999px;
+  color: #1a221f;
+  display: inline-flex;
+  font: 800 2.6cqw/1 var(--font-ui);
+  height: 4.6cqw;
+  justify-content: center;
+  position: absolute;
+  right: 3.2cqw;
+  top: 3.2cqw;
+  width: 4.6cqw;
+}
+
+.plan-card-stop-name {
+  color: #fff;
+  font: 700 4.4cqw/1.15 var(--font-display);
+}
+
+.plan-card-stop-meta {
+  color: rgba(255, 255, 255, 0.88);
+  font: 500 2.7cqw/1.2 var(--font-ui);
+}
+
+.plan-card-footer {
+  align-items: center;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  padding: 3.6cqw 5cqw;
+}
+
+.plan-card-brand {
+  font: 800 3.4cqw/1 var(--font-display);
+}
+
+.plan-card-cta {
+  color: var(--muted);
+  font: 600 2.7cqw/1 var(--font-ui);
+}
+
+/* Public page (#/card/<id>) — the art shrinks to the viewport. */
+.plan-card-page {
+  margin: 0 auto;
+  max-width: 620px;
+  padding: 24px 16px 48px;
+}
+
+.plan-card-page .plan-card-art {
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  width: min(1080px, 100%);
+}
+
+.plan-card-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.plan-card-actions .primary-button,
+.plan-card-actions .secondary-button {
+  align-items: center;
+  display: inline-flex;
+  gap: 6px;
+}
+
+.plan-card-empty {
+  color: var(--muted);
+  padding-top: 12vh;
+  text-align: center;
+}
+
+.plan-card-empty h1 {
+  color: var(--ink);
+  font: 700 1.4rem/1.2 var(--font-display);
+  margin: 0 0 8px;
+}
+
+.plan-card-empty p {
+  font-size: 0.95rem;
+  margin: 0 auto 20px;
+  max-width: 340px;
+}
+
+.plan-card-empty .primary-button {
+  display: inline-flex;
+}
+
+.plan-card-empty .spin {
+  animation: plan-card-spin 1s linear infinite;
+  color: var(--accent);
+}
+
+@keyframes plan-card-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Share preview modal. */
+.plan-card-backdrop {
+  z-index: 1100;
+}
+
+.plan-card-modal {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  max-width: 480px;
+  padding: 16px;
+  width: min(480px, 100%);
+}
+
+.plan-card-modal-head {
+  align-items: center;
+  display: flex;
+  font: 700 0.95rem/1 var(--font-ui);
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.plan-card-preview {
+  border-radius: 12px;
+  height: 560px;
+  overflow: hidden;
+  overflow-y: auto;
+  position: relative;
+}
+
+.plan-card-preview .plan-card-art {
+  transform: scale(0.4);
+  transform-origin: top left;
+}
+
+.plan-card-modal-actions {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+.plan-card-modal-actions .primary-button,
+.plan-card-modal-actions .text-button {
+  align-items: center;
+  display: inline-flex;
+}
+
+.plan-card-copied {
+  color: var(--forest);
+  font: 600 0.8rem/1 var(--font-ui);
+  margin-right: auto;
+}
+
+.plan-card-error {
+  color: var(--accent-strong);
+  font: 600 0.8rem/1 var(--font-ui);
+  margin-right: auto;
+}
+
+/* ── Trust badge + check-in prompt (post-weekend "did you go?") ──────────── */
+.trust-badge {
+  align-items: center;
+  background: var(--accent-soft);
+  border-radius: 999px;
+  color: var(--accent-strong);
+  display: inline-flex;
+  font: 700 0.72rem/1 var(--font-ui);
+  gap: 4px;
+  padding: 3px 8px;
+}
+
+.trust-badge svg {
+  height: 11px;
+  width: 11px;
+}
+
+.checkin-backdrop {
+  z-index: 1100;
+}
+
+.checkin-prompt {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  max-width: 400px;
+  padding: 26px 24px 20px;
+  text-align: center;
+  width: min(400px, 100%);
+}
+
+.checkin-prompt .eyebrow {
+  color: var(--accent);
+  font: 700 0.72rem/1 var(--font-ui);
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.checkin-prompt h2 {
+  font: 700 1.3rem/1.15 var(--font-display);
+  margin: 0 0 14px;
+}
+
+.checkin-event {
+  display: grid;
+  gap: 4px;
+  margin: 0 0 18px;
+}
+
+.checkin-event strong {
+  font: 700 0.98rem/1.3 var(--font-ui);
+}
+
+.checkin-event span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.checkin-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.checkin-actions .primary-button,
+.checkin-actions .secondary-button {
+  align-items: center;
+  display: inline-flex;
+  gap: 6px;
+}
+
+.checkin-progress {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.checkin-progress span {
+  background: var(--line);
+  border-radius: 999px;
+  height: 6px;
+  width: 6px;
+}
+
+.checkin-progress span.active {
+  background: var(--accent);
+  width: 18px;
+}

@@ -15,13 +15,17 @@ import {
   MapPin,
   Plus,
   Share2,
+  SlidersHorizontal,
   Sparkles,
+  ThumbsUp,
 } from "lucide-react";
 import type { FamilyEvent, FeaturedPlan } from "./App";
 import type { MetroConfig } from "./metros";
 import type { AgeBand } from "./planner";
 import { APP_AUDIENCE, SHOW_AGE_BAND_UI } from "./appConfig";
 import { isUpcomingEvent } from "./eventFreshness";
+import { scoreEventForFamily, type FamilyProfile } from "./familyProfile";
+import { trustBoost, type EventTrust } from "./checkinApi";
 
 // Local copy of App.tsx's sourceHostname — importing the runtime helper from
 // App would create a require cycle (App imports this view).
@@ -96,6 +100,14 @@ type Props = {
   guideHref: string;
   /** NewsletterCard is injected by App to avoid an import cycle. */
   newsletterSlot?: ReactNode;
+  /** First-run family profile; when present the feed is re-ranked for it. */
+  profile?: FamilyProfile | null;
+  /** Device/IP-derived home coords for proximity ranking (best effort). */
+  homeLocation?: { lat: number; lon: number } | null;
+  /** Re-open the profile wizard ("Edit profile"). */
+  onEditProfile?: () => void;
+  /** Aggregate check-in trust per event id (badges + ranking boost). */
+  trust?: ReadonlyMap<string, EventTrust>;
 };
 
 export default function WeekendView({
@@ -113,6 +125,10 @@ export default function WeekendView({
   onOpenMap,
   guideHref,
   newsletterSlot,
+  profile,
+  homeLocation,
+  onEditProfile,
+  trust,
 }: Props) {
   const feed = useMemo(() => {
     const now = new Date();
@@ -154,8 +170,22 @@ export default function WeekendView({
 
   const scope = (list: FamilyEvent[]) =>
     ageBand === "any" ? list : list.filter((e) => e.ageBands.includes(ageBand));
-  const satScoped = scope(feed.satEvents);
-  const sunScoped = scope(feed.sunEvents);
+  const home = homeLocation ?? null;
+  // Personalization: when a family profile exists, re-rank each day so the
+  // best-fit events lead their daypart (stable sort keeps time order within
+  // ties, so an unprofiled feed stays purely chronological). Trusted events
+  // (check-in aggregates) get a small boost on top.
+  const familyScore = (event: FamilyEvent) =>
+    scoreEventForFamily(event, { profile: profile ?? null, home }) +
+    trustBoost(trust?.get(event.id)?.trustScore ?? null);
+  const rank = (list: FamilyEvent[]) =>
+    profile || (trust && trust.size > 0)
+      ? [...list].sort(
+          (a, b) => familyScore(b) - familyScore(a),
+        )
+      : list;
+  const satScoped = rank(scope(feed.satEvents));
+  const sunScoped = rank(scope(feed.sunEvents));
   const total = satScoped.length + sunScoped.length;
   const freeCount =
     satScoped.filter((e) => e.cost === "Free").length +
@@ -180,6 +210,13 @@ export default function WeekendView({
       event.verified && event.url ? sourceHostname(event.url) : null;
     const free = event.cost === "Free";
     const showCost = !free && event.cost && event.cost !== "Unknown";
+    // Trust badge: only when enough families have checked in for the score to
+    // be stable (>=3 answers) — a single "worth it" is noise, not proof.
+    const eventTrust = trust?.get(event.id);
+    const trustLabel =
+      eventTrust && eventTrust.total >= 3 && eventTrust.trustScore != null
+        ? `${eventTrust.trustScore}% of parents said worth it`
+        : null;
     return (
       <li key={event.id} className="weekend-card">
         <span className="weekend-card-when">{timeLabel(event)}</span>
@@ -198,10 +235,16 @@ export default function WeekendView({
             {event.venue}
             {event.city ? ` · ${event.city}` : ""}
           </span>
-          {(free || showCost || host) && (
+          {(free || showCost || host || trustLabel) && (
             <span className="weekend-card-meta">
               {free && <em className="weekend-chip-free">Free</em>}
               {showCost && <em className="weekend-chip">{event.cost}</em>}
+              {trustLabel && (
+                <em className="trust-badge" title={trustLabel}>
+                  <ThumbsUp aria-hidden="true" />
+                  {eventTrust!.trustScore}%
+                </em>
+              )}
               {host && (
                 <a
                   className="verified-source"
@@ -311,7 +354,7 @@ export default function WeekendView({
           <CalendarDays aria-hidden="true" /> This weekend in {metro.label} ·{" "}
           {rangeLabel}
         </p>
-        <h1>Your weekend, sorted.</h1>
+        <h1>{profile ? "Your family's weekend." : "Your weekend, sorted."}</h1>
         <p className="weekend-sub">
           {total > 0 ? (
             <>
@@ -324,6 +367,17 @@ export default function WeekendView({
             <>Here&rsquo;s how this weekend is shaping up.</>
           )}
         </p>
+        {profile && onEditProfile && (
+          <button type="button" className="weekend-edit-profile" onClick={onEditProfile}>
+            <SlidersHorizontal size={13} aria-hidden="true" />
+            {profile.ageBands.length > 0
+              ? `Ages ${profile.ageBands
+                  .map((b) => AGE_CHIPS.find(([band]) => band === b)?.[1] ?? b)
+                  .join(", ")}`
+              : "Ages any"}{" "}
+            · edit profile
+          </button>
+        )}
         {SHOW_AGE_BAND_UI && (
           <div
             className="weekend-ages"

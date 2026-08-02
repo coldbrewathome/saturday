@@ -1,4 +1,5 @@
 import { APP_AUDIENCE } from "./appConfig";
+import type { FamilyProfile } from "./familyProfile";
 
 export type Vote = "up" | "down" | "meh";
 
@@ -239,6 +240,14 @@ export async function subscribeNewsletter(body: {
   email: string;
   metroId?: string;
   ageBand?: string;
+  /** Family profile fields — personalize the Friday digest picks. */
+  ageBands?: string[];
+  zipCode?: string;
+  interests?: string[];
+  budget?: string;
+  setting?: string;
+  /** Saved event ids at subscribe time — Monday recap check-in asks. */
+  savedEventIds?: string[];
   source?: string;
   url?: string;
 }): Promise<{ ok: boolean }> {
@@ -275,6 +284,8 @@ export type SyncedState = {
   plans: unknown[];
   deletedPlanIds?: string[];
   interests?: string[];
+  /** First-run family profile (ages, ZIP, interests, budget, setting). */
+  profile?: FamilyProfile | null;
   updatedAt?: string;
 };
 

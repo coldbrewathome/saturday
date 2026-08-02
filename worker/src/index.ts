@@ -1,4 +1,5 @@
 import {
+  sendMondayRecap,
   sendWeekendDigest,
   unsubscribeToken,
   type NewsletterRecipient,
@@ -55,6 +56,15 @@ type NewsletterRecord = {
   email: string;
   metroId: string;
   ageBand?: string;
+  // Family profile fields (from the in-app first-run wizard) — personalize
+  // the Friday digest and Monday recap picks.
+  ageBands?: string[];
+  zipCode?: string;
+  interests?: string[];
+  budget?: string;
+  setting?: string;
+  // Saved event ids at subscribe time — drives Monday recap check-in asks.
+  savedEventIds?: string[];
   source?: string;
   url?: string;
   createdAt: string;
@@ -597,6 +607,7 @@ async function putUserState(
     plans?: unknown;
     deletedPlanIds?: unknown;
     interests?: unknown;
+    profile?: unknown;
   };
   const stringArr = (value: unknown, max: number): string[] =>
     Array.isArray(value)
@@ -606,6 +617,10 @@ async function putUserState(
     Array.isArray(value)
       ? value.filter((v) => v && typeof v === "object").slice(0, max)
       : [];
+  const profile =
+    data.profile && typeof data.profile === "object"
+      ? (data.profile as Record<string, unknown>)
+      : null;
   const state = {
     savedIds: stringArr(data.savedIds, 500),
     savedEventIds: stringArr(data.savedEventIds, 500),
@@ -614,6 +629,15 @@ async function putUserState(
     plans: objectArr(data.plans, 50),
     deletedPlanIds: stringArr(data.deletedPlanIds, 500),
     interests: stringArr(data.interests, 50),
+    profile: profile
+      ? {
+          ageBands: stringArr(profile.ageBands, 10),
+          zipCode: typeof profile.zipCode === "string" ? profile.zipCode.slice(0, 10) : "",
+          interests: stringArr(profile.interests, 20),
+          budget: typeof profile.budget === "string" ? profile.budget : "any",
+          setting: typeof profile.setting === "string" ? profile.setting : "any",
+        }
+      : null,
     updatedAt: new Date().toISOString(),
   };
   const serialized = JSON.stringify(state);
@@ -1171,6 +1195,204 @@ async function getPoll(
   );
 }
 
+// ── Plan cards ─────────────────────────────────────────────────────────────
+// A plan card is a shareable snapshot of a plan (title + up to 3 photo-led
+// stops) rendered as a Wrapped-style image. The public page at #/card/<id> is
+// the backlink target for shares; the image rides the native share sheet.
+
+const PLAN_CARD_TTL_SECONDS = 60 * 60 * 24 * 90;
+const PLAN_CARD_MAX_STOPS = 3;
+
+async function createPlanCard(
+  request: Request,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  const cap = await checkAndIncrementPollsCap(request, env);
+  if (!cap.ok) {
+    return json(
+      { error: `Daily share limit reached (${cap.limit} per IP). Try again tomorrow.` },
+      { status: 429 },
+      cors,
+    );
+  }
+
+  let payload: unknown;
+  try {
+    payload = await request.json();
+  } catch {
+    return json({ error: "invalid json" }, { status: 400 }, cors);
+  }
+  const data = payload as {
+    title?: unknown;
+    metroId?: unknown;
+    stops?: unknown;
+  };
+  const title = typeof data.title === "string" ? data.title.slice(0, 200) : "Untitled plan";
+  const rawMetroId = typeof data.metroId === "string" ? data.metroId : "bay-area";
+  const metroId = normalizeMetroId(rawMetroId) || "bay-area";
+  const stopsInput = Array.isArray(data.stops) ? data.stops : [];
+  const stops = stopsInput.filter(isStopSummary).slice(0, PLAN_CARD_MAX_STOPS);
+  if (stops.length === 0) {
+    return json(
+      { error: "plan card needs at least one stop" },
+      { status: 400 },
+      cors,
+    );
+  }
+  const cardId = crypto.randomUUID().slice(0, 8);
+  const record = {
+    cardId,
+    metroId,
+    title,
+    stops,
+    createdAt: new Date().toISOString(),
+  };
+  await env.POLLS.put(`plancard:${cardId}`, JSON.stringify(record), {
+    expirationTtl: PLAN_CARD_TTL_SECONDS,
+  });
+  return json({ cardId }, { status: 201 }, cors);
+}
+
+async function getPlanCard(
+  cardId: string,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  const raw = await env.POLLS.get(`plancard:${cardId}`);
+  if (!raw) {
+    return json({ error: "not found" }, { status: 404 }, cors);
+  }
+  return json(JSON.parse(raw), { status: 200 }, cors);
+}
+
+// ── Check-ins + trust scores ───────────────────────────────────────────────
+// "Did you go?" post-weekend feedback. Per-user history (checkin:user:<sub>)
+// prevents double-counting and powers the Monday recap; the aggregate
+// (checkin:event:<eventId>) powers the trust badge + ranking boost.
+
+const CHECKIN_TTL_SECONDS = 60 * 60 * 24 * 90;
+const CHECKIN_USER_TTL_SECONDS = 60 * 60 * 24 * 180;
+
+async function submitCheckin(
+  request: Request,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  const session = await getSession(env, request);
+  if (!session) {
+    return json({ error: "sign in required" }, { status: 401 }, cors);
+  }
+  const cap = await checkAndIncrementCap(request, env, "checkin", 100);
+  if (!cap.ok) {
+    return json(
+      { error: "Daily check-in limit reached. Try again tomorrow." },
+      { status: 429 },
+      cors,
+    );
+  }
+  let payload: unknown;
+  try {
+    payload = await request.json();
+  } catch {
+    return json({ error: "invalid json" }, { status: 400 }, cors);
+  }
+  const data = payload as { eventId?: unknown; worthIt?: unknown };
+  const eventId = cleanText(data.eventId, 120);
+  if (!eventId) {
+    return json({ error: "eventId required" }, { status: 400 }, cors);
+  }
+  if (typeof data.worthIt !== "boolean") {
+    return json({ error: "worthIt must be a boolean" }, { status: 400 }, cors);
+  }
+  const worthIt = data.worthIt;
+
+  const userKey = `checkin:user:${session.data.sub}`;
+  let userRecord: Record<string, { date: string; worthIt: boolean }> = {};
+  const userRaw = await env.POLLS.get(userKey);
+  if (userRaw) {
+    try {
+      userRecord = JSON.parse(userRaw) as typeof userRecord;
+    } catch {
+      // corrupt record — start fresh
+    }
+  }
+
+  const aggKey = `checkin:event:${eventId}`;
+  let agg = { worthIt: 0, notWorthIt: 0 };
+  const aggRaw = await env.POLLS.get(aggKey);
+  if (aggRaw) {
+    try {
+      const parsed = JSON.parse(aggRaw) as { worthIt?: number; notWorthIt?: number };
+      agg = {
+        worthIt: typeof parsed.worthIt === "number" ? parsed.worthIt : 0,
+        notWorthIt: typeof parsed.notWorthIt === "number" ? parsed.notWorthIt : 0,
+      };
+    } catch {
+      // corrupt record — start fresh
+    }
+  }
+
+  // Re-vote replaces the old tally (prevents double counting).
+  const prev = userRecord[eventId];
+  if (prev) {
+    if (prev.worthIt) agg.worthIt = Math.max(0, agg.worthIt - 1);
+    else agg.notWorthIt = Math.max(0, agg.notWorthIt - 1);
+  }
+  if (worthIt) agg.worthIt += 1;
+  else agg.notWorthIt += 1;
+
+  userRecord[eventId] = { date: new Date().toISOString(), worthIt };
+  await env.POLLS.put(aggKey, JSON.stringify(agg), {
+    expirationTtl: CHECKIN_TTL_SECONDS,
+  });
+  await env.POLLS.put(userKey, JSON.stringify(userRecord), {
+    expirationTtl: CHECKIN_USER_TTL_SECONDS,
+  });
+  return json({ ok: true }, { status: 201 }, cors);
+}
+
+async function getEventCheckins(
+  eventId: string,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  const aggRaw = await env.POLLS.get(`checkin:event:${eventId}`);
+  const agg = aggRaw
+    ? (JSON.parse(aggRaw) as { worthIt?: number; notWorthIt?: number })
+    : {};
+  const worthIt = typeof agg.worthIt === "number" ? agg.worthIt : 0;
+  const notWorthIt = typeof agg.notWorthIt === "number" ? agg.notWorthIt : 0;
+  const total = worthIt + notWorthIt;
+  return json(
+    {
+      worthIt,
+      notWorthIt,
+      total,
+      trustScore: total === 0 ? null : Math.round((worthIt / total) * 100),
+    },
+    { status: 200 },
+    cors,
+  );
+}
+
+async function getUserCheckins(
+  request: Request,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  const session = await getSession(env, request);
+  if (!session) {
+    return json({ error: "sign in required" }, { status: 401 }, cors);
+  }
+  const raw = await env.POLLS.get(`checkin:user:${session.data.sub}`);
+  return json(
+    { checkins: raw ? JSON.parse(raw) : {} },
+    { status: 200 },
+    cors,
+  );
+}
+
 // Throttle window for "friends voted on your plan" owner emails.
 const VOTE_NOTIFY_THROTTLE_SECONDS = 30 * 60;
 
@@ -1304,6 +1526,12 @@ async function subscribeNewsletter(
     email?: unknown;
     metroId?: unknown;
     ageBand?: unknown;
+    ageBands?: unknown;
+    zipCode?: unknown;
+    interests?: unknown;
+    budget?: unknown;
+    setting?: unknown;
+    savedEventIds?: unknown;
     source?: unknown;
     url?: unknown;
   };
@@ -1316,6 +1544,10 @@ async function subscribeNewsletter(
   const ageBand = cleanText(data.ageBand, 40) || undefined;
   const source = cleanText(data.source, 80) || "weekend-guide";
   const url = cleanText(data.url, 500) || undefined;
+  const stringArr = (value: unknown, max: number): string[] =>
+    Array.isArray(value)
+      ? value.filter((v) => typeof v === "string").slice(0, max)
+      : [];
   const now = new Date().toISOString();
   const key = `newsletter:${safeKvSegment(metroId)}:${safeKvSegment(email)}`;
 
@@ -1334,6 +1566,12 @@ async function subscribeNewsletter(
     email,
     metroId,
     ageBand,
+    ageBands: stringArr(data.ageBands, 10),
+    zipCode: cleanText(data.zipCode, 10) || undefined,
+    interests: stringArr(data.interests, 20),
+    budget: cleanText(data.budget, 20) || undefined,
+    setting: cleanText(data.setting, 20) || undefined,
+    savedEventIds: stringArr(data.savedEventIds, 500),
     source,
     url,
     createdAt,
@@ -1443,6 +1681,87 @@ async function sendNewsletter(
     recipients,
     fetch,
     new URL(request.url).origin,
+  );
+  return json(result, { status: 200 }, cors);
+}
+
+async function sendMondayRecapHandler(
+  request: Request,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  const token = env.NEWSLETTER_ADMIN_TOKEN;
+  if (!token) {
+    return json(
+      { error: "newsletter sending not configured" },
+      { status: 503 },
+      cors,
+    );
+  }
+  const auth = request.headers.get("authorization") || "";
+  const provided = auth.startsWith("Bearer ") ? auth.slice(7).trim() : "";
+  if (!provided || provided !== token) {
+    return json({ error: "admin access required" }, { status: 403 }, cors);
+  }
+
+  let payload: unknown = null;
+  if (request.headers.get("content-type")?.includes("application/json")) {
+    try {
+      payload = await request.json();
+    } catch {
+      return json({ error: "invalid json" }, { status: 400 }, cors);
+    }
+  }
+  const data = (payload && typeof payload === "object" ? payload : {}) as {
+    recipients?: unknown;
+  };
+  const rawRecipients = Array.isArray(data.recipients) ? data.recipients : [];
+  const recipients: NewsletterRecipient[] = [];
+  for (const entry of rawRecipients) {
+    if (!entry || typeof entry !== "object") continue;
+    const e = entry as {
+      email?: unknown;
+      metroId?: unknown;
+      ageBand?: unknown;
+      profile?: unknown;
+      savedEventIds?: unknown;
+    };
+    const email = cleanEmail(e.email);
+    if (!email) continue;
+    const profile =
+      e.profile && typeof e.profile === "object"
+        ? (e.profile as Record<string, unknown>)
+        : undefined;
+    recipients.push({
+      email,
+      metroId: cleanText(e.metroId, 60) || undefined,
+      ageBand: cleanText(e.ageBand, 40) || undefined,
+      profile: profile
+        ? {
+            ageBands: Array.isArray(profile.ageBands)
+              ? profile.ageBands.filter((v): v is string => typeof v === "string").slice(0, 10)
+              : undefined,
+            zipCode:
+              typeof profile.zipCode === "string" ? profile.zipCode.slice(0, 10) : undefined,
+            interests: Array.isArray(profile.interests)
+              ? profile.interests.filter((v): v is string => typeof v === "string").slice(0, 20)
+              : undefined,
+            budget: typeof profile.budget === "string" ? profile.budget : undefined,
+            setting: typeof profile.setting === "string" ? profile.setting : undefined,
+          }
+        : undefined,
+      savedEventIds: Array.isArray(e.savedEventIds)
+        ? e.savedEventIds.filter((v): v is string => typeof v === "string").slice(0, 500)
+        : undefined,
+    });
+  }
+
+  const result = await sendMondayRecap(
+    env,
+    recipients,
+    fetch,
+    new URL(request.url).origin,
+    (key) => env.POLLS.get(key),
   );
   return json(result, { status: 200 }, cors);
 }
@@ -1617,6 +1936,10 @@ export default {
       return sendNewsletter(request, env, cors);
     }
 
+    if (path === "/newsletter/send-monday" && request.method === "POST") {
+      return sendMondayRecapHandler(request, env, cors);
+    }
+
     if (
       path === "/newsletter/unsubscribe" &&
       (request.method === "GET" || request.method === "POST")
@@ -1697,6 +2020,28 @@ export default {
     const pollMatch = path.match(/^\/polls\/([A-Za-z0-9-]+)$/);
     if (pollMatch && request.method === "GET") {
       return getPoll(pollMatch[1], env, cors);
+    }
+
+    if (path === "/plancards" && request.method === "POST") {
+      return createPlanCard(request, env, cors);
+    }
+
+    const planCardMatch = path.match(/^\/plancards\/([A-Za-z0-9-]+)$/);
+    if (planCardMatch && request.method === "GET") {
+      return getPlanCard(planCardMatch[1], env, cors);
+    }
+
+    if (path === "/checkin" && request.method === "POST") {
+      return submitCheckin(request, env, cors);
+    }
+
+    if (path === "/checkin/user" && request.method === "GET") {
+      return getUserCheckins(request, env, cors);
+    }
+
+    const checkinMatch = path.match(/^\/checkin\/event\/([A-Za-z0-9_-]+)$/);
+    if (checkinMatch && request.method === "GET") {
+      return getEventCheckins(checkinMatch[1], env, cors);
     }
 
     const voteMatch = path.match(/^\/polls\/([A-Za-z0-9-]+)\/votes$/);
