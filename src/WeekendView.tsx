@@ -231,14 +231,23 @@ export default function WeekendView({
         ? `${eventTrust.trustScore}% of parents said worth it`
         : null;
     const editorPicked = editorPickedEventIds.has(event.id);
+    const thumb = eventImageSmall(event);
     return (
       <li key={event.id} className="weekend-card">
-        <img
-          className="weekend-card-img"
-          src={eventImageSmall(event)}
-          alt=""
-          loading="lazy"
-        />
+        {thumb ? (
+          <img
+            className="weekend-card-img"
+            src={thumb}
+            alt=""
+            loading="lazy"
+          />
+        ) : (
+          // No photo exists for this event — a neutral category block, never
+          // a stock stand-in.
+          <span className="weekend-card-img weekend-card-img-placeholder" aria-hidden="true">
+            {event.category.slice(0, 1)}
+          </span>
+        )}
         <span className="weekend-card-when">{timeLabel(event)}</span>
         <div className="weekend-card-main">
           {event.slug ? (

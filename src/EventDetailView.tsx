@@ -326,8 +326,17 @@ export default function EventDetailView({
         </section>
       ) : (
         <article className="event-detail">
-          {hero && (
+          {hero ? (
             <img className="event-detail-hero" src={hero} alt="" loading="lazy" />
+          ) : (
+            // No photo exists for this event — neutral placeholder, never a
+            // stock stand-in.
+            <div
+              className="event-detail-hero event-detail-hero-placeholder"
+              aria-hidden="true"
+            >
+              {event.category}
+            </div>
           )}
           <header>
             <h1>{event.title}</h1>

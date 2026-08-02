@@ -319,6 +319,22 @@ export function sanitizeUrl(value, baseUrl = "") {
   }
 }
 
+// Event photo URL, when the source actually provides one (Ticketmaster,
+// Eventbrite-style feeds). Never synthesize — a stock image passed off as
+// an event's photo is misleading (2026-08-02 directive). A placeholder is
+// the honest alternative to a fake photo.
+export function cleanEventImage(value) {
+  const url = sanitizeUrl(value);
+  if (!url) return null;
+  // Junk-guard: the URL must be a real image asset — an image file
+  // extension, or a known image CDN host (some feeds serve extensionless
+  // URLs via image processors).
+  const host = new URL(url).hostname.toLowerCase();
+  if (/\.(jpe?g|png|webp|gif|avif)([?#]|$)/i.test(url)) return url;
+  if (/(unsplash|ticketmaster|evbuc|imgix|cloudinary)/.test(host)) return url;
+  return null;
+}
+
 export function decodeHtmlEntities(value) {
   if (typeof value !== "string") return "";
   const named = {
@@ -2284,6 +2300,7 @@ export function normalizeRawEvent(raw, source = {}) {
     cost: stripUnsafeText(raw.cost || inferCost(combined), 30),
     url: sanitizeUrl(raw.url || raw.sourceUrl || source.url, source.url) || source.url,
     sourceUrl: sanitizeUrl(raw.sourceUrl || source.url, source.url) || source.url,
+    imageUrl: cleanEventImage(raw.imageUrl) || undefined,
     sourceId: stripUnsafeText(raw.sourceId || source.id || "", 80),
     sourceName: stripUnsafeText(raw.sourceName || source.name || "", 120),
     sourceMode: stripUnsafeText(raw.sourceMode || raw.extractionMethod || "live", 40),
@@ -4194,6 +4211,11 @@ export function extractTicketmasterEvents(json, source = {}) {
       if (source.ticketmasterExcludePattern && patternMatches(signalText, source.ticketmasterExcludePattern)) return null;
       if (!source.ticketmasterAllowedPattern && !hasFamilySignal(`${signalText} ${sourceAudienceText(source)}`)) return null;
       if (hasAdultOnlySignal(signalText)) return null;
+      // Real event photo when the API provides one — prefer the largest
+      // crop; cleanEventImage does the real validation downstream.
+      const imageUrl = (Array.isArray(item.images) ? item.images : [])
+        .filter((img) => typeof img?.url === "string")
+        .sort((a, b) => (b?.width ?? 0) - (a?.width ?? 0))[0]?.url;
       return normalizeRawEvent({
         title: item.name,
         description: item.info || item.pleaseNote || classifications,
@@ -4205,6 +4227,7 @@ export function extractTicketmasterEvents(json, source = {}) {
         startDateTime: item.dates?.start?.dateTime || item.dates?.start?.localDate,
         endDateTime: item.dates?.end?.dateTime,
         url: item.url,
+        imageUrl,
         cost: item.priceRanges?.length ? "$" : "Unknown",
         sourceId: source.id,
         sourceName: source.name,

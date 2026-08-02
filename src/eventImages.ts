@@ -1,32 +1,23 @@
-// Category-based hero images for events. Events don't carry photos in the
-// feed data, so cards/detail pages use a curated Unsplash fallback per event
-// category — the same proven photo ids the spot pipeline already ships
-// (public/data/*/spots.json), so they are known to load.
+// Event photo resolution. Events only ever show a REAL photo extracted at
+// ingest (event.imageUrl, from sources that provide one — Ticketmaster,
+// Eventbrite-style feeds). There is intentionally no category fallback: a
+// stock photo passed off as an event's photo is misleading (2026-08-02
+// directive). Surfaces render a neutral placeholder when no photo exists.
 
 import type { FamilyEvent } from "./App";
 
-const CATEGORY_PHOTO: Record<string, string> = {
-  Library: "1485738422979-f5c462d49f74",
-  Museum: "1485738422979-f5c462d49f74",
-  Community: "1518998053901-5348d3961a04",
-  Festival: "1418065460487-3e41a6c84dc5",
-  Zoo: "1441974231531-c6227db76b6e",
-  Farm: "1418065460487-3e41a6c84dc5",
-  Park: "1441974231531-c6227db76b6e",
-  Music: "1518998053901-5348d3961a04",
-  Comedy: "1506629082955-511b1aa562c8",
-  Brewery: "1481833761820-0509d3217039",
-  Food: "1481833761820-0509d3217039",
-};
-
-const FALLBACK_PHOTO = "1464822759023-fed622ff2c3b";
-
+/** The event's real photo URL, or null when the source provides none. */
 export function eventImage(event: FamilyEvent, width = 1200): string | null {
-  const id = CATEGORY_PHOTO[event.category] ?? FALLBACK_PHOTO;
-  return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${width}&q=80`;
+  if (!event.imageUrl) return null;
+  // Re-crop Unsplash-sourced images at the requested width; other hosts
+  // are used as-is.
+  if (event.imageUrl.includes("images.unsplash.com")) {
+    return event.imageUrl.replace(/w=\d+/, `w=${width}`);
+  }
+  return event.imageUrl;
 }
 
 /** Small crop for feed cards. */
-export function eventImageSmall(event: FamilyEvent): string {
-  return eventImage(event, 400)!;
+export function eventImageSmall(event: FamilyEvent): string | null {
+  return eventImage(event, 400);
 }

@@ -257,7 +257,16 @@ export default function PlanSignupPage({ metro }: Props) {
             <ul>
               {teasers.map((event) => (
                 <li key={event.id}>
-                  <img src={eventImageSmall(event)} alt="" loading="lazy" />
+                  {eventImageSmall(event) ? (
+                    <img src={eventImageSmall(event)!} alt="" loading="lazy" />
+                  ) : (
+                    <span
+                      className="plan-signup-teaser-placeholder"
+                      aria-hidden="true"
+                    >
+                      {event.category.slice(0, 1)}
+                    </span>
+                  )}
                   <div>
                     <strong>{event.title}</strong>
                     <span>

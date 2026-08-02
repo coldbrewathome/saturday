@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   assignEventSlugs,
   buildEventsDataset,
+  cleanEventImage,
   expandRecurringTemplates,
   extractBiblioEvents,
   extractBrooklynLibraryEvents,
@@ -44,6 +45,22 @@ import {
 
 // E27: offsetStringForZone derives a DST-aware UTC offset per date/zone
 // instead of a fixed per-metro string that goes stale twice a year.
+test("cleanEventImage keeps real photo URLs and rejects non-image junk", () => {
+  assert.equal(
+    cleanEventImage("https://media.ticketmaster.com/tm/photo-123.jpg"),
+    "https://media.ticketmaster.com/tm/photo-123.jpg",
+  );
+  assert.equal(
+    cleanEventImage("https://img.evbuc.com/event-logo.png?w=400"),
+    "https://img.evbuc.com/event-logo.png?w=400",
+  );
+  assert.equal(cleanEventImage("https://example.com/event/123"), null);
+  assert.equal(cleanEventImage("https://example.com/page.html"), null);
+  assert.equal(cleanEventImage("not-a-url"), null);
+  assert.equal(cleanEventImage(undefined), null);
+  assert.equal(cleanEventImage("javascript:alert(1)"), null);
+});
+
 test("E27: offsetStringForZone is DST-aware and metro-specific", () => {
   assert.equal(offsetStringForZone(new Date("2026-07-01T12:00:00Z"), "America/New_York"), "-04:00");
   assert.equal(offsetStringForZone(new Date("2026-01-01T12:00:00Z"), "America/New_York"), "-05:00");

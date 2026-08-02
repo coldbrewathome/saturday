@@ -209,6 +209,10 @@ export type FamilyEvent = {
   sourceName?: string;
   sourceMode?: string;
   verified: boolean;
+  // Real event photo extracted at ingest when the source provides one
+  // (Ticketmaster/Eventbrite-style feeds). Absent = no photo exists —
+  // surfaces render a placeholder, never a stock stand-in.
+  imageUrl?: string;
   // Stable slug landed in 261ce3b. Drives the SPA `#/event/<slug>` route
   // (this file) and the prerendered `/<metro>/events/<slug>/` URL (ADR-04).
   slug?: string;

@@ -8080,3 +8080,45 @@ a.weekend-card-title:hover {
     width: 100%;
   }
 }
+
+/* ── Honest event photos: neutral placeholders when no photo exists ──────── */
+/* Events only ever show a REAL source photo (event.imageUrl). When the
+   source has none, surfaces render this neutral category block — never a
+   stock photo passed off as the event. */
+.weekend-card-img-placeholder {
+  align-items: center;
+  background: var(--surface-strong);
+  border: 1px dashed var(--line);
+  color: var(--muted);
+  display: flex;
+  font: 800 1.05rem/1 var(--font-display);
+  justify-content: center;
+  text-transform: uppercase;
+}
+
+.event-detail-hero-placeholder {
+  align-items: center;
+  background: var(--surface-strong);
+  border: 1px dashed var(--line);
+  color: var(--muted);
+  display: flex;
+  font: 700 0.95rem/1 var(--font-ui);
+  justify-content: center;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.plan-signup-teaser-placeholder {
+  align-items: center;
+  background: var(--surface-strong);
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+  color: var(--muted);
+  display: flex;
+  flex: 0 0 52px;
+  font: 800 1rem/1 var(--font-display);
+  height: 52px;
+  justify-content: center;
+  text-transform: uppercase;
+  width: 52px;
+}

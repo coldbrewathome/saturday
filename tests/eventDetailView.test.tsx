@@ -115,7 +115,7 @@ describe("EventDetailView", () => {
     vi.useRealTimers();
   });
 
-  it("renders hero image, age-fit line, facts, and the map link", () => {
+  it("renders hero placeholder, age-fit line, facts, and the map link", () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-06-10T12:00:00-07:00"));
     const event = makeEvent({
@@ -128,9 +128,9 @@ describe("EventDetailView", () => {
       <EventDetailView {...baseProps} events={[event]} slug="storytime" />,
     );
 
-    const hero = container.querySelector("img.event-detail-hero");
-    expect(hero).toHaveAttribute("src", expect.stringContaining("images.unsplash.com"));
-    expect(hero).toHaveAttribute("loading", "lazy");
+    // No source photo → neutral placeholder, never a stock stand-in.
+    expect(container.querySelector("img.event-detail-hero")).toBeNull();
+    expect(container.querySelector(".event-detail-hero-placeholder")).not.toBeNull();
 
     expect(
       screen.getByText("Best for: Toddler (1-3) · Preschool (3-5)"),
@@ -148,6 +148,23 @@ describe("EventDetailView", () => {
       "href",
       "#/browse",
     );
+    vi.useRealTimers();
+  });
+
+  it("renders the real source photo when the event has one", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-06-10T12:00:00-07:00"));
+    const event = makeEvent({
+      id: "e1",
+      slug: "ticketed-show",
+      imageUrl: "https://media.ticketmaster.com/tm/photo-real.jpg",
+    });
+    const { container } = render(
+      <EventDetailView {...baseProps} events={[event]} slug="ticketed-show" />,
+    );
+    const hero = container.querySelector("img.event-detail-hero");
+    expect(hero).toHaveAttribute("src", "https://media.ticketmaster.com/tm/photo-real.jpg");
+    expect(container.querySelector(".event-detail-hero-placeholder")).toBeNull();
     vi.useRealTimers();
   });
 
