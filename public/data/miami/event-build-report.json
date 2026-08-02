@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "miami",
-  "generatedAt": "2026-08-01T05:29:11.845Z",
+  "generatedAt": "2026-08-02T22:09:08.974Z",
   "registryPath": "data/event-sources-miami.json",
   "outputPath": "public/data/miami/events.json",
-  "eventCount": 1321,
-  "adultsEventCount": 60,
+  "eventCount": 1332,
+  "adultsEventCount": 58,
   "sourceCount": 21,
-  "liveEventCount": 1348,
+  "liveEventCount": 1357,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 8,
-  "operatorAlertCount": 9,
+  "operatorAlertCount": 10,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:11.845Z",
+      "fetchedAt": "2026-08-02T22:09:08.974Z",
       "fetches": [
         {
           "url": "https://mdpls.libnet.info/events",
@@ -52,7 +52,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:11.845Z",
+      "fetchedAt": "2026-08-02T22:09:08.974Z",
       "fetches": [
         {
           "url": "https://www.fairexpo.com/",
@@ -77,10 +77,35 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:11.845Z",
+      "fetchedAt": "2026-08-02T22:09:08.974Z",
       "fetches": [
         {
           "url": "https://www.southfloridafair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "miami",
+      "sourceId": "childrens-trust-family-expo-2026-08-01-src",
+      "sourceName": "The Children's Trust Family Expo Miami",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.thechildrenstrust.org/events/family-expo-miami-2026/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-02T22:09:08.974Z",
+      "fetches": [
+        {
+          "url": "https://www.thechildrenstrust.org/events/family-expo-miami-2026/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -102,7 +127,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:11.845Z",
+      "fetchedAt": "2026-08-02T22:09:08.974Z",
       "fetches": [
         {
           "url": "https://clubspace.com/events",
@@ -127,7 +152,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:11.845Z",
+      "fetchedAt": "2026-08-02T22:09:08.974Z",
       "fetches": [
         {
           "url": "https://thegroundmiami.com/events",
@@ -152,7 +177,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:11.845Z",
+      "fetchedAt": "2026-08-02T22:09:08.974Z",
       "fetches": [
         {
           "url": "https://www.grframps.com/calendar",
@@ -176,7 +201,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:11.845Z",
+      "fetchedAt": "2026-08-02T22:09:08.974Z",
       "fetches": [
         {
           "url": "https://www.oasiswynwood.com/events",
@@ -201,7 +226,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:11.845Z",
+      "fetchedAt": "2026-08-02T22:09:08.974Z",
       "fetches": [
         {
           "url": "https://www.lasrosasbar.com/events",
@@ -226,7 +251,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:11.845Z",
+      "fetchedAt": "2026-08-02T22:09:08.974Z",
       "fetches": [
         {
           "url": "https://www.miamiimprov.com/calendar",
@@ -339,9 +364,9 @@
       "metroId": "miami",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 4,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://www.zoomiami.org/",
@@ -352,7 +377,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 8,
+      "rejectedLiveEvents": 10,
       "extractedEvents": 12,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -447,21 +472,21 @@
       "metroId": "miami",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 973,
+      "liveEvents": 988,
       "fallbackEvents": 0,
-      "eventCount": 973,
+      "eventCount": 988,
       "fetches": [
         {
           "url": "https://broward.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=2269; locations=40"
+          "contentType": "application/json; source=communico-events; events=2291; locations=40"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=2269; locations=40",
-      "rejectedLiveEvents": 39,
-      "extractedEvents": 1012,
+      "contentType": "application/json; source=communico-events; events=2291; locations=40",
+      "rejectedLiveEvents": 34,
+      "extractedEvents": 1022,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -501,21 +526,21 @@
       "metroId": "miami",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 14,
+      "liveEvents": 13,
       "fallbackEvents": 0,
-      "eventCount": 14,
+      "eventCount": 13,
       "fetches": [
         {
           "url": "http://coralgablesmuseum.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=14; pages=1"
+          "contentType": "application/json; source=tribe-events; events=13; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=14; pages=1",
+      "contentType": "application/json; source=tribe-events; events=13; pages=1",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 14,
+      "extractedEvents": 13,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -536,13 +561,13 @@
           "url": "https://miamibeachbandshell.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=28; pages=1"
+          "contentType": "application/json; source=tribe-events; events=29; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=28; pages=1",
-      "rejectedLiveEvents": 23,
-      "extractedEvents": 28,
+      "contentType": "application/json; source=tribe-events; events=29; pages=1",
+      "rejectedLiveEvents": 24,
+      "extractedEvents": 29,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -588,9 +613,9 @@
       "metroId": "miami",
       "category": "Community",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.thechildrenstrust.org/events/family-expo-miami-2026/",
@@ -601,7 +626,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -615,9 +640,9 @@
       "metroId": "miami",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 35,
+      "liveEvents": 33,
       "fallbackEvents": 0,
-      "eventCount": 35,
+      "eventCount": 33,
       "fetches": [
         {
           "url": "https://11miami.com/events",
@@ -628,8 +653,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 35,
-      "extractedEvents": 70,
+      "rejectedLiveEvents": 34,
+      "extractedEvents": 67,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
