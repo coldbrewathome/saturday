@@ -216,3 +216,33 @@ test("titleCaseAllCaps sentence-cases shouting titles", async () => {
   // Short acronyms are unchanged.
   assert.equal(titleCaseAllCaps("LEGO"), "LEGO");
 });
+
+test("junk-4: time-only titles with dotted meridiems are dropped", () => {
+  assert.equal(normalizeScrapedTitle("10 a.m. – 5 p.m."), "");
+  assert.equal(normalizeScrapedTitle("10 a.m.–5 p.m."), "");
+  assert.equal(normalizeScrapedTitle("9:30 A.M. - 12 P.M."), "");
+});
+
+test("junk-4: date-only titles are dropped", () => {
+  assert.equal(normalizeScrapedTitle("Saturday, August 22"), "");
+  assert.equal(normalizeScrapedTitle("Aug. 22"), "");
+  assert.equal(normalizeScrapedTitle("8/22/2026"), "");
+});
+
+test("junk-4: weekday-datetime blobs with junk remainders are dropped", () => {
+  assert.equal(normalizeScrapedTitle("Monday, August 10 1:00—3:00 PM Zoom"), "");
+  assert.equal(normalizeScrapedTitle("Sat, Aug 22 2026, 10 - 11:30am"), "");
+  assert.equal(
+    normalizeScrapedTitle("Tuesday, September 1 6:00—7:30 PM 79 Highland Ave, Somerville, MA, 02143"),
+    "",
+  );
+});
+
+test("junk-4: real titles with times or weekday words survive", () => {
+  assert.equal(normalizeScrapedTitle("Storytime at 10 a.m."), "Storytime at 10 a.m.");
+  assert.equal(normalizeScrapedTitle("Sunday Market at Jefferson"), "Sunday Market at Jefferson");
+  assert.equal(
+    normalizeScrapedTitle("Friday, August 14 6:00—8:00 PM Family Movie Night"),
+    "Friday, August 14 6:00—8:00 PM Family Movie Night",
+  );
+});

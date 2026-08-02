@@ -2345,7 +2345,8 @@ export function resolveAudiences(raw = {}, source = {}, combinedText = "") {
 // BubbleFest June 13 @ 10:00 am - 4:30 pm BubbleFest $24 ..."), "Image " /
 // "Registration Required" prefixes, the title duplicated inside the
 // description, and truncated leading garbage ("oin us for ...").
-const TITLE_CLOCK = "\\d{1,2}(?::\\d{2})?\\s*(?:am|pm)";
+// junk-4: dotted meridiems ("10 a.m. – 5 p.m.") count as clock times too.
+const TITLE_CLOCK = "\\d{1,2}(?::\\d{2})?\\s*(?:a\\.?\\s?m\\.?|p\\.?\\s?m\\.?)";
 const LEADING_TIME_RANGE_RE = new RegExp(`^\\s*${TITLE_CLOCK}\\s*[-–]\\s*${TITLE_CLOCK}\\s+`, "i");
 const ONLY_TIMES_RE = new RegExp(
   `^\\s*(?:${TITLE_CLOCK}|\\d{1,2}:\\d{2})(?:\\s*[-–]?\\s*(?:${TITLE_CLOCK}|\\d{1,2}:\\d{2}))*\\s*$`,
@@ -2360,12 +2361,41 @@ const LEADING_DATE_PRELUDE_RE = new RegExp(
   "i",
 );
 
+// junk-4: "Monday, August 10 1:00—3:00 PM Zoom" and "Sat, Aug 22 2026,
+// 10 - 11:30am" are calendar plumbing published as titles. Strip the
+// weekday-date-time prefix; when nothing meaningful remains (empty, more
+// times, a bare platform word, or a street-address signature), the title
+// is junk and the event must not mint a page.
+const WEEKDAY_DATETIME_PREFIX_RE = new RegExp(
+  "^(?:today\\s+|tomorrow\\s+)?" +
+  "(?:mon|tue(?:s)?|wed(?:nes)?|thu(?:rs)?|fri|sat(?:ur)?|sun)(?:day)?\\.?,?\\s+" +
+  "(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\\.?\\s+\\d{1,2}" +
+  "(?:,?\\s*20\\d{2})?,?\\s+" +
+  `\\d{1,2}(?::\\d{2})?\\s*(?:a\\.?\\s?m\\.?|p\\.?\\s?m\\.?)?\\s*[—–-]\\s*(?:${TITLE_CLOCK}|\\d{1,2}:\\d{2})\\s*`,
+  "i",
+);
+const JUNK_TITLE_REMAINDER_RE = /^(?:zoom|online|virtual)$/i;
+const ADDRESS_SIGNATURE_RE = /\b\d{5}(?:-\d{4})?\b|,\s*[A-Z]{2},?\s+\d{5}/;
+
 export function normalizeScrapedTitle(value) {
   let title = stripUnsafeText(value, 220)
     .replace(/^\d{4}-\d{2}-\d{2}\s+/, "")
     .replace(/^image\b[:\s]+/i, "")
     .replace(/^registration required\b[:\s]*/i, "");
   if (ONLY_TIMES_RE.test(title)) return "";
+  if (DATE_ONLY_TITLE_RE.test(title.trim())) return "";
+  const wdPrefix = title.match(WEEKDAY_DATETIME_PREFIX_RE);
+  if (wdPrefix) {
+    const rest = title.slice(wdPrefix[0].length).trim();
+    if (
+      !rest ||
+      ONLY_TIMES_RE.test(rest) ||
+      JUNK_TITLE_REMAINDER_RE.test(rest) ||
+      ADDRESS_SIGNATURE_RE.test(rest)
+    ) {
+      return "";
+    }
+  }
   title = title.replace(LEADING_TIME_RANGE_RE, "");
   // "BubbleFest June 13 @ 10:00 am - 4:30 pm BubbleFest $24 ..." — drop the
   // embedded date chunk; when the tail repeats the head (often truncated),
