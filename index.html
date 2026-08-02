@@ -35,6 +35,17 @@
       enough — full preconnect just burns a TLS slot during LCP.
     -->
     <link rel="preconnect" href="https://saturday-polls.santaclararental2016.workers.dev" crossorigin />
+    <!-- perf-1: fonts CSS moved here from src/styles.css's @import so its
+         connection overlaps the HTML download instead of waiting for the CSS
+         bundle to parse. Shared file: both brands load this one URL (it is
+         what src/styles.css loaded for Mosey too). fonts.googleapis.com gets
+         NO crossorigin (stylesheet fetch is no-cors); fonts.gstatic.com does. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap"
+    />
     <link rel="dns-prefetch" href="https://a.tile.openstreetmap.org" />
     <link rel="dns-prefetch" href="https://commons.wikimedia.org" />
     <link rel="dns-prefetch" href="https://images.unsplash.com" />

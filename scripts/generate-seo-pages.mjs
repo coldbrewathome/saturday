@@ -26,7 +26,12 @@ import {
   matchesBrandSafetyAllowlist,
 } from "./lib/brandSafety.mjs";
 import { ADULT_OVERRIDE_RE, KIDS_CONTENT_RE } from "./lib/adultAudience.mjs";
-import { isMarqueeEvent, kidsEventBrandSafetyViolation } from "./eventPipeline.mjs";
+import {
+  decodeHtmlEntities,
+  isMarqueeEvent,
+  kidsEventBrandSafetyViolation,
+  truncateAtBoundary,
+} from "./eventPipeline.mjs";
 import { ENDED_GRACE_MS } from "../functions/_detail-guard.mjs";
 import {
   defaultLocale,
@@ -436,6 +441,58 @@ function saveLastmodStore() {
   fs.writeFileSync(LASTMOD_STORE_PATH, JSON.stringify(merged) + "\n");
 }
 
+// wkd-1: city weekend page hysteresis. Google positions /this-weekend/{city}/
+// URLs within days; the old behavior deleted any city that dipped below the
+// 3-event gate for a week, 404ing ranked URLs (morgan-hill pos 23.1, hayward
+// pos 6.0). Persist metro → citySlug → { name, lastQualified } and keep
+// re-qualified-within-8-weeks cities alive with a "quieter weekend" page.
+// Kids build only (Mosey writes no city weekend pages). Staged explicitly
+// like data/indexing-history.json per the concurrent-sessions rule.
+const CITY_WEEKEND_HISTORY_PATH = path.join(ROOT, "data", "city-weekend-history.json");
+const CITY_WEEKEND_HYSTERESIS_DAYS = 56; // 8 weeks
+let cityWeekendHistory = { metros: {} };
+try {
+  const parsed = JSON.parse(fs.readFileSync(CITY_WEEKEND_HISTORY_PATH, "utf8"));
+  if (parsed && typeof parsed.metros === "object" && parsed.metros) {
+    cityWeekendHistory = { metros: parsed.metros };
+  }
+} catch {
+  // First run: file does not exist yet.
+}
+
+function cityWeekendHistoryFor(metroId) {
+  return cityWeekendHistory.metros[metroId] || {};
+}
+
+function cityQualifiedRecently(entry, now = new Date()) {
+  const ts = entry?.lastQualified ? Date.parse(entry.lastQualified) : NaN;
+  if (!Number.isFinite(ts)) return false;
+  return now.getTime() - ts <= CITY_WEEKEND_HYSTERESIS_DAYS * 86400 * 1000;
+}
+
+function recordCityWeekendQualifiers(metroId, cities) {
+  const metroHistory = { ...(cityWeekendHistory.metros[metroId] || {}) };
+  for (const c of cities) {
+    metroHistory[c.slug] = { name: c.name, lastQualified: today() };
+  }
+  // Prune entries outside the hysteresis window so the file stays bounded.
+  const now = new Date();
+  for (const [slug, entry] of Object.entries(metroHistory)) {
+    if (!cityQualifiedRecently(entry, now)) delete metroHistory[slug];
+  }
+  cityWeekendHistory.metros[metroId] = metroHistory;
+}
+
+function saveCityWeekendHistory() {
+  if (IS_ADULTS) return;
+  const payload = {
+    _comment:
+      "wkd-1 hysteresis state for /{metro}/this-weekend/{city}/ pages: cities that met the 3-event gate keep their page for 8 weeks after their last qualification (quieter-weekend rendering) so ranked URLs never 404 on a slow week. Written by generate-seo-pages.mjs on kids builds; stage this file explicitly, never via add -A.",
+    metros: cityWeekendHistory.metros,
+  };
+  fs.writeFileSync(CITY_WEEKEND_HISTORY_PATH, `${JSON.stringify(payload, null, 1)}\n`);
+}
+
 let sitemapEntries = [
   { loc: `${SITE}/`, lastmod: today(), changefreq: "daily", priority: 1.0 },
 ];
@@ -579,10 +636,14 @@ const ADULT_CATEGORY_PAGES = [
 
 const CATEGORY_PAGES = IS_ADULTS ? ADULT_CATEGORY_PAGES : KIDS_CATEGORY_PAGES;
 
-const PAGE_CSS = `
-@import url("${IS_ADULTS
+// perf-1: fonts load via preconnect + a parallel <link rel="stylesheet"> in
+// renderShell's head (same css2 URL as before) instead of a serial @import
+// discovered only after the inline CSS parses. Keep display=swap.
+const FONTS_CSS_URL = IS_ADULTS
   ? "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap"
-  : "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap"}");
+  : "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap";
+
+const PAGE_CSS = `
 :root{--font-ui:"Plus Jakarta Sans",Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--font-display:"Bricolage Grotesque","Plus Jakarta Sans",Inter,ui-sans-serif,system-ui,sans-serif;--bg:#faf5eb;--surface:#fff;--surface-strong:#f2ead9;--line:#e8dfca;--ink:#1b1916;--muted:#6b7280;--blue:#5a7896;--accent:#dd6a1a;--accent-strong:#b8541a;--accent-soft:#fdece7;--fact-bg:#fff8ec;--fact-border:rgba(245,158,11,.22);--chip-bg:#fff3d5;--chip-border:rgba(245,158,11,.3);--chip-ink:#8a4f00;--brand:var(--accent);--brand-strong:var(--accent-strong);--card:var(--surface);--glass-bg:rgba(250,245,235,.82);--glass-blur:blur(20px) saturate(160%);--glass-border:.5px solid rgba(255,255,255,.6);--glass-shadow:0 6px 24px rgba(0,0,0,.08);--glass-radius:16px;--overlay-gap:16px;}
 ${IS_ADULTS ? `:root{--bg:#f3f0fa;--surface-strong:#e8e2f4;--line:#d4cde5;--ink:#1e1a2b;--muted:#6b6580;--blue:#3b5998;--accent:#7c3aed;--accent-strong:#5b21b6;--accent-soft:#ede5fc;--fact-bg:#f4f0fc;--fact-border:rgba(124,58,237,.18);--chip-bg:#ede5fc;--chip-border:rgba(124,58,237,.3);--chip-ink:#5b21b6;--glass-bg:rgba(243,240,250,.85);--glass-border:.5px solid rgba(124,58,237,.15);--font-ui:"Plus Jakarta Sans",Inter,ui-sans-serif,system-ui,sans-serif;--font-display:"Inter",ui-sans-serif,system-ui,sans-serif;}` : ""}
 *{box-sizing:border-box}
@@ -630,6 +691,9 @@ a:hover{text-decoration:underline}
 .famhop-auth .sync-pill{background:var(--accent-soft);border-radius:999px;color:var(--brand-strong);font-size:.7rem;font-style:normal;font-weight:900;letter-spacing:.04em;padding:2px 6px;}
 .famhop-auth .signin-wrap{align-items:center;display:flex;justify-content:flex-end;min-height:40px;}
 .famhop-auth .signin-slot{align-items:center;display:inline-flex;min-height:36px;}
+.famhop-auth .signin-intent{align-items:center;background:var(--surface-strong);border:1px solid var(--line);border-radius:999px;color:var(--muted);cursor:pointer;display:flex;height:40px;justify-content:center;padding:0;width:40px;}
+.famhop-auth .signin-intent svg{height:16px;width:16px;}
+@media (max-width:820px){.famhop-auth .signin-intent{height:32px;width:32px;}}
 .famhop-auth .signin-wrap .user-avatar-fallback{border-radius:999px;display:none;height:40px;text-decoration:none;width:40px;}
 .famhop-auth .signin-wrap.no-google .user-avatar-fallback{display:flex;}
 .famhop-auth .signin-error{color:var(--brand-strong);font-size:.72rem;font-weight:800;margin-left:8px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -1166,6 +1230,10 @@ function main() {
         if (live && !annualByEventSlug.has(live.slug)) annualByEventSlug.set(live.slug, entry);
       }
     }
+    // junk-7: per-source boilerplate descriptions (same blob on >= 4 distinct
+    // titles) are computed per metro and suppressed by every description
+    // consumer (event pages, weekend ItemLists) via module state.
+    setActiveBoilerplateKeys(buildBoilerplateDescriptionKeys(events));
     const eventSlugs = generateEventPages(capEventsForPages(distinctEvents, eventSlugLookup), eventsDoc?.generatedAt, eventSlugLookup, citySlugsPre, annualByEventSlug);
     generatedEventSlugsByMetro.set(metro.id, eventSlugs);
 
@@ -1261,6 +1329,7 @@ function main() {
 
   writeSitemap(sitemapEntries);
   saveLastmodStore();
+  saveCityWeekendHistory();
   writeRobotsAndLlms();
 
   console.log(
@@ -1626,44 +1695,63 @@ function renderStaticAuthScript() {
       wrap.classList.add("no-google");
       return;
     }
-    loadGoogleIdentity()
-      .then(() => {
-        if (!window.google?.accounts?.id) return;
-        window.google.accounts.id.initialize({
-          client_id: googleClientId,
-          callback: async (response) => {
-            try {
-              const result = await googleSignIn(response.credential);
-              const next = {
-                token: result.sessionToken,
-                user: result.user,
-              };
-              writeSession(next);
-              setSignInError("");
-              render();
-            } catch (error) {
-              setSignInError(error instanceof Error ? error.message : "Sign-in failed");
-            }
-          },
-          ux_mode: "popup",
-          use_fedcm_for_button: true,
-          use_fedcm_for_prompt: true,
-          itp_support: true,
-          auto_select: false,
-          cancel_on_tap_outside: false,
+    // perf-4: gsi/client (~99 KB + a third-party TLS connection) loads on
+    // sign-in intent, not on every static page view. A plain styled button
+    // fills the slot immediately; the first click/focus loads Google
+    // Identity, swaps in the official button, and opens the prompt.
+    slot.innerHTML = '<button type="button" class="signin-intent" title="Sign in with Google" aria-label="Sign in with Google">' + usersIcon + "</button>";
+    const intentButton = slot.querySelector(".signin-intent");
+    let started = false;
+    const startGoogleSignIn = (showPrompt) => {
+      if (started) return;
+      started = true;
+      loadGoogleIdentity()
+        .then(() => {
+          if (!window.google?.accounts?.id) return;
+          window.google.accounts.id.initialize({
+            client_id: googleClientId,
+            callback: async (response) => {
+              try {
+                const result = await googleSignIn(response.credential);
+                const next = {
+                  token: result.sessionToken,
+                  user: result.user,
+                };
+                writeSession(next);
+                setSignInError("");
+                render();
+              } catch (error) {
+                setSignInError(error instanceof Error ? error.message : "Sign-in failed");
+              }
+            },
+            ux_mode: "popup",
+            use_fedcm_for_button: true,
+            use_fedcm_for_prompt: true,
+            itp_support: true,
+            auto_select: false,
+            cancel_on_tap_outside: false,
+          });
+          slot.innerHTML = "";
+          window.google.accounts.id.renderButton(slot, {
+            theme: "outline",
+            size: "medium",
+            type: "icon",
+            shape: "circle",
+          });
+          if (showPrompt && window.google.accounts.id.prompt) {
+            window.google.accounts.id.prompt();
+          }
+        })
+        .catch((error) => {
+          started = false;
+          wrap.classList.add("no-google");
+          setSignInError(error instanceof Error ? error.message : "Sign-in unavailable");
         });
-        slot.innerHTML = "";
-        window.google.accounts.id.renderButton(slot, {
-          theme: "outline",
-          size: "medium",
-          type: "icon",
-          shape: "circle",
-        });
-      })
-      .catch((error) => {
-        wrap.classList.add("no-google");
-        setSignInError(error instanceof Error ? error.message : "Sign-in unavailable");
-      });
+    };
+    if (intentButton) {
+      intentButton.addEventListener("click", () => startGoogleSignIn(true));
+      intentButton.addEventListener("focus", () => startGoogleSignIn(false), { once: true });
+    }
     if (fallback) {
       fallback.addEventListener("click", (event) => {
         const button = slot.querySelector('[role="button"], iframe, div[tabindex]');
@@ -1675,7 +1763,10 @@ function renderStaticAuthScript() {
         if (window.google?.accounts?.id?.prompt) {
           event.preventDefault();
           window.google.accounts.id.prompt();
+          return;
         }
+        event.preventDefault();
+        startGoogleSignIn(true);
       });
     }
   }
@@ -2187,7 +2278,7 @@ function replaceMetroShellCopy(html, title, description, extras = {}) {
         day: "numeric",
         timeZone: tzHub,
       });
-      const where = [event.venue, event.city || event.neighborhood]
+      const where = [displayVenue(event), event.city || event.neighborhood]
         .filter(Boolean)
         .map((part) => esc(part))
         .join(", ");
@@ -2204,6 +2295,7 @@ function replaceMetroShellCopy(html, title, description, extras = {}) {
           <p>Updated for the weekend of ${esc(hubList.rangeLabel)}.</p>
           <ul>${eventItems.join("\n          ")}</ul>
           <p><a href="${metroPath("this-weekend/")}">See the full ${esc(area)} weekend guide &rarr;</a></p>
+          ${!IS_ADULTS && keepIndexable(CATEGORY_INDEX_KEEP, metroUrl("category/library/")) && events.some((e) => e.category === "Library") ? `<p>Weekly storytimes: <a href="${metroPath("category/library/")}">the ${esc(area)} library events calendar</a>.</p>` : ""}
         </section>`
       : `<section>
           <h2>Upcoming ${A.eventsAdj}events in ${esc(area)}</h2>
@@ -2674,6 +2766,19 @@ export function matchAnnualLiveEvent(entry, events, eventSlugLookup, generatedSl
   return null;
 }
 
+// ann-1: the year the NEXT edition lands in, parsed from the entry's month
+// field ("July", "June–July", "August or September"): first month token; if
+// that month has fully passed this year, next year. Null when unparseable —
+// the caller then skips the year entirely.
+export function annualPageYear(month, now = new Date()) {
+  const MONTHS = ["january", "february", "march", "april", "may", "june", "july",
+    "august", "september", "october", "november", "december"];
+  const token = String(month || "").trim().split(/[^A-Za-z]+/)[0] || "";
+  const idx = MONTHS.indexOf(token.toLowerCase());
+  if (idx < 0) return null;
+  return idx < now.getMonth() ? now.getFullYear() + 1 : now.getFullYear();
+}
+
 function generateAnnualEventPages(distinctEvents, eventSlugLookup, eventSlugs) {
   if (IS_ADULTS) return 0;
   const entries = ANNUAL_EVENTS[activeMetro.id] || [];
@@ -2682,14 +2787,18 @@ function generateAnnualEventPages(distinctEvents, eventSlugLookup, eventSlugs) {
   const items = entries.map((entry) => ({
     entry,
     live: matchAnnualLiveEvent(entry, distinctEvents, eventSlugLookup, eventSlugs),
+    // ann-1: '{event} {year}' is the proven query pattern (2,912 impr/90d on
+    // this property vs zero for "annual guide"); the year rolls each build.
+    year: annualPageYear(entry.month),
   }));
 
-  for (const { entry, live } of items) {
+  for (const { entry, live, year } of items) {
     const canonical = metroUrl(`annual/${entry.slug}/`);
-    const title = `${entry.title} — annual guide, ${entry.city} | ${BRAND}`;
-    const description = `${entry.title} in ${entry.city}: what it is, when it usually happens (${entry.month}), and this year's dates when announced.`;
+    const yearedName = year ? `${entry.title} ${year}` : entry.title;
+    const title = `${yearedName} — dates & family guide, ${entry.city} | ${BRAND}`;
+    const description = `When is ${yearedName}? Usually held ${entry.month} at ${entry.venue}, ${entry.city} — what it is, typical dates, and this year's schedule when announced.`;
     const liveHtml = live
-      ? `<p class="cta-row"><a class="cta" href="${metroPath(`event/${live.slug}/`)}">This year's event: ${esc(live.event.title)} &rarr;</a></p>`
+      ? `<p class="cta-row"><a class="cta" href="${metroPath(`event/${live.slug}/`)}">This year's event: ${esc(displayEventTitle(live.event))} &rarr;</a></p>`
       : `<p>Dates for the next edition are usually announced closer to ${esc(entry.month)}. Until then, <a href="${metroPath("this-weekend/")}">see what's on this weekend in ${esc(metroLabel())}</a>.</p>`;
     // link-3: cross-link the OTHER annual traditions in-metro (2-15 entries,
     // so a readable "other traditions this year" list, not a farm), keeping
@@ -2699,14 +2808,29 @@ function generateAnnualEventPages(distinctEvents, eventSlugLookup, eventSlugs) {
       .filter((s) => s.entry.slug !== entry.slug)
       .map((s) => `<a href="${metroPath(`annual/${s.entry.slug}/`)}">${esc(s.entry.title)} (${esc(s.entry.month)})</a>`)
       .join("\n        ");
+    // ann-3: Event JSON-LD ONLY when this year's edition is live in the
+    // dataset with real announced dates (startDate is required — guessing
+    // dates violates structured-data policy; aggregateRating stays banned).
+    // Derived via buildEventJsonLd so location carries a full PostalAddress.
+    // Tradeoff (accepted): the live /event/ page carries the same Event
+    // markup, so Google may dedupe — the annual URL is the one meant to
+    // persist.
+    const jsonLd = live ? buildEventJsonLd(live.event, canonical) : null;
+    // ann-2: optional curated fields (typicalDates, cost, whatToExpect,
+    // officialUrl) render only when present — entries without verified
+    // official-source data simply omit them.
     const body = `
       <p class="lede">${esc(entry.description)}</p>
       <dl class="meta-grid">
         <div><dt>Usually held</dt><dd>${esc(entry.month)}, every year</dd></div>
+        ${entry.typicalDates ? `<div><dt>Typical dates</dt><dd>${esc(entry.typicalDates)}</dd></div>` : ""}
+        ${entry.cost ? `<div><dt>Cost</dt><dd>${esc(entry.cost)}</dd></div>` : ""}
         <div><dt>Where</dt><dd>${esc(entry.venue)}, ${esc(entry.city)}</dd></div>
       </dl>
+      ${entry.whatToExpect ? `<section class="annual-expect"><h2>What to expect</h2><p>${esc(entry.whatToExpect)}</p></section>` : ""}
       ${liveHtml}
-      ${IS_ADULTS ? "" : renderShareBar(canonical, `${entry.title} — ${entry.city} annual guide`, null)}
+      ${entry.officialUrl ? `<p class="see-also"><a rel="noopener" href="${esc(entry.officialUrl)}">Official site &rarr;</a></p>` : ""}
+      ${IS_ADULTS ? "" : renderShareBar(canonical, `${yearedName} — ${entry.city} family guide`, null)}
       <nav class="see-also" aria-label="More annual traditions">
         <a href="${metroPath("annual/")}">All annual events in ${esc(metroLabel())}</a>${siblingLinks ? `\n        ${siblingLinks}` : ""}
       </nav>
@@ -2716,12 +2840,13 @@ function generateAnnualEventPages(distinctEvents, eventSlugLookup, eventSlugs) {
       description,
       canonical,
       ogImage: OG_IMAGE,
+      jsonLd,
       breadcrumb: [
         { name: BRAND, url: metroUrl("") },
         { name: "Annual events", url: metroUrl("annual/") },
-        { name: entry.title, url: canonical },
+        { name: yearedName, url: canonical },
       ],
-      h1: entry.title,
+      h1: yearedName,
       eyebrow: `${esc(entry.city)} · every ${esc(entry.month)}`,
       body,
     });
@@ -2738,7 +2863,7 @@ function generateAnnualEventPages(distinctEvents, eventSlugLookup, eventSlugs) {
   const hubBody = `
     <p class="lede">The ${esc(metroLabel())} events that come back every year — fairs, festivals, parades, and traditions worth planning around. Each guide links to this year's dates as soon as they're announced.</p>
     <ul>${items
-      .map(({ entry }) => `<li><a href="${metroPath(`annual/${entry.slug}/`)}">${esc(entry.title)}</a> — ${esc(entry.city)}, every ${esc(entry.month)}</li>`)
+      .map(({ entry, year }) => `<li><a href="${metroPath(`annual/${entry.slug}/`)}">${esc(year ? `${entry.title} ${year}` : entry.title)}</a> — ${esc(entry.city)}, every ${esc(entry.month)}</li>`)
       .join("")}</ul>
   `;
   const hubHtml = renderShell({
@@ -2800,7 +2925,9 @@ function generateEvergreenEventPages(distinctEvents, eventSlugLookup, eventSlugs
       </dl>
       ${isAnnual
         ? `<p>${esc(entry.title)} usually returns every ${esc(entry.month)}; this page updates when next year's dates are announced.</p>`
-        : `<p>The organizer has not announced whether ${esc(entry.title)} will return. This page stays up as a record of the event.</p>`}
+        : entry.recurrence === "recurring"
+          ? `<p>${esc(entry.title)} is a recurring ${esc(entry.venue || metroLabel())} program; this page links the next session whenever one is on the calendar.</p>`
+          : `<p>The organizer has not announced whether ${esc(entry.title)} will return. This page stays up as a record of the event.</p>`}
       ${liveHtml}
       <p class="see-also">In the meantime: <a href="${metroPath("this-weekend/")}">what's on this weekend in ${esc(metroLabel())}</a>${entry.annualSlug ? `, the <a href="${metroPath(`annual/${entry.annualSlug}/`)}">${esc(entry.title)} annual guide</a>` : ""}, all <a href="${metroPath("annual/")}">${esc(metroLabel())} annual events</a>, or the <a href="${metroPath("")}">${esc(metroLabel())} family weekend planner</a>.</p>
     `;
@@ -2837,7 +2964,7 @@ function renderRelatedEvents(event, upcomingSorted, eventSlugLookup) {
     .map((e) => {
       const slug = eventSlugLookup.get(e);
       const when = formatEventDate(e);
-      return `<li><a href="${metroPath(`event/${slug}/`)}">${esc(e.title)}</a>${when ? ` — ${esc(when)}` : ""}</li>`;
+      return `<li><a href="${metroPath(`event/${slug}/`)}">${esc(displayEventTitle(e))}</a>${when ? ` — ${esc(when)}` : ""}</li>`;
     })
     .join("");
   return `<section class="event-related">
@@ -2861,6 +2988,15 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
       return true;
     })
     .sort((a, b) => (a.startDateTime || "").localeCompare(b.startDateTime || ""));
+  // evt-1: frequency of each title stem in this metro. When a stem is shared
+  // (3x "Family Story Time"), the venue disambiguates <title>/og:title and
+  // the eyebrow so the pages stop reading as exact duplicates. Slugs/URLs
+  // never change.
+  const titleFreq = new Map();
+  for (const ev of items) {
+    const key = String(ev.title || "").trim().toLowerCase();
+    if (key) titleFreq.set(key, (titleFreq.get(key) || 0) + 1);
+  }
   for (const event of items) {
     const candidate = eventSlugLookup.get(event);
     if (!candidate) continue;
@@ -2888,15 +3024,37 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
     // pages get (kids only; the map is empty on the adults build).
     const annualEntry = annualByEventSlug ? annualByEventSlug.get(candidate) || null : null;
     const dateStr = formatEventDate(event);
-    const title = `${event.title} — ${cityName}${dateStr ? `, ${dateStr}` : ""} | ${BRAND}`;
+    // gap-5: junk time/date-as-title events render a venue+category display
+    // title everywhere (title, H1, JSON-LD name) — the slug stays untouched.
+    const displayTitle = displayEventTitle(event);
+    const titleKey = String(event.title || "").trim().toLowerCase();
+    const cleanVenue = displayVenue(event);
+    // evt-1: venue qualifies the <title> when the title stem is ambiguous in
+    // this metro and doesn't already contain the venue.
+    const venueForTitle =
+      cleanVenue &&
+      (titleFreq.get(titleKey) || 0) > 1 &&
+      !displayTitle.toLowerCase().includes(cleanVenue.toLowerCase())
+        ? cleanVenue
+        : "";
+    const title = `${displayTitle}${venueForTitle ? ` at ${venueForTitle}` : ""} — ${cityName}${dateStr ? `, ${dateStr}` : ""} | ${BRAND}`;
     const description = buildEventDescription(event, dateStr);
 
     const detailRows = buildEventDetailRows(event, dateStr);
     const runDays = eventRunDays(event);
 
+    // evt-2: the lede is a short factual line; the FULL cleaned feed
+    // description (feeds cap at 360 chars) renders as its own paragraph
+    // after the meta-grid instead of being discarded for the meta string.
+    const factsLede = buildEventFacts(event, dateStr);
+    const bodyDesc = eventBodyDescription(event, dateStr);
+    const bodyDescHtml =
+      bodyDesc && bodyDesc !== factsLede ? `<p class="event-desc">${esc(bodyDesc)}</p>` : "";
+
     const body = `
-      <p class="lede">${esc(description)}</p>
+      <p class="lede">${esc(factsLede)}</p>
       ${detailRows.length ? `<dl class="meta-grid">${detailRows.map((r) => `<div><dt>${esc(r.label)}</dt><dd>${r.html}</dd></div>`).join("")}</dl>` : ""}
+      ${bodyDescHtml}
       ${
         runDays.length > 1
           ? `<section class="event-dates"><h2>All dates</h2><ul>${runDays
@@ -2928,10 +3086,11 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
       breadcrumb: [
         { name: BRAND, url: metroUrl("") },
         showCityLink ? { name: cityName, url: metroUrl(`city/${citySlug}/`) } : null,
-        { name: event.title, url: canonical },
+        { name: displayTitle, url: canonical },
       ].filter(Boolean),
-      h1: event.title,
-      eyebrow: `${esc(cityName)}${dateStr ? ` · ${esc(dateStr)}` : ""}`,
+      h1: displayTitle,
+      // evt-1: ambiguous-title pages carry the venue in the eyebrow too.
+      eyebrow: `${venueForTitle ? `${esc(venueForTitle)} · ` : ""}${esc(cityName)}${dateStr ? ` · ${esc(dateStr)}` : ""}`,
       body,
     });
 
@@ -3183,23 +3342,159 @@ function writeEndedEventStub(
   writeMetroPage(`event/${slug}/index.html`, html);
 }
 
-function buildEventDescription(event, dateStr) {
-  const where = event.venue || event.city || metroLabel();
+// junk-6: display-time venue de-sourcing. Calendar scrapes leak source-page
+// chrome into venue names ("Children's Museum of Atlanta Events"). Strip the
+// trailing calendar word only when a real multi-word venue remains ("Special
+// Events" stays). Display-time ONLY — ADR-04 slug = slugify(title + venue),
+// so cleaning the venue at ingest would churn ~1,147 URLs.
+export function displayVenue(eventOrVenue) {
+  const venue =
+    typeof eventOrVenue === "string"
+      ? eventOrVenue.trim()
+      : String(eventOrVenue?.venue || "").trim();
+  if (!venue) return "";
+  const stripped = venue
+    .replace(/\s+(Program Calendar|Events Calendar|Event Calendar|Events|Calendar)$/i, "")
+    .trim();
+  if (stripped === venue) return venue;
+  return stripped.split(/\s+/).length >= 2 ? stripped : venue;
+}
+
+// gap-5/wkd-3: junk-title guard shared by event pages, weekend timelines, and
+// JSON-LD names. Matches titles that are really presentation chrome: a
+// leading clock time ("10 a.m. – 5 p.m."), bare numbers/ranges, or a bare
+// date. URLs/slugs never change — only rendered text.
+const JUNK_TITLE_MONTHS =
+  "january|february|march|april|may|june|july|august|september|october|november|december";
+export function isJunkEventTitle(title) {
+  const t = String(title || "").trim();
+  if (!t) return true;
+  if (/^\d{1,2}(:\d{2})?\s*(a\.?m\.?|p\.?m\.?)([^a-z]|$)/i.test(t)) return true;
+  if (/^[\d\s:.–—-]+$/.test(t)) return true;
+  if (
+    new RegExp(
+      `^(${JUNK_TITLE_MONTHS})\\s+\\d{1,2}(st|nd|rd|th)?(,\\s*\\d{4})?$`,
+      "i",
+    ).test(t)
+  ) {
+    return true;
+  }
+  return false;
+}
+
+// Display title: junk time/date-as-title events render as
+// "{venue} — {category} day" (same substitute the hub guard family uses)
+// in <title>, H1, timeline cards, and JSON-LD name.
+export function displayEventTitle(event) {
+  const title = decodeHtmlEntities(String(event?.title || "")).trim();
+  if (!isJunkEventTitle(title)) return title;
+  const venue = displayVenue(event) || event?.city || metroLabel();
+  return `${venue} — ${event?.category || "Family"} day`;
+}
+
+// evt-2/gap-5: the FULL cleaned feed description for the page body and
+// JSON-LD. Decodes residual entities, strips a leading restatement of the
+// title (exact prefix match), and repairs hard-truncated copy by trimming to
+// the last sentence boundary (word-boundary cut with an ellipsis when no
+// usable boundary exists).
+export function cleanEventBodyText(event) {
+  let desc = decodeHtmlEntities(String(event?.description || ""))
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!desc) return "";
+  const title = decodeHtmlEntities(String(event?.title || "")).replace(/\s+/g, " ").trim();
+  if (title && desc.toLowerCase().startsWith(title.toLowerCase())) {
+    desc = desc.slice(title.length).replace(/^[\s:;,.–—•|-]+/, "");
+  }
+  // Feed copy is capped at 360 chars at ingest. Copy that runs near the cap
+  // without terminal punctuation was cut mid-clause.
+  if (desc.length >= 340 && !/[.!?…]["')\]]?$/.test(desc)) {
+    const lastStop = Math.max(
+      desc.lastIndexOf(". "),
+      desc.lastIndexOf("! "),
+      desc.lastIndexOf("? "),
+    );
+    if (lastStop >= desc.length * 0.4) {
+      desc = desc.slice(0, lastStop + 1);
+    } else {
+      desc = truncateAtBoundary(desc, desc.length - 1);
+    }
+  }
+  return desc;
+}
+
+// The structured factual line (title + date + venue + category + cost +
+// ages): the meta-description lead, and the whole body/JSON-LD description
+// when the feed copy is empty, one-word, or per-source boilerplate.
+function buildEventFacts(event, dateStr) {
+  const where = displayVenue(event) || event.city || metroLabel();
   const when = dateStr ? ` on ${dateStr}` : "";
   const cat = event.category ? ` (${event.category})` : "";
   const cost = event.cost && event.cost !== "Unknown" ? ` Cost: ${event.cost}.` : "";
   const ages = !IS_ADULTS && Array.isArray(event.ageBands) && event.ageBands.length
     ? ` Best for: ${event.ageBands.join(", ")}.`
     : "";
-  const desc = (event.description || "").replace(/\s+/g, " ").trim();
-  const trimmedDesc = desc.length > 160 ? desc.slice(0, 160) + "…" : desc;
-  return `${event.title}${when} at ${where}${cat}.${cost}${ages} ${trimmedDesc}`.trim().slice(0, 300);
+  return `${displayEventTitle(event)}${when} at ${where}${cat}.${cost}${ages}`.trim();
+}
+
+// junk-7: per-source boilerplate detection — a description shared verbatim by
+// >= 4 distinct titles within one source is source chrome, not event copy.
+// Returns the Set of "sourceId|normalized-desc" keys to suppress.
+export function buildBoilerplateDescriptionKeys(events) {
+  const groups = new Map();
+  for (const e of events || []) {
+    const desc = String(e?.description || "").replace(/\s+/g, " ").trim().toLowerCase();
+    if (!desc) continue;
+    const key = `${String(e?.sourceId || "")}|${desc}`;
+    if (!groups.has(key)) groups.set(key, new Set());
+    groups.get(key).add(String(e?.title || "").trim().toLowerCase());
+  }
+  const keys = new Set();
+  for (const [key, titles] of groups) {
+    if (titles.size >= 4) keys.add(key);
+  }
+  return keys;
+}
+
+// Per-metro boilerplate keys, set in main() before page generation so every
+// buildEventJsonLd call site (event pages, weekend ItemLists) shares them.
+let activeBoilerplateKeys = new Set();
+function setActiveBoilerplateKeys(keys) {
+  activeBoilerplateKeys = keys || new Set();
+}
+
+function eventDescriptionIsBoilerplate(event) {
+  const desc = String(event?.description || "").replace(/\s+/g, " ").trim().toLowerCase();
+  if (!desc) return false;
+  return activeBoilerplateKeys.has(`${String(event?.sourceId || "")}|${desc}`);
+}
+
+// The body/JSON-LD description: full cleaned feed copy, or the structured
+// factual line when there is no usable unique copy (empty, one word, or
+// per-source boilerplate).
+export function eventBodyDescription(event, dateStr) {
+  const cleaned = cleanEventBodyText(event);
+  const words = cleaned ? cleaned.split(/\s+/).length : 0;
+  if (!cleaned || words <= 1 || eventDescriptionIsBoilerplate(event)) {
+    return buildEventFacts(event, dateStr);
+  }
+  return cleaned;
+}
+
+// Meta description (and og/twitter description via renderShell): keeps the
+// title+venue+date lead for uniqueness (currently 0 duplicate metas), then a
+// ~160-char word-boundary excerpt of the cleaned copy; 300-char boundary cap.
+function buildEventDescription(event, dateStr) {
+  const facts = buildEventFacts(event, dateStr);
+  const cleaned = eventDescriptionIsBoilerplate(event) ? "" : cleanEventBodyText(event);
+  const excerpt = truncateAtBoundary(cleaned, 160);
+  return truncateAtBoundary(`${facts} ${excerpt}`.trim(), 300);
 }
 
 function buildEventDetailRows(event, dateStr) {
   const rows = [];
   if (dateStr) rows.push({ label: "When", html: esc(dateStr) });
-  if (event.venue) rows.push({ label: "Venue", html: esc(event.venue) });
+  if (event.venue) rows.push({ label: "Venue", html: esc(displayVenue(event)) });
   if (event.city) rows.push({ label: "City", html: esc(event.city) });
   if (event.category) rows.push({ label: "Category", html: esc(event.category) });
   if (event.cost && event.cost !== "Unknown") rows.push({ label: "Cost", html: esc(event.cost) });
@@ -3215,18 +3510,23 @@ function buildEventDetailRows(event, dateStr) {
   return rows;
 }
 
-function buildEventJsonLd(event, canonical) {
+export function buildEventJsonLd(event, canonical) {
   if (!event.startDateTime) return null;
 
   const free = eventLikelyFree(event);
+  // evt-5: title-only online-event flag (descriptions say "zoom" in kids
+  // program copy too often — do not widen the match).
+  const isOnline = /\bzoom\b/i.test(String(event.title || ""));
   const node = {
     "@context": "https://schema.org",
     "@type": "Event",
     "@id": `${canonical}#event`,
-    name: event.title,
+    name: displayEventTitle(event),
     url: canonical,
-    description: buildEventDescription(event, formatEventDate(event)),
-    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    description: eventBodyDescription(event, formatEventDate(event)),
+    eventAttendanceMode: isOnline
+      ? "https://schema.org/OnlineEventAttendanceMode"
+      : "https://schema.org/OfflineEventAttendanceMode",
     eventStatus: "https://schema.org/EventScheduled",
     startDate: event.startDateTime,
     // AEO/trust: when this listing was last verified against its source
@@ -3241,13 +3541,20 @@ function buildEventJsonLd(event, canonical) {
   // using the representative's own endDateTime would expire the page on day one.
   const endDate = event.occurrenceEnd || event.endDateTime;
   if (endDate) node.endDate = endDate;
+  // evt-5: `image` only when the event has a real image. The old fallback
+  // stamped the identical sitewide og-image.png on every Event node, which
+  // Google's event structured-data guidelines say to avoid (og:image/
+  // twitter:image in renderShell stay — that usage is correct).
   if (event.imageUrl) {
     node.image = event.imageUrl;
-  } else {
-    node.image = OG_IMAGE;
   }
-  const venue = event.venue || event.city;
-  if (venue) {
+  const venue = displayVenue(event) || event.city;
+  if (isOnline) {
+    node.location = {
+      "@type": "VirtualLocation",
+      url: event.url || event.sourceUrl || canonical,
+    };
+  } else if (venue) {
     node.location = {
       "@type": "Place",
       name: venue,
@@ -3850,21 +4157,71 @@ function generateCategoryPages(spotItems, eventItems, spotSlugLookup, eventSlugL
         return (b.friendScore || 0) - (a.friendScore || 0);
       })
       .slice(0, 30);
-    const matchingEvents = eventItems
+    const allMatchingEvents = eventItems
       .filter((e) => cat.eventMatch(e))
-      .sort((a, b) => (a.startDateTime || "").localeCompare(b.startDateTime || ""))
-      .slice(0, 40);
+      .sort((a, b) => (a.startDateTime || "").localeCompare(b.startDateTime || ""));
+    const matchingEvents = allMatchingEvents.slice(0, 40);
 
     if (matchingSpots.length + matchingEvents.length === 0) continue;
 
     const canonical = metroUrl(`category/${cat.slug}/`);
     // High-intent, rating-led title ("best bars in {metro}" queries).
-    const pageName = `Best ${cat.label.toLowerCase()} in ${metroLabel()}`;
-    const description =
+    let pageName = `Best ${cat.label.toLowerCase()} in ${metroLabel()}`;
+    // Year in the <title> only (not the H1/JSON-LD name) for SERP freshness.
+    let pageTitle = `${pageName} (${new Date().getUTCFullYear()}) — ${BRAND}`;
+    let description =
       `${metroText(cat.blurb)} Browse ${matchingSpots.length} ${A.friendlyAdj}spots and ${matchingEvents.length} upcoming events on ${BRAND}.`.slice(
         0,
         300,
       );
+    let branchSectionHtml = "";
+    if (!IS_ADULTS && cat.slug === "library" && allMatchingEvents.length) {
+      // gap-1: the queries this page can win are system-navigational
+      // ("seattle public library events calendar"), so lead the title/H1 with
+      // the real library systems feeding this metro's Library category —
+      // derived from sourceName so we never claim a system not in the feed.
+      const systemOf = (s) =>
+        String(s || "")
+          .replace(/\s*[-–—]\s*(Youth and Family|Family Programs)$/i, "")
+          .replace(/\s+(Story Time Calendar|Family Storytimes|Family Programs|Events Calendar|Event Calendar|Events|Calendar)$/i, "")
+          .replace(/^The\s+/i, "")
+          .trim();
+      const systems = topCountLabels(countBy(allMatchingEvents, (e) => systemOf(e.sourceName)), 2)
+        .map((entry) => entry.label)
+        .filter(Boolean);
+      if (systems.length) {
+        pageName = `${systems.join(" & ")} events and storytimes`;
+        pageTitle = `${pageName} — weekly calendar | ${BRAND}`;
+        description = `${systems.join(" and ")} events for kids in ${metroLabel()}: storytimes, maker programs, and free family events from the official library calendars, grouped by branch and refreshed weekly. Browse ${allMatchingEvents.length} upcoming library events on ${BRAND}.`.slice(0, 300);
+      }
+      // Storytimes by branch: live Library-category events grouped by venue
+      // (branch), each linking to its event page when one was generated.
+      const byBranch = new Map();
+      for (const e of allMatchingEvents) {
+        const branch = displayVenue(e);
+        if (!branch) continue;
+        if (!byBranch.has(branch)) byBranch.set(branch, []);
+        byBranch.get(branch).push(e);
+      }
+      const branches = [...byBranch.entries()]
+        .sort((a, b) => b[1].length - a[1].length || String(a[0]).localeCompare(String(b[0])))
+        .slice(0, 12);
+      if (branches.length) {
+        branchSectionHtml = `<section class="library-branches"><h2>Storytimes by branch</h2>${branches
+          .map(([branch, evs]) => {
+            const rows = evs.slice(0, 5).map((e) => {
+              const eslug = eventSlugLookup.get(e);
+              const dateStr = formatEventDate(e);
+              const label = `${esc(displayEventTitle(e))}${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}`;
+              return eslug && eventSlugs.has(eslug)
+                ? `<li><a href="${metroPath(`event/${eslug}/`)}">${label}</a></li>`
+                : `<li>${label}</li>`;
+            });
+            return `<h3>${esc(branch)}</h3><ul class="card-list">${rows.join("")}</ul>`;
+          })
+          .join("")}</section>`;
+      }
+    }
 
     const spotsList = matchingSpots.length
       ? `<section><h2>Top-rated ${esc(cat.label.toLowerCase())}</h2><ul class="card-list">${matchingSpots
@@ -3886,9 +4243,9 @@ function generateCategoryPages(spotItems, eventItems, spotSlugLookup, eventSlugL
             if (!eslug) return "";
             const dateStr = formatEventDate(e);
             if (!eventSlugs.has(eslug)) {
-              return `<li><strong>${esc(e.title)}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}</li>`;
+              return `<li><strong>${esc(displayEventTitle(e))}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}</li>`;
             }
-            return `<li><a href="${metroPath(`event/${eslug}/`)}"><strong>${esc(e.title)}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}</a>${e.venue ? `<p>${esc(e.venue)}${e.city ? `, ${esc(e.city)}` : ""}${e.cost && e.cost !== "Unknown" ? ` · ${esc(e.cost)}` : ""}</p>` : ""}</li>`;
+            return `<li><a href="${metroPath(`event/${eslug}/`)}"><strong>${esc(displayEventTitle(e))}</strong>${dateStr ? `<span> · ${esc(dateStr)}</span>` : ""}</a>${e.venue ? `<p>${esc(displayVenue(e))}${e.city ? `, ${esc(e.city)}` : ""}${e.cost && e.cost !== "Unknown" ? ` · ${esc(e.cost)}` : ""}</p>` : ""}</li>`;
           })
           .join("")}</ul></section>`
       : "";
@@ -3897,6 +4254,7 @@ function generateCategoryPages(spotItems, eventItems, spotSlugLookup, eventSlugL
       <p class="lede">${esc(description)}</p>
       <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a day with ${BRAND}</a> <a class="cta-secondary" href="${metroPath("this-weekend/")}">Weekend guide</a></p>
       ${eventsList}
+      ${branchSectionHtml}
       ${spotsList}
     `;
 
@@ -3915,8 +4273,7 @@ function generateCategoryPages(spotItems, eventItems, spotSlugLookup, eventSlugL
     };
 
     const html = renderShell({
-      // Year in the <title> only (not the H1/JSON-LD name) for SERP freshness.
-      title: `${pageName} (${new Date().getUTCFullYear()}) — ${BRAND}`,
+      title: pageTitle,
       description,
       canonical,
       ogImage: OG_IMAGE,
@@ -4079,21 +4436,73 @@ function generateCityCategoryPages(spotItems, eventItems, spotSlugLookup, eventS
 // This weekend
 // ---------------------------------------------------------------------------
 
+// wkd-3: repeat same-day sessions ("Play and Explore" at 9:00/9:30/10:00)
+// roll up to ONE timeline card and ONE ItemList row. Group key: title with
+// any leading time-range chrome stripped + venue + local day. The earliest
+// session is the representative (sessions arrive start-sorted); the extra
+// session start times render on its card. Same-day sessions already share
+// one slug via dedupeEventOccurrences, so the card links cleanly.
+const LEADING_SESSION_TIME_RE =
+  /^\s*\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)?\s*[–—-]\s*\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)?\s+/i;
+export function rollupWeekendSessions(events, timeZone) {
+  const groups = new Map();
+  const order = [];
+  for (const e of events || []) {
+    const dayKey = e.startDateTime ? zonedDateKey(new Date(e.startDateTime), timeZone) : "tba";
+    const titleKey = String(e.title || "").replace(LEADING_SESSION_TIME_RE, "").trim().toLowerCase();
+    const key = `${titleKey}|${String(e.venue || "").trim().toLowerCase()}|${dayKey}`;
+    if (!groups.has(key)) {
+      groups.set(key, [e]);
+      order.push(key);
+    } else {
+      groups.get(key).push(e);
+    }
+  }
+  return order.map((key) => {
+    const sessions = groups.get(key);
+    if (sessions.length > 1) {
+      // Annotate the representative in place: eventLookup maps are keyed by
+      // object identity, so a copy would lose its slug (and internal link).
+      sessions[0].sessionStarts = sessions.map((s) => s.startDateTime).filter(Boolean);
+    }
+    return sessions[0];
+  });
+}
+
+function formatSessionTimes(starts, locale = "en") {
+  const times = [];
+  const seen = new Set();
+  for (const start of starts || []) {
+    const t = formatEventTime({ startDateTime: start }, locale);
+    if (t && !seen.has(t)) {
+      seen.add(t);
+      times.push(t);
+    }
+  }
+  if (times.length <= 1) return times[0] || "";
+  return `${times.slice(0, -1).join(", ")} & ${times[times.length - 1]}`;
+}
+
 function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
   const lookup = eventSlugLookup || buildEventSlugLookup(eventItems);
   const now = new Date();
-  const weekend = getWeekendDateKeys(now, activeMetro.timezone);
+  // wkd-2: Fri–Sun window (+59% event coverage vs Sat+Sun, matching every
+  // ranking competitor's format).
+  const weekend = getWeekendDateKeys(now, activeMetro.timezone, { includeFriday: true });
 
-  const upcoming = eventItems
-    .filter((e) => {
-      if (!e.startDateTime) return false;
-      const d = new Date(e.startDateTime);
-      if (!Number.isFinite(d.getTime())) return false;
-      return weekend.keys.has(zonedDateKey(d, activeMetro.timezone));
-    })
-    .sort((a, b) =>
-      (a.startDateTime || "").localeCompare(b.startDateTime || ""),
-    );
+  const upcoming = rollupWeekendSessions(
+    eventItems
+      .filter((e) => {
+        if (!e.startDateTime) return false;
+        const d = new Date(e.startDateTime);
+        if (!Number.isFinite(d.getTime())) return false;
+        return weekend.keys.has(zonedDateKey(d, activeMetro.timezone));
+      })
+      .sort((a, b) =>
+        (a.startDateTime || "").localeCompare(b.startDateTime || ""),
+      ),
+    activeMetro.timezone,
+  );
 
   // Query-shaped, high-intent guide titles ("things to do ... this weekend").
   const guideH1 = weekendGuideTitle(metroLabel(), IS_ADULTS);
@@ -4164,7 +4573,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
   }
 
   const canonical = metroUrl("this-weekend/");
-  const weekendLabel = weekend.saturday.toLocaleDateString("en-US", {
+  const weekendLabel = weekend.friday.toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",
     day: "numeric",
@@ -4176,7 +4585,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     day: "numeric",
     timeZone: activeMetro.timezone || "America/Los_Angeles",
   });
-  const rangeLabel = formatWeekendRange(weekend.saturday, weekend.sunday, activeMetro.timezone);
+  const rangeLabel = formatWeekendRange(weekend.friday, weekend.sunday, activeMetro.timezone);
   // The pages that own this SERP (Mommy Poppins, New York Family, Bay Area
   // Kid Fun) all lead the headline with this weekend's NAMED marquee events,
   // refreshed weekly. Surface our top headliners into the title/description;
@@ -4226,8 +4635,15 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
   const freeCount = upcoming.filter(eventLikelyFree).length;
   const planPresets = buildWeekendPlanPresets(upcoming, lookup);
   const editorialBuckets = buildWeekendEditorialBuckets(upcoming, lookup);
-  const daySections = [weekend.saturdayKey, weekend.sundayKey]
-    .map((dayKey) => renderWeekendDaySection(dayKey, byDay.get(dayKey) || [], lookup))
+  // wkd-2: on Sat/Sun builds, days already behind us render with an
+  // "already happened" note (deterministic rule: dayKey < today's local
+  // date key) — Sunday builds keep showing Sunday.
+  const daySections = [weekend.fridayKey, weekend.saturdayKey, weekend.sundayKey]
+    .map((dayKey) =>
+      renderWeekendDaySection(dayKey, byDay.get(dayKey) || [], lookup, "en", {
+        past: dayKey < weekend.todayKey,
+      }),
+    )
     .filter(Boolean);
   const generatedLabel = now.toLocaleDateString("en-US", {
     month: "long",
@@ -4256,7 +4672,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
   // torn down 2026-07-27): a short conversational paragraph naming this
   // weekend's marquee events with their day and city, ahead of the stats.
   const tzIntro = activeMetro.timezone || "America/Los_Angeles";
-  const introPicks = IS_ADULTS ? [] : headliners.filter(nameworthy).map((e) => {
+  const introPicks = IS_ADULTS ? [] : headliners.filter(nameworthy).filter((e) => !isJunkEventTitle(e.title)).map((e) => {
     const name = cleanEventName(e);
     const day = e.startDateTime
       ? new Date(e.startDateTime).toLocaleDateString("en-US", { weekday: "long", timeZone: tzIntro })
@@ -4264,13 +4680,24 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     const where = e.city || e.neighborhood || "";
     return { name, day, where, slug: lookup.get(e) };
   }).filter((p) => p.slug && p.name.length >= 8 && p.name.length <= 60 && p.name.includes(" ")).slice(0, 4);
+  // wkd-6: metros with no nameworthy headliners still get unique intro prose,
+  // built from data already computed (counts, categories, busiest venues).
+  // "family entertainment" appears only for the metros where GSC shows that
+  // phrasing, one natural mention, no stuffing.
+  const FAMILY_ENTERTAINMENT_METROS = new Set(["phoenix", "honolulu", "bay-area"]);
+  const topVenues = topCountLabels(countBy(upcoming, (e) => displayVenue(e)), 2)
+    .map((v) => v.label)
+    .filter(Boolean);
+  const fallbackIntroHtml = IS_ADULTS
+    ? ""
+    : `<p class="wg-intro">The weekend of ${esc(rangeLabel)} has ${upcoming.length} family events on across ${cityCounts.size} ${esc(metroLabel())} ${cityCounts.size === 1 ? "city" : "cities"}${topCategories.length ? `, led by ${esc(topCategories.slice(0, 2).map((c) => c.label.toLowerCase()).join(" and "))} programs` : ""}.${topVenues.length >= 2 ? ` The busiest calendars are at ${esc(topVenues[0])} and ${esc(topVenues[1])}.` : ""}${FAMILY_ENTERTAINMENT_METROS.has(activeMetro.id) ? ` It's an easy scan of the weekend's family entertainment: every listing below comes from the organizer's own calendar, and the free ones are marked.` : ` Every listing below comes from the organizer's own calendar, with times, venues, and official links — and the free ones are marked.`}</p>`;
   const introHtml = introPicks.length >= 1
     ? `<p class="wg-intro">The weekend of ${esc(rangeLabel)} brings ${introPicks.slice(0, 2).map((p) =>
         `<a href="${metroPath(`event/${p.slug}/`)}">${esc(p.name)}</a>${p.where ? ` in ${esc(p.where)}` : ""}${p.day ? ` (${esc(p.day)})` : ""}`,
       ).join(" and ")}${introPicks.length > 2 ? `, plus ${introPicks.slice(2).map((p) =>
         `<a href="${metroPath(`event/${p.slug}/`)}">${esc(p.name)}</a>`,
       ).join(" and ")}` : ""}. Every listing below comes from the organizer's own calendar, with times, venues, and official links — and the free ones are marked.</p>`
-    : "";
+    : fallbackIntroHtml;
 
   // Evergreen cross-links: the weekend guide is the most-visited prerendered
   // page, so let it feed crawl discovery of the metro's annual pages the same
@@ -4336,12 +4763,21 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     ? `<section class="wg-by-city" aria-label="By city">
       <h2>This weekend by city</h2>
       <nav class="wg-city-links" aria-label="By city">${weekendCities.map((c) =>
-        `<a href="${metroPath(`this-weekend/${c.slug}/`)}">${esc(c.name)} (${c.count} events)</a>`,
+        `<a href="${metroPath(`this-weekend/${c.slug}/`)}">${esc(c.name)} (${c.count} event${c.count === 1 ? "" : "s"})</a>`,
       ).join("\n        ")}</nav>
     </section>`
     : "";
+  // gap-1: internal link to the indexed library category page (the library-
+  // system cluster's durable URL) from the most-crawled prerendered page.
+  const libraryLinkHtml =
+    !IS_ADULTS &&
+    keepIndexable(CATEGORY_INDEX_KEEP, metroUrl("category/library/")) &&
+    eventItems.some((e) => e.category === "Library")
+      ? `<p class="see-also">Weekly storytimes and library programs: <a href="${metroPath("category/library/")}">the ${esc(metroLabel())} library events calendar</a>.</p>`
+      : "";
   const navHtml = `<nav class="wg-nav" aria-label="Guide sections">
       ${marqueeHtml ? `<a href="#top-picks">Top picks</a>` : ""}
+      ${(byDay.get(weekend.fridayKey) || []).length ? `<a href="#day-fri">Friday</a>` : ""}
       ${(byDay.get(weekend.saturdayKey) || []).length ? `<a href="#day-sat">Saturday</a>` : ""}
       ${(byDay.get(weekend.sundayKey) || []).length ? `<a href="#day-sun">Sunday</a>` : ""}
       ${!IS_ADULTS && CITY_WEEKEND_METROS.has(activeMetro.id) && freeCount >= MIN_WEEKEND_SUB_PAGE_EVENTS ? `<a href="${metroPath("free-this-weekend/")}">Free only</a>` : ""}
@@ -4363,6 +4799,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     ${renderWeekendInterestChips(editorialBuckets, freeCount)}
     ${planPresets.length ? renderWeekendPlanPresets(planPresets) : ""}
     <section id="timeline" aria-label="Weekend event timeline">
+      <h2>${IS_ADULTS ? `Things to do in ${esc(metroLabel())} this weekend: ${esc(rangeLabel)}` : `Family events in ${esc(metroLabel())} this weekend: ${esc(rangeLabel)}`}</h2>
       <p class="eyebrow">Generated ${esc(generatedLabel)} from official event sources</p>
       ${renderWeekendFilters("en", upcoming.length)}
       ${daySections.join("")}
@@ -4372,6 +4809,7 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     ${lookAheadHtml}
     ${planAheadHtml}
     ${cityNavHtml}
+    ${libraryLinkHtml}
     ${IS_ADULTS ? "" : renderShareBar(canonical, `${guideH1} (${rangeLabel})`, posterUrl)}
     ${renderNewsletterSignup()}
     <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a 3-stop day with ${BRAND}</a></p>
@@ -4415,7 +4853,9 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
             "@type": "ListItem",
             position: index + 1,
             url: eventUrl,
-            name: event.title,
+            // wkd-3: junk time-as-title events carry the substitute display
+            // name in structured data too, not just the visible H3.
+            name: displayEventTitle(event),
           };
           // Embed the full Event object so the weekend guide is eligible for
           // Google's event rich results / "things to do" carousel, not just a
@@ -4504,7 +4944,8 @@ const MAX_CITY_WEEKEND_PAGES = 20;
 const MIN_WEEKEND_SUB_PAGE_EVENTS = 3;
 
 function weekendEventsFor(eventItems) {
-  const weekend = getWeekendDateKeys(new Date(), activeMetro.timezone);
+  // wkd-2: sub-pages share the guide's Fri–Sun window.
+  const weekend = getWeekendDateKeys(new Date(), activeMetro.timezone, { includeFriday: true });
   const upcoming = eventItems
     .filter((e) => {
       if (!e.startDateTime) return false;
@@ -4519,6 +4960,11 @@ function weekendEventsFor(eventItems) {
 // link-1: the city set that earns a /this-weekend/{city}/ page, shared
 // between the page generator below and the metro guide's "By city" nav so
 // every rendered anchor resolves to a page written in the same build.
+// wkd-1: two tiers — (a) cities meeting the >= 3-event gate today (capped at
+// MAX_CITY_WEEKEND_PAGES, as before), plus (b) hysteresis cities that
+// qualified within the last 8 weeks (uncapped, `quiet` when under the gate)
+// so ranked URLs survive a slow week instead of 404ing. Pure read — history
+// updates happen once, in generateCityWeekendPages.
 function weekendCitySelection(upcoming) {
   const byCity = new Map();
   for (const e of upcoming) {
@@ -4527,12 +4973,39 @@ function weekendCitySelection(upcoming) {
     if (!byCity.has(name)) byCity.set(name, []);
     byCity.get(name).push(e);
   }
-  return [...byCity.entries()]
+  const qualifiers = [...byCity.entries()]
     .filter(([, evs]) => evs.length >= MIN_WEEKEND_SUB_PAGE_EVENTS)
     .sort((a, b) => b[1].length - a[1].length)
     .slice(0, MAX_CITY_WEEKEND_PAGES)
-    .map(([name, evs]) => ({ name, slug: slugify(name), events: evs, count: evs.length }))
+    .map(([name, evs]) => ({
+      name,
+      slug: slugify(name),
+      events: evs,
+      count: evs.length,
+      quiet: false,
+      qualified: true,
+    }))
     .filter((c) => c.slug);
+  const selectedSlugs = new Set(qualifiers.map((c) => c.slug));
+  const hysteresis = [];
+  const now = new Date();
+  const metroHistory = cityWeekendHistoryFor(activeMetro.id);
+  for (const [slug, entry] of Object.entries(metroHistory)) {
+    if (selectedSlugs.has(slug) || !cityQualifiedRecently(entry, now)) continue;
+    const name = String(entry?.name || "").trim();
+    if (!name) continue;
+    const events = byCity.get(name) || [];
+    hysteresis.push({
+      name,
+      slug,
+      events,
+      count: events.length,
+      quiet: events.length < MIN_WEEKEND_SUB_PAGE_EVENTS,
+      qualified: false,
+    });
+  }
+  hysteresis.sort((a, b) => b.count - a.count || a.slug.localeCompare(b.slug));
+  return [...qualifiers, ...hysteresis];
 }
 
 function generateCityWeekendPages(eventItems, lookup) {
@@ -4540,15 +5013,42 @@ function generateCityWeekendPages(eventItems, lookup) {
   const { weekend, upcoming } = weekendEventsFor(eventItems);
   if (!upcoming.length) return 0;
 
+  const selection = weekendCitySelection(upcoming);
+  // wkd-1: today's full qualifiers refresh their hysteresis window; entries
+  // older than 8 weeks age out. (Runs after both selection calls — the "By
+  // city" nav in generateThisWeekendPage and this one — so both see the same
+  // pre-update history and render the identical city set.)
+  recordCityWeekendQualifiers(activeMetro.id, selection.filter((c) => c.qualified));
+
+  const now = new Date();
+  const nowIso = now.toISOString();
   let wrote = 0;
-  for (const { name, slug, events } of weekendCitySelection(upcoming)) {
+  for (const city of selection) {
+    // wkd-1: a quieter-weekend page still needs real content — the city's
+    // next 3 linkable dated events keep it from reading as a soft 404.
+    const lookAheadEvents = eventItems
+      .filter((e) => {
+        if (!e.startDateTime || e.startDateTime < nowIso) return false;
+        if (!lookup.get(e)) return false;
+        return String(e.city || e.neighborhood || "").trim() === city.name;
+      })
+      .sort((a, b) => (a.startDateTime || "").localeCompare(b.startDateTime || ""))
+      .filter((e, i, arr) => arr.findIndex((o) => lookup.get(o) === lookup.get(e)) === i)
+      .slice(0, 3);
+    const siblingCities = selection
+      .filter((c) => c.slug !== city.slug && !c.quiet)
+      .slice(0, 3);
     writeWeekendSubPage({
-      rel: `this-weekend/${slug}/`,
-      heading: weekendGuideTitle(name),
-      placeName: name,
-      events,
+      rel: `this-weekend/${city.slug}/`,
+      heading: weekendGuideTitle(city.name),
+      placeName: city.name,
+      events: city.events,
       weekend,
       lookup,
+      quiet: city.quiet,
+      lookAheadEvents,
+      siblingCities,
+      hasFreePage: upcoming.filter(eventLikelyFree).length >= MIN_WEEKEND_SUB_PAGE_EVENTS,
     });
     wrote += 1;
   }
@@ -4567,41 +5067,168 @@ function generateFreeThisWeekendPage(eventItems, lookup) {
     events: freeEvents,
     weekend,
     lookup,
+    isFree: true,
+    siblingCities: weekendCitySelection(upcoming)
+      .filter((c) => !c.quiet)
+      .slice(0, 3),
   });
   return 1;
 }
 
-function writeWeekendSubPage({ rel, heading, placeName, events, weekend, lookup }) {
+function writeWeekendSubPage({
+  rel,
+  heading,
+  placeName,
+  events,
+  weekend,
+  lookup,
+  quiet = false,
+  lookAheadEvents = [],
+  siblingCities = [],
+  isFree = false,
+  hasFreePage = false,
+}) {
   const canonical = metroUrl(rel);
-  const rangeLabel = formatWeekendRange(weekend.saturday, weekend.sunday, activeMetro.timezone);
+  const tz = activeMetro.timezone || "America/Los_Angeles";
+  const rangeLabel = formatWeekendRange(weekend.friday, weekend.sunday, activeMetro.timezone);
+  // wkd-3: repeat sessions share one card + one ItemList row here too.
+  const rolled = rollupWeekendSessions(events, activeMetro.timezone);
   const title = `${heading} (${rangeLabel}) | ${BRAND}`;
-  const freeCount = events.filter(eventLikelyFree).length;
-  const description = `${heading}: ${events.length} dated family events for ${rangeLabel}, with times, venues, costs, and official links. Updated weekly. Build a 3-stop plan with ${BRAND}.`.slice(
-    0,
-    300,
-  );
+  const freeCount = rolled.filter(eventLikelyFree).length;
+  // wkd-5 keeps the qualified pages' meta-description formula; only the
+  // quiet (hysteresis) pages describe themselves differently.
+  const description = (quiet
+    ? `A quieter weekend in ${placeName} (${rangeLabel}): ${rolled.length} dated family event${rolled.length === 1 ? "" : "s"} this time, plus what's coming up next in ${placeName} and nearby cities. Updated weekly on ${BRAND}.`
+    : `${heading}: ${rolled.length} dated family events for ${rangeLabel}, with times, venues, costs, and official links. Updated weekly. Build a 3-stop plan with ${BRAND}.`
+  ).slice(0, 300);
 
   const byDay = new Map();
-  for (const e of events) {
+  for (const e of rolled) {
     const dayKey = zonedDateKey(new Date(e.startDateTime), activeMetro.timezone);
     if (!byDay.has(dayKey)) byDay.set(dayKey, []);
     byDay.get(dayKey).push(e);
   }
-  const daySections = [weekend.saturdayKey, weekend.sundayKey]
-    .map((dayKey) => renderWeekendDaySection(dayKey, byDay.get(dayKey) || [], lookup))
+  const daySections = [weekend.fridayKey, weekend.saturdayKey, weekend.sundayKey]
+    .map((dayKey) =>
+      renderWeekendDaySection(dayKey, byDay.get(dayKey) || [], lookup, "en", {
+        past: dayKey < weekend.todayKey,
+      }),
+    )
     .filter(Boolean);
 
+  const generatedLabel = new Date().toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: tz,
+  });
+
+  // wkd-5: unique data-driven intro naming the top 2 events with day + venue
+  // (headliners first; junk time-as-title events never reach the prose).
+  const introSource = [
+    ...pickWeekendHeadliners(rolled, lookup),
+    ...rolled,
+  ];
+  const seenIntro = new Set();
+  const introPicks = [];
+  for (const e of introSource) {
+    const slug = lookup.get(e);
+    if (!slug || isJunkEventTitle(e.title) || seenIntro.has(slug)) continue;
+    seenIntro.add(slug);
+    introPicks.push({
+      name: displayEventTitle(e),
+      slug,
+      venue: displayVenue(e),
+      day: e.startDateTime
+        ? new Date(e.startDateTime).toLocaleDateString("en-US", { weekday: "long", timeZone: tz })
+        : "",
+    });
+    if (introPicks.length >= 2) break;
+  }
+  const introHtml = introPicks.length
+    ? `<p class="wg-intro">The weekend of ${esc(rangeLabel)} in ${esc(placeName)} brings ${introPicks
+        .map(
+          (p) =>
+            `<a href="${metroPath(`event/${p.slug}/`)}">${esc(p.name)}</a>${p.venue ? ` at ${esc(p.venue)}` : ""}${p.day ? ` (${esc(p.day)})` : ""}`,
+        )
+        .join(" and ")}. Every listing comes from the organizer's own calendar, with times, venues, and official links — free ones are marked.</p>`
+    : "";
+
+  // wkd-1: quieter-weekend line + the city's next linkable dated events keep
+  // a hysteresis page a real page, not a soft 404.
+  const quietHtml = quiet
+    ? `<p class="wg-quiet">It's a quieter weekend in ${esc(placeName)} — ${rolled.length ? `${rolled.length} dated family event${rolled.length === 1 ? "" : "s"} below` : "no dated family events made this weekend's cut"}. The <a href="${metroPath("this-weekend/")}">${esc(metroLabel())} weekend guide</a> has the full metro lineup, and new ${esc(placeName)} dates land here as soon as organizers publish them.</p>`
+    : "";
+  const lookAheadHtml = lookAheadEvents.length
+    ? `<section class="wg-look-ahead" aria-label="Coming up">
+      <h2>Coming up in ${esc(placeName)}</h2>
+      <ul>${lookAheadEvents
+        .map((e) => {
+          const d = e.startDateTime
+            ? new Date(e.startDateTime).toLocaleDateString("en-US", { month: "long", day: "numeric", timeZone: tz })
+            : "";
+          return `<li><a href="${metroPath(`event/${lookup.get(e)}/`)}">${esc(displayEventTitle(e))}</a>${d ? ` — ${esc(d)}` : ""}${e.venue ? ` · ${esc(displayVenue(e))}` : ""}</li>`;
+        })
+        .join("")}</ul>
+    </section>`
+    : "";
+
+  // wkd-6 (free page): named top free picks above the timeline.
+  const freePicks = isFree
+    ? [...pickWeekendHeadliners(rolled, lookup), ...rolled]
+        .filter((e, i, arr) => arr.indexOf(e) === i)
+        .filter((e) => lookup.get(e) && !isJunkEventTitle(e.title))
+        .slice(0, 5)
+    : [];
+  const freePicksHtml = freePicks.length
+    ? `<section class="wg-free-picks" aria-label="Top free picks">
+      <h2>Top free picks</h2>
+      <ul>${freePicks
+        .map((e) => {
+          const d = e.startDateTime
+            ? new Date(e.startDateTime).toLocaleDateString("en-US", { weekday: "long", timeZone: tz })
+            : "";
+          return `<li><a href="${metroPath(`event/${lookup.get(e)}/`)}">${esc(displayEventTitle(e))}</a>${e.venue ? ` · ${esc(displayVenue(e))}` : ""}${d ? ` · ${esc(d)}` : ""}</li>`;
+        })
+        .join("")}</ul>
+    </section>`
+    : "";
+
+  // wkd-5: sibling links — largest other city pages this weekend (all written
+  // in this same build), the free page, and the parent guide.
+  const siblingLinks = [
+    ...siblingCities.map(
+      (c) => `<a href="${metroPath(`this-weekend/${c.slug}/`)}">${esc(c.name)} this weekend</a>`,
+    ),
+    !isFree && hasFreePage
+      ? `<a href="${metroPath("free-this-weekend/")}">Free this weekend in ${esc(metroLabel())}</a>`
+      : "",
+    `<a href="${metroPath("this-weekend/")}">Full ${esc(metroLabel())} weekend guide</a>`,
+  ].filter(Boolean);
+  const siblingsHtml = `<nav class="see-also" aria-label="Nearby weekend guides">
+      ${siblingLinks.join("\n      ")}
+    </nav>`;
+
+  const timelineH2 = isFree
+    ? `Free family events in ${metroLabel()} this weekend: ${rangeLabel}`
+    : `Family events in ${placeName} this weekend: ${rangeLabel}`;
+
   const body = `
-    <p class="lede">${esc(description)}</p>
+    <p class="wg-updated eyebrow">Updated ${esc(generatedLabel)}</p>
+    ${introHtml}
+    ${quietHtml}
     <section class="guide-summary" aria-label="Weekend snapshot">
       <h2>Weekend snapshot</h2>
       <div class="guide-facts">
-        <div class="guide-fact"><strong>${events.length}</strong><span>dated family events</span></div>
+        <div class="guide-fact"><strong>${rolled.length}</strong><span>dated family events</span></div>
         <div class="guide-fact"><strong>${freeCount}</strong><span>likely free options</span></div>
       </div>
     </section>
     <p class="cta-row"><a class="cta" href="${metroPath("")}">Plan a 3-stop day with ${BRAND}</a> <a class="cta-secondary" href="${metroPath("this-weekend/")}">Full weekend guide</a></p>
-    ${daySections.join("")}
+    ${freePicksHtml}
+    ${daySections.length ? `<section id="timeline" aria-label="Weekend event timeline"><h2>${esc(timelineH2)}</h2>${daySections.join("")}</section>` : ""}
+    ${lookAheadHtml}
+    ${siblingsHtml}
   `;
 
   const jsonLd = {
@@ -4616,18 +5243,32 @@ function writeWeekendSubPage({ rel, heading, placeName, events, weekend, lookup 
         isPartOf: { "@id": `${metroUrl("")}#website` },
         about: { "@type": "Place", name: placeName },
       },
+      // wkd-5: Article node with dateModified — the machine-readable
+      // freshness marker the metro guide already carries.
+      {
+        "@type": "Article",
+        "@id": `${canonical}#guide`,
+        headline: title,
+        description,
+        dateModified: today(),
+        author: { "@type": "Organization", name: BRAND },
+        publisher: { "@type": "Organization", name: BRAND },
+        mainEntityOfPage: canonical,
+      },
       {
         "@type": "ItemList",
         "@id": `${canonical}#timeline`,
         name: heading,
-        itemListElement: events.slice(0, 30).map((event, index) => {
+        itemListElement: rolled.slice(0, 30).map((event, index) => {
           const slug = lookup.get(event);
           const eventUrl = slug ? metroUrl(`event/${slug}/`) : event.url || canonical;
           const listItem = {
             "@type": "ListItem",
             position: index + 1,
             url: eventUrl,
-            name: event.title,
+            // wkd-3: junk time-as-title events carry the substitute display
+            // name in structured data too, not just the visible H3.
+            name: displayEventTitle(event),
           };
           const eventNode = buildEventJsonLd(event, eventUrl);
           if (eventNode) {
@@ -4651,7 +5292,8 @@ function writeWeekendSubPage({ rel, heading, placeName, events, weekend, lookup 
       { name: "Weekend guide", url: metroUrl("this-weekend/") },
       { name: heading, url: canonical },
     ],
-    h1: heading,
+    // wkd-5: the date range in the visible H1, matching the metro guide.
+    h1: `${heading} (${rangeLabel})`,
     eyebrow: metroTag(),
     body,
   });
@@ -4666,20 +5308,32 @@ function writeWeekendSubPage({ rel, heading, placeName, events, weekend, lookup 
   });
 }
 
-function getWeekendDateKeys(now, timeZone = "America/Los_Angeles") {
+// wkd-2: the weekend window. Anchoring rule: Sat builds anchor to today;
+// SUNDAY builds anchor to YESTERDAY's Saturday so the weekend pages keep
+// covering the weekend in progress on peak search day instead of jumping six
+// days ahead; Mon–Fri anchor to the upcoming Saturday. `includeFriday` opts a
+// caller into the Fri–Sun window (the weekend guide + city/free sub-pages);
+// default stays Sat+Sun so the hub strip and localized guides — which only
+// render Sat/Sun day sections — keep their JSON-LD mirroring the page.
+export function getWeekendDateKeys(now, timeZone = "America/Los_Angeles", { includeFriday = false } = {}) {
   const todayParts = zonedDateParts(now, timeZone);
   const dow = weekdayNumber(todayParts.weekday);
-  const daysToSat = dow === 6 ? 0 : (6 - dow + 7) % 7;
+  const daysToSat = dow === 6 ? 0 : dow === 0 ? -1 : 6 - dow;
   const saturdayYmd = addDaysToYmd(todayParts, daysToSat);
+  const fridayYmd = addDaysToYmd(saturdayYmd, -1);
   const sundayYmd = addDaysToYmd(saturdayYmd, 1);
+  const fridayKey = ymdKey(fridayYmd);
   const saturdayKey = ymdKey(saturdayYmd);
   const sundayKey = ymdKey(sundayYmd);
   return {
+    friday: ymdToUtcDate(fridayYmd),
     saturday: ymdToUtcDate(saturdayYmd),
     sunday: ymdToUtcDate(sundayYmd),
+    todayKey: ymdKey(todayParts),
+    fridayKey,
     saturdayKey,
     sundayKey,
-    keys: new Set([saturdayKey, sundayKey]),
+    keys: new Set(includeFriday ? [fridayKey, saturdayKey, sundayKey] : [saturdayKey, sundayKey]),
   };
 }
 
@@ -5194,7 +5848,7 @@ function renderShareBar(canonical, shareTitle, posterUrl) {
   <script>(function(){var n=document.querySelector("[data-share-native]");if(n&&navigator.share){n.hidden=false;n.addEventListener("click",function(){navigator.share({title:document.title,url:location.href}).catch(function(){})});}var c=document.querySelector("[data-share-copy]");if(c&&navigator.clipboard){c.addEventListener("click",function(){navigator.clipboard.writeText(c.getAttribute("data-url")).then(function(){c.textContent="Copied!";setTimeout(function(){c.textContent="Copy link"},1500)})});}var ta=document.querySelector(".share-embed textarea");if(ta){ta.addEventListener("click",function(){ta.select()});}})();</script>`;
 }
 
-function renderWeekendDaySection(dayKey, events, eventSlugLookup, locale = "en") {
+function renderWeekendDaySection(dayKey, events, eventSlugLookup, locale = "en", { past = false } = {}) {
   if (!events.length) return "";
   const date = ymdToUtcDate({
     year: Number(dayKey.slice(0, 4)),
@@ -5217,10 +5871,14 @@ function renderWeekendDaySection(dayKey, events, eventSlugLookup, locale = "en")
       (a.startDateTime || "").localeCompare(b.startDateTime || ""));
   const items = sorted.map((event) => renderTimelineEvent(event, eventSlugLookup, locale)).join("");
   const freeCount = events.filter(eventLikelyFree).length;
+  // wkd-2: a day already behind the build date (Sat/Sun builds keep covering
+  // the weekend in progress) is labeled, never silently dropped.
+  const pastMap = { en: " · already happened", es: " · ya pasó", "zh-Hans": " · 已结束" };
+  const pastNote = past ? (pastMap[locale] || pastMap.en) : "";
   const noteMap = {
-    en: `${events.length} event${events.length === 1 ? "" : "s"}${freeCount ? ` · ${freeCount} free` : ""}`,
-    es: `${events.length} evento${events.length === 1 ? "" : "s"}${freeCount ? ` · ${freeCount} gratis` : ""}`,
-    "zh-Hans": `${events.length} 个活动${freeCount ? ` · ${freeCount} 个免费` : ""}`,
+    en: `${events.length} event${events.length === 1 ? "" : "s"}${freeCount ? ` · ${freeCount} free` : ""}${pastNote}`,
+    es: `${events.length} evento${events.length === 1 ? "" : "s"}${freeCount ? ` · ${freeCount} gratis` : ""}${pastNote}`,
+    "zh-Hans": `${events.length} 个活动${freeCount ? ` · ${freeCount} 个免费` : ""}${pastNote}`,
   };
   const dow = date.toLocaleDateString("en-US", { weekday: "short", timeZone: "UTC" }).toLowerCase();
   return `<section class="guide-day" id="day-${esc(dow)}"><div class="guide-day-head"><h2>${esc(dayLabel)}</h2><p class="guide-day-note">${noteMap[locale] || noteMap.en}</p></div><ol class="timeline-list">${items}</ol></section>`;
@@ -5229,7 +5887,10 @@ function renderWeekendDaySection(dayKey, events, eventSlugLookup, locale = "en")
 function renderTimelineEvent(event, eventSlugLookup, locale = "en") {
   const slug = eventSlugLookup.get(event);
   const internalHref = slug ? metroPath(`event/${slug}/`) : "";
-  const time = formatEventTime(event, locale);
+  // wkd-3: a rolled-up card shows every session time ("9:00, 9:30 & 10:00 AM").
+  const time = Array.isArray(event.sessionStarts) && event.sessionStarts.length > 1
+    ? formatSessionTimes(event.sessionStarts, locale)
+    : formatEventTime(event, locale);
   const bucketKey = timelineBucket(event, "en").toLowerCase();
   const free = eventLikelyFree(event);
   const ageBands = Array.isArray(event.ageBands) ? event.ageBands.join(",") : "";
@@ -5239,7 +5900,7 @@ function renderTimelineEvent(event, eventSlugLookup, locale = "en") {
   const timeTba = { en: "Time TBA", es: "Hora por confirmar", "zh-Hans": "时间待定" };
   const freeLabel = { en: "Free", es: "Gratis", "zh-Hans": "免费" };
   const officialLabel = { en: "Official ↗", es: "Oficial ↗", "zh-Hans": "官方 ↗" };
-  const title = internalHref ? `<a href="${internalHref}">${esc(event.title)}</a>` : esc(event.title);
+  const title = internalHref ? `<a href="${internalHref}">${esc(displayEventTitle(event))}</a>` : esc(displayEventTitle(event));
   return `<li class="timeline-card" data-age-bands="${esc(ageBands)}" data-cost-free="${free}" data-category="${esc(event.category || "")}" data-bucket="${esc(bucketKey)}">
     <time class="timeline-time" datetime="${esc(event.startDateTime || "")}">${esc(time || (timeTba[locale] || timeTba.en))}</time>
     <h3><span class="timeline-dot cm-c-${fam}" aria-hidden="true"></span>${title}</h3>
@@ -5496,7 +6157,7 @@ function formatEventTime(event, locale = "en") {
 
 function formatTimelineMeta(event) {
   const parts = [];
-  if (event.venue) parts.push(event.venue);
+  if (event.venue) parts.push(displayVenue(event));
   if (event.city) parts.push(event.city);
   if (event.cost && event.cost !== "Unknown" && !/free/i.test(event.cost)) parts.push(event.cost);
   if (!IS_ADULTS) {
@@ -6030,7 +6691,7 @@ function generateLocalizedWeekendPage(eventItems, locale, routeKey, cluster, eve
         "@type": "ListItem",
         position: index + 1,
         url: slug ? metroUrl(`event/${slug}/`) : event.url || canonical,
-        name: event.title,
+        name: displayEventTitle(event),
       };
     }),
   });
@@ -6196,13 +6857,15 @@ ${hreflangHtml}
 <meta name="twitter:description" content="${esc(description)}">
 <meta name="twitter:image" content="${esc(ogImage)}">
 <meta name="theme-color" content="${IS_ADULTS ? "#7c3aed" : "#f59e0b"}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="${FONTS_CSS_URL}">
 <style>${PAGE_CSS}</style>
 ${allLd.map((node) => `<script type="application/ld+json">${safeJsonScript(node)}</script>`).join("\n")}${headExtra ? `\n${headExtra}` : ""}
 </head>
 <body>
 ${renderStaticTopbar({ guideCurrent })}
 ${langSwitcherHtml}
-${renderStaticAuthScript()}
 <main class="${mainClass}">
   ${breadcrumbHtml}
   ${eyebrow ? `<p class="eyebrow">${eyebrow}</p>` : ""}
@@ -6215,6 +6878,7 @@ ${renderStaticAuthScript()}
   <p><a href="/about/">About ${esc(BRAND)}</a> · <a href="/how-we-verify/">How we verify listings</a> · <a href="/privacy/">Privacy</a></p>${IS_ADULTS ? "" : `
   <p>Planning an adults night out in the Bay Area? Try <a href="https://trymosey.com/bay-area/">Mosey</a>.</p>`}
 </footer>
+${renderStaticAuthScript()}
 ${bodyEnd}
 </body>
 </html>`;

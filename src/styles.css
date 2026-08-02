@@ -1,8 +1,10 @@
 /* ─── Type ──────────────────────────────────────────────────────────────────
    FamHop's UI face is Plus Jakarta Sans; headings use Bricolage Grotesque
    (characterful, warmer than Inter, reads as "family" without leaning cute).
-   Inter remains in the fallback stack for FOUT safety. */
-@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap");
+   Inter remains in the fallback stack for FOUT safety.
+   perf-1: the fonts CSS loads from index.html via preconnect + a parallel
+   <link rel="stylesheet"> (same URL) instead of a render-blocking @import
+   discovered only after this bundle's CSS parses. */
 
 :root {
   color: var(--ink);

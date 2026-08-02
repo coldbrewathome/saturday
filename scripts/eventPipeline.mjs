@@ -293,6 +293,21 @@ export function stripUnsafeText(value, maxLength = 260) {
     .slice(0, maxLength);
 }
 
+// junk-1: word-boundary truncation for display copy. Cuts at the last space
+// within `max` (falling back to a hard cut only when the last space sits
+// before 60% of the budget), strips dangling punctuation, and appends an
+// ellipsis only when text was actually removed. NOT used by slug/id/url
+// paths — those keep stripUnsafeText's hard slice.
+export function truncateAtBoundary(text, max) {
+  const value = typeof text === "string" ? text : "";
+  if (!Number.isFinite(max) || max <= 1 || value.length <= max) return value;
+  const budget = max - 1; // reserve room for the ellipsis
+  const slice = value.slice(0, budget);
+  const lastSpace = slice.lastIndexOf(" ");
+  const cut = lastSpace >= Math.floor(budget * 0.6) ? slice.slice(0, lastSpace) : slice;
+  return `${cut.replace(/[\s,;:–—-]+$/, "")}…`;
+}
+
 export function sanitizeUrl(value, baseUrl = "") {
   const raw = stripUnsafeText(value, 700);
   if (!raw) return null;
@@ -313,6 +328,30 @@ export function decodeHtmlEntities(value) {
     lt: "<",
     nbsp: " ",
     quot: "\"",
+    // junk-2: the named entities actually observed in live feeds (rsquo 851,
+    // mdash 218, hellip 163, ndash 155, ...). Numeric refs already decode.
+    rsquo: "’",
+    lsquo: "‘",
+    rdquo: "”",
+    ldquo: "“",
+    mdash: "—",
+    ndash: "–",
+    hellip: "…",
+    bull: "•",
+    middot: "·",
+    reg: "®",
+    trade: "™",
+    deg: "°",
+    cent: "¢",
+    eacute: "é",
+    aacute: "á",
+    iacute: "í",
+    oacute: "ó",
+    uacute: "ú",
+    ntilde: "ñ",
+    uuml: "ü",
+    iexcl: "¡",
+    iquest: "¿",
   };
   return value.replace(/&(#x?[0-9a-f]+|[a-z]+);/gi, (match, entity) => {
     const key = entity.toLowerCase();
@@ -524,7 +563,13 @@ export function extractJsonLdEvents(html, source = {}) {
 
 function fieldFromIcs(block, key) {
   const re = new RegExp(`^${key}(?:;[^:]*)?:(.*)$`, "im");
-  return stripUnsafeText(block.match(re)?.[1] || "", 1000);
+  // junk-3: RFC 5545 §3.3.11 TEXT unescaping (single pass so an escaped
+  // backslash never re-combines with the next char): \n → space (the field
+  // is folded to one line), \, → ",", \; → ";", \\ → "\".
+  const raw = (block.match(re)?.[1] || "").replace(/\\([\\;,nN])/g, (_m, ch) =>
+    ch === "n" || ch === "N" ? " " : ch,
+  );
+  return stripUnsafeText(raw, 1000);
 }
 
 function parseIcsDate(value, timezoneOffset = DEFAULT_TIMEZONE_OFFSET) {
@@ -1806,9 +1851,12 @@ export function extractNycParksEvents(html, source = {}, options = {}) {
         const startDateTime = localIsoFromEpochMillis(item?.startDate, timezoneOffset);
         if (!startDateTime) continue;
         const endDateTime = localIsoFromEpochMillis(item?.endDate, timezoneOffset);
-        const description = stripUnsafeText(
-          item?.repetitionString ||
-            `${title} at ${venue}${park?.address ? `, ${park.address}` : ""}.`,
+        const description = truncateAtBoundary(
+          stripUnsafeText(
+            item?.repetitionString ||
+              `${title} at ${venue}${park?.address ? `, ${park.address}` : ""}.`,
+            600,
+          ),
           360,
         );
         events.push(normalizeRawEvent({
@@ -2336,7 +2384,9 @@ export function normalizeScrapedTitle(value) {
 }
 
 export function normalizeScrapedDescription(value, title = "") {
-  let description = stripUnsafeText(value, 420)
+  // junk-1: pre-clean with headroom (600) so the final 360 cap can land on a
+  // word boundary instead of the historic mid-word hard slice.
+  let description = stripUnsafeText(value, 600)
     .replace(/^image\b[:\s]+/i, "")
     .replace(/^registration required\b[:\s]*/i, "");
   for (let pass = 0; pass < 3; pass += 1) {
@@ -2351,24 +2401,52 @@ export function normalizeScrapedDescription(value, title = "") {
   description = description
     .replace(/^oin us\b/, "Join us")
     .replace(/^elcome\b/i, "Welcome");
-  return stripUnsafeText(description, 360);
+  return truncateAtBoundary(stripUnsafeText(description, 600), 360);
+}
+
+// junk-5: sentence-case shouting titles ("STEVE-O: CRASH & BURN"). Only fires
+// when the title has >= 6 letters and > 90% of them are uppercase. Tokens
+// containing digits stay untouched (E11EVEN, 3D, VOL.2 stays VOL.2's "2"),
+// small words lowercase except in first position, and hyphenated segments
+// each capitalize ("STEVE-O" → "Steve-O"). Slug-safe: slugify lowercases.
+const TITLE_SMALL_WORDS = new Set([
+  "a", "an", "and", "at", "by", "for", "in", "of", "on", "or", "the", "to", "with",
+]);
+export function titleCaseAllCaps(value) {
+  const title = typeof value === "string" ? value : "";
+  const letters = title.match(/[a-z]/gi) || [];
+  if (letters.length < 6) return title;
+  const upper = letters.filter((ch) => ch >= "A" && ch <= "Z").length;
+  if (upper / letters.length <= 0.9) return title;
+  const capSegment = (seg) =>
+    seg ? seg.charAt(0).toUpperCase() + seg.slice(1).toLowerCase() : seg;
+  return title
+    .split(/(\s+)/)
+    .map((token, index) => {
+      if (/\s/.test(token) || !token) return token;
+      if (/\d/.test(token)) return token;
+      const wordOnly = token.toLowerCase().replace(/[^a-z]/g, "");
+      if (index > 0 && TITLE_SMALL_WORDS.has(wordOnly)) return token.toLowerCase();
+      return token.split("-").map(capSegment).join("-");
+    })
+    .join("");
 }
 
 function cleanEventTitle(value) {
   const title = normalizeScrapedTitle(value);
   const featured = title.match(/^(.+?)\s+Featured Event\.\s+(.+)$/i);
   if (featured && featured[2].toLowerCase().startsWith(featured[1].toLowerCase())) {
-    return stripUnsafeText(featured[1], 140);
+    return titleCaseAllCaps(stripUnsafeText(featured[1], 140));
   }
   const repeated = title.match(/^(.{8,70}?)\s+\1\b/i);
   if (repeated) {
-    return stripUnsafeText(repeated[1], 140);
+    return titleCaseAllCaps(stripUnsafeText(repeated[1], 140));
   }
-  return stripUnsafeText(
+  return titleCaseAllCaps(stripUnsafeText(
     title
       .replace(/\s+Featured Event\.\s*/i, " "),
     140,
-  );
+  ));
 }
 
 function isGenericPageTitle(title) {

@@ -208,3 +208,151 @@ test("matchAnnualLiveEvent links only generated pages, by match regex", async ()
   // bad regex entry never throws
   assert.equal(matchAnnualLiveEvent({ title: "x", match: "(" }, [a], lookup, null), null);
 });
+
+// --- wkd-2: weekend window ---------------------------------------------------
+
+test("formatWeekendRange handles a Fri–Sun span", () => {
+  const fri = new Date(Date.UTC(2026, 7, 7, 12));
+  const sun = new Date(Date.UTC(2026, 7, 9, 12));
+  assert.equal(formatWeekendRange(fri, sun, "America/Los_Angeles"), "August 7–9");
+});
+
+test("getWeekendDateKeys includes Friday only on opt-in and anchors Sunday builds to the weekend in progress", async () => {
+  const { getWeekendDateKeys } = await import("../scripts/generate-seo-pages.mjs");
+  // Wednesday 2026-08-05 → upcoming weekend Fri 8/7 – Sun 8/9.
+  const wed = new Date(Date.UTC(2026, 7, 5, 19));
+  const midweek = getWeekendDateKeys(wed, "America/Los_Angeles", { includeFriday: true });
+  assert.equal(midweek.fridayKey, "2026-08-07");
+  assert.equal(midweek.saturdayKey, "2026-08-08");
+  assert.equal(midweek.sundayKey, "2026-08-09");
+  assert.deepEqual([...midweek.keys].sort(), ["2026-08-07", "2026-08-08", "2026-08-09"]);
+  // Default (no opt-in) keeps the Sat+Sun window for hub/localized callers.
+  const defaultKeys = getWeekendDateKeys(wed, "America/Los_Angeles");
+  assert.deepEqual([...defaultKeys.keys].sort(), ["2026-08-08", "2026-08-09"]);
+  // Sunday 2026-08-09 (noon PT) anchors to YESTERDAY's Saturday, not +6 days.
+  const sun = new Date(Date.UTC(2026, 7, 9, 19));
+  const sundayBuild = getWeekendDateKeys(sun, "America/Los_Angeles", { includeFriday: true });
+  assert.equal(sundayBuild.saturdayKey, "2026-08-08");
+  assert.equal(sundayBuild.sundayKey, "2026-08-09");
+  assert.equal(sundayBuild.todayKey, "2026-08-09");
+});
+
+// --- wkd-3: session rollup + junk-title guard --------------------------------
+
+test("rollupWeekendSessions groups same title+venue+day sessions into one card", async () => {
+  const { rollupWeekendSessions } = await import("../scripts/generate-seo-pages.mjs");
+  const mk = (title, venue, start) => ({ title, venue, startDateTime: start });
+  const events = [
+    mk("Play and Explore", "Kidspace", "2026-08-08T09:00:00-07:00"),
+    mk("Play and Explore", "Kidspace", "2026-08-08T09:30:00-07:00"),
+    mk("Play and Explore", "Kidspace", "2026-08-08T10:00:00-07:00"),
+    mk("Play and Explore", "Kidspace", "2026-08-09T09:00:00-07:00"), // other day → own card
+    mk("Play and Explore", "Other Hall", "2026-08-08T09:00:00-07:00"), // other venue → own card
+    mk("9:00 am - 9:45 am Play and Explore", "Kidspace", "2026-08-08T10:30:00-07:00"), // time-prefix strips into the group
+  ];
+  const rolled = rollupWeekendSessions(events, "America/Los_Angeles");
+  assert.equal(rolled.length, 3);
+  assert.equal(rolled[0].sessionStarts.length, 4);
+  assert.ok(!rolled[1].sessionStarts, "single-session events carry no sessionStarts");
+});
+
+test("isJunkEventTitle flags time/date-as-title junk; displayEventTitle substitutes venue+category", async () => {
+  const { isJunkEventTitle, displayEventTitle } = await import("../scripts/generate-seo-pages.mjs");
+  assert.equal(isJunkEventTitle("10 a.m. – 5 p.m."), true);
+  assert.equal(isJunkEventTitle("10:00 am - 4:30 pm"), true);
+  assert.equal(isJunkEventTitle("July 12"), true);
+  assert.equal(isJunkEventTitle("10 Fun Crafts for Kids"), false);
+  assert.equal(isJunkEventTitle("Family Story Time"), false);
+  assert.equal(
+    displayEventTitle({ title: "10 a.m. – 5 p.m.", venue: "Burke Museum Events", category: "Museum" }),
+    "Burke Museum — Museum day",
+  );
+  assert.equal(displayEventTitle({ title: "Family Story Time" }), "Family Story Time");
+});
+
+// --- junk-6: display-time venue de-sourcing ----------------------------------
+
+test("displayVenue strips calendar suffixes only when a real venue remains", async () => {
+  const { displayVenue } = await import("../scripts/generate-seo-pages.mjs");
+  assert.equal(displayVenue("Children's Museum of Atlanta Events"), "Children's Museum of Atlanta");
+  assert.equal(displayVenue("The Seattle Public Library Story Time Calendar"), "The Seattle Public Library Story Time");
+  assert.equal(displayVenue("Special Events"), "Special Events");
+  assert.equal(displayVenue("Golden Gate Park"), "Golden Gate Park");
+  assert.equal(displayVenue({ venue: "Phoenix Public Library Program Calendar" }), "Phoenix Public Library");
+});
+
+// --- evt-5 / junk-6 / junk-7: Event JSON-LD accuracy --------------------------
+
+test("buildEventJsonLd emits no logo fallback image, cleans location.name, keeps URL", async () => {
+  const { buildEventJsonLd } = await import("../scripts/generate-seo-pages.mjs");
+  const node = buildEventJsonLd(
+    {
+      title: "Toddler Tales",
+      venue: "Children's Museum of Atlanta Events",
+      city: "Atlanta",
+      startDateTime: "2099-05-02T10:00:00-04:00",
+      description: "A gentle storytime for walkers and pre-walkers with songs and bubbles.",
+    },
+    "https://famhop.com/atlanta/event/toddler-tales-childrens-museum-of-atlanta-events/",
+  );
+  assert.equal(node.image, undefined, "no sitewide-logo Event.image fallback");
+  assert.equal(node.location.name, "Children's Museum of Atlanta");
+  assert.equal(node.url, "https://famhop.com/atlanta/event/toddler-tales-childrens-museum-of-atlanta-events/");
+  assert.equal(node.eventAttendanceMode, "https://schema.org/OfflineEventAttendanceMode");
+});
+
+test("buildEventJsonLd flags Zoom titles as online events with a VirtualLocation", async () => {
+  const { buildEventJsonLd } = await import("../scripts/generate-seo-pages.mjs");
+  const node = buildEventJsonLd(
+    {
+      title: "Homework Help over Zoom",
+      venue: "Somerville Public Library",
+      city: "Somerville",
+      startDateTime: "2099-05-02T16:00:00-04:00",
+      url: "https://example.org/zoom-homework",
+    },
+    "https://famhop.com/boston/event/homework-help-over-zoom/",
+  );
+  assert.equal(node.eventAttendanceMode, "https://schema.org/OnlineEventAttendanceMode");
+  assert.equal(node.location["@type"], "VirtualLocation");
+  assert.equal(node.location.url, "https://example.org/zoom-homework");
+  // A description that merely mentions zoom does NOT flip the mode.
+  const offline = buildEventJsonLd(
+    { title: "Storytime", description: "We zoom around the room!", venue: "Library", city: "Boston", startDateTime: "2099-05-02T10:00:00-04:00" },
+    "https://famhop.com/boston/event/storytime/",
+  );
+  assert.equal(offline.eventAttendanceMode, "https://schema.org/OfflineEventAttendanceMode");
+});
+
+// --- junk-7: per-source boilerplate descriptions ------------------------------
+
+test("buildBoilerplateDescriptionKeys flags a desc shared by >=4 titles in one source only", async () => {
+  const { buildBoilerplateDescriptionKeys } = await import("../scripts/generate-seo-pages.mjs");
+  const blob = "children family kids museum science art workshop";
+  const mk = (title, sourceId, description) => ({ title, sourceId, description });
+  const events = [
+    mk("A", "src-1", blob), mk("B", "src-1", blob), mk("C", "src-1", blob),
+    mk("D", "src-1", blob), mk("E", "src-1", blob),
+    mk("F", "src-2", "Shared by two"), mk("G", "src-2", "Shared by two"),
+  ];
+  const keys = buildBoilerplateDescriptionKeys(events);
+  assert.equal(keys.has(`src-1|${blob}`), true);
+  assert.equal(keys.has("src-2|shared by two"), false);
+});
+
+// --- ann-1: annual page year -------------------------------------------------
+
+test("annualPageYear rolls to next year once the (first) month has passed", async () => {
+  const { annualPageYear } = await import("../scripts/generate-seo-pages.mjs");
+  const nov = new Date(Date.UTC(2026, 10, 15, 12));
+  assert.equal(annualPageYear("July", nov), 2027);
+  assert.equal(annualPageYear("December", nov), 2026);
+  const feb = new Date(Date.UTC(2026, 1, 10, 12));
+  assert.equal(annualPageYear("June–July", feb), 2026, "en-dash range parses first token");
+  assert.equal(annualPageYear("July–August", feb), 2026);
+  assert.equal(annualPageYear("August or September", feb), 2026);
+  assert.equal(annualPageYear("June–August", nov), 2027);
+  // Unparseable month → null → caller skips the year.
+  assert.equal(annualPageYear("Seasonal", feb), null);
+  assert.equal(annualPageYear("", feb), null);
+});

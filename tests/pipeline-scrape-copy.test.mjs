@@ -121,3 +121,98 @@ test("extractJsonLdEvents still ignores non-event JSON-LD types", () => {
   }));
   assert.deepEqual(extractJsonLdEvents(html, fillmoreSource), []);
 });
+
+// --- junk-1: word-boundary truncation ---------------------------------------
+
+test("truncateAtBoundary cuts on a complete word and appends an ellipsis", async () => {
+  const { truncateAtBoundary } = await import("../scripts/eventPipeline.mjs");
+  const long = Array.from({ length: 100 }, (_, i) => `word${i}`).join(" ").slice(0, 500);
+  const cut = truncateAtBoundary(long, 360);
+  assert.ok(cut.length <= 360, `length ${cut.length} > 360`);
+  assert.ok(cut.endsWith("…"), "ends with ellipsis");
+  const lastWord = cut.slice(0, -1).split(" ").pop();
+  assert.ok(long.split(" ").includes(lastWord), `"${lastWord}" is a complete word`);
+});
+
+test("truncateAtBoundary leaves short text untouched (no ellipsis)", async () => {
+  const { truncateAtBoundary } = await import("../scripts/eventPipeline.mjs");
+  const short = "a".repeat(150) + " " + "b".repeat(49); // 200 chars
+  assert.equal(truncateAtBoundary(short, 360), short);
+});
+
+test("normalizeScrapedDescription caps at 360 on a word boundary", async () => {
+  const { normalizeScrapedDescription } = await import("../scripts/eventPipeline.mjs");
+  const long = Array.from({ length: 90 }, (_, i) => `token${i}`).join(" ");
+  const out = normalizeScrapedDescription(long, "Some Title");
+  assert.ok(out.length <= 360);
+  assert.ok(out.endsWith("…"));
+  assert.ok(!/\S{1,}tok$/.test(out.slice(0, -1)), "no mid-word cut");
+});
+
+// Gate regression: raising the pre-clean cap must not weaken the adult-signal
+// gate — an adult term deep in the description still rejects the event for a
+// kids-audience source.
+test("junk-1 gate regression: adult term at char ~300 still rejects for kids source", async () => {
+  const { normalizeRawEvent } = await import("../scripts/eventPipeline.mjs");
+  const padding = Array.from({ length: 60 }, (_, i) => `fun${i}`).join(" ").slice(0, 295);
+  const description = `${padding} brewery tour for grown-ups afterwards.`;
+  const event = normalizeRawEvent(
+    {
+      title: "Neighborhood Afternoon Social",
+      description,
+      startDateTime: "2099-05-01T10:00:00-07:00",
+    },
+    { id: "kids-src", name: "Kids Source", city: "Oakland", audiences: ["kids"] },
+  );
+  assert.equal(event, null);
+});
+
+// --- junk-2: named HTML entities --------------------------------------------
+
+test("decodeHtmlEntities decodes the feed-observed named entities", async () => {
+  const { decodeHtmlEntities } = await import("../scripts/eventPipeline.mjs");
+  assert.equal(
+    decodeHtmlEntities("It&rsquo;s 9:00 AM&mdash;12:45"),
+    "It’s 9:00 AM—12:45",
+  );
+  assert.equal(decodeHtmlEntities("caf&eacute; &bull; ni&ntilde;os"), "café • niños");
+  // Unknown entities pass through untouched.
+  assert.equal(decodeHtmlEntities("keep &foobar; as-is"), "keep &foobar; as-is");
+});
+
+// --- junk-3: RFC 5545 unescaping in ICS fields ------------------------------
+
+test("extractIcsEvents unescapes RFC 5545 text (backslash-comma, backslash-n)", async () => {
+  const { extractIcsEvents } = await import("../scripts/eventPipeline.mjs");
+  const ics = [
+    "BEGIN:VCALENDAR",
+    "BEGIN:VEVENT",
+    "SUMMARY:Comedy Night Fundraiser",
+    "DTSTART:20990110T190000",
+    "DESCRIPTION:Line one\\nLine two",
+    "LOCATION:Laughing Skull Lounge\\, 878 Peachtree Street\\, Atlanta",
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ].join("\r\n");
+  const events = extractIcsEvents(ics, { id: "test-ics", name: "Test", city: "Atlanta", audiences: ["all"] });
+  assert.equal(events.length, 1);
+  assert.equal(events[0].venue, "Laughing Skull Lounge, 878 Peachtree Street, Atlanta");
+  assert.equal(events[0].description, "Line one Line two");
+});
+
+// --- junk-5: ALLCAPS titles --------------------------------------------------
+
+test("titleCaseAllCaps sentence-cases shouting titles", async () => {
+  const { titleCaseAllCaps } = await import("../scripts/eventPipeline.mjs");
+  assert.equal(titleCaseAllCaps("STEVE-O: CRASH & BURN"), "Steve-O: Crash & Burn");
+  assert.equal(
+    titleCaseAllCaps("FOUR SQUARE VOL. 2 - A HIP-HOP VIDEO GAME LIVE THEATRE EXPERIENCE"),
+    "Four Square Vol. 2 - a Hip-Hop Video Game Live Theatre Experience",
+  );
+  // Tokens containing digits stay untouched.
+  assert.equal(titleCaseAllCaps("E11EVEN MIAMI NIGHT"), "E11EVEN Miami Night");
+  // Normal mixed-case titles are unchanged.
+  assert.equal(titleCaseAllCaps("Family Story Time"), "Family Story Time");
+  // Short acronyms are unchanged.
+  assert.equal(titleCaseAllCaps("LEGO"), "LEGO");
+});

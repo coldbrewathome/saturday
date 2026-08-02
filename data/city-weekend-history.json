@@ -1,0 +1,349 @@
+{
+ "_comment": "wkd-1 hysteresis state for /{metro}/this-weekend/{city}/ pages: cities that met the 3-event gate keep their page for 8 weeks after their last qualification (quieter-weekend rendering) so ranked URLs never 404 on a slow week. Written by generate-seo-pages.mjs on kids builds; stage this file explicitly, never via add -A.",
+ "metros": {
+  "bay-area": {
+   "san-francisco": {
+    "name": "San Francisco",
+    "lastQualified": "2026-08-02"
+   },
+   "stanford": {
+    "name": "Stanford",
+    "lastQualified": "2026-08-02"
+   },
+   "oakland": {
+    "name": "Oakland",
+    "lastQualified": "2026-08-02"
+   },
+   "berkeley": {
+    "name": "Berkeley",
+    "lastQualified": "2026-08-02"
+   },
+   "fremont": {
+    "name": "Fremont",
+    "lastQualified": "2026-08-02"
+   },
+   "san-jose": {
+    "name": "San Jose",
+    "lastQualified": "2026-08-02"
+   },
+   "san-mateo": {
+    "name": "San Mateo",
+    "lastQualified": "2026-08-02"
+   },
+   "santa-rosa": {
+    "name": "Santa Rosa",
+    "lastQualified": "2026-08-02"
+   },
+   "palo-alto": {
+    "name": "Palo Alto",
+    "lastQualified": "2026-08-02"
+   },
+   "santa-clara": {
+    "name": "Santa Clara",
+    "lastQualified": "2026-08-02"
+   },
+   "livermore": {
+    "name": "Livermore",
+    "lastQualified": "2026-08-02"
+   },
+   "alameda": {
+    "name": "Alameda",
+    "lastQualified": "2026-08-02"
+   },
+   "antioch": {
+    "name": "Antioch",
+    "lastQualified": "2026-08-02"
+   },
+   "los-altos": {
+    "name": "Los Altos",
+    "lastQualified": "2026-08-02"
+   },
+   "vallejo": {
+    "name": "Vallejo",
+    "lastQualified": "2026-08-02"
+   },
+   "walnut-creek": {
+    "name": "Walnut Creek",
+    "lastQualified": "2026-08-02"
+   },
+   "oakley": {
+    "name": "Oakley",
+    "lastQualified": "2026-08-02"
+   },
+   "watsonville": {
+    "name": "Watsonville",
+    "lastQualified": "2026-08-02"
+   },
+   "vacaville": {
+    "name": "Vacaville",
+    "lastQualified": "2026-08-02"
+   },
+   "cupertino": {
+    "name": "Cupertino",
+    "lastQualified": "2026-08-02"
+   }
+  },
+  "los-angeles": {
+   "los-angeles": {
+    "name": "Los Angeles",
+    "lastQualified": "2026-08-02"
+   },
+   "long-beach": {
+    "name": "Long Beach",
+    "lastQualified": "2026-08-02"
+   },
+   "la-canada-flintridge": {
+    "name": "La Cañada Flintridge",
+    "lastQualified": "2026-08-02"
+   },
+   "pasadena": {
+    "name": "Pasadena",
+    "lastQualified": "2026-08-02"
+   },
+   "glendale": {
+    "name": "Glendale",
+    "lastQualified": "2026-08-02"
+   },
+   "culver-city": {
+    "name": "Culver City",
+    "lastQualified": "2026-08-02"
+   },
+   "costa-mesa": {
+    "name": "Costa Mesa",
+    "lastQualified": "2026-08-02"
+   },
+   "ventura": {
+    "name": "Ventura",
+    "lastQualified": "2026-08-02"
+   }
+  },
+  "new-york-city": {
+   "brooklyn": {
+    "name": "Brooklyn",
+    "lastQualified": "2026-08-02"
+   },
+   "manhattan": {
+    "name": "Manhattan",
+    "lastQualified": "2026-08-02"
+   },
+   "queens": {
+    "name": "Queens",
+    "lastQualified": "2026-08-02"
+   },
+   "bronx": {
+    "name": "Bronx",
+    "lastQualified": "2026-08-02"
+   },
+   "staten-island": {
+    "name": "Staten Island",
+    "lastQualified": "2026-08-02"
+   }
+  },
+  "seattle": {
+   "seattle": {
+    "name": "Seattle",
+    "lastQualified": "2026-08-02"
+   },
+   "bellevue": {
+    "name": "Bellevue",
+    "lastQualified": "2026-08-02"
+   },
+   "bothell": {
+    "name": "Bothell",
+    "lastQualified": "2026-08-02"
+   }
+  },
+  "chicago": {
+   "chicago": {
+    "name": "Chicago",
+    "lastQualified": "2026-08-02"
+   },
+   "elk-grove-village": {
+    "name": "Elk Grove Village",
+    "lastQualified": "2026-08-02"
+   },
+   "schaumburg": {
+    "name": "Schaumburg",
+    "lastQualified": "2026-08-02"
+   },
+   "downers-grove": {
+    "name": "Downers Grove",
+    "lastQualified": "2026-08-02"
+   },
+   "evanston": {
+    "name": "Evanston",
+    "lastQualified": "2026-08-02"
+   }
+  },
+  "dallas-fort-worth": {
+   "fort-worth": {
+    "name": "Fort Worth",
+    "lastQualified": "2026-08-02"
+   },
+   "dallas": {
+    "name": "Dallas",
+    "lastQualified": "2026-08-02"
+   },
+   "plano": {
+    "name": "Plano",
+    "lastQualified": "2026-08-02"
+   },
+   "mckinney": {
+    "name": "McKinney",
+    "lastQualified": "2026-08-02"
+   }
+  },
+  "houston": {
+   "houston": {
+    "name": "Houston",
+    "lastQualified": "2026-08-02"
+   },
+   "pearland": {
+    "name": "Pearland",
+    "lastQualified": "2026-08-02"
+   }
+  },
+  "washington-dc": {
+   "tysons": {
+    "name": "Tysons",
+    "lastQualified": "2026-08-02"
+   },
+   "washington": {
+    "name": "Washington",
+    "lastQualified": "2026-08-02"
+   },
+   "arlington": {
+    "name": "Arlington",
+    "lastQualified": "2026-08-02"
+   },
+   "alexandria": {
+    "name": "Alexandria",
+    "lastQualified": "2026-08-02"
+   },
+   "rockville": {
+    "name": "Rockville",
+    "lastQualified": "2026-08-02"
+   },
+   "silver-spring": {
+    "name": "Silver Spring",
+    "lastQualified": "2026-08-02"
+   },
+   "gaithersburg": {
+    "name": "Gaithersburg",
+    "lastQualified": "2026-08-02"
+   }
+  },
+  "atlanta": {
+   "atlanta": {
+    "name": "Atlanta",
+    "lastQualified": "2026-08-02"
+   },
+   "marietta": {
+    "name": "Marietta",
+    "lastQualified": "2026-08-02"
+   },
+   "lithonia": {
+    "name": "Lithonia",
+    "lastQualified": "2026-08-02"
+   },
+   "decatur": {
+    "name": "Decatur",
+    "lastQualified": "2026-08-02"
+   }
+  },
+  "philadelphia": {
+   "philadelphia": {
+    "name": "Philadelphia",
+    "lastQualified": "2026-08-02"
+   },
+   "bensalem": {
+    "name": "Bensalem",
+    "lastQualified": "2026-08-02"
+   },
+   "media": {
+    "name": "Media",
+    "lastQualified": "2026-08-02"
+   },
+   "cherry-hill": {
+    "name": "Cherry Hill",
+    "lastQualified": "2026-08-02"
+   }
+  },
+  "miami": {
+   "miami": {
+    "name": "Miami",
+    "lastQualified": "2026-08-02"
+   },
+   "pembroke-pines": {
+    "name": "Pembroke Pines",
+    "lastQualified": "2026-08-02"
+   },
+   "fort-lauderdale": {
+    "name": "Fort Lauderdale",
+    "lastQualified": "2026-08-02"
+   },
+   "plantation": {
+    "name": "Plantation",
+    "lastQualified": "2026-08-02"
+   },
+   "miami-beach": {
+    "name": "Miami Beach",
+    "lastQualified": "2026-08-02"
+   }
+  },
+  "phoenix": {
+   "phoenix": {
+    "name": "Phoenix",
+    "lastQualified": "2026-08-02"
+   }
+  },
+  "boston": {
+   "boston": {
+    "name": "Boston",
+    "lastQualified": "2026-08-02"
+   },
+   "somerville": {
+    "name": "Somerville",
+    "lastQualified": "2026-08-02"
+   },
+   "cambridge": {
+    "name": "Cambridge",
+    "lastQualified": "2026-08-02"
+   },
+   "newton": {
+    "name": "Newton",
+    "lastQualified": "2026-08-02"
+   }
+  },
+  "san-diego": {
+   "san-diego": {
+    "name": "San Diego",
+    "lastQualified": "2026-08-02"
+   },
+   "la-jolla": {
+    "name": "La Jolla",
+    "lastQualified": "2026-08-02"
+   }
+  },
+  "honolulu": {
+   "honolulu": {
+    "name": "Honolulu",
+    "lastQualified": "2026-08-02"
+   },
+   "kapolei": {
+    "name": "Kapolei",
+    "lastQualified": "2026-08-02"
+   }
+  },
+  "austin": {
+   "austin": {
+    "name": "Austin",
+    "lastQualified": "2026-08-02"
+   },
+   "round-rock": {
+    "name": "Round Rock",
+    "lastQualified": "2026-08-02"
+   }
+  }
+ }
+}
