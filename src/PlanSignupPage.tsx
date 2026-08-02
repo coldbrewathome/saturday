@@ -15,7 +15,12 @@ import type { MetroConfig } from "./metros";
 import type { FamilyEvent } from "./App";
 import { subscribeNewsletter, trackMetric, API_CONFIGURED } from "./api";
 import { APP_BRAND, APP_DOMAIN } from "./appConfig";
-import { eventImageSmall } from "./eventImages";
+import {
+  buildVenueImageMap,
+  eventImageSmall,
+  venueImageFor,
+  type VenueImageMap,
+} from "./eventImages";
 import { isFeedJunkEvent } from "./eventQuality";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -112,15 +117,23 @@ export default function PlanSignupPage({ metro }: Props) {
   );
   const [error, setError] = useState<string | null>(null);
   const [teasers, setTeasers] = useState<FamilyEvent[]>([]);
+  const [venueImages, setVenueImages] = useState<VenueImageMap>(new Map());
 
   useEffect(() => {
     let cancelled = false;
-    const url = `${DATA_ORIGIN}/data/${metro.dataDir}/events.json`;
-    fetch(url)
-      .then((r) => (r.ok ? r.json() : null))
-      .then((doc: { events?: FamilyEvent[] } | null) => {
-        if (cancelled || !doc?.events) return;
-        setTeasers(pickTeasers(doc.events, new Date(), metro.timezone));
+    const base = `${DATA_ORIGIN}/data/${metro.dataDir}/`;
+    const eventsUrl = `${base}events.json`;
+    const spotsUrl = `${base}spots.json`;
+    Promise.all([
+      fetch(eventsUrl).then((r) => (r.ok ? r.json() : null)),
+      fetch(spotsUrl).then((r) => (r.ok ? r.json() : null)),
+    ])
+      .then(([eventsDoc, spotsDoc]) => {
+        if (cancelled) return;
+        const events = (eventsDoc as { events?: FamilyEvent[] } | null)?.events;
+        if (events) setTeasers(pickTeasers(events, new Date(), metro.timezone));
+        const spots = (spotsDoc as { spots?: Array<{ name: string; city?: string | null; imageUrl?: string }> } | null)?.spots;
+        if (spots) setVenueImages(buildVenueImageMap(spots));
       })
       .catch(() => {
         // teasers are decorative — the page still works without them
@@ -255,10 +268,13 @@ export default function PlanSignupPage({ metro }: Props) {
               This weekend in {metro.label}:
             </p>
             <ul>
-              {teasers.map((event) => (
+              {teasers.map((event) => {
+                const thumb =
+                  eventImageSmall(event) ?? venueImageFor(event, venueImages);
+                return (
                 <li key={event.id}>
-                  {eventImageSmall(event) ? (
-                    <img src={eventImageSmall(event)!} alt="" loading="lazy" />
+                  {thumb ? (
+                    <img src={thumb} alt="" loading="lazy" />
                   ) : (
                     <span
                       className="plan-signup-teaser-placeholder"
@@ -276,7 +292,8 @@ export default function PlanSignupPage({ metro }: Props) {
                     </span>
                   </div>
                 </li>
-              ))}
+                );
+              })}
             </ul>
           </div>
         )}

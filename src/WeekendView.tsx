@@ -25,7 +25,12 @@ import type { AgeBand } from "./planner";
 import { APP_AUDIENCE, SHOW_AGE_BAND_UI } from "./appConfig";
 import { isUpcomingEvent } from "./eventFreshness";
 import { isFeedJunkEvent } from "./eventQuality";
-import { eventImageSmall } from "./eventImages";
+import {
+  EMPTY_VENUE_MAP,
+  eventImageSmall,
+  venueImageFor,
+  type VenueImageMap,
+} from "./eventImages";
 import { scoreEventForFamily, type FamilyProfile } from "./familyProfile";
 import { trustBoost, type EventTrust } from "./checkinApi";
 
@@ -110,6 +115,9 @@ type Props = {
   onEditProfile?: () => void;
   /** Aggregate check-in trust per event id (badges + ranking boost). */
   trust?: ReadonlyMap<string, EventTrust>;
+  /** Venue → curated photo index; events without their own photo use the
+   * venue's real image instead of a blank card. */
+  venueImages?: VenueImageMap;
 };
 
 export default function WeekendView({
@@ -131,6 +139,7 @@ export default function WeekendView({
   homeLocation,
   onEditProfile,
   trust,
+  venueImages,
 }: Props) {
   const feed = useMemo(() => {
     const now = new Date();
@@ -231,7 +240,10 @@ export default function WeekendView({
         ? `${eventTrust.trustScore}% of parents said worth it`
         : null;
     const editorPicked = editorPickedEventIds.has(event.id);
-    const thumb = eventImageSmall(event);
+    // The event's own photo, else the venue's real photo (honest — it's the
+    // place), else a neutral placeholder.
+    const thumb =
+      eventImageSmall(event) ?? venueImageFor(event, venueImages ?? EMPTY_VENUE_MAP);
     return (
       <li key={event.id} className="weekend-card">
         {thumb ? (

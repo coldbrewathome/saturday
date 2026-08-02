@@ -125,6 +125,7 @@ import {
   scoreEventForFamily,
   type FamilyProfile,
 } from "./familyProfile";
+import { buildVenueImageMap } from "./eventImages";
 
 type Category =
   | "Outdoors"
@@ -2745,6 +2746,11 @@ function App({ metro }: AppProps) {
     () => [...remoteSpots, ...curatedSpots, ...customSpots],
     [customSpots, curatedSpots, remoteSpots],
   );
+
+  // Venue → curated photo index for events without their own photo: the
+  // venue's real image shown in place of a blank card (honest — it's the
+  // place, not a stock stand-in for the event).
+  const venueImages = useMemo(() => buildVenueImageMap(allSpots), [allSpots]);
 
   // Consume a `#/spot/<id>` deep link once the spot has loaded: open its map
   // sheet. One-shot — clears so later interactions aren't overridden.
@@ -5559,6 +5565,7 @@ function App({ metro }: AppProps) {
         homeLocation={userLocation}
         onEditProfile={() => setShowProfileWizard(true)}
         trust={eventTrust}
+        venueImages={venueImages}
         newsletterSlot={
           <NewsletterCard
             metroId={metro.id}
@@ -5587,6 +5594,7 @@ function App({ metro }: AppProps) {
         onShare={(title, slug) => shareItem(title, eventShareUrl(slug))}
         shareCopiedUrl={shareCopiedUrl}
         shareUrlFor={eventShareUrl}
+        venueImages={venueImages}
       />
       ) : (
       <main className="plans-workspace" aria-label="Plans">

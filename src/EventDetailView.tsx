@@ -14,7 +14,12 @@ import type { FamilyEvent } from "./App";
 import type { MetroConfig } from "./metros";
 import { APP_BRAND } from "./appConfig";
 import { isUpcomingEvent } from "./eventFreshness";
-import { eventImage } from "./eventImages";
+import {
+  EMPTY_VENUE_MAP,
+  eventImage,
+  venueImageFor,
+  type VenueImageMap,
+} from "./eventImages";
 import { fetchEventTrust, type EventTrust } from "./checkinApi";
 import { ageBandLabels } from "./planner";
 
@@ -35,6 +40,9 @@ type Props = {
   shareCopiedUrl: string | null;
   /** Builds the share URL for a slug (to match against shareCopiedUrl). */
   shareUrlFor: (slug: string) => string;
+  /** Venue → curated photo index; events without their own photo use the
+   * venue's real image instead of a blank hero. */
+  venueImages?: VenueImageMap;
 };
 
 // Local copy of App.tsx's sourceHostname — importing the runtime helper from
@@ -218,6 +226,7 @@ export default function EventDetailView({
   onShare,
   shareCopiedUrl,
   shareUrlFor,
+  venueImages,
 }: Props) {
   const foundEvent = slug ? events.find((e) => e.slug === slug) : null;
   // A slug that still resolves but whose event has since ended must render
@@ -233,7 +242,11 @@ export default function EventDetailView({
   );
   const [eventTrust, setEventTrust] = useState<EventTrust | null>(null);
 
-  const hero = event ? eventImage(event) : null;
+  // The event's own photo, else the venue's real photo (honest — it's the
+  // place), else a neutral placeholder.
+  const hero = event
+    ? eventImage(event) ?? venueImageFor(event, venueImages ?? EMPTY_VENUE_MAP)
+    : null;
   const timeStart = event ? formatStart(event.startDateTime) : null;
   const duration = event ? formatDuration(event.startDateTime, event.endDateTime) : null;
 
