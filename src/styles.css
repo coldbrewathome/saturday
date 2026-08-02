@@ -7303,12 +7303,17 @@ a.weekend-card-title:hover {
   background: transparent;
   border: 0;
   color: var(--muted);
-  font: 600 0.8rem/1 var(--font-ui);
-  padding: 4px;
-  position: absolute;
-  right: 16px;
-  top: 16px;
   cursor: pointer;
+  font: 600 0.8rem/1 var(--font-ui);
+  min-height: 26px;
+  padding: 4px 6px;
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  /* The step section's entrance animation (transform) creates a stacking
+     context that otherwise paints above this button and swallows its
+     clicks — a new visitor would be stuck behind an undismissable modal. */
+  z-index: 2;
 }
 
 .profile-wizard-step {
@@ -7786,4 +7791,101 @@ a.weekend-card-title:hover {
 .checkin-progress span.active {
   background: var(--accent);
   width: 18px;
+}
+
+/* ── Feed upgrades: card thumbnails + editor's pick ──────────────────────── */
+.weekend-card-img {
+  align-self: center;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  flex: 0 0 56px;
+  height: 56px;
+  object-fit: cover;
+  width: 56px;
+}
+
+.weekend-chip-editors {
+  align-items: center;
+  background: var(--sun-soft, #fdf3d7);
+  border-radius: 999px;
+  color: #7a5c00;
+  display: inline-flex;
+  font: 700 0.72rem/1 var(--font-ui);
+  gap: 4px;
+  padding: 3px 8px;
+}
+
+.weekend-chip-editors::before {
+  content: "★";
+  font-size: 0.7rem;
+}
+
+@media (max-width: 480px) {
+  .weekend-card-img {
+    flex-basis: 48px;
+    height: 48px;
+    width: 48px;
+  }
+}
+
+/* ── Event detail upgrades: hero, age fit, facts, trust ─────────────────── */
+.event-detail-hero {
+  aspect-ratio: 16 / 9;
+  border-radius: 14px;
+  margin: 4px 0 16px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.event-detail-age {
+  color: var(--ink-soft);
+  font: 600 0.85rem/1.4 var(--font-ui);
+  margin: 10px 0 0;
+}
+
+.event-detail-age strong {
+  color: var(--ink);
+}
+
+.event-detail-facts {
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding-top: 14px;
+}
+
+.event-detail-fact {
+  align-items: baseline;
+  display: flex;
+  gap: 10px;
+}
+
+.event-detail-fact dt {
+  color: var(--muted);
+  flex: 0 0 96px;
+  font: 700 0.78rem/1.4 var(--font-ui);
+  text-transform: uppercase;
+}
+
+.event-detail-fact dd {
+  font: 500 0.9rem/1.4 var(--font-ui);
+  margin: 0;
+}
+
+.event-detail-checkins {
+  align-items: center;
+  background: #e7f6ec;
+  border-radius: 10px;
+  color: #1a7f37;
+  display: flex;
+  font: 700 0.88rem/1.4 var(--font-ui);
+  gap: 8px;
+  margin: 14px 0 0;
+  padding: 10px 12px;
+}
+
+.event-detail-checkins::before {
+  content: "👍";
+  font-size: 0.95rem;
 }

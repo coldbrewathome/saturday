@@ -24,6 +24,8 @@ import type { MetroConfig } from "./metros";
 import type { AgeBand } from "./planner";
 import { APP_AUDIENCE, SHOW_AGE_BAND_UI } from "./appConfig";
 import { isUpcomingEvent } from "./eventFreshness";
+import { isFeedJunkEvent } from "./eventQuality";
+import { eventImageSmall } from "./eventImages";
 import { scoreEventForFamily, type FamilyProfile } from "./familyProfile";
 import { trustBoost, type EventTrust } from "./checkinApi";
 
@@ -146,7 +148,8 @@ export default function WeekendView({
       .filter(
         (e) =>
           e.startDateTime &&
-          isUpcomingEvent(e, now, { timeZone: metro.timezone }),
+          isUpcomingEvent(e, now, { timeZone: metro.timezone }) &&
+          !isFeedJunkEvent(e),
       )
       .sort((a, b) => (a.startDateTime! < b.startDateTime! ? -1 : 1));
     for (const event of dated) {
@@ -167,6 +170,16 @@ export default function WeekendView({
       sunEvents: byDay.get(sunKey)!,
     };
   }, [events, metro]);
+
+  // Event ids referenced by any curated featured plan — rendered as an honest
+  // "Editor's pick" tag (a human-curated signal, not a rating).
+  const editorPickedEventIds = useMemo(() => {
+    const ids = new Set<string>();
+    for (const plan of featuredPlans) {
+      for (const id of plan.eventIds ?? []) ids.add(id);
+    }
+    return ids;
+  }, [featuredPlans]);
 
   const scope = (list: FamilyEvent[]) =>
     ageBand === "any" ? list : list.filter((e) => e.ageBands.includes(ageBand));
@@ -217,8 +230,15 @@ export default function WeekendView({
       eventTrust && eventTrust.total >= 3 && eventTrust.trustScore != null
         ? `${eventTrust.trustScore}% of parents said worth it`
         : null;
+    const editorPicked = editorPickedEventIds.has(event.id);
     return (
       <li key={event.id} className="weekend-card">
+        <img
+          className="weekend-card-img"
+          src={eventImageSmall(event)}
+          alt=""
+          loading="lazy"
+        />
         <span className="weekend-card-when">{timeLabel(event)}</span>
         <div className="weekend-card-main">
           {event.slug ? (
@@ -235,8 +255,11 @@ export default function WeekendView({
             {event.venue}
             {event.city ? ` · ${event.city}` : ""}
           </span>
-          {(free || showCost || host || trustLabel) && (
+          {(free || showCost || host || trustLabel || editorPicked) && (
             <span className="weekend-card-meta">
+              {editorPicked && (
+                <em className="weekend-chip-editors">Editor&rsquo;s pick</em>
+              )}
               {free && <em className="weekend-chip-free">Free</em>}
               {showCost && <em className="weekend-chip">{event.cost}</em>}
               {trustLabel && (

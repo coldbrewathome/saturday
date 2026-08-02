@@ -8,12 +8,15 @@
 // generateEventPages / buildEventJsonLd) remains the canonical surface for
 // crawlers; this effect is the cosmetic + JS-aware-share-bot fallback.
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Check, ChevronLeft, Plus, Share2 } from "lucide-react";
 import type { FamilyEvent } from "./App";
 import type { MetroConfig } from "./metros";
 import { APP_BRAND } from "./appConfig";
 import { isUpcomingEvent } from "./eventFreshness";
+import { eventImage } from "./eventImages";
+import { fetchEventTrust, type EventTrust } from "./checkinApi";
+import { ageBandLabels } from "./planner";
 
 type Props = {
   events: FamilyEvent[];
@@ -69,6 +72,19 @@ function formatEventDate(value?: string | null): string {
     day: "numeric",
     year: "numeric",
   });
+}
+
+/** "45 min", "1 hour", "1.5 hours" — or null when either bound is missing/unparseable. */
+function formatDuration(start?: string | null, end?: string | null): string | null {
+  if (!start || !end) return null;
+  const startMs = new Date(start).getTime();
+  const endMs = new Date(end).getTime();
+  if (Number.isNaN(startMs) || Number.isNaN(endMs)) return null;
+  const minutes = Math.max(1, Math.round((endMs - startMs) / 60000));
+  if (minutes < 60) return `${minutes} min`;
+  const hours = minutes / 60;
+  if (Number.isInteger(hours)) return `${hours} hour${hours === 1 ? "" : "s"}`;
+  return `${hours} hours`;
 }
 
 function buildDescription(event: FamilyEvent): string {
@@ -215,6 +231,11 @@ export default function EventDetailView({
   const shareCopied = Boolean(
     event?.slug && shareCopiedUrl === shareUrlFor(event.slug),
   );
+  const [eventTrust, setEventTrust] = useState<EventTrust | null>(null);
+
+  const hero = event ? eventImage(event) : null;
+  const timeStart = event ? formatStart(event.startDateTime) : null;
+  const duration = event ? formatDuration(event.startDateTime, event.endDateTime) : null;
 
   useEffect(() => {
     if (!slug) return;
@@ -269,6 +290,17 @@ export default function EventDetailView({
     };
   }, [event, slug, metro]);
 
+  useEffect(() => {
+    if (!event) return;
+    let cancelled = false;
+    fetchEventTrust(event.id).then((trust) => {
+      if (!cancelled) setEventTrust(trust);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [event]);
+
   return (
     <main className="event-detail-view" aria-label="Event details">
       <button type="button" className="text-button" onClick={onBack}>
@@ -294,6 +326,9 @@ export default function EventDetailView({
         </section>
       ) : (
         <article className="event-detail">
+          {hero && (
+            <img className="event-detail-hero" src={hero} alt="" loading="lazy" />
+          )}
           <header>
             <h1>{event.title}</h1>
             {formatStart(event.startDateTime) && (
@@ -326,10 +361,49 @@ export default function EventDetailView({
                   </p>
                 );
               })()}
+            {event.ageBands.length > 0 && (
+              <p className="event-detail-age">
+                Best for: {event.ageBands.map((b) => ageBandLabels[b]).join(" · ")}
+              </p>
+            )}
           </header>
 
           {event.description && (
             <p className="event-detail-description">{event.description}</p>
+          )}
+
+          <dl className="event-detail-facts">
+            {event.cost && event.cost !== "Unknown" && (
+              <div className="event-detail-fact">
+                <dt>Cost</dt>
+                <dd>{event.cost}</dd>
+              </div>
+            )}
+            {(event.timeWindow || timeStart) && (
+              <div className="event-detail-fact">
+                <dt>Time</dt>
+                <dd>{[event.timeWindow, timeStart].filter(Boolean).join(" · ")}</dd>
+              </div>
+            )}
+            {duration && (
+              <div className="event-detail-fact">
+                <dt>Duration</dt>
+                <dd>{duration}</dd>
+              </div>
+            )}
+            {event.neighborhood && (
+              <div className="event-detail-fact">
+                <dt>Neighborhood</dt>
+                <dd>{event.neighborhood}</dd>
+              </div>
+            )}
+          </dl>
+
+          {eventTrust && eventTrust.total >= 3 && eventTrust.trustScore != null && (
+            <p className="event-detail-checkins">
+              {eventTrust.trustScore}% of families said this was worth it (
+              {eventTrust.total} check-ins)
+            </p>
           )}
 
           <div className="event-detail-actions">
@@ -360,6 +434,9 @@ export default function EventDetailView({
                 <Share2 aria-hidden="true" /> {shareCopied ? "Copied!" : "Share"}
               </button>
             )}
+            <a className="text-button" href="#/browse">
+              See it on the map
+            </a>
           </div>
 
           {event.url && (
