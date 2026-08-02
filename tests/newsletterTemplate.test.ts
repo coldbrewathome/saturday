@@ -90,17 +90,17 @@ describe("renderWeekendDigest", () => {
       now: NOW,
     });
 
-    expect(out.subject).toBe("Atlanta weekend: May 23–24");
+    expect(out.subject).toBe("🎈 Atlanta this weekend: your family game plan (May 23–24)");
     expect(out.planCount).toBe(3);
     expect(out.eventCount).toBe(3);
     expect(out.html).toContain("<!doctype html>");
-    expect(out.html).toContain("Atlanta this weekend");
+    expect(out.html).toContain("Your Atlanta weekend, sorted");
     expect(out.html).toContain("Atlanta events"); // event-bearing plan
     expect(out.html).toContain("Sat morning museum");
     expect(out.html).not.toContain("Friday open studio");
     expect(out.html).not.toContain("Next-week event");
-    expect(out.text).toContain("TOP 3 PLANS");
-    expect(out.text).toContain("5 THINGS HAPPENING");
+    expect(out.text).toContain("THREE READY-MADE ADVENTURES");
+    expect(out.text).toContain("DON'T MISS THESE");
     expect(out.text).toContain("Sat morning museum");
   });
 
@@ -182,10 +182,10 @@ describe("renderWeekendDigest", () => {
     });
     expect(out.planCount).toBe(0);
     expect(out.eventCount).toBe(0);
-    expect(out.html).toContain("No featured plans yet");
-    expect(out.html).toContain("No new family events");
-    expect(out.text).toContain("(none yet");
-    expect(out.text).toContain("(no events found");
+    expect(out.html).toContain("Plans are still cooking");
+    expect(out.html).toContain("quiet one on the calendar");
+    expect(out.text).toContain("(still cooking");
+    expect(out.text).toContain("(a quiet weekend on the calendar");
   });
 
   it("escapes HTML in plan and event titles", () => {
@@ -243,6 +243,41 @@ describe("renderWeekendDigest", () => {
     expect(out.text).not.toContain("Unsubscribe:");
   });
 
+  it("headlines the most interesting event and leads the subject with it", () => {
+    const mixed: DigestEvent[] = [
+      {
+        id: "e1",
+        title: "Sun storytime",
+        startDateTime: "2026-05-24T15:30:00.000Z",
+      },
+      {
+        id: "e2",
+        title: "Decatur Arts Festival",
+        venue: "Decatur Square",
+        city: "Decatur",
+        cost: "Free",
+        startDateTime: "2026-05-23T16:00:00.000Z",
+        url: "https://example.org/fest",
+      },
+    ];
+    const out = renderWeekendDigest({
+      metroId: "atlanta",
+      metroLabel: "Atlanta",
+      timezone: "America/New_York",
+      plans: [],
+      events: mixed,
+      now: NOW,
+    });
+    expect(out.subject).toBe(
+      "🎈 Decatur Arts Festival + more this weekend in Atlanta",
+    );
+    expect(out.html).toContain("This weekend's headliner");
+    expect(out.html).toContain("FREE");
+    // The headliner is pulled out of the list; storytime stays in it.
+    expect(out.text).toContain("THIS WEEKEND'S HEADLINER");
+    expect(out.text).toContain("Sun storytime");
+  });
+
   it("handles a Saturday 'today' (weekend is today + tomorrow)", () => {
     const sat = new Date("2026-05-23T10:00:00-04:00");
     const out = renderWeekendDigest({
@@ -254,6 +289,6 @@ describe("renderWeekendDigest", () => {
       now: sat,
     });
     expect(out.eventCount).toBe(3); // sat-morning, sat-afternoon, sun
-    expect(out.subject).toBe("Atlanta weekend: May 23–24");
+    expect(out.subject).toBe("🎈 Atlanta this weekend: your family game plan (May 23–24)");
   });
 });
