@@ -7,6 +7,7 @@ import OpsAlertsView from "./ops/OpsAlertsView";
 import OpsAnalyticsView from "./ops/OpsAnalyticsView";
 import PollView from "./PollView";
 import PlanCardView from "./PlanCardView";
+import PlanSignupPage from "./PlanSignupPage";
 import { recordVisit } from "./installPrompt";
 import "./styles.css";
 
@@ -41,6 +42,12 @@ function readPlanCardRouteFromHash(): PlanCardRoute {
   return match ? match[1] : null;
 }
 
+// Ad-traffic capture landing: {metro}/#/plan-signup — standalone page, no
+// topbar or feed (nothing to browse away from).
+function isPlanSignupHash(): boolean {
+  return window.location.hash === "#/plan-signup";
+}
+
 function isOpsAlertsHash(): boolean {
   // Accept "#/ops/alerts" and "#/ops/alerts?..." so filter state can ride in
   // a querystring inside the hash without breaking route detection.
@@ -62,6 +69,7 @@ function Root() {
   const [planCardId, setPlanCardId] = useState<PlanCardRoute>(() =>
     readPlanCardRouteFromHash(),
   );
+  const [planSignup, setPlanSignup] = useState<boolean>(() => isPlanSignupHash());
   const [opsAlerts, setOpsAlerts] = useState<boolean>(() => isOpsAlertsHash());
   const [opsAnalytics, setOpsAnalytics] = useState<boolean>(() =>
     isOpsAnalyticsHash(),
@@ -83,6 +91,7 @@ function Root() {
     function handler() {
       setPollRoute(readPollRouteFromHash());
       setPlanCardId(readPlanCardRouteFromHash());
+      setPlanSignup(isPlanSignupHash());
       setOpsAlerts(isOpsAlertsHash());
       setOpsAnalytics(isOpsAnalyticsHash());
     }
@@ -95,6 +104,9 @@ function Root() {
   }
   if (planCardId) {
     return <PlanCardView cardId={planCardId} />;
+  }
+  if (planSignup) {
+    return <PlanSignupPage metro={metro} />;
   }
   if (opsAlerts) {
     return <OpsAlertsView />;
