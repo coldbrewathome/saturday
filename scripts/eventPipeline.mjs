@@ -519,6 +519,22 @@ function jsonLdTypes(value) {
   return maybeArray(value?.["@type"]).map((item) => String(item).toLowerCase());
 }
 
+// schema.org Event image: a string URL, an object with `url`, or an array of
+// either. Returns the first usable value or null.
+function jsonLdImage(item) {
+  const value = item?.image;
+  if (typeof value === "string") return value;
+  if (Array.isArray(value)) {
+    for (const entry of value) {
+      if (typeof entry === "string") return entry;
+      if (entry && typeof entry.url === "string") return entry.url;
+    }
+    return null;
+  }
+  if (value && typeof value.url === "string") return value.url;
+  return null;
+}
+
 function walkJsonLd(value, out = []) {
   if (!value || typeof value !== "object") return out;
   if (Array.isArray(value)) {
@@ -562,6 +578,7 @@ export function extractJsonLdEvents(html, source = {}) {
           endDateTime: item.endDate,
           ageBands: inferAgeBands(signalText),
           url: item.url,
+          imageUrl: jsonLdImage(item),
           cost: item.isAccessibleForFree === true ? "Free" : inferCost(signalText),
           sourceId: source.id,
           sourceName: source.name,
@@ -3748,6 +3765,24 @@ function communicoEventUrl(item, source) {
   return sanitizeUrl(item?.url, source.url) || source.url;
 }
 
+// Communico calendar entries carry an image filename (or full URL) — the
+// same photo the venue's detail page shows. The relative form lives at
+// {origin}/images/events/{client}/{file}.
+function communicoImageUrl(item, source = {}) {
+  const file = stripUnsafeText(item.event_image || item.image, 300);
+  if (!file) return null;
+  if (/^https?:\/\//i.test(file)) return file;
+  let origin = "";
+  let client = source.communicoClient || "";
+  try {
+    origin = new URL(source.url).origin;
+    if (!client) client = new URL(source.url).hostname.split(".")[0];
+  } catch {
+    return null;
+  }
+  return `${origin}/images/events/${client}/${file.replace(/^\//, "")}`;
+}
+
 export function extractCommunicoEvents(json, source = {}) {
   const rawEvents = Array.isArray(json) ? json : Array.isArray(json?.events) ? json.events : [];
   const locations = communicoLocationMap(json);
@@ -3792,6 +3827,7 @@ export function extractCommunicoEvents(json, source = {}) {
       audiences: communicoAudiences(ages, ageBands),
       cost: communicoCost(item, signalText),
       url: communicoEventUrl(item, source),
+      imageUrl: communicoImageUrl(item, source),
       sourceId: source.id,
       sourceName: source.name,
       sourceUrl: source.url,

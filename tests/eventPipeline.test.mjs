@@ -45,6 +45,45 @@ import {
 
 // E27: offsetStringForZone derives a DST-aware UTC offset per date/zone
 // instead of a fixed per-metro string that goes stale twice a year.
+test("Communico extractor pulls the venue's event photo", () => {
+  const events = extractCommunicoEvents(
+    {
+      events: [
+        {
+          id: 17045413,
+          title: "Scotts Valley 60th Birthday Bash",
+          sub_title: "Celebrate!",
+          description: "Party in the park",
+          event_image: "60th_birthday_bash_IG_1_.jpg",
+          agesArray: ["All Ages"],
+          raw_start_time: "2026-08-02T11:00:00",
+          location_id: "1",
+        },
+        { id: 2, title: "No Photo Event", sub_title: "", description: "x", agesArray: ["All Ages"], raw_start_time: "2026-08-03T11:00:00", location_id: "1" },
+      ],
+      locations: [{ id: "1", name: "Skypark", lat: 36.98, lon: -122.02, locality: "Scotts Valley" }],
+    },
+    { id: "santa-cruz-library", name: "Santa Cruz Public Libraries", url: "https://santacruzpl.libnet.info/events", city: "Santa Cruz", communicoClient: "santacruzpl" },
+  );
+  assert.equal(
+    events[0].imageUrl,
+    "https://santacruzpl.libnet.info/images/events/santacruzpl/60th_birthday_bash_IG_1_.jpg",
+  );
+  assert.equal(events[1].imageUrl, undefined);
+});
+
+test("JSON-LD extractor captures schema.org image (string, object, or array)", () => {
+  const html = `
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Event","name":"Fest","image":"https://cdn.example.com/fest.jpg","startDate":"2026-08-08T10:00:00-07:00","endDate":"2026-08-08T18:00:00-07:00","url":"https://example.com/fest","location":{"name":"Park","address":{"addressLocality":"SF"}}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Event","name":"Show","image":{"url":"https://cdn.example.com/show.png"},"startDate":"2026-08-09T10:00:00-07:00","url":"https://example.com/show","location":{"name":"Hall","address":{"addressLocality":"SF"}}}</script>
+  `;
+  const events = extractJsonLdEvents(html, { id: "s1", name: "S", url: "https://s.com", city: "SF", audiences: ["kids"] });
+  const fest = events.find((e) => e.title === "Fest");
+  const show = events.find((e) => e.title === "Show");
+  assert.equal(fest?.imageUrl, "https://cdn.example.com/fest.jpg");
+  assert.equal(show?.imageUrl, "https://cdn.example.com/show.png");
+});
+
 test("cleanEventImage keeps real photo URLs and rejects non-image junk", () => {
   assert.equal(
     cleanEventImage("https://media.ticketmaster.com/tm/photo-123.jpg"),
