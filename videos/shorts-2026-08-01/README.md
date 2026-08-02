@@ -16,6 +16,30 @@ Narration is cached: shared lines live in `videos/vo-shared/`, the per-metro
 closing line in each project's `assets/voice/cta.mp3`. Delete a file to
 regenerate just that line. `--no-vo` skips ElevenLabs entirely.
 
+## How each cut earns the click
+
+A list Short that shows everything gives the viewer no reason to leave YouTube.
+Each cut is built so the *useful* part earns the watch and the *incomplete* part
+earns the visit:
+
+1. **Five cards, not six.** Enough to be worth watching and screenshotting. The
+   sixth pick only exists in the description, so clicking through over-delivers.
+2. **A running `n of N this week` on every card.** By card five the viewer has
+   felt that they are seeing roughly one percent.
+3. **The gap beat.** One dot per event in that metro this week, with the five
+   just seen lit in orange. A 30-second video structurally cannot show 895
+   events, and this frame makes that visible rather than asserting it.
+4. **The payoff beat.** A real filter cascade — four true counts, each one
+   filter deeper (`895 → 435 → 289 → 100`, free → age band → morning), using the
+   app's own filter names. Metros whose cascade bottoms out below 5 get the plan
+   payoff instead ("pick two, it maps the day"), which does not depend on volume.
+5. **The close.** `see the other 890`, the deep link, and the real Friday email
+   offer — two conversion paths, not one.
+
+Every number in beats 2–4 is computed from the feed. Nothing is rounded up and
+nothing is withheld to manufacture curiosity: the events shown are complete and
+accurate, and the argument for visiting is simply that there are far more.
+
 ## The one thing to understand before publishing
 
 **The feed cannot fill six strong weekend cards in every metro.** The generator
