@@ -111,14 +111,25 @@ async function main() {
       try {
         console.log(`Fetching search analytics for ${siteUrl}...`);
         
-        // Calculate date range: today to 30 days ago
+        // Calculate date range: 30-day window ending 2 days ago (Search
+        // Console lags ~2-3 days).
         const endDate = new Date();
-        // search console usually has 2-3 days lag, so end date should be 2 days ago
         endDate.setDate(endDate.getDate() - 2);
-        const startDate = new Date();
-        startDate.setDate(endDate.getDate() - 30);
-        
-        const formatDate = (d) => d.toISOString().split("T")[0];
+        const startDate = new Date(endDate);
+        startDate.setDate(startDate.getDate() - 29);
+
+        // Local YYYY-MM-DD — toISOString() converts to UTC, which shifts
+        // the range a day for US evening runs and can make start > end
+        // (the API then rejects the request).
+        const formatDate = (d) => {
+          const parts = new Intl.DateTimeFormat("en-CA", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          }).formatToParts(d);
+          const get = (type) => parts.find((p) => p.type === type)?.value || "";
+          return `${get("year")}-${get("month")}-${get("day")}`;
+        };
         const startStr = formatDate(startDate);
         const endStr = formatDate(endDate);
         console.log(`  Date range: ${startStr} to ${endStr}`);
