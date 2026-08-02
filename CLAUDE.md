@@ -103,6 +103,10 @@ Audited 2026-07-11 against GSC and the Google URL Inspection API. These are conc
 
 Do **not** restructure URLs, add FAQPage schema (dead in Google Search since 2026-05), chase EXIF geotagging, or do NAP/local-pack work — a directory with no physical address cannot enter the local pack.
 
+## Weekly digest voice (user directive 2026-08-01)
+
+The newsletter digest (`worker/src/newsletter-template.ts`, sent via `scripts/newsletter-send.mjs`) must be **exciting and engaging, with highlights of the most popular/interesting events** — never a dry chronological list. The mechanism: `scoreEvent` interestingness ranking (marquee one-offs > free > routine library programming), a headliner spotlight that also leads the subject line, FREE badges, warm sign-off, small fixed emoji budget. `tests/newsletterTemplate.test.ts` pins the voice — evolve the copy deliberately there, never revert to "Top 3 plans / 5 things happening" style listings. Template changes require a worker deploy (`cd worker && npx wrangler deploy`) to go live.
+
 ## Shared Skills
 
 - For local event discovery, source repair, Bay Area feed repopulation, or missing-event audits, read and follow `skills/grounded-event-discovery/SKILL.md`. It defines the official-source search workflow and verification gates shared with Codex.

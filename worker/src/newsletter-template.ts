@@ -3,6 +3,17 @@
 // (public/data/{metro}/featured-plans.json and events.json). Pure — no I/O.
 // The send pipeline in worker/src/newsletter.ts fetches the JSON over HTTPS
 // and passes it here; tests can pass fixtures directly.
+//
+// EDITORIAL CONTRACT (user directive 2026-08-01 — keep on every rewrite):
+// the digest is exciting and engaging, never a dry listing. Concretely:
+// events are ranked by interestingness (scoreEvent: marquee one-offs >
+// free > routine library programming), the top scorer headlines the
+// subject line and gets the spotlight block, FREE gets a badge, copy is
+// warm and energetic with a small fixed emoji budget (subject balloon +
+// section markers — do not add more; deliverability). A quiet weekend
+// degrades to the plain list; never fake a headliner. Pinned by
+// tests/newsletterTemplate.test.ts — update copy there deliberately,
+// not by weakening assertions.
 
 export type DigestPlan = {
   id: string;
