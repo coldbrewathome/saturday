@@ -704,6 +704,7 @@ export function extractHtmlEvents(html, source = {}, options = {}) {
     const signalText = `${text} ${audienceText}`;
     if (!isEventish(signalText) || hasAdultOnlySignal(signalText)) continue;
     if (!hasFamilySignal(signalText)) continue;
+    if (source.excludePattern && patternMatches(signalText, source.excludePattern)) continue;
     const startDateTime = datetimeFromBlock(block, timezoneOffset) || parseLooseDate(text, options.now || new Date(), timezoneOffset);
     if (!startDateTime) continue;
     const links = hrefsFromBlock(block, source.url);

@@ -15,11 +15,13 @@
 // - Ended event still inside the 14-day grace window (_detail-guard.mjs
 //   ENDED_GRACE_MS) → the prerendered page keeps serving with 200 (it shows
 //   full past-tense event info); with no prerendered page, the branded
-//   "event ended" page serves with 200 instead of 410.
-// - Missing event page whose slug is a past YYYY-MM-DD (beyond grace) or is
-//   in the metro's ended-slug catalog → HTTP 410 with a small branded
-//   "event ended" page, soft-landing links to upcoming events,
-//   x-robots-tag: noindex.
+//   "past event" page serves with 200.
+// - Ended event beyond grace (past YYYY-MM-DD slug or in the metro's
+//   ended-slug catalog) → HTTP 200 with a permanent, indexable "past event"
+//   page: soft-landing links to upcoming events, self-canonical. The URL
+//   never dies — with crawl inflow near zero, 410ing expired URLs was
+//   draining the index (removals without replacement); freezing them as 200
+//   stops the drain. 404 stays reserved for slugs that never existed.
 // - Missing event page whose slug the catalog has never recorded → HTTP 404
 //   (real not-found, noindex) instead of a soft-404 200 shell.
 // - Missing event page that IS a live (capped-out) event, or any missing spot
@@ -67,12 +69,14 @@ function softLandingHtml(metro: string, upcoming: UpcomingLink[]): string {
 function detailMissPage(
   host: string,
   metro: string,
-  status: 200 | 404 | 410,
+  status: 200 | 404,
   upcoming: UpcomingLink[],
   pageKind: string = "event",
+  canonicalPath?: string,
 ): Response {
   const brand = brandForHost(host);
   const isEvent = pageKind === "event";
+  const indexable = status === 200;
   const heading =
     status === 404
       ? isEvent
@@ -84,14 +88,16 @@ function detailMissPage(
       ? isEvent
         ? "We couldn&#39;t find an event at this link. It may have been moved, or the address may be mistyped."
         : "We couldn&#39;t find a page at this link. It may have been removed, or the address may be mistyped."
-      : "The event at this link is no longer scheduled. It happened in the past or was removed by the organizer.";
+      : `This event was listed on ${esc(brand.name)} and is no longer scheduled. We keep a permanent record at this link — the live list for this metro is below.`;
+  const canonical = indexable && canonicalPath
+    ? `<link rel="canonical" href="https://${esc(host)}${esc(canonicalPath)}">\n`
+    : "";
   const html = `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,follow">
-<title>${esc(heading)} — ${esc(brand.name)}</title>
+${indexable ? "" : `<meta name="robots" content="noindex,follow">\n`}${canonical}<title>${esc(heading)} — ${esc(brand.name)}</title>
 <style>body{font-family:system-ui,sans-serif;max-width:36rem;margin:4rem auto;padding:0 1rem;line-height:1.5;color:#222}a{color:#0066cc}ul{padding-left:1.1rem}li{margin:.25rem 0}</style>
 </head>
 <body>
@@ -101,14 +107,12 @@ ${softLandingHtml(metro, upcoming)}
 <p><a href="/">${esc(brand.name)}</a> — ${esc(brand.tag)}</p>
 </body>
 </html>`;
-  return new Response(html, {
-    status,
-    headers: {
-      "content-type": "text/html; charset=utf-8",
-      "cache-control": "public, max-age=3600",
-      "x-robots-tag": "noindex",
-    },
-  });
+  const headers: Record<string, string> = {
+    "content-type": "text/html; charset=utf-8",
+    "cache-control": "public, max-age=3600",
+  };
+  if (!indexable) headers["x-robots-tag"] = "noindex";
+  return new Response(html, { status, headers });
 }
 
 export async function onRequest(context: Context): Promise<Response> {
@@ -157,7 +161,7 @@ export async function onRequest(context: Context): Promise<Response> {
     if (detail.kind === "event") {
       const disposition = missingPageDisposition(detail.kind, detail.slug, Date.now(), catalog);
       if (disposition === "gone") {
-        return detailMissPage(url.hostname, detail.metro, 410, catalog?.upcoming ?? []);
+        return detailMissPage(url.hostname, detail.metro, 200, catalog?.upcoming ?? [], "event", url.pathname);
       }
       // "ended-grace" intentionally falls through: the prerendered page keeps
       // serving with 200 for 14 days after the event ends (full past-tense
@@ -175,13 +179,13 @@ export async function onRequest(context: Context): Promise<Response> {
   );
   const upcoming = catalog?.upcoming ?? [];
   if (disposition === "gone") {
-    return detailMissPage(url.hostname, detail.metro, 410, upcoming);
+    return detailMissPage(url.hostname, detail.metro, 200, upcoming, "event", url.pathname);
   }
   if (disposition === "ended-grace") {
     // No prerendered asset (capped-out, or a redeploy dropped it): the
-    // branded ended page with its soft-landing links serves with 200 through
-    // the grace window; the 410 lands when grace elapses.
-    return detailMissPage(url.hostname, detail.metro, 200, upcoming);
+    // branded past-event page with its soft-landing links serves with 200
+    // through the grace window and stays as the permanent page after it.
+    return detailMissPage(url.hostname, detail.metro, 200, upcoming, "event", url.pathname);
   }
   if (disposition === "not-found") {
     return detailMissPage(url.hostname, detail.metro, 404, upcoming);

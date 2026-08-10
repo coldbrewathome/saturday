@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "philadelphia",
-  "generatedAt": "2026-08-01T05:30:10.991Z",
+  "generatedAt": "2026-08-10T01:48:36.506Z",
   "registryPath": "data/event-sources-philadelphia.json",
   "outputPath": "public/data/philadelphia/events.json",
-  "eventCount": 885,
-  "adultsEventCount": 169,
+  "eventCount": 863,
+  "adultsEventCount": 150,
   "sourceCount": 25,
-  "liveEventCount": 946,
+  "liveEventCount": 924,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 16,
-  "operatorAlertCount": 8,
+  "operatorAlertCount": 11,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:30:10.991Z",
+      "fetchedAt": "2026-08-10T01:48:36.506Z",
       "fetches": [
         {
           "url": "https://freelibraryfoundation.org/events/",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:30:10.991Z",
+      "fetchedAt": "2026-08-10T01:48:36.506Z",
       "fetches": [
         {
           "url": "https://www.phila.gov/departments/philadelphia-parks-recreation/#calendar",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:30:10.991Z",
+      "fetchedAt": "2026-08-10T01:48:36.506Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -103,13 +103,63 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:30:10.991Z",
+      "fetchedAt": "2026-08-10T01:48:36.506Z",
       "fetches": [
         {
           "url": "https://middletowngrangefair.org/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "peach-festival-peddlers-village-2026-08-01-src",
+      "sourceName": "Peach Festival at Peddler's Village (Saturday)",
+      "sourceType": "officialTextEvents",
+      "url": "https://peddlersvillage.com/event/peach-festival/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:48:36.506Z",
+      "fetches": [
+        {
+          "url": "https://peddlersvillage.com/event/peach-festival/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "second-street-festival-northern-liberties-2026-08-02-src",
+      "sourceName": "16th Annual 2nd Street Festival",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.explorenorthernliberties.org/event/16th-annual-2nd-street-festival/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:48:36.506Z",
+      "fetches": [
+        {
+          "url": "https://www.explorenorthernliberties.org/event/16th-annual-2nd-street-festival/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -128,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:30:10.991Z",
+      "fetchedAt": "2026-08-10T01:48:36.506Z",
       "fetches": [
         {
           "url": "https://www.utphilly.com/events",
@@ -153,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:30:10.991Z",
+      "fetchedAt": "2026-08-10T01:48:36.506Z",
       "fetches": [
         {
           "url": "https://www.johnnybrendas.com/events",
@@ -178,13 +228,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:30:10.991Z",
+      "fetchedAt": "2026-08-10T01:48:36.506Z",
       "fetches": [
         {
           "url": "https://philadelphia.heliumcomedy.com/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "ardmore-music-hall",
+      "sourceName": "Ardmore Music Hall",
+      "sourceType": "html",
+      "url": "https://ardmoremusichall.com/all-events/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:48:36.506Z",
+      "fetches": [
+        {
+          "url": "https://ardmoremusichall.com/all-events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -203,7 +278,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:30:10.991Z",
+      "fetchedAt": "2026-08-10T01:48:36.506Z",
       "fetches": [
         {
           "url": "https://folkfest.org/",
@@ -292,9 +367,9 @@
       "metroId": "philadelphia",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 305,
+      "liveEvents": 364,
       "fallbackEvents": 0,
-      "eventCount": 305,
+      "eventCount": 364,
       "fetches": [
         {
           "url": "https://www.pleasetouchmuseum.org/calendar/month/",
@@ -305,7 +380,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=600; pages=12",
-      "rejectedLiveEvents": 295,
+      "rejectedLiveEvents": 236,
       "extractedEvents": 600,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -319,21 +394,21 @@
       "metroId": "philadelphia",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 7,
+      "liveEvents": 5,
       "fallbackEvents": 0,
-      "eventCount": 7,
+      "eventCount": 5,
       "fetches": [
         {
           "url": "https://www.philadelphiazoo.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=wp-rest-events; events=84"
+          "contentType": "application/json; source=wp-rest-events; events=87"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=wp-rest-events; events=84",
-      "rejectedLiveEvents": 201,
-      "extractedEvents": 208,
+      "contentType": "application/json; source=wp-rest-events; events=87",
+      "rejectedLiveEvents": 204,
+      "extractedEvents": 209,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -400,9 +475,9 @@
       "metroId": "philadelphia",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 14,
+      "liveEvents": 7,
       "fallbackEvents": 0,
-      "eventCount": 14,
+      "eventCount": 7,
       "fetches": [
         {
           "url": "https://bclsnj.bibliocommons.com/v2/events",
@@ -414,7 +489,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 14,
+      "extractedEvents": 7,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -427,9 +502,9 @@
       "metroId": "philadelphia",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 53,
+      "liveEvents": 33,
       "fallbackEvents": 0,
-      "eventCount": 53,
+      "eventCount": 33,
       "fetches": [
         {
           "url": "https://mnl.libcal.com/calendar?cid=19360&cal=19360",
@@ -440,8 +515,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 7,
-      "extractedEvents": 60,
+      "rejectedLiveEvents": 6,
+      "extractedEvents": 39,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -454,9 +529,9 @@
       "metroId": "philadelphia",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 246,
+      "liveEvents": 237,
       "fallbackEvents": 0,
-      "eventCount": 246,
+      "eventCount": 237,
       "fetches": [
         {
           "url": "https://delcolibraries.libcal.com/calendar?cid=10206&cal=10206",
@@ -468,7 +543,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 1,
-      "extractedEvents": 247,
+      "extractedEvents": 238,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -481,9 +556,9 @@
       "metroId": "philadelphia",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 229,
+      "liveEvents": 192,
       "fallbackEvents": 0,
-      "eventCount": 229,
+      "eventCount": 192,
       "fetches": [
         {
           "url": "https://calendar.buckslib.org/calendar?cid=3891&cal=3891",
@@ -495,7 +570,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 3,
-      "extractedEvents": 232,
+      "extractedEvents": 195,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -508,9 +583,9 @@
       "metroId": "philadelphia",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 10,
+      "liveEvents": 8,
       "fallbackEvents": 0,
-      "eventCount": 10,
+      "eventCount": 8,
       "fetches": [
         {
           "url": "https://ansp.org/programs-and-events/events/",
@@ -521,8 +596,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 10,
-      "extractedEvents": 20,
+      "rejectedLiveEvents": 8,
+      "extractedEvents": 16,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -535,9 +610,9 @@
       "metroId": "philadelphia",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://peddlersvillage.com/event/peach-festival/",
@@ -548,7 +623,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 2,
       "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -562,9 +637,9 @@
       "metroId": "philadelphia",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.explorenorthernliberties.org/event/16th-annual-2nd-street-festival/",
@@ -575,7 +650,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -750,9 +825,9 @@
       "metroId": "philadelphia",
       "category": "Comedy",
       "status": "ok",
-      "liveEvents": 35,
+      "liveEvents": 36,
       "fallbackEvents": 0,
-      "eventCount": 35,
+      "eventCount": 36,
       "fetches": [
         {
           "url": "https://www.punchlinephilly.com/shows",
@@ -763,7 +838,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 0,
       "extractedEvents": 36,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -777,9 +852,9 @@
       "metroId": "philadelphia",
       "category": "Live Music",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://ardmoremusichall.com/all-events/",
@@ -790,8 +865,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 3,
+      "rejectedLiveEvents": 2,
+      "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "honolulu",
-  "generatedAt": "2026-08-01T05:27:50.821Z",
-  "alertCount": 6,
+  "generatedAt": "2026-08-10T01:51:30.240Z",
+  "alertCount": 12,
   "alerts": [
     {
       "severity": "critical",
@@ -19,37 +19,12 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:27:50.821Z",
+      "fetchedAt": "2026-08-10T01:51:30.240Z",
       "fetches": [
         {
           "url": "https://www.bishopmuseum.org/exhibits-and-programs/events/",
           "status": "blocked",
           "reason": "challenge page returned instead of event content",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "honolulu",
-      "sourceId": "honolulu-museum-art",
-      "sourceName": "Honolulu Museum of Art",
-      "sourceType": "html",
-      "url": "https://honolulumuseum.org/events/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:27:50.821Z",
-      "fetches": [
-        {
-          "url": "https://honolulumuseum.org/events/",
-          "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
@@ -70,7 +45,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:27:50.821Z",
+      "fetchedAt": "2026-08-10T01:51:30.240Z",
       "fetches": [
         {
           "url": "https://www.honoluluzoo.org/experiences-events/",
@@ -95,7 +70,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:27:50.821Z",
+      "fetchedAt": "2026-08-10T01:51:30.240Z",
       "fetches": [
         {
           "url": "https://calendar.google.com/calendar/ical/hawaii.edu_ur7iq68mqshu5q73n79rmb4jrk%40group.calendar.google.com/public/basic.ics",
@@ -120,13 +95,188 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:27:50.821Z",
+      "fetchedAt": "2026-08-10T01:51:30.240Z",
       "fetches": [
         {
           "url": "https://www.kualoa.com/activities/",
           "status": "http-error",
           "httpStatus": 404,
           "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "honolulu",
+      "sourceId": "kuhio-beach-hula-show-2026-08-01-src",
+      "sourceName": "Kuhio Beach Hula Show",
+      "sourceType": "officialTextEvents",
+      "url": "https://kbhulashow.wixsite.com/official",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:51:30.240Z",
+      "fetches": [
+        {
+          "url": "https://kbhulashow.wixsite.com/official",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "honolulu",
+      "sourceId": "waipahu-soto-zen-taiyoji-bon-dance-2026-07-31-src",
+      "sourceName": "Bon Dance at Waipahu Soto Zen Temple Taiyoji",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:51:30.240Z",
+      "fetches": [
+        {
+          "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "honolulu",
+      "sourceId": "waipahu-soto-zen-taiyoji-bon-dance-2026-08-01-src",
+      "sourceName": "Bon Dance at Waipahu Soto Zen Temple Taiyoji",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:51:30.240Z",
+      "fetches": [
+        {
+          "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "honolulu",
+      "sourceId": "kcc-farmers-market-2026-08-01-src",
+      "sourceName": "KCC Farmers' Market",
+      "sourceType": "officialTextEvents",
+      "url": "https://hfbf.org/farmers-markets/kcc/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:51:30.240Z",
+      "fetches": [
+        {
+          "url": "https://hfbf.org/farmers-markets/kcc/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "honolulu",
+      "sourceId": "aiea-soto-mission-bon-dance-2026-08-07-src",
+      "sourceName": "Bon Dance at Soto Mission of Aiea",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:51:30.240Z",
+      "fetches": [
+        {
+          "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "honolulu",
+      "sourceId": "aiea-soto-mission-bon-dance-2026-08-08-src",
+      "sourceName": "Bon Dance at Soto Mission of Aiea",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:51:30.240Z",
+      "fetches": [
+        {
+          "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "honolulu",
+      "sourceId": "pearl-city-hongwanji-bon-dance-2026-08-08-src",
+      "sourceName": "Bon Dance at Pearl City Hongwanji Mission",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:51:30.240Z",
+      "fetches": [
+        {
+          "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -145,7 +295,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:27:50.821Z",
+      "fetchedAt": "2026-08-10T01:51:30.240Z",
       "fetches": [
         {
           "url": "https://www.alohacomedyclub.com/calendar",

@@ -1,21 +1,17 @@
 {
   "schemaVersion": 1,
   "metroId": "new-york-city",
-  "generatedAt": "2026-08-01T05:29:49.035Z",
+  "generatedAt": "2026-08-10T01:43:41.541Z",
   "registryPath": "data/event-sources-new-york-city.json",
   "outputPath": "public/data/new-york-city/events.json",
-  "eventCount": 2664,
-  "adultsEventCount": 40,
+  "eventCount": 2604,
+  "adultsEventCount": 43,
   "sourceCount": 29,
-  "liveEventCount": 511,
-  "lastKnownGoodEventCount": 2133,
+  "liveEventCount": 2584,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 20,
   "operatorAlertCount": 19,
-  "errors": [
-    "events[125].city 'Wantagh' is outside configured coverage (ticketmaster-nyc-family: KIDZ BOP LIVE Birthday Concert Event).",
-    "events[203].city 'Wantagh' is outside configured coverage (ticketmaster-nyc-family: Craig Gass (Family Guy, Howard Stern) & Chris Kael (Five Finger Death Punch) stand up and live podcast taping of Beardo & Weirdo).",
-    "events[705].city 'Atlantic City' is outside configured coverage (ticketmaster-nyc-family: No Sitter Necessary: The Family K-Pop Dance Takedown!)."
-  ],
+  "errors": [],
   "operatorAlerts": [
     {
       "severity": "warning",
@@ -32,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:49.035Z",
+      "fetchedAt": "2026-08-10T01:43:41.541Z",
       "fetches": [
         {
           "url": "https://queens.libnet.info/events",
@@ -57,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:49.035Z",
+      "fetchedAt": "2026-08-10T01:43:41.541Z",
       "fetches": [
         {
           "url": "https://www.nypl.org/events/calendar",
@@ -65,31 +61,6 @@
           "reason": "challenge page returned instead of event content",
           "httpStatus": 200,
           "contentType": "text/html"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "new-york-city",
-      "sourceId": "nyc-parks-kids",
-      "sourceName": "NYC Parks Events",
-      "sourceType": "nycParksEvents",
-      "url": "https://www.nycgovparks.org/events",
-      "status": "ok-last-known-good",
-      "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 2133,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 2133,
-      "fetchedAt": "2026-08-01T05:29:49.035Z",
-      "fetches": [
-        {
-          "url": "https://www.nycgovparks.org/events/kids",
-          "status": "ok",
-          "httpStatus": 202,
-          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -108,13 +79,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:49.035Z",
+      "fetchedAt": "2026-08-10T01:43:41.541Z",
       "fetches": [
         {
           "url": "https://www.newvictory.org/api/event-instances.json",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "application/json"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "new-york-city",
+      "sourceId": "lincoln-center-family",
+      "sourceName": "Lincoln Center Kids & Family Programs",
+      "sourceType": "lincolnCenterFamily",
+      "url": "https://www.lincolncenter.org/series/family",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:43:41.541Z",
+      "fetches": [
+        {
+          "url": "https://www.lincolncenter.org/series/family",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -133,7 +129,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:49.035Z",
+      "fetchedAt": "2026-08-10T01:43:41.541Z",
       "fetches": [
         {
           "url": "https://www.amnh.org/calendar",
@@ -158,7 +154,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:49.035Z",
+      "fetchedAt": "2026-08-10T01:43:41.541Z",
       "fetches": [
         {
           "url": "https://bronxzoo.com/things-to-do/events",
@@ -183,7 +179,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:49.035Z",
+      "fetchedAt": "2026-08-10T01:43:41.541Z",
       "fetches": [
         {
           "url": "https://njfair.com/",
@@ -208,7 +204,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:49.035Z",
+      "fetchedAt": "2026-08-10T01:43:41.541Z",
       "fetches": [
         {
           "url": "https://www.brooklynsteel.com/calendar",
@@ -233,7 +229,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:49.035Z",
+      "fetchedAt": "2026-08-10T01:43:41.541Z",
       "fetches": [
         {
           "url": "https://www.boweryballroom.com/calendar",
@@ -258,7 +254,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:49.035Z",
+      "fetchedAt": "2026-08-10T01:43:41.541Z",
       "fetches": [
         {
           "url": "https://www.musichallofwilliamsburg.com/calendar",
@@ -283,7 +279,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:49.035Z",
+      "fetchedAt": "2026-08-10T01:43:41.541Z",
       "fetches": [
         {
           "url": "https://lpr.com/calendar",
@@ -308,7 +304,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:49.035Z",
+      "fetchedAt": "2026-08-10T01:43:41.541Z",
       "fetches": [
         {
           "url": "https://www.terminal5nyc.com/calendar",
@@ -333,7 +329,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:49.035Z",
+      "fetchedAt": "2026-08-10T01:43:41.541Z",
       "fetches": [
         {
           "url": "https://www.websterhall.com/events",
@@ -358,7 +354,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:49.035Z",
+      "fetchedAt": "2026-08-10T01:43:41.541Z",
       "fetches": [
         {
           "url": "https://www.comedycellar.com/line-up/",
@@ -383,7 +379,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:49.035Z",
+      "fetchedAt": "2026-08-10T01:43:41.541Z",
       "fetches": [
         {
           "url": "https://gothamcomedyclub.com/calendar",
@@ -408,7 +404,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:49.035Z",
+      "fetchedAt": "2026-08-10T01:43:41.541Z",
       "fetches": [
         {
           "url": "https://www.elsewherebrooklyn.com/events",
@@ -433,7 +429,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:49.035Z",
+      "fetchedAt": "2026-08-10T01:43:41.541Z",
       "fetches": [
         {
           "url": "https://www.roughtradenyc.com/events",
@@ -458,7 +454,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:49.035Z",
+      "fetchedAt": "2026-08-10T01:43:41.541Z",
       "fetches": [
         {
           "url": "https://www.bluenotejazz.com/new-york/schedule",
@@ -483,7 +479,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:29:49.035Z",
+      "fetchedAt": "2026-08-10T01:43:41.541Z",
       "fetches": [
         {
           "url": "https://villagevanguard.com/events",
@@ -599,25 +595,24 @@
       "city": "New York",
       "metroId": "new-york-city",
       "category": "Park",
-      "status": "ok-last-known-good",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 2091,
       "fallbackEvents": 0,
-      "eventCount": 2133,
+      "eventCount": 2091,
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/kids",
           "status": "ok",
-          "httpStatus": 202,
+          "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "httpStatus": 202,
+      "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 2133,
-      "recoveryMode": "last-known-good",
-      "reason": "source produced no live events; using last-known-good future events"
+      "rejectedLiveEvents": 535,
+      "extractedEvents": 2626,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "brooklyn-childrens-museum",
@@ -668,8 +663,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 140,
-      "extractedEvents": 140,
+      "rejectedLiveEvents": 143,
+      "extractedEvents": 143,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -682,9 +677,9 @@
       "metroId": "new-york-city",
       "category": "Theater",
       "status": "ok",
-      "liveEvents": 4,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.lincolncenter.org/series/family",
@@ -695,7 +690,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 4,
       "extractedEvents": 4,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -762,21 +757,21 @@
       "metroId": "new-york-city",
       "category": "Ticketed",
       "status": "ok",
-      "liveEvents": 157,
+      "liveEvents": 136,
       "fallbackEvents": 0,
-      "eventCount": 157,
+      "eventCount": 136,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=181; queries=3"
+          "contentType": "application/json; source=ticketmaster; events=157; queries=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=ticketmaster; events=181; queries=3",
-      "rejectedLiveEvents": 10,
-      "extractedEvents": 167,
+      "contentType": "application/json; source=ticketmaster; events=157; queries=3",
+      "rejectedLiveEvents": 14,
+      "extractedEvents": 150,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -816,21 +811,21 @@
       "metroId": "new-york-city",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 37,
+      "liveEvents": 34,
       "fallbackEvents": 0,
-      "eventCount": 37,
+      "eventCount": 34,
       "fetches": [
         {
           "url": "https://queensbotanical.org/calendar/list/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=115; pages=3"
+          "contentType": "application/json; source=tribe-events; events=108; pages=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=115; pages=3",
-      "rejectedLiveEvents": 72,
-      "extractedEvents": 109,
+      "contentType": "application/json; source=tribe-events; events=108; pages=3",
+      "rejectedLiveEvents": 68,
+      "extractedEvents": 102,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -870,21 +865,21 @@
       "metroId": "new-york-city",
       "category": "Community",
       "status": "ok",
-      "liveEvents": 101,
+      "liveEvents": 112,
       "fallbackEvents": 0,
-      "eventCount": 101,
+      "eventCount": 112,
       "fetches": [
         {
           "url": "https://cityparksfoundation.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=120; pages=3"
+          "contentType": "application/json; source=tribe-events; events=126; pages=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=120; pages=3",
-      "rejectedLiveEvents": 19,
-      "extractedEvents": 120,
+      "contentType": "application/json; source=tribe-events; events=126; pages=3",
+      "rejectedLiveEvents": 14,
+      "extractedEvents": 126,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -897,9 +892,9 @@
       "metroId": "new-york-city",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://www.hkdbf-ny.org/",
@@ -916,7 +911,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null

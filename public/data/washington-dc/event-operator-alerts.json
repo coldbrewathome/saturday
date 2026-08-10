@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "washington-dc",
-  "generatedAt": "2026-08-01T05:36:39.284Z",
-  "alertCount": 6,
+  "generatedAt": "2026-08-10T01:46:53.920Z",
+  "alertCount": 9,
   "alerts": [
     {
       "severity": "warning",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:36:39.284Z",
+      "fetchedAt": "2026-08-10T01:46:53.920Z",
       "fetches": [
         {
           "url": "https://dpr.dc.gov/events",
@@ -44,13 +44,37 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:36:39.284Z",
+      "fetchedAt": "2026-08-10T01:46:53.920Z",
       "fetches": [
         {
           "url": "https://naturalhistory.si.edu/events/family-programs",
           "status": "http-error",
           "httpStatus": 403,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "washington-dc",
+      "sourceId": "washington-dc-zoo-family",
+      "sourceName": "National Zoo Events",
+      "sourceType": "nationalZooJsonApi",
+      "url": "https://nationalzoo.si.edu/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 4,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 4,
+      "fetchedAt": "2026-08-10T01:46:53.920Z",
+      "fetches": [
+        {
+          "url": "https://nationalzoo.si.edu/events",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ]
     },
@@ -69,13 +93,63 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:36:39.284Z",
+      "fetchedAt": "2026-08-10T01:46:53.920Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "application/json; source=ticketmaster; events=3; queries=1"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "washington-dc",
+      "sourceId": "fairfax-county-summer-carnival-and-fair-2026-07-31-src",
+      "sourceName": "Fairfax County Summer Carnival and Fair (Friday)",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.fairfaxcounty.gov/parks/frying-pan-park/4-h-fair",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:46:53.920Z",
+      "fetches": [
+        {
+          "url": "https://www.fairfaxcounty.gov/parks/frying-pan-park/4-h-fair",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "washington-dc",
+      "sourceId": "prince-william-county-fair-2026-src",
+      "sourceName": "Prince William County Fair 2026 (75th)",
+      "sourceType": "officialTextEvents",
+      "url": "https://deggeller.com/events/13",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:46:53.920Z",
+      "fetches": [
+        {
+          "url": "https://deggeller.com/events/13",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html"
         }
       ]
     },
@@ -94,7 +168,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:36:39.284Z",
+      "fetchedAt": "2026-08-10T01:46:53.920Z",
       "fetches": [
         {
           "url": "https://www.930.com/events",
@@ -119,7 +193,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:36:39.284Z",
+      "fetchedAt": "2026-08-10T01:46:53.920Z",
       "fetches": [
         {
           "url": "https://www.unionstage.com/events",
@@ -143,7 +217,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:36:39.284Z",
+      "fetchedAt": "2026-08-10T01:46:53.920Z",
       "fetches": [
         {
           "url": "https://www.songbyrddc.com/events",

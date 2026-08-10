@@ -1,9 +1,34 @@
 {
   "schemaVersion": 1,
   "metroId": "los-angeles",
-  "generatedAt": "2026-08-01T05:19:10.526Z",
-  "alertCount": 15,
+  "generatedAt": "2026-08-10T02:16:18.334Z",
+  "alertCount": 25,
   "alerts": [
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "nhm-family-calendar",
+      "sourceName": "Natural History Museums of Los Angeles County",
+      "sourceType": "officialTextEvents",
+      "url": "https://nhm.org/calendar",
+      "status": "ok-last-known-good",
+      "issueType": "zero-extracted",
+      "reason": "source produced no live events; using last-known-good future events",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 25,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 25,
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
+      "fetches": [
+        {
+          "url": "https://nhm.org/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
     {
       "severity": "critical",
       "metroId": "los-angeles",
@@ -19,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:19:10.526Z",
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
       "fetches": [
         {
           "url": "https://www.petersen.org/events",
@@ -33,22 +58,22 @@
     {
       "severity": "warning",
       "metroId": "los-angeles",
-      "sourceId": "griffith-observatory",
-      "sourceName": "Griffith Observatory",
+      "sourceId": "cabrillo-marine-aquarium",
+      "sourceName": "Cabrillo Marine Aquarium",
       "sourceType": "html",
-      "url": "https://griffithobservatory.lacity.gov/events/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
+      "url": "https://cma.recreation.parks.lacity.gov/",
+      "status": "ok-last-known-good",
+      "issueType": "zero-extracted",
+      "reason": "source produced no live events; using last-known-good future events",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:19:10.526Z",
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
       "fetches": [
         {
-          "url": "https://griffithobservatory.lacity.gov/events/",
+          "url": "https://cma.recreation.parks.lacity.gov/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -56,27 +81,27 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "los-angeles",
       "sourceId": "norton-simon",
       "sourceName": "Norton Simon Museum",
       "sourceType": "html",
       "url": "https://www.nortonsimon.org/calendar",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:19:10.526Z",
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
       "fetches": [
         {
           "url": "https://www.nortonsimon.org/calendar",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -95,7 +120,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:19:10.526Z",
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
       "fetches": [
         {
           "url": "https://www.huntington.org/calendar",
@@ -120,7 +145,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:19:10.526Z",
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
       "fetches": [
         {
           "url": "https://grandparkla.org/events/",
@@ -145,7 +170,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:19:10.526Z",
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -170,10 +195,235 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:19:10.526Z",
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
       "fetches": [
         {
           "url": "https://ocfair.com/oc-fair/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "macarthur-park-country-mexican-regional-concert-2026-08-01-src",
+      "sourceName": "MacArthur Park Free Summer Concert: Country/Mexican Regional",
+      "sourceType": "officialTextEvents",
+      "url": "https://mac-la.org/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
+      "fetches": [
+        {
+          "url": "https://mac-la.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "ciro-hurtado-and-friends-grand-performances-2026-07-31-src",
+      "sourceName": "An Evening with Ciro Hurtado and Friends — Grand Performances",
+      "sourceType": "officialTextEvents",
+      "url": "https://grandperformances.org/events/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
+      "fetches": [
+        {
+          "url": "https://grandperformances.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "bees-things-flowers-roy-ayers-j-dilla-grand-performances-2026-08-01-src",
+      "sourceName": "Bees & Things & Flowers: Roy Ayers Tribute + J Dilla's Donuts — Grand Performances",
+      "sourceType": "officialTextEvents",
+      "url": "https://grandperformances.org/events/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
+      "fetches": [
+        {
+          "url": "https://grandperformances.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "sounds-of-la-county-helen-keller-park-2026-08-01-src",
+      "sourceName": "Sounds of LA County: Selectors Choice DJ Dance Party at Helen Keller Park",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.soundsoflacounty.com/schedule/helen-keller-park-sat-08/01/26-selectors-choice-dj-dance-party-experience-workshops",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
+      "fetches": [
+        {
+          "url": "https://www.soundsoflacounty.com/schedule/helen-keller-park-sat-08/01/26-selectors-choice-dj-dance-party-experience-workshops",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "sounds-of-la-county-lennox-park-2026-08-01-src",
+      "sourceName": "Sounds of LA County: Lily H Clark featuring Guicho y La Tribu at Lennox Park",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.soundsoflacounty.com/schedule",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
+      "fetches": [
+        {
+          "url": "https://www.soundsoflacounty.com/schedule",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "sounds-of-la-county-william-steinmetz-park-2026-08-01-src",
+      "sourceName": "Sounds of LA County: Resonance & Remedies at William Steinmetz Park",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.soundsoflacounty.com/schedule/william-steinmetz-park-sat-08/01/26-nance-arte-presents-resonance-remedies-an-evening-of-la-soundscapes",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
+      "fetches": [
+        {
+          "url": "https://www.soundsoflacounty.com/schedule/william-steinmetz-park-sat-08/01/26-nance-arte-presents-resonance-remedies-an-evening-of-la-soundscapes",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "dena-community-backpack-giveaway-rose-bowl-2026-08-02-src",
+      "sourceName": "3rd Annual Dena Community Backpack Giveaway at Rose Bowl Stadium",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.eventbrite.com/e/3rd-annual-dena-community-backpack-giveawayentrega-de-mochilas-tickets-1989623447290",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
+      "fetches": [
+        {
+          "url": "https://www.eventbrite.com/e/3rd-annual-dena-community-backpack-giveawayentrega-de-mochilas-tickets-1989623447290",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "international-surf-festival-pier-to-pier-swim-2026-08-02-src",
+      "sourceName": "International Surf Festival: Dwight Crum Pier-to-Pier Swim",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.surffestival.org/swim",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
+      "fetches": [
+        {
+          "url": "https://www.surffestival.org/swim",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "sawdust-art-festival-2026-08-01-src",
+      "sourceName": "Sawdust Art Festival (60th Summer Festival)",
+      "sourceType": "officialTextEvents",
+      "url": "https://sawdustartfestival.org/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
+      "fetches": [
+        {
+          "url": "https://sawdustartfestival.org/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -195,7 +445,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:19:10.526Z",
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
       "fetches": [
         {
           "url": "https://www.troubadour.com/events",
@@ -220,7 +470,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:19:10.526Z",
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
       "fetches": [
         {
           "url": "https://www.theelrey.com/events",
@@ -245,7 +495,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:19:10.526Z",
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
       "fetches": [
         {
           "url": "https://www.theroxy.com/events",
@@ -270,7 +520,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:19:10.526Z",
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
       "fetches": [
         {
           "url": "https://thecomedystore.com/calendar/",
@@ -295,7 +545,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:19:10.526Z",
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
       "fetches": [
         {
           "url": "https://www.laughfactory.com/shows",
@@ -320,7 +570,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:19:10.526Z",
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
       "fetches": [
         {
           "url": "https://improv.com/hollywood/calendar/",
@@ -345,7 +595,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:19:10.526Z",
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
       "fetches": [
         {
           "url": "https://www.ticketmaster.com/the-wiltern-tickets-los-angeles/venue/73790",
@@ -371,7 +621,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:19:10.526Z",
+      "fetchedAt": "2026-08-10T02:16:18.334Z",
       "fetches": [
         {
           "url": "https://www.theregenttheater.com/events",

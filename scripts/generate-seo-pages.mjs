@@ -416,11 +416,20 @@ const lastmodStoreNext = {};
 // pages with neither region.
 function lastmodContentSignature(html) {
   const text = String(html);
-  const main = /<main[\s\S]*?<\/main>/i.exec(text);
+  // Volatile blocks must not drive <lastmod>: the event pages' related-events
+  // section and the ended-stub's upcoming/featured lists embed live feed
+  // links + dates that rotate with every ingest. Including them re-stamped
+  // thousands of pages per build (5,868 of 7,115 URLs shared one date on
+  // 2026-08-05), resurrecting the daily-churn pattern Google distrusts.
+  const stripped = text
+    .replace(/<section class="event-related">[\s\S]*?<\/section>/g, "")
+    .replace(/<h2>Upcoming Events in [\s\S]*?<\/ul>/g, "")
+    .replace(/<h2>Featured Spots in [\s\S]*?<\/ul>/g, "");
+  const main = /<main[\s\S]*?<\/main>/i.exec(stripped);
   if (main) return main[0];
-  const shell = /<!--seo-shell:start-->[\s\S]*?<!--seo-shell:end-->/.exec(text);
+  const shell = /<!--seo-shell:start-->[\s\S]*?<!--seo-shell:end-->/.exec(stripped);
   if (shell) return shell[0];
-  return text;
+  return stripped;
 }
 function trackedLastmod(url, content) {
   const hash = crypto.createHash("sha1").update(lastmodContentSignature(content)).digest("hex").slice(0, 16);
@@ -1286,6 +1295,17 @@ function main() {
       // /annual/ URLs that render as the shell — mirrors the gate in
       // generateThisWeekendPage's annualForMetro.
       annualEntries: IS_ADULTS ? [] : (ANNUAL_EVENTS[metro.id] || []),
+      // Evergreen-rescue recaps are also kids-only and are linked from the
+      // daily-crawled hub for the same discovery reason as /annual/ — a ranked
+      // /event/ URL that went 410 then evergreen keeps ranking only if Google
+      // re-crawls it, and the hub link is the one crawl path that works here
+      // (verified 2026-07-26; request-indexing alone sat for a month).
+      // Filter to entries whose recap page this build actually wrote: the
+      // collision guard skips entries whose slug went live again, and linking
+      // a nonexistent page would 404. Mirrors the guard's liveSlugs check.
+      evergreenEntries: IS_ADULTS ? [] : (EVERGREEN_EVENTS[metro.id] || []).filter(
+        (e) => !allCurrentEventSlugs.has(e.slug),
+      ),
     });
 
     const slugHistory = readEventSlugHistory(metro);
@@ -2197,6 +2217,7 @@ function replaceMetroShellCopy(html, title, description, extras = {}) {
     hasWeekendGuide = true,
     hasFreeWeekend = false,
     annualEntries = [],
+    evergreenEntries = [],
     hubEvents = null,
   } = extras;
   const area = metroLabel();
@@ -2263,6 +2284,15 @@ function replaceMetroShellCopy(html, title, description, extras = {}) {
     .map(
       (e) =>
         `<li><a href="${metroPath(`annual/${e.slug}/`)}">${esc(e.title)}</a> — ${esc(e.month)}, ${esc(e.venue || e.city || area)}.${e.description ? ` ${esc(e.description)}` : ""}</li>`,
+    );
+  // Evergreen-rescue recaps (ranked-then-dead /event/ URLs kept as permanent
+  // recaps): linked from the hub so the daily-crawled page is their discovery
+  // path. "last held" dates the anchor without claiming an upcoming event.
+  const evergreenItems = [...(evergreenEntries || [])]
+    .sort((a, b) => monthsAway(a.month) - monthsAway(b.month))
+    .map(
+      (e) =>
+        `<li><a href="${metroPath(`event/${e.slug}/`)}">${esc(e.title)}</a> — ${esc(e.venue || e.city || area)}, last held ${esc(e.month)} ${esc(e.lastHeld || "")}.${e.description ? ` ${esc(e.description)}` : ""}</li>`,
     );
 
   // hub-1: this weekend's events (headliners first), or the soonest-10
@@ -2361,6 +2391,10 @@ function replaceMetroShellCopy(html, title, description, extras = {}) {
           <h2>Annual traditions in ${esc(area)}</h2>
           <nav><a href="${metroPath("annual/")}">All annual events</a></nav>
           <ul>${annualItems.join("\n          ")}</ul>
+        </section>` : ""}
+        ${evergreenItems.length ? `<section>
+          <h2>Recurring &amp; returning programs in ${esc(area)}</h2>
+          <ul>${evergreenItems.join("\n          ")}</ul>
         </section>` : ""}
         <noscript><p><strong>Heads-up:</strong> ${esc(BRAND)} is an interactive planner. Please enable JavaScript to plan, share and vote.</p></noscript>
       </div>`;
@@ -3051,7 +3085,16 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
     const bodyDescHtml =
       bodyDesc && bodyDesc !== factsLede ? `<p class="event-desc">${esc(bodyDesc)}</p>` : "";
 
+    // img-1: the scraped event image renders in the body near the lede with
+    // descriptive alt (event + venue + city — the terms these pages rank for).
+    // Mirrors the spot-page hero pattern; skipped when the scrape found none,
+    // so a missing image never blocks the page.
+    const heroImage = event.imageUrl
+      ? `<figure class="hero"><img src="${esc(event.imageUrl)}" alt="${esc(`${displayTitle} at ${cleanVenue || cityName}, ${cityName}`)}" loading="lazy" decoding="async" width="1200" height="800"></figure>`
+      : "";
+
     const body = `
+      ${heroImage}
       <p class="lede">${esc(factsLede)}</p>
       ${detailRows.length ? `<dl class="meta-grid">${detailRows.map((r) => `<div><dt>${esc(r.label)}</dt><dd>${r.html}</dd></div>`).join("")}</dl>` : ""}
       ${bodyDescHtml}
@@ -3529,6 +3572,10 @@ export function buildEventJsonLd(event, canonical) {
       : "https://schema.org/OfflineEventAttendanceMode",
     eventStatus: "https://schema.org/EventScheduled",
     startDate: event.startDateTime,
+    // Google's Events rich-result checker flags "Missing field validFrom"
+    // (2026-08-05 inspection); the feed has no ticket-sale date, so the
+    // listing is valid from the event's own start.
+    validFrom: event.startDateTime,
     // AEO/trust: when this listing was last verified against its source
     // (build time) and the official source URL. Non-schema.org keys are
     // ignored by validators but readable by assistants and LLM crawlers.
@@ -3575,6 +3622,14 @@ export function buildEventJsonLd(event, canonical) {
   }
   if (event.sourceName) {
     node.organizer = {
+      "@type": "Organization",
+      name: event.sourceName,
+      url: event.sourceUrl || event.url || canonical,
+    };
+    // Same "Missing field performer" warning: the organizer presents the
+    // program (library storytimes, museum series), so it doubles as the
+    // performer. Never invented — only emitted when a real source exists.
+    node.performer = {
       "@type": "Organization",
       name: event.sourceName,
       url: event.sourceUrl || event.url || canonical,

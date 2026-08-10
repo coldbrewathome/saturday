@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "metroId": "austin",
-  "generatedAt": "2026-08-01T05:35:56.606Z",
+  "generatedAt": "2026-08-10T01:53:10.840Z",
   "alertCount": 14,
   "alerts": [
     {
@@ -19,37 +19,12 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:35:56.606Z",
+      "fetchedAt": "2026-08-10T01:53:10.840Z",
       "fetches": [
         {
           "url": "https://library.austintexas.gov/events/calendar",
           "status": "blocked",
           "reason": "challenge page returned instead of event content",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "austin",
-      "sourceId": "thinkery",
-      "sourceName": "Thinkery (Children's Museum)",
-      "sourceType": "html",
-      "url": "https://thinkeryaustin.org/visit-us/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:35:56.606Z",
-      "fetches": [
-        {
-          "url": "https://thinkeryaustin.org/visit-us/",
-          "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
@@ -70,7 +45,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:35:56.606Z",
+      "fetchedAt": "2026-08-10T01:53:10.840Z",
       "fetches": [
         {
           "url": "https://www.thestoryoftexas.com/visit/calendar",
@@ -95,7 +70,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:35:56.606Z",
+      "fetchedAt": "2026-08-10T01:53:10.840Z",
       "fetches": [
         {
           "url": "https://www.lbjlibrary.org/events",
@@ -120,7 +95,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:35:56.606Z",
+      "fetchedAt": "2026-08-10T01:53:10.840Z",
       "fetches": [
         {
           "url": "https://blantonmuseum.org/events/",
@@ -145,7 +120,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:35:56.606Z",
+      "fetchedAt": "2026-08-10T01:53:10.840Z",
       "fetches": [
         {
           "url": "https://www.umlaufsculpture.org/events",
@@ -158,10 +133,10 @@
     {
       "severity": "warning",
       "metroId": "austin",
-      "sourceId": "pflugerville-library",
-      "sourceName": "Pflugerville Public Library",
-      "sourceType": "librarycalendar",
-      "url": "https://pflugerville.librarycalendar.com/events/month",
+      "sourceId": "zilker-summer-musical-singin-in-the-rain-2026-07-31-src",
+      "sourceName": "Zilker Summer Musical: Singin' in the Rain (Friday)",
+      "sourceType": "officialTextEvents",
+      "url": "https://zilker.org/sitr2026/",
       "status": "ok",
       "issueType": "zero-in-window",
       "reason": "Source returned events, but none were in the planning window.",
@@ -170,13 +145,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:35:56.606Z",
+      "fetchedAt": "2026-08-10T01:53:10.840Z",
       "fetches": [
         {
-          "url": "https://pflugerville.librarycalendar.com/events/month",
+          "url": "https://zilker.org/sitr2026/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "austin",
+      "sourceId": "long-center-drop-in-2026-08-06-src",
+      "sourceName": "The Drop-In, A Levitt VIBE Austin Music Series",
+      "sourceType": "officialTextEvents",
+      "url": "https://thelongcenter.org/events/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:53:10.840Z",
+      "fetches": [
+        {
+          "url": "https://thelongcenter.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -195,7 +195,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:35:56.606Z",
+      "fetchedAt": "2026-08-10T01:53:10.840Z",
       "fetches": [
         {
           "url": "https://stubbsaustin.com/concert-calendar/",
@@ -220,7 +220,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:35:56.606Z",
+      "fetchedAt": "2026-08-10T01:53:10.840Z",
       "fetches": [
         {
           "url": "https://mohawkaustin.com/calendar",
@@ -245,7 +245,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:35:56.606Z",
+      "fetchedAt": "2026-08-10T01:53:10.840Z",
       "fetches": [
         {
           "url": "https://continentalclub.com/austin-tx/",
@@ -270,7 +270,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:35:56.606Z",
+      "fetchedAt": "2026-08-10T01:53:10.840Z",
       "fetches": [
         {
           "url": "https://antonesnightclub.com/calendar/",
@@ -295,7 +295,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:35:56.606Z",
+      "fetchedAt": "2026-08-10T01:53:10.840Z",
       "fetches": [
         {
           "url": "https://acl-live.com/calendar/",
@@ -320,7 +320,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:35:56.606Z",
+      "fetchedAt": "2026-08-10T01:53:10.840Z",
       "fetches": [
         {
           "url": "https://drafthouse.com/austin/calendar",
@@ -345,7 +345,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:35:56.606Z",
+      "fetchedAt": "2026-08-10T01:53:10.840Z",
       "fetches": [
         {
           "url": "https://www.capcitycomedy.com/calendar",

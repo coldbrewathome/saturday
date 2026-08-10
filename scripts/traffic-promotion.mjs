@@ -253,7 +253,18 @@ const rows = gsc.rows.map((r) => classify(r, st)).filter(Boolean);
 
 const rescue = rows
   .filter((r) => r.kind === "event" && r.state === "dead" && hasTraffic(r))
-  .sort((a, b) => b.clicks - a.clicks || b.impressions - a.impressions);
+  // Strike zone first: 0-click pages already on page 1 (pos <= 15) are the
+  // cheapest wins — a dead page there wastes impressions that a live recap
+  // would convert. The clicks-first sort hid them (2026-08-04: 3 of 4 missed
+  // rescue candidates were 0-click, pos 6.6–10.4, later 410/404).
+  .map((r) => ({ ...r, strike: r.position <= 15 && r.impressions >= 10 }))
+  .sort((a, b) => (b.strike - a.strike) || (b.clicks - a.clicks) || (b.impressions - a.impressions));
+// Probe the live URL of each dead candidate: a 404/410/301 here means Google
+// still indexes a surface that no longer resolves — evergreen-rescue it, don't
+// let the slug keep decaying (evergreen pages stay up indefinitely).
+const rescueProbed = await Promise.all(
+  rescue.map(async (r) => ({ ...r, http: (await probe(r.url)).status }))
+);
 
 const protect = rows
   .filter((r) => r.kind !== "event" && (r.state === "live" || r.state === "unpromoted"))
@@ -266,13 +277,15 @@ const drift = await buildDrift(st);
 mkdirSync(OUT, { recursive: true });
 const stamp = { generatedAt: new Date().toISOString(), window: `${gsc.startDate}..${gsc.endDate}`, bar: `${BAR.clicks}+ clicks or ${BAR.impressions}+ impressions` };
 
-writeFileSync(path.join(OUT, "rescue-candidates.json"), JSON.stringify({ ...stamp, candidates: rescue }, null, 2));
+writeFileSync(path.join(OUT, "rescue-candidates.json"), JSON.stringify({ ...stamp, candidates: rescueProbed }, null, 2));
 writeFileSync(path.join(OUT, "protect-candidates.json"), JSON.stringify({ ...stamp, candidates: protect, note: "spot action = add slug to data/seo-pinned-paths.json + data/spot-index-keep.json; city/category action = add path to the *-index-keep.json keep list" }, null, 2));
 writeFileSync(path.join(OUT, "drift-report.json"), JSON.stringify({ ...stamp, drift }, null, 2));
 
-const rescueMd = `# Rescue candidates (dead events with traffic)\n\nWindow ${gsc.startDate}..${gsc.endDate} · bar: ${stamp.bar} · proposals only — review, then merge into \`data/evergreen-events.json\` (metrics shown per SEO policy).\n\n${rescue.length ? mdTable(rescue.map((r) => ({ ...r, title: r.slug })), [
+const rescueMd = `# Rescue candidates (dead events with traffic)\n\nWindow ${gsc.startDate}..${gsc.endDate} · bar: ${stamp.bar} · proposals only — review, then merge into \`data/evergreen-events.json\` (metrics shown per SEO policy).\n\n**strike** = pos ≤ 15 + impressions ≥ 10 (ranks page 1, just needs a live surface). **http** = current live status of the URL; 404/410/301 means Google still indexes a dead surface — rescue it. Evergreen recap pages stay up indefinitely to keep attracting traffic (user directive 2026-08-04) — removal is never the default for a ranked slug.\n\n${rescueProbed.length ? mdTable(rescueProbed.map((r) => ({ ...r, title: r.slug })), [
   { label: "metro", get: (r) => r.metro },
   { label: "slug", get: (r) => r.slug },
+  { label: "strike", get: (r) => (r.strike ? "✓" : "") },
+  { label: "http", get: (r) => r.http },
   { label: "clicks", get: (r) => r.clicks },
   { label: "imp", get: (r) => r.impressions },
   { label: "pos", get: (r) => r.position.toFixed(1) },

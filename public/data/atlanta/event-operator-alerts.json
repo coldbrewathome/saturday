@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "atlanta",
-  "generatedAt": "2026-08-01T05:23:51.667Z",
-  "alertCount": 8,
+  "generatedAt": "2026-08-10T01:47:47.032Z",
+  "alertCount": 10,
   "alerts": [
     {
       "severity": "warning",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:23:51.667Z",
+      "fetchedAt": "2026-08-10T01:47:47.032Z",
       "fetches": [
         {
           "url": "https://www.atlantaga.gov/government/departments/parks-recreation/events",
@@ -44,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:23:51.667Z",
+      "fetchedAt": "2026-08-10T01:47:47.032Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -69,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:23:51.667Z",
+      "fetchedAt": "2026-08-10T01:47:47.032Z",
       "fetches": [
         {
           "url": "https://www.northgeorgiastatefair.com/",
@@ -94,10 +94,60 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:23:51.667Z",
+      "fetchedAt": "2026-08-10T01:47:47.032Z",
       "fetches": [
         {
           "url": "https://www.gwinnettcountyfair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "atlanta",
+      "sourceId": "artsxchange-midsummer-family-fun-festival-2026-08-01-src",
+      "sourceName": "2026 Midsummer Family Fun Festival at ArtsXchange",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.artsxchange.org/upcomingevents",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:47:47.032Z",
+      "fetches": [
+        {
+          "url": "https://www.artsxchange.org/upcomingevents",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "atlanta",
+      "sourceId": "ghanafest-atlanta-2026-08-08-src",
+      "sourceName": "GhanaFest Atlanta 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://gadangmega.org/events/40-ghanafest-2026",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:47:47.032Z",
+      "fetches": [
+        {
+          "url": "https://gadangmega.org/events/40-ghanafest-2026",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -119,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:23:51.667Z",
+      "fetchedAt": "2026-08-10T01:47:47.032Z",
       "fetches": [
         {
           "url": "https://www.terminalwestatl.com/events",
@@ -144,7 +194,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:23:51.667Z",
+      "fetchedAt": "2026-08-10T01:47:47.032Z",
       "fetches": [
         {
           "url": "https://www.varietyplayhouse.com/events",
@@ -169,7 +219,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:23:51.667Z",
+      "fetchedAt": "2026-08-10T01:47:47.032Z",
       "fetches": [
         {
           "url": "https://www.badearl.com/calendar",
@@ -194,7 +244,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:23:51.667Z",
+      "fetchedAt": "2026-08-10T01:47:47.032Z",
       "fetches": [
         {
           "url": "https://atlfoodandwinefestival.com/",

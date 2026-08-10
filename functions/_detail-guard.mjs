@@ -70,9 +70,10 @@ function endedDisposition(endMs, nowMs) {
 }
 
 // What to do with a detail URL that has no prerendered page:
-// - "gone": ended event, past the 14-day grace window → HTTP 410 branded
-//   page (noindex). Without this, expired event URLs serve the SPA shell
-//   with 200 + index,follow — thousands of soft-404s.
+// - "gone": ended event, past the 14-day grace window → HTTP 200 permanent
+//   "past event" page, indexable with self-canonical and soft-landing links
+//   ([[path]].ts maps the disposition; the response no longer 410s — with
+//   crawl inflow near zero, 410s were draining the index).
 // - "ended-grace": ended event still inside the grace window → serve the
 //   prerendered page (if any) or the branded ended page with 200, keeping
 //   the URL alive through its ranking earn-out.

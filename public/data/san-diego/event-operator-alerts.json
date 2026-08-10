@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "san-diego",
-  "generatedAt": "2026-08-01T05:31:03.990Z",
-  "alertCount": 6,
+  "generatedAt": "2026-08-10T01:50:47.371Z",
+  "alertCount": 10,
   "alerts": [
     {
       "severity": "critical",
@@ -19,10 +19,85 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:31:03.990Z",
+      "fetchedAt": "2026-08-10T01:50:47.371Z",
       "fetches": [
         {
           "url": "https://www.sdfair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "san-diego",
+      "sourceId": "birch-shark-summer-stations-2026-07-19-src",
+      "sourceName": "Shark Summer Exploration Stations",
+      "sourceType": "officialTextEvents",
+      "url": "https://aquarium.ucsd.edu/events/shark-summer",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:50:47.371Z",
+      "fetches": [
+        {
+          "url": "https://aquarium.ucsd.edu/events/shark-summer",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "san-diego",
+      "sourceId": "ramona-country-fair-2026-08-01-src",
+      "sourceName": "Ramona Country Fair (Saturday)",
+      "sourceType": "officialTextEvents",
+      "url": "https://ramonachamber.com/ramona-country-fair/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:50:47.371Z",
+      "fetches": [
+        {
+          "url": "https://ramonachamber.com/ramona-country-fair/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "san-diego",
+      "sourceId": "morava-serbian-summer-folkfest-2026-08-01-src",
+      "sourceName": "35th Annual MORAVA Serbian Summer Folkfest",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.eventbrite.com/e/35th-annual-morava-serbian-summer-folkfest-2026-tickets-1992743649900",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:50:47.371Z",
+      "fetches": [
+        {
+          "url": "https://www.eventbrite.com/e/35th-annual-morava-serbian-summer-folkfest-2026-tickets-1992743649900",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -44,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:31:03.990Z",
+      "fetchedAt": "2026-08-10T01:50:47.371Z",
       "fetches": [
         {
           "url": "https://www.casbahmusic.com/events",
@@ -69,10 +144,35 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:31:03.990Z",
+      "fetchedAt": "2026-08-10T01:50:47.371Z",
       "fetches": [
         {
           "url": "https://www.bellyup.com/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "san-diego",
+      "sourceId": "music-box-sd",
+      "sourceName": "Music Box",
+      "sourceType": "html",
+      "url": "https://musicboxsd.com/shows/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:50:47.371Z",
+      "fetches": [
+        {
+          "url": "https://musicboxsd.com/shows/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -94,7 +194,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:31:03.990Z",
+      "fetchedAt": "2026-08-10T01:50:47.371Z",
       "fetches": [
         {
           "url": "https://www.observatorysd.com/events",
@@ -119,7 +219,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:31:03.990Z",
+      "fetchedAt": "2026-08-10T01:50:47.371Z",
       "fetches": [
         {
           "url": "https://www.americancomedyco.com/calendar",
@@ -144,7 +244,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:31:03.990Z",
+      "fetchedAt": "2026-08-10T01:50:47.371Z",
       "fetches": [
         {
           "url": "https://thecomedystore.com/la-jolla/",

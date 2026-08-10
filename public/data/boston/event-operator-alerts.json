@@ -1,34 +1,9 @@
 {
   "schemaVersion": 1,
   "metroId": "boston",
-  "generatedAt": "2026-08-02T22:08:36.015Z",
-  "alertCount": 8,
+  "generatedAt": "2026-08-10T01:50:15.335Z",
+  "alertCount": 10,
   "alerts": [
-    {
-      "severity": "warning",
-      "metroId": "boston",
-      "sourceId": "ticketmaster-boston-family",
-      "sourceName": "Ticketmaster Boston Family Events",
-      "sourceType": "ticketmaster",
-      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-02T22:08:36.015Z",
-      "fetches": [
-        {
-          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=1; queries=1"
-        }
-      ]
-    },
     {
       "severity": "critical",
       "metroId": "boston",
@@ -44,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-02T22:08:36.015Z",
+      "fetchedAt": "2026-08-10T01:50:15.335Z",
       "fetches": [
         {
           "url": "https://www.easternstatesexposition.com/",
@@ -69,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-02T22:08:36.015Z",
+      "fetchedAt": "2026-08-10T01:50:15.335Z",
       "fetches": [
         {
           "url": "https://marshfieldfair.org/events/",
@@ -94,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-02T22:08:36.015Z",
+      "fetchedAt": "2026-08-10T01:50:15.335Z",
       "fetches": [
         {
           "url": "https://www.salemma.gov/CivicAlerts.aspx?AID=235",
@@ -119,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-02T22:08:36.015Z",
+      "fetchedAt": "2026-08-10T01:50:15.335Z",
       "fetches": [
         {
           "url": "https://www.rosekennedygreenway.org/events/boston-race-amity-arts-music-festival/",
@@ -144,10 +119,85 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-02T22:08:36.015Z",
+      "fetchedAt": "2026-08-10T01:50:15.335Z",
       "fetches": [
         {
           "url": "https://www.landmarksorchestra.org/press-media/summer-2026-season/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "boston",
+      "sourceId": "free-shakespeare-on-the-common-midsummer-2026-07-31-src",
+      "sourceName": "Free Shakespeare on the Common: A Midsummer Night's Dream",
+      "sourceType": "officialTextEvents",
+      "url": "https://commshakes.org/production/dream26/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:50:15.335Z",
+      "fetches": [
+        {
+          "url": "https://commshakes.org/production/dream26/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "boston",
+      "sourceId": "saint-agrippina-di-mineo-feast-2026-07-31-src",
+      "sourceName": "112th Saint Agrippina di Mineo Feast (Friday)",
+      "sourceType": "officialTextEvents",
+      "url": "https://saintagrippinaboston.com/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:50:15.335Z",
+      "fetches": [
+        {
+          "url": "https://saintagrippinaboston.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "boston",
+      "sourceId": "charles-river-jazz-festival-2026-08-08-src",
+      "sourceName": "2026 Charles River Jazz Festival",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.bostonjazzfoundation.org/crjf",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:50:15.335Z",
+      "fetches": [
+        {
+          "url": "https://www.bostonjazzfoundation.org/crjf",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -169,7 +219,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-02T22:08:36.015Z",
+      "fetchedAt": "2026-08-10T01:50:15.335Z",
       "fetches": [
         {
           "url": "https://www.crossroadspresents.com/paradise-rock-club",
@@ -194,7 +244,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-02T22:08:36.015Z",
+      "fetchedAt": "2026-08-10T01:50:15.335Z",
       "fetches": [
         {
           "url": "https://www.nickscomedystop.com/calendar",

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "chicago",
-  "generatedAt": "2026-08-01T05:36:13.911Z",
-  "alertCount": 11,
+  "generatedAt": "2026-08-10T01:44:37.458Z",
+  "alertCount": 17,
   "alerts": [
     {
       "severity": "warning",
@@ -19,13 +19,38 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:36:13.911Z",
+      "fetchedAt": "2026-08-10T01:44:37.458Z",
       "fetches": [
         {
           "url": "https://www.lpzoo.org/calendar-events/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "application/json; source=tribe-events; events=180; pages=4"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "chicago",
+      "sourceId": "dupage-county-fair",
+      "sourceName": "DuPage County Fair",
+      "sourceType": "html",
+      "url": "https://dupagecountyfair.org/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:44:37.458Z",
+      "fetches": [
+        {
+          "url": "https://dupagecountyfair.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -44,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:36:13.911Z",
+      "fetchedAt": "2026-08-10T01:44:37.458Z",
       "fetches": [
         {
           "url": "https://www.lcfairgrounds.com/events",
@@ -69,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:36:13.911Z",
+      "fetchedAt": "2026-08-10T01:44:37.458Z",
       "fetches": [
         {
           "url": "https://oakpark.librarycalendar.com/events/month",
@@ -94,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:36:13.911Z",
+      "fetchedAt": "2026-08-10T01:44:37.458Z",
       "fetches": [
         {
           "url": "https://napervillepl.librarycalendar.com/events/month",
@@ -107,25 +132,150 @@
     {
       "severity": "warning",
       "metroId": "chicago",
+      "sourceId": "chicago-urban-league-back-to-school-festival-2026-08-01-src",
+      "sourceName": "Chicago Urban League Back To School Festival",
+      "sourceType": "officialTextEvents",
+      "url": "https://chiul.org/event/back-to-school-festival/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:44:37.458Z",
+      "fetches": [
+        {
+          "url": "https://chiul.org/event/back-to-school-festival/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "chicago",
+      "sourceId": "destination-asia-festival-morton-arboretum-2026-07-31-src",
+      "sourceName": "Destination Asia Festival: Toro Nagashi Lantern Evening",
+      "sourceType": "officialTextEvents",
+      "url": "https://mortonarb.org/explore/activities/events/destination-asia-festival/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:44:37.458Z",
+      "fetches": [
+        {
+          "url": "https://mortonarb.org/explore/activities/events/destination-asia-festival/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
       "sourceId": "big-trucks-barrington-park-district-2026-08-01-src",
       "sourceName": "Big Trucks at Ron Beese Park",
       "sourceType": "officialTextEvents",
       "url": "https://www.barringtonparkdistrict.org/events-trips/",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-08-01T05:36:13.911Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:44:37.458Z",
       "fetches": [
         {
           "url": "https://www.barringtonparkdistrict.org/events-trips/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "chicago",
+      "sourceId": "fullersburg-days-2026-01-src",
+      "sourceName": "Fullersburg Days 2026 (Saturday)",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.thehinsdalean.com/story/2026/07/23/pulse/fill-up-on-fun-at-fullersburg-woods/11153.html",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:44:37.458Z",
+      "fetches": [
+        {
+          "url": "https://www.thehinsdalean.com/story/2026/07/23/pulse/fill-up-on-fun-at-fullersburg-woods/11153.html",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "chicago",
+      "sourceId": "fullersburg-days-2026-02-src",
+      "sourceName": "Fullersburg Days 2026 (Sunday)",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.thehinsdalean.com/story/2026/07/23/pulse/fill-up-on-fun-at-fullersburg-woods/11153.html",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:44:37.458Z",
+      "fetches": [
+        {
+          "url": "https://www.thehinsdalean.com/story/2026/07/23/pulse/fill-up-on-fun-at-fullersburg-woods/11153.html",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "chicago",
+      "sourceId": "bud-billiken-parade-2026-08-08-src",
+      "sourceName": "97th Annual Bud Billiken Parade & Back-to-School Festival",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.givesignup.org/TicketEvent/bbpbacktoschoolfestival2026",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:44:37.458Z",
+      "fetches": [
+        {
+          "url": "https://www.givesignup.org/TicketEvent/bbpbacktoschoolfestival2026",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -144,7 +294,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:36:13.911Z",
+      "fetchedAt": "2026-08-10T01:44:37.458Z",
       "fetches": [
         {
           "url": "https://metrochicago.com/shows/",
@@ -169,7 +319,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:36:13.911Z",
+      "fetchedAt": "2026-08-10T01:44:37.458Z",
       "fetches": [
         {
           "url": "https://www.emptybottle.com/events/",
@@ -194,7 +344,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:36:13.911Z",
+      "fetchedAt": "2026-08-10T01:44:37.458Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
@@ -219,7 +369,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:36:13.911Z",
+      "fetchedAt": "2026-08-10T01:44:37.458Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
@@ -244,7 +394,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:36:13.911Z",
+      "fetchedAt": "2026-08-10T01:44:37.458Z",
       "fetches": [
         {
           "url": "https://chicago.zanies.com/events",
@@ -269,7 +419,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:36:13.911Z",
+      "fetchedAt": "2026-08-10T01:44:37.458Z",
       "fetches": [
         {
           "url": "https://www.hideoutchicago.com/events",

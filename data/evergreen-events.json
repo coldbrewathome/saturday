@@ -1,5 +1,5 @@
 {
-  "_comment": "Curated evergreen-rescue list: EXISTING /{metro}/event/{slug}/ URLs that ranked (90-day GSC clicks+impressions pulled and SHOWN per ~/Projects/seo-ops/SEO-POLICY.md) and then died in the 410 lifecycle. generate-seo-pages.mjs regenerates each as a permanent 200 recap page at the SAME URL (no Event JSON-LD, no date claims beyond lastHeld), and the event-seo-manifest `evergreen` array exempts the slug from the edge guard's 410. Inclusion bar: ranked-and-dead ONLY — metrics shown first, list stays curated, never systemic. `match` is a case-insensitive regex against live event titles to cross-link next year's edition when it is back in the dataset; recurrence \"unverified\" entries must not claim the event returns every year. Note: this list is complementary to data/annual-events.json (/{metro}/annual/ guides) — boston minuteman-library-crawl exists in BOTH (annualSlug cross-references it); the /annual/ page is the year-round guide, the /event/ evergreen page preserves the ranked URL itself.",
+  "_comment": "Curated evergreen-rescue list: EXISTING /{metro}/event/{slug}/ URLs that ranked (90-day GSC clicks+impressions pulled and SHOWN per ~/Projects/seo-ops/SEO-POLICY.md) and then died in the 410 lifecycle. generate-seo-pages.mjs regenerates each as a permanent 200 recap page at the SAME URL (no Event JSON-LD, no date claims beyond lastHeld), and the event-seo-manifest `evergreen` array exempts the slug from the edge guard's 410. Inclusion bar: ranked-and-dead ONLY — metrics shown first, list stays curated, never systemic. `match` is a case-insensitive regex against live event titles to cross-link next year's edition when it is back in the dataset; recurrence \"unverified\" entries must not claim the event returns every year. Note: this list is complementary to data/annual-events.json (/{metro}/annual/ guides) — boston minuteman-library-crawl exists in BOTH (annualSlug cross-references it); the /annual/ page is the year-round guide, the /event/ evergreen page preserves the ranked URL itself. Evergreen policy (user directive 2026-08-04): a page that EVER ranked keeps its recap for as long as it draws impressions — evergreen URLs are kept much longer than the 410 lifecycle would, on purpose, to keep attracting search traffic; removal is never the default for a ranked slug (only for pages shown to be zero-traffic, per the metrics-first policy).",
   "metros": {
     "bay-area": [
       {
@@ -35,6 +35,105 @@
         "description": "Healdsburg's hometown Fourth of July fireworks show, launched from the Healdsburg High School area — Sonoma County families picnic nearby and watch the display over town.",
         "match": "healdsburg.*(independence day|fireworks)",
         "annualSlug": "healdsburg-fireworks"
+      },
+      {
+        "slug": "sf-rec-park-calendar-union-square-daily-programming-friday-chess-lessons-a208000",
+        "title": "Friday Chess Lessons @ Union Square",
+        "venue": "Union Square",
+        "city": "San Francisco",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "SF Recreation & Parks' Friday chess lessons at Union Square: free drop-in chess in the heart of San Francisco, part of the park's daily programming series.",
+        "match": "chess"
+      },
+      {
+        "slug": "sf-rec-park-calendar-union-square-daily-programming-friday-chess-lessons-a93736e",
+        "title": "Friday Chess Lessons @ Union Square",
+        "venue": "Union Square",
+        "city": "San Francisco",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "SF Recreation & Parks' Friday chess lessons at Union Square: free drop-in chess in the heart of San Francisco, part of the park's daily programming series.",
+        "match": "chess"
+      },
+      {
+        "slug": "family-storytime-bayview-richmond-public-library",
+        "title": "Family Storytime",
+        "venue": "Bayview Branch, Richmond Public Library",
+        "city": "Richmond",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Family Storytime — a recurring family program at Bayview Branch, Richmond Public Library in Richmond.",
+        "match": "bayview"
+      },
+      {
+        "slug": "family-storytime-stay-play-seven-trees",
+        "title": "Family Storytime with Stay & Play",
+        "venue": "Seven Trees Branch Library",
+        "city": "San Jose",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Family Storytime with Stay & Play — a recurring family program at Seven Trees Branch Library in San Jose.",
+        "match": "Family Storytime with Stay & Play"
+      },
+      {
+        "slug": "mandarin-cantonese-storytime-millbrae",
+        "title": "Mandarin-Cantonese Storytime",
+        "venue": "Millbrae Library",
+        "city": "Millbrae",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Mandarin-Cantonese Storytime — a recurring family program at Millbrae Library in Millbrae.",
+        "match": "mandarin"
+      },
+      {
+        "slug": "family-storytime-west-side-branch-library-richmond-public-library-richmond-library-family-storytime-west-side-branch-library-0c7d78d3f5",
+        "title": "Family Storytime",
+        "venue": "West Side Branch Library",
+        "city": "Richmond",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Family Storytime — a recurring family program at West Side Branch Library in Richmond.",
+        "match": "west side"
+      },
+      {
+        "slug": "teen-super-smash-bros-tournament-1st-floor-program-room",
+        "title": "Teen Super Smash Bros. Tournament",
+        "venue": "Library Program Room",
+        "city": "Bay Area",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Teen Super Smash Bros. Tournament — a recurring family program at Library Program Room in Bay Area.",
+        "match": "smash"
+      },
+      {
+        "slug": "free-summer-lunch-newark",
+        "title": "Free Summer Lunch",
+        "venue": "Newark Library",
+        "city": "Newark",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Free Summer Lunch — a recurring family program at Newark Library in Newark.",
+        "match": "Free Summer Lunch"
+      },
+      {
+        "slug": "central-park-music-series-week-7-central-park",
+        "title": "Central Park Music Series",
+        "venue": "Central Park",
+        "city": "Bay Area",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Central Park Music Series — a recurring family program at Central Park in Bay Area.",
+        "match": "Central Park Music Series"
       }
     ],
     "los-angeles": [
@@ -81,6 +180,28 @@
         "recurrence": "unverified",
         "description": "A dinosaur-themed adventure program for kids hosted at the Carson Library.",
         "match": "dino west"
+      },
+      {
+        "slug": "sharks-and-wrecks-manhattan-beach-library",
+        "title": "Sharks and Wrecks",
+        "venue": "Manhattan Beach Library",
+        "city": "Manhattan Beach",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Sharks and Wrecks — a recurring family program at Manhattan Beach Library in Manhattan Beach.",
+        "match": "Sharks and Wrecks"
+      },
+      {
+        "slug": "thursday-jul-09-skirball-cultural-center",
+        "title": "Skirball Cultural Center Program",
+        "venue": "Skirball Cultural Center",
+        "city": "Los Angeles",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "unverified",
+        "description": "Skirball Cultural Center Program — a special family program at Skirball Cultural Center in Los Angeles.",
+        "match": "Skirball Cultural Center Program"
       }
     ],
     "seattle": [
@@ -94,6 +215,28 @@
         "recurrence": "annual",
         "description": "Bellevue's free Fourth of July festival at Downtown Park: an afternoon of family activities, food, and live music leading into the Eastside's biggest fireworks show.",
         "match": "bellevue family 4th"
+      },
+      {
+        "slug": "ikebana-art-at-the-garden-the-aaron-education-center-at-the-bellevue-botanical-garden",
+        "title": "Ikebana Art at the Garden",
+        "venue": "Bellevue Botanical Garden",
+        "city": "Bellevue",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Ikebana Art at the Garden — a recurring family program at Bellevue Botanical Garden in Bellevue.",
+        "match": "Ikebana Art at the Garden"
+      },
+      {
+        "slug": "baby-story-time-central-library-spl-story-time-baby-story-time-2b0217b09e",
+        "title": "Baby Story Time",
+        "venue": "Seattle Central Library",
+        "city": "Seattle",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Baby Story Time — a recurring family program at Seattle Central Library in Seattle.",
+        "match": "baby story"
       }
     ],
     "houston": [
@@ -107,6 +250,39 @@
         "recurrence": "annual",
         "description": "Rosenberg's free Independence Day celebration at Seabourne Creek Nature Park — family activities, food vendors, and live entertainment finished with a fireworks display.",
         "match": "rosenberg.*family 4th"
+      },
+      {
+        "slug": "second-saturday-shark-week-hmns-style-houston-museum-of-natural-science",
+        "title": "Second Saturday Shark Week",
+        "venue": "Houston Museum of Natural Science",
+        "city": "Houston",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Second Saturday Shark Week — a recurring family program at Houston Museum of Natural Science in Houston.",
+        "match": "Second Saturday Shark Week"
+      },
+      {
+        "slug": "under-the-big-top-party-children-s-museum-houston-events",
+        "title": "Under the Big Top Party",
+        "venue": "Children's Museum Houston",
+        "city": "Houston",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Under the Big Top Party — a recurring family program at Children's Museum Houston in Houston.",
+        "match": "Under the Big Top Party"
+      },
+      {
+        "slug": "texas-snakes-live-reptile-show-houston-public-library-events",
+        "title": "Texas Snakes: Live Reptile Show",
+        "venue": "Houston Public Library",
+        "city": "Houston",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Texas Snakes: Live Reptile Show — a recurring family program at Houston Public Library in Houston.",
+        "match": "Texas Snakes: Live Reptile Show"
       }
     ],
     "austin": [
@@ -190,6 +366,61 @@
         "recurrence": "recurring",
         "description": "Free child identification cards — photo, fingerprints, and emergency info — issued by the Hawaii Police Department at the Hilo Public Library.",
         "match": "keiki id"
+      },
+      {
+        "slug": "allegro-keiki-o-ahu-kapolei",
+        "title": "Allegro Keiki",
+        "venue": "Kapolei Library",
+        "city": "Kapolei",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Allegro Keiki — a recurring family program at Kapolei Library in Kapolei.",
+        "match": "allegro"
+      },
+      {
+        "slug": "keiki-storytime-o-ahu-pearl-city-hawaii-state-library-275600",
+        "title": "Keiki Storytime",
+        "venue": "Pearl City Hawaii State Library",
+        "city": "Pearl City",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Keiki Storytime — a recurring family program at Pearl City Hawaii State Library in Pearl City.",
+        "match": "keiki storytime"
+      },
+      {
+        "slug": "food-science-lab-hawai-i-kealakekua",
+        "title": "Food Science Lab",
+        "venue": "Kealakekua Library",
+        "city": "Kealakekua",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Food Science Lab — a recurring family program at Kealakekua Library in Kealakekua.",
+        "match": "food science"
+      },
+      {
+        "slug": "anake-nani-higa-presents-a-hula-lesson-for-beginners-kaua-i-hanapepe",
+        "title": "A Hula Lesson for Beginners",
+        "venue": "Hanapepe Hawaii State Library",
+        "city": "Hanapepe",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "A Hula Lesson for Beginners — a recurring family program at Hanapepe Hawaii State Library in Hanapepe.",
+        "match": "A Hula Lesson for Beginners"
+      },
+      {
+        "slug": "stories-from-around-the-world-with-dave-del-rocco-o-ahu-aiea",
+        "title": "Stories from Around the World with Dave Del Rocco",
+        "venue": "Aiea Hawaii State Library",
+        "city": "Aiea",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Stories from Around the World with Dave Del Rocco — a recurring family program at Aiea Hawaii State Library in Aiea.",
+        "match": "Stories from Around the World with Dave Del Rocco"
       }
     ],
     "san-diego": [
@@ -247,6 +478,50 @@
         "recurrence": "recurring",
         "description": "The Nat's after-hours evening program — access to the San Diego Natural History Museum's exhibits in Balboa Park after closing time.",
         "match": "nat at night"
+      },
+      {
+        "slug": "parks-after-dark-at-city-heights-recreation-center-san-diego-parks-and-recreation-events-san-diego-parks-family-parks-after-dark-at-city-heights-recreation-center-2c2346fd9b",
+        "title": "Parks After Dark at City Heights Recreation Center",
+        "venue": "City Heights Recreation Center",
+        "city": "San Diego",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Parks After Dark is San Diego's free summer-evening series at neighborhood recreation centers: family games, music, and community activities at City Heights Recreation Center after dark.",
+        "match": "parks after dark"
+      },
+      {
+        "slug": "nat-at-night-san-diego-natural-history-museum-the-nat-balboa-park-events-10071121",
+        "title": "Nat at Night",
+        "venue": "San Diego Natural History Museum (The Nat)",
+        "city": "San Diego",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Nat at Night — a recurring family program at San Diego Natural History Museum (The Nat) in San Diego.",
+        "match": "Nat at Night"
+      },
+      {
+        "slug": "nat-at-night-san-diego-natural-history-museum-the-nat-balboa-park-events-10071122",
+        "title": "Nat at Night",
+        "venue": "San Diego Natural History Museum (The Nat)",
+        "city": "San Diego",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Nat at Night — a recurring family program at San Diego Natural History Museum (The Nat) in San Diego.",
+        "match": "Nat at Night"
+      },
+      {
+        "slug": "san-diego-county-fair-2026-final-weekend-in-del-mar-july-5-del-mar-fairgrounds",
+        "title": "San Diego County Fair 2026 Final Weekend",
+        "venue": "Del Mar Fairgrounds",
+        "city": "Del Mar",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "annual",
+        "description": "San Diego County Fair 2026 Final Weekend — a annual family program at Del Mar Fairgrounds in Del Mar.",
+        "match": "San Diego County Fair 2026 Final Weekend"
       }
     ],
     "new-york-city": [
@@ -271,6 +546,50 @@
         "recurrence": "unverified",
         "description": "Kids in Motion's Superhero Day at St. James Park — playground games and superhero fun for neighborhood families.",
         "match": "kids in motion"
+      },
+      {
+        "slug": "kim-st-john-s-park-playground-at-st-john-s-park-nyc-parks-kids-kim-st-john-s-park-783c0d4c4a",
+        "title": "Playground Programs at Kim St. John's Park",
+        "venue": "Kim St. John's Park Playground",
+        "city": "New York City",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Playground Programs at Kim St. John's Park — a recurring family program at Kim St. John's Park Playground in New York City.",
+        "match": "st. john"
+      },
+      {
+        "slug": "kim-st-john-s-park-playground-at-st-john-s-park-nyc-parks-kids-kim-st-john-s-park-031e96618b",
+        "title": "Playground Programs at Kim St. John's Park",
+        "venue": "Kim St. John's Park Playground",
+        "city": "New York City",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Playground Programs at Kim St. John's Park — a recurring family program at Kim St. John's Park Playground in New York City.",
+        "match": "st. john"
+      },
+      {
+        "slug": "summer-sport-experience-pickleball-greenbelt-recreation-center",
+        "title": "Summer Sport Experience: Pickleball",
+        "venue": "Greenbelt Recreation Center",
+        "city": "New York City",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Summer Sport Experience: Pickleball — a recurring family program at Greenbelt Recreation Center in New York City.",
+        "match": "Summer Sport Experience: Pickleball"
+      },
+      {
+        "slug": "summer-on-the-hudson-play-dates-featuring-zing-125th-street-and-marginal-street-at-west-harlem-piers",
+        "title": "Summer on the Hudson: Play Dates featuring Zing",
+        "venue": "West Harlem Piers",
+        "city": "New York City",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Summer on the Hudson: Play Dates featuring Zing — a recurring family program at West Harlem Piers in New York City.",
+        "match": "Summer on the Hudson: Play Dates featuring Zing"
       }
     ],
     "washington-dc": [
@@ -306,6 +625,17 @@
         "recurrence": "unverified",
         "description": "DC Public Library's Library Day at the National Museum of Women in the Arts — free museum exploring during a community day for library families.",
         "match": "library day"
+      },
+      {
+        "slug": "celebrate-dc-public-library-s-130th-birthday-rosedale-neighborhood-library",
+        "title": "Celebrate DC Public Library's 130th Birthday",
+        "venue": "Rosedale Neighborhood Library",
+        "city": "Washington, DC",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "unverified",
+        "description": "Celebrate DC Public Library's 130th Birthday — a special family program at Rosedale Neighborhood Library in Washington, DC.",
+        "match": "Celebrate DC Public Library's 130th Birthday"
       }
     ],
     "boston": [
@@ -353,6 +683,28 @@
         "recurrence": "unverified",
         "description": "A transition meetup for families with kids starting kindergarten, held at Hunneman Hall in Brookline Village.",
         "match": "kindergarten.*transition"
+      },
+      {
+        "slug": "summer-reading-plant-pantry-botany-workshop-with-new-england-botanic-garden-valente-cambridge-public-library-events",
+        "title": "Summer Reading: Plant Pantry Botany Workshop",
+        "venue": "New England Botanic Garden",
+        "city": "Cambridge",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Summer Reading: Plant Pantry Botany Workshop — a recurring family program at New England Botanic Garden in Cambridge.",
+        "match": "Summer Reading: Plant Pantry Botany Workshop"
+      },
+      {
+        "slug": "salem-400-heritage-days-parade-o-keefe-center-225-canal-street",
+        "title": "Salem 400 Heritage Days Parade",
+        "venue": "O'Keefe Center",
+        "city": "Salem",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "annual",
+        "description": "Salem 400 Heritage Days Parade — a annual family program at O'Keefe Center in Salem.",
+        "match": "Salem 400 Heritage Days Parade"
       }
     ],
     "chicago": [
@@ -399,6 +751,83 @@
         "recurrence": "recurring",
         "description": "The Field Museum's late-night evening program — exhibits open after hours with live music and special programming.",
         "match": "legendary late hours"
+      },
+      {
+        "slug": "play-picnic-party-elk-grove-village-public-library",
+        "title": "Play Picnic and Party",
+        "venue": "Elk Grove Village Public Library",
+        "city": "Elk Grove Village",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "A recurring family program at Elk Grove Village Public Library in suburban Chicago, combining play and a party atmosphere for kids.",
+        "match": "play picnic"
+      },
+      {
+        "slug": "wonderful-world-of-elk-grove-village-scavenger-hunt-elk-grove-village-public-library",
+        "title": "Wonderful World of Elk Grove Village Scavenger Hunt",
+        "venue": "Elk Grove Village Public Library",
+        "city": "Elk Grove Village",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Wonderful World of Elk Grove Village Scavenger Hunt — a recurring family program at Elk Grove Village Public Library in Elk Grove Village.",
+        "match": "Wonderful World of Elk Grove Village Scavenger Hunt"
+      },
+      {
+        "slug": "wee-wonders-pollinators-sand-ridge-nature-center",
+        "title": "Wee Wonders: Pollinators",
+        "venue": "Sand Ridge Nature Center",
+        "city": "Chicago",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Wee Wonders: Pollinators — a recurring family program at Sand Ridge Nature Center in Chicago.",
+        "match": "wee wonders"
+      },
+      {
+        "slug": "autism-movement-therapy-central-library-craft-room-storytime-room-schaumburg-library-family-15932358",
+        "title": "Autism Movement Therapy",
+        "venue": "Schaumburg Township District Library",
+        "city": "Schaumburg",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Autism Movement Therapy — a recurring family program at Schaumburg Township District Library in Schaumburg.",
+        "match": "Autism Movement Therapy"
+      },
+      {
+        "slug": "bluey-stitch-meet-and-greet-elk-grove-village-public-library",
+        "title": "Bluey & Stitch Meet and Greet",
+        "venue": "Elk Grove Village Public Library",
+        "city": "Elk Grove Village",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Bluey & Stitch Meet and Greet — a recurring family program at Elk Grove Village Public Library in Elk Grove Village.",
+        "match": "Bluey & Stitch Meet and Greet"
+      },
+      {
+        "slug": "nature-wellness-walk-river-trail-nature-center",
+        "title": "Nature Wellness Walk",
+        "venue": "River Trail Nature Center",
+        "city": "Chicago",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Nature Wellness Walk — a recurring family program at River Trail Nature Center in Chicago.",
+        "match": "wellness"
+      },
+      {
+        "slug": "wheaton-independence-day-fireworks-2026-at-graf-park-july-3-graf-park",
+        "title": "Wheaton Independence Day Fireworks",
+        "venue": "Graf Park",
+        "city": "Wheaton",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "annual",
+        "description": "Wheaton Independence Day Fireworks — a annual family program at Graf Park in Wheaton.",
+        "match": "Wheaton Independence Day Fireworks"
       }
     ],
     "miami": [
@@ -433,6 +862,50 @@
         "recurrence": "unverified",
         "description": "A 3D paper art craft program for kids at the Stirling Road Branch of the Broward County Library.",
         "match": "3d paper art"
+      },
+      {
+        "slug": "tai-chi-ruler-for-seniors-un-unidad-7251-collins-avenue-miami-beach-city-events-10102716",
+        "title": "Tai Chi for Seniors",
+        "venue": "Unidad Senior Center, 7251 Collins Avenue",
+        "city": "Miami Beach",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Tai Chi for Seniors — a recurring family program at Unidad Senior Center, 7251 Collins Avenue in Miami Beach.",
+        "match": "tai chi"
+      },
+      {
+        "slug": "qi-gong-for-seniors-un-unidad-7251-collins-avenue-miami-beach-city-events-10103423",
+        "title": "Qi Gong for Seniors",
+        "venue": "Unidad Senior Center, 7251 Collins Avenue",
+        "city": "Miami Beach",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Qi Gong for Seniors — a recurring family program at Unidad Senior Center, 7251 Collins Avenue in Miami Beach.",
+        "match": "qi gong"
+      },
+      {
+        "slug": "poolside-miami-beach-bandshell-events",
+        "title": "Poolside Miami Beach",
+        "venue": "Miami Beach Bandshell",
+        "city": "Miami Beach",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Poolside Miami Beach — a recurring family program at Miami Beach Bandshell in Miami Beach.",
+        "match": "Poolside Miami Beach"
+      },
+      {
+        "slug": "the-storefront-echoes-of-the-islands-main-library-the-storefront-1st-floor-miami-broward-library-communico-16851246",
+        "title": "The Storefront: Echoes of the Islands",
+        "venue": "Miami-Dade Main Library",
+        "city": "Miami",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "unverified",
+        "description": "The Storefront: Echoes of the Islands — a special family program at Miami-Dade Main Library in Miami.",
+        "match": "The Storefront: Echoes of the Islands"
       }
     ],
     "dallas-fort-worth": [
@@ -457,6 +930,50 @@
         "recurrence": "recurring",
         "description": "The Ramazinis' family juggling show at the Dallas Public Library — comedy, unicycles, and juggling for all ages.",
         "match": "ramazinis"
+      },
+      {
+        "slug": "movie-maker-camp-grades-6-12-parr-library-program-room-dfw-plano-library-communico-15745811",
+        "title": "Movie Maker Camp",
+        "venue": "Parr Library",
+        "city": "Plano",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Movie Maker Camp — a recurring family program at Parr Library in Plano.",
+        "match": "Movie Maker Camp"
+      },
+      {
+        "slug": "wildlife-on-the-move-s-cool-cold-blooded-critters-animal-show-city-council-chambers",
+        "title": "Wildlife on the Move: Cool Cold-Blooded Critters",
+        "venue": "City Council Chambers",
+        "city": "Dallas-Fort Worth",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Wildlife on the Move: Cool Cold-Blooded Critters — a recurring family program at City Council Chambers in Dallas-Fort Worth.",
+        "match": "Wildlife on the Move: Cool Cold-Blooded Critters"
+      },
+      {
+        "slug": "teen-dungeons-and-dragons-meeting-room-dfw-fort-worth-library-libcal-16952259",
+        "title": "Teen Dungeons & Dragons",
+        "venue": "Fort Worth Public Library",
+        "city": "Fort Worth",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Teen Dungeons & Dragons — a recurring family program at Fort Worth Public Library in Fort Worth.",
+        "match": "dungeons"
+      },
+      {
+        "slug": "the-lost-declaration-an-escape-adventure-lochwood-classroom-1-2-at-lochwood-branch",
+        "title": "The Lost Declaration: An Escape Adventure",
+        "venue": "Lochwood Branch Library",
+        "city": "Dallas",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "The Lost Declaration: An Escape Adventure — a recurring family program at Lochwood Branch Library in Dallas.",
+        "match": "The Lost Declaration: An Escape Adventure"
       }
     ],
     "atlanta": [
@@ -470,6 +987,52 @@
         "recurrence": "recurring",
         "description": "Piedmont Park's weekly green market — local farmers and vendors every Saturday in the park.",
         "match": "green market|piedmont.*market"
+      },
+      {
+        "slug": "books-and-babies-storytime-toco-hill-avis-g-williams-library-toco-hill-avis-g-williams-library-meeting-room-dekalb-library-family-16312630",
+        "title": "Books and Babies Storytime",
+        "venue": "Avis G. Williams Library",
+        "city": "Atlanta",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Books and Babies Storytime — a recurring family program at Avis G. Williams Library in Atlanta.",
+        "match": "books and babies"
+      },
+      {
+        "slug": "drop-in-kids-gardening-activity-atlanta-botanical-garden-atlanta-botanical-garden-10011693",
+        "title": "Drop-In Kids Gardening Activity",
+        "venue": "Atlanta Botanical Garden",
+        "city": "Atlanta",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "recurring",
+        "description": "Drop-In Kids Gardening Activity — a recurring family program at Atlanta Botanical Garden in Atlanta.",
+        "match": "gardening"
+      }
+    ],
+    "phoenix": [
+      {
+        "slug": "mark-klett-desert-citizens-desert-botanical-garden-desert-botanical-garden-388923",
+        "title": "Mark Klett: Desert Citizens",
+        "venue": "Desert Botanical Garden",
+        "city": "Phoenix",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "unverified",
+        "description": "Mark Klett: Desert Citizens — a special family program at Desert Botanical Garden in Phoenix.",
+        "match": "Mark Klett: Desert Citizens"
+      },
+      {
+        "slug": "winter-in-july-phoenix-zoo-events",
+        "title": "Winter in July",
+        "venue": "Phoenix Zoo",
+        "city": "Phoenix",
+        "month": "July",
+        "lastHeld": "2026",
+        "recurrence": "annual",
+        "description": "Winter in July — a annual family program at Phoenix Zoo in Phoenix.",
+        "match": "Winter in July"
       }
     ]
   }

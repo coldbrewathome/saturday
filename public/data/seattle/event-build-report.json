@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "seattle",
-  "generatedAt": "2026-08-01T05:31:26.373Z",
+  "generatedAt": "2026-08-10T01:44:14.149Z",
   "registryPath": "data/event-sources-seattle.json",
   "outputPath": "public/data/seattle/events.json",
-  "eventCount": 463,
-  "adultsEventCount": 34,
+  "eventCount": 529,
+  "adultsEventCount": 30,
   "sourceCount": 30,
-  "liveEventCount": 487,
-  "lastKnownGoodEventCount": 1,
+  "liveEventCount": 559,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 12,
+  "operatorAlertCount": 13,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:31:26.373Z",
+      "fetchedAt": "2026-08-10T01:44:14.149Z",
       "fetches": [
         {
           "url": "https://www.zoo.org/events?cgid=1",
@@ -39,21 +39,21 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "seattle",
       "sourceId": "burke-museum-events",
       "sourceName": "Burke Museum Events",
       "sourceType": "eventList",
       "url": "https://www.burkemuseum.org/events",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-08-01T05:31:26.373Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:44:14.149Z",
       "fetches": [
         {
           "url": "https://www.burkemuseum.org/events",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:31:26.373Z",
+      "fetchedAt": "2026-08-10T01:44:14.149Z",
       "fetches": [
         {
           "url": "https://pacificsciencecenter.org/events/",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:31:26.373Z",
+      "fetchedAt": "2026-08-10T01:44:14.149Z",
       "fetches": [
         {
           "url": "https://www.seattleaquarium.org/explore-the-aquarium/programs/toddler-time/",
@@ -128,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:31:26.373Z",
+      "fetchedAt": "2026-08-10T01:44:14.149Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -139,12 +139,37 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "seattle",
       "sourceId": "evergreen-state-fair",
       "sourceName": "Evergreen State Fair",
       "sourceType": "html",
       "url": "https://www.evergreenfair.org/calendar.aspx",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetches": [
+        {
+          "url": "https://www.evergreenfair.org/calendar.aspx",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "seattle",
+      "sourceId": "seafair-weekend-festival-2026-08-01-src",
+      "sourceName": "Seafair Weekend Festival & Boeing Seafair Air Show",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.seafair.org/seafair-weekend-festival/",
       "status": "ok",
       "issueType": "zero-in-window",
       "reason": "Source returned events, but none were in the planning window.",
@@ -153,13 +178,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:31:26.373Z",
+      "fetchedAt": "2026-08-10T01:44:14.149Z",
       "fetches": [
         {
-          "url": "https://www.evergreenfair.org/calendar.aspx",
+          "url": "https://www.seafair.org/seafair-weekend-festival/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -178,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:31:26.373Z",
+      "fetchedAt": "2026-08-10T01:44:14.149Z",
       "fetches": [
         {
           "url": "https://www.neumos.com/events",
@@ -203,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:31:26.373Z",
+      "fetchedAt": "2026-08-10T01:44:14.149Z",
       "fetches": [
         {
           "url": "https://www.thecrocodile.com/events",
@@ -228,7 +253,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:31:26.373Z",
+      "fetchedAt": "2026-08-10T01:44:14.149Z",
       "fetches": [
         {
           "url": "https://www.tractortavern.com/events",
@@ -253,7 +278,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:31:26.373Z",
+      "fetchedAt": "2026-08-10T01:44:14.149Z",
       "fetches": [
         {
           "url": "https://www.sunsettavern.com/events",
@@ -278,7 +303,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:31:26.373Z",
+      "fetchedAt": "2026-08-10T01:44:14.149Z",
       "fetches": [
         {
           "url": "https://www.comedyunderground.com/calendar",
@@ -303,7 +328,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:31:26.373Z",
+      "fetchedAt": "2026-08-10T01:44:14.149Z",
       "fetches": [
         {
           "url": "https://www.nectarlounge.com/",
@@ -365,9 +390,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 176,
+      "liveEvents": 172,
       "fallbackEvents": 0,
-      "eventCount": 176,
+      "eventCount": 172,
       "fetches": [
         {
           "url": "https://www.trumba.com/calendars/kalendaro.json?filterview=SeriesStoryTime",
@@ -378,8 +403,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 176,
+      "rejectedLiveEvents": 9,
+      "extractedEvents": 181,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -392,9 +417,9 @@
       "metroId": "seattle",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 16,
+      "liveEvents": 83,
       "fallbackEvents": 0,
-      "eventCount": 16,
+      "eventCount": 83,
       "fetches": [
         {
           "url": "https://seattlechildrensmuseum.org/calendar/",
@@ -405,8 +430,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 102,
-      "extractedEvents": 118,
+      "rejectedLiveEvents": 43,
+      "extractedEvents": 126,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -444,10 +469,10 @@
       "city": "Seattle",
       "metroId": "seattle",
       "category": "Museum",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.burkemuseum.org/events",
@@ -460,9 +485,8 @@
       "contentType": "text/html;charset=utf-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "recoveryMode": "last-known-good",
-      "reason": "source produced no live events; using last-known-good future events"
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "pacific-science-center-events",
@@ -594,8 +618,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -608,9 +632,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 7,
+      "liveEvents": 11,
       "fallbackEvents": 0,
-      "eventCount": 7,
+      "eventCount": 11,
       "fetches": [
         {
           "url": "https://kcls.bibliocommons.com/v2/events",
@@ -622,7 +646,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 7,
+      "extractedEvents": 11,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -635,9 +659,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 8,
+      "liveEvents": 17,
       "fallbackEvents": 0,
-      "eventCount": 8,
+      "eventCount": 17,
       "fetches": [
         {
           "url": "https://sno-isle.bibliocommons.com/v2/events",
@@ -649,7 +673,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 8,
+      "extractedEvents": 17,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -670,13 +694,13 @@
           "url": "https://bellevuebotanical.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=95; pages=1"
+          "contentType": "application/json; source=tribe-events; events=90; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=95; pages=1",
-      "rejectedLiveEvents": 61,
-      "extractedEvents": 93,
+      "contentType": "application/json; source=tribe-events; events=90; pages=1",
+      "rejectedLiveEvents": 57,
+      "extractedEvents": 89,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -689,9 +713,9 @@
       "metroId": "seattle",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 199,
+      "liveEvents": 197,
       "fallbackEvents": 0,
-      "eventCount": 199,
+      "eventCount": 197,
       "fetches": [
         {
           "url": "https://www.trumba.com/calendars/sea_campus.json",
@@ -703,7 +727,7 @@
       "httpStatus": 200,
       "contentType": "application/json;charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 199,
+      "extractedEvents": 197,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -824,9 +848,9 @@
       "metroId": "seattle",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.seafair.org/seafair-weekend-festival/",
@@ -837,7 +861,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 2,
       "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -904,9 +928,9 @@
       "metroId": "seattle",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 10,
+      "liveEvents": 9,
       "fallbackEvents": 0,
-      "eventCount": 10,
+      "eventCount": 9,
       "fetches": [
         {
           "url": "https://www.showboxpresents.com/events/rss",
@@ -918,7 +942,7 @@
       "httpStatus": 200,
       "contentType": "application/rss+xml",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 10,
+      "extractedEvents": 9,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -983,9 +1007,9 @@
       "metroId": "seattle",
       "category": "Comedy",
       "status": "ok",
-      "liveEvents": 12,
+      "liveEvents": 13,
       "fallbackEvents": 0,
-      "eventCount": 12,
+      "eventCount": 13,
       "fetches": [
         {
           "url": "https://www.unexpectedproductions.org/events/list/",
@@ -996,8 +1020,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 12,
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 14,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

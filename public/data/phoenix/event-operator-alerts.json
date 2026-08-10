@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "metroId": "phoenix",
-  "generatedAt": "2026-08-01T05:30:43.307Z",
+  "generatedAt": "2026-08-10T01:49:51.593Z",
   "alertCount": 7,
   "alerts": [
     {
@@ -19,13 +19,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:30:43.307Z",
+      "fetchedAt": "2026-08-10T01:49:51.593Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "application/json; source=ticketmaster; events=1; queries=1"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "phoenix",
+      "sourceId": "hot-wheels-monster-trucks-live-glendale-2026-08-08-src",
+      "sourceName": "Hot Wheels Monster Trucks Live Glow-N-Fire",
+      "sourceType": "officialTextEvents",
+      "url": "https://hotwheelsmonstertruckslive.com/event/glendale-az-2026/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-10T01:49:51.593Z",
+      "fetches": [
+        {
+          "url": "https://hotwheelsmonstertruckslive.com/event/glendale-az-2026/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -44,35 +69,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:30:43.307Z",
+      "fetchedAt": "2026-08-10T01:49:51.593Z",
       "fetches": [
         {
           "url": "https://www.crescentphx.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "phoenix",
-      "sourceId": "rebel-lounge-phx",
-      "sourceName": "The Rebel Lounge",
-      "sourceType": "html",
-      "url": "https://www.therebellounge.com/events",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:30:43.307Z",
-      "fetches": [
-        {
-          "url": "https://www.therebellounge.com/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -94,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:30:43.307Z",
+      "fetchedAt": "2026-08-10T01:49:51.593Z",
       "fetches": [
         {
           "url": "https://www.marqueetheatreaz.com/calendar/",
@@ -119,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:30:43.307Z",
+      "fetchedAt": "2026-08-10T01:49:51.593Z",
       "fetches": [
         {
           "url": "https://phoenix.standuplive.com/events",
@@ -144,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:30:43.307Z",
+      "fetchedAt": "2026-08-10T01:49:51.593Z",
       "fetches": [
         {
           "url": "https://houseofcomedy.net/scottsdale",
@@ -169,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-01T05:30:43.307Z",
+      "fetchedAt": "2026-08-10T01:49:51.593Z",
       "fetches": [
         {
           "url": "https://www.theniletheater.com/events",
