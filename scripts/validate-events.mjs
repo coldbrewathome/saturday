@@ -122,6 +122,63 @@ async function adultEventsErrors(metro) {
   return errors;
 }
 
+// Popular picks are weekly editorial snapshots: a pick must resolve to an
+// event in the live feed that still starts within the weekend the file names.
+// Missing files are fine (the section hides without them); stale or unknown
+// references are errors — they would ship a "Popular" section pointing at
+// events the feed no longer carries.
+async function stalePopularPickErrors(metro) {
+  const eventsPath = metroDataFile(metro, "events");
+  const picksPath = metroDataFile(metro, "popularEvents");
+  const pairs = [
+    [picksPath, eventsPath],
+    [
+      picksPath.replace(/popular-events\.json$/, "popular-events-adults.json"),
+      eventsPath.replace(/events\.json$/, "events-adults.json"),
+    ],
+  ];
+  const errors = [];
+  for (const [picksFile, eventFile] of pairs) {
+    const picksDoc = await readJsonOrNull(picksFile);
+    const eventsDoc = await readJsonOrNull(eventFile);
+    if (!picksDoc || !eventsDoc) continue;
+    if (!Array.isArray(picksDoc.picks)) {
+      errors.push(`${picksFile}: picks is not an array.`);
+      continue;
+    }
+    const eventsById = new Map(
+      (Array.isArray(eventsDoc.events) ? eventsDoc.events : []).map((e) => [e.id, e]),
+    );
+    for (const pick of picksDoc.picks) {
+      const event = eventsById.get(pick?.eventId);
+      if (!event) {
+        errors.push(`${picksFile}: pick references unknown event "${pick?.eventId}".`);
+        continue;
+      }
+      const start = new Date(event.startDateTime);
+      if (!Number.isFinite(start.getTime())) continue;
+      // Metro-local date, same ground truth the generator's digest uses
+      // (zonedKey) — the machine's local zone is the wrong frame for a
+      // Chicago event sitting near midnight CT.
+      const startKey = new Intl.DateTimeFormat("en-CA", {
+        timeZone: metro.timezone,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).format(start);
+      if (
+        picksDoc.weekendStart &&
+        (startKey < picksDoc.weekendStart || startKey > (picksDoc.weekendEnd || picksDoc.weekendStart))
+      ) {
+        errors.push(
+          `${picksFile}: pick "${event.id}" (${event.title}) starts ${startKey}, outside ${picksDoc.weekendStart}..${picksDoc.weekendEnd}.`,
+        );
+      }
+    }
+  }
+  return errors;
+}
+
 async function validateMetro(metro) {
   const dataPath =
     process.env.EVENT_OUTPUT ||
@@ -146,6 +203,7 @@ async function validateMetro(metro) {
   errors.push(...(await expiredPlanErrors(metro)));
   errors.push(...(await planGeometryErrors(metro)));
   errors.push(...(await adultEventsErrors(metro)));
+  errors.push(...(await stalePopularPickErrors(metro)));
 
   if (errors.length > 0) {
     console.error(`[${metro.id}] ${errors.join(`\n[${metro.id}] `)}`);

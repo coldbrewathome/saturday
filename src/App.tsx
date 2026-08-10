@@ -118,6 +118,7 @@ import CheckinPrompt from "./CheckinPrompt";
 import { computeCheckinCandidates } from "./checkinQueue";
 import { EVENT_THEMES, isValidThemeId } from "./eventThemes";
 import { isUpcomingEvent, isWeekendWindowDate } from "./eventFreshness";
+import type { PopularEventsDataset } from "./popularEvents";
 import {
   PROFILE_STORAGE_KEY,
   readStoredProfile,
@@ -1543,6 +1544,7 @@ function App({ metro }: AppProps) {
     ),
     events: dataUrl(metroDataPath(metro, "events")),
     featuredPlans: dataUrl(metroDataPath(metro, "featuredPlans")),
+    popularEvents: dataUrl(metroDataPath(metro, "popularEvents")),
     curatedSpots: rootDataUrl(
       legacyMetroDataPath(metro, "curatedSpots") ||
         metroDataPath(metro, "curatedSpots"),
@@ -1859,6 +1861,7 @@ function App({ metro }: AppProps) {
   const guidePlanConsumedRef = useRef(false);
 
   const [featuredPlans, setFeaturedPlans] = useState<FeaturedPlan[]>([]);
+  const [popularPicks, setPopularPicks] = useState<PopularEventsDataset | null>(null);
   const [boaMuseums, setBoaMuseums] = useState<BoaMuseum[]>([]);
   const [weather, setWeather] = useState<WeatherForecast | null>(null);
   const [preferences, setPreferences] = useState<PlannerPreferenceId[]>(() => {
@@ -2311,6 +2314,22 @@ function App({ metro }: AppProps) {
       active = false;
     };
   }, [dataUrls.featuredPlans]);
+
+  useEffect(() => {
+    let active = true;
+    fetch(dataUrls.popularEvents)
+      .then((response) => (response.ok ? response.json() : Promise.reject()))
+      .then((dataset: PopularEventsDataset) => {
+        if (!active) return;
+        if (Array.isArray(dataset?.picks)) setPopularPicks(dataset);
+      })
+      .catch(() => {
+        // Popular picks are optional; the feed renders without them.
+      });
+    return () => {
+      active = false;
+    };
+  }, [dataUrls.popularEvents]);
 
   useEffect(() => {
     if (metro.id !== "bay-area") {
@@ -5566,6 +5585,7 @@ function App({ metro }: AppProps) {
         onEditProfile={() => setShowProfileWizard(true)}
         trust={eventTrust}
         venueImages={venueImages}
+        popularPicks={popularPicks}
         newsletterSlot={
           <NewsletterCard
             metroId={metro.id}

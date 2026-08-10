@@ -39,8 +39,8 @@ function makeEvent(
     category: "Festival",
     daysOfWeek: [6],
     timeWindow: "Afternoon",
-    startDateTime: "2026-08-08T13:00:00-07:00",
-    endDateTime: "2026-08-08T17:00:00-07:00",
+    startDateTime: "2026-08-15T13:00:00-07:00",
+    endDateTime: "2026-08-15T17:00:00-07:00",
     ageBands: [],
     cost: "Free",
     url: "https://example.com/e",
@@ -49,14 +49,14 @@ function makeEvent(
   };
 }
 
-// 2026-08-08 is a Saturday; today is 2026-08-02 (Sunday).
+// 2026-08-15 is a Saturday; today is 2026-08-09 (Sunday).
 const WEEKEND_EVENTS = {
   events: [
     makeEvent({ title: "Fireworks Festival", cost: "Free" }),
     makeEvent({ title: "Storytime at the Library", cost: "Free" }),
     makeEvent({ title: "Saturday Concert in the Park", cost: "$" }),
     makeEvent({ title: "Teen Advisory Council", cost: "Free" }),
-    makeEvent({ title: "Next Week Event", startDateTime: "2026-08-15T13:00:00-07:00" }),
+    makeEvent({ title: "Next Week Event", startDateTime: "2026-08-22T13:00:00-07:00" }),
   ],
 };
 

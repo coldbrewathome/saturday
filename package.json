@@ -43,7 +43,9 @@
     "seo:audit": "node scripts/validate-all-seo.mjs",
     "ci": "npm run test && npm run validate:data:all && npm run validate:events:all && npm run build && npm run seo:i18n-check && npm run seo:audit && npm run ci:worker",
     "promote:traffic": "node scripts/traffic-promotion.mjs",
-    "pr:weekly": "node scripts/pr-weekly.mjs"
+    "pr:weekly": "node scripts/pr-weekly.mjs",
+    "popular:candidates": "node scripts/generate-popular-events.mjs --candidates",
+    "popular:merge": "node scripts/generate-popular-events.mjs"
   },
   "dependencies": {
     "@types/leaflet": "^1.9.21",

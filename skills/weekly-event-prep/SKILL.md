@@ -97,7 +97,29 @@ npm run validate:data
 npm run validate:events:all      # if it names a metro, regenerate that metro's plans and re-run
 ```
 
-## 6. SEO no-regression gate
+## 5a. Popular picks — LLM editor (15 min, agents)
+
+The weekend feed's "Popular this weekend" section is editorial: an LLM reads the
+candidates digest and picks ~6 events per metro+audience that a general audience
+would recognize. GSC clicks are a small tiebreak only — never the ranking.
+
+```bash
+npm run popular:candidates -- --weekend=YYYY-MM-DD   # digests → output/popular-candidates/
+```
+
+- The Saturday passed to `--weekend` must be the Sat the app feed will show
+  next (the feed's current Sat+Sun, or the upcoming one from Monday on).
+- One agent per metro (no sub-agents), reads `output/popular-candidates/{metro}-kids.md`
+  (+ `bay-area-adults.md`), writes `output/popular-picks/{metro}-kids.json`
+  (+ `-adults.json` bay-area only) — picks: 4–6 events, ranks contiguous from 1,
+  `eventId` copied verbatim from the digest, one-line `reason` each.
+- Favor marquee one-offs (fairs, festivals, big shows) over routine library/
+  museum programming; mix Sat/Sun and dayparts; skip events the feed itself
+  hides (e.g. age-band-restricted shows for kids audiences).
+- Merge + validate hard (unknown ids / bad ranks / >8 picks fail loud):
+  `npm run popular:merge` → then `npm run validate:events` in step 5.
+
+
 
 `npm run seo:audit` scans **dist/**, so it is meaningless on a stale build. Always:
 
@@ -116,6 +138,7 @@ The `seo-shell` markers are the crawlable homepage/metro-hub content added 2026-
 ```bash
 git add -A && git commit -m "feat(events): weekly prep <window>" && git push origin main
 npm run deploy:kids && npm run deploy:adults    # sequential — they share dist/
+npm run deploy:data                              # new/updated public/data files (popular-events.json, featured-plans, events) — apps fetch data at runtime from famhop-data
 ```
 
 **MANDATORY after any build that runs `generate-seo-pages.mjs` (including the gate build in step 6): commit `data/seo-lastmod.json` before the session ends** (explicit path — `git add data/seo-lastmod.json` — per the concurrent-sessions rule). The content-hash `<lastmod>` store only works if it persists across checkouts: a build from a clean clone with an empty/stale store makes `trackedLastmod()` fall back to today() for every URL, re-stamping all ~6,900 lastmods at once — exactly the "Google learns to distrust lastmod" failure the hashing was built to end (it fired once: 6,697/6,802 live sitemap URLs stamped 2026-08-01).

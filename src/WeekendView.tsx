@@ -12,6 +12,7 @@ import {
   CalendarDays,
   Check,
   ChevronRight,
+  Flame,
   MapPin,
   Plus,
   Share2,
@@ -24,6 +25,7 @@ import type { MetroConfig } from "./metros";
 import type { AgeBand } from "./planner";
 import { APP_AUDIENCE, SHOW_AGE_BAND_UI } from "./appConfig";
 import { isUpcomingEvent } from "./eventFreshness";
+import { resolvePopularEvents, type PopularEventsDataset } from "./popularEvents";
 import { isFeedJunkEvent } from "./eventQuality";
 import {
   EMPTY_VENUE_MAP,
@@ -118,6 +120,8 @@ type Props = {
   /** Venue → curated photo index; events without their own photo use the
    * venue's real image instead of a blank card. */
   venueImages?: VenueImageMap;
+  /** Editorial "Popular this weekend" picks; stale/empty → section hidden. */
+  popularPicks?: PopularEventsDataset | null;
 };
 
 export default function WeekendView({
@@ -140,6 +144,7 @@ export default function WeekendView({
   onEditProfile,
   trust,
   venueImages,
+  popularPicks,
 }: Props) {
   const feed = useMemo(() => {
     const now = new Date();
@@ -190,6 +195,25 @@ export default function WeekendView({
     return ids;
   }, [featuredPlans]);
 
+  // Editorial "Popular this weekend" picks. Resolved against the live feed so
+  // unknown/stale/ended picks drop out — the section only shows events that
+  // are genuinely in this weekend's window.
+  const popularEvents = useMemo(
+    () =>
+      resolvePopularEvents({
+        dataset: popularPicks,
+        events,
+        sat: feed.sat,
+        sun: feed.sun,
+        timeZone: metro.timezone,
+      }),
+    [popularPicks, events, feed, metro],
+  );
+  const popularEventIds = useMemo(
+    () => new Set(popularEvents.map((event) => event.id)),
+    [popularEvents],
+  );
+
   const scope = (list: FamilyEvent[]) =>
     ageBand === "any" ? list : list.filter((e) => e.ageBands.includes(ageBand));
   const home = homeLocation ?? null;
@@ -208,6 +232,7 @@ export default function WeekendView({
       : list;
   const satScoped = rank(scope(feed.satEvents));
   const sunScoped = rank(scope(feed.sunEvents));
+  const popularScoped = scope(popularEvents);
   const total = satScoped.length + sunScoped.length;
   const freeCount =
     satScoped.filter((e) => e.cost === "Free").length +
@@ -276,10 +301,16 @@ export default function WeekendView({
             {event.venue}
             {event.city ? ` · ${event.city}` : ""}
           </span>
-          {(free || showCost || host || trustLabel || editorPicked) && (
+          {(free || showCost || host || trustLabel || editorPicked || popularEventIds.has(event.id)) && (
             <span className="weekend-card-meta">
               {editorPicked && (
                 <em className="weekend-chip-editors">Editor&rsquo;s pick</em>
+              )}
+              {popularEventIds.has(event.id) && (
+                <em className="weekend-chip-popular">
+                  <Flame size={11} aria-hidden="true" />
+                  Popular
+                </em>
               )}
               {free && <em className="weekend-chip-free">Free</em>}
               {showCost && <em className="weekend-chip">{event.cost}</em>}
@@ -477,10 +508,25 @@ export default function WeekendView({
           </div>
         </section>
       ) : (
-        <div className="weekend-days">
-          {renderDay(feed.sat, satScoped)}
-          {renderDay(feed.sun, sunScoped)}
-        </div>
+        <>
+          {popularScoped.length > 0 && (
+            <section
+              className="weekend-popular"
+              aria-label="Popular this weekend"
+            >
+              <h3>
+                <Flame aria-hidden="true" /> Popular this weekend
+              </h3>
+              <ol className="weekend-cards weekend-popular-list">
+                {popularScoped.map(renderCard)}
+              </ol>
+            </section>
+          )}
+          <div className="weekend-days">
+            {renderDay(feed.sat, satScoped)}
+            {renderDay(feed.sun, sunScoped)}
+          </div>
+        </>
       )}
 
       {featuredPlans.length > 0 && (

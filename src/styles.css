@@ -1627,6 +1627,52 @@ a.weekend-card-title:hover {
   width: 16px;
 }
 
+.weekend-popular {
+  display: grid;
+  gap: 12px;
+}
+
+.weekend-popular h3 {
+  align-items: center;
+  display: flex;
+  font: 800 1rem/1.2 var(--font-display);
+  gap: 6px;
+  margin: 0;
+}
+
+.weekend-popular h3 svg {
+  color: var(--accent);
+  height: 16px;
+  width: 16px;
+}
+
+.weekend-popular-list {
+  counter-reset: popular;
+}
+
+.weekend-popular-list li {
+  counter-increment: popular;
+  position: relative;
+}
+
+/* Rank counter: "1", "2", … pinned to the card's leading edge. */
+.weekend-popular-list li::before {
+  align-items: center;
+  background: var(--accent-strong);
+  border-radius: 50%;
+  color: #fff;
+  content: counter(popular);
+  display: flex;
+  font: 800 0.72rem/1 var(--font-ui);
+  height: 22px;
+  justify-content: center;
+  left: -7px;
+  position: absolute;
+  top: 12px;
+  width: 22px;
+  z-index: 1;
+}
+
 .weekend-plans-list {
   display: grid;
   gap: 10px;
@@ -7818,6 +7864,17 @@ a.weekend-card-title:hover {
 .weekend-chip-editors::before {
   content: "★";
   font-size: 0.7rem;
+}
+
+.weekend-chip-popular {
+  align-items: center;
+  background: var(--accent-soft);
+  border-radius: 999px;
+  color: var(--accent-strong);
+  display: inline-flex;
+  font: 700 0.72rem/1 var(--font-ui);
+  gap: 3px;
+  padding: 3px 8px;
 }
 
 @media (max-width: 480px) {

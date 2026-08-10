@@ -24,7 +24,8 @@ export type DataKey =
   | "events"
   | "eventReport"
   | "featuredPlans"
-  | "curatedSpots";
+  | "curatedSpots"
+  | "popularEvents";
 
 const ALL_METROS: MetroConfig[] = metrosDoc.metros as MetroConfig[];
 
@@ -52,6 +53,7 @@ const DATA_FILES: Record<DataKey, string> = {
   eventReport: "event-build-report.json",
   featuredPlans: "featured-plans.json",
   curatedSpots: "curated-spots.json",
+  popularEvents: "popular-events.json",
 };
 
 const ADULTS_DATA_FILES: Partial<Record<DataKey, string>> = {
@@ -63,6 +65,10 @@ const ADULTS_DATA_FILES: Partial<Record<DataKey, string>> = {
   // serving Koret Children's Quarter Playground, Yerba Buena Children's
   // Garden, etc. straight from curated-spots.json.
   curatedSpots: "curated-spots-adults.json",
+  // Popular picks are editorial + audience-specific (kids picks reference
+  // kids event ids; the adults feed has a different id scheme) — without
+  // this entry the adults build would fall through to the kids file below.
+  popularEvents: "popular-events-adults.json",
 };
 
 export function metroBySlug(slug: string | null | undefined): MetroConfig {
