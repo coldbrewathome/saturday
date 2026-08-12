@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "austin",
-  "generatedAt": "2026-08-10T01:53:10.840Z",
+  "generatedAt": "2026-08-12T18:36:51.952Z",
   "registryPath": "data/event-sources-austin.json",
   "outputPath": "public/data/austin/events.json",
-  "eventCount": 102,
-  "adultsEventCount": 7,
+  "eventCount": 121,
+  "adultsEventCount": 8,
   "sourceCount": 25,
-  "liveEventCount": 108,
-  "lastKnownGoodEventCount": 0,
+  "liveEventCount": 127,
+  "lastKnownGoodEventCount": 1,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 14,
+  "operatorAlertCount": 15,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,12 +28,37 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:53:10.840Z",
+      "fetchedAt": "2026-08-12T18:36:51.952Z",
       "fetches": [
         {
           "url": "https://library.austintexas.gov/events/calendar",
           "status": "blocked",
           "reason": "challenge page returned instead of event content",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "austin",
+      "sourceId": "thinkery",
+      "sourceName": "Thinkery (Children's Museum)",
+      "sourceType": "html",
+      "url": "https://thinkeryaustin.org/visit-us/",
+      "status": "ok-last-known-good",
+      "issueType": "zero-extracted",
+      "reason": "source produced no live events; using last-known-good future events",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-08-12T18:36:51.952Z",
+      "fetches": [
+        {
+          "url": "https://thinkeryaustin.org/visit-us/",
+          "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
@@ -54,7 +79,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:53:10.840Z",
+      "fetchedAt": "2026-08-12T18:36:51.952Z",
       "fetches": [
         {
           "url": "https://www.thestoryoftexas.com/visit/calendar",
@@ -79,7 +104,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:53:10.840Z",
+      "fetchedAt": "2026-08-12T18:36:51.952Z",
       "fetches": [
         {
           "url": "https://www.lbjlibrary.org/events",
@@ -104,7 +129,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:53:10.840Z",
+      "fetchedAt": "2026-08-12T18:36:51.952Z",
       "fetches": [
         {
           "url": "https://blantonmuseum.org/events/",
@@ -129,7 +154,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:53:10.840Z",
+      "fetchedAt": "2026-08-12T18:36:51.952Z",
       "fetches": [
         {
           "url": "https://www.umlaufsculpture.org/events",
@@ -154,7 +179,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:53:10.840Z",
+      "fetchedAt": "2026-08-12T18:36:51.952Z",
       "fetches": [
         {
           "url": "https://zilker.org/sitr2026/",
@@ -179,7 +204,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:53:10.840Z",
+      "fetchedAt": "2026-08-12T18:36:51.952Z",
       "fetches": [
         {
           "url": "https://thelongcenter.org/events/",
@@ -204,7 +229,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:53:10.840Z",
+      "fetchedAt": "2026-08-12T18:36:51.952Z",
       "fetches": [
         {
           "url": "https://stubbsaustin.com/concert-calendar/",
@@ -229,7 +254,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:53:10.840Z",
+      "fetchedAt": "2026-08-12T18:36:51.952Z",
       "fetches": [
         {
           "url": "https://mohawkaustin.com/calendar",
@@ -254,7 +279,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:53:10.840Z",
+      "fetchedAt": "2026-08-12T18:36:51.952Z",
       "fetches": [
         {
           "url": "https://continentalclub.com/austin-tx/",
@@ -279,7 +304,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:53:10.840Z",
+      "fetchedAt": "2026-08-12T18:36:51.952Z",
       "fetches": [
         {
           "url": "https://antonesnightclub.com/calendar/",
@@ -304,7 +329,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:53:10.840Z",
+      "fetchedAt": "2026-08-12T18:36:51.952Z",
       "fetches": [
         {
           "url": "https://acl-live.com/calendar/",
@@ -329,7 +354,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:53:10.840Z",
+      "fetchedAt": "2026-08-12T18:36:51.952Z",
       "fetches": [
         {
           "url": "https://drafthouse.com/austin/calendar",
@@ -354,7 +379,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:53:10.840Z",
+      "fetchedAt": "2026-08-12T18:36:51.952Z",
       "fetches": [
         {
           "url": "https://www.capcitycomedy.com/calendar",
@@ -416,8 +441,8 @@
       "city": "Austin",
       "metroId": "austin",
       "category": "Museum",
-      "status": "ok",
-      "liveEvents": 1,
+      "status": "ok-last-known-good",
+      "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 1,
       "fetches": [
@@ -431,9 +456,10 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "recoveryMode": "last-known-good",
+      "reason": "source produced no live events; using last-known-good future events"
     },
     {
       "id": "bullock-museum",
@@ -533,13 +559,13 @@
           "url": "https://zilkergarden.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=15; pages=1"
+          "contentType": "application/json; source=tribe-events; events=18; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=15; pages=1",
-      "rejectedLiveEvents": 6,
-      "extractedEvents": 14,
+      "contentType": "application/json; source=tribe-events; events=18; pages=1",
+      "rejectedLiveEvents": 9,
+      "extractedEvents": 17,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -606,9 +632,9 @@
       "metroId": "austin",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 5,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 5,
       "fetches": [
         {
           "url": "https://pflugerville.librarycalendar.com/events/month",
@@ -619,7 +645,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 5,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 6,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -660,9 +686,9 @@
       "metroId": "austin",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 83,
+      "liveEvents": 98,
       "fallbackEvents": 0,
-      "eventCount": 83,
+      "eventCount": 98,
       "fetches": [
         {
           "url": "https://roundrocktexas.libcal.com/calendar/libraryevents?cid=19825&cal=19825",
@@ -673,7 +699,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 79,
+      "rejectedLiveEvents": 64,
       "extractedEvents": 162,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -955,9 +981,9 @@
       "metroId": "austin",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 4,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 4,
       "fetches": [
         {
           "url": "https://www.thecontemporaryaustin.org/events/",
@@ -968,7 +994,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=22; pages=1",
-      "rejectedLiveEvents": 19,
+      "rejectedLiveEvents": 18,
       "extractedEvents": 22,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -990,13 +1016,13 @@
           "url": "https://www.mexic-artemuseum.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=5; pages=1"
+          "contentType": "application/json; source=tribe-events; events=7; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=5; pages=1",
-      "rejectedLiveEvents": 3,
-      "extractedEvents": 5,
+      "contentType": "application/json; source=tribe-events; events=7; pages=1",
+      "rejectedLiveEvents": 5,
+      "extractedEvents": 7,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

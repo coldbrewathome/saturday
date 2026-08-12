@@ -180,24 +180,42 @@ async function fetchSource(source, registry) {
       }
       url.searchParams.set("startDateTime", now.toISOString().replace(/\.\d{3}Z$/, "Z"));
       url.searchParams.set("endDateTime", end.toISOString().replace(/\.\d{3}Z$/, "Z"));
-      url.searchParams.set("size", String(source.ticketmasterPageSize || 100));
-      const payload = await fetchUrlForSource(source, url.toString(), registry.defaults?.userAgent, {
-        browserHeaders: true,
-        headers: { accept: "application/json" },
-      });
-      if (payload.status !== "ok") return payload;
-      const json = payload.json || JSON.parse(payload.text || "{}");
-      for (const event of json?._embedded?.events || []) {
-        const key = event.id || `${event.name}|${event.dates?.start?.dateTime || event.dates?.start?.localDate || ""}`;
-        eventsById.set(key, event);
+      const pageSize = Number(source.ticketmasterPageSize || 100);
+      url.searchParams.set("size", String(pageSize));
+      // Timed-entry events (museums, plays) emit one record per slot. A
+      // single page sorted by date carries only the first 100 — typically
+      // today's slots — so a weeks-long exhibition would look "tonight only":
+      // its weekend slots never reach the dataset, and auto-plans pin the
+      // expiring slots. Paginate until the window is covered or the API runs
+      // out (Ticketmaster 400s beyond page 10, 0-indexed — a non-ok page is
+      // end-of-results, not a fatal error, unless it's the very first page).
+      const maxPages = Math.min(Number(source.maxPages || 12), 11);
+      for (let page = 0; page < maxPages; page += 1) {
+        const pageUrl = new URL(url.toString());
+        pageUrl.searchParams.set("page", String(page));
+        const payload = await fetchUrlForSource(source, pageUrl.toString(), registry.defaults?.userAgent, {
+          browserHeaders: true,
+          headers: { accept: "application/json" },
+        });
+        if (payload.status !== "ok") {
+          if (page === 0) return payload;
+          break;
+        }
+        const json = payload.json || JSON.parse(payload.text || "{}");
+        const pageEvents = json?._embedded?.events || [];
+        for (const event of pageEvents) {
+          const key = event.id || `${event.name}|${event.dates?.start?.dateTime || event.dates?.start?.localDate || ""}`;
+          eventsById.set(key, event);
+        }
+        fetched += 1;
+        if (pageEvents.length < pageSize) break;
       }
-      fetched += 1;
     }
     const json = { _embedded: { events: [...eventsById.values()] } };
     return {
       status: "ok",
       httpStatus: 200,
-      contentType: `application/json; source=ticketmaster; events=${eventsById.size}; queries=${fetched}`,
+      contentType: `application/json; source=ticketmaster; events=${eventsById.size}; pages=${fetched}`,
       json,
       text: JSON.stringify(json),
     };
@@ -1002,6 +1020,27 @@ async function fetchSourcePayloads(source, registry) {
     const sourceForUrl = { ...source, url };
     const payload = await fetchSource(sourceForUrl, registry);
     payloads.push({ ...payload, url, source: sourceForUrl });
+  }
+  // officialRecurringEvents configs may carry their own page urls (NHM's
+  // landing calendar lists only a rotating subset of programs). Fetch each
+  // distinct config page so extraction can gate each config against its own
+  // visible text instead of the parent page.
+  if (source.sourceType === "officialTextEvents" && Array.isArray(source.officialRecurringEvents)) {
+    const configUrls = [...new Set(
+      source.officialRecurringEvents
+        .map((config) => config.url)
+        .filter((url) => typeof url === "string" && url.length > 0 && url !== source.url),
+    )];
+    if (configUrls.length > 0) {
+      const pageTexts = {};
+      for (const url of configUrls) {
+        const pagePayload = await fetchUrlForSource(source, url, registry.defaults?.userAgent, {
+          browserHeaders: source.requiresBrowserHeaders === true,
+        });
+        if (pagePayload.status === "ok" && pagePayload.text) pageTexts[url] = pagePayload.text;
+      }
+      if (Object.keys(pageTexts).length > 0 && payloads[0]) payloads[0].pageTexts = pageTexts;
+    }
   }
   return payloads;
 }

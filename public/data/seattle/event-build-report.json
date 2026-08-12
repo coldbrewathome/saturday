@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "seattle",
-  "generatedAt": "2026-08-10T01:44:14.149Z",
+  "generatedAt": "2026-08-12T18:28:10.368Z",
   "registryPath": "data/event-sources-seattle.json",
   "outputPath": "public/data/seattle/events.json",
-  "eventCount": 529,
-  "adultsEventCount": 30,
+  "eventCount": 521,
+  "adultsEventCount": 29,
   "sourceCount": 30,
-  "liveEventCount": 559,
+  "liveEventCount": 547,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 13,
+  "operatorAlertCount": 15,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.zoo.org/events?cgid=1",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.burkemuseum.org/events",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://pacificsciencecenter.org/events/",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.seattleaquarium.org/explore-the-aquarium/programs/toddler-time/",
@@ -114,27 +114,27 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "seattle",
       "sourceId": "ticketmaster-seattle-family",
       "sourceName": "Ticketmaster Seattle Family Events",
       "sourceType": "ticketmaster",
       "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=7; queries=3"
+          "status": "http-error",
+          "httpStatus": 429,
+          "contentType": "application/json"
         }
       ]
     },
@@ -153,10 +153,35 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.evergreenfair.org/calendar.aspx",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "seattle",
+      "sourceId": "festal-tibet-fest-2026",
+      "sourceName": "Festál: Tibet Fest",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.seattlecenter.com/events/featured-events/festal/tibet-fest",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
+      "fetches": [
+        {
+          "url": "https://www.seattlecenter.com/events/featured-events/festal/tibet-fest",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -178,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.seafair.org/seafair-weekend-festival/",
@@ -203,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.neumos.com/events",
@@ -228,7 +253,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.thecrocodile.com/events",
@@ -253,7 +278,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.tractortavern.com/events",
@@ -278,7 +303,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.sunsettavern.com/events",
@@ -303,7 +328,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.comedyunderground.com/calendar",
@@ -328,13 +353,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.nectarlounge.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "seattle",
+      "sourceId": "capitol-hill-block-party-2026",
+      "sourceName": "Capitol Hill Block Party 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.capitolhillblockparty.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
+      "fetches": [
+        {
+          "url": "https://www.capitolhillblockparty.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
         }
       ]
     }
@@ -363,9 +413,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 18,
+      "liveEvents": 20,
       "fallbackEvents": 0,
-      "eventCount": 18,
+      "eventCount": 20,
       "fetches": [
         {
           "url": "https://kcls.bibliocommons.com/v2/events?programs=6092fc2d8910133a0055a335",
@@ -377,7 +427,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 18,
+      "extractedEvents": 20,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -390,9 +440,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 172,
+      "liveEvents": 175,
       "fallbackEvents": 0,
-      "eventCount": 172,
+      "eventCount": 175,
       "fetches": [
         {
           "url": "https://www.trumba.com/calendars/kalendaro.json?filterview=SeriesStoryTime",
@@ -403,8 +453,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=UTF-8",
-      "rejectedLiveEvents": 9,
-      "extractedEvents": 181,
+      "rejectedLiveEvents": 7,
+      "extractedEvents": 182,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -417,9 +467,9 @@
       "metroId": "seattle",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 83,
+      "liveEvents": 74,
       "fallbackEvents": 0,
-      "eventCount": 83,
+      "eventCount": 74,
       "fetches": [
         {
           "url": "https://seattlechildrensmuseum.org/calendar/",
@@ -430,7 +480,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 43,
+      "rejectedLiveEvents": 52,
       "extractedEvents": 126,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -550,22 +600,21 @@
       "city": "Seattle",
       "metroId": "seattle",
       "category": "Ticketed",
-      "status": "ok",
+      "status": "http-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=7; queries=3"
+          "status": "http-error",
+          "httpStatus": 429,
+          "contentType": "application/json"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "application/json; source=ticketmaster; events=7; queries=3",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
+      "httpStatus": 429,
+      "contentType": "application/json",
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -632,9 +681,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 11,
+      "liveEvents": 10,
       "fallbackEvents": 0,
-      "eventCount": 11,
+      "eventCount": 10,
       "fetches": [
         {
           "url": "https://kcls.bibliocommons.com/v2/events",
@@ -646,7 +695,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 11,
+      "extractedEvents": 10,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -659,9 +708,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 17,
+      "liveEvents": 12,
       "fallbackEvents": 0,
-      "eventCount": 17,
+      "eventCount": 12,
       "fetches": [
         {
           "url": "https://sno-isle.bibliocommons.com/v2/events",
@@ -673,7 +722,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 17,
+      "extractedEvents": 12,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -686,21 +735,21 @@
       "metroId": "seattle",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 32,
+      "liveEvents": 31,
       "fallbackEvents": 0,
-      "eventCount": 32,
+      "eventCount": 31,
       "fetches": [
         {
           "url": "https://bellevuebotanical.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=90; pages=1"
+          "contentType": "application/json; source=tribe-events; events=88; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=90; pages=1",
-      "rejectedLiveEvents": 57,
-      "extractedEvents": 89,
+      "contentType": "application/json; source=tribe-events; events=88; pages=1",
+      "rejectedLiveEvents": 56,
+      "extractedEvents": 87,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -740,9 +789,9 @@
       "metroId": "seattle",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.seattlecenter.com/events/featured-events/festal/tibet-fest",
@@ -753,7 +802,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -928,9 +977,9 @@
       "metroId": "seattle",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 9,
+      "liveEvents": 10,
       "fallbackEvents": 0,
-      "eventCount": 9,
+      "eventCount": 10,
       "fetches": [
         {
           "url": "https://www.showboxpresents.com/events/rss",
@@ -942,7 +991,7 @@
       "httpStatus": 200,
       "contentType": "application/rss+xml",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 9,
+      "extractedEvents": 10,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1115,9 +1164,9 @@
       "metroId": "seattle",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.capitolhillblockparty.com/",
@@ -1129,7 +1178,7 @@
       "httpStatus": 200,
       "contentType": "text/html;charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     }

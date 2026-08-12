@@ -1263,6 +1263,63 @@ test("extractOfficialTextEvents expands verified weekly recurring events on conf
   assert.equal(events[0].extractionMethod, "official-recurring-event");
 });
 
+test("extractOfficialTextEvents gates recurring configs against their own page text", () => {
+  // The parent calendar page lists only "Meet a Live Animal"; the Dinosaur
+  // Encounters program (with its current "11 am" copy) lives on its own page.
+  // Each config must be gated against its own page, not the parent — the
+  // parent no longer carries the other programs' titles.
+  const parentHtml = `
+    <main>
+      <p>Meet a Live Animal — get up close with the Museum's resident animals. daily 3:00 pm</p>
+    </main>
+  `;
+  const dinosaurHtml = `
+    <main>
+      <h1>Dinosaur Encounters</h1>
+      <p>Friday–Sunday, 11 am and 1:45 pm</p>
+    </main>
+  `;
+
+  const events = extractOfficialTextEvents(parentHtml, {
+    id: "nhm-family-calendar",
+    name: "Natural History Museums of Los Angeles County",
+    url: "https://nhm.org/calendar",
+    city: "Los Angeles",
+    category: "Museum",
+    officialRecurringEvents: [
+      {
+        id: "nhm-meet-live-animal",
+        title: "Meet a Live Animal",
+        venue: "Natural History Museum of Los Angeles County",
+        startTime: "15:00",
+        durationMinutes: 20,
+        requiredText: ["Meet a Live Animal", "3:00 pm"],
+        recurrence: { frequency: "daily" },
+      },
+      {
+        id: "nhm-dinosaur-encounters",
+        title: "Dinosaur Encounters",
+        venue: "Natural History Museum of Los Angeles County",
+        startTime: "11:00",
+        durationMinutes: 20,
+        url: "https://nhm.org/calendar/dinosaur-encounters",
+        requiredText: ["Dinosaur Encounters", "11 am"],
+        recurrence: { frequency: "weekly", daysOfWeek: [5, 6, 0] },
+      },
+    ],
+  }, {
+    now: new Date("2026-08-12T12:00:00Z"),
+    windowDays: 10,
+    pageTexts: { "https://nhm.org/calendar/dinosaur-encounters": dinosaurHtml },
+  });
+
+  const ids = events.map((event) => event.id);
+  assert.ok(ids.includes("nhm-meet-live-animal-2026-08-12"), "daily config gates on parent page");
+  // Sun Aug 16 is inside the window; the config's gate only passes via its
+  // own page text — the parent html never mentions Dinosaur Encounters.
+  assert.ok(ids.includes("nhm-dinosaur-encounters-2026-08-16"), "config gates on its own page text");
+});
+
 test("expandRecurringTemplates creates dated events inside the planning window", () => {
   const events = expandRecurringTemplates(
     [

@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "phoenix",
-  "generatedAt": "2026-08-10T01:49:51.593Z",
+  "generatedAt": "2026-08-12T18:34:05.327Z",
   "registryPath": "data/event-sources-phoenix.json",
   "outputPath": "public/data/phoenix/events.json",
-  "eventCount": 534,
-  "adultsEventCount": 51,
+  "eventCount": 486,
+  "adultsEventCount": 48,
   "sourceCount": 17,
-  "liveEventCount": 559,
+  "liveEventCount": 511,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 7,
+  "operatorAlertCount": 8,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:49:51.593Z",
+      "fetchedAt": "2026-08-12T18:34:05.327Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -53,10 +53,35 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:49:51.593Z",
+      "fetchedAt": "2026-08-12T18:34:05.327Z",
       "fetches": [
         {
           "url": "https://hotwheelsmonstertruckslive.com/event/glendale-az-2026/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "phoenix",
+      "sourceId": "xfinity-us-gymnastics-championships-2026-08-08-src",
+      "sourceName": "Xfinity U.S. Gymnastics Championships",
+      "sourceType": "officialTextEvents",
+      "url": "https://xfinitychampionships.com/info/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-12T18:34:05.327Z",
+      "fetches": [
+        {
+          "url": "https://xfinitychampionships.com/info/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -78,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:49:51.593Z",
+      "fetchedAt": "2026-08-12T18:34:05.327Z",
       "fetches": [
         {
           "url": "https://www.crescentphx.com/events",
@@ -103,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:49:51.593Z",
+      "fetchedAt": "2026-08-12T18:34:05.327Z",
       "fetches": [
         {
           "url": "https://www.marqueetheatreaz.com/calendar/",
@@ -128,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:49:51.593Z",
+      "fetchedAt": "2026-08-12T18:34:05.327Z",
       "fetches": [
         {
           "url": "https://phoenix.standuplive.com/events",
@@ -153,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:49:51.593Z",
+      "fetchedAt": "2026-08-12T18:34:05.327Z",
       "fetches": [
         {
           "url": "https://houseofcomedy.net/scottsdale",
@@ -178,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:49:51.593Z",
+      "fetchedAt": "2026-08-12T18:34:05.327Z",
       "fetches": [
         {
           "url": "https://www.theniletheater.com/events",
@@ -213,9 +238,9 @@
       "metroId": "phoenix",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 278,
+      "liveEvents": 237,
       "fallbackEvents": 0,
-      "eventCount": 278,
+      "eventCount": 237,
       "fetches": [
         {
           "url": "https://calendar.phoenixpubliclibrary.org/calendar/",
@@ -227,7 +252,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 278,
+      "extractedEvents": 237,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -267,21 +292,21 @@
       "metroId": "phoenix",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 110,
+      "liveEvents": 106,
       "fallbackEvents": 0,
-      "eventCount": 110,
+      "eventCount": 106,
       "fetches": [
         {
           "url": "https://childrensmuseumofphoenix.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=121; pages=3"
+          "contentType": "application/json; source=tribe-events; events=120; pages=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=121; pages=3",
-      "rejectedLiveEvents": 6,
-      "extractedEvents": 116,
+      "contentType": "application/json; source=tribe-events; events=120; pages=3",
+      "rejectedLiveEvents": 8,
+      "extractedEvents": 114,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -294,9 +319,9 @@
       "metroId": "phoenix",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://www.phoenixzoo.org/events/",
@@ -307,7 +332,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 7,
+      "rejectedLiveEvents": 8,
       "extractedEvents": 10,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -375,9 +400,9 @@
       "metroId": "phoenix",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 136,
+      "liveEvents": 135,
       "fallbackEvents": 0,
-      "eventCount": 136,
+      "eventCount": 135,
       "fetches": [
         {
           "url": "https://dbg.org/events/",
@@ -388,7 +413,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 60,
+      "rejectedLiveEvents": 61,
       "extractedEvents": 196,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -429,9 +454,9 @@
       "metroId": "phoenix",
       "category": "Ticketed",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://xfinitychampionships.com/info/",
@@ -442,7 +467,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 2,
       "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -483,9 +508,9 @@
       "metroId": "phoenix",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 22,
+      "liveEvents": 21,
       "fallbackEvents": 0,
-      "eventCount": 22,
+      "eventCount": 21,
       "fetches": [
         {
           "url": "https://www.thevanburenphx.com/shows",
@@ -496,7 +521,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 14,
+      "rejectedLiveEvents": 15,
       "extractedEvents": 36,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -510,9 +535,9 @@
       "metroId": "phoenix",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://www.therebellounge.com/events",
@@ -523,8 +548,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 3,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

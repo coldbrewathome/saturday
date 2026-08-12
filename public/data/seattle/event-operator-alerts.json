@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "seattle",
-  "generatedAt": "2026-08-10T01:44:14.149Z",
-  "alertCount": 13,
+  "generatedAt": "2026-08-12T18:28:10.368Z",
+  "alertCount": 15,
   "alerts": [
     {
       "severity": "critical",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.zoo.org/events?cgid=1",
@@ -44,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.burkemuseum.org/events",
@@ -69,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://pacificsciencecenter.org/events/",
@@ -94,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.seattleaquarium.org/explore-the-aquarium/programs/toddler-time/",
@@ -105,27 +105,27 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "seattle",
       "sourceId": "ticketmaster-seattle-family",
       "sourceName": "Ticketmaster Seattle Family Events",
       "sourceType": "ticketmaster",
       "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=7; queries=3"
+          "status": "http-error",
+          "httpStatus": 429,
+          "contentType": "application/json"
         }
       ]
     },
@@ -144,10 +144,35 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.evergreenfair.org/calendar.aspx",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "seattle",
+      "sourceId": "festal-tibet-fest-2026",
+      "sourceName": "Festál: Tibet Fest",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.seattlecenter.com/events/featured-events/festal/tibet-fest",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
+      "fetches": [
+        {
+          "url": "https://www.seattlecenter.com/events/featured-events/festal/tibet-fest",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -169,7 +194,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.seafair.org/seafair-weekend-festival/",
@@ -194,7 +219,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.neumos.com/events",
@@ -219,7 +244,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.thecrocodile.com/events",
@@ -244,7 +269,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.tractortavern.com/events",
@@ -269,7 +294,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.sunsettavern.com/events",
@@ -294,7 +319,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.comedyunderground.com/calendar",
@@ -319,13 +344,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:44:14.149Z",
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
       "fetches": [
         {
           "url": "https://www.nectarlounge.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "seattle",
+      "sourceId": "capitol-hill-block-party-2026",
+      "sourceName": "Capitol Hill Block Party 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.capitolhillblockparty.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-12T18:28:10.368Z",
+      "fetches": [
+        {
+          "url": "https://www.capitolhillblockparty.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
         }
       ]
     }

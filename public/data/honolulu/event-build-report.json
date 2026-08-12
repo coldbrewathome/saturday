@@ -1,18 +1,43 @@
 {
   "schemaVersion": 1,
   "metroId": "honolulu",
-  "generatedAt": "2026-08-10T01:51:30.240Z",
+  "generatedAt": "2026-08-12T18:35:49.269Z",
   "registryPath": "data/event-sources-honolulu.json",
   "outputPath": "public/data/honolulu/events.json",
-  "eventCount": 401,
-  "adultsEventCount": 30,
+  "eventCount": 371,
+  "adultsEventCount": 32,
   "sourceCount": 21,
-  "liveEventCount": 426,
-  "lastKnownGoodEventCount": 0,
+  "liveEventCount": 28,
+  "lastKnownGoodEventCount": 369,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 12,
+  "operatorAlertCount": 15,
   "errors": [],
   "operatorAlerts": [
+    {
+      "severity": "warning",
+      "metroId": "honolulu",
+      "sourceId": "hawaii-state-library",
+      "sourceName": "Hawaii State Public Library System",
+      "sourceType": "tribeEvents",
+      "url": "https://www.librarieshawaii.org/events/",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 369,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 369,
+      "fetchedAt": "2026-08-12T18:35:49.269Z",
+      "fetches": [
+        {
+          "url": "https://www.librarieshawaii.org/events/",
+          "status": "http-error",
+          "httpStatus": 500,
+          "contentType": "application/json; charset=UTF-8"
+        }
+      ]
+    },
     {
       "severity": "critical",
       "metroId": "honolulu",
@@ -28,12 +53,37 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:51:30.240Z",
+      "fetchedAt": "2026-08-12T18:35:49.269Z",
       "fetches": [
         {
           "url": "https://www.bishopmuseum.org/exhibits-and-programs/events/",
           "status": "blocked",
           "reason": "challenge page returned instead of event content",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "honolulu",
+      "sourceId": "honolulu-museum-art",
+      "sourceName": "Honolulu Museum of Art",
+      "sourceType": "html",
+      "url": "https://honolulumuseum.org/events/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-12T18:35:49.269Z",
+      "fetches": [
+        {
+          "url": "https://honolulumuseum.org/events/",
+          "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
@@ -54,7 +104,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:51:30.240Z",
+      "fetchedAt": "2026-08-12T18:35:49.269Z",
       "fetches": [
         {
           "url": "https://www.honoluluzoo.org/experiences-events/",
@@ -79,13 +129,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:51:30.240Z",
+      "fetchedAt": "2026-08-12T18:35:49.269Z",
       "fetches": [
         {
           "url": "https://calendar.google.com/calendar/ical/hawaii.edu_ur7iq68mqshu5q73n79rmb4jrk%40group.calendar.google.com/public/basic.ics",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/calendar; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "honolulu",
+      "sourceId": "iolani-palace",
+      "sourceName": "Iolani Palace",
+      "sourceType": "rss",
+      "url": "https://www.iolanipalace.org/event/feed/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-12T18:35:49.269Z",
+      "fetches": [
+        {
+          "url": "https://www.iolanipalace.org/event/feed/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/rss+xml; charset=UTF-8"
         }
       ]
     },
@@ -104,7 +179,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:51:30.240Z",
+      "fetchedAt": "2026-08-12T18:35:49.269Z",
       "fetches": [
         {
           "url": "https://www.kualoa.com/activities/",
@@ -129,7 +204,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:51:30.240Z",
+      "fetchedAt": "2026-08-12T18:35:49.269Z",
       "fetches": [
         {
           "url": "https://kbhulashow.wixsite.com/official",
@@ -154,7 +229,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:51:30.240Z",
+      "fetchedAt": "2026-08-12T18:35:49.269Z",
       "fetches": [
         {
           "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
@@ -179,7 +254,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:51:30.240Z",
+      "fetchedAt": "2026-08-12T18:35:49.269Z",
       "fetches": [
         {
           "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
@@ -204,7 +279,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:51:30.240Z",
+      "fetchedAt": "2026-08-12T18:35:49.269Z",
       "fetches": [
         {
           "url": "https://hfbf.org/farmers-markets/kcc/",
@@ -229,7 +304,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:51:30.240Z",
+      "fetchedAt": "2026-08-12T18:35:49.269Z",
       "fetches": [
         {
           "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
@@ -254,7 +329,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:51:30.240Z",
+      "fetchedAt": "2026-08-12T18:35:49.269Z",
       "fetches": [
         {
           "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
@@ -279,7 +354,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:51:30.240Z",
+      "fetchedAt": "2026-08-12T18:35:49.269Z",
       "fetches": [
         {
           "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
@@ -304,7 +379,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:51:30.240Z",
+      "fetchedAt": "2026-08-12T18:35:49.269Z",
       "fetches": [
         {
           "url": "https://www.alohacomedyclub.com/calendar",
@@ -337,24 +412,23 @@
       "city": "Honolulu",
       "metroId": "honolulu",
       "category": "Library",
-      "status": "ok",
-      "liveEvents": 398,
+      "status": "http-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 398,
+      "eventCount": 369,
       "fetches": [
         {
           "url": "https://www.librarieshawaii.org/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=400; pages=8"
+          "status": "http-error",
+          "httpStatus": 500,
+          "contentType": "application/json; charset=UTF-8"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=400; pages=8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 399,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "httpStatus": 500,
+      "contentType": "application/json; charset=UTF-8",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 369,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "bishop-museum",
@@ -393,9 +467,9 @@
       "metroId": "honolulu",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://honolulumuseum.org/events/",
@@ -407,7 +481,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -500,9 +574,9 @@
       "metroId": "honolulu",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.iolanipalace.org/event/feed/",
@@ -513,7 +587,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/rss+xml; charset=UTF-8",
-      "rejectedLiveEvents": 9,
+      "rejectedLiveEvents": 10,
       "extractedEvents": 10,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -820,21 +894,21 @@
       "metroId": "honolulu",
       "category": "Theater",
       "status": "ok",
-      "liveEvents": 19,
+      "liveEvents": 21,
       "fallbackEvents": 0,
-      "eventCount": 19,
+      "eventCount": 21,
       "fetches": [
         {
           "url": "https://blaisdellcenter.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=185; pages=2"
+          "contentType": "application/json; source=tribe-events; events=187; pages=2"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=185; pages=2",
+      "contentType": "application/json; source=tribe-events; events=187; pages=2",
       "rejectedLiveEvents": 142,
-      "extractedEvents": 161,
+      "extractedEvents": 163,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

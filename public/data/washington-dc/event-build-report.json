@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "washington-dc",
-  "generatedAt": "2026-08-10T01:46:53.920Z",
+  "generatedAt": "2026-08-12T18:31:09.145Z",
   "registryPath": "data/event-sources-washington-dc.json",
   "outputPath": "public/data/washington-dc/events.json",
-  "eventCount": 1983,
+  "eventCount": 2016,
   "adultsEventCount": 38,
   "sourceCount": 23,
-  "liveEventCount": 1983,
-  "lastKnownGoodEventCount": 4,
+  "liveEventCount": 2019,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 12,
-  "operatorAlertCount": 9,
+  "operatorAlertCount": 8,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:46:53.920Z",
+      "fetchedAt": "2026-08-12T18:31:09.145Z",
       "fetches": [
         {
           "url": "https://dpr.dc.gov/events",
@@ -53,37 +53,13 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:46:53.920Z",
+      "fetchedAt": "2026-08-12T18:31:09.145Z",
       "fetches": [
         {
           "url": "https://naturalhistory.si.edu/events/family-programs",
           "status": "http-error",
           "httpStatus": 403,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "washington-dc",
-      "sourceId": "washington-dc-zoo-family",
-      "sourceName": "National Zoo Events",
-      "sourceType": "nationalZooJsonApi",
-      "url": "https://nationalzoo.si.edu/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 4,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 4,
-      "fetchedAt": "2026-08-10T01:46:53.920Z",
-      "fetches": [
-        {
-          "url": "https://nationalzoo.si.edu/events",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
         }
       ]
     },
@@ -102,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:46:53.920Z",
+      "fetchedAt": "2026-08-12T18:31:09.145Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -127,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:46:53.920Z",
+      "fetchedAt": "2026-08-12T18:31:09.145Z",
       "fetches": [
         {
           "url": "https://www.fairfaxcounty.gov/parks/frying-pan-park/4-h-fair",
@@ -152,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:46:53.920Z",
+      "fetchedAt": "2026-08-12T18:31:09.145Z",
       "fetches": [
         {
           "url": "https://deggeller.com/events/13",
@@ -177,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:46:53.920Z",
+      "fetchedAt": "2026-08-12T18:31:09.145Z",
       "fetches": [
         {
           "url": "https://www.930.com/events",
@@ -202,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:46:53.920Z",
+      "fetchedAt": "2026-08-12T18:31:09.145Z",
       "fetches": [
         {
           "url": "https://www.unionstage.com/events",
@@ -226,7 +202,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-10T01:46:53.920Z",
+      "fetchedAt": "2026-08-12T18:31:09.145Z",
       "fetches": [
         {
           "url": "https://www.songbyrddc.com/events",
@@ -261,21 +237,21 @@
       "metroId": "washington-dc",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 244,
+      "liveEvents": 243,
       "fallbackEvents": 0,
-      "eventCount": 244,
+      "eventCount": 243,
       "fetches": [
         {
           "url": "https://dclibrary.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=1325; locations=27"
+          "contentType": "application/json; source=communico-events; events=1280; locations=27"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=1325; locations=27",
-      "rejectedLiveEvents": 12,
-      "extractedEvents": 256,
+      "contentType": "application/json; source=communico-events; events=1280; locations=27",
+      "rejectedLiveEvents": 6,
+      "extractedEvents": 249,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -340,21 +316,24 @@
       "city": "Washington",
       "metroId": "washington-dc",
       "category": "Zoo",
-      "status": "fetch-error",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 8,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 8,
       "fetches": [
         {
           "url": "https://nationalzoo.si.edu/events",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/vnd.api+json; source=national-zoo-jsonapi; events=32"
         }
       ],
-      "reason": "This operation was aborted",
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 4,
-      "recoveryMode": "last-known-good"
+      "httpStatus": 200,
+      "contentType": "application/vnd.api+json; source=national-zoo-jsonapi; events=32",
+      "rejectedLiveEvents": 243,
+      "extractedEvents": 251,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "ticketmaster-washington-dc-family",
@@ -446,21 +425,21 @@
       "metroId": "washington-dc",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 718,
+      "liveEvents": 731,
       "fallbackEvents": 0,
-      "eventCount": 718,
+      "eventCount": 731,
       "fetches": [
         {
           "url": "https://mcpl.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=1478; locations=23"
+          "contentType": "application/json; source=communico-events; events=1468; locations=23"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=1478; locations=23",
-      "rejectedLiveEvents": 41,
-      "extractedEvents": 759,
+      "contentType": "application/json; source=communico-events; events=1468; locations=23",
+      "rejectedLiveEvents": 16,
+      "extractedEvents": 747,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -473,21 +452,21 @@
       "metroId": "washington-dc",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 546,
+      "liveEvents": 563,
       "fallbackEvents": 0,
-      "eventCount": 546,
+      "eventCount": 563,
       "fetches": [
         {
           "url": "https://pgcmls.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=871; locations=23"
+          "contentType": "application/json; source=communico-events; events=839; locations=23"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=871; locations=23",
-      "rejectedLiveEvents": 41,
-      "extractedEvents": 587,
+      "contentType": "application/json; source=communico-events; events=839; locations=23",
+      "rejectedLiveEvents": 9,
+      "extractedEvents": 572,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -500,20 +479,20 @@
       "metroId": "washington-dc",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 132,
+      "liveEvents": 140,
       "fallbackEvents": 0,
-      "eventCount": 132,
+      "eventCount": 140,
       "fetches": [
         {
           "url": "https://alexandria.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=290; locations=12"
+          "contentType": "application/json; source=communico-events; events=288; locations=12"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=290; locations=12",
-      "rejectedLiveEvents": 10,
+      "contentType": "application/json; source=communico-events; events=288; locations=12",
+      "rejectedLiveEvents": 2,
       "extractedEvents": 142,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -527,9 +506,9 @@
       "metroId": "washington-dc",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 169,
+      "liveEvents": 167,
       "fallbackEvents": 0,
-      "eventCount": 169,
+      "eventCount": 167,
       "fetches": [
         {
           "url": "https://librarycalendar.fairfaxcounty.gov/calendar?cid=6524&cal=6524",
@@ -540,8 +519,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 169,
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 168,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -554,9 +533,9 @@
       "metroId": "washington-dc",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 120,
+      "liveEvents": 115,
       "fallbackEvents": 0,
-      "eventCount": 120,
+      "eventCount": 115,
       "fetches": [
         {
           "url": "https://arlingtonva.libcal.com/calendar/apl/?cid=12881&cal=12881",
@@ -568,7 +547,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 120,
+      "extractedEvents": 115,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -581,9 +560,9 @@
       "metroId": "washington-dc",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 23,
+      "liveEvents": 22,
       "fallbackEvents": 0,
-      "eventCount": 23,
+      "eventCount": 22,
       "fetches": [
         {
           "url": "https://nbm.org/events/",
@@ -595,7 +574,7 @@
       "httpStatus": 200,
       "contentType": "application/json; source=ticketure-events; events=4; calendars=4",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 23,
+      "extractedEvents": 22,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -742,9 +721,9 @@
       "metroId": "washington-dc",
       "category": "Comedy",
       "status": "ok",
-      "liveEvents": 15,
+      "liveEvents": 14,
       "fallbackEvents": 0,
-      "eventCount": 15,
+      "eventCount": 14,
       "fetches": [
         {
           "url": "https://www.dcimprov.com/shows?format=feed&type=rss",
@@ -756,7 +735,7 @@
       "httpStatus": 200,
       "contentType": "application/rss+xml; charset=utf-8",
       "rejectedLiveEvents": 50,
-      "extractedEvents": 65,
+      "extractedEvents": 64,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

@@ -2070,9 +2070,14 @@ function expandOfficialRecurringEvents(source = {}, pageText = "", options = {})
   const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
   const end = addDays(start, Number(options.windowDays || DEFAULT_WINDOW_DAYS));
   const events = [];
+  // Some official calendars (NHM) list only a rotating subset of their
+  // recurring programs on the landing page. A config may carry its own `url`;
+  // gate it against that page's text when present, falling back to the parent
+  // page text (raw html pre-converted by the caller in `options.pageTexts`).
+  const pageTexts = options.pageTexts || {};
 
   for (const config of configs) {
-    if (!officialEventMatchesPage(pageText, config)) continue;
+    if (!officialEventMatchesPage(pageTexts[config.url] ?? pageText, config)) continue;
     const recurrence = config.recurrence || {};
     if (recurrence.frequency === "daily" || recurrence.frequency === "weekly") {
       // Weekly recurrences emit only on recurrence.daysOfWeek (0 = Sunday).
@@ -2152,6 +2157,13 @@ function expandOfficialRecurringEvents(source = {}, pageText = "", options = {})
 
 export function extractOfficialTextEvents(html, source = {}, options = {}) {
   const pageText = searchablePageText(html);
+  // Per-config page texts ride along as raw html (payload.pageTexts) — convert
+  // to the same searchable form the parent page goes through so gates match
+  // against visible text only, per the same rule as the parent gate.
+  const pageTexts = {};
+  for (const [url, pageHtml] of Object.entries(options.pageTexts || {})) {
+    pageTexts[url] = searchablePageText(pageHtml);
+  }
   const configured = Array.isArray(source.officialTextEvents) ? source.officialTextEvents : [];
   const events = configured
     .filter((config) => officialEventMatchesPage(pageText, config))
@@ -2173,7 +2185,7 @@ export function extractOfficialTextEvents(html, source = {}, options = {}) {
 
   return dedupeEvents([
     ...events,
-    ...expandOfficialRecurringEvents(source, pageText, options),
+    ...expandOfficialRecurringEvents(source, pageText, { ...options, pageTexts }),
   ]);
 }
 
@@ -3356,6 +3368,11 @@ export function extractSanDiegoDrupalCalendarEvents(html, source = {}, options =
 export function extractEventsFromPayload(payload, source = {}, options = {}) {
   const contentType = payload.contentType || "";
   const text = payload.text || "";
+  // Fetch layer may attach per-config page html (officialRecurringEvents with
+  // their own urls, e.g. NHM program pages) — thread it into the extractors.
+  if (payload.pageTexts) {
+    options = { ...options, pageTexts: { ...(options.pageTexts || {}), ...payload.pageTexts } };
+  }
   if (source.sourceType === "nextDataEvents") {
     return extractNextDataEvents(payload.json, source);
   }
