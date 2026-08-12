@@ -2295,13 +2295,24 @@ export function normalizeRawEvent(raw, source = {}) {
     ? raw.ageBands.filter((band) => AGE_BANDS.includes(band))
     : inferAgeBands(combined);
   const [lat, lon] = resolveEventCoordinates(raw, source);
+  const venue = stripUnsafeText(raw.venue || source.name || title, 100);
 
   return {
+    // The id hash includes startDateTime (and raw.url), so a recurring
+    // series whose next occurrence lands with a new time or a date-stamped
+    // source URL gets a new id every refresh. That's fine for ids (internal),
+    // but `stableKey` below is what assignEventSlugs suffixes collisions
+    // with — a pure function of (title, venue), so weekly storytimes and
+    // ticketed slot batches hold ONE slug for the life of the series instead
+    // of minting a fresh URL per occurrence (ADR-04 extension).
     id: raw.id || `${source.id || "source"}-${slugify(title)}-${hash(`${title}|${raw.venue}|${startDateTime || raw.url || source.url}`)}`,
+    // Deterministic per (title, venue); identical for same-series occurrences
+    // (slot batches), which dedupeEventOccurrences collapses to one page.
+    stableKey: hash(`${title}|${venue}`),
     baseId: raw.baseId || null,
     title,
     description,
-    venue: stripUnsafeText(raw.venue || source.name || title, 100),
+    venue,
     city: stripUnsafeText(raw.city || source.city || "Bay Area", 80),
     neighborhood: stripUnsafeText(raw.neighborhood || raw.city || source.city || "Bay Area", 80),
     lat,
@@ -4366,7 +4377,14 @@ export function assignEventSlugs(events) {
     let s = base;
     let suffix = "";
     if (used.has(s)) {
-      suffix = getStableEventSuffix(event.baseId ?? event.id);
+      // baseId (recurring-template identity) is the most stable suffix, then
+      // stableKey (minted at id-time from title+venue — see the record
+      // factory), then the id itself as a legacy fallback. The id hash
+      // contains startDateTime, so it must never be the FIRST choice: a
+      // weekly storytime or a ticketed slot batch would mint a new URL every
+      // refresh. Legacy records (pre-stableKey) keep id-suffix behavior, so
+      // on-disk datasets don't drift until their next ingest.
+      suffix = getStableEventSuffix(event.baseId ?? event.stableKey ?? event.id);
       s = suffix ? `${base}-${suffix}` : `${base}-${used.get(base)}`;
       used.set(base, (used.get(base) || 2) + 1);
     } else {

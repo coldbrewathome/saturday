@@ -1638,6 +1638,28 @@ test("assignEventSlugs builds stable slugs from title+venue and suffixes collisi
   assert.equal(events[3].slug, "members-hour-atlanta-children-s-museum-phx-museum-hour");
 });
 
+test("assignEventSlugs suffixes collisions with stableKey, not the churning id", () => {
+  // Feed events without raw ids get id = hash(title|venue|startDateTime|url)
+  // at mint time — a weekly storytime's id changes every refresh. The
+  // collision suffix must come from stableKey (hash of title|venue), so
+  // same-series occurrences share one slug and never mint fresh URLs.
+  const events = [
+    { id: "sfpl-storytime-for-babies-3d9a808685", stableKey: "abc123def4", title: "Storytime: For Babies", venue: "Main" },
+    { id: "sfpl-storytime-for-babies-1e7f3d819d", stableKey: "abc123def4", title: "Storytime: For Babies", venue: "Main" },
+    { id: "sfpl-storytime-for-babies-125fa0dd11", stableKey: "abc123def4", title: "Storytime: For Babies", venue: "Merced" },
+    // Legacy record without stableKey keeps the id-based suffix (no drift).
+    { id: "legacy-sfpl-storytime-for-babies-9a9a9a9a9a", stableKey: undefined, title: "Storytime: For Babies", venue: "Main" },
+  ];
+  assignEventSlugs(events);
+  assert.equal(events[0].slug, "storytime-for-babies-main");
+  // Same-series duplicate shares the stableKey suffix — never the id.
+  assert.equal(events[1].slug, "storytime-for-babies-main-abc123def4");
+  // Different venue is a different group: distinct slug from title+venue.
+  assert.equal(events[2].slug, "storytime-for-babies-merced");
+  // Legacy fallback: unchanged id-derived suffix.
+  assert.equal(events[3].slug, "storytime-for-babies-main-legacy-sfpl-storytime-for-babies-9a9a9a9a9a");
+});
+
 test("buildEventsDataset writes a slug on every event", () => {
   const dataset = buildEventsDataset(
     [

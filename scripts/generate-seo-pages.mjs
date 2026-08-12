@@ -31,6 +31,7 @@ import {
   isMarqueeEvent,
   kidsEventBrandSafetyViolation,
   truncateAtBoundary,
+  updateSlugHistory,
 } from "./eventPipeline.mjs";
 import { ENDED_GRACE_MS } from "../functions/_detail-guard.mjs";
 import {
@@ -1320,6 +1321,14 @@ function main() {
       spotSlugs
     );
     writeEventSeoManifest(metro, events, eventSlugLookup, allCurrentEventSlugs, eventSlugs, slugHistory);
+    // Slug-history write: ingest-events is not the only path that changes the
+    // dataset — recovery, merge, and manual edits all funnel through this
+    // build, and their slugs never reach updateSlugHistory. Refresh the
+    // rolling 90-day history from the dataset here so the guard's endedSet
+    // keeps covering every slug the site has published (kills the
+    // "crawled but 404" class for URLs still in the stale index). Slugs that
+    // merely appear here get stubs/"gone" treatment and age out in 90 days.
+    writeEventSlugHistory(metro, slugHistory, events, eventSlugLookup);
 
     totalSpotPages += spotSlugs.size;
     totalEventPages += eventSlugs.size;
@@ -1473,6 +1482,22 @@ function readEventSlugHistory(metro) {
   } catch {
     return { slugs: {} };
   }
+}
+
+// Mirrors ingest-events' updateSlugHistory but at build time, from the
+// dataset this build actually published. Stamps every dataset slug (capped-out
+// ones too — a capped slug may still be indexed from a build when it wasn't
+// capped) and prunes the same 90-day window.
+function writeEventSlugHistory(metro, history, events, eventSlugLookup) {
+  const datasets = [
+    { events: events.map((ev) => ({ ...ev, slug: eventSlugLookup.get(ev) })) },
+  ];
+  const updated = updateSlugHistory(history, datasets, { metroId: metro.id });
+  const file = path.join(ROOT, "data", metro.dataDir || metro.id, "event-slug-history.json");
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  // Pretty-print to match the committed format (ingest-events writes the
+  // same) — a minified rewrite would churn the whole file in git.
+  fs.writeFileSync(file, `${JSON.stringify(updated, null, 2)}\n`);
 }
 
 function metroPath(rel = "") {

@@ -73,6 +73,16 @@ function auditDataset(label, dataset) {
   }
   for (const [slug, group] of bySlug) {
     if (group.length < 2) continue;
+    // Intentional collapse: occurrences sharing (title, venue) — recurring
+    // series and ticketed slot batches — are collapsed into one page by
+    // dedupeEventOccurrences and now share one stableKey suffix. Only flag
+    // slugs shared across DISTINCT (title, venue) groups.
+    const groupKeys = new Set(
+      group.map(({ event }) =>
+        `${(event.title || "").trim().toLowerCase()}|${(event.venue || "").trim().toLowerCase()}`,
+      ),
+    );
+    if (groupKeys.size < 2) continue;
     const stableIds = new Set(
       group.map(({ event }) => event.baseId || event.id || ""),
     );
