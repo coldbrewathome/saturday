@@ -9,6 +9,7 @@ https://famhop.com/bay-area/event/lemos-farm-pumpkin-patch-lemos-farm/
 https://famhop.com/bay-area/event/mandarin-cantonese-storytime-millbrae/
 https://famhop.com/bay-area/event/millbrae-art-wine-festival-55th-broadway-avenue-downtown-millbrae/
 https://famhop.com/bay-area/event/scottish-highland-gathering-games-160th-alameda-county-fairgrounds/
+https://famhop.com/los-angeles/event/tanaka-farms-pumpkin-patch-tanaka-farms/
 https://famhop.com/los-angeles/event/fiesta-hermosa-downtown-hermosa-beach-pier-ave-hermosa-ave/
 https://famhop.com/los-angeles/event/free-shakespeare-for-families-buena-vista-branch-library/
 https://famhop.com/los-angeles/event/los-rios-rancho-apple-u-pick-los-rios-rancho/
