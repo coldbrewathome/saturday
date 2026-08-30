@@ -29,6 +29,7 @@ import {
   extractSfmomaEvents,
   extractSfplEvents,
   extractTicketmasterEvents,
+  extractTicketSpiceEvents,
   extractTicketureEvents,
   extractWebflowEvents,
   extractWpRestEvents,
@@ -1079,6 +1080,61 @@ test("extractTicketureEvents reads dated ticketing templates and rejects adult e
   assert.equal(events[0].endDateTime, "2026-06-06T02:00:00.000Z");
   assert.equal(events[0].venue, "Perot Museum of Nature and Science");
   assert.equal(events[0].extractionMethod, "ticketure-events");
+});
+
+test("extractTicketSpiceEvents emits one dated event per day of the active season range", () => {
+  // TicketSpice pages embed the season config as an escaped JSON state blob
+  // (quotes escaped inside a script string). One category is the active
+  // season; another is an inactive daily-admission ticket.
+  const html = `
+    <html><head><title>Tanaka Farms Pumpkin Patch</title></head>
+    <body>
+      <script>
+        (function() {
+          var state = "{\\"minDate\\":\\"2026-09-12\\",\\"maxDate\\":\\"2026-11-01\\",\\"active\\":true,\\"inventoryDisplay\\":{}}";
+          var daily = "{\\"minDate\\":\\"2026-08-30\\",\\"maxDate\\":\\"2026-12-31\\",\\"active\\":false}";
+        })();
+      </script>
+    </body></html>
+  `;
+
+  const events = extractTicketSpiceEvents(html, {
+    id: "tanaka-pumpkin-patch-2026",
+    name: "Tanaka Farms Pumpkin Patch",
+    url: "https://tanakafarms.ticketspice.com/tanaka-farms-pumpkin-patch-2026",
+    city: "Irvine",
+    category: "Festival",
+    timezoneOffset: "-07:00",
+    eventList: {
+      title: "Tanaka Farms Pumpkin Patch",
+      venue: "Tanaka Farms",
+      startTime: "09:00",
+      endTime: "18:00",
+      ageBands: ["toddler", "preschool", "school-age", "tween"],
+      cost: "$$",
+    },
+  }, { now: new Date("2026-08-30T12:00:00Z"), windowDays: 45 });
+
+  // Window: Aug 30 → Oct 14. Season starts Sep 12 → daily through Oct 14.
+  assert.ok(events.length > 0);
+  assert.equal(events[0].title, "Tanaka Farms Pumpkin Patch");
+  assert.equal(events[0].startDateTime.slice(0, 10), "2026-09-12");
+  assert.equal(events[0].startDateTime.slice(11, 19), "16:00:00"); // 09:00 LA
+  assert.equal(events[0].endDateTime.slice(11, 19), "01:00:00"); // 18:00 LA
+  assert.ok(!events.some((e) => e.startDateTime.slice(0, 10) < "2026-09-12"));
+  assert.equal(events.at(-1).startDateTime.slice(0, 10), "2026-10-14");
+  assert.equal(events.length, 33); // Sep 12–30 (19) + Oct 1–14 (14)
+  assert.equal(events[0].extractionMethod, "ticketspice");
+});
+
+test("extractTicketSpiceEvents returns [] when no season range is embedded", () => {
+  const events = extractTicketSpiceEvents("<html><body>Coming soon</body></html>", {
+    id: "no-season",
+    name: "No Season Yet",
+    url: "https://example.com/tickets",
+    city: "Nowhere",
+  }, { now: new Date("2026-08-30T12:00:00Z"), windowDays: 45 });
+  assert.equal(events.length, 0);
 });
 
 test("extractWpRestEvents reads single-date ACF event fields", () => {

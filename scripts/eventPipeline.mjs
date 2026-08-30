@@ -1671,6 +1671,78 @@ function ticketureRows(json, key) {
   return Array.isArray(json?.[key]?._data) ? json[key]._data : [];
 }
 
+// TicketSpice event pages (JS-rendered ticket widgets, e.g. pumpkin patches)
+// embed their season config as an escaped JSON state blob — a
+// `"minDate":"YYYY-MM-DD","maxDate":"YYYY-MM-DD","active":true|false` triple
+// per ticket category. Emit one dated event per day of the active season
+// range (Tanaka Farms pumpkin patch: Sep 12 – Nov 1). Fail-closed: no active
+// range → no events. Hours/description live in source.eventList so per-farm
+// facts stay in the registry, not the extractor.
+// The blob usually rides inside a JSON string, so keys/quotes appear escaped
+// (\"minDate\":\"2026-09-12\") — tolerate the optional backslashes.
+const TICKETSPICE_RANGE_RE =
+  /\\?"minDate\\?":\\?"(\d{4}-\d{2}-\d{2})\\",\\?"maxDate\\?":\\?"(\d{4}-\d{2}-\d{2})\\",\\?"active\\?":(true|false)/g;
+
+export function extractTicketSpiceEvents(html, source = {}, options = {}) {
+  const ranges = [];
+  for (const match of html.matchAll(TICKETSPICE_RANGE_RE)) {
+    ranges.push({ min: match[1], max: match[2], active: match[3] === "true" });
+  }
+  // Prefer the active season config; fall back to the earliest range when the
+  // page never marks one active.
+  const active = ranges.filter((r) => r.active);
+  const pool = active.length > 0 ? active : ranges;
+  const chosen = [...pool].sort((a, b) => (a.min < b.min ? -1 : 1))[0];
+  if (!chosen) return [];
+  const start = new Date(`${chosen.min}T00:00:00Z`);
+  const end = new Date(`${chosen.max}T23:59:59Z`);
+  if (!Number.isFinite(start.getTime()) || !Number.isFinite(end.getTime()) || end < start) {
+    return [];
+  }
+  const now = options.now ? new Date(options.now) : new Date();
+  const windowEnd = addDays(
+    new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())),
+    Number(options.windowDays || DEFAULT_WINDOW_DAYS),
+  );
+  const startClock = parseClock(source.eventList?.startTime || "09:00");
+  if (!startClock) return [];
+  const endClock = source.eventList?.endTime
+    ? parseClock(source.eventList.endTime, startClock.meridiem)
+    : null;
+  const tz = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
+  const events = [];
+  for (let cursor = new Date(start); cursor <= end && cursor <= windowEnd; cursor = addDays(cursor, 1)) {
+    const startDateTime = localDateTime(cursor, startClock, tz);
+    events.push(normalizeRawEvent({
+      title: source.eventList?.title || source.name,
+      description:
+        source.eventList?.description ||
+        `${source.name} — open daily ${chosen.min} through ${chosen.max}.`,
+      venue: source.eventList?.venue || source.name,
+      city: source.eventList?.city || source.city,
+      neighborhood: source.neighborhood || source.city,
+      lat: source.lat,
+      lon: source.lon,
+      category: source.eventList?.category || source.category || "Festival",
+      startDateTime,
+      endDateTime: endClock
+        ? localDateTime(cursor, endClock, tz)
+        : addMinutesToLocalIso(startDateTime, 60),
+      ageBands:
+        source.eventList?.ageBands ||
+        inferAgeBands(`${source.name} ${sourceAudienceText(source)}`),
+      cost: source.eventList?.cost || "Unknown",
+      url: source.url,
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.url,
+      extractionMethod: "ticketspice",
+      verified: true,
+    }, source));
+  }
+  return dedupeEvents(events);
+}
+
 export function extractTicketureEvents(json, source = {}, options = {}) {
   const templates = ticketureRows(json, "event_template");
   const venues = new Map(ticketureRows(json, "venue").map((venue) => [venue.id, venue]));
@@ -3430,6 +3502,9 @@ export function extractEventsFromPayload(payload, source = {}, options = {}) {
   }
   if (source.sourceType === "ticketureEvents") {
     return extractTicketureEvents(payload.json, source, options);
+  }
+  if (source.sourceType === "ticketSpice") {
+    return extractTicketSpiceEvents(text, source, options);
   }
   if (source.sourceType === "sanDiegoDrupalCalendar") {
     return extractSanDiegoDrupalCalendarEvents(text, source, options);
