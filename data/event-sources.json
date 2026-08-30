@@ -2025,6 +2025,473 @@
         "defaultDurationMinutes": 120
       },
       "notes": "Official WordPress Tribe Events API confirmed live: https://magic-sf.org/wp-json/tribe/events/v1/events?per_page=5 returns HTTP 200, application/json, total 178."
+    },
+    {
+      "id": "daly-city-library",
+      "name": "Daly City Public Library",
+      "url": "https://dalycity.org/calendar.aspx?CID=22&view=list",
+      "city": "Daly City",
+      "category": "Library",
+      "sourceType": "civicpluscal",
+      "trust": "official",
+      "lat": 37.7058,
+      "lon": -122.4619,
+      "defaultAudienceText": "library storytime family kids children baby toddler bounce",
+      "includePattern": "Storytime|Story Time|Bounce|Family|kids|children|baby",
+      "defaultDurationMinutes": 60,
+      "notes": "Official CivicPlus calendar (Library category CID 22). Audit 2026-08: Serramonte Baby Bounce/Family Storytime + John Daly Family Storytime verified on official page."
+    },
+    {
+      "id": "south-san-francisco-library",
+      "name": "South San Francisco Public Library",
+      "url": "https://www.ssfca.gov/Events/0826-Baby-Storytime",
+      "city": "South San Francisco",
+      "neighborhood": "South San Francisco",
+      "venue": "South San Francisco Public Library",
+      "category": "Library",
+      "sourceType": "openCitiesEvent",
+      "trust": "official",
+      "lat": 37.6547,
+      "lon": -122.4077,
+      "defaultAudienceText": "library storytime family kids children baby toddler bilingual",
+      "notes": "Official city site, month-scoped series URL (0826- prefix) — refresh monthly. Audit 2026-08: Baby/Toddler/Spanish Bilingual storytimes verified with multi-date blocks."
+    },
+    {
+      "id": "san-leandro-library",
+      "name": "San Leandro Public Library",
+      "url": "https://www.sanleandro.org/calendar.aspx?CID=25,46&view=list",
+      "city": "San Leandro",
+      "category": "Library",
+      "sourceType": "civicpluscal",
+      "trust": "official",
+      "lat": 37.725,
+      "lon": -122.1561,
+      "defaultAudienceText": "library storytime family kids children baby toddler",
+      "includePattern": "Storytime|Story Time|Family|kids|children|baby|toddler",
+      "defaultDurationMinutes": 60,
+      "notes": "Official CivicPlus calendar (library CIDs 25 + 46). Storytimes pause Aug 2026, resume Sept 1; Family Fun Night live now."
+    },
+    {
+      "id": "pleasanton-library",
+      "name": "Pleasanton Public Library",
+      "url": "https://pleasantonlibrary.bibliocommons.com/v2/events?audiences=5db31ee4f571c22400adde51",
+      "city": "Pleasanton",
+      "category": "Library",
+      "sourceType": "biblioevents",
+      "trust": "official",
+      "lat": 37.6624,
+      "lon": -121.8747,
+      "notes": "Official Bibliocommons calendar (kids audience). Audit 2026-08: Family/Toddler/Baby/Sensory storytimes verified."
+    },
+    {
+      "id": "burlingame-library",
+      "name": "Burlingame Public Library",
+      "url": "https://burlingame.libcal.com/calendar/programs?cid=6897&t=g&d=0000-00-00&cal=6897&inc=0",
+      "city": "Burlingame",
+      "category": "Library",
+      "sourceType": "libcal",
+      "trust": "official",
+      "lat": 37.5779,
+      "lon": -122.3481,
+      "libcalCalendarId": 6897,
+      "notes": "Official LibCal calendar. Audit 2026-08: 5 weekly storytime series verified via LibCal API."
+    },
+    {
+      "id": "menlo-park-library",
+      "name": "Menlo Park Public Library",
+      "url": "https://www.menlopark.gov/Government/Departments/Library-and-Community-Services/Events/Events-for-children/2026_06-12-Storytime-Alma-Thurs",
+      "city": "Menlo Park",
+      "neighborhood": "Menlo Park",
+      "venue": "Menlo Park Library",
+      "category": "Library",
+      "sourceType": "openCitiesEvent",
+      "trust": "official",
+      "lat": 37.453,
+      "lon": -122.1817,
+      "defaultAudienceText": "library storytime family kids children baby toddler",
+      "notes": "Official city series page; 25 multi-date storytime blocks through Dec 2026 (audit 2026-08). Sibling series pages exist for Friday + Belle Haven."
+    },
+    {
+      "id": "los-gatos-library",
+      "name": "Los Gatos Public Library",
+      "url": "https://losgatosca.libcal.com/calendar?cid=11830&t=g&d=0000-00-00&cal=11830&inc=0",
+      "city": "Los Gatos",
+      "category": "Library",
+      "sourceType": "libcal",
+      "trust": "official",
+      "lat": 37.2266,
+      "lon": -121.9747,
+      "libcalCalendarId": 11830,
+      "notes": "Official LibCal calendar. Storytimes pause Aug 2026; populates from September (audit 2026-08)."
+    },
+    {
+      "id": "dellosso-pumpkin-maze",
+      "name": "Dell'Osso Family Farm Pumpkin Maze",
+      "url": "https://www.pumpkinmaze.com/",
+      "city": "Lathrop",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 37.7824,
+      "lon": -121.3141,
+      "audienceIds": [
+        "kids"
+      ],
+      "notes": "30th annual pumpkin maze, Oct 2-31 2026, open daily. Verified 2026-08-16: banner reads 'OPENING DAY Friday, October 2, 2026' and 'OPEN Daily Oct. 2 - Oct 31, 2026'. Gate anchors on the 2026 banner (page also carries a stale 2025 line).",
+      "officialRecurringEvents": [
+        {
+          "id": "dellosso-pumpkin-maze-2026",
+          "title": "Dell'Osso Family Farm Pumpkin Maze",
+          "description": "30th annual pumpkin maze at Dell'Osso Family Farm, open daily October 2-31. Weekdays from 12pm, weekends from 10am, last entry 7pm. Tickets $24.95-$34.95 per person, ages 2 and under free, parking free.",
+          "venue": "Dell'Osso Family Farm",
+          "neighborhood": "Lathrop",
+          "startTime": "10:00",
+          "endTime": "19:00",
+          "ageBands": [
+            "toddler",
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$$",
+          "requiredText": [
+            "October 2, 2026"
+          ],
+          "requiredPattern": "Oct 31, 2026",
+          "recurrence": {
+            "frequency": "daily",
+            "until": "2026-10-31",
+            "after": "2026-10-02"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lemos-farm-pumpkin-patch",
+      "name": "Lemos Farm Pumpkin Patch",
+      "url": "https://www.lemosfarm.com/pumpkin-patch",
+      "city": "Half Moon Bay",
+      "category": "Outdoors",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "lat": 37.4803,
+      "lon": -122.4075,
+      "audienceIds": [
+        "kids"
+      ],
+      "notes": "2026 patch runs Sep 5 - Nov 15; weekends + select weekdays in Sep, daily in Oct, weekends in Nov. Verified 2026-08-16: 'The 2026 Lemos Farm Pumpkin Patch will begin September 5th and run through November 15th.' Timed-entry tickets pre-sold online.",
+      "officialRecurringEvents": [
+        {
+          "id": "lemos-pumpkin-weekends",
+          "title": "Lemos Farm Pumpkin Patch",
+          "description": "Pumpkin patch at Lemos Farm in Half Moon Bay: corn maze, pony rides, petting zoo, and pumpkin picking. Open weekends 10am-5pm (plus select weekdays in September and November). Timed-entry tickets pre-sold online.",
+          "venue": "Lemos Farm",
+          "neighborhood": "Half Moon Bay",
+          "startTime": "10:00",
+          "endTime": "17:00",
+          "ageBands": [
+            "toddler",
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "Unknown",
+          "requiredText": [
+            "2026 Lemos Farm Pumpkin Patch"
+          ],
+          "requiredPattern": "September 5th",
+          "recurrence": {
+            "frequency": "weekly",
+            "daysOfWeek": [
+              0,
+              6
+            ],
+            "until": "2026-11-15",
+            "after": "2026-09-05"
+          }
+        },
+        {
+          "id": "lemos-pumpkin-oct-daily",
+          "title": "Lemos Farm Pumpkin Patch",
+          "description": "Pumpkin patch at Lemos Farm in Half Moon Bay: corn maze, pony rides, petting zoo, and pumpkin picking. Open daily in October, 10am-5pm. Timed-entry tickets pre-sold online.",
+          "venue": "Lemos Farm",
+          "neighborhood": "Half Moon Bay",
+          "startTime": "10:00",
+          "endTime": "17:00",
+          "ageBands": [
+            "toddler",
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "Unknown",
+          "requiredText": [
+            "2026 Lemos Farm Pumpkin Patch"
+          ],
+          "requiredPattern": "September 5th",
+          "recurrence": {
+            "frequency": "daily",
+            "until": "2026-10-31",
+            "after": "2026-10-01"
+          }
+        }
+      ]
+    },
+    {
+      "id": "millbrae-art-wine-fest-2026",
+      "name": "Millbrae Art & Wine Festival",
+      "url": "https://www.millbraechamber.com/artwinefestival2026",
+      "city": "Millbrae",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "audienceIds": [
+        "kids"
+      ],
+      "notes": "Verified one-off with 2026 dates on the official page (2026-08-30). Static dated entries gated on visible page text.",
+      "officialTextEvents": [
+        {
+          "id": "millbrae-art-wine-fest-2026-sat",
+          "title": "Millbrae Art & Wine Festival (55th)",
+          "description": "Free, family-friendly art and wine festival on Broadway Avenue in downtown Millbrae — 200+ artists, food trucks, festival food and drink gardens, and kids' activities.",
+          "venue": "Broadway Avenue, Downtown Millbrae",
+          "neighborhood": "Millbrae",
+          "startDateTime": "2026-09-05T10:00:00-07:00",
+          "endDateTime": "2026-09-05T17:00:00-07:00",
+          "ageBands": [
+            "toddler",
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "Free",
+          "category": "Festival",
+          "requiredText": [
+            "Art & Wine Festival",
+            "September 5"
+          ]
+        },
+        {
+          "id": "millbrae-art-wine-fest-2026-sun",
+          "title": "Millbrae Art & Wine Festival (55th)",
+          "description": "Free, family-friendly art and wine festival on Broadway Avenue in downtown Millbrae — 200+ artists, food trucks, festival food and drink gardens, and kids' activities.",
+          "venue": "Broadway Avenue, Downtown Millbrae",
+          "neighborhood": "Millbrae",
+          "startDateTime": "2026-09-06T10:00:00-07:00",
+          "endDateTime": "2026-09-06T17:00:00-07:00",
+          "ageBands": [
+            "toddler",
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "Free",
+          "category": "Festival",
+          "requiredText": [
+            "Art & Wine Festival",
+            "September 5"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "belmont-greek-festival-2026",
+      "name": "Belmont Greek Festival",
+      "url": "https://www.belmontgreekfestival.com/",
+      "city": "Belmont",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "audienceIds": [
+        "kids"
+      ],
+      "notes": "Verified one-off with 2026 dates on the official page (2026-08-30). Static dated entries gated on visible page text.",
+      "officialTextEvents": [
+        {
+          "id": "belmont-greek-festival-2026-sat",
+          "title": "Belmont Greek Festival (54th)",
+          "description": "Annual Greek festival at the Greek Orthodox Church of the Holy Cross in Belmont: Greek food, pastries, live music, dancing, and a kids' area.",
+          "venue": "Greek Orthodox Church of the Holy Cross, 900 Alameda de las Pulgas",
+          "neighborhood": "Belmont",
+          "startDateTime": "2026-09-05T12:00:00-07:00",
+          "endDateTime": "2026-09-05T22:00:00-07:00",
+          "ageBands": [
+            "toddler",
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "Unknown",
+          "category": "Festival",
+          "requiredText": [
+            "Greek Festival",
+            "September 5"
+          ]
+        },
+        {
+          "id": "belmont-greek-festival-2026-sun",
+          "title": "Belmont Greek Festival (54th)",
+          "description": "Annual Greek festival at the Greek Orthodox Church of the Holy Cross in Belmont: Greek food, pastries, live music, dancing, and a kids' area.",
+          "venue": "Greek Orthodox Church of the Holy Cross, 900 Alameda de las Pulgas",
+          "neighborhood": "Belmont",
+          "startDateTime": "2026-09-06T12:00:00-07:00",
+          "endDateTime": "2026-09-06T22:00:00-07:00",
+          "ageBands": [
+            "toddler",
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "Unknown",
+          "category": "Festival",
+          "requiredText": [
+            "Greek Festival",
+            "September 5"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "scottish-highland-games-2026",
+      "name": "Scottish Highland Gathering & Games",
+      "url": "https://thescottishgames.com/",
+      "city": "Pleasanton",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "audienceIds": [
+        "kids"
+      ],
+      "notes": "Verified one-off with 2026 dates on the official page (2026-08-30). Static dated entries gated on visible page text.",
+      "officialTextEvents": [
+        {
+          "id": "scottish-highland-games-2026-sat",
+          "title": "Scottish Highland Gathering & Games (160th)",
+          "description": "The 160th Scottish Highland Gathering & Games at the Alameda County Fairgrounds: athletics, pipe bands, Highland dancing, and kids' activities. Performances from 10am.",
+          "venue": "Alameda County Fairgrounds",
+          "neighborhood": "Pleasanton",
+          "startDateTime": "2026-09-05T10:00:00-07:00",
+          "endDateTime": "2026-09-05T18:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$$",
+          "category": "Festival",
+          "requiredText": [
+            "Highland",
+            "September 5"
+          ]
+        },
+        {
+          "id": "scottish-highland-games-2026-sun",
+          "title": "Scottish Highland Gathering & Games (160th)",
+          "description": "The 160th Scottish Highland Gathering & Games at the Alameda County Fairgrounds: athletics, pipe bands, Highland dancing, and kids' activities. Performances from 10am.",
+          "venue": "Alameda County Fairgrounds",
+          "neighborhood": "Pleasanton",
+          "startDateTime": "2026-09-06T10:00:00-07:00",
+          "endDateTime": "2026-09-06T18:00:00-07:00",
+          "ageBands": [
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$$",
+          "category": "Festival",
+          "requiredText": [
+            "Highland",
+            "September 5"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "alameda-point-antiques-faire-2026",
+      "name": "Alameda Point Antiques Faire",
+      "url": "https://www.alamedapointantiquesfaire.com/",
+      "city": "Alameda",
+      "category": "Community",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "audienceIds": [
+        "kids"
+      ],
+      "notes": "Verified one-off with 2026 dates on the official page (2026-08-30). Static dated entries gated on visible page text.",
+      "officialTextEvents": [
+        {
+          "id": "alameda-point-antiques-faire-2026",
+          "title": "Alameda Point Antiques Faire",
+          "description": "The Alameda Point Antiques Faire on the old naval air station: 800+ dealers of vintage furniture, collectibles, and treasures. Timed-entry tickets $5-$20.",
+          "venue": "Alameda Point",
+          "neighborhood": "Alameda",
+          "startDateTime": "2026-09-06T06:00:00-07:00",
+          "endDateTime": "2026-09-06T15:00:00-07:00",
+          "ageBands": [
+            "school-age",
+            "tween"
+          ],
+          "cost": "$",
+          "category": "Community",
+          "requiredText": [
+            "Antiques Faire",
+            "Sept 6"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sf-shakes-mclaren-park-2026",
+      "name": "SF Shakes: Free Shakespeare in the Park",
+      "url": "https://www.sfshakes.org/shows-events/free-shakespeare-in-the-park/",
+      "city": "San Francisco",
+      "category": "Culture",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "audienceIds": [
+        "kids"
+      ],
+      "notes": "Verified one-off with 2026 dates on the official page (2026-08-30). Static dated entries gated on visible page text.",
+      "officialTextEvents": [
+        {
+          "id": "sf-shakes-mclaren-2026-sat",
+          "title": "Free Shakespeare in the Park: San Francisco",
+          "description": "Free Shakespeare in the Park at John McLaren Park — the closing weekend of the annual outdoor season, 2pm performance. Bring a blanket; picnicking welcome.",
+          "venue": "John McLaren Park",
+          "neighborhood": "San Francisco",
+          "startDateTime": "2026-09-05T14:00:00-07:00",
+          "endDateTime": "2026-09-05T16:30:00-07:00",
+          "ageBands": [
+            "school-age",
+            "tween"
+          ],
+          "cost": "Free",
+          "category": "Culture",
+          "requiredText": [
+            "Shakespeare in the Park",
+            "September 2"
+          ]
+        },
+        {
+          "id": "sf-shakes-mclaren-2026-sun",
+          "title": "Free Shakespeare in the Park: San Francisco",
+          "description": "Free Shakespeare in the Park at John McLaren Park — the closing weekend of the annual outdoor season, 2pm performance. Bring a blanket; picnicking welcome.",
+          "venue": "John McLaren Park",
+          "neighborhood": "San Francisco",
+          "startDateTime": "2026-09-06T14:00:00-07:00",
+          "endDateTime": "2026-09-06T16:30:00-07:00",
+          "ageBands": [
+            "school-age",
+            "tween"
+          ],
+          "cost": "Free",
+          "category": "Culture",
+          "requiredText": [
+            "Shakespeare in the Park",
+            "September 2"
+          ]
+        }
+      ]
     }
   ]
 }

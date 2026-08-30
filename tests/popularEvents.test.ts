@@ -53,6 +53,7 @@ describe("resolvePopularEvents", () => {
       events: EVENT_POOL,
       sat: SAT,
       sun: SUN,
+          now: NOW,
     });
     expect(out.map((e) => e.id)).toEqual(["c", "a", "b"]);
   });
@@ -67,6 +68,7 @@ describe("resolvePopularEvents", () => {
       events: EVENT_POOL,
       sat: SAT,
       sun: SUN,
+          now: NOW,
     });
     expect(out.map((e) => e.id)).toEqual(["b", "a", "c"]);
   });
@@ -94,6 +96,7 @@ describe("resolvePopularEvents", () => {
       events: EVENT_POOL,
       sat: SAT,
       sun: SUN,
+          now: NOW,
     });
     expect(out.map((e) => e.id)).toEqual(["a"]);
   });
@@ -107,6 +110,7 @@ describe("resolvePopularEvents", () => {
       events: EVENT_POOL,
       sat: SAT,
       sun: SUN,
+          now: NOW,
     });
     expect(out.map((e) => e.id)).toEqual(["c"]);
   });
@@ -121,6 +125,7 @@ describe("resolvePopularEvents", () => {
       events: EVENT_POOL,
       sat: SAT,
       sun: SUN,
+          now: NOW,
     });
     expect(out.map((e) => e.id)).toEqual(["a", "b"]);
   });

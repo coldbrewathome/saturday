@@ -1,34 +1,9 @@
 {
   "schemaVersion": 1,
   "metroId": "honolulu",
-  "generatedAt": "2026-08-12T18:35:49.269Z",
-  "alertCount": 15,
+  "generatedAt": "2026-08-30T17:49:33.168Z",
+  "alertCount": 14,
   "alerts": [
-    {
-      "severity": "warning",
-      "metroId": "honolulu",
-      "sourceId": "hawaii-state-library",
-      "sourceName": "Hawaii State Public Library System",
-      "sourceType": "tribeEvents",
-      "url": "https://www.librarieshawaii.org/events/",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 369,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 369,
-      "fetchedAt": "2026-08-12T18:35:49.269Z",
-      "fetches": [
-        {
-          "url": "https://www.librarieshawaii.org/events/",
-          "status": "http-error",
-          "httpStatus": 500,
-          "contentType": "application/json; charset=UTF-8"
-        }
-      ]
-    },
     {
       "severity": "critical",
       "metroId": "honolulu",
@@ -44,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:35:49.269Z",
+      "fetchedAt": "2026-08-30T17:49:33.168Z",
       "fetches": [
         {
           "url": "https://www.bishopmuseum.org/exhibits-and-programs/events/",
@@ -70,7 +45,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:35:49.269Z",
+      "fetchedAt": "2026-08-30T17:49:33.168Z",
       "fetches": [
         {
           "url": "https://honolulumuseum.org/events/",
@@ -95,7 +70,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:35:49.269Z",
+      "fetchedAt": "2026-08-30T17:49:33.168Z",
       "fetches": [
         {
           "url": "https://www.honoluluzoo.org/experiences-events/",
@@ -120,38 +95,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:35:49.269Z",
+      "fetchedAt": "2026-08-30T17:49:33.168Z",
       "fetches": [
         {
           "url": "https://calendar.google.com/calendar/ical/hawaii.edu_ur7iq68mqshu5q73n79rmb4jrk%40group.calendar.google.com/public/basic.ics",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/calendar; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "honolulu",
-      "sourceId": "iolani-palace",
-      "sourceName": "Iolani Palace",
-      "sourceType": "rss",
-      "url": "https://www.iolanipalace.org/event/feed/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:35:49.269Z",
-      "fetches": [
-        {
-          "url": "https://www.iolanipalace.org/event/feed/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/rss+xml; charset=UTF-8"
         }
       ]
     },
@@ -170,7 +120,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:35:49.269Z",
+      "fetchedAt": "2026-08-30T17:49:33.168Z",
       "fetches": [
         {
           "url": "https://www.kualoa.com/activities/",
@@ -195,7 +145,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:35:49.269Z",
+      "fetchedAt": "2026-08-30T17:49:33.168Z",
       "fetches": [
         {
           "url": "https://kbhulashow.wixsite.com/official",
@@ -220,7 +170,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:35:49.269Z",
+      "fetchedAt": "2026-08-30T17:49:33.168Z",
       "fetches": [
         {
           "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
@@ -245,7 +195,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:35:49.269Z",
+      "fetchedAt": "2026-08-30T17:49:33.168Z",
       "fetches": [
         {
           "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
@@ -256,24 +206,49 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "honolulu",
       "sourceId": "kcc-farmers-market-2026-08-01-src",
       "sourceName": "KCC Farmers' Market",
       "sourceType": "officialTextEvents",
       "url": "https://hfbf.org/farmers-markets/kcc/",
       "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:35:49.269Z",
+      "fetchedAt": "2026-08-30T17:49:33.168Z",
       "fetches": [
         {
           "url": "https://hfbf.org/farmers-markets/kcc/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "honolulu",
+      "sourceId": "duke-kahanamoku-oceanfest-opening-ceremony-2026-08-14-src",
+      "sourceName": "Duke Kahanamoku OceanFest: Opening Ceremony",
+      "sourceType": "officialTextEvents",
+      "url": "https://dukekahanamokuoceanfest.com/events/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-30T17:49:33.168Z",
+      "fetches": [
+        {
+          "url": "https://dukekahanamokuoceanfest.com/events/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -295,7 +270,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:35:49.269Z",
+      "fetchedAt": "2026-08-30T17:49:33.168Z",
       "fetches": [
         {
           "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
@@ -320,7 +295,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:35:49.269Z",
+      "fetchedAt": "2026-08-30T17:49:33.168Z",
       "fetches": [
         {
           "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
@@ -345,7 +320,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:35:49.269Z",
+      "fetchedAt": "2026-08-30T17:49:33.168Z",
       "fetches": [
         {
           "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
@@ -370,7 +345,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:35:49.269Z",
+      "fetchedAt": "2026-08-30T17:49:33.168Z",
       "fetches": [
         {
           "url": "https://www.alohacomedyclub.com/calendar",

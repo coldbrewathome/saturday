@@ -119,6 +119,7 @@ import { computeCheckinCandidates } from "./checkinQueue";
 import { EVENT_THEMES, isValidThemeId } from "./eventThemes";
 import { isUpcomingEvent, isWeekendWindowDate } from "./eventFreshness";
 import type { PopularEventsDataset } from "./popularEvents";
+import { readLastVisit, writeLastVisit } from "./newEvents";
 import {
   PROFILE_STORAGE_KEY,
   readStoredProfile,
@@ -127,183 +128,100 @@ import {
   type FamilyProfile,
 } from "./familyProfile";
 import { buildVenueImageMap } from "./eventImages";
+import {
+  DEFAULT_VIEW,
+  buildAppHash,
+  readAppRoute,
+  type AppRoute,
+} from "./appRoutes";
+import {
+  addLocalDays,
+  dayWindowLabel,
+  eventCategoryToSpotCategory,
+  eventCostToSpotCost,
+  eventDateGroupLabel,
+  eventTimeLabel,
+  eventWhenLabel,
+  formatWeekendRange,
+  groupSavedEventsByDate,
+  isActualPlanningEvent,
+  isEventExpired,
+  isoDate,
+  nextBoaWeekend,
+  nextDayOfWeek,
+  optionLabel,
+  parseIsoDate,
+  sameLocalDate,
+  thisOrNextDayOfWeek,
+  validEventDate,
+  weatherTone,
+} from "./eventDates";
+import {
+  AGE_BAND_STORAGE_KEY,
+  AGE_PROMPT_DISMISSED_KEY,
+  CHECKINS_STORAGE_KEY,
+  GOING_OUT_STORAGE_KEY,
+  INTERESTS_STORAGE_KEY,
+  readStoredAgeBand,
+  readStoredArray,
+  readStoredCheckins,
+  readStoredGoingOutMode,
+  readStoredInterests,
+  writeStoredCheckins,
+} from "./appStorage";
+import {
+  EMAIL_RE,
+  formatGeneratedAt,
+  interleaveByCategory,
+  latestGeneratedAt,
+  sourceHostname,
+} from "./appUtils";
+import {
+  DAY_KEYS,
+  DAY_NAMES,
+  compactHoursLabel,
+  describeStatus,
+  formatMinutes,
+  formatRatingCount,
+  normalizeClock,
+  normalizeHourSpan,
+  pickCategoryImage,
+  statusLabel,
+  type OpenStatus,
+} from "./spotDisplay";
 
-type Category =
-  | "Outdoors"
-  | "Food"
-  | "Culture"
-  | "Wellness"
-  | "Shopping"
-  | "Nightlife";
-type Cost = "Free" | "$" | "$$" | "$$$" | "Unknown";
-
-type ScheduleWindow = { open: number; close: number };
-type WeekSchedule = {
-  mon: ScheduleWindow[];
-  tue: ScheduleWindow[];
-  wed: ScheduleWindow[];
-  thu: ScheduleWindow[];
-  fri: ScheduleWindow[];
-  sat: ScheduleWindow[];
-  sun: ScheduleWindow[];
-};
-type Schedule = { is247: true; days: null } | { is247: false; days: WeekSchedule };
-
-export type Spot = {
-  id: string;
-  name: string;
-  neighborhood: string;
-  category: Category;
-  imageUrl: string;
-  imageSource?: string;
-  imageAttribution?: string;
-  bestWith?: string[];
-  cost: Cost;
-  transitMinutes: number;
-  timeWindow: string;
-  mood: string;
-  groupSize: string;
-  planning: string;
-  openNow: boolean;
-  note: string;
-  tags: string[];
-  lat?: number;
-  lon?: number;
-  distanceMiles?: number;
-  sourceUrl?: string;
-  website?: string | null;
-  openingHours?: string | null;
-  schedule?: Schedule | null;
-  wheelchair?: "yes" | "limited" | "no" | null;
-  dogsAllowed?: boolean | null;
-  kidsFriendly?: boolean | null;
-  parkingNearby?: boolean | null;
-  dataSource?: string;
-  updatedAt?: string;
-  friendScore?: number;
-  wikidataId?: string | null;
-  wikipedia?: string | null;
-  googleRating?: number;
-  googleRatingCount?: number;
-  audiences?: Audience[];
-};
-
-export type Audience = "kids" | "adults" | "all";
-
-export type FamilyEvent = {
-  id: string;
-  title: string;
-  description: string;
-  venue: string;
-  city: string;
-  neighborhood: string;
-  lat: number;
-  lon: number;
-  category: string;
-  daysOfWeek: number[];
-  timeWindow: "Morning" | "Afternoon" | "Evening";
-  startDateTime?: string | null;
-  endDateTime?: string | null;
-  ageBands: AgeBand[];
-  audiences?: Audience[];
-  cost: string;
-  url: string;
-  sourceName?: string;
-  sourceMode?: string;
-  verified: boolean;
-  // Real event photo extracted at ingest when the source provides one
-  // (Ticketmaster/Eventbrite-style feeds). Absent = no photo exists —
-  // surfaces render a placeholder, never a stock stand-in.
-  imageUrl?: string;
-  // Stable slug landed in 261ce3b. Drives the SPA `#/event/<slug>` route
-  // (this file) and the prerendered `/<metro>/events/<slug>/` URL (ADR-04).
-  slug?: string;
-  // Interest themes assigned at ingest (scripts/eventThemes.mjs). Drives the
-  // "Browse by interest" filter; see EVENT_THEMES in eventThemes.ts.
-  themes?: string[];
-};
-
-type SavedEventDateGroup = {
-  key: string;
-  label: string;
-  sortTime: number;
-  events: FamilyEvent[];
-};
-
-type BoaMuseum = {
-  id: string;
-  name: string;
-  city: string;
-  neighborhood: string;
-  lat: number;
-  lon: number;
-  url: string;
-};
-
-type BoaDataset = {
-  url?: string;
-  note?: string;
-  museums?: BoaMuseum[];
-};
-
-type EventsDataset = {
-  schemaVersion?: number;
-  generatedAt?: string;
-  note?: string;
-  events?: FamilyEvent[];
-};
-
-type SpotDataset = {
-  generatedAt?: string;
-  source?: {
-    name?: string;
-    attribution?: string;
-    license?: string;
-  };
-  imageStats?: {
-    wikidata?: number;
-    tagged?: number;
-    fallback?: number;
-  };
-  count?: number;
-  spots?: Spot[];
-};
-
-type NewSpotForm = {
-  name: string;
-  neighborhood: string;
-  category: Category;
-  cost: Cost;
-  note: string;
-};
-
-export type PlanItemRef = { kind: "spot" | "event"; id: string };
-
-export type Plan = {
-  id: string;
-  name: string;
-  stopIds: string[];
-  eventIds?: string[];
-  // Mixed visit order (newest field). When present, drives the plan/map/poll
-  // rendering; otherwise we fall back to "stops in stopIds order, then events
-  // in date order" so existing plans keep working.
-  itemOrder?: PlanItemRef[];
-  createdAt: string;
-  pollId?: string;
-  ownerToken?: string;
-  source?: "manual" | "ai";
-  vibe?: PlannerVibe;
-  summary?: string;
-  rationale?: string[];
-  cautions?: string[];
-  picks?: Array<{ id: string; reason: string }>;
-  aiModel?: string;
-  profile?: PlannerProfile;
-};
-
-type PlanItem =
-  | { kind: "spot"; id: string; spot: Spot }
-  | { kind: "event"; id: string; event: FamilyEvent };
+// Shared domain types live in ./types (extracted 2026-08); re-export the
+// public surface here so existing importers keep working unchanged.
+import type {
+  Audience,
+  BoaDataset,
+  BoaMuseum,
+  Category,
+  Cost,
+  EventsDataset,
+  FamilyEvent,
+  FeaturedPlan,
+  HeroPick,
+  NewSpotForm,
+  Plan,
+  PlanItem,
+  PlanItemRef,
+  SavedEventDateGroup,
+  Schedule,
+  ScheduleWindow,
+  Spot,
+  SpotDataset,
+  WeekSchedule,
+} from "./types";
+export type {
+  Audience,
+  FamilyEvent,
+  FeaturedPlan,
+  HeroPick,
+  Plan,
+  PlanItemRef,
+  Spot,
+} from "./types";
 
 const PLAN_ID_TOKEN_LENGTH = 12;
 
@@ -380,228 +298,6 @@ const eventDateFilters: Array<{ id: EventDateFilter; label: string }> = [
   { id: "tomorrow", label: "Tomorrow" },
   { id: "weekend", label: "Weekend (Fri–Sun)" },
 ];
-function optionLabel<T extends string>(
-  options: Array<{ id: T; label: string }>,
-  id: T,
-): string {
-  return options.find((option) => option.id === id)?.label ?? id;
-}
-
-const SHORT_DAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-// True when an event is no longer upcoming. Delegates to the shared
-// freshness gate (src/eventFreshness.ts) instead of a start+/-6h heuristic —
-// that heuristic both showed a just-ended short event as attendable (start
-// less than 6h ago) and marked a live multi-day exhibition "Past" the day
-// after it opened (start more than 6h ago, endDateTime ignored entirely).
-function isEventExpired(
-  event: { startDateTime?: string | null; endDateTime?: string | null },
-  now: Date = new Date(),
-  timeZone?: string,
-): boolean {
-  return !isUpcomingEvent(event, now, { timeZone });
-}
-
-function dayWindowLabel(days: number[]): string {
-  if (!days || days.length === 0) return "Weekly";
-  if (days.length === 1) return SHORT_DAY[days[0]] ?? "Weekly";
-  const sorted = [...days].sort((a, b) => a - b);
-  return sorted.map((d) => SHORT_DAY[d] ?? "?").join(" / ");
-}
-
-function validEventDate(value?: string | null): Date | null {
-  if (!value) return null;
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? null : date;
-}
-
-function sameLocalDate(left: Date, right: Date): boolean {
-  return (
-    left.getFullYear() === right.getFullYear() &&
-    left.getMonth() === right.getMonth() &&
-    left.getDate() === right.getDate()
-  );
-}
-
-function eventDateGroupLabel(event: FamilyEvent): string {
-  const date = validEventDate(event.startDateTime);
-  if (!date) {
-    return `${dayWindowLabel(event.daysOfWeek)} events`;
-  }
-  return date.toLocaleDateString(undefined, {
-    weekday: "long",
-    month: "short",
-    day: "numeric",
-  });
-}
-
-function eventTimeLabel(event: FamilyEvent): string | null {
-  const start = validEventDate(event.startDateTime);
-  if (!start) return null;
-  const end = validEventDate(event.endDateTime);
-  const formatter = new Intl.DateTimeFormat(undefined, {
-    hour: "numeric",
-    minute: "2-digit",
-  });
-  if (
-    end &&
-    sameLocalDate(start, end) &&
-    start.getHours() === 0 &&
-    start.getMinutes() === 0 &&
-    end.getTime() - start.getTime() >= 23 * 60 * 60 * 1000
-  ) {
-    return "All day";
-  }
-  if (end && sameLocalDate(start, end) && end.getTime() > start.getTime()) {
-    return `${formatter.format(start)} - ${formatter.format(end)}`;
-  }
-  return formatter.format(start);
-}
-
-function groupSavedEventsByDate(events: FamilyEvent[]): SavedEventDateGroup[] {
-  const groups = new Map<string, SavedEventDateGroup>();
-  for (const event of events) {
-    const date = validEventDate(event.startDateTime);
-    const key = date ? isoDate(date) : `recurring-${dayWindowLabel(event.daysOfWeek)}`;
-    const sortTime = date
-      ? new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
-      : Infinity;
-    const group = groups.get(key) ?? {
-      key,
-      label: eventDateGroupLabel(event),
-      sortTime,
-      events: [],
-    };
-    group.events.push(event);
-    groups.set(key, group);
-  }
-  return Array.from(groups.values()).sort(
-    (left, right) => left.sortTime - right.sortTime || left.label.localeCompare(right.label),
-  );
-}
-
-function weatherTone(label: string): "wet" | "dry" | "mixed" {
-  const wet = ["Rainy", "Drizzly", "Stormy", "Showers", "Snowy"];
-  const dry = ["Clear", "Mostly sunny"];
-  if (wet.includes(label)) return "wet";
-  if (dry.includes(label)) return "dry";
-  return "mixed";
-}
-
-function isoDate(date: Date): string {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-}
-
-function parseIsoDate(value: string): Date {
-  const [y, m, d] = value.split("-").map(Number);
-  return new Date(y, (m ?? 1) - 1, d ?? 1);
-}
-
-function nextDayOfWeek(target: number, from: Date = new Date()): Date {
-  const offset = (target - from.getDay() + 7) % 7 || 7;
-  return new Date(from.getFullYear(), from.getMonth(), from.getDate() + offset);
-}
-
-function thisOrNextDayOfWeek(target: number, from: Date = new Date()): Date {
-  const offset = (target - from.getDay() + 7) % 7;
-  return new Date(from.getFullYear(), from.getMonth(), from.getDate() + offset);
-}
-
-function addLocalDays(date: Date, days: number): Date {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
-}
-
-function nextBoaWeekend(now: Date = new Date()): { saturday: Date; sunday: Date } {
-  let year = now.getFullYear();
-  let month = now.getMonth();
-  for (let attempt = 0; attempt < 4; attempt += 1) {
-    const firstOfMonth = new Date(year, month, 1);
-    const offset = (6 - firstOfMonth.getDay() + 7) % 7;
-    const saturday = new Date(year, month, 1 + offset);
-    const sunday = new Date(year, month, 2 + offset);
-    if (sunday.getMonth() === month) {
-      const sundayEnd = new Date(year, month, 2 + offset, 23, 59, 59);
-      if (sundayEnd >= now) {
-        return { saturday, sunday };
-      }
-    }
-    month += 1;
-    if (month > 11) {
-      month = 0;
-      year += 1;
-    }
-  }
-  const fallback = new Date(year, month, 1);
-  return { saturday: fallback, sunday: fallback };
-}
-
-function formatWeekendRange(saturday: Date, sunday: Date): string {
-  const monthName = saturday.toLocaleDateString("en-US", { month: "short" });
-  if (saturday.getMonth() === sunday.getMonth()) {
-    return `${monthName} ${saturday.getDate()}–${sunday.getDate()}`;
-  }
-  const sundayMonth = sunday.toLocaleDateString("en-US", { month: "short" });
-  return `${monthName} ${saturday.getDate()} – ${sundayMonth} ${sunday.getDate()}`;
-}
-
-function eventWhenLabel(event: FamilyEvent): string {
-  if (!event.startDateTime) {
-    return `${dayWindowLabel(event.daysOfWeek)} · ${event.timeWindow}`;
-  }
-  const date = new Date(event.startDateTime);
-  if (Number.isNaN(date.getTime())) {
-    return `${dayWindowLabel(event.daysOfWeek)} · ${event.timeWindow}`;
-  }
-  return new Intl.DateTimeFormat(undefined, {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(date);
-}
-
-function eventCategoryToSpotCategory(category: string): Category {
-  if (/\b(music|comedy|nightclub|bar|dj|concert)\b/i.test(category)) return "Nightlife";
-  if (/\b(library|museum|ticketed)\b/i.test(category)) return "Culture";
-  if (/\b(park|farm|zoo|garden|nature)\b/i.test(category)) return "Outdoors";
-  return "Culture";
-}
-
-function eventCostToSpotCost(cost: string): Cost {
-  if (cost === "Free" || cost === "$" || cost === "$$" || cost === "$$$") {
-    return cost;
-  }
-  if (/free/i.test(cost)) return "Free";
-  if (/\$\$\$/.test(cost)) return "$$$";
-  if (/\$\$/.test(cost)) return "$$";
-  if (/\$/.test(cost)) return "$";
-  return "Unknown";
-}
-
-function isActualPlanningEvent(
-  event: FamilyEvent,
-  now: Date,
-  selectedAgeBand: AgeBand | "any",
-  timeZone?: string,
-): boolean {
-  if (!event.verified || event.sourceMode === "recurring-template") return false;
-  if (!event.startDateTime) return false;
-  if (!isUpcomingEvent(event, now, { timeZone })) return false;
-  const start = new Date(event.startDateTime);
-  if (Number.isNaN(start.getTime())) return false;
-  const today = new Date(now);
-  today.setHours(0, 0, 0, 0);
-  const horizon = new Date(today.getTime() + 45 * 24 * 60 * 60 * 1000);
-  if (start < today || start > horizon) return false;
-  const day = start.getDay();
-  if (day !== 0 && day !== 6) return false;
-  if (selectedAgeBand !== "any" && !event.ageBands.includes(selectedAgeBand)) {
-    return false;
-  }
-  return true;
-}
-
 function eventToPlanningSpot(event: FamilyEvent, transitMinutes: number): Spot {
   const when = eventWhenLabel(event);
   const category = eventCategoryToSpotCategory(event.category);
@@ -665,332 +361,10 @@ void APP_AUDIENCE; // surface APP_AUDIENCE for downstream debugging if needed
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID ?? "";
 const GOOGLE_CONFIGURED = GOOGLE_CLIENT_ID.length > 0;
 
-// Saved interest themes for the "For you" view (Phase 2). Cross-metro and
-// per-origin, so a plain global key rather than metroStorageKey.
-const INTERESTS_STORAGE_KEY = "famhop:interests";
+// Storage keys + helpers moved to src/appStorage.ts (2026-08).
 
-function readStoredInterests(): Set<string> {
-  try {
-    const raw = window.localStorage.getItem(INTERESTS_STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw) as string[];
-      return new Set(parsed.filter(isValidThemeId));
-    }
-  } catch {
-    // fall through to empty
-  }
-  return new Set<string>();
-}
-
-// Kids only: persist the age-group filter across sessions — a family's kid
-// ages don't change between visits, so losing the choice on reload throws
-// away the highest-signal personalization input. Global key like interests
-// (ages aren't metro-specific).
-const AGE_BAND_STORAGE_KEY = "famhop:ageBand";
-
-const AGE_PROMPT_DISMISSED_KEY = "famhop:agePromptDismissed";
-
-function readStoredAgeBand(): AgeBand | "any" {
-  try {
-    const raw = window.localStorage.getItem(AGE_BAND_STORAGE_KEY);
-    if (
-      raw === "toddler" ||
-      raw === "preschool" ||
-      raw === "school-age" ||
-      raw === "tween"
-    ) {
-      return raw;
-    }
-  } catch {
-    // fall through to default
-  }
-  return "any";
-}
-
-// Adults (Mosey) only: persist "who you're heading out as" across sessions, like
-// interests — it's a personal preference, not metro-specific, so it uses a global key.
-const GOING_OUT_STORAGE_KEY = "famhop:goingOutMode";
-
-function readStoredGoingOutMode(): "solo" | "friends" | "date" {
-  try {
-    const raw = window.localStorage.getItem(GOING_OUT_STORAGE_KEY);
-    if (raw === "solo" || raw === "friends" || raw === "date") return raw;
-  } catch {
-    // fall through to default
-  }
-  return "friends";
-}
-
-// Post-weekend check-ins ("did you go?"). Local map of eventId → answer,
-// which gates the prompt queue; the aggregate + cross-device history live on
-// the worker (submitCheckin / fetchUserCheckins).
-const CHECKINS_STORAGE_KEY = "famhop:checkins";
-
-function readStoredCheckins(): Record<string, { date: string; worthIt: boolean }> {
-  try {
-    const raw = window.localStorage.getItem(CHECKINS_STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw) as Record<string, { date?: string; worthIt?: unknown }>;
-      const out: Record<string, { date: string; worthIt: boolean }> = {};
-      for (const [id, entry] of Object.entries(parsed)) {
-        if (entry && typeof entry.worthIt === "boolean") {
-          out[id] = { date: entry.date ?? "", worthIt: entry.worthIt };
-        }
-      }
-      return out;
-    }
-  } catch {
-    // fall through to empty
-  }
-  return {};
-}
-
-function writeStoredCheckins(
-  record: Record<string, { date: string; worthIt: boolean }>,
-): void {
-  try {
-    window.localStorage.setItem(CHECKINS_STORAGE_KEY, JSON.stringify(record));
-  } catch {
-    // ignore
-  }
-}
-
-const unsplash = (id: string) =>
-  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1200&q=80`;
-
-const categoryImagePool: Record<Category, string[]> = {
-  Food: [
-    "1495474472287-4d71bcdd2085",
-    "1555396273-367ea4eb4db5",
-    "1517248135467-4c7edcad34c4",
-    "1481833761820-0509d3217039",
-    "1414235077428-338989a2e8c0",
-    "1424847651672-bf20a4b0982b",
-    "1610890716171-6b1bb98ffd09",
-    "1504674900247-0877df9cc836",
-    "1565299624946-b28f40a0ae38",
-    "1559339352-11d035aa65de",
-  ].map(unsplash),
-  Outdoors: [
-    "1500530855697-b586d89ba3ee",
-    "1469474968028-56623f02e42e",
-    "1501785888041-af3ef285b470",
-    "1502082553048-f009c37129b9",
-    "1464822759023-fed622ff2c3b",
-    "1473773508845-188df298d2d1",
-    "1441974231531-c6227db76b6e",
-    "1506905925346-21bda4d32df4",
-    "1418065460487-3e41a6c84dc5",
-  ].map(unsplash),
-  Culture: [
-    "1518998053901-5348d3961a04",
-    "1554907984-15263bfd63bd",
-    "1564399579883-451a5d44ec08",
-    "1583847268964-b28dc8f51f92",
-    "1485738422979-f5c462d49f74",
-    "1503095396549-807759245b35",
-  ].map(unsplash),
-  Wellness: [
-    "1626224583764-f87db24ac4ea",
-    "1518611012118-696072aa579a",
-    "1571902943202-507ec2618e8f",
-    "1599901860904-17e6ed7083a0",
-    "1545205597-3d9d02c29597",
-    "1571388208497-71bedc66e932",
-    "1506629082955-511b1aa562c8",
-    "1518609878373-06d740f60d8b",
-  ].map(unsplash),
-  Shopping: [
-    "1441986300917-64674bd600d8",
-    "1481437156560-3205f6a55735",
-    "1555529669-e69e7aa0ba9a",
-    "1567401893414-76b7b1e5a7a5",
-    "1549298916-b41d501d3772",
-    "1483985988355-763728e1935b",
-    "1472851294608-062f824d29cc",
-    "1555529771-7888783a18d3",
-  ].map(unsplash),
-  Nightlife: [
-    "1514525253161-7a46d19cd819",
-    "1566737236500-c8ac43014a67",
-    "1470225620780-dba8ba36b745",
-    "1516450360452-9258136e8735",
-    "1574391884720-bbc3740c59d1",
-    "1543007631-283050bb3e8c",
-    "1571204829887-3b8d69e4094d",
-    "1508997449629-303059a039c0",
-  ].map(unsplash),
-};
-
-function pickCategoryImage(category: Category, key: string): string {
-  const pool = categoryImagePool[category];
-  let hash = 0;
-  for (let i = 0; i < key.length; i += 1) {
-    hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
-  }
-  return pool[hash % pool.length];
-}
-
-const DAY_KEYS: Array<keyof WeekSchedule> = [
-  "sun",
-  "mon",
-  "tue",
-  "wed",
-  "thu",
-  "fri",
-  "sat",
-];
-const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-function formatRatingCount(count: number): string {
-  if (count >= 1000) {
-    const k = count / 1000;
-    return `${k >= 10 ? Math.round(k) : k.toFixed(1)}k`;
-  }
-  return String(count);
-}
-
-const SHORT_DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const DAY_INDEX: Record<string, number> = {
-  sunday: 0,
-  monday: 1,
-  tuesday: 2,
-  wednesday: 3,
-  thursday: 4,
-  friday: 5,
-  saturday: 6,
-};
-
-// "9:30 AM" → "9:30am", "9:00 AM" → "9am", "12:00 PM" → "noon"
-function normalizeClock(token: string): string {
-  const m = token.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
-  if (!m) return token.trim();
-  const hour = Number(m[1]);
-  const minute = Number(m[2]);
-  const ampm = m[3].toLowerCase();
-  if (hour === 12 && minute === 0) return ampm === "pm" ? "noon" : "midnight";
-  const h = hour % 12 === 0 ? 12 : hour;
-  return minute === 0 ? `${h}${ampm}` : `${h}:${m[2]}${ampm}`;
-}
-
-function normalizeHourSpan(span: string): string {
-  // Some venues post split sessions ("11:30 AM – 2:30 PM, 4:30 – 8:00 PM").
-  // Normalize each range independently, then rejoin.
-  return span
-    .split(/\s*,\s*/)
-    .map((segment) => {
-      const parts = segment.split(/\s*[–-]\s*| to /);
-      if (parts.length !== 2) return segment.trim();
-      return `${normalizeClock(parts[0])}–${normalizeClock(parts[1])}`;
-    })
-    .join(", ");
-}
-
-// "Monday: 9:30 AM – 6:00 PM; Tuesday: ... ; Sunday: ..." → "Daily 9:30am–6pm"
-// or "Mon–Fri 9am–5pm · Sat–Sun 10am–4pm". Returns null if input doesn't look
-// like the verbose Google weekdayDescriptions format.
-function compactHoursLabel(raw: string): string | null {
-  if (!raw || !raw.includes(":") || !raw.includes(";")) return null;
-  const segments = raw.split(/\s*;\s*/);
-  if (segments.length !== 7) return null;
-  const byDay = new Array<string>(7).fill("");
-  for (const segment of segments) {
-    const sep = segment.indexOf(":");
-    if (sep < 0) return null;
-    const day = segment.slice(0, sep).trim().toLowerCase();
-    const hours = segment.slice(sep + 1).trim();
-    const idx = DAY_INDEX[day];
-    if (idx === undefined || !hours) return null;
-    byDay[idx] = /closed/i.test(hours) ? "Closed" : normalizeHourSpan(hours);
-  }
-  // Reorder Mon–Sun for natural reading.
-  const ordered = [1, 2, 3, 4, 5, 6, 0].map((i) => ({
-    day: SHORT_DAYS[i],
-    hours: byDay[i],
-  }));
-  // Group consecutive days with identical hours.
-  const groups: Array<{ start: string; end: string; hours: string; span: number }> = [];
-  for (const entry of ordered) {
-    const last = groups[groups.length - 1];
-    if (last && last.hours === entry.hours) {
-      last.end = entry.day;
-      last.span += 1;
-    } else {
-      groups.push({ start: entry.day, end: entry.day, hours: entry.hours, span: 1 });
-    }
-  }
-  if (groups.length === 1 && groups[0].span === 7) {
-    return `Daily ${groups[0].hours}`;
-  }
-  return groups
-    .map((g) => {
-      const range = g.start === g.end ? g.start : `${g.start}–${g.end}`;
-      return `${range} ${g.hours}`;
-    })
-    .join(" · ");
-}
-
-function formatMinutes(mins: number): string {
-  const total = mins % 1440;
-  if (total === 0) return "midnight";
-  if (total === 720) return "noon";
-  let h = Math.floor(total / 60);
-  const m = total % 60;
-  const suffix = h >= 12 ? "pm" : "am";
-  h = h % 12 === 0 ? 12 : h % 12;
-  return m === 0 ? `${h}${suffix}` : `${h}:${String(m).padStart(2, "0")}${suffix}`;
-}
-
-type OpenStatus =
-  | { kind: "open"; closesAt: number; nextDayIdx?: number }
-  | { kind: "closed"; nextOpenAt?: number; nextOpenDayIdx?: number }
-  | { kind: "always" }
-  | { kind: "unknown" };
-
-function describeStatus(spot: Spot, now: Date = new Date()): OpenStatus {
-  const schedule = spot.schedule;
-  if (!schedule) return { kind: "unknown" };
-  if (schedule.is247) return { kind: "always" };
-
-  const days = schedule.days;
-  const dayIdx = now.getDay();
-  const minutes = now.getHours() * 60 + now.getMinutes();
-  const todayKey = DAY_KEYS[dayIdx];
-  const todaySlots = days[todayKey];
-
-  for (const slot of todaySlots) {
-    if (minutes >= slot.open && minutes < slot.close) {
-      return { kind: "open", closesAt: slot.close };
-    }
-  }
-
-  // Find next opening within the next 7 days.
-  for (let offset = 0; offset < 7; offset += 1) {
-    const lookIdx = (dayIdx + offset) % 7;
-    const slots = days[DAY_KEYS[lookIdx]];
-    for (const slot of slots) {
-      if (offset === 0 && slot.open <= minutes) continue;
-      return { kind: "closed", nextOpenAt: slot.open, nextOpenDayIdx: lookIdx };
-    }
-  }
-  return { kind: "closed" };
-}
-
-function statusLabel(status: OpenStatus, now: Date = new Date()): string {
-  if (status.kind === "always") return "Open 24/7";
-  if (status.kind === "open") {
-    return `Open · until ${formatMinutes(status.closesAt)}`;
-  }
-  if (status.kind === "closed") {
-    if (status.nextOpenAt === undefined || status.nextOpenDayIdx === undefined) {
-      return "Closed";
-    }
-    const sameDay = status.nextOpenDayIdx === now.getDay();
-    const dayLabel = sameDay ? "" : ` ${DAY_NAMES[status.nextOpenDayIdx]}`;
-    return `Closed · opens ${formatMinutes(status.nextOpenAt)}${dayLabel}`;
-  }
-  return "Hours unknown";
-}
+// Spot display helpers (categoryImagePool, pickCategoryImage, hours/status
+// formatting) moved to src/spotDisplay.ts (2026-08).
 
 const starterSpots: Spot[] = [
   {
@@ -1200,22 +574,6 @@ function PlanMap(props: ComponentProps<typeof LazyPlanMap>) {
   );
 }
 
-export type FeaturedPlan = {
-  id: string;
-  name: string;
-  summary: string;
-  accent?: string;
-  stopIds: string[];
-  eventIds?: string[];
-  audiences?: Audience[];
-  city?: string;
-  lat?: number | null;
-  lon?: number | null;
-  generated?: boolean;
-  themed?: string;
-  themedEnd?: string;
-};
-
 // ── Plan-first hero (browse view) ────────────────────────────────────
 // The hero card fulfills the advertised "pick a vibe, get a 3-stop plan in
 // seconds" promise with the strongest already-loaded editor's pick — no
@@ -1229,287 +587,25 @@ const HERO_VIBES: PlannerVibe[] = [
   "culture",
 ];
 
-export type HeroPick = {
-  featured: FeaturedPlan;
-  stops: Spot[];
-  events: FamilyEvent[];
-};
+// isThemedPlanEligible/pickHeroFeatured/summarizePollTallies moved to
+// src/planUtils.ts (2026-08); re-exported here for tests.
+import {
+  isThemedPlanEligible,
+  pickHeroFeatured,
+  summarizePollTallies,
+} from "./planUtils";
+export {
+  isThemedPlanEligible,
+  pickHeroFeatured,
+  summarizePollTallies,
+} from "./planUtils";
 
-// B4: a themed plan (e.g. Memorial Day weekend) is pinned at the top of the
-// Editor's-picks rail regardless of map center. With an explicit themedEnd
-// it expires there. Without one, it used to pin forever — derive an
-// effective window from the plan's own events instead: eligible only while
-// at least one resolves and hasn't ended; ineligible if none resolve or
-// none carry a usable date. Exported for tests.
-export function isThemedPlanEligible(
-  plan: FeaturedPlan,
-  eventsById: Map<string, FamilyEvent>,
-  now: Date = new Date(),
-): boolean {
-  if (!plan.themed) return false;
-  if (plan.themedEnd) return Date.parse(plan.themedEnd) > now.getTime();
-  const ends = (plan.eventIds ?? [])
-    .map((id) => eventsById.get(id))
-    .filter((e): e is FamilyEvent => Boolean(e))
-    .map((e) => Date.parse(e.endDateTime || e.startDateTime || ""))
-    .filter((t) => Number.isFinite(t));
-  if (ends.length === 0) return false;
-  return Math.max(...ends) > now.getTime();
-}
+// sourceHostname/formatGeneratedAt/latestGeneratedAt/interleaveByCategory
+// moved to src/appUtils.ts (2026-08); sourceHostname re-exported below for
+// PollView + tests.
+export { sourceHostname } from "./appUtils";
 
-// Pick the hero suggestion from the already-loaded featured plans. Plans
-// whose referenced items are all missing/ended are skipped (freshness gate:
-// only upcoming events count). Without a vibe the editorial rail order wins;
-// with a vibe, plans are re-ranked client-side by scoring their resolved
-// stops with the shared planner scorer. Exported for tests.
-export function pickHeroFeatured(
-  plans: FeaturedPlan[],
-  spots: Spot[],
-  events: FamilyEvent[],
-  vibe: PlannerVibe | null,
-  scoringOptions?: PlannerScoringOptions,
-  now: Date = new Date(),
-  timeZone?: string,
-): HeroPick | null {
-  const spotById = new Map(spots.map((s) => [s.id, s] as const));
-  const eventById = new Map(events.map((e) => [e.id, e] as const));
-  const candidates: HeroPick[] = [];
-  for (const featured of plans) {
-    const resolvedStops = featured.stopIds
-      .map((id) => spotById.get(id))
-      .filter((s): s is Spot => Boolean(s));
-    const upcoming = (featured.eventIds ?? [])
-      .map((id) => eventById.get(id))
-      .filter((e): e is FamilyEvent => Boolean(e && isUpcomingEvent(e, now, { timeZone })));
-    if (resolvedStops.length === 0 && upcoming.length === 0) continue;
-    candidates.push({ featured, stops: resolvedStops, events: upcoming });
-  }
-  if (candidates.length === 0) return null;
-  if (!vibe || vibe === "balanced") return candidates[0];
-  const scored = candidates.map((pick, index) => ({
-    pick,
-    index,
-    score:
-      pick.stops.length > 0
-        ? pick.stops.reduce(
-            (sum, stop) => sum + scoreSpotForVibe(stop, vibe, scoringOptions),
-            0,
-          ) / pick.stops.length
-        : Number.NEGATIVE_INFINITY,
-  }));
-  scored.sort((a, b) => b.score - a.score || a.index - b.index);
-  return scored[0].pick;
-}
-
-// Aggregate a poll snapshot into the owner-facing tally summary shown in the
-// plan detail ("2 friends voted · 5 yes votes" + per-stop yes counts).
-// Exported for tests.
-export function summarizePollTallies(poll: PollSnapshot): {
-  voterCount: number;
-  totalYes: number;
-  perItem: Array<{ id: string; label: string; yes: number }>;
-} {
-  const labelById = new Map<string, string>();
-  for (const stop of poll.stops) labelById.set(stop.id, stop.name);
-  for (const event of poll.events ?? []) labelById.set(event.id, event.title);
-  const order: string[] = [];
-  const seen = new Set<string>();
-  for (const ref of poll.itemOrder ?? []) {
-    if (!seen.has(ref.id) && labelById.has(ref.id)) {
-      seen.add(ref.id);
-      order.push(ref.id);
-    }
-  }
-  for (const id of labelById.keys()) {
-    if (!seen.has(id)) {
-      seen.add(id);
-      order.push(id);
-    }
-  }
-  let totalYes = 0;
-  const perItem = order.map((id) => {
-    const yes = poll.tallies[id]?.up ?? 0;
-    totalYes += yes;
-    return { id, label: labelById.get(id) ?? id, yes };
-  });
-  return { voterCount: poll.voterCount, totalYes, perItem };
-}
-
-// Hostname for the "Verified · {host}" trust line on event stops. Returns
-// null when the URL can't be parsed (callers then skip the verified framing).
-// Exported for PollView + tests.
-export function sourceHostname(url: string): string | null {
-  try {
-    const host = new URL(url).hostname.replace(/^www\./, "");
-    return host || null;
-  } catch {
-    return null;
-  }
-}
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-type AppRoute = {
-  view: "browse" | "plans" | "event" | "weekend";
-  planId: string | null;
-  eventSlug: string | null;
-  /** Spot to open on the map (from a shared `#/spot/<id>` deep link). */
-  focusSpotId: string | null;
-};
-
-// Kids land on the decision-first Weekend feed; the map ("Explore") is one
-// tap away. Adults (Mosey) keep the map-first landing — hangout discovery is
-// spontaneous, not weekend-anchored.
-const DEFAULT_VIEW: AppRoute["view"] =
-  APP_AUDIENCE === "kids" ? "weekend" : "browse";
-
-function readAppRoute(): AppRoute {
-  const browse: AppRoute = {
-    view: "browse",
-    planId: null,
-    eventSlug: null,
-    focusSpotId: null,
-  };
-  const landing: AppRoute = { ...browse, view: DEFAULT_VIEW };
-  if (typeof window === "undefined") {
-    return landing;
-  }
-  const hash = window.location.hash;
-  if (hash.startsWith("#/p/")) {
-    // Poll route — main.tsx handles rendering. App still mounts when the user
-    // navigates back, so default to the landing view.
-    return landing;
-  }
-  if (hash.startsWith("#/weekend")) {
-    return { ...browse, view: "weekend" };
-  }
-  // Explicit map request (incl. "#/browse?hopnow=1" from static SEO pages).
-  if (hash.startsWith("#/browse")) {
-    return browse;
-  }
-  // Per ADR-04: the SPA hash route is `#/event/<slug>`. The prerendered SEO
-  // path `/<metro>/events/<slug>/` is a sibling surface, not handled here.
-  const eventMatch = hash.match(/^#\/event\/(.+)$/);
-  if (eventMatch) {
-    return {
-      view: "event",
-      planId: null,
-      eventSlug: decodeURIComponent(eventMatch[1]),
-      focusSpotId: null,
-    };
-  }
-  // Shareable spot deep link: opens the spot's map sheet (one-shot — the hash
-  // then normalizes to #/browse). Uses the stable spot id, so it resolves for
-  // any spot regardless of the prerendered spot-page cap.
-  const spotMatch = hash.match(/^#\/spot\/(.+)$/);
-  if (spotMatch) {
-    return { ...browse, focusSpotId: decodeURIComponent(spotMatch[1]) };
-  }
-  const planMatch = hash.match(/^#\/plans\/(.+)$/);
-  if (planMatch) {
-    return {
-      view: "plans",
-      planId: decodeURIComponent(planMatch[1]),
-      eventSlug: null,
-      focusSpotId: null,
-    };
-  }
-  if (hash === "#/plans") {
-    return { ...browse, view: "plans" };
-  }
-  // Prerendered event SEO pages are path-based (/<metro>/event/<slug>/). A human
-  // with JS who lands there from search or a shared link should open the in-app
-  // event detail, not bounce to browse. The path slug equals event.slug, and the
-  // metro is resolved from the same path, so EventDetailView finds the event.
-  const eventPathMatch = window.location.pathname.match(/\/event\/([^/]+)\/?$/);
-  if (eventPathMatch) {
-    return {
-      view: "event",
-      planId: null,
-      eventSlug: decodeURIComponent(eventPathMatch[1]),
-      focusSpotId: null,
-    };
-  }
-  return landing;
-}
-
-function buildAppHash(
-  view: AppRoute["view"],
-  planId: string | null,
-  eventSlug: string | null,
-): string {
-  if (view === "event" && eventSlug) {
-    return `#/event/${encodeURIComponent(eventSlug)}`;
-  }
-  if (view === "plans") {
-    return planId ? `#/plans/${encodeURIComponent(planId)}` : "#/plans";
-  }
-  if (view === "weekend") return "#/weekend";
-  if (view === "browse") return "#/browse";
-  return "#/";
-}
-
-function readStoredArray<T>(key: string, fallback: T[]): T[] {
-  try {
-    const raw = window.localStorage.getItem(key);
-    return raw ? (JSON.parse(raw) as T[]) : fallback;
-  } catch {
-    return fallback;
-  }
-}
-
-function formatGeneratedAt(value?: string) {
-  if (!value) {
-    return "Fallback data";
-  }
-
-  return new Intl.DateTimeFormat(undefined, {
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(new Date(value));
-}
-
-function latestGeneratedAt(...values: Array<string | undefined>) {
-  let best: string | undefined;
-  let bestMs = -Infinity;
-  for (const value of values) {
-    if (!value) continue;
-    const ms = Date.parse(value);
-    if (Number.isFinite(ms) && ms > bestMs) {
-      bestMs = ms;
-      best = value;
-    }
-  }
-  return best;
-}
-
-function interleaveByCategory(spots: Spot[]) {
-  const buckets = new Map<Category, Spot[]>();
-  for (const item of categories) {
-    buckets.set(item, []);
-  }
-
-  for (const spot of spots) {
-    buckets.get(spot.category)?.push(spot);
-  }
-
-  const result: Spot[] = [];
-  let added = true;
-  while (added) {
-    added = false;
-    for (const item of categories) {
-      const next = buckets.get(item)?.shift();
-      if (next) {
-        result.push(next);
-        added = true;
-      }
-    }
-  }
-
-  return result;
-}
+// EMAIL_RE lives in src/appUtils.ts (shared with NewsletterCard).
 
 type AppProps = {
   metro: MetroConfig;
@@ -1572,6 +668,11 @@ function App({ metro }: AppProps) {
     selectedCategories: metroStorageKey(metro, "selectedCategories"),
   }), [metro]);
   const shareBaseUrl = useMemo(() => metroShareBase(metro), [metro]);
+  // Weekend briefing share link: lands recipients on the decision-first view.
+  const weekendShareUrl = useMemo(
+    () => `${shareBaseUrl.replace(/\/+$/, "")}#/weekend`,
+    [shareBaseUrl],
+  );
   useEffect(() => {
     // Prerendered pages (homepage + metro hubs) ship crafted titles,
     // descriptions, and a correct self-canonical; rewriting them on
@@ -1850,7 +951,19 @@ function App({ metro }: AppProps) {
   >("idle");
   const [remoteSpots, setRemoteSpots] = useState<Spot[]>(starterSpots);
   const [curatedSpots, setCuratedSpots] = useState<Spot[]>([]);
+  // Ready-made day-plan cover photos: first stop with a curated image.
+  const stopImages = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const spot of curatedSpots) {
+      if (spot.imageUrl && !map[spot.id]) map[spot.id] = spot.imageUrl;
+    }
+    return map;
+  }, [curatedSpots]);
   const [events, setEvents] = useState<FamilyEvent[]>([]);
+  // Baseline for "New since your last visit" — read once at mount, before
+  // the mount effect writes today's timestamp, so the section compares
+  // against the *previous* visit. Never updated in-session.
+  const [lastVisit] = useState<string | null>(readLastVisit);
   const [mapSelection, setMapSelection] = useState<MapSelection | null>(null);
   // Track the map's current center so the featured-plans rail can re-rank
   // city plans by distance from whatever the user is browsing. Default to
@@ -2256,8 +1369,10 @@ function App({ metro }: AppProps) {
   }, [plannerProfile, storageKeys.plannerProfile]);
 
   useEffect(() => {
-    const lat = userLocation?.lat ?? inferredGeo?.lat;
-    const lon = userLocation?.lon ?? inferredGeo?.lon;
+    // Weekend-brief weather: prefer the user's coords, fall back to the
+    // metro center so the entrance briefing has a forecast for everyone.
+    const lat = userLocation?.lat ?? inferredGeo?.lat ?? metro.center.lat;
+    const lon = userLocation?.lon ?? inferredGeo?.lon ?? metro.center.lon;
     if (!lat || !lon) return;
     let active = true;
     fetchWeather(lat, lon).then((forecast) => {
@@ -2267,7 +1382,7 @@ function App({ metro }: AppProps) {
     return () => {
       active = false;
     };
-  }, [inferredGeo, userLocation]);
+  }, [inferredGeo, metro, userLocation]);
 
   useEffect(() => {
     let active = true;
@@ -2441,6 +1556,12 @@ function App({ metro }: AppProps) {
         setShowDigestPrompt(true);
         trackMetric("digest_prompt_shown", metro.id);
       }
+    } catch {
+      // ignore
+    }
+    // "New since your last visit" baseline for the *next* visit.
+    try {
+      writeLastVisit(new Date().toISOString());
     } catch {
       // ignore
     }
@@ -2961,7 +2082,7 @@ function App({ metro }: AppProps) {
     };
 
     if (sortBy === "best") {
-      return interleaveByCategory(filtered.sort(byScore));
+      return interleaveByCategory(filtered.sort(byScore), categories);
     }
 
     return filtered.sort((left, right) => {
@@ -5586,6 +4707,11 @@ function App({ metro }: AppProps) {
         trust={eventTrust}
         venueImages={venueImages}
         popularPicks={popularPicks}
+        lastVisit={lastVisit}
+        weather={weather}
+        onShareWeekend={(title, url) => shareItem(title, url)}
+        shareUrl={weekendShareUrl}
+        stopImages={stopImages}
         newsletterSlot={
           <NewsletterCard
             metroId={metro.id}
@@ -6676,523 +5802,15 @@ function App({ metro }: AppProps) {
   );
 }
 
-// Friday-digest signup. Mounted on the Plans tab, inside the browse hero
-// (collapsed one-liner via collapsedLabel), the visit-3 digest modal (bare),
-// and the poll page after a vote (heading override). Success is explicit and
-// persists for the session — the card never silently unmounts on subscribe.
-// Exported so PollView (rendered standalone by main.tsx) can reuse it.
-export function NewsletterCard({
-  metroId,
-  metroLabel,
-  source = "app-plans",
-  heading,
-  collapsedLabel,
-  bare = false,
-  profile,
-  savedEventIds,
-}: {
-  metroId?: string;
-  metroLabel?: string;
-  source?: string;
-  /** Override the metro-framed heading (e.g. poll-page digest framing). */
-  heading?: string;
-  /** Render as a tappable one-liner until opened (browse hero). */
-  collapsedLabel?: string;
-  /** Form-only — no card chrome, heading, or close (digest modal). */
-  bare?: boolean;
-  /** Family profile — rides along on subscribe so digests pick for the
-   * family (ages/interests/budget), not generically. */
-  profile?: FamilyProfile | null;
-  /** Saved event ids at subscribe time — Monday recap check-in asks. */
-  savedEventIds?: string[];
-}) {
-  type Status = "idle" | "submitting" | "done" | "hidden";
-  const [email, setEmail] = useState("");
-  const [open, setOpen] = useState(false);
-  const [status, setStatus] = useState<Status>(() => {
-    if (typeof window === "undefined") return "idle";
-    try {
-      if (window.localStorage.getItem("saturday.newsletterSubscribed") === "1") {
-        return "hidden";
-      }
-      // The bare (modal) variant ignores the card dismissal — the modal has
-      // its own dismissal key and its trigger already checks subscription.
-      if (
-        !bare &&
-        window.localStorage.getItem("saturday.newsletterDismissed") === "1"
-      ) {
-        return "hidden";
-      }
-    } catch {
-      // ignore
-    }
-    return "idle";
-  });
-  const [error, setError] = useState<string | null>(null);
+// NewsletterCard moved to src/NewsletterCard.tsx (2026-08); re-exported for
+// PollView + App-internal use.
+import { NewsletterCard } from "./NewsletterCard";
+export { NewsletterCard } from "./NewsletterCard";
 
-  if (status === "hidden") return null;
-
-  function dismiss() {
-    setStatus("hidden");
-    try {
-      window.localStorage.setItem("saturday.newsletterDismissed", "1");
-    } catch {
-      // ignore
-    }
-  }
-
-  async function submit(event: React.FormEvent) {
-    event.preventDefault();
-    const trimmed = email.trim();
-    if (!EMAIL_RE.test(trimmed)) {
-      setError("Enter a valid email.");
-      return;
-    }
-    setError(null);
-    setStatus("submitting");
-    try {
-      // Age band rides along when the family has picked one — stored on the
-      // subscriber record (worker) so digests can segment by age. The full
-      // family profile (when complete) personalizes the picks themselves.
-      const storedAge = SHOW_AGE_BAND_UI ? readStoredAgeBand() : "any";
-      await subscribeNewsletter({
-        email: trimmed,
-        metroId,
-        ageBand: storedAge === "any" ? undefined : storedAge,
-        ageBands: profile?.ageBands,
-        zipCode: profile?.zipCode || undefined,
-        interests: profile?.interests,
-        budget: profile?.budget === "any" ? undefined : profile?.budget,
-        setting: profile?.setting === "any" ? undefined : profile?.setting,
-        savedEventIds,
-        source,
-      });
-      setStatus("done");
-      try {
-        window.localStorage.setItem("saturday.newsletterSubscribed", "1");
-      } catch {
-        // ignore
-      }
-      trackMetric("newsletter_subscribed", metroId);
-    } catch (e) {
-      setStatus("idle");
-      setError((e as Error).message || "Subscribe failed — try again.");
-    }
-  }
-
-  // Explicit, persistent success — never silently vanish after subscribing.
-  if (status === "done") {
-    const successLine = "You're in — first email lands Friday.";
-    return bare ? (
-      <p className="newsletter-success" role="status">
-        {successLine}
-      </p>
-    ) : (
-      <section className="newsletter-card is-done" aria-label="Friday digest">
-        <p className="newsletter-success" role="status">
-          <Check aria-hidden="true" /> {successLine}
-        </p>
-      </section>
-    );
-  }
-
-  // Collapsed one-liner (browse hero): expands to the form on tap; the X
-  // persists the same dismissal as the full card.
-  if (collapsedLabel && !open) {
-    return (
-      <div className="newsletter-inline">
-        <button
-          type="button"
-          className="newsletter-inline-open"
-          onClick={() => setOpen(true)}
-        >
-          <Mail aria-hidden="true" />
-          {collapsedLabel}
-        </button>
-        <button
-          type="button"
-          className="icon-button newsletter-inline-dismiss"
-          title="Hide"
-          aria-label="Hide digest signup"
-          onClick={dismiss}
-        >
-          <X aria-hidden="true" />
-        </button>
-      </div>
-    );
-  }
-
-  const formBlock = (
-    <>
-      <form onSubmit={submit} className="newsletter-form">
-        <input
-          type="email"
-          placeholder="you@example.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          autoComplete="email"
-        />
-        <button
-          type="submit"
-          className="primary-button"
-          disabled={status === "submitting"}
-        >
-          {status === "submitting" ? "Subscribing…" : "Subscribe"}
-        </button>
-      </form>
-      {error && <p className="newsletter-error">{error}</p>}
-    </>
-  );
-
-  if (bare) {
-    return <div className="newsletter-bare">{formBlock}</div>;
-  }
-
-  return (
-    <section className="newsletter-card" aria-label="Friday weekend digest">
-      <button
-        type="button"
-        className="icon-button newsletter-card-close"
-        title="Hide"
-        onClick={dismiss}
-      >
-        <X aria-hidden="true" />
-      </button>
-      <p className="eyebrow">
-        <Mail aria-hidden="true" /> Friday digest
-      </p>
-      <h3>
-        {heading ??
-          `5 ${APP_AUDIENCE === "adults" ? "" : "family "}ideas for ${
-            metroLabel ?? "your metro"
-          } this weekend`}
-      </h3>
-      <p className="newsletter-sub">
-        A short email every Friday morning. Free. Unsubscribe anytime.
-      </p>
-      {formBlock}
-    </section>
-  );
-}
-
-function resolveHopNowLocation(
-  saved: { lat: number; lon: number } | null,
-  inferred: { lat: number | null; lon: number | null } | null,
-  metro: MetroConfig,
-): { lat: number; lon: number } | null {
-  if (saved) return saved;
-  if (inferred?.lat == null || inferred?.lon == null) return null;
-  const bbox = metro.spotCoverage?.bbox;
-  if (!bbox) return { lat: inferred.lat, lon: inferred.lon };
-  const inMetro =
-    inferred.lat >= bbox.south &&
-    inferred.lat <= bbox.north &&
-    inferred.lon >= bbox.west &&
-    inferred.lon <= bbox.east;
-  return inMetro ? { lat: inferred.lat, lon: inferred.lon } : null;
-}
-
-function spotToHopNow(spot: Spot): HopNowSpot {
-  return {
-    id: spot.id,
-    name: spot.name,
-    neighborhood: spot.neighborhood,
-    category: spot.category,
-    lat: spot.lat,
-    lon: spot.lon,
-    transitMinutes: spot.transitMinutes,
-    schedule: spot.schedule ?? null,
-    cost: spot.cost,
-    kidsFriendly: spot.kidsFriendly ?? null,
-    audiences: spot.audiences,
-    friendScore: spot.friendScore,
-    googleRating: spot.googleRating,
-    googleRatingCount: spot.googleRatingCount,
-    tags: spot.tags,
-    mood: spot.mood,
-    website: spot.website ?? null,
-    sourceUrl: spot.sourceUrl,
-  };
-}
-
-function eventToHopNow(event: FamilyEvent): HopNowEvent | null {
-  if (!event.startDateTime) return null;
-  return {
-    id: event.id,
-    title: event.title,
-    venue: event.venue,
-    neighborhood: event.neighborhood,
-    category: event.category,
-    lat: event.lat,
-    lon: event.lon,
-    startDateTime: event.startDateTime,
-    endDateTime: event.endDateTime ?? null,
-    cost: event.cost,
-    url: event.url,
-  };
-}
-
-function mapsHref(query: string): string {
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
-}
-
-export function HopNowPanel({
-  spots,
-  events,
-  userLocation,
-  audience,
-  activePlanName,
-  onAddToPlan,
-  onClose,
-  metroTimeZone,
-}: {
-  spots: Spot[];
-  events: FamilyEvent[];
-  userLocation: { lat: number; lon: number } | null;
-  audience: "kids" | "adults";
-  activePlanName: string | null;
-  onAddToPlan: (item: PlanItemRef) => void;
-  onClose: () => void;
-  metroTimeZone?: string;
-}) {
-  const [seed, setSeed] = useState(0);
-  const [excludeIds, setExcludeIds] = useState<ReadonlySet<string>>(
-    () => new Set<string>(),
-  );
-  const [addedIds, setAddedIds] = useState<ReadonlySet<string>>(
-    () => new Set<string>(),
-  );
-  // B1.7: a Hop Now panel left open (or backgrounded and returned to) should
-  // not keep suggesting an event that has since ended.
-  const [clockTick, setClockTick] = useState(0);
-  useEffect(() => {
-    const tick = () => setClockTick((n) => n + 1);
-    const interval = setInterval(tick, 5 * 60 * 1000);
-    const onVisibility = () => {
-      if (document.visibilityState === "visible") tick();
-    };
-    document.addEventListener("visibilitychange", onVisibility);
-    return () => {
-      clearInterval(interval);
-      document.removeEventListener("visibilitychange", onVisibility);
-    };
-  }, []);
-
-  const result: HopNowResult = useMemo(() => {
-    const now = new Date();
-    const hopSpots = spots.map(spotToHopNow);
-    // Freshness gate: hopNowPicks re-checks timing, but never hand it an
-    // event that already ended.
-    const hopEvents = events
-      .filter((event) => isUpcomingEvent(event, now, { timeZone: metroTimeZone }))
-      .map(eventToHopNow)
-      .filter((e): e is HopNowEvent => e !== null);
-    return hopNowPicks(hopSpots, hopEvents, {
-      now,
-      audience,
-      userLocation,
-      shuffleSeed: seed,
-      excludeIds,
-    });
-  }, [audience, events, seed, spots, userLocation, excludeIds, metroTimeZone, clockTick]);
-
-  function tryNewBatch() {
-    // Park the IDs we just showed so the next batch surfaces fresh items.
-    const shown = new Set(excludeIds);
-    for (const pick of result.picks) shown.add(pick.id);
-    setExcludeIds(shown);
-    setSeed((s) => s + 1);
-  }
-
-  function resetBatch() {
-    setExcludeIds(new Set());
-    setSeed((s) => s + 1);
-  }
-
-  function handleAdd(pick: HopNowPick) {
-    onAddToPlan({ kind: pick.kind, id: pick.id });
-    setAddedIds((current) => {
-      const next = new Set(current);
-      next.add(pick.id);
-      return next;
-    });
-  }
-
-  const exhausted = excludeIds.size > 0 && result.picks.length === 0;
-
-  return (
-    <div className="hop-now-backdrop" role="presentation" onClick={onClose}>
-      <div
-        className="hop-now-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Hop me now"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="hop-now-head">
-          <div>
-            <p className="eyebrow">Right now</p>
-            <h2>Hop me now</h2>
-            <p className="hop-now-sub">
-              Open, nearby, and good for the next hour or two.
-            </p>
-          </div>
-          <button
-            className="icon-button"
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-          >
-            <X aria-hidden="true" />
-          </button>
-        </div>
-
-        {result.reason && !exhausted && (
-          <p className="hop-now-reason">{result.reason}</p>
-        )}
-        {exhausted && (
-          <p className="hop-now-reason">
-            That's everything nearby right now. Reset to start over.
-          </p>
-        )}
-
-        {result.picks.length > 0 && (
-          <ul className="hop-now-list">
-            {result.picks.map((pick) => (
-              <HopNowCard
-                key={`${pick.kind}:${pick.id}`}
-                pick={pick}
-                added={addedIds.has(pick.id)}
-                activePlanName={activePlanName}
-                onAdd={() => handleAdd(pick)}
-              />
-            ))}
-          </ul>
-        )}
-
-        <div className="hop-now-foot">
-          {exhausted ? (
-            <button
-              type="button"
-              className="text-button"
-              onClick={resetBatch}
-            >
-              Reset
-            </button>
-          ) : (
-            <button
-              type="button"
-              className="text-button"
-              onClick={tryNewBatch}
-              disabled={result.picks.length === 0}
-            >
-              Try a new batch
-            </button>
-          )}
-          {!userLocation && (
-            <span className="hop-now-hint">
-              Tip: allow location for better picks.
-            </span>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function HopNowCard({
-  pick,
-  added,
-  activePlanName,
-  onAdd,
-}: {
-  pick: HopNowPick;
-  added: boolean;
-  activePlanName: string | null;
-  onAdd: () => void;
-}) {
-  const meta: string[] = [];
-  if (pick.etaMinutes != null) {
-    meta.push(`${pick.etaMinutes} min away`);
-  }
-  if (pick.kind === "spot") {
-    if (pick.alwaysOpen) meta.push("Open 24/7");
-    else if (pick.closesAtMinutes != null) {
-      const m = ((pick.closesAtMinutes % 1440) + 1440) % 1440;
-      const h24 = Math.floor(m / 60);
-      const mm = m % 60;
-      const ampm = h24 >= 12 ? "PM" : "AM";
-      const h12 = ((h24 + 11) % 12) + 1;
-      const label = mm === 0 ? `${h12}${ampm}` : `${h12}:${mm.toString().padStart(2, "0")}${ampm}`;
-      meta.push(`Until ${label}`);
-    }
-  } else if (pick.kind === "event") {
-    if (pick.startsInMinutes <= 0) meta.push("In progress");
-    else meta.push(`Starts in ${pick.startsInMinutes} min`);
-  }
-  return (
-    <li className="hop-now-card">
-      <div className="hop-now-card-head">
-        <span className="hop-now-card-cat">{pick.category}</span>
-        {pick.kind === "event" && <span className="hop-now-card-badge">Event</span>}
-      </div>
-      <h3>{pick.name}</h3>
-      <p className="hop-now-card-where">
-        {pick.kind === "event" ? `${pick.venue} · ${pick.neighborhood}` : pick.neighborhood}
-      </p>
-      <p className="hop-now-card-why">{pick.whyNow}</p>
-      {meta.length > 0 && (
-        <p className="hop-now-card-meta">{meta.join(" · ")}</p>
-      )}
-      <div className="hop-now-card-actions">
-        <a
-          className="primary-button"
-          href={mapsHref(pick.mapsQuery)}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Take me there
-        </a>
-        <button
-          type="button"
-          className="text-button hop-now-add"
-          onClick={onAdd}
-          disabled={added}
-          title={
-            added
-              ? "Added"
-              : activePlanName
-                ? `Add to "${activePlanName}"`
-                : "Save to a new plan"
-          }
-        >
-          {added ? "Added ✓" : activePlanName ? "Add to plan" : "Save to plan"}
-        </button>
-        {pick.kind === "event" && pick.url && (
-          <a
-            className="text-button"
-            href={pick.url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Event details
-          </a>
-        )}
-        {pick.kind === "spot" && pick.url && (
-          <a
-            className="text-button"
-            href={pick.url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Website
-          </a>
-        )}
-      </div>
-    </li>
-  );
-}
+// HopNowPanel (modal + right-now helpers) moved to src/HopNowPanel.tsx
+// (2026-08); re-exported for compatibility.
+import { HopNowPanel, resolveHopNowLocation } from "./HopNowPanel";
+export { HopNowPanel } from "./HopNowPanel";
 
 const CATEGORY_COLORS: Record<Category, string> = {
   Outdoors: "var(--forest)",

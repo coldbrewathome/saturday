@@ -32,11 +32,23 @@ type PopularCandidate = {
 
 // Same local-date math the feed uses to bucket days (WeekendView dateKey), so
 // an event shown on Saturday in the feed lands in the same window here.
-function dateKey(d: Date): string {
+export function dateKey(d: Date): string {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
+}
+
+// True when the event's start date falls on the given Sat/Sun weekend
+// (metro-local dates, same bucket math as the weekend feed).
+export function isWeekendWindowEvent(
+  event: { startDateTime?: string | null },
+  sat: Date,
+  sun: Date,
+): boolean {
+  if (!event.startDateTime) return false;
+  const startKey = dateKey(new Date(event.startDateTime));
+  return startKey === dateKey(sat) || startKey === dateKey(sun);
 }
 
 export type ResolvePopularEventsOptions<T extends PopularCandidate = PopularCandidate> = {
@@ -62,8 +74,6 @@ export function resolvePopularEvents<T extends PopularCandidate>({
   // The file is a weekly snapshot; only apply it to the weekend it names.
   if (dataset.weekendStart !== dateKey(sat)) return [];
 
-  const satKey = dateKey(sat);
-  const sunKey = dateKey(sun);
   const byId = new Map(events.map((event) => [event.id, event]));
   const seen = new Set<string>();
   const out: T[] = [];
@@ -77,11 +87,9 @@ export function resolvePopularEvents<T extends PopularCandidate>({
   for (const pick of ranked) {
     const event = byId.get(pick.eventId);
     if (!event) continue; // id not in the live feed this week
-    if (!event.startDateTime) continue; // can't place it in the weekend window
     if (seen.has(event.id)) continue;
     if (!isUpcomingEvent(event, now, timeZone ? { timeZone } : undefined)) continue;
-    const startKey = dateKey(new Date(event.startDateTime));
-    if (startKey !== satKey && startKey !== sunKey) continue;
+    if (!isWeekendWindowEvent(event, sat, sun)) continue;
     seen.add(event.id);
     out.push(event);
   }

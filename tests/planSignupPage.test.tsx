@@ -39,8 +39,8 @@ function makeEvent(
     category: "Festival",
     daysOfWeek: [6],
     timeWindow: "Afternoon",
-    startDateTime: "2026-08-15T13:00:00-07:00",
-    endDateTime: "2026-08-15T17:00:00-07:00",
+    startDateTime: `${satKey}T17:00:00-07:00`,
+    endDateTime: `${satKey}T21:00:00-07:00`,
     ageBands: [],
     cost: "Free",
     url: "https://example.com/e",
@@ -49,14 +49,27 @@ function makeEvent(
   };
 }
 
-// 2026-08-15 is a Saturday; today is 2026-08-09 (Sunday).
+// Same upcoming-Saturday math as the component's weekendKeys (never
+// yesterday, unlike the weekend feed) — teaser fixtures must stay inside the
+// window on any run day, not on a pinned calendar date.
+const daysToSat = new Date().getDay() === 6 ? 0 : (6 - new Date().getDay() + 7) % 7;
+const SAT = new Date();
+SAT.setHours(0, 0, 0, 0);
+SAT.setDate(SAT.getDate() + daysToSat);
+const key = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
+    d.getDate(),
+  ).padStart(2, "0")}`;
+const satKey = key(SAT);
+const nextSatKey = key(new Date(SAT.getFullYear(), SAT.getMonth(), SAT.getDate() + 7));
+
 const WEEKEND_EVENTS = {
   events: [
     makeEvent({ title: "Fireworks Festival", cost: "Free" }),
     makeEvent({ title: "Storytime at the Library", cost: "Free" }),
     makeEvent({ title: "Saturday Concert in the Park", cost: "$" }),
     makeEvent({ title: "Teen Advisory Council", cost: "Free" }),
-    makeEvent({ title: "Next Week Event", startDateTime: "2026-08-22T13:00:00-07:00" }),
+    makeEvent({ title: "Next Week Event", startDateTime: `${nextSatKey}T13:00:00-07:00` }),
   ],
 };
 

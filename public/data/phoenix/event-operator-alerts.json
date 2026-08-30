@@ -1,31 +1,31 @@
 {
   "schemaVersion": 1,
   "metroId": "phoenix",
-  "generatedAt": "2026-08-12T18:34:05.327Z",
-  "alertCount": 8,
+  "generatedAt": "2026-08-30T17:47:54.783Z",
+  "alertCount": 7,
   "alerts": [
     {
       "severity": "warning",
       "metroId": "phoenix",
-      "sourceId": "ticketmaster-phoenix-family",
-      "sourceName": "Ticketmaster Phoenix Family Events",
-      "sourceType": "ticketmaster",
-      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
+      "sourceId": "arizona-state-fair",
+      "sourceName": "Arizona State Fair",
+      "sourceType": "html",
+      "url": "https://azstatefair.com/",
+      "status": "ok-last-known-good",
+      "issueType": "zero-extracted",
+      "reason": "source produced no live events; using last-known-good future events",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 3,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:34:05.327Z",
+      "lastKnownGoodEvents": 3,
+      "fetchedAt": "2026-08-30T17:47:54.783Z",
       "fetches": [
         {
-          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "url": "https://azstatefair.com/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=1; queries=1"
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -44,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:34:05.327Z",
+      "fetchedAt": "2026-08-30T17:47:54.783Z",
       "fetches": [
         {
           "url": "https://hotwheelsmonstertruckslive.com/event/glendale-az-2026/",
@@ -69,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:34:05.327Z",
+      "fetchedAt": "2026-08-30T17:47:54.783Z",
       "fetches": [
         {
           "url": "https://xfinitychampionships.com/info/",
@@ -94,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:34:05.327Z",
+      "fetchedAt": "2026-08-30T17:47:54.783Z",
       "fetches": [
         {
           "url": "https://www.crescentphx.com/events",
@@ -119,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:34:05.327Z",
+      "fetchedAt": "2026-08-30T17:47:54.783Z",
       "fetches": [
         {
           "url": "https://www.marqueetheatreaz.com/calendar/",
@@ -144,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:34:05.327Z",
+      "fetchedAt": "2026-08-30T17:47:54.783Z",
       "fetches": [
         {
           "url": "https://phoenix.standuplive.com/events",
@@ -161,46 +161,20 @@
       "sourceName": "Rick Bronson's House of Comedy",
       "sourceType": "html",
       "url": "https://houseofcomedy.net/scottsdale",
-      "status": "http-error",
+      "status": "fetch-error",
       "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:34:05.327Z",
+      "fetchedAt": "2026-08-30T17:47:54.783Z",
       "fetches": [
         {
           "url": "https://houseofcomedy.net/scottsdale",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "phoenix",
-      "sourceId": "nile-theater-mesa",
-      "sourceName": "The Nile Theater",
-      "sourceType": "html",
-      "url": "https://www.theniletheater.com/events",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:34:05.327Z",
-      "fetches": [
-        {
-          "url": "https://www.theniletheater.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     }

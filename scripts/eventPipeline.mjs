@@ -2081,13 +2081,17 @@ function expandOfficialRecurringEvents(source = {}, pageText = "", options = {})
     const recurrence = config.recurrence || {};
     if (recurrence.frequency === "daily" || recurrence.frequency === "weekly") {
       // Weekly recurrences emit only on recurrence.daysOfWeek (0 = Sunday).
-      // recurrence.until (YYYY-MM-DD) caps expansion for runs that end
-      // before the page copy is taken down.
+      // recurrence.until (YYYY-MM-DD) caps the end of a run; recurrence.after
+      // (YYYY-MM-DD) delays the start — seasonal runs (pumpkin patches,
+      // u-pick seasons) publish their 2026 dates months before the run starts,
+      // and expansion must not mint events for days before the season opens.
       const weeklyDays = maybeArray(recurrence.daysOfWeek)
         .map(Number)
         .filter((day) => day >= 0 && day <= 6);
+      const after = recurrence.after ? new Date(`${recurrence.after}T00:00:00Z`) : null;
       const until = recurrence.until ? new Date(`${recurrence.until}T23:59:59Z`) : null;
       for (let cursor = new Date(start); cursor <= end; cursor = addDays(cursor, 1)) {
+        if (after && cursor < after) continue;
         if (until && cursor > until) break;
         if (recurrence.frequency === "weekly" && !weeklyDays.includes(cursor.getUTCDay())) continue;
         const startClock = parseClock(config.startTime || "10:00");
@@ -4442,7 +4446,11 @@ export function buildEventsDataset(events, options = {}) {
 // Schema is intentionally small (one line per slug) so the file stays under
 // ~30KB per metro at full saturation.
 export const SLUG_HISTORY_SCHEMA_VERSION = 1;
-const SLUG_HISTORY_WINDOW_DAYS = 90;
+// 2026-08-13: 90 → 180 so known-expired event slugs answer 410 (gone) for
+// twice as long — 410 removes from Google's index on the first recrawl,
+// 404 needs repeated rechecks. Only affects future pruning; slugs pruned
+// under the old window are already gone from the history files.
+const SLUG_HISTORY_WINDOW_DAYS = 180;
 
 export function pruneSlugHistory(history, now = new Date()) {
   const cutoff = new Date(now);

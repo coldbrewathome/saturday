@@ -1685,6 +1685,54 @@ async function sendNewsletter(
   return json(result, { status: 200 }, cors);
 }
 
+// Generic PR-outreach email send (scripts/pr-weekly.mjs). Same admin gate as
+// /newsletter/send; sends one subject/html via Resend to each recipient.
+async function sendPrEmailHandler(
+  request: Request,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  const token = env.NEWSLETTER_ADMIN_TOKEN;
+  if (!token) {
+    return json({ error: "pr sending not configured" }, { status: 503 }, cors);
+  }
+  const auth = request.headers.get("authorization") || "";
+  const provided = auth.startsWith("Bearer ") ? auth.slice(7).trim() : "";
+  if (!provided || provided !== token) {
+    return json({ error: "admin access required" }, { status: 403 }, cors);
+  }
+  let payload: Record<string, unknown>;
+  try {
+    payload = (await request.json()) as Record<string, unknown>;
+  } catch {
+    return json({ error: "invalid json" }, { status: 400 }, cors);
+  }
+  const to = (Array.isArray(payload.to) ? payload.to : [])
+    .map((e) => cleanEmail(e))
+    .filter(Boolean);
+  const subject = cleanText(payload.subject, 120);
+  const html = typeof payload.html === "string" ? payload.html.slice(0, 65_536) : "";
+  const text = typeof payload.text === "string" ? payload.text.slice(0, 65_536) : undefined;
+  if (to.length === 0 || !subject || !html) {
+    return json({ error: "to (non-empty), subject and html required" }, { status: 400 }, cors);
+  }
+  const from = typeof payload.from === "string" && payload.from ? cleanText(payload.from, 200) : "FamHop <weekly@famhop.com>";
+
+  const failures: string[] = [];
+  for (const email of to) {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${env.RESEND_API_KEY}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ from, to: [email], subject, html, text }),
+    });
+    if (!res.ok) failures.push(email);
+  }
+  return json({ ok: failures.length === 0, sent: to.length - failures.length, failures }, { status: 200 }, cors);
+}
+
 async function sendMondayRecapHandler(
   request: Request,
   env: Env,
@@ -1938,6 +1986,10 @@ export default {
 
     if (path === "/newsletter/send-monday" && request.method === "POST") {
       return sendMondayRecapHandler(request, env, cors);
+    }
+
+    if (path === "/pr/send" && request.method === "POST") {
+      return sendPrEmailHandler(request, env, cors);
     }
 
     if (

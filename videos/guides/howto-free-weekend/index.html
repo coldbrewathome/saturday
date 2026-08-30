@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+
+      @font-face{font-family:'Bricolage Grotesque';src:url('assets/fonts/bricolage-grotesque-400_800.woff2') format('woff2');font-weight:400 800;font-style:normal;font-display:block;}
+      @font-face{font-family:'JetBrains Mono';src:url('assets/fonts/jetbrains-mono-400.woff2') format('woff2');font-weight:100 800;font-style:normal;font-display:block;}
+      @font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/plus-jakarta-sans-400.woff2') format('woff2');font-weight:200 800;font-style:normal;font-display:block;}
+
+      #root{
+        position:relative;width:1920px;height:1080px;overflow:hidden;
+        --cream:#FAF5EB; --ink:#1B1916; --accent:#DD6A1A; --sun:#E8B547; --muted:#4A453F; --mutedi:#C9C2B6;
+        font-family:'Plus Jakarta Sans',sans-serif;color:#1B1916;
+      }
+
+      .scene{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;}
+      /* A cream base under every scene: the panel wipes are 0.3s of scaleY, and
+         without a floor beneath them the frame shows through to black. */
+      .basefill{position:absolute;inset:0;background:var(--cream);}
+      .pnl{position:absolute;inset:0;background:var(--cream);transform-origin:50% 100%;}
+      .inv .pnl{background:var(--ink);}
+      .inv{color:var(--cream);}
+
+      .mono{font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.10em;text-transform:uppercase;}
+      .disp{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:-.015em;line-height:.94;}
+
+      .chrome{position:absolute;left:72px;right:72px;top:56px;display:flex;justify-content:space-between;align-items:center;font-size:28px;}
+      .chrome .r{color:var(--muted);}
+      .inv .chrome .r{color:var(--mutedi);}
+      .mark{display:inline-flex;align-items:center;gap:14px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:44px;letter-spacing:-.02em;text-transform:lowercase;}
+      .mark i{display:block;width:30px;height:30px;background:var(--accent);border-radius:8px;}
+      .foot{position:absolute;left:72px;bottom:44px;font-family:'JetBrains Mono',monospace;font-size:26px;letter-spacing:.06em;color:var(--muted);}
+      .inv .foot{color:var(--mutedi);}
+
+      .tl{display:block;}
+      .tc{display:block;}
+
+      /* title */
+      .hookstack{position:absolute;left:72px;right:72px;top:290px;}
+      .hookstack .tc{font-size:150px;line-height:.9;}
+      .hookstack .tc.big{color:var(--accent);}
+      .slabwrap{position:absolute;left:72px;top:660px;display:inline-block;}
+      .slab{position:absolute;inset:0;background:var(--ink);transform-origin:0% 50%;}
+      .inv .slab{background:var(--sun);}
+      .slabtx{position:relative;display:block;padding:14px 34px 22px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:56px;text-transform:uppercase;letter-spacing:-.01em;color:var(--cream);white-space:nowrap;}
+      .inv .slabtx{color:var(--ink);}
+      .title-sub{position:absolute;left:72px;top:800px;font-size:32px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+      .inv .title-sub{color:var(--mutedi);}
+
+      /* section */
+      .secnum{position:absolute;left:72px;top:200px;font-size:260px;line-height:.8;color:var(--accent);letter-spacing:-.04em;}
+      .kick{position:absolute;right:72px;top:290px;font-size:30px;color:var(--muted);text-align:right;}
+      .inv .kick{color:var(--mutedi);}
+      .sectitle{position:absolute;left:72px;right:72px;top:430px;font-size:110px;line-height:1.02;}
+
+      /* card */
+      .num{position:absolute;left:72px;top:130px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:150px;line-height:.8;color:var(--accent);letter-spacing:-.04em;}
+      .tag{position:absolute;right:72px;top:200px;display:flex;align-items:center;gap:20px;}
+      .pill{background:var(--sun);border:5px solid var(--ink);border-radius:999px;padding:8px 30px 12px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:34px;text-transform:uppercase;color:var(--ink);letter-spacing:-.01em;white-space:nowrap;}
+      .inv .pill{border-color:var(--cream);}
+      .cat{font-family:'JetBrains Mono',monospace;font-size:26px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+      .inv .cat{color:var(--mutedi);}
+      .card-title{position:absolute;left:72px;right:72px;top:340px;font-size:110px;}
+      .card-title.img{right:1300px;}
+      /* Photo panel: sits above the rule/body columns on the right. A dropped
+         image (unreachable at build) means the scene renders text-only. */
+      .card-photo{position:absolute;right:72px;top:300px;width:548px;height:420px;object-fit:cover;border-radius:28px;border:5px solid var(--ink);transform-origin:50% 100%;background:var(--sun);}
+      .rule{position:absolute;left:72px;top:640px;width:900px;height:6px;background:var(--ink);transform-origin:0% 50%;}
+      .inv .rule{background:var(--cream);}
+      .venue{position:absolute;left:72px;top:684px;font-weight:800;font-size:50px;line-height:1.15;}
+      .city{position:absolute;left:72px;top:790px;font-family:'JetBrains Mono',monospace;font-size:30px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+      .inv .city{color:var(--mutedi);}
+      .card-body{position:absolute;left:72px;right:700px;top:830px;font-weight:500;font-size:44px;color:var(--muted);}
+      .inv .card-body{color:var(--mutedi);}
+      .card-body .bl{display:block;line-height:1.18;font-weight:500;}
+      .card-slab{position:absolute;left:auto;right:72px;top:880px;display:inline-block;}
+
+      /* list */
+      .list-head{position:absolute;left:72px;right:72px;top:150px;}
+      .rows{position:absolute;left:72px;right:72px;top:320px;display:flex;flex-direction:column;gap:12px;}
+      .row{display:flex;align-items:flex-start;gap:36px;}
+      .rownum{flex:0 0 120px;font-size:60px;line-height:.8;color:var(--accent);}
+      .rowtxt{display:flex;flex-direction:column;}
+      .rowtx{font-size:60px;line-height:.95;}
+      .rowsub{margin-top:10px;display:block;font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+      .inv .rowsub{color:var(--mutedi);}
+
+      /* stat */
+      .paynum{position:absolute;left:72px;top:240px;font-size:320px;line-height:.84;color:var(--accent);}
+      .paylabel{position:absolute;left:72px;top:640px;font-size:110px;line-height:1;}
+      .paysub{position:absolute;left:72px;top:820px;font-family:'JetBrains Mono',monospace;font-size:34px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+      .inv .paysub{color:var(--mutedi);}
+
+      /* cta */
+      .ctakick{position:absolute;left:72px;top:290px;font-size:132px;line-height:.9;}
+      .ctamark{position:absolute;left:72px;top:560px;display:inline-flex;align-items:center;gap:24px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:120px;letter-spacing:-.03em;text-transform:lowercase;color:var(--cream);}
+      .ctamark i{display:block;width:60px;height:60px;background:var(--accent);border-radius:16px;}
+      .ctaurl{position:absolute;left:72px;top:760px;display:inline-block;}
+      .ctaurltx{position:relative;display:block;padding:18px 30px 22px;font-family:'JetBrains Mono',monospace;font-size:46px;letter-spacing:.01em;color:var(--ink);}
+      .ctanews{position:absolute;left:72px;bottom:120px;font-family:'JetBrains Mono',monospace;font-size:32px;letter-spacing:.06em;color:var(--mutedi);}
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="222.00" data-width="1920" data-height="1080" data-fps="30">
+
+      <div id="base" class="scene clip" data-start="0" data-duration="222.00" data-track-index="0">
+        <div class="basefill"></div>
+      </div>
+
+      <div id="s0" class="scene clip" data-start="0.00" data-duration="13.00" data-track-index="1">
+        <div class="pnl" id="s0-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">famhop · how-to guide</span></div>
+        <div class="foot mono">famhop.com</div>
+        <div class="hookstack disp" data-layout-allow-overlap>
+          <span class="tl"><span class="tc big" id="s0-l1" style="font-size:150px">HOW TO FIND</span></span>
+          <span class="tl"><span class="tc" id="s0-l2" style="font-size:120px">FREE THINGS TO DO</span></span>
+          <span class="tl"><span class="tc" id="s0-l3" style="font-size:120px">WITH YOUR KIDS</span></span>
+        </div>
+        <div class="slabwrap" id="s0-slabwrap"><span class="slab" id="s0-slab"></span><span class="slabtx" id="s0-slabtx">a 3-step method</span></div>
+        <div class="title-sub mono" id="s0-sub">no ticket lines · no guesses</div>
+      </div>
+
+      <div id="s1" class="scene clip" data-start="13.00" data-duration="9.00" data-track-index="1">
+        <div class="pnl" id="s1-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">famhop · how-to guide</span></div>
+        <div class="foot mono">famhop.com</div>
+        <div class="secnum disp" id="s1-num">01</div>
+        <div class="kick mono" id="s1-kick">weekend planning</div>
+        <div class="sectitle disp" data-layout-allow-overlap>
+          <span class="tl"><span class="tc " id="s1-t1" style="font-size:110px">THE</span></span>
+          <span class="tl"><span class="tc " id="s1-t2" style="font-size:110px">PROBLEM</span></span>
+        </div>
+      </div>
+
+      <div id="s2" class="scene clip" data-start="22.00" data-duration="11.00" data-track-index="1">
+        <div class="pnl" id="s2-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">famhop · how-to guide</span></div>
+        <div class="foot mono">famhop.com</div>
+        <div class="paynum disp" data-layout-allow-overlap id="s2-num" style="font-size:320px">1,723</div>
+        <div class="paylabel disp" data-layout-allow-overlap id="s2-label">FREE EVENTS</div>
+        <div class="paysub mono" id="s2-sub">of 3,077 · checked from venues' calendars</div>
+      </div>
+
+      <div id="s3" class="scene clip" data-start="33.00" data-duration="9.00" data-track-index="1">
+        <div class="pnl" id="s3-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">famhop · how-to guide</span></div>
+        <div class="foot mono">famhop.com</div>
+        <div class="secnum disp" id="s3-num">02</div>
+        <div class="kick mono" id="s3-kick">why you can trust it</div>
+        <div class="sectitle disp" data-layout-allow-overlap>
+          <span class="tl"><span class="tc " id="s3-t1" style="font-size:110px">FREE IS</span></span>
+          <span class="tl"><span class="tc " id="s3-t2" style="font-size:110px">A FACT</span></span>
+        </div>
+      </div>
+
+      <div id="s4" class="scene clip" data-start="42.00" data-duration="14.00" data-track-index="1">
+        <div class="pnl" id="s4-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">famhop · how-to guide</span></div>
+        <div class="foot mono">famhop.com</div>
+        <div class="num disp" id="s4-num">01</div>
+        <div class="tag" id="s4-tag"><span class="cat mono" id="s4-cat">Library</span><span class="pill" id="s4-pill">free</span></div>
+        <img class="card-photo" id="s4-photo" src="assets/img/4.jpg" alt="" />
+        <div class="card-title disp img" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="s4-t1" style="font-size:100px">2nd</span></span>
+          <span class="tl"><span class="tc" id="s4-t2" style="font-size:100px">Saturday</span></span>
+          <span class="tl"><span class="tc" id="s4-t3" style="font-size:100px">Storytime</span></span>
+        </div>
+        <div class="rule" id="s4-rule"></div>
+        <div class="venue" id="s4-v" style="font-size:50px">Fairfield Civic Center Library - Children’s Area</div>
+        <div class="city mono" id="s4-c">Fairfield</div>
+        <div class="card-body">
+          <span class="bl" id="s4-b1" style="font-size:36px">Monthly Saturday Storytimes at the Fairfield Civic Center Library Join us every 2nd Saturday of the month for family storytime right in our children's area.…</span>
+        </div>
+        <div class="card-slab slabwrap" id="s4-slabwrap"><span class="slab" id="s4-slab"></span><span class="slabtx" id="s4-slabtx">every month</span></div>
+      </div>
+
+      <div id="s5" class="scene clip" data-start="56.00" data-duration="14.00" data-track-index="1">
+        <div class="pnl" id="s5-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">famhop · how-to guide</span></div>
+        <div class="foot mono">famhop.com</div>
+        <div class="num disp" id="s5-num">02</div>
+        <div class="tag" id="s5-tag"><span class="cat mono" id="s5-cat">Museum</span><span class="pill" id="s5-pill">free</span></div>
+        <img class="card-photo" id="s5-photo" src="assets/img/5.jpg" alt="" />
+        <div class="card-title disp img" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="s5-t1" style="font-size:76px">Friday Nights</span></span>
+          <span class="tl"><span class="tc" id="s5-t2" style="font-size:76px">at OMCA with</span></span>
+          <span class="tl"><span class="tc" id="s5-t3" style="font-size:76px">Ashley Mehta</span></span>
+        </div>
+        <div class="rule" id="s5-rule"></div>
+        <div class="venue" id="s5-v" style="font-size:50px">OMCA campus</div>
+        <div class="city mono" id="s5-c">Oakland</div>
+        <div class="card-body">
+          <span class="bl" id="s5-b1" style="font-size:44px">OMCA's free Friday Nights: live music,</span>
+          <span class="bl" id="s5-b2" style="font-size:44px">galleries, and the garden — every Friday</span>
+          <span class="bl" id="s5-b3" style="font-size:44px">evening.</span>
+        </div>
+        
+      </div>
+
+      <div id="s6" class="scene clip" data-start="70.00" data-duration="14.00" data-track-index="1">
+        <div class="pnl" id="s6-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">famhop · how-to guide</span></div>
+        <div class="foot mono">famhop.com</div>
+        <div class="num disp" id="s6-num">03</div>
+        <div class="tag" id="s6-tag"><span class="cat mono" id="s6-cat">Library</span><span class="pill" id="s6-pill">free</span></div>
+        <img class="card-photo" id="s6-photo" src="assets/img/6.jpg" alt="" />
+        <div class="card-title disp img" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="s6-t1" style="font-size:60px">Saturday Crafternoons: Ocean Creature Suncatchers</span></span>
+        </div>
+        <div class="rule" id="s6-rule"></div>
+        <div class="venue" id="s6-v" style="font-size:50px">American Canyon Library - Community Meeting Room</div>
+        <div class="city mono" id="s6-c">American Canyon</div>
+        <div class="card-body">
+          <span class="bl" id="s6-b1" style="font-size:36px">Summer is a great time for a trip to the ocean, so this month's edition of Saturday Crafternoons is bringing the ocean to you. Join us as we make beautiful…</span>
+        </div>
+        <div class="card-slab slabwrap" id="s6-slabwrap"><span class="slab" id="s6-slab"></span><span class="slabtx" id="s6-slabtx">every saturday</span></div>
+      </div>
+
+      <div id="s7" class="scene clip" data-start="84.00" data-duration="8.00" data-track-index="1">
+        <div class="pnl" id="s7-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">famhop · how-to guide</span></div>
+        <div class="foot mono">famhop.com</div>
+        <div class="secnum disp" id="s7-num">03</div>
+        <div class="kick mono" id="s7-kick">the method</div>
+        <div class="sectitle disp" data-layout-allow-overlap>
+          <span class="tl"><span class="tc " id="s7-t1" style="font-size:110px">THREE</span></span>
+          <span class="tl"><span class="tc " id="s7-t2" style="font-size:110px">STEPS</span></span>
+        </div>
+      </div>
+
+      <div id="s8" class="scene clip" data-start="92.00" data-duration="15.00" data-track-index="1">
+        <div class="pnl" id="s8-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">famhop · how-to guide</span></div>
+        <div class="foot mono">famhop.com</div>
+        <div class="disp list-head" data-layout-allow-overlap id="s8-head" style="font-size:96px">THREE STEPS</div>
+        <div class="rows">
+          <div class="row" id="s8-r1">
+            <span class="rownum disp" id="s8-n1">01</span>
+            <span class="rowtxt">
+              <span class="rowtx disp" id="s8-x1" style="font-size:64px">PICK A METRO</span>
+              <span class="rowsub mono" id="s8-u1">famhop.com — sixteen metros</span>
+            </span>
+          </div>
+          <div class="row" id="s8-r2">
+            <span class="rownum disp" id="s8-n2">02</span>
+            <span class="rowtxt">
+              <span class="rowtx disp" id="s8-x2" style="font-size:64px">FILTER TO FREE</span>
+              <span class="rowsub mono" id="s8-u2">1,723 in the bay area alone</span>
+            </span>
+          </div>
+          <div class="row" id="s8-r3">
+            <span class="rownum disp" id="s8-n3">03</span>
+            <span class="rowtxt">
+              <span class="rowtx disp" id="s8-x3" style="font-size:64px">NARROW BY AGE &amp; TIME</span>
+              <span class="rowsub mono" id="s8-u3">toddler · school-age · morning</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div id="s9" class="scene clip" data-start="107.00" data-duration="9.00" data-track-index="1">
+        <div class="pnl" id="s9-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">famhop · how-to guide</span></div>
+        <div class="foot mono">famhop.com</div>
+        <div class="secnum disp" id="s9-num">01</div>
+        <div class="kick mono" id="s9-kick">step one</div>
+        <div class="sectitle disp" data-layout-allow-overlap>
+          <span class="tl"><span class="tc " id="s9-t1" style="font-size:110px">PICK YOUR</span></span>
+          <span class="tl"><span class="tc " id="s9-t2" style="font-size:110px">METRO</span></span>
+        </div>
+      </div>
+
+      <div id="s10" class="scene clip" data-start="116.00" data-duration="11.00" data-track-index="1">
+        <div class="pnl" id="s10-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">famhop · how-to guide</span></div>
+        <div class="foot mono">famhop.com</div>
+        <div class="paynum disp" data-layout-allow-overlap id="s10-num" style="font-size:320px">16</div>
+        <div class="paylabel disp" data-layout-allow-overlap id="s10-label">METROS</div>
+        <div class="paysub mono" id="s10-sub">from honolulu to boston · one page each</div>
+      </div>
+
+      <div id="s11" class="scene clip" data-start="127.00" data-duration="9.00" data-track-index="1">
+        <div class="pnl" id="s11-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">famhop · how-to guide</span></div>
+        <div class="foot mono">famhop.com</div>
+        <div class="secnum disp" id="s11-num">02</div>
+        <div class="kick mono" id="s11-kick">step two</div>
+        <div class="sectitle disp" data-layout-allow-overlap>
+          <span class="tl"><span class="tc " id="s11-t1" style="font-size:110px">FILTER TO</span></span>
+          <span class="tl"><span class="tc " id="s11-t2" style="font-size:110px">FREE</span></span>
+        </div>
+      </div>
+
+      <div id="s12" class="scene clip" data-start="136.00" data-duration="11.00" data-track-index="1">
+        <div class="pnl" id="s12-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">famhop · how-to guide</span></div>
+        <div class="foot mono">famhop.com</div>
+        <div class="paynum disp" data-layout-allow-overlap id="s12-num" style="font-size:320px">853</div>
+        <div class="paylabel disp" data-layout-allow-overlap id="s12-label">FREE TODDLER EVENTS</div>
+        <div class="paysub mono" id="s12-sub">of 3,077 · checked from venues' calendars</div>
+      </div>
+
+      <div id="s13" class="scene clip" data-start="147.00" data-duration="9.00" data-track-index="1">
+        <div class="pnl" id="s13-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">famhop · how-to guide</span></div>
+        <div class="foot mono">famhop.com</div>
+        <div class="secnum disp" id="s13-num">03</div>
+        <div class="kick mono" id="s13-kick">step three</div>
+        <div class="sectitle disp" data-layout-allow-overlap>
+          <span class="tl"><span class="tc " id="s13-t1" style="font-size:110px">NARROW IT</span></span>
+          <span class="tl"><span class="tc " id="s13-t2" style="font-size:110px">DOWN</span></span>
+        </div>
+      </div>
+
+      <div id="s14" class="scene clip" data-start="156.00" data-duration="15.00" data-track-index="1">
+        <div class="pnl" id="s14-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">famhop · how-to guide</span></div>
+        <div class="foot mono">famhop.com</div>
+        <div class="disp list-head" data-layout-allow-overlap id="s14-head" style="font-size:96px">THREE WAYS TO NARROW</div>
+        <div class="rows">
+          <div class="row" id="s14-r1">
+            <span class="rownum disp" id="s14-n1">01</span>
+            <span class="rowtxt">
+              <span class="rowtx disp" id="s14-x1" style="font-size:64px">BY AGE</span>
+              <span class="rowsub mono" id="s14-u1">toddler · school-age · tween</span>
+            </span>
+          </div>
+          <div class="row" id="s14-r2">
+            <span class="rownum disp" id="s14-n2">02</span>
+            <span class="rowtxt">
+              <span class="rowtx disp" id="s14-x2" style="font-size:64px">BY COST</span>
+              <span class="rowsub mono" id="s14-u2">free · $ · $$</span>
+            </span>
+          </div>
+          <div class="row" id="s14-r3">
+            <span class="rownum disp" id="s14-n3">03</span>
+            <span class="rowtxt">
+              <span class="rowtx disp" id="s14-x3" style="font-size:64px">BY TIME OF DAY</span>
+              <span class="rowsub mono" id="s14-u3">morning · afternoon · evening</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div id="s15" class="scene clip" data-start="171.00" data-duration="9.00" data-track-index="1">
+        <div class="pnl" id="s15-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">famhop · how-to guide</span></div>
+        <div class="foot mono">famhop.com</div>
+        <div class="secnum disp" id="s15-num">04</div>
+        <div class="kick mono" id="s15-kick">the payoff</div>
+        <div class="sectitle disp" data-layout-allow-overlap>
+          <span class="tl"><span class="tc " id="s15-t1" style="font-size:110px">MAKE IT</span></span>
+          <span class="tl"><span class="tc " id="s15-t2" style="font-size:110px">A DAY</span></span>
+        </div>
+      </div>
+
+      <div id="s16" class="scene clip" data-start="180.00" data-duration="15.00" data-track-index="1">
+        <div class="pnl" id="s16-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">famhop · how-to guide</span></div>
+        <div class="foot mono">famhop.com</div>
+        <div class="num disp" id="s16-num">04</div>
+        <div class="tag" id="s16-tag"><span class="cat mono" id="s16-cat">ready-made plan</span></div>
+        <img class="card-photo" id="s16-photo" src="assets/img/16.jpg" alt="" />
+        <div class="card-title disp img" data-layout-allow-overlap>
+          <span class="tl"><span class="tc" id="s16-t1" style="font-size:60px">Palo Alto rainy-day: animals, art &amp; ice cream</span></span>
+        </div>
+        <div class="rule" id="s16-rule"></div>
+        <div class="venue" id="s16-v" style="font-size:50px">Bay Area</div>
+        
+        <div class="card-body">
+          <span class="bl" id="s16-b1" style="font-size:36px">An all-indoor Palo Alto day for drizzle or heat — real animals and hands-on exhibits at the Junior Museum &amp; Zoo, paint-your-own pottery at Color Me Mine,…</span>
+        </div>
+        <div class="card-slab slabwrap" id="s16-slabwrap"><span class="slab" id="s16-slab"></span><span class="slabtx" id="s16-slabtx">3 stops · one route</span></div>
+      </div>
+
+      <div id="s17" class="scene clip" data-start="195.00" data-duration="15.00" data-track-index="1">
+        <div class="pnl" id="s17-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">famhop · how-to guide</span></div>
+        <div class="foot mono">famhop.com</div>
+        <div class="disp list-head" data-layout-allow-overlap id="s17-head" style="font-size:96px">WHAT TO WATCH FOR</div>
+        <div class="rows">
+          <div class="row" id="s17-r1">
+            <span class="rownum disp" id="s17-n1">01</span>
+            <span class="rowtxt">
+              <span class="rowtx disp" id="s17-x1" style="font-size:64px">CHECK THE VENUE'S OWN CALENDAR</span>
+              <span class="rowsub mono" id="s17-u1">dates change — the venue is final</span>
+            </span>
+          </div>
+          <div class="row" id="s17-r2">
+            <span class="rownum disp" id="s17-n2">02</span>
+            <span class="rowtxt">
+              <span class="rowtx disp" id="s17-x2" style="font-size:64px">MORNINGS ARE QUIETER</span>
+              <span class="rowsub mono" id="s17-u2">before the crowds</span>
+            </span>
+          </div>
+          <div class="row" id="s17-r3">
+            <span class="rownum disp" id="s17-n3">03</span>
+            <span class="rowtxt">
+              <span class="rowtx disp" id="s17-x3" style="font-size:64px">RSVP WHEN THE LISTING ASKS</span>
+              <span class="rowsub mono" id="s17-u3">some events cap seats</span>
+            </span>
+          </div>
+          <div class="row" id="s17-r4">
+            <span class="rownum disp" id="s17-n4">04</span>
+            <span class="rowtxt">
+              <span class="rowtx disp" id="s17-x4" style="font-size:64px">KEEP A RAIN-DAY SWAP</span>
+              <span class="rowsub mono" id="s17-u4">a backup plan ready</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div id="s18" class="scene clip" data-start="210.00" data-duration="12.00" data-track-index="1">
+        <div class="pnl" id="s18-pnl"></div>
+        <div class="chrome mono"><span class="mark"><i></i>famhop</span><span class="r">famhop · how-to guide</span></div>
+        <div class="foot mono">famhop.com</div>
+        <div class="ctakick disp" data-layout-allow-overlap>
+          <span class="tl"><span class="tc big" id="s18-k1" style="font-size:132px">PLAN IT</span></span>
+          <span class="tl"><span class="tc big" id="s18-k2" style="font-size:132px">FREE</span></span>
+        </div>
+        <div class="ctamark disp" id="s18-mark"><i></i>famhop</div>
+        <div class="slabwrap ctaurl" id="s18-urlwrap">
+          <span class="slab" id="s18-url"></span>
+          <span class="ctaurltx" id="s18-urltx" style="font-size:46px">famhop.com</span>
+        </div>
+        <div class="ctanews mono" id="s18-news">16 metros · 5 picks by email every friday</div>
+      </div>
+
+      <!-- narration timed to fixed windows; never re-time frames from voice length -->
+      <audio id="vo1" src="assets/voice/1.mp3" data-start="0.35" data-duration="7.76" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo2" src="assets/voice/2.mp3" data-start="13.35" data-duration="4.04" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo3" src="assets/voice/3.mp3" data-start="22.35" data-duration="3.76" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo4" src="assets/voice/4.mp3" data-start="33.35" data-duration="4.83" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo5" src="assets/voice/5.mp3" data-start="42.35" data-duration="4.92" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo6" src="assets/voice/6.mp3" data-start="56.35" data-duration="4.92" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo7" src="assets/voice/7.mp3" data-start="70.35" data-duration="5.06" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo8" src="assets/voice/8.mp3" data-start="84.35" data-duration="1.63" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo9" src="assets/voice/9.mp3" data-start="92.35" data-duration="7.99" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo10" src="assets/voice/10.mp3" data-start="107.35" data-duration="4.37" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo11" src="assets/voice/11.mp3" data-start="116.35" data-duration="3.67" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo12" src="assets/voice/12.mp3" data-start="127.35" data-duration="3.11" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo13" src="assets/voice/13.mp3" data-start="136.35" data-duration="4.74" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo14" src="assets/voice/14.mp3" data-start="147.35" data-duration="4.88" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo15" src="assets/voice/15.mp3" data-start="156.35" data-duration="4.97" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo16" src="assets/voice/16.mp3" data-start="171.35" data-duration="2.69" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo17" src="assets/voice/17.mp3" data-start="180.35" data-duration="7.06" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo18" src="assets/voice/18.mp3" data-start="195.35" data-duration="7.06" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo19" src="assets/voice/19.mp3" data-start="210.35" data-duration="3.85" data-track-index="10" data-volume="1"></audio>
+      <audio id="bgm" src="assets/bgm/loop-222.00.mp3" data-start="0" data-duration="222.00" data-track-index="11" data-volume="0.14"></audio>
+    </div>
+
+    <script>
+      (function () {
+        var tl = gsap.timeline({ paused: true });
+        /* Full-span anchor so the master duration equals the composition total. */
+        tl.to({}, { duration: 222.00 }, 0);
+
+        /* scene 1 — title @ 0.00 */
+        tl.fromTo('#s0-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.34, ease: 'power3.out' }, 0.00);
+        tl.fromTo('#s0-l1', { opacity: 0, y: 70, scale: 0.86 }, { opacity: 1, y: 0, scale: 1, duration: 0.42, ease: 'power4.out' }, 0.16);
+        tl.fromTo('#s0-l2', { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 0.66);
+        tl.fromTo('#s0-l3', { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 0.80);
+        tl.fromTo('#s0-slab', { scaleX: 0 }, { scaleX: 1, duration: 0.38, ease: 'power3.out' }, 1.10);
+        tl.fromTo('#s0-slabtx', { opacity: 0 }, { opacity: 1, duration: 0.01 }, 1.40);
+        tl.fromTo('#s0-sub', { opacity: 0, x: -36 }, { opacity: 1, x: 0, duration: 0.44, ease: 'power3.out' }, 1.56);
+
+        /* scene 2 — section @ 13.00 */
+        tl.fromTo('#s1-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.32, ease: 'power3.out' }, 13.00);
+        tl.fromTo('#s1-num', { opacity: 0, y: 64, scale: 0.78 }, { opacity: 1, y: 0, scale: 1, duration: 0.34, ease: 'back.out(2.2)' }, 13.14);
+        tl.fromTo('#s1-kick', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, 13.26);
+        tl.fromTo('#s1-t1', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 13.44);
+        tl.fromTo('#s1-t2', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 13.57);
+
+        /* scene 3 — stat @ 22.00 */
+        tl.fromTo('#s2-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.32, ease: 'power3.out' }, 22.00);
+        tl.fromTo('#s2-num', { opacity: 0, y: 50, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.38, ease: 'back.out(2.4)' }, 22.18);
+        tl.fromTo('#s2-label', { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.36, ease: 'expo.out' }, 22.46);
+        tl.fromTo('#s2-sub', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.38, ease: 'power3.out' }, 22.66);
+
+        /* scene 4 — section @ 33.00 */
+        tl.fromTo('#s3-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.32, ease: 'power3.out' }, 33.00);
+        tl.fromTo('#s3-num', { opacity: 0, y: 64, scale: 0.78 }, { opacity: 1, y: 0, scale: 1, duration: 0.34, ease: 'back.out(2.2)' }, 33.14);
+        tl.fromTo('#s3-kick', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, 33.26);
+        tl.fromTo('#s3-t1', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 33.44);
+        tl.fromTo('#s3-t2', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 33.57);
+
+        /* scene 5 — card @ 42.00 */
+        tl.fromTo('#s4-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.30, ease: 'power3.out' }, 42.00);
+        tl.fromTo('#s4-num', { opacity: 0, y: 64, scale: 0.78 }, { opacity: 1, y: 0, scale: 1, duration: 0.26, ease: 'power4.out' }, 42.14);
+        tl.fromTo('#s4-photo', { scaleY: 0, opacity: 0 }, { scaleY: 1, opacity: 1, duration: 0.50, ease: 'power3.out' }, 42.50);
+        tl.fromTo('#s4-tag', { opacity: 0, scale: 0.72 }, { opacity: 1, scale: 1, duration: 0.30, ease: 'back.out(2.2)' }, 42.22);
+        tl.fromTo('#s4-t1', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.42, ease: 'expo.out' }, 42.32);
+        tl.fromTo('#s4-t2', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.42, ease: 'expo.out' }, 42.45);
+        tl.fromTo('#s4-t3', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.42, ease: 'expo.out' }, 42.58);
+        tl.fromTo('#s4-rule', { scaleX: 0 }, { scaleX: 1, duration: 0.40, ease: 'power3.out' }, 42.80);
+        tl.fromTo('#s4-v', { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, 42.92);
+        tl.fromTo('#s4-c', { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, 43.02);
+        tl.fromTo('#s4-b1', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.38, ease: 'power3.out' }, 43.30);
+        tl.fromTo('#s4-slab', { scaleX: 0 }, { scaleX: 1, duration: 0.34, ease: 'power3.out' }, 43.18);
+        tl.fromTo('#s4-slabtx', { opacity: 0 }, { opacity: 1, duration: 0.01 }, 43.46);
+
+        /* scene 6 — card @ 56.00 */
+        tl.fromTo('#s5-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.30, ease: 'power3.out' }, 56.00);
+        tl.fromTo('#s5-num', { opacity: 0, y: 64, scale: 0.78 }, { opacity: 1, y: 0, scale: 1, duration: 0.26, ease: 'power4.out' }, 56.14);
+        tl.fromTo('#s5-photo', { scaleY: 0, opacity: 0 }, { scaleY: 1, opacity: 1, duration: 0.50, ease: 'power3.out' }, 56.50);
+        tl.fromTo('#s5-tag', { opacity: 0, scale: 0.72 }, { opacity: 1, scale: 1, duration: 0.30, ease: 'back.out(2.2)' }, 56.22);
+        tl.fromTo('#s5-t1', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.42, ease: 'expo.out' }, 56.32);
+        tl.fromTo('#s5-t2', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.42, ease: 'expo.out' }, 56.45);
+        tl.fromTo('#s5-t3', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.42, ease: 'expo.out' }, 56.58);
+        tl.fromTo('#s5-rule', { scaleX: 0 }, { scaleX: 1, duration: 0.40, ease: 'power3.out' }, 56.80);
+        tl.fromTo('#s5-v', { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, 56.92);
+        tl.fromTo('#s5-c', { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, 57.02);
+        tl.fromTo('#s5-b1', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.38, ease: 'power3.out' }, 57.30);
+        tl.fromTo('#s5-b2', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.38, ease: 'power3.out' }, 57.42);
+        tl.fromTo('#s5-b3', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.38, ease: 'power3.out' }, 57.54);
+
+        /* scene 7 — card @ 70.00 */
+        tl.fromTo('#s6-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.30, ease: 'power3.out' }, 70.00);
+        tl.fromTo('#s6-num', { opacity: 0, y: 64, scale: 0.78 }, { opacity: 1, y: 0, scale: 1, duration: 0.26, ease: 'power4.out' }, 70.14);
+        tl.fromTo('#s6-photo', { scaleY: 0, opacity: 0 }, { scaleY: 1, opacity: 1, duration: 0.50, ease: 'power3.out' }, 70.50);
+        tl.fromTo('#s6-tag', { opacity: 0, scale: 0.72 }, { opacity: 1, scale: 1, duration: 0.30, ease: 'back.out(2.2)' }, 70.22);
+        tl.fromTo('#s6-t1', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.42, ease: 'expo.out' }, 70.32);
+        tl.fromTo('#s6-rule', { scaleX: 0 }, { scaleX: 1, duration: 0.40, ease: 'power3.out' }, 70.80);
+        tl.fromTo('#s6-v', { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, 70.92);
+        tl.fromTo('#s6-c', { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, 71.02);
+        tl.fromTo('#s6-b1', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.38, ease: 'power3.out' }, 71.30);
+        tl.fromTo('#s6-slab', { scaleX: 0 }, { scaleX: 1, duration: 0.34, ease: 'power3.out' }, 71.18);
+        tl.fromTo('#s6-slabtx', { opacity: 0 }, { opacity: 1, duration: 0.01 }, 71.46);
+
+        /* scene 8 — section @ 84.00 */
+        tl.fromTo('#s7-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.32, ease: 'power3.out' }, 84.00);
+        tl.fromTo('#s7-num', { opacity: 0, y: 64, scale: 0.78 }, { opacity: 1, y: 0, scale: 1, duration: 0.34, ease: 'back.out(2.2)' }, 84.14);
+        tl.fromTo('#s7-kick', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, 84.26);
+        tl.fromTo('#s7-t1', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 84.44);
+        tl.fromTo('#s7-t2', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 84.57);
+
+        /* scene 9 — list @ 92.00 */
+        tl.fromTo('#s8-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.30, ease: 'power3.out' }, 92.00);
+        tl.fromTo('#s8-head', { opacity: 0, y: 48 }, { opacity: 1, y: 0, duration: 0.40, ease: 'power4.out' }, 92.16);
+        tl.fromTo('#s8-r1', { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.30, ease: 'power2.out' }, 92.45);
+        tl.fromTo('#s8-n1', { scale: 0.4 }, { scale: 1, duration: 0.32, ease: 'back.out(2.6)' }, 92.53);
+        tl.fromTo('#s8-x1', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.34, ease: 'expo.out' }, 92.63);
+        tl.fromTo('#s8-u1', { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.32, ease: 'power3.out' }, 92.77);
+        tl.fromTo('#s8-r2', { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.30, ease: 'power2.out' }, 93.35);
+        tl.fromTo('#s8-n2', { scale: 0.4 }, { scale: 1, duration: 0.32, ease: 'back.out(2.6)' }, 93.43);
+        tl.fromTo('#s8-x2', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.34, ease: 'expo.out' }, 93.53);
+        tl.fromTo('#s8-u2', { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.32, ease: 'power3.out' }, 93.67);
+        tl.fromTo('#s8-r3', { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.30, ease: 'power2.out' }, 94.25);
+        tl.fromTo('#s8-n3', { scale: 0.4 }, { scale: 1, duration: 0.32, ease: 'back.out(2.6)' }, 94.33);
+        tl.fromTo('#s8-x3', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.34, ease: 'expo.out' }, 94.43);
+        tl.fromTo('#s8-u3', { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.32, ease: 'power3.out' }, 94.57);
+
+        /* scene 10 — section @ 107.00 */
+        tl.fromTo('#s9-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.32, ease: 'power3.out' }, 107.00);
+        tl.fromTo('#s9-num', { opacity: 0, y: 64, scale: 0.78 }, { opacity: 1, y: 0, scale: 1, duration: 0.34, ease: 'back.out(2.2)' }, 107.14);
+        tl.fromTo('#s9-kick', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, 107.26);
+        tl.fromTo('#s9-t1', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 107.44);
+        tl.fromTo('#s9-t2', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 107.57);
+
+        /* scene 11 — stat @ 116.00 */
+        tl.fromTo('#s10-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.32, ease: 'power3.out' }, 116.00);
+        tl.fromTo('#s10-num', { opacity: 0, y: 50, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.38, ease: 'back.out(2.4)' }, 116.18);
+        tl.fromTo('#s10-label', { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.36, ease: 'expo.out' }, 116.46);
+        tl.fromTo('#s10-sub', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.38, ease: 'power3.out' }, 116.66);
+
+        /* scene 12 — section @ 127.00 */
+        tl.fromTo('#s11-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.32, ease: 'power3.out' }, 127.00);
+        tl.fromTo('#s11-num', { opacity: 0, y: 64, scale: 0.78 }, { opacity: 1, y: 0, scale: 1, duration: 0.34, ease: 'back.out(2.2)' }, 127.14);
+        tl.fromTo('#s11-kick', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, 127.26);
+        tl.fromTo('#s11-t1', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 127.44);
+        tl.fromTo('#s11-t2', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 127.57);
+
+        /* scene 13 — stat @ 136.00 */
+        tl.fromTo('#s12-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.32, ease: 'power3.out' }, 136.00);
+        tl.fromTo('#s12-num', { opacity: 0, y: 50, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.38, ease: 'back.out(2.4)' }, 136.18);
+        tl.fromTo('#s12-label', { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.36, ease: 'expo.out' }, 136.46);
+        tl.fromTo('#s12-sub', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.38, ease: 'power3.out' }, 136.66);
+
+        /* scene 14 — section @ 147.00 */
+        tl.fromTo('#s13-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.32, ease: 'power3.out' }, 147.00);
+        tl.fromTo('#s13-num', { opacity: 0, y: 64, scale: 0.78 }, { opacity: 1, y: 0, scale: 1, duration: 0.34, ease: 'back.out(2.2)' }, 147.14);
+        tl.fromTo('#s13-kick', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, 147.26);
+        tl.fromTo('#s13-t1', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 147.44);
+        tl.fromTo('#s13-t2', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 147.57);
+
+        /* scene 15 — list @ 156.00 */
+        tl.fromTo('#s14-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.30, ease: 'power3.out' }, 156.00);
+        tl.fromTo('#s14-head', { opacity: 0, y: 48 }, { opacity: 1, y: 0, duration: 0.40, ease: 'power4.out' }, 156.16);
+        tl.fromTo('#s14-r1', { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.30, ease: 'power2.out' }, 156.45);
+        tl.fromTo('#s14-n1', { scale: 0.4 }, { scale: 1, duration: 0.32, ease: 'back.out(2.6)' }, 156.53);
+        tl.fromTo('#s14-x1', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.34, ease: 'expo.out' }, 156.63);
+        tl.fromTo('#s14-u1', { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.32, ease: 'power3.out' }, 156.77);
+        tl.fromTo('#s14-r2', { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.30, ease: 'power2.out' }, 157.35);
+        tl.fromTo('#s14-n2', { scale: 0.4 }, { scale: 1, duration: 0.32, ease: 'back.out(2.6)' }, 157.43);
+        tl.fromTo('#s14-x2', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.34, ease: 'expo.out' }, 157.53);
+        tl.fromTo('#s14-u2', { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.32, ease: 'power3.out' }, 157.67);
+        tl.fromTo('#s14-r3', { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.30, ease: 'power2.out' }, 158.25);
+        tl.fromTo('#s14-n3', { scale: 0.4 }, { scale: 1, duration: 0.32, ease: 'back.out(2.6)' }, 158.33);
+        tl.fromTo('#s14-x3', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.34, ease: 'expo.out' }, 158.43);
+        tl.fromTo('#s14-u3', { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.32, ease: 'power3.out' }, 158.57);
+
+        /* scene 16 — section @ 171.00 */
+        tl.fromTo('#s15-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.32, ease: 'power3.out' }, 171.00);
+        tl.fromTo('#s15-num', { opacity: 0, y: 64, scale: 0.78 }, { opacity: 1, y: 0, scale: 1, duration: 0.34, ease: 'back.out(2.2)' }, 171.14);
+        tl.fromTo('#s15-kick', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, 171.26);
+        tl.fromTo('#s15-t1', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 171.44);
+        tl.fromTo('#s15-t2', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 171.57);
+
+        /* scene 17 — card @ 180.00 */
+        tl.fromTo('#s16-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.30, ease: 'power3.out' }, 180.00);
+        tl.fromTo('#s16-num', { opacity: 0, y: 64, scale: 0.78 }, { opacity: 1, y: 0, scale: 1, duration: 0.26, ease: 'power4.out' }, 180.14);
+        tl.fromTo('#s16-photo', { scaleY: 0, opacity: 0 }, { scaleY: 1, opacity: 1, duration: 0.50, ease: 'power3.out' }, 180.50);
+        tl.fromTo('#s16-tag', { opacity: 0, scale: 0.72 }, { opacity: 1, scale: 1, duration: 0.30, ease: 'back.out(2.2)' }, 180.22);
+        tl.fromTo('#s16-t1', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.42, ease: 'expo.out' }, 180.32);
+        tl.fromTo('#s16-rule', { scaleX: 0 }, { scaleX: 1, duration: 0.40, ease: 'power3.out' }, 180.80);
+        tl.fromTo('#s16-v', { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.36, ease: 'power3.out' }, 180.92);
+        tl.fromTo('#s16-b1', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.38, ease: 'power3.out' }, 181.30);
+        tl.fromTo('#s16-slab', { scaleX: 0 }, { scaleX: 1, duration: 0.34, ease: 'power3.out' }, 181.18);
+        tl.fromTo('#s16-slabtx', { opacity: 0 }, { opacity: 1, duration: 0.01 }, 181.46);
+
+        /* scene 18 — list @ 195.00 */
+        tl.fromTo('#s17-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.30, ease: 'power3.out' }, 195.00);
+        tl.fromTo('#s17-head', { opacity: 0, y: 48 }, { opacity: 1, y: 0, duration: 0.40, ease: 'power4.out' }, 195.16);
+        tl.fromTo('#s17-r1', { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.30, ease: 'power2.out' }, 195.45);
+        tl.fromTo('#s17-n1', { scale: 0.4 }, { scale: 1, duration: 0.32, ease: 'back.out(2.6)' }, 195.53);
+        tl.fromTo('#s17-x1', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.34, ease: 'expo.out' }, 195.63);
+        tl.fromTo('#s17-u1', { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.32, ease: 'power3.out' }, 195.77);
+        tl.fromTo('#s17-r2', { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.30, ease: 'power2.out' }, 196.35);
+        tl.fromTo('#s17-n2', { scale: 0.4 }, { scale: 1, duration: 0.32, ease: 'back.out(2.6)' }, 196.43);
+        tl.fromTo('#s17-x2', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.34, ease: 'expo.out' }, 196.53);
+        tl.fromTo('#s17-u2', { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.32, ease: 'power3.out' }, 196.67);
+        tl.fromTo('#s17-r3', { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.30, ease: 'power2.out' }, 197.25);
+        tl.fromTo('#s17-n3', { scale: 0.4 }, { scale: 1, duration: 0.32, ease: 'back.out(2.6)' }, 197.33);
+        tl.fromTo('#s17-x3', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.34, ease: 'expo.out' }, 197.43);
+        tl.fromTo('#s17-u3', { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.32, ease: 'power3.out' }, 197.57);
+        tl.fromTo('#s17-r4', { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.30, ease: 'power2.out' }, 198.15);
+        tl.fromTo('#s17-n4', { scale: 0.4 }, { scale: 1, duration: 0.32, ease: 'back.out(2.6)' }, 198.23);
+        tl.fromTo('#s17-x4', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.34, ease: 'expo.out' }, 198.33);
+        tl.fromTo('#s17-u4', { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.32, ease: 'power3.out' }, 198.47);
+
+        /* scene 19 — cta @ 210.00 */
+        tl.fromTo('#s18-pnl', { scaleY: 0 }, { scaleY: 1, duration: 0.34, ease: 'power3.out' }, 210.00);
+        tl.fromTo('#s18-k1', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.40, ease: 'expo.out' }, 210.16);
+        tl.fromTo('#s18-k2', { opacity: 0, y: 60, scale: 0.86 }, { opacity: 1, y: 0, scale: 1, duration: 0.42, ease: 'power4.out' }, 210.32);
+        tl.fromTo('#s18-mark', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.42, ease: 'power4.out' }, 210.86);
+        tl.fromTo('#s18-url', { scaleX: 0 }, { scaleX: 1, duration: 0.40, ease: 'power3.out' }, 211.18);
+        tl.fromTo('#s18-urltx', { opacity: 0 }, { opacity: 1, duration: 0.01 }, 211.50);
+        tl.fromTo('#s18-news', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.38, ease: 'power3.out' }, 211.74);
+
+        window.__timelines = window.__timelines || {};
+        window.__timelines['main'] = tl;
+      })();
+    </script>
+  </body>
+</html>

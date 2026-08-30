@@ -20,7 +20,7 @@ const metro: MetroConfig = {
 };
 
 // Same upcomingWeekend math as the view — the dataset must name the weekend
-// the feed is currently showing for the section to appear.
+// the feed is currently showing for the picks to apply.
 function upcomingWeekend() {
   const now = new Date();
   const dow = now.getDay();
@@ -89,8 +89,8 @@ function dataset(picks: PopularEventsDataset["picks"]): PopularEventsDataset {
   };
 }
 
-describe("WeekendView popular section", () => {
-  it("renders the ranked popular section with chips when picks match the weekend", () => {
+describe("WeekendView popular picks in the briefing", () => {
+  it("makes the rank-1 pick the headliner and ranks the rest in the best-of", () => {
     const events = [makeEvent("b", SUN, 15), makeEvent("a", SUN, 16)];
     render(
       <WeekendView
@@ -102,20 +102,18 @@ describe("WeekendView popular section", () => {
         ])}
       />,
     );
-    expect(screen.getByText("Popular this weekend")).toBeInTheDocument();
-    // Rank order: the rank-1 pick's title appears before rank-2's.
-    const section = screen.getByLabelText("Popular this weekend");
-    expect(section.textContent?.indexOf("Event a")).toBeGreaterThan(-1);
-    expect(section.textContent!.indexOf("Event a")).toBeLessThan(
-      section.textContent!.indexOf("Event b"),
-    );
-    // Chips on the popular cards.
-    expect(section.querySelectorAll(".weekend-chip-popular").length).toBe(2);
-    // Rank badges 1, 2.
-    expect(section.querySelector(".weekend-popular-list li::before")).toBeDefined();
+    // Rank-1 pick is the single headliner.
+    const headliner = screen.getByLabelText("The one to plan around");
+    expect(headliner.textContent).toContain("Event a");
+    expect(headliner.textContent).not.toContain("Event b");
+    // Rank-2 pick leads the best-of list with a Popular chip + rank badge.
+    const bestOf = screen.getByLabelText("Best of the weekend");
+    expect(bestOf.textContent).toContain("Event b");
+    expect(bestOf.querySelectorAll(".weekend-chip-popular").length).toBe(1);
+    expect(bestOf.querySelector(".weekend-ranked-list")).not.toBeNull();
   });
 
-  it("hides the section for a stale dataset (different weekend)", () => {
+  it("shows no popular chips for a stale dataset (different weekend)", () => {
     const events = [makeEvent("b", SAT)];
     render(
       <WeekendView
@@ -124,11 +122,12 @@ describe("WeekendView popular section", () => {
         popularPicks={{ ...dataset([]), weekendStart: "2020-01-04", picks: [{ eventId: "b", rank: 1 }] }}
       />,
     );
-    expect(screen.queryByText("Popular this weekend")).not.toBeInTheDocument();
+    expect(document.querySelectorAll(".weekend-chip-popular").length).toBe(0);
   });
 
-  it("hides the section when picks reference unknown ids", () => {
-    const events = [makeEvent("b", SAT)];
+  it("shows no popular chips when picks reference unknown ids", () => {
+    // Sunday evening hours keep both events upcoming on any run day.
+    const events = [makeEvent("b", SUN, 17), makeEvent("c", SUN, 18)];
     render(
       <WeekendView
         {...baseProps}
@@ -136,6 +135,8 @@ describe("WeekendView popular section", () => {
         popularPicks={dataset([{ eventId: "ghost", rank: 1 }])}
       />,
     );
-    expect(screen.queryByText("Popular this weekend")).not.toBeInTheDocument();
+    expect(document.querySelectorAll(".weekend-chip-popular").length).toBe(0);
+    // The briefing still renders the weekend's real events.
+    expect(screen.getByLabelText("Best of the weekend")).toBeInTheDocument();
   });
 });

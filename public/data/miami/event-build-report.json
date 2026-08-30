@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "miami",
-  "generatedAt": "2026-08-12T18:33:25.237Z",
+  "generatedAt": "2026-08-30T17:47:13.699Z",
   "registryPath": "data/event-sources-miami.json",
   "outputPath": "public/data/miami/events.json",
-  "eventCount": 1393,
-  "adultsEventCount": 64,
+  "eventCount": 1490,
+  "adultsEventCount": 61,
   "sourceCount": 21,
-  "liveEventCount": 1419,
-  "lastKnownGoodEventCount": 0,
+  "liveEventCount": 1481,
+  "lastKnownGoodEventCount": 13,
   "fallbackEventCount": 8,
-  "operatorAlertCount": 10,
+  "operatorAlertCount": 12,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:33:25.237Z",
+      "fetchedAt": "2026-08-30T17:47:13.699Z",
       "fetches": [
         {
           "url": "https://mdpls.libnet.info/events",
@@ -52,7 +52,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:33:25.237Z",
+      "fetchedAt": "2026-08-30T17:47:13.699Z",
       "fetches": [
         {
           "url": "https://www.fairexpo.com/",
@@ -77,10 +77,41 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:33:25.237Z",
+      "fetchedAt": "2026-08-30T17:47:13.699Z",
       "fetches": [
         {
           "url": "https://www.southfloridafair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "miami",
+      "sourceId": "miami-north-miami-beach-civic",
+      "sourceName": "North Miami Beach City Calendar",
+      "sourceType": "civicpluscal",
+      "url": "https://www.citynmb.com/calendar.aspx?view=list&CID=14",
+      "status": "ok-last-known-good",
+      "issueType": "zero-extracted",
+      "reason": "source produced no live events; using last-known-good future events",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-08-30T17:47:13.699Z",
+      "fetches": [
+        {
+          "url": "https://www.citynmb.com/calendar.aspx?view=list&CID=14",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        },
+        {
+          "url": "https://www.citynmb.com/calendar.aspx?view=list&CID=14&month=9&year=2026",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -102,10 +133,35 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:33:25.237Z",
+      "fetchedAt": "2026-08-30T17:47:13.699Z",
       "fetches": [
         {
           "url": "https://www.thechildrenstrust.org/events/family-expo-miami-2026/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "miami",
+      "sourceId": "e11even-miami",
+      "sourceName": "E11EVEN Miami",
+      "sourceType": "html",
+      "url": "https://11miami.com/events",
+      "status": "ok-last-known-good",
+      "issueType": "zero-extracted",
+      "reason": "source produced no live events; using last-known-good future events",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 12,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 12,
+      "fetchedAt": "2026-08-30T17:47:13.699Z",
+      "fetches": [
+        {
+          "url": "https://11miami.com/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -127,7 +183,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:33:25.237Z",
+      "fetchedAt": "2026-08-30T17:47:13.699Z",
       "fetches": [
         {
           "url": "https://clubspace.com/events",
@@ -152,7 +208,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:33:25.237Z",
+      "fetchedAt": "2026-08-30T17:47:13.699Z",
       "fetches": [
         {
           "url": "https://thegroundmiami.com/events",
@@ -177,7 +233,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:33:25.237Z",
+      "fetchedAt": "2026-08-30T17:47:13.699Z",
       "fetches": [
         {
           "url": "https://www.grframps.com/calendar",
@@ -201,7 +257,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:33:25.237Z",
+      "fetchedAt": "2026-08-30T17:47:13.699Z",
       "fetches": [
         {
           "url": "https://www.oasiswynwood.com/events",
@@ -226,7 +282,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:33:25.237Z",
+      "fetchedAt": "2026-08-30T17:47:13.699Z",
       "fetches": [
         {
           "url": "https://www.lasrosasbar.com/events",
@@ -251,7 +307,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-12T18:33:25.237Z",
+      "fetchedAt": "2026-08-30T17:47:13.699Z",
       "fetches": [
         {
           "url": "https://www.miamiimprov.com/calendar",
@@ -310,9 +366,9 @@
       "metroId": "miami",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 9,
+      "liveEvents": 6,
       "fallbackEvents": 0,
-      "eventCount": 9,
+      "eventCount": 6,
       "fetches": [
         {
           "url": "https://www.miamidade.gov/global/calendar/global.page?calendarName=Parks",
@@ -324,7 +380,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 9,
+      "extractedEvents": 6,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -337,21 +393,21 @@
       "metroId": "miami",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 8,
+      "liveEvents": 7,
       "fallbackEvents": 0,
-      "eventCount": 8,
+      "eventCount": 7,
       "fetches": [
         {
           "url": "https://www.frostscience.org/calendar-events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=26; pages=1"
+          "contentType": "application/json; source=tribe-events; events=23; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=26; pages=1",
-      "rejectedLiveEvents": 18,
-      "extractedEvents": 26,
+      "contentType": "application/json; source=tribe-events; events=23; pages=1",
+      "rejectedLiveEvents": 16,
+      "extractedEvents": 23,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -364,9 +420,9 @@
       "metroId": "miami",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://www.zoomiami.org/",
@@ -377,7 +433,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 11,
+      "rejectedLiveEvents": 9,
       "extractedEvents": 12,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -390,24 +446,11 @@
       "city": "Miami",
       "metroId": "miami",
       "category": "Ticketed",
-      "status": "ok",
-      "liveEvents": 100,
+      "status": "disabled",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 100,
-      "fetches": [
-        {
-          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=100; queries=1"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "application/json; source=ticketmaster; events=100; queries=1",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 100,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "eventCount": 0,
+      "fetches": []
     },
     {
       "id": "miami-dade-youth-fair",
@@ -472,21 +515,21 @@
       "metroId": "miami",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 1060,
+      "liveEvents": 1247,
       "fallbackEvents": 0,
-      "eventCount": 1060,
+      "eventCount": 1247,
       "fetches": [
         {
           "url": "https://broward.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=2394; locations=40"
+          "contentType": "application/json; source=communico-events; events=2496; locations=40"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=2394; locations=40",
-      "rejectedLiveEvents": 36,
-      "extractedEvents": 1096,
+      "contentType": "application/json; source=communico-events; events=2496; locations=40",
+      "rejectedLiveEvents": 30,
+      "extractedEvents": 1277,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -526,21 +569,21 @@
       "metroId": "miami",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 4,
+      "liveEvents": 6,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 6,
       "fetches": [
         {
           "url": "http://coralgablesmuseum.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=4; pages=1"
+          "contentType": "application/json; source=tribe-events; events=6; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=4; pages=1",
+      "contentType": "application/json; source=tribe-events; events=6; pages=1",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 4,
+      "extractedEvents": 6,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -553,21 +596,21 @@
       "metroId": "miami",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 7,
+      "liveEvents": 16,
       "fallbackEvents": 0,
-      "eventCount": 7,
+      "eventCount": 16,
       "fetches": [
         {
           "url": "https://miamibeachbandshell.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=32; pages=1"
+          "contentType": "application/json; source=tribe-events; events=33; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=32; pages=1",
-      "rejectedLiveEvents": 25,
-      "extractedEvents": 32,
+      "contentType": "application/json; source=tribe-events; events=33; pages=1",
+      "rejectedLiveEvents": 17,
+      "extractedEvents": 33,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -579,8 +622,8 @@
       "city": "North Miami Beach",
       "metroId": "miami",
       "category": "Community",
-      "status": "ok",
-      "liveEvents": 1,
+      "status": "ok-last-known-good",
+      "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 1,
       "fetches": [
@@ -600,9 +643,10 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "recoveryMode": "last-known-good",
+      "reason": "source produced no live events; using last-known-good future events"
     },
     {
       "id": "childrens-trust-family-expo-2026-08-01-src",
@@ -639,10 +683,10 @@
       "city": "Miami",
       "metroId": "miami",
       "category": "Music",
-      "status": "ok",
-      "liveEvents": 33,
+      "status": "ok-last-known-good",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 33,
+      "eventCount": 12,
       "fetches": [
         {
           "url": "https://11miami.com/events",
@@ -653,10 +697,11 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 48,
-      "extractedEvents": 81,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 12,
+      "recoveryMode": "last-known-good",
+      "reason": "source produced no live events; using last-known-good future events"
     },
     {
       "id": "space-miami",

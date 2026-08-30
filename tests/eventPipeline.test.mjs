@@ -1263,6 +1263,45 @@ test("extractOfficialTextEvents expands verified weekly recurring events on conf
   assert.equal(events[0].extractionMethod, "official-recurring-event");
 });
 
+test("extractOfficialTextEvents honors recurrence.after so seasonal runs do not emit before opening day", () => {
+  // A pumpkin patch publishes its 2026 season dates in August, but the run
+  // starts September 12 — expansion must not mint August/early-September
+  // events for a patch that is not open yet.
+  const html = `
+    <main>
+      <p>Irvine Pumpkin Patch 2026 — September 12th through November 1st.</p>
+    </main>
+  `;
+
+  const events = extractOfficialTextEvents(html, {
+    id: "tanaka-pumpkin",
+    name: "Tanaka Farms",
+    url: "https://tanakafarms.com/pages/the-tanaka-pumpkin",
+    city: "Irvine",
+    category: "Festival",
+    officialRecurringEvents: [
+      {
+        id: "tanaka-pumpkin-2026",
+        title: "Tanaka Farms Pumpkin Patch",
+        venue: "Tanaka Farms",
+        startTime: "09:00",
+        endTime: "18:00",
+        ageBands: ["toddler", "preschool", "school-age", "tween"],
+        requiredText: ["Pumpkin Patch 2026", "September 12th"],
+        recurrence: { frequency: "daily", after: "2026-09-12", until: "2026-11-01" },
+      },
+    ],
+  }, { now: new Date("2026-08-30T12:00:00Z"), windowDays: 45 });
+
+  // Window: Aug 30 → Oct 14. after=Sep 12 delays the first event; nothing
+  // before opening day, daily from then through the window end.
+  assert.ok(events.length > 0);
+  assert.equal(events[0].startDateTime.slice(0, 10), "2026-09-12");
+  assert.ok(!events.some((e) => e.startDateTime.slice(0, 10) < "2026-09-12"));
+  assert.equal(events.at(-1).startDateTime.slice(0, 10), "2026-10-14");
+  assert.equal(events.length, 33); // Sep 12–30 (19) + Oct 1–14 (14)
+});
+
 test("extractOfficialTextEvents gates recurring configs against their own page text", () => {
   // The parent calendar page lists only "Meet a Live Animal"; the Dinosaur
   // Encounters program (with its current "11 am" copy) lives on its own page.
@@ -1770,10 +1809,10 @@ test("updateSlugHistory stamps live slugs and tags recurring vs one-off via base
   assert.equal(next.slugs["family-yoga"].isRecurring, false);
 });
 
-test("pruneSlugHistory drops slugs older than 90 days and keeps fresh ones", () => {
+test("pruneSlugHistory drops slugs older than 180 days and keeps fresh ones", () => {
   const now = new Date("2026-05-25T00:00:00Z");
   const fresh = new Date("2026-04-01T00:00:00Z").toISOString(); // ~54 days old
-  const stale = new Date("2026-02-01T00:00:00Z").toISOString(); // ~113 days old
+  const stale = new Date("2025-11-01T00:00:00Z").toISOString(); // ~205 days old
   const pruned = pruneSlugHistory(
     {
       slugs: {
@@ -1789,8 +1828,8 @@ test("pruneSlugHistory drops slugs older than 90 days and keeps fresh ones", () 
 
 test("updateSlugHistory refreshes lastSeenAt on re-seen slugs and prunes the rest", () => {
   const now = new Date("2026-05-25T12:00:00Z");
-  const stale = new Date("2026-02-01T00:00:00Z").toISOString(); // outside 90d
-  const recent = new Date("2026-05-01T00:00:00Z").toISOString(); // inside 90d
+  const stale = new Date("2025-11-01T00:00:00Z").toISOString(); // outside 180d
+  const recent = new Date("2026-05-01T00:00:00Z").toISOString(); // inside 180d
   const next = updateSlugHistory(
     {
       slugs: {
@@ -1810,7 +1849,7 @@ test("updateSlugHistory refreshes lastSeenAt on re-seen slugs and prunes the res
     ],
     { metroId: "atlanta", now },
   );
-  // stale slug pruned (> 90 days), recent kept verbatim, re-seen stamped to now.
+  // stale slug pruned (> 180 days), recent kept verbatim, re-seen stamped to now.
   assert.equal(next.slugs["stale-one-off"], undefined);
   assert.equal(next.slugs["recent-one-off"].lastSeenAt, recent);
   assert.equal(next.slugs["recurring-template"].lastSeenAt, now.toISOString());

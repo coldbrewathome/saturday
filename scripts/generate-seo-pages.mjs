@@ -819,22 +819,29 @@ a:hover{text-decoration:underline}
 ${IS_ADULTS ? ".wg-nav{background:linear-gradient(rgba(243,240,250,.98),rgba(243,240,250,.92));}" : ""}
 .wg-nav a{flex:none;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);white-space:nowrap;}
 .wg-nav a:hover{border-color:var(--accent);}
-.wg-marquee{display:grid;grid-template-columns:1.35fr 1fr 1fr;grid-template-rows:178px 178px;gap:14px;margin:0 0 16px;}
-.mq{position:relative;border-radius:20px;padding:20px 22px;display:flex;flex-direction:column;justify-content:flex-end;color:#fff;text-decoration:none;overflow:hidden;box-shadow:0 14px 34px rgba(27,25,22,.16);transition:transform .15s;}
-.mq:hover{transform:translateY(-3px);text-decoration:none;}
-.mq-cat{position:absolute;top:16px;left:20px;right:70px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.mq-big{font-family:var(--font-display);font-size:clamp(19px,2vw,26px);font-weight:700;line-height:1.1;letter-spacing:-.01em;margin:0 0 6px;color:#fff;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
-.mq--hero .mq-big{-webkit-line-clamp:5;}
-.mq-sub{font-size:12.5px;font-weight:600;opacity:.85;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.mq--hero .mq-sub{-webkit-line-clamp:3;}
-.mq-free{position:absolute;top:14px;right:16px;font-size:10.5px;font-weight:800;background:rgba(255,255,255,.92);color:#1c6b3f;border-radius:999px;padding:4px 11px;}
-.mq--hero{grid-row:1/3;background:linear-gradient(160deg,#2c3e54,#141d29);}
-.mq--hero .mq-big{font-size:clamp(24px,2.7vw,34px);}
-.mq--hero::after{content:"";position:absolute;inset:auto -30px -40px auto;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(232,181,71,.5),transparent 65%);}
-.mq--c1{background:linear-gradient(150deg,#c4657a,#963d54);}
-.mq--c2{background:linear-gradient(150deg,#3aa06b,#25714a);}
-.mq--c3{background:linear-gradient(150deg,#5f8cbf,#3d6491);}
-.mq--c4{background:linear-gradient(150deg,#e8842e,#c05a12);}
+/* Top picks carousel — big image-led cards, horizontal scroll-snap rail.
+   Cards track the viewport width (clamp) so the rail reflows on resize;
+   the rail stays inside the content column (no negative-margin bleed). */
+.wg-carousel{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scroll-padding:0;margin:0 0 16px;padding:4px 0 12px;max-width:100%;scrollbar-width:thin;scrollbar-color:rgba(27,25,22,.28) transparent;}
+.wg-carousel::-webkit-scrollbar{height:8px;}
+.wg-carousel::-webkit-scrollbar-thumb{background:rgba(27,25,22,.28);border-radius:99px;}
+.wg-carousel::-webkit-scrollbar-track{background:transparent;}
+.wc{position:relative;flex:0 0 clamp(300px,32vw,520px);height:330px;border-radius:20px;padding:20px 22px;display:flex;flex-direction:column;justify-content:flex-end;color:#fff;text-decoration:none;overflow:hidden;scroll-snap-align:start;box-shadow:0 14px 34px rgba(27,25,22,.16);transition:transform .15s;}
+.wc:hover{transform:translateY(-3px);text-decoration:none;}
+.wc img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}
+.wc-shade{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(20,20,22,.08) 34%,rgba(20,20,22,.74) 100%);}
+.wc-glow{position:absolute;inset:auto -30px -40px auto;z-index:1;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(232,181,71,.5),transparent 65%);}
+.wc-cat,.wc-big,.wc-sub{position:relative;z-index:2;}
+.wc-cat{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.95;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:8px;}
+.wc-big{font-family:var(--font-display);font-size:clamp(20px,2.4vw,28px);font-weight:700;line-height:1.12;letter-spacing:-.01em;margin:0 0 6px;color:#fff;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-shadow:0 1px 10px rgba(0,0,0,.35);}
+.wc-sub{font-size:12.5px;font-weight:600;opacity:.92;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-shadow:0 1px 8px rgba(0,0,0,.4);}
+.wc-free{position:absolute;top:14px;right:16px;z-index:2;font-size:10.5px;font-weight:800;background:rgba(255,255,255,.92);color:#1c6b3f;border-radius:999px;padding:4px 11px;}
+.wc--hero{flex-basis:clamp(340px,38vw,560px);background:linear-gradient(160deg,#2c3e54,#141d29);}
+.wc--hero .wc-big{font-size:clamp(24px,2.7vw,34px);}
+.wc--c1{background:linear-gradient(150deg,#c4657a,#963d54);}
+.wc--c2{background:linear-gradient(150deg,#3aa06b,#25714a);}
+.wc--c3{background:linear-gradient(150deg,#5f8cbf,#3d6491);}
+.wc--c4{background:linear-gradient(150deg,#e8842e,#c05a12);}
 .wg-chips{display:flex;flex-wrap:wrap;gap:9px;margin:0 0 42px;}
 .wg-chip{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:9px 17px;text-decoration:none;}
 .wg-chip:hover{border-color:var(--accent);text-decoration:none;}
@@ -845,11 +852,11 @@ ${IS_ADULTS ? ".wg-nav{background:linear-gradient(rgba(243,240,250,.98),rgba(243
 .wg-poster img{width:100%;height:auto;border-radius:18px;box-shadow:0 18px 44px rgba(27,25,22,.18);}
 .wg-poster figcaption{color:var(--muted);font-size:13px;font-weight:600;margin-top:10px;}
 @media (max-width:760px){
-  .wg-marquee{grid-template-columns:1fr;grid-template-rows:190px repeat(4,148px);}
-  .mq--hero{grid-row:auto;}
+  .wc{flex-basis:86vw;height:290px;}
+  .wc--hero{flex-basis:86vw;}
   .wg-nav{top:60px;}
 }
-.famhop-lang-switcher{display:flex;gap:4px;align-items:center;justify-content:flex-end;max-width:1500px;margin:78px auto 0;padding:0 var(--overlay-gap);font-size:13px;font-weight:600;}
+.famhop-lang-switcher{position:sticky;top:96px;z-index:400;display:flex;gap:4px;align-items:center;justify-content:flex-end;max-width:1500px;margin:120px auto 0;padding:6px var(--overlay-gap);font-size:13px;font-weight:600;background:linear-gradient(rgba(250,245,235,.95),rgba(250,245,235,.9));backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
 .famhop-lang-switcher a{color:var(--muted);padding:4px 8px;border-radius:6px;text-decoration:none;}
 .famhop-lang-switcher a:hover{color:var(--ink);background:var(--surface-strong);}
 .famhop-lang-switcher a[aria-current="page"]{color:var(--ink);background:var(--surface);border:1px solid var(--line);}
@@ -1160,7 +1167,7 @@ ${IS_ADULTS ? ".wg-nav{background:linear-gradient(rgba(243,240,250,.98),rgba(243
 const isDirectRun =
   process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
-function main() {
+async function main() {
   if (!fs.existsSync(DIST)) {
     console.error(`[seo] dist/ not found at ${DIST} — run \`vite build\` first.`);
     process.exit(1);
@@ -1268,13 +1275,20 @@ function main() {
     const { slugs: citySlugs, cities } = generateCityPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs);
     const categorySlugs = generateCategoryPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs);
     const cityCategorySlugs = generateCityCategoryPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs, cities);
+    // Niche city hubs for the query class a zero-backlink domain wins
+    // ("{branch} storytime {city}" ranks pos 4-14 in GSC) — kids + bay-area
+    // only for now. Returned entries feed the hub discovery links.
+    const storytimeEntries = generateCityStorytimePages(events, eventSlugLookup, eventSlugs);
     // Weekend guides link events through this lookup; restrict it to events
     // whose pages were actually written so capped-out events fall back to
     // their official link instead of a broken internal one.
     const weekendEventLookup = lookupOfGenerated(eventSlugLookup, eventSlugs);
+    // Venue-name → curated spot photo index for the top-picks carousel
+    // (event's own photo first, venue photo as the honest fallback).
+    const venueImageIndex = buildVenueImageIndex(spots);
     totalAnnualPages += generateAnnualEventPages(distinctEvents, eventSlugLookup, eventSlugs);
     totalEvergreenPages += generateEvergreenEventPages(distinctEvents, eventSlugLookup, eventSlugs, allCurrentEventSlugs);
-    const wroteThisWeekend = generateThisWeekendPage(events, weekendEventLookup);
+    const wroteThisWeekend = await generateThisWeekendPage(events, weekendEventLookup, venueImageIndex);
     const wroteFreeWeekend = generateFreeThisWeekendPage(events, weekendEventLookup);
     totalWeekendSubPages +=
       generateCityWeekendPages(events, weekendEventLookup) + wroteFreeWeekend;
@@ -1287,6 +1301,12 @@ function main() {
       // Real per-metro spot inventory for the data-driven hub intro (hub-2);
       // replaces the hard-coded (and for Honolulu false) "1,500+" claim.
       spots,
+      // Bay Area storytime hubs — the daily-crawled hub is their discovery
+      // path (same reason as /annual/ and evergreen links below).
+      storytimeCities: storytimeEntries.map((entry) => ({
+        city: entry.city,
+        count: entry.count,
+      })),
       hasWeekendGuide: wroteThisWeekend,
       // Hub -> free-this-weekend link (link-2): only when this build actually
       // wrote the page (>= 3 free events gate in generateFreeThisWeekendPage).
@@ -1555,7 +1575,8 @@ function metroSelectOptionsHtml(rel = "") {
 function topbarIcon(name) {
   const paths = {
     explore: `<path d="M12 21s7-6.2 7-12A7 7 0 0 0 5 9c0 5.8 7 12 7 12Z"></path><circle cx="12" cy="9" r="2.5"></circle>`,
-    guide: `<circle cx="12" cy="12" r="10"></circle><path d="M12 6v6h4"></path>`,
+    // CalendarDays — matches the SPA's Weekend tab icon (App.tsx).
+    weekend: `<rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path>`,
     plans: `<path d="M8 6h13"></path><path d="M8 12h13"></path><path d="M8 18h13"></path><path d="M3 6h.01"></path><path d="M3 12h.01"></path><path d="M3 18h.01"></path>`,
     users: `<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>`,
   };
@@ -1598,8 +1619,8 @@ function renderStaticTopbar({ guideCurrent = false } = {}) {
     </select>
   </label>
   <nav class="famhop-tabs" aria-label="View">
+    <a href="${metroPath(guideRel)}"${guideCurrent ? ` aria-current="page"` : ""}>${topbarIcon("weekend")}<span>Weekend</span></a>
     <a href="${metroPath("")}#/browse">${topbarIcon("explore")}<span>Explore</span></a>
-    <a href="${metroPath(guideRel)}"${guideCurrent ? ` aria-current="page"` : ""}>${topbarIcon("guide")}<span>Guide</span></a>
     <a href="${metroPath("")}#/plans">${topbarIcon("plans")}<span>Plans</span><em class="tab-count" data-static-plan-count>0</em></a>
   </nav>
   <a class="hop-now-button topbar-hop" href="${metroPath("")}#/browse?hopnow=1" title="Things to do right now"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg><span class="hop-now-label">Hop now</span></a>
@@ -2243,6 +2264,7 @@ function replaceMetroShellCopy(html, title, description, extras = {}) {
     hasFreeWeekend = false,
     annualEntries = [],
     evergreenEntries = [],
+    storytimeCities = [],
     hubEvents = null,
   } = extras;
   const area = metroLabel();
@@ -2265,7 +2287,13 @@ function replaceMetroShellCopy(html, title, description, extras = {}) {
         { slug: "festival", label: "family festivals" },
       ];
   for (const c of allowedCats) {
-    if (!categorySlugs || categorySlugs.has(c.slug)) {
+    // link-3: link only indexable category pages — the hub is the crawl
+    // entrance, and a link to a noindex page spends crawl budget on a page
+    // Google can never keep (keep-list curation, 2026-07-27).
+    if (
+      (!categorySlugs || categorySlugs.has(c.slug)) &&
+      keepIndexable(CATEGORY_INDEX_KEEP, metroUrl(`category/${c.slug}/`))
+    ) {
       categoriesList.push(`<a href="${metroPath(`category/${c.slug}/`)}">${esc(c.label)}</a>`);
     }
   }
@@ -2282,10 +2310,22 @@ function replaceMetroShellCopy(html, title, description, extras = {}) {
 
   // City hub links — `cities` is exactly the set generateCityPages wrote, so
   // every anchor resolves to a prerendered page. Real per-city counts (hub-2)
-  // make each anchor unique, truthful text.
-  const cityLinks = cities.map(
+  // make each anchor unique, truthful text. link-3: only indexable cities —
+  // the keep-list curation noindexes the zero-traffic ones, and the
+  // daily-crawled hub must not spend crawl budget pointing at them.
+  const indexableCities = cities.filter((c) =>
+    keepIndexable(CITY_INDEX_KEEP, metroUrl(`city/${slugify(c.name)}/`)),
+  );
+  const cityLinks = indexableCities.map(
     (c) =>
       `<a href="${metroPath(`city/${slugify(c.name)}/`)}">${esc(c.name)} (${c.spots.length} spots · ${c.events.length} events)</a>`,
+  );
+
+  // Storytime hub links — the Bay Area niche long-tail pages (generated by
+  // generateCityStorytimePages; empty for other metros and the adults build).
+  const storytimeLinks = (storytimeCities || []).map(
+    (c) =>
+      `<a href="${metroPath(`storytimes/${slugify(c.city)}/`)}">${esc(c.city)} storytimes &amp; weekly kids programs (${c.count})</a>`,
   );
 
   // Annual/evergreen page links. The metro hub is crawled daily (verified 2026-07-26
@@ -2410,6 +2450,10 @@ function replaceMetroShellCopy(html, title, description, extras = {}) {
         ${cityLinks.length ? `<section>
           <h2>${esc(area)} cities and towns</h2>
           <nav>${cityLinks.join("\n          ")}</nav>
+        </section>` : ""}
+        ${storytimeLinks.length ? `<section>
+          <h2>Storytimes &amp; weekly kids programs in ${esc(area)}</h2>
+          <nav>${storytimeLinks.join("\n          ")}</nav>
         </section>` : ""}
         ${eventsSection}
         ${annualItems.length ? `<section>
@@ -4209,6 +4253,149 @@ function generateCityPages(spotItems, eventItems, spotSlugLookup, eventSlugLooku
   return { slugs, cities };
 }
 
+// ── Storytimes & weekly programs (city hubs) ───────────────────────────────
+// Niche long-tail pages for the query class a zero-backlink domain
+// demonstrably wins ("{branch} storytime {city}" family ranks pos 4-14 in
+// GSC). One hub per city links every live named library program so those
+// pages have a crawled, indexable parent. Kids-only, bay-area-only for now —
+// a new page type at scale competes for crawl budget (SEO invariants).
+const STORYTIME_METROS = new Set(["bay-area"]);
+// Cap must stay above the big legacy systems' counts so the newly-covered
+// cities from the 2026-08 program audit (Daly City 40, Los Gatos 37,
+// San Leandro 29) also get hubs.
+const STORYTIME_CITY_CAP = 24;
+// Low enough to include newly-covered systems with small live feeds
+// (Pleasanton 6, Menlo Park 7) but not month-scoped stubs (SSF 3).
+const STORYTIME_MIN_EVENTS = 5;
+
+function generateCityStorytimePages(eventItems, eventSlugLookup, eventSlugs) {
+  if (IS_ADULTS || !STORYTIME_METROS.has(activeMetro.id)) return [];
+
+  // Only events whose pages this build actually wrote may link internally —
+  // capped-out events fall back to their official URL (same rule as the
+  // weekend guides' lookupOfGenerated).
+  const generatedLookup = lookupOfGenerated(eventSlugLookup, eventSlugs);
+
+  const byCity = new Map();
+  for (const event of eventItems) {
+    if (event.category !== "Library") continue;
+    const city = (event.city || event.neighborhood || "").trim();
+    if (!city) continue;
+    if (!byCity.has(city)) byCity.set(city, []);
+    byCity.get(city).push(event);
+  }
+
+  const cities = [...byCity.entries()]
+    .filter(([, events]) => events.length >= STORYTIME_MIN_EVENTS)
+    .sort((a, b) => b[1].length - a[1].length)
+    .slice(0, STORYTIME_CITY_CAP);
+
+  const entries = [];
+  for (const [city, cityEvents] of cities) {
+    const slug = slugify(city);
+    if (!slug) continue;
+    const canonical = metroUrl(`storytimes/${slug}/`);
+    const year = new Date().getUTCFullYear();
+    // Named library systems serving this city (sourceName-derived — never
+    // claim a system not in the feed).
+    const systems = topCountLabels(countBy(cityEvents, (e) => e.sourceName || ""), 3)
+      .map((entry) => entry.label)
+      .filter(Boolean);
+    const systemsPhrase = systems.length ? `, from ${systems.join(", ")}` : "";
+    const title = `${city} Storytimes & Weekly Kids Programs (${year}) — ${BRAND}`;
+    const description =
+      `Weekly storytimes and kids programs in ${city}${systemsPhrase}: branch-by-branch days and times with official links, refreshed weekly. Plan a library visit with ${BRAND}.`.slice(
+        0,
+        300,
+      );
+
+    // Branch/venue grouping; each program links its event page when this
+    // build actually wrote one (capped-out events keep their title only).
+    // Feed venue strings carry room suffixes ("West Branch - Meeting Room");
+    // group by the cleaned branch so one branch isn't split into N rooms.
+    const cleanBranch = (venue) => {
+      const parts = String(venue || "").split(/\s*[-–—]\s*/);
+      if (parts.length < 2) return String(venue || "").trim();
+      const tail = parts.slice(1).join(" - ");
+      // Only strip when the suffix reads like a room/space, never a branch name.
+      return /(room|space|area|lawn|commons|hall)\b/i.test(tail)
+        ? parts[0].trim()
+        : String(venue || "").trim();
+    };
+    const byBranch = new Map();
+    for (const event of cityEvents) {
+      const branch = cleanBranch(displayVenue(event));
+      if (!byBranch.has(branch)) byBranch.set(branch, []);
+      byBranch.get(branch).push(event);
+    }
+    const branchesHtml = [...byBranch.entries()]
+      .sort((a, b) => b[1].length - a[1].length)
+      .map(([branch, programs]) => {
+        const items = programs
+          .slice()
+          .sort((a, b) => (a.startDateTime || "9999").localeCompare(b.startDateTime || "9999"))
+          .map((event) => {
+            const eventSlug = generatedLookup.get(event);
+            const href = eventSlug ? metroPath(`event/${eventSlug}/`) : event.url || "";
+            const when = formatEventDate(event);
+            const name = href
+              ? `<a href="${href}">${esc(displayEventTitle(event))}</a>`
+              : esc(displayEventTitle(event));
+            return `<li>${name}${when ? ` — ${esc(when)}` : ""}${event.cost === "Free" ? " · Free" : ""}</li>`;
+          })
+          .join("");
+        return `<section class="storytime-branch"><h3>${esc(branch)}</h3><ul>${items}</ul></section>`;
+      })
+      .join("");
+
+    const body = `
+      <p class="lede">${esc(description)}</p>
+      ${branchesHtml}
+      <p class="cta-row"><a class="cta" href="${metroPath("this-weekend/")}">This weekend in ${esc(metroLabel())}</a> <a class="cta secondary" href="${metroPath("category/library/")}">All ${esc(metroLabel())} library events</a></p>
+    `;
+
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "@id": `${canonical}#page`,
+      url: canonical,
+      name: `${city} storytimes and weekly kids programs`,
+      description,
+      isPartOf: { "@id": `${metroUrl("")}#website` },
+      about: {
+        "@type": "Place",
+        name: city,
+      },
+    };
+
+    const html = renderShell({
+      title,
+      description,
+      canonical,
+      ogImage: OG_IMAGE,
+      jsonLd,
+      breadcrumb: [
+        { name: BRAND, url: metroUrl("") },
+        { name: `${city} storytimes`, url: canonical },
+      ],
+      h1: `Storytimes &amp; weekly kids programs in ${esc(city)}`,
+      eyebrow: metroTag(),
+      body,
+    });
+
+    writeMetroPage(`storytimes/${slug}/index.html`, html);
+    sitemapEntries.push({
+      loc: canonical,
+      lastmod: trackedLastmod(canonical, html),
+      changefreq: "weekly",
+      priority: 0.7,
+    });
+    entries.push({ city, slug, count: cityEvents.length });
+  }
+
+  return entries;
+}
+
 // ---------------------------------------------------------------------------
 // Categories
 // ---------------------------------------------------------------------------
@@ -4563,7 +4750,7 @@ function formatSessionTimes(starts, locale = "en") {
   return `${times.slice(0, -1).join(", ")} & ${times[times.length - 1]}`;
 }
 
-function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
+async function generateThisWeekendPage(eventItems, eventSlugLookup = null, venueImageIndex = null) {
   const lookup = eventSlugLookup || buildEventSlugLookup(eventItems);
   const now = new Date();
   // wkd-2: Fri–Sun window (+59% event coverage vs Sat+Sun, matching every
@@ -4741,7 +4928,14 @@ function generateThisWeekendPage(eventItems, eventSlugLookup = null) {
     </figure>`
     : "";
 
-  const marqueeHtml = renderWeekendMarquee(headliners, lookup);
+  // OG-image scrape for headliners that would otherwise render as gradients
+  // (the event's own feed photo and venue-photo match are tried first).
+  const ogImages = await scrapeHeadlinerOgImages(
+    headliners.filter(
+      (event) => !event.imageUrl && !venueImageForEvent(event, venueImageIndex),
+    ),
+  );
+  const marqueeHtml = renderWeekendMarquee(headliners, lookup, venueImageIndex, ogImages);
   const topCatPhrase = topCategories
     .slice(0, 3)
     .map((c) => `${c.label.toLowerCase()} (${c.count})`)
@@ -5831,13 +6025,119 @@ function pickWeekendHeadliners(events, eventSlugLookup, limit = 5) {
   return picked;
 }
 
-function renderWeekendMarquee(headliners, eventSlugLookup) {
+// ── Top-picks carousel imagery ────────────────────────────────────────────
+// Event photos resolve the same honest ladder as the SPA (src/eventImages.ts):
+// the event's own scraped photo, else the og:image on the event's official
+// URL (scraped at build time for headliners only), else a curated override
+// (data/event-image-overrides.json — for feed URLs that are registration
+// pages), else the venue's curated spot photo when the normalized names
+// confidently match. Never a stock stand-in; cards without any keep the
+// gradient + glow fallback.
+
+function loadEventImageOverrides() {
+  try {
+    const doc = JSON.parse(
+      fs.readFileSync(path.join(ROOT, "data", "event-image-overrides.json"), "utf8"),
+    );
+    const images = doc?.images;
+    return images && typeof images === "object"
+      ? new Map(
+          Object.entries(images).map(([key, value]) => [
+            String(key).trim().toLowerCase(),
+            String(value),
+          ]),
+        )
+      : null;
+  } catch {
+    return null; // fail open — a missing override file must never break the build
+  }
+}
+
+const EVENT_IMAGE_OVERRIDES = loadEventImageOverrides();
+
+async function fetchOgImage(pageUrl) {
+  if (!pageUrl) return null;
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
+    const res = await fetch(pageUrl, {
+      redirect: "follow",
+      signal: controller.signal,
+      headers: { "user-agent": "Mozilla/5.0 (compatible; famhop-bot/1.0; +https://famhop.com)" },
+    });
+    clearTimeout(timer);
+    if (!res.ok) return null;
+    const html = (await res.text()).slice(0, 400000);
+    // Prefer og:image:secure_url, then og:image, then twitter:image.
+    const metas = [
+      html.match(/<meta[^>]+(?:property|name)=["']og:image:secure_url["'][^>]+content=["']([^"']+)["']/i),
+      html.match(/<meta[^>]+(?:property|name)=["']og:image["'][^>]+content=["']([^"']+)["']/i),
+      html.match(/<meta[^>]+(?:property|name)=["']twitter:image["'][^>]+content=["']([^"']+)["']/i),
+    ];
+    const hit = metas.find((m) => m);
+    if (!hit) return null;
+    const absolute = new URL(hit[1].replace(/&amp;/g, "&"), pageUrl).toString();
+    return /^https?:/i.test(absolute) ? absolute : null;
+  } catch {
+    return null;
+  }
+}
+
+// Scrape og:images for headliners that have no photo yet. Bounded: only the
+// ~5 headliners per metro, 8s timeout each, failures degrade to gradients.
+async function scrapeHeadlinerOgImages(headliners) {
+  const out = new Map();
+  await Promise.all(
+    headliners.map(async (event) => {
+      const url = await fetchOgImage(event.url);
+      if (url) out.set(event.id, url);
+    }),
+  );
+  return out;
+}
+function normalizeVenueName(value) {
+  return (value || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, " ")
+    .replace(/\bthe\b/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function buildVenueImageIndex(spots) {
+  const map = new Map();
+  for (const spot of spots) {
+    if (!spot.imageUrl) continue;
+    const key = normalizeVenueName(spot.name);
+    if (key.length >= 3 && !map.has(key)) {
+      map.set(key, { image: spot.imageUrl, city: normalizeVenueName(spot.city || "") });
+    }
+  }
+  return map;
+}
+
+function venueImageForEvent(event, index) {
+  if (!index) return null;
+  const venue = normalizeVenueName(event.venue);
+  const city = normalizeVenueName(event.city);
+  const exact = index.get(venue);
+  if (exact && (!exact.city || !city || exact.city === city)) return exact.image;
+  for (const [key, entry] of index) {
+    if (entry.city && city && entry.city !== city) continue;
+    if (key.length >= 4 && venue.length >= 4 && (key.includes(venue) || venue.includes(key))) {
+      return entry.image;
+    }
+  }
+  return null;
+}
+
+function renderWeekendMarquee(headliners, eventSlugLookup, venueImageIndex = null, ogImages = null) {
   if (headliners.length < 3) return "";
   const tz = activeMetro.timezone || "America/Los_Angeles";
   const cards = headliners.map((event, i) => {
     const slug = eventSlugLookup.get(event);
     const href = metroPath(`event/${slug}/`);
-    const cls = i === 0 ? "mq--hero" : `mq--c${i}`;
+    const cls = i === 0 ? "wc--hero" : `wc--c${i}`;
     const start = event.startDateTime ? new Date(event.startDateTime) : null;
     const dow = start ? start.toLocaleDateString("en-US", { weekday: "short", timeZone: tz }) : "";
     const time = formatEventTime(event) || "";
@@ -5854,14 +6154,27 @@ function renderWeekendMarquee(headliners, eventSlugLookup) {
       const head = displayTitle.split(/\s[–—-]\s|\s\(/)[0].trim();
       if (head.length >= 24) displayTitle = head;
     }
-    return `<a class="mq ${cls}" href="${href}" title="${esc(event.title)}">
-      <span class="mq-cat">${esc(catLine)}</span>
-      ${eventLikelyFree(event) ? `<span class="mq-free">Free</span>` : ""}
-      <p class="mq-big">${esc(displayTitle)}</p>
-      ${sub ? `<p class="mq-sub">${esc(sub)}</p>` : ""}
+    // Big image first, honest fallback second (gradient + glow, like before).
+    const curated = EVENT_IMAGE_OVERRIDES?.get(
+      String(event.title || "").trim().toLowerCase(),
+    );
+    const imageUrl =
+      event.imageUrl ||
+      ogImages?.get(event.id) ||
+      curated ||
+      venueImageForEvent(event, venueImageIndex);
+    const media = imageUrl
+      ? `<img src="${esc(imageUrl)}" alt="${esc(`${event.title} at ${event.venue}, ${event.city}`)}" loading="lazy" decoding="async" width="1200" height="800"><span class="wc-shade" aria-hidden="true"></span>`
+      : `<span class="wc-glow" aria-hidden="true"></span>`;
+    return `<a class="wc ${cls}" href="${href}" title="${esc(event.title)}">
+      ${media}
+      <span class="wc-cat">${esc(catLine)}</span>
+      ${eventLikelyFree(event) ? `<span class="wc-free">Free</span>` : ""}
+      <p class="wc-big">${esc(displayTitle)}</p>
+      ${sub ? `<p class="wc-sub">${esc(sub)}</p>` : ""}
     </a>`;
   });
-  return `<div class="wg-marquee" id="top-picks" aria-label="This weekend's top picks">${cards.join("")}</div>`;
+  return `<div class="wg-carousel" id="top-picks" aria-label="This weekend's top picks">${cards.join("")}</div>`;
 }
 
 function renderWeekendInterestChips(buckets, freeCount) {
@@ -7085,4 +7398,9 @@ function normalizeDate(value) {
   return d.toISOString().slice(0, 10);
 }
 
-if (isDirectRun) main();
+if (isDirectRun) {
+  main().catch((error) => {
+    console.error("[seo] build failed:", error);
+    process.exit(1);
+  });
+}

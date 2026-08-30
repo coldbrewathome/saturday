@@ -1348,10 +1348,12 @@ h3 {
 }
 
 /* ── Weekend home (decision-first landing view) ────────────────────────
-   Structure is the design: Saturday/Sunday day blocks with an accent day
-   numeral, sub-grouped by Morning/Afternoon/Evening — the nap-schedule
-   units families actually plan in. Cards stay quiet; the accent is spent
-   on the day numerals and the Free chips. */
+   The entrance is a briefing: weather pills + a single headliner card (the
+   one event to plan around), a short ranked best-of, then the Saturday/
+   Sunday timeline with an accent day numeral, sub-grouped by Morning/
+   Afternoon/Evening — the nap-schedule units families actually plan in.
+   Cards stay quiet; the accent is spent on the day numerals, the headliner
+   kicker, and the Free chips. */
 .weekend-home {
   display: grid;
   gap: 30px;
@@ -1406,6 +1408,196 @@ h3 {
 .weekend-ages-label {
   color: var(--ink);
   font: 700 0.8rem/1 var(--font-ui);
+}
+
+/* ── Weekend weather (the briefing's concreteness) ───────────────────── */
+.weekend-weather {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  margin-top: 2px;
+}
+
+.weather-pill {
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  display: inline-flex;
+  font: 700 0.8rem/1 var(--font-ui);
+  gap: 6px;
+  padding: 7px 12px;
+}
+
+.weather-pill-icon {
+  color: var(--accent-strong, var(--accent));
+  height: 15px;
+  width: 15px;
+}
+
+.weather-pill-day {
+  color: var(--muted);
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.weather-pill-temp {
+  font-weight: 800;
+}
+
+.weather-pill-rain {
+  color: var(--blue);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.weather-hint {
+  color: var(--ink-soft);
+  flex-basis: 100%;
+  font: 600 0.82rem/1.4 var(--font-ui);
+  margin: 2px 0 0;
+}
+
+/* ── Headliner: the one event to plan around ─────────────────────────── */
+.weekend-headliner {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  display: grid;
+  gap: 0;
+  overflow: hidden;
+}
+
+.weekend-headliner-media {
+  aspect-ratio: 16 / 9;
+  min-height: 0;
+  position: relative;
+}
+
+.weekend-headliner-img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.weekend-headliner-placeholder {
+  align-items: center;
+  background: linear-gradient(135deg, var(--sun-soft), var(--accent-soft));
+  color: var(--accent-strong, var(--accent));
+  display: flex;
+  font: 800 3rem/1 var(--font-display);
+  justify-content: center;
+}
+
+.weekend-headliner-day {
+  backdrop-filter: blur(6px);
+  background: rgba(27, 25, 22, 0.62);
+  border-radius: 999px;
+  bottom: 12px;
+  color: #fff;
+  font: 800 0.74rem/1 var(--font-ui);
+  left: 12px;
+  padding: 7px 11px;
+  position: absolute;
+}
+
+.weekend-headliner-body {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+}
+
+.weekend-headliner-kicker {
+  align-items: center;
+  color: var(--accent-strong, var(--accent));
+  display: flex;
+  font: 800 0.72rem/1.2 var(--font-ui);
+  gap: 6px;
+  letter-spacing: 0.06em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.weekend-headliner-kicker svg {
+  height: 14px;
+  width: 14px;
+}
+
+.weekend-headliner-title {
+  font: 800 clamp(1.35rem, 4vw, 1.8rem) / 1.15 var(--font-display);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.weekend-headliner-title a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.weekend-headliner-title a:hover {
+  color: var(--accent-strong, var(--accent));
+  text-decoration: underline;
+}
+
+.weekend-headliner-where {
+  color: var(--ink-soft);
+  font: 500 0.88rem/1.4 var(--font-ui);
+  margin: 0;
+}
+
+.weekend-headliner-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.weekend-headliner-actions .primary-button {
+  min-height: 42px;
+}
+
+.weekend-headliner-actions .icon-button {
+  height: 42px;
+  width: 42px;
+}
+
+.primary-button.is-in-plan {
+  background: var(--forest-strong);
+}
+
+/* ── Share-the-weekend hook ──────────────────────────────────────────── */
+.weekend-share {
+  align-items: center;
+  background: var(--accent-soft);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  justify-content: space-between;
+  padding: 14px 16px;
+}
+
+.weekend-share-copy {
+  display: grid;
+  gap: 2px;
+  min-width: 220px;
+}
+
+.weekend-share-copy strong {
+  font: 800 0.95rem/1.3 var(--font-display);
+}
+
+.weekend-share-copy span {
+  color: var(--ink-soft);
+  font: 500 0.82rem/1.45 var(--font-ui);
+}
+
+.weekend-share .primary-button {
+  min-height: 42px;
 }
 
 .weekend-days {
@@ -1627,12 +1819,12 @@ a.weekend-card-title:hover {
   width: 16px;
 }
 
-.weekend-popular {
+.weekend-bestof {
   display: grid;
   gap: 12px;
 }
 
-.weekend-popular h3 {
+.weekend-bestof h3 {
   align-items: center;
   display: flex;
   font: 800 1rem/1.2 var(--font-display);
@@ -1640,28 +1832,28 @@ a.weekend-card-title:hover {
   margin: 0;
 }
 
-.weekend-popular h3 svg {
+.weekend-bestof h3 svg {
   color: var(--accent);
   height: 16px;
   width: 16px;
 }
 
-.weekend-popular-list {
-  counter-reset: popular;
+.weekend-ranked-list {
+  counter-reset: bestof;
 }
 
-.weekend-popular-list li {
-  counter-increment: popular;
+.weekend-ranked-list li {
+  counter-increment: bestof;
   position: relative;
 }
 
 /* Rank counter: "1", "2", … pinned to the card's leading edge. */
-.weekend-popular-list li::before {
+.weekend-ranked-list li::before {
   align-items: center;
   background: var(--accent-strong);
   border-radius: 50%;
   color: #fff;
-  content: counter(popular);
+  content: counter(bestof);
   display: flex;
   font: 800 0.72rem/1 var(--font-ui);
   height: 22px;
@@ -1675,8 +1867,8 @@ a.weekend-card-title:hover {
 
 .weekend-plans-list {
   display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   list-style: none;
   margin: 0;
   padding: 0;
@@ -1688,22 +1880,54 @@ a.weekend-card-title:hover {
   border-radius: 14px;
   cursor: pointer;
   display: grid;
-  gap: 6px;
+  grid-template-rows: 118px 1fr;
   height: 100%;
-  padding: 14px;
+  overflow: hidden;
+  padding: 0;
   text-align: left;
   width: 100%;
 }
 
 .weekend-plan-card:hover {
   border-color: var(--accent);
+  box-shadow: var(--shadow);
 }
 
-.weekend-plan-card strong {
+.weekend-plan-card:hover .weekend-plan-media {
+  transform: scale(1.04);
+}
+
+.weekend-plan-media {
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.25s ease;
+  width: 100%;
+}
+
+.weekend-plan-media-fallback {
+  align-items: center;
+  background: linear-gradient(135deg, var(--sun-soft), var(--accent-soft));
+  color: var(--accent-strong, var(--accent));
+  display: flex;
+  justify-content: center;
+}
+
+.weekend-plan-media-fallback svg {
+  height: 26px;
+  width: 26px;
+}
+
+.weekend-plan-body {
+  display: grid;
+  gap: 6px;
+  padding: 12px 14px 14px;
+}
+
+.weekend-plan-body strong {
   font: 700 0.92rem/1.3 var(--font-ui);
 }
 
-.weekend-plan-card span {
+.weekend-plan-body > span {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   color: var(--ink-soft);
@@ -1712,7 +1936,7 @@ a.weekend-card-title:hover {
   overflow: hidden;
 }
 
-.weekend-plan-card em {
+.weekend-plan-body em {
   color: var(--accent-strong, var(--accent));
   font: 700 0.72rem/1 var(--font-ui);
   font-style: normal;
@@ -1752,6 +1976,18 @@ a.weekend-card-title:hover {
 @media (min-width: 1000px) {
   .weekend-home {
     max-width: 1020px;
+  }
+  /* Headliner: photo left, briefing right. */
+  .weekend-headliner {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  }
+  .weekend-headliner-media {
+    aspect-ratio: auto;
+    height: 100%;
+  }
+  .weekend-headliner-body {
+    align-content: center;
+    padding: 22px 24px;
   }
   .weekend-days {
     align-items: start;
@@ -7871,6 +8107,17 @@ a.weekend-card-title:hover {
   background: var(--accent-soft);
   border-radius: 999px;
   color: var(--accent-strong);
+  display: inline-flex;
+  font: 700 0.72rem/1 var(--font-ui);
+  gap: 3px;
+  padding: 3px 8px;
+}
+
+.weekend-chip-new {
+  align-items: center;
+  background: var(--fresh-soft, #e4f5ea);
+  border-radius: 999px;
+  color: var(--fresh-strong, #1e7a44);
   display: inline-flex;
   font: 700 0.72rem/1 var(--font-ui);
   gap: 3px;
