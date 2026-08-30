@@ -32,6 +32,24 @@ https://famhop.com/los-angeles/event/mr-bones-pumpkin-patch-mr-bones-pumpkin-pat
 https://famhop.com/los-angeles/event/halloween-day-at-descanso-descanso-gardens/
 https://famhop.com/washington-dc/annual/butlers-orchard-pumpkin-festival/
 https://famhop.com/honolulu/annual/aloun-farms-pumpkin-festival/
+
+## Halloween wave 2 (NYC + Chicago, verified 2026-08-30)
+https://famhop.com/bay-area/event/ardenwood-harvest-festival-ardenwood-historic-farm/
+https://famhop.com/bay-area/event/dig-deep-farms-pumpkin-patch-at-ardenwood-ardenwood-historic-farm/
+https://famhop.com/bay-area/event/downtown-santa-cruz-harvest-festival-offsite/
+https://famhop.com/los-angeles/event/underwood-family-farms-fall-harvest-festival-underwood-family-farms/
+https://famhop.com/los-angeles/annual/underwood-family-farms-fall-harvest-festival/
+https://famhop.com/los-angeles/annual/underwood-fall-harvest-festival/
+https://famhop.com/new-york-city/event/the-great-jack-o-lantern-blaze-van-cortlandt-manor/
+https://famhop.com/new-york-city/event/harvest-festival-field-62-63-at-randall-s-island-park/
+https://famhop.com/new-york-city/event/boo-bash-in-the-bronx-st-james-park/
+https://famhop.com/new-york-city/event/spooktacular-fiesta-loreto-playground/
+https://famhop.com/new-york-city/event/nyc-village-halloween-parade-53rd-sixth-avenue-greenwich-village/
+https://famhop.com/chicago/event/spooky-zoo-at-lincoln-park-zoo-lincoln-park-zoo-2001-n-clark-st/
+https://famhop.com/miami/annual/berry-farm-harvest-festival/
+https://famhop.com/honolulu/event/spooktacular-movie-beetlejuice-beetlejuice-o-ahu-manoa/
+https://famhop.com/honolulu/event/spooktacular-movie-m3gan-o-ahu-manoa/
+https://famhop.com/honolulu/event/spooktacular-movie-m3gan-2-0-o-ahu-manoa/
 ## New evergreen annual pages (hold rank between seasons)
 https://famhop.com/atlanta/annual/
 https://famhop.com/atlanta/annual/atlanta-ice-cream-festival/
