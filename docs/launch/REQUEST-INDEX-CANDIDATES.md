@@ -50,6 +50,14 @@ https://famhop.com/miami/annual/berry-farm-harvest-festival/
 https://famhop.com/honolulu/event/spooktacular-movie-beetlejuice-beetlejuice-o-ahu-manoa/
 https://famhop.com/honolulu/event/spooktacular-movie-m3gan-o-ahu-manoa/
 https://famhop.com/honolulu/event/spooktacular-movie-m3gan-2-0-o-ahu-manoa/
+
+## Halloween annual pages (added 2026-08-30 wave 3)
+https://famhop.com/bay-area/annual/great-big-boo-gilroy-gardens/
+https://famhop.com/bay-area/annual/walnut-creek-trunk-or-treat/
+https://famhop.com/los-angeles/annual/mr-bones-pumpkin-patch/
+https://famhop.com/new-york-city/annual/village-halloween-parade/
+https://famhop.com/new-york-city/annual/great-jack-o-lantern-blaze/
+https://famhop.com/chicago/annual/spooky-zoo-lincoln-park-zoo/
 ## New evergreen annual pages (hold rank between seasons)
 https://famhop.com/atlanta/annual/
 https://famhop.com/atlanta/annual/atlanta-ice-cream-festival/
