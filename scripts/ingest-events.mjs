@@ -1258,13 +1258,24 @@ async function closeBrowser() {
 }
 
 async function fetchUrlWithBrowserContext(source, url, init = {}) {
-  const launched = await browser();
-  const page = await launched.newPage({
-    userAgent: BROWSER_HEADERS["user-agent"],
-    extraHTTPHeaders: {
-      "accept-language": "en-US,en;q=0.9",
-    },
-  });
+  // A missing/launch-failing browser (CI runners ship no Playwright binaries
+  // unless installed) must degrade this source to a fetch-error — recovered
+  // via last-known-good/templates — never crash the whole metro ingest.
+  let page = null;
+  try {
+    launched = await browser();
+    page = await launched.newPage({
+      userAgent: BROWSER_HEADERS["user-agent"],
+      extraHTTPHeaders: {
+        "accept-language": "en-US,en;q=0.9",
+      },
+    });
+  } catch (error) {
+    return {
+      status: "fetch-error",
+      reason: `browser unavailable: ${error instanceof Error ? error.message : String(error)}`,
+    };
+  }
   try {
     const warmupUrl = source.browserPageUrl || source.pageUrl || source.homeUrl || source.url || url;
     await page.goto(warmupUrl, { waitUntil: "domcontentloaded", timeout: timeoutMs }).catch(() => null);
@@ -1312,7 +1323,7 @@ async function fetchUrlWithBrowserContext(source, url, init = {}) {
       reason: `browser fetch failed: ${error instanceof Error ? error.message : String(error)}`,
     };
   } finally {
-    await page.close().catch(() => null);
+    await page?.close().catch(() => null);
   }
 }
 

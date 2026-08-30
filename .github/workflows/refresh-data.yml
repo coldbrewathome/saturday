@@ -26,6 +26,12 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # requiresBrowserContext sources (famsf and friends) fetch via headless
+      # Chromium; runners ship no browser binaries, and a launch failure used
+      # to crash the whole ingest. Install the browser, and the ingest is
+      # also hardened to degrade such sources instead of dying.
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium
       - name: Ingest Bay Area spots (retry on Overpass 5xx)
         run: |
           for attempt in 1 2 3; do
