@@ -62,6 +62,20 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=nighthop --branch=main --commit-dirty=true
 
+      # The apps fetch their event/spot data at runtime from the standalone
+      # famhop-data project (VITE_DATA_ORIGIN). Without this step the feed
+      # only updates on manual `npm run deploy:data` — it silently went stale
+      # for weeks (2026-08-13 → 08-30) while the apps stayed current. Deploy
+      # the feed on every push + the Friday cron, same as the apps.
+      - name: Build data feed (famhop-data)
+        run: npm run build:data-site
+      - name: Deploy data feed to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy data-site/dist --project-name=famhop-data --branch=main --commit-dirty=true
+
       # Indexing API publishing REMOVED 2026-07-22 — the local 9:00 AM PT cron is
       # the single owner of the 200/day quota and data/indexing-history.json (see
       # refresh-data.yml for the double-burn incident this fixes).
