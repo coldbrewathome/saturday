@@ -837,11 +837,12 @@
       "url": "https://www.eventbrite.com/o/san-mateo-county-parks-department-8207188966",
       "city": "San Mateo",
       "category": "Park",
-      "sourceType": "html",
+      "sourceType": "eventbriteOrg",
       "trust": "official",
       "lat": 37.4337,
       "lon": -122.4014,
-      "defaultAudienceText": "family kids nature hikes storytime parks trails bicycle"
+      "defaultAudienceText": "family kids nature hikes storytime parks trails bicycle",
+      "notes": "Eventbrite organizer page; embedded upcomingEvents state extracted via eventbriteOrg sourceType (2026-08-30)."
     },
     {
       "id": "sf-rec-park-calendar",
@@ -2489,6 +2490,135 @@
           "requiredText": [
             "Shakespeare in the Park",
             "September 2"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "half-moon-bay-pumpkin-festival-2026",
+      "name": "Half Moon Bay Art & Pumpkin Festival",
+      "url": "https://www.hmbpumpkinfest.com/",
+      "city": "Half Moon Bay",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "audienceIds": [
+        "kids"
+      ],
+      "notes": "54th annual, Oct 17-18 2026, Main Street Half Moon Bay, free. Verified 2026-08-30: visible 'October 17-18, 2026'. Weigh-off Oct 12, costume contest Sat 10am, Great Pumpkin Parade Sat noon.",
+      "officialTextEvents": [
+        {
+          "id": "hmb-pumpkin-fest-2026-sat",
+          "title": "Half Moon Bay Art & Pumpkin Festival (54th)",
+          "description": "The 54th annual Half Moon Bay Art & Pumpkin Festival on Main Street: the World Championship Pumpkin Weigh-Off weekend, giant pumpkins, costume contest at 10am, the Great Pumpkin Parade at noon, pie-eating and pumpkin carving, and 300+ arts and crafts booths. Free admission.",
+          "venue": "Main Street",
+          "neighborhood": "Half Moon Bay",
+          "startDateTime": "2026-10-17T09:00:00-07:00",
+          "endDateTime": "2026-10-17T17:00:00-07:00",
+          "ageBands": [
+            "toddler",
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "Free",
+          "category": "Festival",
+          "requiredText": [
+            "October 17-18, 2026",
+            "Pumpkin Festival"
+          ]
+        },
+        {
+          "id": "hmb-pumpkin-fest-2026-sun",
+          "title": "Half Moon Bay Art & Pumpkin Festival (54th)",
+          "description": "The 54th annual Half Moon Bay Art & Pumpkin Festival on Main Street: giant pumpkins, live music, the Pumpkin Run, pie-eating contests, and 300+ arts and crafts booths. Free admission.",
+          "venue": "Main Street",
+          "neighborhood": "Half Moon Bay",
+          "startDateTime": "2026-10-18T09:00:00-07:00",
+          "endDateTime": "2026-10-18T17:00:00-07:00",
+          "ageBands": [
+            "toddler",
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "Free",
+          "category": "Festival",
+          "requiredText": [
+            "October 17-18, 2026",
+            "Pumpkin Festival"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "great-big-boo-gilroy-gardens",
+      "name": "The Great Big BOO! at Gilroy Gardens",
+      "url": "https://www.gilroygardens.org/halloween/",
+      "city": "Gilroy",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "audienceIds": [
+        "kids"
+      ],
+      "notes": "Family Halloween festival at Gilroy Gardens; page verifies start date Sep 25 2026 only — modeled as opening-day event; weekend run through Halloween implied, confirm on park calendar. Gate uses early-page strings (Sep 25 date sits beyond the 1MB pageText slice).",
+      "officialTextEvents": [
+        {
+          "id": "great-big-boo-opening-2026",
+          "title": "The Great Big BOO! at Gilroy Gardens",
+          "description": "The Great Big BOO! family Halloween festival at Gilroy Gardens: trick-or-treat trail, live show, costumes, and the Downtown BOO Alley. Runs weekends from September 25 through the Halloween season — confirm dates on the park's calendar. Park admission required.",
+          "venue": "Gilroy Gardens Family Theme Park",
+          "neighborhood": "Gilroy",
+          "startDateTime": "2026-09-25T11:00:00-07:00",
+          "endDateTime": "2026-09-25T21:00:00-07:00",
+          "ageBands": [
+            "toddler",
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "$$",
+          "category": "Community",
+          "requiredText": [
+            "The Great Big BOO",
+            "Halloween Event"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "walnut-creek-trunk-or-treat-2026",
+      "name": "Trunk or Treat Walnut Creek",
+      "url": "https://walnutcreekdowntown.com/do/trunk-or-treat-walnut-creek",
+      "city": "Walnut Creek",
+      "category": "Community",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "audienceIds": [
+        "kids"
+      ],
+      "notes": "7th annual, Fri Oct 23 2026, 3-6pm, Civic Park, free; low-sensory hour 3-4pm. Verified 2026-08-30.",
+      "officialTextEvents": [
+        {
+          "id": "walnut-creek-trunk-or-treat-2026",
+          "title": "Trunk or Treat Walnut Creek (7th Annual)",
+          "description": "The 7th annual Trunk or Treat at Civic Park, presented by Walnut Creek Arts + Recreation: decorated trunks, music, activities, and a scavenger hunt. Low-sensory hour 3-4pm, general event 4-6pm. Free — bring your own bucket or bag.",
+          "venue": "Civic Park, 1375 Civic Drive",
+          "neighborhood": "Walnut Creek",
+          "startDateTime": "2026-10-23T15:00:00-07:00",
+          "endDateTime": "2026-10-23T18:00:00-07:00",
+          "ageBands": [
+            "toddler",
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "Free",
+          "category": "Community",
+          "requiredText": [
+            "Trunk or Treat",
+            "October 23"
           ]
         }
       ]

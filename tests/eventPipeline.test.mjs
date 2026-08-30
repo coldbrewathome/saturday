@@ -13,6 +13,7 @@ import {
   extractAopCalendarEvents,
   extractDrupalCardEvents,
   extractEventOnEvents,
+  extractEventbriteOrgEvents,
   extractEventListEvents,
   extractFamsfEvents,
   extractLaplEvents,
@@ -1965,4 +1966,38 @@ test("extractHtmlEvents never publishes a bare date header as a title (Getty wha
   const dateOnly = /^(?:(?:mon|tues?|wednes|thurs?|fri|satur|sun)day,?\s+)?(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?\s+\d{1,2}(?:\s*(?:and|&|,|through|to|[-–])\s*\d{1,2})*(?:,?\s*20\d{2})?$/i;
   assert.ok(!titles.some((t) => dateOnly.test(t.trim())), JSON.stringify(titles));
   assert.ok(titles.includes("Garden Concerts for Kids: family music on the lawn"), JSON.stringify(titles));
+});
+
+test("extractEventbriteOrgEvents reads the embedded upcomingEvents state and skips cancelled/online", () => {
+  // Eventbrite organizer pages embed per-event objects in a JS state blob;
+  // the blob is not strictly valid JSON, so the extractor uses a targeted
+  // regex over the stable key sequence.
+  const html = `
+    <script>
+      window.__EB_STATE__ = {
+        "upcomingEvents": [
+          {"id":"1","name":"Wildflower Hike - Memorial Park","url":"https://www.eventbrite.com/e/wildflower-hike-memorial-park-tickets-1995155736516","start_date":"2026-09-05","start_time":"10:30:00","end_date":"2026-09-05","end_time":"12:30:00","timezone":"America/Los_Angeles","is_cancelled":false,"is_online_event":false,"primary_venue":{"_type":"venue","name":"Memorial County Park","id":"298706355","address":{"city":"Loma Mar","country":"US","region":"CA"}}},
+          {"id":"2","name":"Online Webinar: Native Plants","url":"https://www.eventbrite.com/e/online-webinar-tickets-999","start_date":"2026-09-06","start_time":"18:00:00","end_date":"2026-09-06","end_time":"19:00:00","timezone":"America/Los_Angeles","is_cancelled":false,"is_online_event":true},
+          {"id":"3","name":"Cancelled Bird Walk","url":"https://www.eventbrite.com/e/cancelled-bird-walk-tickets-888","start_date":"2026-09-07","start_time":"08:00:00","end_date":"2026-09-07","end_time":"10:00:00","timezone":"America/Los_Angeles","is_cancelled":true,"is_online_event":false}
+        ]
+      };
+    </script>
+  `;
+
+  const events = extractEventbriteOrgEvents(html, {
+    id: "san-mateo-county-parks",
+    name: "San Mateo County Parks",
+    url: "https://www.eventbrite.com/o/san-mateo-county-parks-department-8207188966",
+    city: "San Mateo",
+    category: "Outdoors",
+    timezoneOffset: "-07:00",
+    defaultAudienceText: "family kids hike nature outdoors",
+  });
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "Wildflower Hike - Memorial Park");
+  assert.equal(events[0].venue, "Memorial County Park");
+  assert.equal(events[0].city, "Loma Mar");
+  assert.equal(events[0].startDateTime, "2026-09-05T17:30:00.000Z"); // 10:30 LA
+  assert.equal(events[0].extractionMethod, "eventbrite-org");
 });

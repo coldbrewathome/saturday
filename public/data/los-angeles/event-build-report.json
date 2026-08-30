@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "los-angeles",
-  "generatedAt": "2026-08-30T18:31:29.239Z",
+  "generatedAt": "2026-08-30T19:11:42.172Z",
   "registryPath": "data/event-sources-los-angeles.json",
   "outputPath": "public/data/los-angeles/events.json",
-  "eventCount": 2050,
-  "adultsEventCount": 136,
-  "sourceCount": 72,
-  "liveEventCount": 2153,
+  "eventCount": 2458,
+  "adultsEventCount": 542,
+  "sourceCount": 71,
+  "liveEventCount": 2577,
   "lastKnownGoodEventCount": 1,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 33,
+  "operatorAlertCount": 29,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://tarpits.org/calendar?_wrapper_format=html&page=0",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://www.petersen.org/events",
@@ -79,7 +79,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://www.nortonsimon.org/calendar",
@@ -104,7 +104,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://www.huntington.org/calendar",
@@ -129,7 +129,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://grandparkla.org/events/",
@@ -154,7 +154,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://ocfair.com/oc-fair/",
@@ -179,7 +179,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://venturacountyfair.org/",
@@ -204,88 +204,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "los-angeles",
-      "sourceId": "macarthur-park-country-mexican-regional-concert-2026-08-01-src",
-      "sourceName": "MacArthur Park Free Summer Concert: Country/Mexican Regional",
-      "sourceType": "officialTextEvents",
-      "url": "https://mac-la.org/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
-      "fetches": [
-        {
-          "url": "https://mac-la.org/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "los-angeles",
-      "sourceId": "ciro-hurtado-and-friends-grand-performances-2026-07-31-src",
-      "sourceName": "An Evening with Ciro Hurtado and Friends — Grand Performances",
-      "sourceType": "officialTextEvents",
-      "url": "https://grandperformances.org/events/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
-      "fetches": [
-        {
-          "url": "https://grandperformances.org/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "los-angeles",
-      "sourceId": "bees-things-flowers-roy-ayers-j-dilla-grand-performances-2026-08-01-src",
-      "sourceName": "Bees & Things & Flowers: Roy Ayers Tribute + J Dilla's Donuts — Grand Performances",
-      "sourceType": "officialTextEvents",
-      "url": "https://grandperformances.org/events/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
-      "fetches": [
-        {
-          "url": "https://grandperformances.org/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
         }
       ]
     },
@@ -304,7 +229,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://www.soundsoflacounty.com/schedule/helen-keller-park-sat-08/01/26-selectors-choice-dj-dance-party-experience-workshops",
@@ -329,7 +254,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://www.soundsoflacounty.com/schedule",
@@ -354,38 +279,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://www.soundsoflacounty.com/schedule/william-steinmetz-park-sat-08/01/26-nance-arte-presents-resonance-remedies-an-evening-of-la-soundscapes",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html;charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "los-angeles",
-      "sourceId": "dena-community-backpack-giveaway-rose-bowl-2026-08-02-src",
-      "sourceName": "3rd Annual Dena Community Backpack Giveaway at Rose Bowl Stadium",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.eventbrite.com/e/3rd-annual-dena-community-backpack-giveawayentrega-de-mochilas-tickets-1989623447290",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
-      "fetches": [
-        {
-          "url": "https://www.eventbrite.com/e/3rd-annual-dena-community-backpack-giveawayentrega-de-mochilas-tickets-1989623447290",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -404,7 +304,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://niseiweek.org/events/grand-parade/",
@@ -429,7 +329,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://niseiweek.org/events/plaza-festival/",
@@ -454,7 +354,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://www.surffestival.org/swim",
@@ -479,7 +379,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://sawdustartfestival.org/",
@@ -504,7 +404,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://www.janm.org/index.php/press/release/janm-presents-free-2026-natsumatsuri-family-festival-saturday-august-15",
@@ -529,7 +429,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://www.soundsoflacounty.com/schedule",
@@ -554,7 +454,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://www.soundsoflacounty.com/schedule",
@@ -579,7 +479,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://www.soundsoflacounty.com/schedule",
@@ -604,7 +504,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://www.wayfinderfamily.org/back-to-school-bash",
@@ -629,7 +529,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://www.getty.edu/news/garden-concerts-for-kids-returns-for-summer-at-the-getty-center/",
@@ -654,7 +554,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://www.troubadour.com/events",
@@ -679,7 +579,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://www.theelrey.com/events",
@@ -704,7 +604,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://www.theroxy.com/events",
@@ -729,7 +629,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://thecomedystore.com/calendar/",
@@ -754,7 +654,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://www.laughfactory.com/shows",
@@ -779,7 +679,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://improv.com/hollywood/calendar/",
@@ -804,7 +704,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://www.ticketmaster.com/the-wiltern-tickets-los-angeles/venue/73790",
@@ -830,7 +730,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T18:31:29.239Z",
+      "fetchedAt": "2026-08-30T19:11:42.172Z",
       "fetches": [
         {
           "url": "https://www.theregenttheater.com/events",
@@ -1477,9 +1377,9 @@
       "metroId": "los-angeles",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 20,
+      "liveEvents": 31,
       "fallbackEvents": 0,
-      "eventCount": 20,
+      "eventCount": 31,
       "fetches": [
         {
           "url": "https://www.descansogardens.org/events",
@@ -1490,8 +1390,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 312,
-      "extractedEvents": 332,
+      "rejectedLiveEvents": 137,
+      "extractedEvents": 168,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1753,87 +1653,6 @@
       "recoveryMode": null
     },
     {
-      "id": "macarthur-park-country-mexican-regional-concert-2026-08-01-src",
-      "name": "MacArthur Park Free Summer Concert: Country/Mexican Regional",
-      "url": "https://mac-la.org/",
-      "sourceType": "officialTextEvents",
-      "city": "Los Angeles",
-      "metroId": "los-angeles",
-      "category": "Live Music",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://mac-la.org/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "ciro-hurtado-and-friends-grand-performances-2026-07-31-src",
-      "name": "An Evening with Ciro Hurtado and Friends — Grand Performances",
-      "url": "https://grandperformances.org/events/",
-      "sourceType": "officialTextEvents",
-      "city": "Los Angeles",
-      "metroId": "los-angeles",
-      "category": "Live Music",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://grandperformances.org/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html;charset=utf-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "bees-things-flowers-roy-ayers-j-dilla-grand-performances-2026-08-01-src",
-      "name": "Bees & Things & Flowers: Roy Ayers Tribute + J Dilla's Donuts — Grand Performances",
-      "url": "https://grandperformances.org/events/",
-      "sourceType": "officialTextEvents",
-      "city": "Los Angeles",
-      "metroId": "los-angeles",
-      "category": "Live Music",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://grandperformances.org/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html;charset=utf-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
       "id": "sounds-of-la-county-helen-keller-park-2026-08-01-src",
       "name": "Sounds of LA County: Selectors Choice DJ Dance Party at Helen Keller Park",
       "url": "https://www.soundsoflacounty.com/schedule/helen-keller-park-sat-08/01/26-selectors-choice-dj-dance-party-experience-workshops",
@@ -1909,33 +1728,6 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html;charset=utf-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "dena-community-backpack-giveaway-rose-bowl-2026-08-02-src",
-      "name": "3rd Annual Dena Community Backpack Giveaway at Rose Bowl Stadium",
-      "url": "https://www.eventbrite.com/e/3rd-annual-dena-community-backpack-giveawayentrega-de-mochilas-tickets-1989623447290",
-      "sourceType": "officialTextEvents",
-      "city": "Pasadena",
-      "metroId": "los-angeles",
-      "category": "Community",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.eventbrite.com/e/3rd-annual-dena-community-backpack-giveawayentrega-de-mochilas-tickets-1989623447290",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 1,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
@@ -2451,6 +2243,87 @@
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 33,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "descanso-halloween-day-2026",
+      "name": "Descanso Gardens",
+      "url": "https://www.descansogardens.org/",
+      "sourceType": "tribeEvents",
+      "city": "La Cañada Flintridge",
+      "metroId": "los-angeles",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 388,
+      "fallbackEvents": 0,
+      "eventCount": 388,
+      "fetches": [
+        {
+          "url": "https://www.descansogardens.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=412; pages=9"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=412; pages=9",
+      "rejectedLiveEvents": 22,
+      "extractedEvents": 410,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "six-flags-magic-mountain-fright-fest-2026",
+      "name": "Six Flags Magic Mountain Fright Fest",
+      "url": "https://www.sixflags.com/magicmountain/events/fright-fest",
+      "sourceType": "officialTextEvents",
+      "city": "Valencia",
+      "metroId": "los-angeles",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 12,
+      "fallbackEvents": 0,
+      "eventCount": 12,
+      "fetches": [
+        {
+          "url": "https://www.sixflags.com/magicmountain/events/fright-fest",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 12,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "mr-bones-pumpkin-patch-2026",
+      "name": "Mr. Bones Pumpkin Patch",
+      "url": "https://mrbonespumpkinpatch.com/admissions/",
+      "sourceType": "officialTextEvents",
+      "city": "Los Angeles",
+      "metroId": "los-angeles",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 13,
+      "fallbackEvents": 0,
+      "eventCount": 13,
+      "fetches": [
+        {
+          "url": "https://mrbonespumpkinpatch.com/admissions/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 13,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

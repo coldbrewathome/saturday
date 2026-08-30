@@ -1671,6 +1671,77 @@ function ticketureRows(json, key) {
   return Array.isArray(json?.[key]?._data) ? json[key]._data : [];
 }
 
+// Eventbrite ORGANIZER pages embed their upcoming events as a JS state blob
+// (one object per event with a stable key sequence). The blob isn't strictly
+// valid JSON (JS-isms), so extract per-event with a targeted regex instead of
+// JSON.parse. Fail-closed: no event-shaped matches → no events.
+const EVENTBRITE_ORG_EVENT_RE =
+  /"name":"([^"]{3,140})","url":"(https:\/\/www\.eventbrite\.com\/e\/[^"]+)","start_date":"(\d{4}-\d{2}-\d{2})","start_time":"([^"]+)","end_date":"(\d{4}-\d{2}-\d{2})","end_time":"([^"]+)","timezone":"([^"]+)"/g;
+const EVENTBRITE_ORG_VENUE_RE =
+  /"primary_venue":\{"_type":"venue","name":"([^"]+)","id":"\d+","address":\{"city":"([^"]+)"/;
+
+export function extractEventbriteOrgEvents(html, source = {}, options = {}) {
+  if (typeof html !== "string" || html.length === 0) return [];
+  const tz = source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
+  const events = [];
+  for (const match of html.matchAll(EVENTBRITE_ORG_EVENT_RE)) {
+    const [, name, url, startDate, startTime, endDate, endTime] = match;
+    if (!name || !url || !startDate) continue;
+    // Skip cancelled and online-only listings — they are not local outings.
+    // Bound the scan to THIS event object: it ends where the next event
+    // object begins (`,{"id":"`, possibly whitespace-padded in pretty-printed
+    // state), so compact pages can't bleed another event's flags into this
+    // one's window.
+    const tail = html.slice(match.index + 20);
+    const nextMatch = tail.match(/,\s*\{"id":"\d+"/);
+    const objectEnd = nextMatch
+      ? match.index + 20 + nextMatch.index
+      : Math.min(html.length, match.index + 4000);
+    const segment = html.slice(match.index, objectEnd);
+    if (/\\?"is_cancelled\\?":true/.test(segment)) continue;
+    if (/\\?"is_online_event\\?":true/.test(segment)) continue;
+    // Venue objects sit at the END of each event object (up to ~1.5k chars
+    // after the name on organizer pages) — the first primary_venue inside
+    // this event's object belongs to it.
+    const venueMatch = segment.match(EVENTBRITE_ORG_VENUE_RE);
+    const venue = venueMatch?.[1] || source.name;
+    const city = venueMatch?.[2] || source.city;
+    const startDateTime = combineEventbriteDateTime(startDate, startTime, tz);
+    if (!startDateTime) continue;
+    const endDateTime = endDate ? combineEventbriteDateTime(endDate, endTime, tz) : null;
+    const signalText = `${name} ${sourceAudienceText(source)}`;
+    events.push(normalizeRawEvent({
+      title: name,
+      description: `${name} at ${venue}. Confirm details on the official listing.`,
+      venue,
+      city,
+      neighborhood: city,
+      lat: source.lat,
+      lon: source.lon,
+      category: source.category || inferCategory(signalText),
+      startDateTime,
+      endDateTime: endDateTime && endDateTime > startDateTime
+        ? endDateTime
+        : addMinutesToLocalIso(startDateTime, 120),
+      ageBands: inferAgeBands(signalText),
+      cost: "Unknown",
+      url,
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.url,
+      extractionMethod: "eventbrite-org",
+      verified: true,
+    }, source));
+  }
+  return dedupeEvents(events);
+}
+
+function combineEventbriteDateTime(date, time, timezoneOffset) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date || "")) return null;
+  const clock = /^\d{2}:\d{2}/.test(time || "") ? time.slice(0, 5) : "10:00";
+  return `${date}T${clock}:00${timezoneOffset}`;
+}
+
 // TicketSpice event pages (JS-rendered ticket widgets, e.g. pumpkin patches)
 // embed their season config as an escaped JSON state blob — a
 // `"minDate":"YYYY-MM-DD","maxDate":"YYYY-MM-DD","active":true|false` triple
@@ -3505,6 +3576,9 @@ export function extractEventsFromPayload(payload, source = {}, options = {}) {
   }
   if (source.sourceType === "ticketSpice") {
     return extractTicketSpiceEvents(text, source, options);
+  }
+  if (source.sourceType === "eventbriteOrg") {
+    return extractEventbriteOrgEvents(text, source, options);
   }
   if (source.sourceType === "sanDiegoDrupalCalendar") {
     return extractSanDiegoDrupalCalendarEvents(text, source, options);
