@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "new-york-city",
-  "generatedAt": "2026-08-30T17:41:22.021Z",
+  "generatedAt": "2026-08-30T19:30:58.203Z",
   "registryPath": "data/event-sources-new-york-city.json",
   "outputPath": "public/data/new-york-city/events.json",
-  "eventCount": 2155,
-  "adultsEventCount": 62,
-  "sourceCount": 29,
-  "liveEventCount": 2135,
+  "eventCount": 2181,
+  "adultsEventCount": 90,
+  "sourceCount": 39,
+  "liveEventCount": 2161,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 20,
-  "operatorAlertCount": 20,
+  "operatorAlertCount": 28,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:41:22.021Z",
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
       "fetches": [
         {
           "url": "https://queens.libnet.info/events",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:41:22.021Z",
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
       "fetches": [
         {
           "url": "https://www.nypl.org/events/calendar",
@@ -79,7 +79,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:41:22.021Z",
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
       "fetches": [
         {
           "url": "https://www.newvictory.org/api/event-instances.json",
@@ -104,7 +104,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:41:22.021Z",
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
       "fetches": [
         {
           "url": "https://www.amnh.org/calendar",
@@ -129,7 +129,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:41:22.021Z",
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
       "fetches": [
         {
           "url": "https://bronxzoo.com/things-to-do/events",
@@ -154,7 +154,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:41:22.021Z",
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
       "fetches": [
         {
           "url": "https://njfair.com/",
@@ -179,7 +179,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:41:22.021Z",
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
       "fetches": [
         {
           "url": "https://www.hkdbf-ny.org/",
@@ -210,13 +210,213 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:41:22.021Z",
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
       "fetches": [
         {
           "url": "https://natddp.org/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "boo-bash-in-the-bronx-2026",
+      "sourceName": "Boo Bash in the Bronx",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.nycgovparks.org/events/2026/10/10/boo-bash-in-the-bronx",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/2026/10/10/boo-bash-in-the-bronx",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "great-pumpkin-spooktacular-2026",
+      "sourceName": "The Great Pumpkin Spooktacular",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.nycgovparks.org/events/2026/10/17/the-great-pumpkin-spooktacular",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/2026/10/17/the-great-pumpkin-spooktacular",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "zumbaween-2026",
+      "sourceName": "Zumbaween",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.nycgovparks.org/events/2026/10/22/zumbaween",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/2026/10/22/zumbaween",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "halloween-boo-bash-randalls-island-2026",
+      "sourceName": "Halloween Boo Bash at Randall's Island",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.nycgovparks.org/events/2026/10/24/halloween-boo-bash",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/2026/10/24/halloween-boo-bash",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "spooktacular-fiesta-2026",
+      "sourceName": "Spooktacular Fiesta",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.nycgovparks.org/events/2026/10/24/spooktacular-fiesta",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/2026/10/24/spooktacular-fiesta",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "halloween-wags-to-witches-2026",
+      "sourceName": "Halloween: Wags to Witches",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.nycgovparks.org/events/2026/10/25/halloween-wags-to-witches",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/2026/10/25/halloween-wags-to-witches",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "pumpkin-palooza-st-marys-2026",
+      "sourceName": "Pumpkin Palooza at St. Mary's Park",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.nycgovparks.org/events/2026/10/31/pumpkin-palooza",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/2026/10/31/pumpkin-palooza",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "new-york-city",
+      "sourceId": "spooky-snug-harbor-tour-2026",
+      "sourceName": "Spooky Snug Harbor Tour",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.nycgovparks.org/events/2026/10/31/2026-spooky-snug-harbor-tour",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/2026/10/31/2026-spooky-snug-harbor-tour",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
         }
       ]
     },
@@ -235,7 +435,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:41:22.021Z",
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
       "fetches": [
         {
           "url": "https://www.brooklynsteel.com/calendar",
@@ -260,7 +460,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:41:22.021Z",
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
       "fetches": [
         {
           "url": "https://www.boweryballroom.com/calendar",
@@ -285,7 +485,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:41:22.021Z",
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
       "fetches": [
         {
           "url": "https://www.musichallofwilliamsburg.com/calendar",
@@ -310,7 +510,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:41:22.021Z",
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
       "fetches": [
         {
           "url": "https://lpr.com/calendar",
@@ -335,7 +535,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:41:22.021Z",
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
       "fetches": [
         {
           "url": "https://www.terminal5nyc.com/calendar",
@@ -360,7 +560,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:41:22.021Z",
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
       "fetches": [
         {
           "url": "https://www.websterhall.com/events",
@@ -385,7 +585,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:41:22.021Z",
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
       "fetches": [
         {
           "url": "https://www.comedycellar.com/line-up/",
@@ -410,7 +610,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:41:22.021Z",
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
       "fetches": [
         {
           "url": "https://gothamcomedyclub.com/calendar",
@@ -435,7 +635,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:41:22.021Z",
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
       "fetches": [
         {
           "url": "https://www.elsewherebrooklyn.com/events",
@@ -460,7 +660,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:41:22.021Z",
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
       "fetches": [
         {
           "url": "https://www.roughtradenyc.com/events",
@@ -485,7 +685,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:41:22.021Z",
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
       "fetches": [
         {
           "url": "https://www.bluenotejazz.com/new-york/schedule",
@@ -510,7 +710,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:41:22.021Z",
+      "fetchedAt": "2026-08-30T19:30:58.203Z",
       "fetches": [
         {
           "url": "https://villagevanguard.com/events",
@@ -627,9 +827,9 @@
       "metroId": "new-york-city",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 1817,
+      "liveEvents": 1815,
       "fallbackEvents": 0,
-      "eventCount": 1817,
+      "eventCount": 1815,
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/kids",
@@ -641,7 +841,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 294,
-      "extractedEvents": 2111,
+      "extractedEvents": 2109,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -958,6 +1158,268 @@
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "village-halloween-parade-2026",
+      "name": "NYC Village Halloween Parade",
+      "url": "https://halloween-nyc.com/",
+      "sourceType": "officialTextEvents",
+      "city": "New York",
+      "metroId": "new-york-city",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://halloween-nyc.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "boo-bash-in-the-bronx-2026",
+      "name": "Boo Bash in the Bronx",
+      "url": "https://www.nycgovparks.org/events/2026/10/10/boo-bash-in-the-bronx",
+      "sourceType": "officialTextEvents",
+      "city": "Bronx",
+      "metroId": "new-york-city",
+      "category": "Community",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/2026/10/10/boo-bash-in-the-bronx",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ],
+      "httpStatus": 403,
+      "contentType": "text/html",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "great-pumpkin-spooktacular-2026",
+      "name": "The Great Pumpkin Spooktacular",
+      "url": "https://www.nycgovparks.org/events/2026/10/17/the-great-pumpkin-spooktacular",
+      "sourceType": "officialTextEvents",
+      "city": "Bronx",
+      "metroId": "new-york-city",
+      "category": "Community",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/2026/10/17/the-great-pumpkin-spooktacular",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ],
+      "httpStatus": 403,
+      "contentType": "text/html",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "zumbaween-2026",
+      "name": "Zumbaween",
+      "url": "https://www.nycgovparks.org/events/2026/10/22/zumbaween",
+      "sourceType": "officialTextEvents",
+      "city": "Long Island City",
+      "metroId": "new-york-city",
+      "category": "Community",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/2026/10/22/zumbaween",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ],
+      "httpStatus": 403,
+      "contentType": "text/html",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "halloween-boo-bash-randalls-island-2026",
+      "name": "Halloween Boo Bash at Randall's Island",
+      "url": "https://www.nycgovparks.org/events/2026/10/24/halloween-boo-bash",
+      "sourceType": "officialTextEvents",
+      "city": "New York",
+      "metroId": "new-york-city",
+      "category": "Community",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/2026/10/24/halloween-boo-bash",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ],
+      "httpStatus": 403,
+      "contentType": "text/html",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "spooktacular-fiesta-2026",
+      "name": "Spooktacular Fiesta",
+      "url": "https://www.nycgovparks.org/events/2026/10/24/spooktacular-fiesta",
+      "sourceType": "officialTextEvents",
+      "city": "Bronx",
+      "metroId": "new-york-city",
+      "category": "Community",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/2026/10/24/spooktacular-fiesta",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ],
+      "httpStatus": 403,
+      "contentType": "text/html",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "halloween-wags-to-witches-2026",
+      "name": "Halloween: Wags to Witches",
+      "url": "https://www.nycgovparks.org/events/2026/10/25/halloween-wags-to-witches",
+      "sourceType": "officialTextEvents",
+      "city": "Bronx",
+      "metroId": "new-york-city",
+      "category": "Community",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/2026/10/25/halloween-wags-to-witches",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ],
+      "httpStatus": 403,
+      "contentType": "text/html",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "pumpkin-palooza-st-marys-2026",
+      "name": "Pumpkin Palooza at St. Mary's Park",
+      "url": "https://www.nycgovparks.org/events/2026/10/31/pumpkin-palooza",
+      "sourceType": "officialTextEvents",
+      "city": "Bronx",
+      "metroId": "new-york-city",
+      "category": "Community",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/2026/10/31/pumpkin-palooza",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ],
+      "httpStatus": 403,
+      "contentType": "text/html",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "spooky-snug-harbor-tour-2026",
+      "name": "Spooky Snug Harbor Tour",
+      "url": "https://www.nycgovparks.org/events/2026/10/31/2026-spooky-snug-harbor-tour",
+      "sourceType": "officialTextEvents",
+      "city": "Staten Island",
+      "metroId": "new-york-city",
+      "category": "Community",
+      "status": "http-error",
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "eventCount": 0,
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/2026/10/31/2026-spooky-snug-harbor-tour",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ],
+      "httpStatus": 403,
+      "contentType": "text/html",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "great-jack-o-lantern-blaze-2026",
+      "name": "The Great Jack O'Lantern Blaze",
+      "url": "https://hudsonvalley.org/events/Blaze/",
+      "sourceType": "officialTextEvents",
+      "city": "Croton-on-Hudson",
+      "metroId": "new-york-city",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 27,
+      "fallbackEvents": 0,
+      "eventCount": 27,
+      "fetches": [
+        {
+          "url": "https://hudsonvalley.org/events/Blaze/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 27,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

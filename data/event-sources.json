@@ -1457,14 +1457,14 @@
     {
       "id": "niles-canyon-railway",
       "name": "Niles Canyon Railway",
-      "url": "https://www.ncry.org/events/?ical=1",
+      "url": "https://www.ncry.org/events/",
       "city": "Sunol",
       "category": "Outdoors",
-      "sourceType": "ics",
+      "sourceType": "html",
       "trust": "official",
       "lat": 37.5949,
       "lon": -121.8895,
-      "notes": "Heritage railway running scenic train rides on the second and third weekends Mar–Oct from the Sunol Depot. Departures 10:30am and 1pm. Tickets required."
+      "notes": "Events page embeds JSON-LD (Diesel Trains, seasonal runs). ical=1 returned empty; switched 2026-08-30."
     },
     {
       "id": "sf-botanical-garden",
@@ -1505,132 +1505,73 @@
     {
       "id": "ardenwood-historic-farm",
       "name": "Ardenwood Historic Farm",
-      "url": "https://www.ebparks.org/parks/ardenwood",
+      "url": "https://www.ebparks.org/calendar?date=2026-10&park=499",
       "city": "Fremont",
       "category": "Outdoors",
       "sourceType": "officialTextEvents",
       "trust": "official",
       "lat": 37.5563,
       "lon": -122.0478,
-      "notes": "1880s working farm operated by East Bay Regional Park District. Tours, hayrides, blacksmith demonstrations.",
-      "officialTextEvents": [
+      "notes": "Oct 2026 calendar view (park=499) — Dig Deep Farms Pumpkin Patch + Harvest Festival weekends. Rebuilt 2026-08-30; prior Aug 15-16 static entries retired (passed).",
+      "officialTextEvents": [],
+      "officialRecurringEvents": [
         {
-          "id": "ardenwood-fun-with-felting-2026-08-15",
-          "title": "Fun With Felting",
-          "description": "Drop-in family program at Ardenwood Historic Farm: try wet felting with wool from the farm's own sheep and learn how wool becomes fabric.",
+          "id": "ardenwood-pumpkin-patch-2026",
+          "title": "Dig Deep Farms Pumpkin Patch at Ardenwood",
+          "description": "The Dig Deep Farms Pumpkin Patch at Ardenwood Historic Farm in Fremont: pumpkins, farm animals, and drop-in activities for kids. Open Saturdays and Sundays in October; drop-in program, no registration.",
           "venue": "Ardenwood Historic Farm",
           "neighborhood": "Fremont",
-          "startDateTime": "2026-08-15T11:30:00-07:00",
-          "endDateTime": "2026-08-15T13:00:00-07:00",
-          "ageBands": [
-            "school-age",
-            "tween",
-            "teen"
-          ],
-          "audiences": [
-            "kids",
-            "adults"
-          ],
-          "cost": "Free with park admission",
-          "url": "https://www.ebparks.org/parks/ardenwood",
-          "requiredText": [
-            "Fun With Felting",
-            "Saturday, Aug. 15, 2026"
-          ]
-        },
-        {
-          "id": "ardenwood-farmyard-story-time-2026-08-16",
-          "title": "Farmyard Story Time",
-          "description": "Drop-in family program at Ardenwood Historic Farm: picture books about farms and animals, read aloud in the farmyard with the farm's animal friends nearby.",
-          "venue": "Ardenwood Historic Farm",
-          "neighborhood": "Fremont",
-          "startDateTime": "2026-08-16T10:30:00-07:00",
-          "endDateTime": "2026-08-16T11:30:00-07:00",
+          "startTime": "10:00",
+          "endTime": "16:00",
           "ageBands": [
             "toddler",
-            "preschool"
-          ],
-          "audiences": [
-            "kids",
-            "adults"
-          ],
-          "cost": "Free with park admission",
-          "url": "https://www.ebparks.org/parks/ardenwood",
-          "requiredText": [
-            "Farmyard Story Time",
-            "Sunday, Aug. 16, 2026"
-          ]
-        },
-        {
-          "id": "ardenwood-garden-bug-safari-2026-08-16",
-          "title": "Garden Bug Safari",
-          "description": "Drop-in family program at Ardenwood Historic Farm: hunt for bugs in the farm's garden with a naturalist and learn why garden insects matter.",
-          "venue": "Ardenwood Historic Farm",
-          "neighborhood": "Fremont",
-          "startDateTime": "2026-08-16T11:30:00-07:00",
-          "endDateTime": "2026-08-16T13:00:00-07:00",
-          "ageBands": [
             "preschool",
             "school-age",
             "tween"
           ],
-          "audiences": [
-            "kids",
-            "adults"
-          ],
-          "cost": "Free with park admission",
-          "url": "https://www.ebparks.org/parks/ardenwood",
+          "cost": "Free",
           "requiredText": [
-            "Garden Bug Safari",
-            "Sunday, Aug. 16, 2026"
-          ]
+            "Dig Deep Farms Pumpkin Patch",
+            "Oct. 3"
+          ],
+          "recurrence": {
+            "frequency": "weekly",
+            "daysOfWeek": [
+              0,
+              6
+            ],
+            "after": "2026-10-03",
+            "until": "2026-10-31"
+          }
         },
         {
-          "id": "ardenwood-hot-hot-peppers-2026-08-16",
-          "title": "Hot, Hot, Peppers",
-          "description": "Drop-in family program at Ardenwood Historic Farm: explore the farm's pepper patch, taste the difference between sweet and hot varieties, and learn how peppers shaped the farm kitchen.",
+          "id": "ardenwood-harvest-festival-2026",
+          "title": "Ardenwood Harvest Festival",
+          "description": "The Harvest Festival at Ardenwood Historic Farm in Fremont: harvest activities, farm demonstrations, and seasonal family programming. Saturdays and Sundays in October; advance tickets required.",
           "venue": "Ardenwood Historic Farm",
           "neighborhood": "Fremont",
-          "startDateTime": "2026-08-16T13:30:00-07:00",
-          "endDateTime": "2026-08-16T15:00:00-07:00",
-          "ageBands": [
-            "school-age",
-            "tween",
-            "teen"
-          ],
-          "audiences": [
-            "kids",
-            "adults"
-          ],
-          "cost": "Free with park admission",
-          "url": "https://www.ebparks.org/parks/ardenwood",
-          "requiredText": [
-            "Hot, Hot, Peppers",
-            "Sunday, Aug. 16, 2026"
-          ]
-        },
-        {
-          "id": "ardenwood-toddler-time-2026-08-19",
-          "title": "Toddler Time",
-          "description": "Drop-in family program at Ardenwood Historic Farm for the youngest visitors: simple farm chores, animal visits, and songs suited to toddlers.",
-          "venue": "Ardenwood Historic Farm",
-          "neighborhood": "Fremont",
-          "startDateTime": "2026-08-19T10:30:00-07:00",
-          "endDateTime": "2026-08-19T11:30:00-07:00",
+          "startTime": "10:00",
+          "endTime": "16:00",
           "ageBands": [
             "toddler",
-            "preschool"
+            "preschool",
+            "school-age",
+            "tween"
           ],
-          "audiences": [
-            "kids",
-            "adults"
-          ],
-          "cost": "Free with park admission",
-          "url": "https://www.ebparks.org/parks/ardenwood",
+          "cost": "$$",
           "requiredText": [
-            "Toddler Time",
-            "Wednesday, Aug. 19, 2026"
-          ]
+            "Harvest Festival",
+            "Oct. 3"
+          ],
+          "recurrence": {
+            "frequency": "weekly",
+            "daysOfWeek": [
+              0,
+              6
+            ],
+            "after": "2026-10-03",
+            "until": "2026-10-31"
+          }
         }
       ]
     },
@@ -1961,46 +1902,6 @@
           "requiredText": [
             "Sábado Gigante",
             "August 15, 2026"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "santa-clara-county-fair-2026-src",
-      "name": "Santa Clara County Fair",
-      "url": "https://thefair.org/ticketing/",
-      "city": "San Jose",
-      "neighborhood": "Santa Clara County Fairgrounds",
-      "category": "Fair",
-      "sourceType": "officialTextEvents",
-      "trust": "official",
-      "lat": 37.3225,
-      "lon": -121.8577,
-      "officialTextEvents": [
-        {
-          "id": "santa-clara-county-fair-2026",
-          "title": "Santa Clara County Fair",
-          "description": "The 82nd annual Santa Clara County Fair at the Santa Clara County Fairgrounds: carnival rides, livestock shows and 4-H/FFA exhibits, food, live entertainment, and the theme days of the 'Hare to Stay' fair. Children 5 and under enter free Aug 20-23; Wacky Wednesday (Aug 19) offers $20 admission including free carnival rides; Saturday Aug 22 is Community Heroes Day with discounted admission.",
-          "venue": "Santa Clara County Fairgrounds",
-          "neighborhood": "Santa Clara County Fairgrounds",
-          "startDateTime": "2026-08-19T16:00:00-07:00",
-          "endDateTime": "2026-08-23T22:00:00-07:00",
-          "ageBands": [
-            "toddler",
-            "preschool",
-            "school-age",
-            "tween",
-            "teen"
-          ],
-          "audiences": [
-            "kids",
-            "adults"
-          ],
-          "cost": "Admission from $15; children 5 and under free Aug 20-23; Wacky Wednesday $20 includes free carnival rides",
-          "url": "https://thefair.org/ticketing/",
-          "requiredText": [
-            "Santa Clara County Fair",
-            "August 19"
           ]
         }
       ]
