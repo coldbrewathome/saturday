@@ -21,6 +21,17 @@ https://famhop.com/los-angeles/event/underwood-family-farms-fall-harvest-festiva
 https://famhop.com/los-angeles/event/water-lantern-festival-inland-empire-rancho-jurupa-regional-park/
 https://famhop.com/seattle/event/story-time-potty-talk-toilet-training-la-hora-de-cuentos-hablemos-del-bano-entrenamiento-para-ir-al-bano-southwest-branch/
 
+
+## Halloween ramp (verified 2026-08-30)
+https://famhop.com/bay-area/event/wildflower-hike-memorial-park-memorial-county-park/
+https://famhop.com/bay-area/event/the-great-big-boo-at-gilroy-gardens-gilroy-gardens-family-theme-park/
+https://famhop.com/bay-area/event/half-moon-bay-art-pumpkin-festival-54th-main-street/
+https://famhop.com/bay-area/annual/half-moon-bay-pumpkin-festival/
+https://famhop.com/los-angeles/event/six-flags-magic-mountain-fright-fest-six-flags-magic-mountain/
+https://famhop.com/los-angeles/event/mr-bones-pumpkin-patch-mr-bones-pumpkin-patch-10100-jefferson-blvd/
+https://famhop.com/los-angeles/event/halloween-day-at-descanso-descanso-gardens/
+https://famhop.com/washington-dc/annual/butlers-orchard-pumpkin-festival/
+https://famhop.com/honolulu/annual/aloun-farms-pumpkin-festival/
 ## New evergreen annual pages (hold rank between seasons)
 https://famhop.com/atlanta/annual/
 https://famhop.com/atlanta/annual/atlanta-ice-cream-festival/
