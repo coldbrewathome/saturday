@@ -527,6 +527,8 @@ ${planLinks}
 
 <p style="color:#444;margin:0 0 24px;">Have an amazing weekend out there! 🧡<br/>— The FamHop crew</p>
 
+<p style="font-size:13px;color:#888;margin:0 0 24px;">Know another family that keeps asking &ldquo;what are we doing this weekend?&rdquo; Forward this along &mdash; they can sign up at <a href="${esc(ctx.siteBase)}/${esc(ctx.metroId)}" style="color:#888;">famhop.com/${esc(ctx.metroId)}</a>.</p>
+
 <p style="font-size:13px;color:#888;margin:24px 0 0;">You're on this list because you signed up at <a href="${esc(ctx.siteBase)}/${ctx.metroId}" style="color:#888;">famhop.com/${esc(ctx.metroId)}</a>. ${
     ctx.unsubscribeUrl
       ? `<a href="${esc(ctx.unsubscribeUrl)}" style="color:#888;">Unsubscribe with one click</a>.`
@@ -581,7 +583,12 @@ function renderText(ctx: RenderContext): string {
   lines.push("");
   lines.push(`See everything happening: ${ctx.siteBase}/${ctx.metroId}/this-weekend/`);
   lines.push("");
-  lines.push("Have an amazing weekend out there! — The FamHop crew");
+  lines.push(
+    "Have an amazing weekend out there! — The FamHop crew\n" +
+      'Know another family that keeps asking "what are we doing this weekend?" ' +
+      "Forward this along — they can sign up at " +
+      `${ctx.siteBase}/${ctx.metroId}`,
+  );
   lines.push("");
   lines.push(
     ctx.unsubscribeUrl
