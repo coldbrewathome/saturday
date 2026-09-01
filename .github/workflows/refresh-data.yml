@@ -8,6 +8,14 @@ on:
 permissions:
   contents: write
 
+# Same deploy queue as deploy-pages.yml: both upload to the same Pages
+# projects, and last-write-wins clobbers whichever deploy finished first
+# (observed 2026-09-01: the daily refresh overwrote a newer push's build).
+# Serialize so a push deploy always lands after the refresh, never before it.
+concurrency:
+  group: cloudflare-pages
+  cancel-in-progress: false
+
 jobs:
   refresh:
     runs-on: ubuntu-latest
