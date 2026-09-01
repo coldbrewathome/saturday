@@ -73,10 +73,16 @@ function detailMissPage(
   upcoming: UpcomingLink[],
   pageKind: string = "event",
   canonicalPath?: string,
+  isIndexable?: boolean,
 ): Response {
   const brand = brandForHost(host);
   const isEvent = pageKind === "event";
-  const indexable = status === 200;
+  // Dead-end pages must not stay in the index: 404s are noindex already;
+  // 200 "This event has ended" pages were indexable, so every ended event
+  // URL accumulated in GSC forever (~11k slugs). Default 404 → noindex,
+  // 200 → indexable, but callers serving "gone" (past the grace window)
+  // pass false so Google drops the URL while humans still get the page.
+  const indexable = isIndexable ?? status === 200;
   const heading =
     status === 404
       ? isEvent
@@ -161,7 +167,7 @@ export async function onRequest(context: Context): Promise<Response> {
     if (detail.kind === "event") {
       const disposition = missingPageDisposition(detail.kind, detail.slug, Date.now(), catalog);
       if (disposition === "gone") {
-        return detailMissPage(url.hostname, detail.metro, 200, catalog?.upcoming ?? [], "event", url.pathname);
+        return detailMissPage(url.hostname, detail.metro, 200, catalog?.upcoming ?? [], "event", url.pathname, false);
       }
       // "ended-grace" intentionally falls through: the prerendered page keeps
       // serving with 200 for 14 days after the event ends (full past-tense
@@ -179,13 +185,13 @@ export async function onRequest(context: Context): Promise<Response> {
   );
   const upcoming = catalog?.upcoming ?? [];
   if (disposition === "gone") {
-    return detailMissPage(url.hostname, detail.metro, 200, upcoming, "event", url.pathname);
+    return detailMissPage(url.hostname, detail.metro, 200, upcoming, "event", url.pathname, false);
   }
   if (disposition === "ended-grace") {
     // No prerendered asset (capped-out, or a redeploy dropped it): the
     // branded past-event page with its soft-landing links serves with 200
     // through the grace window and stays as the permanent page after it.
-    return detailMissPage(url.hostname, detail.metro, 200, upcoming, "event", url.pathname);
+    return detailMissPage(url.hostname, detail.metro, 200, upcoming, "event", url.pathname, true);
   }
   if (disposition === "not-found") {
     return detailMissPage(url.hostname, detail.metro, 404, upcoming);
