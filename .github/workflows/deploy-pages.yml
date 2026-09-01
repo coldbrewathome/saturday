@@ -38,6 +38,10 @@ jobs:
       - run: npm ci
       - run: npm run test
       - run: npm run validate:data
+      # Featured plans go stale the same day events end (the validator flags
+      # "references ended event") — regenerate before validating, same order
+      # as the weekly-prep runbook (skill step 5). Cheap: ~30s.
+      - run: node scripts/generate-featured-plans.mjs --all
       - run: npm run validate:events
 
       - name: Build kids (FamHop)
