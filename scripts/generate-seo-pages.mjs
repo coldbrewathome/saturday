@@ -736,6 +736,11 @@ a:hover{text-decoration:underline}
 .annual-faq dd{margin:2px 0 0;}
 .page-updated{color:var(--muted);font-size:13px;margin-top:14px;}
 .event-related{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin:26px 0;box-shadow:0 10px 28px rgba(34,34,31,.05);}
+.event-nearby{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin:26px 0;box-shadow:0 10px 28px rgba(34,34,31,.05);}
+.event-nearby h2{font-size:22px;line-height:1.25;margin:0 0 10px;}
+.event-nearby ul{margin:0;padding-left:1.1rem;}
+.event-nearby li{margin:.3rem 0;}
+.event-value h2{font-size:22px;line-height:1.25;margin:0 0 10px;}
 .event-related h2{font-size:22px;line-height:1.25;margin:0 0 10px;}
 .event-related ul{margin:0 0 12px;padding-left:1.1rem;}
 .event-related li{margin:.3rem 0;}
@@ -1258,7 +1263,7 @@ async function main() {
     // titles) are computed per metro and suppressed by every description
     // consumer (event pages, weekend ItemLists) via module state.
     setActiveBoilerplateKeys(buildBoilerplateDescriptionKeys(events));
-    const eventSlugs = generateEventPages(capEventsForPages(distinctEvents, eventSlugLookup), eventsDoc?.generatedAt, eventSlugLookup, citySlugsPre, annualByEventSlug);
+    const eventSlugs = generateEventPages(capEventsForPages(distinctEvents, eventSlugLookup), eventsDoc?.generatedAt, eventSlugLookup, citySlugsPre, annualByEventSlug, spotSlugLookup, spotSlugs, spots);
     generatedEventSlugsByMetro.set(metro.id, eventSlugs);
 
     if (!IS_ADULTS) {
@@ -2888,6 +2893,112 @@ export function pickRelatedEvents(event, upcomingSorted, limit = 4) {
   return picked.slice(0, limit);
 }
 
+// ── Event-page value blocks (real data only, nothing invented) ───────────
+// The event pages are the ~85% traffic surface; the SERP winners pair their
+// listing with practical planning content. These blocks add (a) the venue's
+// real opening hours when the event's venue matches a spot in the metro
+// dataset, and (b) the nearest family-friendly spots with real distances —
+// both rendered only when the data exists, and both adding internal links.
+
+function haversineMiles(lat1, lon1, lat2, lon2) {
+  const R = 3958.8; // earth radius in miles
+  const toRad = (d) => (d * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+// Category order for "nearby family spots": what a family pairs with an
+// event — park/playground first, then food, then culture/other.
+const NEARBY_SPOT_ORDER = ["Outdoors", "Park", "Food", "Culture", "Wellness", "Shopping", "Nightlife"];
+
+export function nearbySpotsFor(event, spots, spotSlugLookup, spotSlugs, limit = 3) {
+  if (
+    !event ||
+    typeof event.lat !== "number" ||
+    typeof event.lon !== "number" ||
+    !Array.isArray(spots)
+  ) {
+    return [];
+  }
+  const scored = [];
+  for (const spot of spots) {
+    if (typeof spot.lat !== "number" || typeof spot.lon !== "number") continue;
+    const slug = spotSlugLookup?.get(spot);
+    if (!slug || !spotSlugs?.has(slug)) continue; // only link pages this build wrote
+    const miles = haversineMiles(event.lat, event.lon, spot.lat, spot.lon);
+    if (miles > 8) continue;
+    scored.push({
+      spot,
+      slug,
+      miles,
+      order: NEARBY_SPOT_ORDER.indexOf(spot.category),
+    });
+  }
+  scored.sort((a, b) => {
+    if (a.order !== b.order) return a.order - b.order;
+    return a.miles - b.miles;
+  });
+  return scored.slice(0, limit);
+}
+
+export function venueHoursFor(event, spots) {
+  if (!event?.venue || !Array.isArray(spots)) return null;
+  const norm = (s) =>
+    String(s || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+  const target = norm(event.venue);
+  if (!target) return null;
+  let best = null;
+  let bestScore = 0;
+  for (const spot of spots) {
+    if (!spot.openingHours) continue;
+    const name = norm(spot.name);
+    if (!name) continue;
+    // Exact name match wins; else the longest common word-prefix overlap.
+    let score = 0;
+    if (name === target) {
+      score = 1000;
+    } else {
+      const a = name.split(" ");
+      const b = target.split(" ");
+      for (const w of a) {
+        if (b.includes(w) && w.length > 3) score += 1;
+      }
+    }
+    if (score > bestScore) {
+      bestScore = score;
+      best = spot;
+    }
+  }
+  return bestScore >= 2 ? best.openingHours : null;
+}
+
+function renderEventValueBlocks(event, spots, spotSlugLookup, spotSlugs) {
+  const hours = venueHoursFor(event, spots);
+  const nearby = nearbySpotsFor(event, spots, spotSlugLookup, spotSlugs);
+  if (!hours && nearby.length === 0) return "";
+  const hoursHtml = hours
+    ? `<p><strong>Venue hours:</strong> ${esc(hours)} — check the official page for holiday changes.</p>`
+    : "";
+  const nearbyHtml = nearby.length
+    ? `<section class="event-nearby"><h2>Nearby family spots</h2><ul>${nearby
+        .map(
+          ({ spot, slug, miles }) =>
+            `<li><a href="${metroPath(`spot/${slug}/`)}">${esc(spot.name)}</a> — ${esc(
+              spot.category || "Spot",
+            )} · ${miles < 0.1 ? "steps away" : `${miles.toFixed(1)} mi`}</li>`,
+        )
+        .join("")}</ul></section>`
+    : "";
+  return `<section class="event-value"><h2>Plan your visit</h2>${hoursHtml}${nearbyHtml}</section>`;
+}
+
 // Annual evergreen pages: dated event pages die with a 410 every year, so
 // "<festival name> <year>" queries — which start weeks before dates are
 // announced — land on a cold start each season. These pages persist across
@@ -3126,7 +3237,7 @@ function renderRelatedEvents(event, upcomingSorted, eventSlugLookup) {
       </section>`;
 }
 
-function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySlugs, annualByEventSlug = null) {
+function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySlugs, annualByEventSlug = null, spotSlugLookup = null, spotSlugs = null, spots = null) {
   const slugs = new Set();
   // Candidates for the related-events block, mirroring the mint gates below so
   // every rendered link points at a page this same loop will write (items is
@@ -3235,6 +3346,7 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
       </p>
       ${annualEntry ? `<p class="see-also">This is an annual ${esc(metroLabel())} tradition — see the <a href="${metroPath(`annual/${annualEntry.slug}/`)}">${esc(annualEntry.title)} annual guide</a>.</p>` : ""}
       ${renderRelatedEvents(event, upcomingSorted, eventSlugLookup)}
+      ${renderEventValueBlocks(event, spots, spotSlugLookup, spotSlugs)}
       ${renderNewsletterSignup({
         source: "event-page",
         heading: `Get next weekend's ${metroLabel()} family events in your inbox`,

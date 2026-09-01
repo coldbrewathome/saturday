@@ -3,8 +3,10 @@ import assert from "node:assert/strict";
 import {
   auditAdultsSitemapUrls,
   formatWeekendRange,
+  nearbySpotsFor,
   sitemapUrlViolatesD3,
   spotPassesQualityGate,
+  venueHoursFor,
   weekendGuideTitle,
 } from "../scripts/generate-seo-pages.mjs";
 
@@ -355,4 +357,31 @@ test("annualPageYear rolls to next year once the (first) month has passed", asyn
   // Unparseable month → null → caller skips the year.
   assert.equal(annualPageYear("Seasonal", feb), null);
   assert.equal(annualPageYear("", feb), null);
+});
+
+test("nearbySpotsFor ranks family spots by category then real distance", () => {
+  const event = { lat: 37.5, lon: -122.0, venue: "Main Library" };
+  const spots = [
+    { id: "far-park", name: "Far Park", category: "Park", lat: 37.55, lon: -122.05, openingHours: "6am-8pm" },
+    { id: "near-cafe", name: "Corner Cafe", category: "Food", lat: 37.5001, lon: -122.0001, openingHours: "7am-6pm" },
+    { id: "mid-museum", name: "City Museum", category: "Culture", lat: 37.52, lon: -122.02, openingHours: "10am-5pm" },
+  ];
+  const lookup = new Map(spots.map((s) => [s, s.id]));
+  const slugs = new Set(spots.map((s) => s.id));
+  const nearby = nearbySpotsFor(event, spots, lookup, slugs, 2);
+  assert.equal(nearby.length, 2);
+  // Category order: Park before Food before Culture; the park is far but
+  // still first by category, then the cafe by proximity over the museum.
+  assert.equal(nearby[0].slug, "far-park");
+  assert.equal(nearby[1].slug, "near-cafe");
+  assert.ok(nearby[1].miles < 1);
+
+  // Capped-out spots (no page this build) are never linked.
+  const capped = nearbySpotsFor(event, spots, lookup, new Set(["far-park"]), 5);
+  assert.equal(capped.length, 1);
+  assert.equal(capped[0].slug, "far-park");
+
+  // Venue hours: exact-name match wins.
+  assert.equal(venueHoursFor({ venue: "City Museum" }, spots), "10am-5pm");
+  assert.equal(venueHoursFor({ venue: "Unknown Venue" }, spots), null);
 });
