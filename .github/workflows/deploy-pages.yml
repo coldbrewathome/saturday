@@ -80,6 +80,13 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy data-site/dist --project-name=famhop-data --branch=main --commit-dirty=true
 
+      # IndexNow (Bing/DDG/Yandex/Seznam/Naver): submitted URLs index within
+      # hours; reads the live sitemap, non-fatal. Google ignores IndexNow.
+      - name: Submit to IndexNow
+        run: |
+          node scripts/indexnow-submit.mjs famhop.com
+          node scripts/indexnow-submit.mjs trymosey.com
+
       # Indexing API publishing REMOVED 2026-07-22 — the local 9:00 AM PT cron is
       # the single owner of the 200/day quota and data/indexing-history.json (see
       # refresh-data.yml for the double-burn incident this fixes).

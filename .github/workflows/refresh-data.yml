@@ -44,7 +44,16 @@ jobs:
       - run: npm run test
       - run: npm run validate:data
       - run: npm run validate:events
-      - run: npm run build
+      # The daily refresh must deploy the prerendered SEO pages + sitemap too —
+      # Google re-checks a changing sitemap daily, and a dated event page that
+      # only ships on push/Friday loses its ~13-day ranking runway. Same env
+      # as deploy-pages.yml so the deployed apps behave identically.
+      - name: Build kids (FamHop)
+        run: npm run build
+        env:
+          VITE_POLLS_API: "https://saturday-polls.santaclararental2016.workers.dev"
+          VITE_GOOGLE_CLIENT_ID: "673443526391-r7oj4up03jd13ti57a6fpq6bcdas91p6.apps.googleusercontent.com"
+          VITE_DATA_ORIGIN: "https://famhop-data.pages.dev"
 
       # Indexing API publishing REMOVED 2026-07-22 — the local 9:00 AM PT cron
       # (scripts/local-indexing-cron.sh) is the SINGLE owner of the 200/day quota
@@ -103,3 +112,50 @@ jobs:
             --project-name=famhop-data \
             --branch=main \
             --commit-dirty=true
+
+      # Daily app deploys: the ingest above rebuilt dist with fresh event
+      # pages + a fresh sitemap + a fresh 410/noindex manifest. Deploying
+      # them every morning is what gives Google a daily-changing sitemap to
+      # re-crawl. Kids before adults — they share dist/ and must stay
+      # sequential. Skipped silently when credentials aren't configured.
+      - name: Deploy FamHop to Cloudflare Pages (daily refresh)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "Cloudflare credentials not configured; skipping app deploy."
+            exit 0
+          fi
+          npx wrangler pages deploy dist \
+            --project-name=saturday-spots \
+            --branch=main \
+            --commit-dirty=true
+      - name: Build adults (Mosey) — daily refresh
+        run: npm run build:adults
+        env:
+          VITE_POLLS_API: "https://saturday-polls.santaclararental2016.workers.dev"
+          VITE_GOOGLE_CLIENT_ID: "673443526391-r7oj4up03jd13ti57a6fpq6bcdas91p6.apps.googleusercontent.com"
+          VITE_DATA_ORIGIN: "https://famhop-data.pages.dev"
+      - name: Deploy Mosey to Cloudflare Pages (daily refresh)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "Cloudflare credentials not configured; skipping Mosey deploy."
+            exit 0
+          fi
+          npx wrangler pages deploy dist \
+            --project-name=nighthop \
+            --branch=main \
+            --commit-dirty=true
+
+      # IndexNow (Bing/DDG/Yandex/Seznam/Naver) — submitted URLs index within
+      # hours. Reads the live sitemap, non-fatal. Google ignores IndexNow, but
+      # the daily pings keep every Bing-family index current with today's
+      # events.
+      - name: Submit to IndexNow
+        run: |
+          node scripts/indexnow-submit.mjs famhop.com
+          node scripts/indexnow-submit.mjs trymosey.com
