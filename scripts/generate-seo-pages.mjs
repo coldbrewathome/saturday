@@ -3176,6 +3176,12 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
       }
       <p class="cta-row">
         <a class="cta" href="${metroPath("")}">Plan a day with ${BRAND}</a>
+        ${(() => {
+          const gcal = googleCalendarUrl(event, canonical);
+          return gcal
+            ? `<a class="cta-secondary" rel="noopener" href="${esc(gcal)}">Add to calendar</a>`
+            : "";
+        })()}
         ${event.url ? `<a class="cta-secondary" rel="noopener nofollow" href="${esc(event.url)}">Event details</a>` : ""}
       </p>
       ${annualEntry ? `<p class="see-also">This is an annual ${esc(metroLabel())} tradition — see the <a href="${metroPath(`annual/${annualEntry.slug}/`)}">${esc(annualEntry.title)} annual guide</a>.</p>` : ""}
@@ -3620,6 +3626,26 @@ function buildEventDetailRows(event, dateStr) {
     });
   }
   return rows;
+}
+
+// Google Calendar "Add to calendar" deep link for dated event pages — the
+// subscribe affordance the event-query SERP winners (addcal.io et al.) lead
+// with. Pure URL, no extra files, so the Pages 20k-file cap is untouched.
+export function googleCalendarUrl(event, canonical) {
+  const start = event?.startDateTime ? new Date(event.startDateTime) : null;
+  if (!start || !Number.isFinite(start.getTime())) return null;
+  const end = event?.endDateTime
+    ? new Date(event.endDateTime)
+    : new Date(start.getTime() + 2 * 60 * 60 * 1000);
+  const fmt = (d) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: displayEventTitle(event),
+    dates: `${fmt(start)}/${fmt(end)}`,
+    details: canonical,
+    location: displayVenue(event) || event.city || "",
+  });
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
 
 export function buildEventJsonLd(event, canonical) {
