@@ -728,6 +728,13 @@ a:hover{text-decoration:underline}
 .cta:hover{filter:brightness(.95);text-decoration:none;}
 .cta-secondary{background:#fff;border:1px solid var(--line);color:var(--ink);}
 .see-also{margin-top:28px;color:var(--muted);}
+.annual-faq{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin:26px 0;}
+.annual-faq h2{font-size:20px;line-height:1.25;margin:0 0 12px;}
+.annual-faq dl{margin:0;}
+.annual-faq div{border-top:1px solid var(--line-soft);padding:10px 0;}
+.annual-faq dt{font-weight:700;}
+.annual-faq dd{margin:2px 0 0;}
+.page-updated{color:var(--muted);font-size:13px;margin-top:14px;}
 .event-related{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin:26px 0;box-shadow:0 10px 28px rgba(34,34,31,.05);}
 .event-related h2{font-size:22px;line-height:1.25;margin:0 0 10px;}
 .event-related ul{margin:0 0 12px;padding-left:1.1rem;}
@@ -2931,8 +2938,18 @@ function generateAnnualEventPages(distinctEvents, eventSlugLookup, eventSlugs) {
         <div><dt>Where</dt><dd>${esc(entry.venue)}, ${esc(entry.city)}</dd></div>
       </dl>
       ${entry.whatToExpect ? `<section class="annual-expect"><h2>What to expect</h2><p>${esc(entry.whatToExpect)}</p></section>` : ""}
+      <section class="annual-faq" aria-label="Frequently asked questions">
+        <h2>Quick questions</h2>
+        <dl>
+          <div><dt>When is ${esc(entry.title)}?</dt><dd>Usually held in ${esc(entry.month)}${entry.typicalDates ? ` (typically ${esc(entry.typicalDates)})` : ""}. This year's exact dates appear above as soon as the organizer announces them.</dd></div>
+          <div><dt>Where is it held?</dt><dd>${esc(entry.venue)}, ${esc(entry.city)}.</dd></div>
+          ${entry.cost ? `<div><dt>How much does it cost?</dt><dd>${esc(entry.cost)}${entry.cost === "Free" ? " — bring cash for food and extras, most festivals have booths." : ""}</dd></div>` : ""}
+          <div><dt>Is it good for kids?</dt><dd>${esc(entry.title)} is a ${esc(metroLabel())} family guide — it is picked with kids in mind. The event listing above shows age guidance when the organizer provides it.</dd></div>
+        </dl>
+      </section>
       ${liveHtml}
       ${entry.officialUrl ? `<p class="see-also"><a rel="noopener" href="${esc(entry.officialUrl)}">Official site &rarr;</a></p>` : ""}
+      <p class="page-updated">Updated ${esc(new Date(BUILD_VERIFIED_AT).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }))} — this guide refreshes whenever the organizer announces dates.</p>
       ${IS_ADULTS ? "" : renderShareBar(canonical, `${yearedName} — ${entry.city} family guide`, null)}
       <nav class="see-also" aria-label="More annual traditions">
         <a href="${metroPath("annual/")}">All annual events in ${esc(metroLabel())}</a>${siblingLinks ? `\n        ${siblingLinks}` : ""}
