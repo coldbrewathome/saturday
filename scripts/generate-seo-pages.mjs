@@ -1337,7 +1337,7 @@ async function main() {
     });
 
     const slugHistory = readEventSlugHistory(metro);
-    totalEndedEventStubs += generateEndedEventStubs(
+    const endedStubSlugs = generateEndedEventStubs(
       slugHistory,
       allCurrentEventSlugs,
       events,
@@ -1347,7 +1347,33 @@ async function main() {
       spotSlugLookup,
       spotSlugs
     );
+    totalEndedEventStubs += endedStubSlugs.size;
     writeEventSeoManifest(metro, events, eventSlugLookup, allCurrentEventSlugs, eventSlugs, slugHistory);
+    // Stale-file prune: Pages retains files from older deploys, so ended or
+    // renamed event/spot pages (and capped-out spots) would otherwise keep
+    // serving 200 forever, shadowing the 410/404 guard and the fresh sitemap.
+    // The keep-set must mirror EVERY writer of event/ and spot/ dirs:
+    // generateEventPages (eventSlugs), ended stubs, evergreen recap pages,
+    // generateSpotPages (spotSlugs), and spot alias pages.
+    const evergreenKeep = new Set(
+      IS_ADULTS ? [] : (EVERGREEN_EVENTS[metro.id] || []).map((e) => e.slug).filter(Boolean),
+    );
+    const prunedEvents = pruneStalePageDirs(
+      metro,
+      "event",
+      new Set([...eventSlugs, ...endedStubSlugs, ...evergreenKeep]),
+    );
+    const prunedSpots = pruneStalePageDirs(
+      metro,
+      "spot",
+      new Set([...spotSlugs, ...writtenAliasSlugs]),
+    );
+    writtenAliasSlugs.clear();
+    if (prunedEvents + prunedSpots > 0) {
+      console.log(
+        `[seo] pruned ${prunedEvents} stale event dirs, ${prunedSpots} stale spot dirs (${metro.id})`,
+      );
+    }
     // Slug-history write: ingest-events is not the only path that changes the
     // dataset — recovery, merge, and manual edits all funnel through this
     // build, and their slugs never reach updateSlugHistory. Refresh the
@@ -2705,7 +2731,13 @@ function generateSpotPages(items, spotSlugLookup, generatedCitySlugs, featuredSp
   return new Set(seen.keys());
 }
 
+// Slug dirs written outside the main generators this run — the stale-file
+// prune's keep-sets must include them (spot alias pages write
+// dist/<metro>/spot/<oldSlug>/ dirs whose slugs aren't in spotSlugs).
+const writtenAliasSlugs = new Set();
+
 function writeSpotAliasPage(oldSlug, baseSlug, spot) {
+  writtenAliasSlugs.add(oldSlug);
   const canonical = metroUrl(`spot/${baseSlug}/`);
   const cityName = (spot.neighborhood || metroLabel()).trim();
   const title = `${spot.name} — ${cityName} ${A.spotLabel} | ${BRAND}`;
@@ -3320,7 +3352,33 @@ function generateEndedEventStubs(
   for (const { slug } of capped) {
     writeEndedEventStub(slug, upcomingEvents, featuredSpots, eventSlugLookup, spotSlugLookup);
   }
-  return capped.length;
+  // The set of stub slugs written THIS run — the stale-prune keeps them
+  // (plus live event slugs) and deletes every other event dir.
+  return new Set(capped.map((c) => c.slug));
+}
+
+// Cloudflare Pages retains files from previous deployments — a fresh build
+// that stops generating a page (ended event, renamed slug, capped-out spot)
+// leaves the old file shadowing the runtime 410/404 guard, so dead URLs keep
+// serving 200 stubs/shells forever. After generating a metro's pages, delete
+// every dist/<metro>/<kind>/* dir whose slug this build did not write.
+function pruneStalePageDirs(metro, kind, keepSlugs) {
+  const prefix = String(metro.canonicalPath || "").replace(/^\/+|\/+$/g, "");
+  const dir = path.join(DIST, prefix, kind);
+  let entries;
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return 0; // nothing written for this kind this build
+  }
+  let removed = 0;
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+    if (keepSlugs.has(entry.name)) continue;
+    fs.rmSync(path.join(dir, entry.name), { recursive: true, force: true });
+    removed += 1;
+  }
+  return removed;
 }
 
 // Edge classification manifest consumed by functions/[[path]].ts. For event
