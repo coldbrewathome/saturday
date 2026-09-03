@@ -5,9 +5,11 @@ import {
   writeStoredProfile,
   scoreEventForFamily,
   profileSettingMatches,
-  distanceMiles,
   type FamilyProfile,
 } from "../src/familyProfile";
+// distanceMiles moved to appUtils (as haversineMiles) when haversine copies
+// were deduped.
+import { haversineMiles as distanceMiles } from "../src/appUtils";
 import type { FamilyEvent } from "../src/App";
 
 function makeEvent(overrides: Partial<FamilyEvent> & { id: string }): FamilyEvent {

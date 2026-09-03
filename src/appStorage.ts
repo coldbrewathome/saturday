@@ -102,3 +102,14 @@ export function readStoredArray<T>(key: string, fallback: T[]): T[] {
     return fallback;
   }
 }
+
+// Generic guarded writer: JSON-stringifies non-strings and swallows quota /
+// private-mode errors. Callers keep typed per-key read helpers above.
+export function writeStored(key: string, value: unknown): void {
+  try {
+    const raw = typeof value === "string" ? value : JSON.stringify(value);
+    window.localStorage.setItem(key, raw);
+  } catch {
+    // ignore — best-effort persistence
+  }
+}

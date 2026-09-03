@@ -8426,3 +8426,87 @@ a.weekend-card-title:hover {
   text-transform: uppercase;
   width: 52px;
 }
+
+/* ── Weekend feed loading skeleton (perf pass 2026-09) ────────────────────
+   Mirrors the real feed's geometry (56px thumbs, chip rows, 16:9 hero media)
+   so the loading → loaded swap causes no layout shift. Decorative only; the
+   skeleton container carries the aria-label for the loading region. */
+@keyframes weekend-sk-sheen {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+.weekend-sk {
+  background: var(--surface-strong, #eae5db);
+  border-radius: 999px;
+  display: block;
+  overflow: hidden;
+  position: relative;
+}
+.weekend-sk::after {
+  animation: weekend-sk-sheen 1.5s linear infinite;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  content: "";
+  inset: 0;
+  position: absolute;
+}
+@media (prefers-reduced-motion: reduce) {
+  .weekend-sk::after { animation: none; }
+}
+.weekend-sk-thumb {
+  border-radius: 10px;
+  flex: 0 0 56px;
+  height: 56px;
+  width: 56px;
+}
+.weekend-sk-line {
+  height: 14px;
+  margin: 10px 0;
+  max-width: 100%;
+}
+.weekend-sk-line:first-child { margin-top: 2px; }
+.weekend-sk-w30 { width: 30%; }
+.weekend-sk-w35 { width: 35%; }
+.weekend-sk-w40 { width: 40%; }
+.weekend-sk-w50 { width: 50%; }
+.weekend-sk-w55 { width: 55%; }
+.weekend-sk-w70 { width: 70%; }
+.weekend-sk-w85 { width: 85%; }
+.weekend-sk-title { height: 16px; }
+.weekend-sk-btn {
+  border-radius: 12px;
+  height: 38px;
+  width: 96px;
+}
+.weekend-sk-btn-primary { width: 152px; }
+.weekend-sk-daynum {
+  border-radius: 10px;
+  height: 40px;
+  width: 40px;
+}
+.weekend-sk-pill { height: 26px; width: 92px; }
+.weekend-sk-pill-w { width: 110px; }
+.weekend-sk-fill {
+  border-radius: 0;
+  height: 100%;
+  width: 100%;
+}
+@media (min-width: 1000px) {
+  /* Desktop hero height is body-driven (~305px with a 2-line title); the
+     skeleton's shorter bars would otherwise pop the whole row on swap. */
+  .weekend-skeleton .weekend-headliner {
+    min-height: 305px;
+  }
+}
+@media (max-width: 480px) {
+  .weekend-sk-thumb {
+    flex-basis: 48px;
+    height: 48px;
+    width: 48px;
+  }
+}

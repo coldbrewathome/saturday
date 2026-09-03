@@ -5,16 +5,9 @@
 
 import { useState } from "react";
 import { ArrowLeft, Check, ChevronRight, Sparkles } from "lucide-react";
-import type { AgeBand, PlannerBudgetLevel, PlannerSettingPreference } from "./planner";
+import { AGE_CHIPS, type AgeBand, type PlannerBudgetLevel, type PlannerSettingPreference } from "./planner";
 import { EVENT_THEMES } from "./eventThemes";
 import type { FamilyProfile } from "./familyProfile";
-
-const AGE_CHIPS: ReadonlyArray<readonly [AgeBand, string]> = [
-  ["toddler", "0–2"],
-  ["preschool", "3–5"],
-  ["school-age", "6–10"],
-  ["tween", "10+"],
-];
 
 const BUDGET_OPTIONS: ReadonlyArray<readonly [PlannerBudgetLevel, string]> = [
   ["any", "Any"],

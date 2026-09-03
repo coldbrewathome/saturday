@@ -192,6 +192,17 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   return {
     base,
+    build: {
+      rollupOptions: {
+        output: {
+          // Framework stays out of the app chunk: version-stable, so the
+          // vendor file keeps its hash across app releases (immutable cache).
+          manualChunks(id: string) {
+            if (/node_modules\/(react|react-dom)(\/|$)/.test(id)) return "react";
+          },
+        },
+      },
+    },
     plugins: [
       react(),
       audienceJsonLdPlugin(env),

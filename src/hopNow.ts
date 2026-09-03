@@ -2,6 +2,8 @@
 // weekend planner (which is multi-stop, planned ahead). This is one or two
 // nearby places that are open, near, and a fit for the next 1-2 hours.
 
+import { haversineMiles } from "./appUtils";
+
 export type HopNowAudience = "kids" | "adults";
 
 export type HopNowWeather = "wet" | "dry" | "mixed";
@@ -171,19 +173,6 @@ function pickSpotUrl(spot: HopNowSpot, audience: HopNowAudience): string | null 
     if (candidate && !OSM_URL.test(candidate)) return candidate;
   }
   return null;
-}
-
-function haversineMiles(a: HopNowLocation, b: HopNowLocation): number {
-  const toRad = (deg: number) => (deg * Math.PI) / 180;
-  const R = 3958.8;
-  const dLat = toRad(b.lat - a.lat);
-  const dLon = toRad(b.lon - a.lon);
-  const lat1 = toRad(a.lat);
-  const lat2 = toRad(b.lat);
-  const h =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
-  return 2 * R * Math.asin(Math.min(1, Math.sqrt(h)));
 }
 
 function estimateDriveMinutes(distanceMiles: number): number {

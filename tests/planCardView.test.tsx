@@ -1,7 +1,10 @@
 import "@testing-library/jest-dom/vitest";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
-import PlanCardView, { PlanCardArt, metroLabelForId } from "../src/PlanCardView";
+import PlanCardView from "../src/PlanCardView";
+// Card art + metro label live in planCardArt.tsx (shared with App's modal);
+// PlanCardView only renders the standalone page.
+import { PlanCardArt, metroLabelForId } from "../src/planCardArt";
 
 afterEach(() => {
   cleanup();

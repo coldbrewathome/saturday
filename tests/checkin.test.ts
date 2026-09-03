@@ -14,6 +14,9 @@ afterEach(() => {
   vi.unstubAllEnvs();
   vi.unstubAllGlobals();
   vi.resetModules();
+  // fetchEventTrust keeps a sessionStorage TTL cache — drop it so tests run
+  // against a cold cache.
+  sessionStorage.clear();
 });
 
 describe("submitCheckin", () => {

@@ -39,7 +39,7 @@ import {
 import type { LucideIcon } from "lucide-react";
 import type { FamilyEvent, FeaturedPlan } from "./App";
 import type { MetroConfig } from "./metros";
-import type { AgeBand } from "./planner";
+import { AGE_CHIPS, type AgeBand } from "./planner";
 import { APP_AUDIENCE, SHOW_AGE_BAND_UI } from "./appConfig";
 import type { WeatherForecast } from "./api";
 import { isUpcomingEvent } from "./eventFreshness";
@@ -62,13 +62,6 @@ import {
   weatherBrief,
   type WeatherIconKind,
 } from "./weekendBrief";
-
-const AGE_CHIPS: ReadonlyArray<readonly [AgeBand, string]> = [
-  ["toddler", "0–2"],
-  ["preschool", "3–5"],
-  ["school-age", "6–10"],
-  ["tween", "10+"],
-];
 
 const DAYPARTS = ["Morning", "Afternoon", "Evening"] as const;
 
@@ -180,6 +173,11 @@ type Props = {
   shareUrl?: string;
   /** Spot id → photo for ready-made day-plan cover images. */
   stopImages?: Record<string, string>;
+  /** Feed data state — drives the loading skeleton / retry UI instead of the
+   * pre-fetch "Nothing dated this weekend yet" flash. */
+  eventsState: "loading" | "ready" | "error";
+  /** Re-fetch events after a load failure. */
+  onRetryEvents: () => void;
 };
 
 export default function WeekendView({
@@ -208,6 +206,8 @@ export default function WeekendView({
   onShareWeekend,
   shareUrl,
   stopImages,
+  eventsState,
+  onRetryEvents,
 }: Props) {
   const feed = useMemo(() => {
     const now = new Date();
@@ -682,7 +682,12 @@ export default function WeekendView({
           {rangeLabel}
           {countdown ? ` · ${countdown}` : ""}
         </p>
-        {brief && (brief.saturday || brief.sunday) && (
+        {eventsState === "loading" ? (
+          <div className="weekend-weather" aria-hidden="true">
+            <span className="weather-pill weekend-sk weekend-sk-pill" />
+            <span className="weather-pill weekend-sk weekend-sk-pill weekend-sk-pill-w" />
+          </div>
+        ) : brief && (brief.saturday || brief.sunday) ? (
           <div
             className="weekend-weather"
             role="group"
@@ -726,7 +731,7 @@ export default function WeekendView({
             )}
             {brief.hint && <p className="weather-hint">{brief.hint}</p>}
           </div>
-        )}
+        ) : null}
         <h1>
           {profile ? "Your family's weekend, briefed." : "Your weekend, briefed."}
         </h1>
@@ -778,56 +783,77 @@ export default function WeekendView({
         )}
       </header>
 
-      {headliner && renderHeadliner()}
-
-      {total === 0 ? (
-        <section className="weekend-empty">
-          <h2>
-            Nothing dated{ageLabel ? ` for ages ${ageLabel}` : ""} this
-            weekend yet
-          </h2>
+      {eventsState === "loading" ? (
+        <WeekendSkeleton />
+      ) : eventsState === "error" ? (
+        <section className="weekend-error" role="alert">
+          <h2>Couldn&rsquo;t load this weekend&rsquo;s events</h2>
           <p>
-            Recurring storytimes and drop-in spots don&rsquo;t always carry a
-            date — the map has all of them.
+            Something went wrong reaching the event calendar. Your saved spots
+            and the map still work.
           </p>
-          <div className="weekend-empty-actions">
-            {ageBand !== "any" && (
-              <button
-                type="button"
-                className="secondary-button"
-                onClick={() => onAgeBand("any")}
-              >
-                Show all ages
-              </button>
-            )}
-            <button
-              type="button"
-              className="primary-button"
-              onClick={onOpenMap}
-            >
-              <MapPin aria-hidden="true" /> Open the map
-            </button>
-          </div>
+          <button
+            type="button"
+            className="primary-button"
+            onClick={onRetryEvents}
+          >
+            Try again
+          </button>
         </section>
       ) : (
         <>
-          {bestOf.length > 0 && (
-            <section
-              className="weekend-bestof"
-              aria-label="Best of the weekend"
-            >
-              <h3>
-                <Flame aria-hidden="true" /> The rest of the best
-              </h3>
-              <ol className="weekend-cards weekend-ranked-list">
-                {bestOf.map(({ event }) => renderCard(event, newEventIds.has(event.id)))}
-              </ol>
+          {headliner && renderHeadliner()}
+
+          {total === 0 ? (
+            <section className="weekend-empty">
+              <h2>
+                Nothing dated{ageLabel ? ` for ages ${ageLabel}` : ""} this
+                weekend yet
+              </h2>
+              <p>
+                Recurring storytimes and drop-in spots don&rsquo;t always carry a
+                date — the map has all of them.
+              </p>
+              <div className="weekend-empty-actions">
+                {ageBand !== "any" && (
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    onClick={() => onAgeBand("any")}
+                  >
+                    Show all ages
+                  </button>
+                )}
+                <button
+                  type="button"
+                  className="primary-button"
+                  onClick={onOpenMap}
+                >
+                  <MapPin aria-hidden="true" /> Open the map
+                </button>
+              </div>
             </section>
+          ) : (
+            <>
+              {bestOf.length > 0 && (
+                <section
+                  className="weekend-bestof"
+                  aria-label="Best of the weekend"
+                >
+                  <h3>
+                    <Flame aria-hidden="true" /> The rest of the best
+                  </h3>
+                  <ol className="weekend-cards weekend-ranked-list">
+                    {bestOf.map(({ event }) => renderCard(event, newEventIds.has(event.id)))}
+                  </ol>
+                </section>
+              )}
+              <div className="weekend-days">
+                {renderDay(feed.sat, satScoped)}
+                {renderDay(feed.sun, sunScoped)}
+              </div>
+            </>
           )}
-          <div className="weekend-days">
-            {renderDay(feed.sat, satScoped)}
-            {renderDay(feed.sun, sunScoped)}
-          </div>
         </>
       )}
 
@@ -914,5 +940,74 @@ export default function WeekendView({
         </a>
       </div>
     </main>
+  );
+}
+
+// Loading skeleton for the weekend feed. Mirrors the real block structure
+// (same containers/classes → same responsive geometry at both breakpoints),
+// so swapping skeleton → content causes no layout shift: the hero media box
+// reserves 16:9 where the photo will go, and each skeleton card row matches
+// a real 56px-thumb card row. Rows are capped below the fold where overhang
+// costs nothing. Decorative only — aria-hidden and skipped by SRs.
+function WeekendSkeleton() {
+  function skCard(key: string) {
+    return (
+      <li key={key} className="weekend-card" aria-hidden="true">
+        <span className="weekend-sk weekend-sk-thumb" />
+        <div className="weekend-card-main">
+          <span className="weekend-sk weekend-sk-line weekend-sk-w70" />
+          <span className="weekend-sk weekend-sk-line weekend-sk-w50" />
+          <span className="weekend-sk weekend-sk-line weekend-sk-w35" />
+        </div>
+        <div className="weekend-card-actions">
+          <span className="weekend-sk weekend-sk-btn" />
+          <span className="weekend-sk weekend-sk-btn" />
+        </div>
+      </li>
+    );
+  }
+  return (
+    <div className="weekend-skeleton" aria-label="Loading this weekend's lineup">
+      <section className="weekend-headliner" aria-hidden="true">
+        <div className="weekend-headliner-media">
+          <span className="weekend-sk weekend-sk-fill" />
+        </div>
+        <div className="weekend-headliner-body">
+          <p className="weekend-headliner-kicker">
+            <span className="weekend-sk weekend-sk-line weekend-sk-w30" />
+          </p>
+          <span className="weekend-sk weekend-sk-line weekend-sk-w85" />
+          <span className="weekend-sk weekend-sk-line weekend-sk-w55" />
+          <span className="weekend-sk weekend-sk-line weekend-sk-w40" />
+          <div className="weekend-headliner-actions">
+            <span className="weekend-sk weekend-sk-btn weekend-sk-btn-primary" />
+            <span className="weekend-sk weekend-sk-btn" />
+            <span className="weekend-sk weekend-sk-btn" />
+          </div>
+        </div>
+      </section>
+      <section className="weekend-bestof" aria-hidden="true">
+        <span className="weekend-sk weekend-sk-line weekend-sk-w35 weekend-sk-title" />
+        <ol className="weekend-cards weekend-ranked-list">
+          {[1, 2, 3, 4, 5].map((n) => skCard(`best-${n}`))}
+        </ol>
+      </section>
+      <div className="weekend-days">
+        {[0, 1].map((day) => (
+          <section className="weekend-day" key={day} aria-hidden="true">
+            <header className="weekend-day-head">
+              <span className="weekend-sk weekend-sk-daynum" />
+              <div className="weekend-day-name">
+                <span className="weekend-sk weekend-sk-line weekend-sk-w40" />
+                <span className="weekend-sk weekend-sk-line weekend-sk-w55" />
+              </div>
+            </header>
+            <ul className="weekend-cards">
+              {[1, 2, 3, 4].map((n) => skCard(`day-${day}-${n}`))}
+            </ul>
+          </section>
+        ))}
+      </div>
+    </div>
   );
 }

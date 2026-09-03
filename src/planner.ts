@@ -107,6 +107,15 @@ export const ageBandLabels: Record<AgeBand, string> = {
   tween: "Tween (10-13)",
 };
 
+// Short range labels for age filter chips (shared by WeekendView and the
+// onboarding wizard — keep in sync with ageBandLabels above).
+export const AGE_CHIPS: ReadonlyArray<readonly [AgeBand, string]> = [
+  ["toddler", "0–2"],
+  ["preschool", "3–5"],
+  ["school-age", "6–10"],
+  ["tween", "10+"],
+];
+
 export const plannerPreferenceOptions: Array<{
   id: PlannerPreferenceId;
   label: string;

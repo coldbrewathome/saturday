@@ -6,6 +6,7 @@
 import type { AgeBand, PlannerBudgetLevel, PlannerSettingPreference } from "./planner";
 import { isValidThemeId } from "./eventThemes";
 import type { FamilyEvent } from "./App";
+import { haversineMiles as distanceMiles } from "./appUtils";
 
 export type FamilyProfile = {
   /** Multi-select, unlike the single ageBand filter chip. */
@@ -94,20 +95,6 @@ export function profileSettingMatches(event: FamilyEvent, setting: PlannerSettin
   if (setting === "any") return true;
   if (setting === "indoor") return eventLooksIndoor(event) && !eventLooksOutdoor(event);
   return eventLooksOutdoor(event) && !eventLooksIndoor(event);
-}
-
-// Approx. miles between two lat/lon points (haversine, spherical earth).
-export function distanceMiles(
-  a: { lat: number; lon: number },
-  b: { lat: number; lon: number },
-): number {
-  const toRad = (deg: number) => (deg * Math.PI) / 180;
-  const dLat = toRad(b.lat - a.lat);
-  const dLon = toRad(b.lon - a.lon);
-  const h =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLon / 2) ** 2;
-  return 3958.8 * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
 }
 
 export type EventRankContext = {

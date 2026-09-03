@@ -26,7 +26,6 @@ import {
   X,
   Zap,
 } from "lucide-react";
-import { toPng } from "html-to-image";
 import {
   type ComponentProps,
   FormEvent,
@@ -106,7 +105,7 @@ import EventDetailView from "./EventDetailView";
 import WeekendView from "./WeekendView";
 import InstallBanner from "./InstallBanner";
 import OnboardingWizard from "./OnboardingWizard";
-import { PlanCardArt } from "./PlanCardView";
+import { PlanCardArt } from "./planCardArt";
 import { createPlanCard, type PlanCardRecord } from "./planCardApi";
 import {
   fetchEventTrust,
@@ -167,11 +166,13 @@ import {
   readStoredCheckins,
   readStoredGoingOutMode,
   readStoredInterests,
+  writeStored,
   writeStoredCheckins,
 } from "./appStorage";
 import {
   EMAIL_RE,
   formatGeneratedAt,
+  haversineMiles,
   interleaveByCategory,
   latestGeneratedAt,
   sourceHostname,
@@ -529,8 +530,6 @@ const costRank: Record<Cost, number> = {
   Unknown: 4,
 };
 
-const pageSizeOptions = [24, 48, 96];
-
 // Map components are bundled in a separate chunk (Leaflet + leaflet.css) and
 // loaded only when the user navigates to a view that renders a map.
 const LazySpotMap = lazy(() =>
@@ -867,8 +866,6 @@ function App({ metro }: AppProps) {
   const [sortBy, setSortBy] = useState<"best" | "nearest" | "price" | "name">(
     "best",
   );
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(24);
   const [savedIds, setSavedIds] = useState<string[]>(() =>
     readStoredArray(storageKeys.savedSpots, []),
   );
@@ -945,6 +942,9 @@ function App({ metro }: AppProps) {
   const [session, setSession] = useState<SessionState | null>(() => readSession());
   const [signInError, setSignInError] = useState<string | null>(null);
   const signInButtonRef = useRef<HTMLDivElement | null>(null);
+  // Google Identity initializes lazily on first sign-in intent (see
+  // ensureGoogleIdentity) instead of at boot.
+  const googleIdentityInit = useRef<Promise<void> | null>(null);
   const [syncReady, setSyncReady] = useState(false);
   const [syncStatus, setSyncStatus] = useState<
     "idle" | "loading" | "syncing" | "synced" | "error"
@@ -960,6 +960,15 @@ function App({ metro }: AppProps) {
     return map;
   }, [curatedSpots]);
   const [events, setEvents] = useState<FamilyEvent[]>([]);
+  // Feed state for WeekendView: "loading" → skeleton, "ready" → feed or the
+  // true empty state, "error" → retry UI (a failed events load used to be a
+  // silent permanent empty feed). Set by the events effect below.
+  const [eventsState, setEventsState] = useState<"loading" | "ready" | "error">(
+    "loading",
+  );
+  // Bumping re-runs the events load (retry UI / topbar refresh). Events are
+  // kept during a reload so non-weekend views never flash empty.
+  const [eventsReload, setEventsReload] = useState(0);
   // Baseline for "New since your last visit" — read once at mount, before
   // the mount effect writes today's timestamp, so the section compares
   // against the *previous* visit. Never updated in-session.
@@ -1178,11 +1187,15 @@ function App({ metro }: AppProps) {
             (adminPayload as { generatedAt?: string }).generatedAt ??
             prev.eventsGeneratedAt,
         }));
+        setEventsState("ready");
         return;
       }
       try {
         const response = await fetch(dataUrls.events);
-        if (!response.ok) return;
+        if (!response.ok) {
+          if (active) setEventsState("error");
+          return;
+        }
         const dataset = (await response.json()) as EventsDataset;
         if (!active) return;
         if (Array.isArray(dataset.events)) {
@@ -1193,15 +1206,23 @@ function App({ metro }: AppProps) {
             eventsCount: visible.length,
             eventsGeneratedAt: dataset.generatedAt ?? prev.eventsGeneratedAt,
           }));
+          setEventsState("ready");
+        } else {
+          setEventsState("error");
         }
       } catch {
-        // Events are optional; failure is non-fatal.
+        if (active) setEventsState("error");
       }
     })();
     return () => {
       active = false;
     };
-  }, [dataUrls.events, metro.id]);
+  }, [dataUrls.events, metro.id, eventsReload]);
+
+  function retryEvents() {
+    setEventsState("loading");
+    setEventsReload((n) => n + 1);
+  }
 
   // Aggregate trust scores for the weekend feed: fetch once per upcoming-
   // event batch (capped), re-fetch when events change.
@@ -1319,16 +1340,13 @@ function App({ metro }: AppProps) {
   }, [events, metro.label, plans]);
 
   useEffect(() => {
-    window.localStorage.setItem(
-      storageKeys.preferences,
-      JSON.stringify(preferences),
-    );
+    writeStored(storageKeys.preferences, preferences);
   }, [preferences, storageKeys.preferences]);
 
   useEffect(() => {
-    window.localStorage.setItem(
+    writeStored(
       storageKeys.selectedCategories,
-      JSON.stringify(Array.from(selectedCategories)),
+      Array.from(selectedCategories),
     );
   }, [selectedCategories, storageKeys.selectedCategories]);
 
@@ -1362,10 +1380,7 @@ function App({ metro }: AppProps) {
   }, [ageBand]);
 
   useEffect(() => {
-    window.localStorage.setItem(
-      storageKeys.plannerProfile,
-      JSON.stringify(plannerProfile),
-    );
+    writeStored(storageKeys.plannerProfile, plannerProfile);
   }, [plannerProfile, storageKeys.plannerProfile]);
 
   useEffect(() => {
@@ -1467,7 +1482,7 @@ function App({ metro }: AppProps) {
   }, [metro.id]);
 
   useEffect(() => {
-    window.localStorage.setItem(storageKeys.savedSpots, JSON.stringify(savedIds));
+    writeStored(storageKeys.savedSpots, savedIds);
   }, [savedIds, storageKeys.savedSpots]);
 
   // URL routing: keep window.location.hash in sync with view + activePlanId +
@@ -1499,35 +1514,23 @@ function App({ metro }: AppProps) {
   }, []);
 
   useEffect(() => {
-    window.localStorage.setItem(
-      storageKeys.savedEvents,
-      JSON.stringify(savedEventIds),
-    );
+    writeStored(storageKeys.savedEvents, savedEventIds);
   }, [savedEventIds, storageKeys.savedEvents]);
 
   useEffect(() => {
-    window.localStorage.setItem(
-      storageKeys.visitedSpots,
-      JSON.stringify(visitedIds),
-    );
+    writeStored(storageKeys.visitedSpots, visitedIds);
   }, [visitedIds, storageKeys.visitedSpots]);
 
   useEffect(() => {
-    window.localStorage.setItem(
-      storageKeys.customSpots,
-      JSON.stringify(customSpots),
-    );
+    writeStored(storageKeys.customSpots, customSpots);
   }, [customSpots, storageKeys.customSpots]);
 
   useEffect(() => {
-    window.localStorage.setItem(storageKeys.plans, JSON.stringify(plans));
+    writeStored(storageKeys.plans, plans);
   }, [plans, storageKeys.plans]);
 
   useEffect(() => {
-    window.localStorage.setItem(
-      storageKeys.deletedPlanIds,
-      JSON.stringify(deletedPlanIds),
-    );
+    writeStored(storageKeys.deletedPlanIds, deletedPlanIds);
   }, [deletedPlanIds, storageKeys.deletedPlanIds]);
 
   useEffect(() => {
@@ -1779,14 +1782,18 @@ function App({ metro }: AppProps) {
     profile,
   ]);
 
-  useEffect(() => {
-    if (session || !GOOGLE_CONFIGURED) {
-      return;
-    }
-    let cancelled = false;
-    loadGoogleIdentity()
-      .then(() => {
-        if (cancelled || !window.google?.accounts?.id) return;
+  // Lazy Google Identity: the gsi script + sign-in button iframe are a
+  // third-party request chain no signed-out visitor needs until they tap
+  // sign-in, so load and initialize on first intent. Idempotent — repeat
+  // taps (e.g. after sign-out) reuse the same init.
+  function ensureGoogleIdentity(): Promise<void> {
+    if (!googleIdentityInit.current) {
+      googleIdentityInit.current = (async () => {
+        if (!GOOGLE_CONFIGURED) return;
+        if (!window.google?.accounts?.id) {
+          await loadGoogleIdentity();
+        }
+        if (!window.google?.accounts?.id) return;
         window.google.accounts.id.initialize({
           client_id: GOOGLE_CLIENT_ID,
           callback: async (response: { credential: string }) => {
@@ -1830,16 +1837,14 @@ function App({ metro }: AppProps) {
             shape: "circle",
           });
         }
-      })
-      .catch((error: Error) => {
-        if (!cancelled) {
-          setSignInError(error.message);
-        }
+      })().catch((error: Error) => {
+        setSignInError(error.message);
+        // Allow a retry on the next tap rather than silently succeeding.
+        googleIdentityInit.current = null;
       });
-    return () => {
-      cancelled = true;
-    };
-  }, [session]);
+    }
+    return googleIdentityInit.current;
+  }
 
   function signOut() {
     if (session) {
@@ -1877,10 +1882,6 @@ function App({ metro }: AppProps) {
       }
     }
   }
-
-  useEffect(() => {
-    setPage(1);
-  }, [selectedCategories, city, ageBand, cost, onlyOpen, pageSize, query, sortBy, vibe]);
 
   const allSpots = useMemo(
     () => [...remoteSpots, ...curatedSpots, ...customSpots],
@@ -2103,21 +2104,6 @@ function App({ metro }: AppProps) {
       return left.transitMinutes - right.transitMinutes;
     });
   }, [allSpots, selectedCategories, city, ageBand, cost, onlyOpen, query, scoringOptions, sortBy, vibe, userLocation]);
-
-  const pageCount = Math.max(1, Math.ceil(filteredSpots.length / pageSize));
-  const safePage = Math.min(page, pageCount);
-  const pageStart = filteredSpots.length === 0 ? 0 : (safePage - 1) * pageSize;
-  const pageEnd = Math.min(filteredSpots.length, pageStart + pageSize);
-  const paginatedSpots = useMemo(
-    () => filteredSpots.slice(pageStart, pageStart + pageSize),
-    [filteredSpots, pageSize, pageStart],
-  );
-
-  useEffect(() => {
-    if (page > pageCount) {
-      setPage(pageCount);
-    }
-  }, [page, pageCount]);
 
   const selectedLabel =
     ageBand === "any"
@@ -3105,6 +3091,9 @@ function App({ metro }: AppProps) {
     if (!node || !planCard) return;
     setPlanCardBusy(true);
     try {
+      // html-to-image is heavy (~40 KB) and only needed on the share action —
+      // load it off the boot chunk.
+      const { toPng } = await import("html-to-image");
       const dataUrl = await toPng(node, { pixelRatio: 1 });
       const blob = await (await fetch(dataUrl)).blob();
       const file = new File([blob], "weekend-plan.png", { type: "image/png" });
@@ -3160,22 +3149,6 @@ function App({ metro }: AppProps) {
         return { ...plan, stopIds: next };
       }),
     );
-  }
-
-  function haversineMiles(
-    a: { lat: number; lon: number },
-    b: { lat: number; lon: number },
-  ) {
-    const toRad = (deg: number) => (deg * Math.PI) / 180;
-    const R = 3958.8;
-    const dLat = toRad(b.lat - a.lat);
-    const dLon = toRad(b.lon - a.lon);
-    const lat1 = toRad(a.lat);
-    const lat2 = toRad(b.lat);
-    const x =
-      Math.sin(dLat / 2) ** 2 +
-      Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
-    return 2 * R * Math.asin(Math.sqrt(x));
   }
 
   function clusterAround(
@@ -3359,7 +3332,6 @@ function App({ metro }: AppProps) {
     setSortBy("best");
     setPreferences([]);
     setPlannerProfile(defaultPlannerProfile);
-    setPage(1);
   }
 
   function updatePlannerProfile<Key extends keyof PlannerProfile>(
@@ -3390,11 +3362,15 @@ function App({ metro }: AppProps) {
       cost: newSpot.cost,
       transitMinutes: 20,
       timeWindow: "Anytime",
-      mood: "Saved idea",
-      groupSize: "2-6 people",
+      mood: APP_AUDIENCE === "adults" ? "Saved idea" : "Family plan idea",
+      groupSize: APP_AUDIENCE === "adults" ? "2-6 people" : "Family",
       planning: "Flexible",
       openNow: true,
-      note: note || "A saved friend outing idea to fill in later.",
+      note:
+        note ||
+        (APP_AUDIENCE === "adults"
+          ? "A saved friend outing idea to fill in later."
+          : "A saved family outing idea to fill in later."),
       tags: ["custom", newSpot.category.toLowerCase()],
     };
 
@@ -3536,21 +3512,33 @@ function App({ metro }: AppProps) {
           title={
             dataMeta.loading
               ? `Loading ${metro.label} data…`
-              : dataMeta.error
-                ? "Data error — using fallback. Click to reset filters."
-                : `${
-                    dataMeta.eventsCount != null
-                      ? `${dataMeta.count} spots · ${dataMeta.eventsCount} events`
-                      : `${dataMeta.count} ${metro.label} spots`
-                  } · Refreshed ${formatGeneratedAt(
-                    latestGeneratedAt(
-                      dataMeta.generatedAt,
-                      dataMeta.eventsGeneratedAt,
-                    ),
-                  )} · Click to reset filters`
+              : eventsState === "error"
+                ? "Couldn't load events. Click to retry."
+                : dataMeta.error
+                  ? "Data error — using fallback. Click to reset filters."
+                  : `${
+                      dataMeta.eventsCount != null
+                        ? `${dataMeta.count} spots · ${dataMeta.eventsCount} events`
+                        : `${dataMeta.count} ${metro.label} spots`
+                    } · Refreshed ${formatGeneratedAt(
+                      latestGeneratedAt(
+                        dataMeta.generatedAt,
+                        dataMeta.eventsGeneratedAt,
+                      ),
+                    )} · Click to reset filters`
           }
-          onClick={resetFilters}
-          aria-label="Refresh and reset filters"
+          onClick={() => {
+            if (eventsState === "error") {
+              retryEvents();
+              return;
+            }
+            resetFilters();
+          }}
+          aria-label={
+            eventsState === "error"
+              ? "Retry loading events"
+              : "Refresh and reset filters"
+          }
         >
           <RotateCcw aria-hidden="true" />
         </button>
@@ -3619,10 +3607,12 @@ function App({ metro }: AppProps) {
                 className="user-avatar-fallback"
                 title="Sign in with Google"
                 onClick={() => {
-                  const btn = signInButtonRef.current?.querySelector<HTMLElement>('[role="button"], iframe, div[tabindex]');
-                  if (btn) { btn.click(); return; }
-                  const gid = window.google?.accounts?.id as { prompt?: () => void } | undefined;
-                  gid?.prompt?.();
+                  void ensureGoogleIdentity().then(() => {
+                    const btn = signInButtonRef.current?.querySelector<HTMLElement>('[role="button"], iframe, div[tabindex]');
+                    if (btn) { btn.click(); return; }
+                    const gid = window.google?.accounts?.id as { prompt?: () => void } | undefined;
+                    gid?.prompt?.();
+                  });
                 }}
               >
                 <Users aria-hidden="true" />
@@ -4689,6 +4679,8 @@ function App({ metro }: AppProps) {
       ) : view === "weekend" ? (
       <WeekendView
         events={events}
+        eventsState={eventsState}
+        onRetryEvents={retryEvents}
         metro={metro}
         ageBand={ageBand}
         onAgeBand={setAgeBand}

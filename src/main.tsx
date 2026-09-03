@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { APP_AUDIENCE } from "./appConfig";
 import { metroFromPath } from "./metros";
-import OpsAlertsView from "./ops/OpsAlertsView";
-import OpsAnalyticsView from "./ops/OpsAnalyticsView";
-import PollView from "./PollView";
-import PlanCardView from "./PlanCardView";
-import PlanSignupPage from "./PlanSignupPage";
+// Standalone leaf pages are lazy: only the main app (the overwhelmingly
+// common load) ships in the boot chunk. Each page paints its own chrome
+// immediately on mount, so the fallback can be empty during the brief
+// chunk fetch.
+const OpsAlertsView = lazy(() => import("./ops/OpsAlertsView"));
+const OpsAnalyticsView = lazy(() => import("./ops/OpsAnalyticsView"));
+const PollView = lazy(() => import("./PollView"));
+const PlanCardView = lazy(() => import("./PlanCardView"));
+const PlanSignupPage = lazy(() => import("./PlanSignupPage"));
 import { recordVisit } from "./installPrompt";
 import "./styles.css";
 
@@ -99,22 +103,21 @@ function Root() {
     return () => window.removeEventListener("hashchange", handler);
   }, []);
 
+  let page: React.ReactNode;
   if (pollRoute) {
-    return <PollView pollId={pollRoute.pollId} embed={pollRoute.embed} />;
+    page = <PollView pollId={pollRoute.pollId} embed={pollRoute.embed} />;
+  } else if (planCardId) {
+    page = <PlanCardView cardId={planCardId} />;
+  } else if (planSignup) {
+    page = <PlanSignupPage metro={metro} />;
+  } else if (opsAlerts) {
+    page = <OpsAlertsView />;
+  } else if (opsAnalytics) {
+    page = <OpsAnalyticsView />;
+  } else {
+    page = <App metro={metro} />;
   }
-  if (planCardId) {
-    return <PlanCardView cardId={planCardId} />;
-  }
-  if (planSignup) {
-    return <PlanSignupPage metro={metro} />;
-  }
-  if (opsAlerts) {
-    return <OpsAlertsView />;
-  }
-  if (opsAnalytics) {
-    return <OpsAnalyticsView />;
-  }
-  return <App metro={metro} />;
+  return <Suspense fallback={null}>{page}</Suspense>;
 }
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

@@ -6,6 +6,9 @@ import type { FamilyEvent } from "../src/App";
 import type { MetroConfig } from "../src/metros";
 
 beforeEach(() => {
+  // fetchEventTrust caches per-event results in sessionStorage — drop it so
+  // each render sees the fetch mock below rather than a cached answer.
+  sessionStorage.clear();
   // The trust effect fetches the check-in aggregate on mount (API_BASE is
   // non-empty in tests via .env). Keep every render hermetic: 404 → null.
   vi.stubGlobal(
