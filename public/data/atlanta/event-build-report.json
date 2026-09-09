@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "metroId": "atlanta",
-  "generatedAt": "2026-08-30T17:45:30.619Z",
+  "generatedAt": "2026-09-05T04:31:07.040Z",
   "registryPath": "data/event-sources-atlanta.json",
   "outputPath": "public/data/atlanta/events.json",
-  "eventCount": 778,
-  "adultsEventCount": 218,
-  "sourceCount": 30,
-  "liveEventCount": 772,
-  "lastKnownGoodEventCount": 100,
+  "eventCount": 809,
+  "adultsEventCount": 272,
+  "sourceCount": 31,
+  "liveEventCount": 875,
+  "lastKnownGoodEventCount": 74,
   "fallbackEventCount": 8,
   "operatorAlertCount": 12,
   "errors": [],
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:45:30.619Z",
+      "fetchedAt": "2026-09-05T04:31:07.040Z",
       "fetches": [
         {
           "url": "https://www.atlantaga.gov/government/departments/parks-recreation/events",
@@ -45,21 +45,45 @@
       "sourceName": "Children's Museum of Atlanta Program Calendar",
       "sourceType": "cmaProgramEvents",
       "url": "https://childrensmuseumatlanta.org/program-calendar/",
-      "status": "http-error",
+      "status": "fetch-error",
       "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
+      "reason": "browser unavailable: launched is not defined",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 96,
+      "recoveredEvents": 74,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 96,
-      "fetchedAt": "2026-08-30T17:45:30.619Z",
+      "lastKnownGoodEvents": 74,
+      "fetchedAt": "2026-09-05T04:31:07.040Z",
       "fetches": [
         {
           "url": "https://childrensmuseumatlanta.org/program-calendar/",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "application/json; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "browser unavailable: launched is not defined"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "atlanta",
+      "sourceId": "ticketmaster-atlanta-family",
+      "sourceName": "Ticketmaster Atlanta Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-05T04:31:07.040Z",
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=3; pages=1"
         }
       ]
     },
@@ -78,7 +102,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:45:30.619Z",
+      "fetchedAt": "2026-09-05T04:31:07.040Z",
       "fetches": [
         {
           "url": "https://www.northgeorgiastatefair.com/",
@@ -103,7 +127,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:45:30.619Z",
+      "fetchedAt": "2026-09-05T04:31:07.040Z",
       "fetches": [
         {
           "url": "https://www.gwinnettcountyfair.com/",
@@ -128,7 +152,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:45:30.619Z",
+      "fetchedAt": "2026-09-05T04:31:07.040Z",
       "fetches": [
         {
           "url": "https://www.artsxchange.org/upcomingevents",
@@ -153,7 +177,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:45:30.619Z",
+      "fetchedAt": "2026-09-05T04:31:07.040Z",
       "fetches": [
         {
           "url": "https://gadangmega.org/events/40-ghanafest-2026",
@@ -178,7 +202,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:45:30.619Z",
+      "fetchedAt": "2026-09-05T04:31:07.040Z",
       "fetches": [
         {
           "url": "https://www.terminalwestatl.com/events",
@@ -203,7 +227,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:45:30.619Z",
+      "fetchedAt": "2026-09-05T04:31:07.040Z",
       "fetches": [
         {
           "url": "https://www.varietyplayhouse.com/events",
@@ -228,37 +252,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:45:30.619Z",
+      "fetchedAt": "2026-09-05T04:31:07.040Z",
       "fetches": [
         {
           "url": "https://www.badearl.com/calendar",
           "status": "http-error",
           "httpStatus": 404,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "laughing-skull-atl",
-      "sourceName": "Laughing Skull Lounge",
-      "sourceType": "html",
-      "url": "https://laughingskulllounge.com/events/?ical=1",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 4,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 4,
-      "fetchedAt": "2026-08-30T17:45:30.619Z",
-      "fetches": [
-        {
-          "url": "https://laughingskulllounge.com/events/?ical=1",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
         }
       ]
     },
@@ -277,7 +277,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:45:30.619Z",
+      "fetchedAt": "2026-09-05T04:31:07.040Z",
       "fetches": [
         {
           "url": "https://www.dadsgarage.com/shows",
@@ -302,7 +302,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:45:30.619Z",
+      "fetchedAt": "2026-09-05T04:31:07.040Z",
       "fetches": [
         {
           "url": "https://atlfoodandwinefestival.com/",
@@ -337,9 +337,9 @@
       "metroId": "atlanta",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 5,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 5,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://fulcolibrary.bibliocommons.com/v2/events",
@@ -351,7 +351,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 5,
+      "extractedEvents": 3,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -389,22 +389,20 @@
       "city": "Atlanta",
       "metroId": "atlanta",
       "category": "Museum",
-      "status": "http-error",
+      "status": "fetch-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 96,
+      "eventCount": 74,
       "fetches": [
         {
           "url": "https://childrensmuseumatlanta.org/program-calendar/",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "application/json; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "browser unavailable: launched is not defined"
         }
       ],
-      "httpStatus": 404,
-      "contentType": "application/json; charset=UTF-8",
+      "reason": "browser unavailable: launched is not defined",
       "extractedEvents": 0,
-      "lastKnownGoodEvents": 96,
+      "lastKnownGoodEvents": 74,
       "recoveryMode": "last-known-good"
     },
     {
@@ -416,9 +414,9 @@
       "metroId": "atlanta",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://zooatlanta.org/visit/events/",
@@ -429,7 +427,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 9,
+      "rejectedLiveEvents": 7,
       "extractedEvents": 10,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -442,11 +440,24 @@
       "city": "Atlanta",
       "metroId": "atlanta",
       "category": "Ticketed",
-      "status": "disabled",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
-      "fetches": []
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=3; pages=1"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=ticketmaster; events=3; pages=1",
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "north-georgia-state-fair",
@@ -511,21 +522,21 @@
       "metroId": "atlanta",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 356,
+      "liveEvents": 344,
       "fallbackEvents": 0,
-      "eventCount": 356,
+      "eventCount": 344,
       "fetches": [
         {
           "url": "https://dekalb.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=802; locations=25"
+          "contentType": "application/json; source=communico-events; events=859; locations=25"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=802; locations=25",
+      "contentType": "application/json; source=communico-events; events=859; locations=25",
       "rejectedLiveEvents": 9,
-      "extractedEvents": 365,
+      "extractedEvents": 353,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -538,21 +549,21 @@
       "metroId": "atlanta",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 12,
+      "liveEvents": 18,
       "fallbackEvents": 0,
-      "eventCount": 12,
+      "eventCount": 18,
       "fetches": [
         {
           "url": "https://gwinnettpl.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=597; locations=17"
+          "contentType": "application/json; source=communico-events; events=648; locations=17"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=597; locations=17",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 12,
+      "contentType": "application/json; source=communico-events; events=648; locations=17",
+      "rejectedLiveEvents": 2,
+      "extractedEvents": 20,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -565,21 +576,21 @@
       "metroId": "atlanta",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 85,
+      "liveEvents": 91,
       "fallbackEvents": 0,
-      "eventCount": 85,
+      "eventCount": 91,
       "fetches": [
         {
           "url": "https://atlantabg.org/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=176; pages=4"
+          "contentType": "application/json; source=tribe-events; events=167; pages=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=176; pages=4",
-      "rejectedLiveEvents": 84,
-      "extractedEvents": 169,
+      "contentType": "application/json; source=tribe-events; events=167; pages=4",
+      "rejectedLiveEvents": 71,
+      "extractedEvents": 162,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -592,9 +603,9 @@
       "metroId": "atlanta",
       "category": "Community",
       "status": "ok",
-      "liveEvents": 177,
+      "liveEvents": 178,
       "fallbackEvents": 0,
-      "eventCount": 177,
+      "eventCount": 178,
       "fetches": [
         {
           "url": "https://www.visitmariettaga.com/events/",
@@ -605,8 +616,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 21,
-      "extractedEvents": 198,
+      "rejectedLiveEvents": 19,
+      "extractedEvents": 197,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -619,21 +630,21 @@
       "metroId": "atlanta",
       "category": "Community",
       "status": "ok",
-      "liveEvents": 14,
+      "liveEvents": 63,
       "fallbackEvents": 0,
-      "eventCount": 14,
+      "eventCount": 63,
       "fetches": [
         {
           "url": "https://www.awesomealpharetta.com/calendar/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=33; pages=1"
+          "contentType": "application/json; source=tribe-events; events=90; pages=2"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=33; pages=1",
-      "rejectedLiveEvents": 18,
-      "extractedEvents": 32,
+      "contentType": "application/json; source=tribe-events; events=90; pages=2",
+      "rejectedLiveEvents": 26,
+      "extractedEvents": 89,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -646,9 +657,9 @@
       "metroId": "atlanta",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 26,
+      "liveEvents": 27,
       "fallbackEvents": 0,
-      "eventCount": 26,
+      "eventCount": 27,
       "fetches": [
         {
           "url": "https://piedmontpark.org/",
@@ -659,7 +670,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=42; pages=1",
-      "rejectedLiveEvents": 16,
+      "rejectedLiveEvents": 15,
       "extractedEvents": 42,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -681,13 +692,13 @@
           "url": "https://www.atlantahistorycenter.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=40; pages=1"
+          "contentType": "application/json; source=tribe-events; events=38; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=40; pages=1",
-      "rejectedLiveEvents": 24,
-      "extractedEvents": 40,
+      "contentType": "application/json; source=tribe-events; events=38; pages=1",
+      "rejectedLiveEvents": 22,
+      "extractedEvents": 38,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -800,6 +811,33 @@
       "recoveryMode": null
     },
     {
+      "id": "little-5-points-halloween-festival-parade-2026",
+      "name": "Little 5 Points Halloween Festival & Parade (2026)",
+      "url": "https://www.little5pointsofficial.com/halloween",
+      "sourceType": "officialTextEvents",
+      "city": "Atlanta",
+      "metroId": "atlanta",
+      "category": "Festival",
+      "status": "ok",
+      "liveEvents": 2,
+      "fallbackEvents": 0,
+      "eventCount": 2,
+      "fetches": [
+        {
+          "url": "https://www.little5pointsofficial.com/halloween",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 2,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
       "id": "terminal-west-atl",
       "name": "Terminal West",
       "url": "https://www.terminalwestatl.com/events",
@@ -900,8 +938,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 6,
-      "extractedEvents": 8,
+      "rejectedLiveEvents": 5,
+      "extractedEvents": 7,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -913,21 +951,24 @@
       "city": "Atlanta",
       "metroId": "atlanta",
       "category": "Comedy",
-      "status": "fetch-error",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 30,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 30,
       "fetches": [
         {
           "url": "https://laughingskulllounge.com/events/?ical=1",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/calendar; charset=UTF-8"
         }
       ],
-      "reason": "This operation was aborted",
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 4,
-      "recoveryMode": "last-known-good"
+      "httpStatus": 200,
+      "contentType": "text/calendar; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 30,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "dad-garage-atl",
@@ -951,8 +992,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html;charset=utf-8",
-      "rejectedLiveEvents": 10,
-      "extractedEvents": 10,
+      "rejectedLiveEvents": 9,
+      "extractedEvents": 9,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -965,21 +1006,21 @@
       "metroId": "atlanta",
       "category": "Comedy",
       "status": "ok",
-      "liveEvents": 25,
+      "liveEvents": 24,
       "fallbackEvents": 0,
-      "eventCount": 25,
+      "eventCount": 24,
       "fetches": [
         {
           "url": "https://www.punchline.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=68; pages=2"
+          "contentType": "application/json; source=tribe-events; events=69; pages=2"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=68; pages=2",
-      "rejectedLiveEvents": 43,
-      "extractedEvents": 68,
+      "contentType": "application/json; source=tribe-events; events=69; pages=2",
+      "rejectedLiveEvents": 45,
+      "extractedEvents": 69,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -992,9 +1033,9 @@
       "metroId": "atlanta",
       "category": "Market",
       "status": "ok",
-      "liveEvents": 49,
+      "liveEvents": 70,
       "fallbackEvents": 0,
-      "eventCount": 49,
+      "eventCount": 70,
       "fetches": [
         {
           "url": "https://www.poncecitymarket.com/events/",
@@ -1005,8 +1046,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 118,
-      "extractedEvents": 167,
+      "rejectedLiveEvents": 101,
+      "extractedEvents": 171,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

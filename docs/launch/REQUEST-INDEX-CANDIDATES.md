@@ -224,3 +224,20 @@ https://famhop.com/washington-dc/annual/h-street-festival/
 https://famhop.com/washington-dc/annual/larriland-farm-apple-picking/
 https://famhop.com/washington-dc/annual/national-zoo-zoolights/
 https://famhop.com/washington-dc/annual/prince-william-county-fair/
+
+## Halloween wave 3 (zoo boos + patches, verified 2026-09-04)
+https://famhop.com/bay-area/event/boo-at-the-zoo-oakland-zoo-oakland-zoo/
+https://famhop.com/bay-area/event/spina-farms-pumpkin-patch-spina-farms-pumpkin-patch/
+https://famhop.com/new-york-city/event/boo-at-the-zoo-bronx-zoo-events/
+https://famhop.com/new-york-city/event/boo-at-the-zoo-bronx-zoo-bronx-zoo/
+https://famhop.com/new-york-city/event/spooktacular-at-the-staten-island-zoo-staten-island-zoo/
+https://famhop.com/chicago/event/boo-at-the-zoo-brookfield-zoo-brookfield-zoo-chicago/
+https://famhop.com/atlanta/event/little-5-points-halloween-festival-parade-little-5-points-moreland-ave-and-euclid-ave/
+https://famhop.com/bay-area/annual/oakland-zoo-boo/
+https://famhop.com/bay-area/annual/spina-farms-pumpkin-patch/
+https://famhop.com/new-york-city/annual/bronx-zoo-boo/
+https://famhop.com/new-york-city/annual/staten-island-zoo-spooktacular/
+https://famhop.com/los-angeles/annual/la-zoo-boo/
+https://famhop.com/chicago/annual/brookfield-zoo-boo/
+https://famhop.com/atlanta/annual/little-5-points-halloween-festival-parade/
+

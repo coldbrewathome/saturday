@@ -730,6 +730,118 @@
           }
         }
       ]
+    },
+    {
+      "id": "bronx-zoo-boo-2026",
+      "name": "Boo at the Zoo (Bronx Zoo)",
+      "url": "https://bronxzoo.com/boo-at-the-zoo",
+      "city": "Bronx",
+      "category": "Festival",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "audienceIds": [
+        "kids"
+      ],
+      "marquee": true,
+      "notes": "Verified 2026-09-05 on official page: visible 'SATURDAYS & SUNDAYS SEPTEMBER 26 - NOVEMBER 1 INCLUDING MONDAY, OCTOBER 12'; 'Free with your Bronx Zoo ticket or Membership'; '4:00pm close time for activities'. Weekend zoo-boo run modeled as weekly Sat/Sun recurrence plus one-off text event for Monday Oct 12 holiday.",
+      "officialRecurringEvents": [
+        {
+          "id": "bronx-boo-weekends-2026",
+          "title": "Boo at the Zoo (Bronx Zoo)",
+          "description": "Boo at the Zoo at the Bronx Zoo: trick-or-treat Candy Trail, Hay Maze, Boo Carnival, costume parade, Wildlife Theater shows and Halloween activities for kids. Saturdays and Sundays September 26 through November 1, activities from 11am with a 4pm close. Free with your Bronx Zoo ticket or membership.",
+          "venue": "Bronx Zoo",
+          "neighborhood": "Bronx",
+          "startTime": "11:00",
+          "endTime": "16:00",
+          "ageBands": [
+            "toddler",
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "Included with admission",
+          "requiredText": [
+            "Boo at the Zoo"
+          ],
+          "requiredPattern": "SEPTEMBER 26",
+          "recurrence": {
+            "frequency": "weekly",
+            "daysOfWeek": [
+              0,
+              6
+            ],
+            "after": "2026-09-26",
+            "until": "2026-11-01"
+          }
+        }
+      ],
+      "officialTextEvents": [
+        {
+          "id": "bronx-boo-columbus-day-2026",
+          "title": "Boo at the Zoo (Bronx Zoo)",
+          "description": "Boo at the Zoo on Columbus Day Monday, October 12 at the Bronx Zoo: trick-or-treating, Halloween activities and shows. Free with your Bronx Zoo ticket or membership.",
+          "venue": "Bronx Zoo",
+          "neighborhood": "Bronx",
+          "startDateTime": "2026-10-12T11:00:00-04:00",
+          "endDateTime": "2026-10-12T16:00:00-04:00",
+          "ageBands": [
+            "toddler",
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "Included with admission",
+          "requiredText": [
+            "Boo at the Zoo",
+            "INCLUDING MONDAY, OCTOBER 12"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "staten-island-zoo-spooktacular-2026",
+      "name": "Spooktacular at the Staten Island Zoo",
+      "url": "https://www.statenislandzoo.org/",
+      "city": "Staten Island",
+      "category": "Community",
+      "sourceType": "officialTextEvents",
+      "trust": "official",
+      "audienceIds": [
+        "kids"
+      ],
+      "marquee": false,
+      "notes": "Verified 2026-09-05 on official homepage hero: visible '10/17 & 10/18', '2:30PM-8:00PM', 'TICKETS NOW AVAILABLE'; event name shown as the 'Spooktacular 2026' logo (image) with tickets at statenislandzoo.doubleknot.com/event/day/spooktacular/24432. Homepage-visible text only includes dates/hours; name gate not possible (logo is an image). Timed entry staggered every 30 minutes.",
+      "officialRecurringEvents": [
+        {
+          "id": "si-zoo-spooktacular-2026",
+          "title": "Spooktacular at the Staten Island Zoo",
+          "description": "Spooktacular at the Staten Island Zoo: Halloween evening event with timed-entry admission, October 17 and 18 from 2:30pm to 8:00pm. Tickets available on the zoo's ticketing site.",
+          "venue": "Staten Island Zoo",
+          "neighborhood": "Staten Island",
+          "startTime": "14:30",
+          "endTime": "20:00",
+          "ageBands": [
+            "toddler",
+            "preschool",
+            "school-age",
+            "tween"
+          ],
+          "cost": "Ticketed",
+          "requiredText": [
+            "10/17 & 10/18"
+          ],
+          "requiredPattern": "TICKETS NOW AVAILABLE",
+          "recurrence": {
+            "frequency": "weekly",
+            "daysOfWeek": [
+              0,
+              6
+            ],
+            "after": "2026-10-17",
+            "until": "2026-10-18"
+          }
+        }
+      ]
     }
   ]
 }

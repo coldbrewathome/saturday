@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "miami",
-  "generatedAt": "2026-08-30T17:47:13.699Z",
-  "alertCount": 12,
+  "generatedAt": "2026-09-05T04:21:59.876Z",
+  "alertCount": 13,
   "alerts": [
     {
       "severity": "warning",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:47:13.699Z",
+      "fetchedAt": "2026-09-05T04:21:59.876Z",
       "fetches": [
         {
           "url": "https://mdpls.libnet.info/events",
@@ -43,7 +43,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:47:13.699Z",
+      "fetchedAt": "2026-09-05T04:21:59.876Z",
       "fetches": [
         {
           "url": "https://www.fairexpo.com/",
@@ -68,7 +68,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:47:13.699Z",
+      "fetchedAt": "2026-09-05T04:21:59.876Z",
       "fetches": [
         {
           "url": "https://www.southfloridafair.com/",
@@ -81,19 +81,43 @@
     {
       "severity": "warning",
       "metroId": "miami",
+      "sourceId": "miami-broward-library-communico",
+      "sourceName": "Broward County Library Events",
+      "sourceType": "communicoEvents",
+      "url": "https://broward.libnet.info/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1107,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1107,
+      "fetchedAt": "2026-09-05T04:21:59.876Z",
+      "fetches": [
+        {
+          "url": "https://broward.libnet.info/events",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "miami",
       "sourceId": "miami-north-miami-beach-civic",
       "sourceName": "North Miami Beach City Calendar",
       "sourceType": "civicpluscal",
       "url": "https://www.citynmb.com/calendar.aspx?view=list&CID=14",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-08-30T17:47:13.699Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-05T04:21:59.876Z",
       "fetches": [
         {
           "url": "https://www.citynmb.com/calendar.aspx?view=list&CID=14",
@@ -102,7 +126,7 @@
           "contentType": "text/html; charset=utf-8"
         },
         {
-          "url": "https://www.citynmb.com/calendar.aspx?view=list&CID=14&month=9&year=2026",
+          "url": "https://www.citynmb.com/calendar.aspx?view=list&CID=14&month=10&year=2026",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -124,7 +148,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:47:13.699Z",
+      "fetchedAt": "2026-09-05T04:21:59.876Z",
       "fetches": [
         {
           "url": "https://www.thechildrenstrust.org/events/family-expo-miami-2026/",
@@ -145,11 +169,11 @@
       "issueType": "zero-extracted",
       "reason": "source produced no live events; using last-known-good future events",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 12,
+      "recoveredEvents": 6,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 12,
-      "fetchedAt": "2026-08-30T17:47:13.699Z",
+      "lastKnownGoodEvents": 6,
+      "fetchedAt": "2026-09-05T04:21:59.876Z",
       "fetches": [
         {
           "url": "https://11miami.com/events",
@@ -174,7 +198,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:47:13.699Z",
+      "fetchedAt": "2026-09-05T04:21:59.876Z",
       "fetches": [
         {
           "url": "https://clubspace.com/events",
@@ -199,7 +223,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:47:13.699Z",
+      "fetchedAt": "2026-09-05T04:21:59.876Z",
       "fetches": [
         {
           "url": "https://thegroundmiami.com/events",
@@ -224,7 +248,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:47:13.699Z",
+      "fetchedAt": "2026-09-05T04:21:59.876Z",
       "fetches": [
         {
           "url": "https://www.grframps.com/calendar",
@@ -248,7 +272,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:47:13.699Z",
+      "fetchedAt": "2026-09-05T04:21:59.876Z",
       "fetches": [
         {
           "url": "https://www.oasiswynwood.com/events",
@@ -273,7 +297,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:47:13.699Z",
+      "fetchedAt": "2026-09-05T04:21:59.876Z",
       "fetches": [
         {
           "url": "https://www.lasrosasbar.com/events",
@@ -298,7 +322,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:47:13.699Z",
+      "fetchedAt": "2026-09-05T04:21:59.876Z",
       "fetches": [
         {
           "url": "https://www.miamiimprov.com/calendar",

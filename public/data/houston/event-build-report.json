@@ -1,18 +1,43 @@
 {
   "schemaVersion": 1,
   "metroId": "houston",
-  "generatedAt": "2026-08-30T17:44:03.124Z",
+  "generatedAt": "2026-09-05T04:18:30.626Z",
   "registryPath": "data/event-sources-houston.json",
   "outputPath": "public/data/houston/events.json",
-  "eventCount": 469,
-  "adultsEventCount": 49,
+  "eventCount": 596,
+  "adultsEventCount": 70,
   "sourceCount": 22,
-  "liveEventCount": 515,
+  "liveEventCount": 659,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 9,
+  "operatorAlertCount": 10,
   "errors": [],
   "operatorAlerts": [
+    {
+      "severity": "warning",
+      "metroId": "houston",
+      "sourceId": "ticketmaster-houston-family",
+      "sourceName": "Ticketmaster Houston Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-05T04:18:30.626Z",
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=3; pages=1"
+        }
+      ]
+    },
     {
       "severity": "critical",
       "metroId": "houston",
@@ -28,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:44:03.124Z",
+      "fetchedAt": "2026-09-05T04:18:30.626Z",
       "fetches": [
         {
           "url": "https://www.fortbendcountyfair.com/",
@@ -53,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:44:03.124Z",
+      "fetchedAt": "2026-09-05T04:18:30.626Z",
       "fetches": [
         {
           "url": "https://houstontx.gov/btsf/",
@@ -64,27 +89,26 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "houston",
       "sourceId": "astronaut-days-space-center-houston-2026-07-31-src",
       "sourceName": "Astronaut Days at Space Center Houston (Friday)",
       "sourceType": "officialTextEvents",
       "url": "https://spacecenter.org/featured_events/astronaut-days/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:44:03.124Z",
+      "fetchedAt": "2026-09-05T04:18:30.626Z",
       "fetches": [
         {
           "url": "https://spacecenter.org/featured_events/astronaut-days/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ]
     },
@@ -103,7 +127,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:44:03.124Z",
+      "fetchedAt": "2026-09-05T04:18:30.626Z",
       "fetches": [
         {
           "url": "https://www.uh.edu/shakespeare/",
@@ -128,7 +152,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:44:03.124Z",
+      "fetchedAt": "2026-09-05T04:18:30.626Z",
       "fetches": [
         {
           "url": "https://www.ringling.com/show/houston-tx-2026-nrg-stadium/",
@@ -153,7 +177,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:44:03.124Z",
+      "fetchedAt": "2026-09-05T04:18:30.626Z",
       "fetches": [
         {
           "url": "https://www.whiteoakmusichall.com/events",
@@ -178,7 +202,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:44:03.124Z",
+      "fetchedAt": "2026-09-05T04:18:30.626Z",
       "fetches": [
         {
           "url": "https://www.warehouselive.com/events",
@@ -202,7 +226,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:44:03.124Z",
+      "fetchedAt": "2026-09-05T04:18:30.626Z",
       "fetches": [
         {
           "url": "https://www.thesecretgrouphtx.com/calendar",
@@ -226,7 +250,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-08-30T17:44:03.124Z",
+      "fetchedAt": "2026-09-05T04:18:30.626Z",
       "fetches": [
         {
           "url": "https://improv.com/houston/calendar/",
@@ -261,9 +285,9 @@
       "metroId": "houston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 184,
+      "liveEvents": 253,
       "fallbackEvents": 0,
-      "eventCount": 184,
+      "eventCount": 253,
       "fetches": [
         {
           "url": "https://calendar.houstonlibrary.org/calendar/events?cal=-1&cid=-1&d=0000-00-00&inc=0",
@@ -274,8 +298,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 4,
-      "extractedEvents": 188,
+      "rejectedLiveEvents": 26,
+      "extractedEvents": 279,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -315,9 +339,9 @@
       "metroId": "houston",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 20,
+      "liveEvents": 33,
       "fallbackEvents": 0,
-      "eventCount": 20,
+      "eventCount": 33,
       "fetches": [
         {
           "url": "https://www.cmhouston.org/events",
@@ -328,8 +352,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 11,
-      "extractedEvents": 31,
+      "rejectedLiveEvents": 10,
+      "extractedEvents": 43,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -342,9 +366,9 @@
       "metroId": "houston",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 4,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://www.houstonzoo.org/plan-your-visit/calendar/",
@@ -356,7 +380,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 4,
+      "extractedEvents": 3,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -368,11 +392,24 @@
       "city": "Houston",
       "metroId": "houston",
       "category": "Ticketed",
-      "status": "disabled",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
-      "fetches": []
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=3; pages=1"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "application/json; source=ticketmaster; events=3; pages=1",
+      "rejectedLiveEvents": 3,
+      "extractedEvents": 3,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "fort-bend-county-fair",
@@ -410,9 +447,9 @@
       "metroId": "houston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 13,
+      "liveEvents": 8,
       "fallbackEvents": 0,
-      "eventCount": 13,
+      "eventCount": 8,
       "fetches": [
         {
           "url": "https://hcpl.bibliocommons.com/v2/events",
@@ -424,7 +461,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 13,
+      "extractedEvents": 8,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -437,9 +474,9 @@
       "metroId": "houston",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 37,
+      "liveEvents": 38,
       "fallbackEvents": 0,
-      "eventCount": 37,
+      "eventCount": 38,
       "fetches": [
         {
           "url": "https://houstonarboretum.org/events/",
@@ -450,7 +487,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=131; pages=3",
-      "rejectedLiveEvents": 86,
+      "rejectedLiveEvents": 85,
       "extractedEvents": 123,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -464,9 +501,9 @@
       "metroId": "houston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 177,
+      "liveEvents": 223,
       "fallbackEvents": 0,
-      "eventCount": 177,
+      "eventCount": 223,
       "fetches": [
         {
           "url": "https://www.mybcls.org/calendar.aspx?view=list",
@@ -475,7 +512,7 @@
           "contentType": "text/html; charset=utf-8"
         },
         {
-          "url": "https://www.mybcls.org/calendar.aspx?view=list&month=9&year=2026&CID=0",
+          "url": "https://www.mybcls.org/calendar.aspx?view=list&month=10&year=2026&CID=0",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -483,8 +520,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 177,
+      "rejectedLiveEvents": 63,
+      "extractedEvents": 286,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -524,21 +561,21 @@
       "metroId": "houston",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 28,
+      "liveEvents": 32,
       "fallbackEvents": 0,
-      "eventCount": 28,
+      "eventCount": 32,
       "fetches": [
         {
           "url": "https://buffalobayou.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=45; pages=1"
+          "contentType": "application/json; source=tribe-events; events=51; pages=2"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=45; pages=1",
-      "rejectedLiveEvents": 16,
-      "extractedEvents": 44,
+      "contentType": "application/json; source=tribe-events; events=51; pages=2",
+      "rejectedLiveEvents": 18,
+      "extractedEvents": 50,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -550,22 +587,19 @@
       "city": "Houston",
       "metroId": "houston",
       "category": "Museum",
-      "status": "ok",
+      "status": "fetch-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://spacecenter.org/featured_events/astronaut-days/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 2,
-      "extractedEvents": 2,
+      "reason": "This operation was aborted",
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -682,9 +716,9 @@
       "metroId": "houston",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 30,
+      "liveEvents": 35,
       "fallbackEvents": 0,
-      "eventCount": 30,
+      "eventCount": 35,
       "fetches": [
         {
           "url": "https://timelyapp.time.ly/api/calendars/54706359/export?format=ics",
@@ -695,8 +729,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/calendar; charset=UTF-8",
-      "rejectedLiveEvents": 262,
-      "extractedEvents": 292,
+      "rejectedLiveEvents": 259,
+      "extractedEvents": 294,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -760,21 +794,21 @@
       "metroId": "houston",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 8,
+      "liveEvents": 9,
       "fallbackEvents": 0,
-      "eventCount": 8,
+      "eventCount": 9,
       "fetches": [
         {
           "url": "https://www.numbersnightclub.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=27; pages=1"
+          "contentType": "application/json; source=tribe-events; events=26; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=27; pages=1",
-      "rejectedLiveEvents": 18,
-      "extractedEvents": 26,
+      "contentType": "application/json; source=tribe-events; events=26; pages=1",
+      "rejectedLiveEvents": 16,
+      "extractedEvents": 25,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -787,21 +821,21 @@
       "metroId": "houston",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 8,
+      "liveEvents": 19,
       "fallbackEvents": 0,
-      "eventCount": 8,
+      "eventCount": 19,
       "fetches": [
         {
           "url": "https://www.eurekaheights.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=8; pages=1"
+          "contentType": "application/json; source=tribe-events; events=20; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=8; pages=1",
+      "contentType": "application/json; source=tribe-events; events=20; pages=1",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 8,
+      "extractedEvents": 19,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     }
