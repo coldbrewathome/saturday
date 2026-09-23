@@ -1,34 +1,9 @@
 {
   "schemaVersion": 1,
   "metroId": "phoenix",
-  "generatedAt": "2026-09-05T04:22:50.244Z",
-  "alertCount": 9,
+  "generatedAt": "2026-09-23T22:07:46.818Z",
+  "alertCount": 7,
   "alerts": [
-    {
-      "severity": "warning",
-      "metroId": "phoenix",
-      "sourceId": "ticketmaster-phoenix-family",
-      "sourceName": "Ticketmaster Phoenix Family Events",
-      "sourceType": "ticketmaster",
-      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:22:50.244Z",
-      "fetches": [
-        {
-          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=1; pages=1"
-        }
-      ]
-    },
     {
       "severity": "warning",
       "metroId": "phoenix",
@@ -36,20 +11,20 @@
       "sourceName": "Arizona State Fair",
       "sourceType": "html",
       "url": "https://azstatefair.com/",
-      "status": "ok-last-known-good",
-      "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": "last-known-good",
       "recoveredEvents": 3,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 3,
-      "fetchedAt": "2026-09-05T04:22:50.244Z",
+      "fetchedAt": "2026-09-23T22:07:46.818Z",
       "fetches": [
         {
           "url": "https://azstatefair.com/",
-          "status": "ok",
-          "httpStatus": 200,
+          "status": "http-error",
+          "httpStatus": 403,
           "contentType": "text/html; charset=UTF-8"
         }
       ]
@@ -69,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:22:50.244Z",
+      "fetchedAt": "2026-09-23T22:07:46.818Z",
       "fetches": [
         {
           "url": "https://hotwheelsmonstertruckslive.com/event/glendale-az-2026/",
@@ -94,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:22:50.244Z",
+      "fetchedAt": "2026-09-23T22:07:46.818Z",
       "fetches": [
         {
           "url": "https://xfinitychampionships.com/info/",
@@ -119,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:22:50.244Z",
+      "fetchedAt": "2026-09-23T22:07:46.818Z",
       "fetches": [
         {
           "url": "https://www.crescentphx.com/events",
@@ -144,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:22:50.244Z",
+      "fetchedAt": "2026-09-23T22:07:46.818Z",
       "fetches": [
         {
           "url": "https://www.marqueetheatreaz.com/calendar/",
@@ -169,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:22:50.244Z",
+      "fetchedAt": "2026-09-23T22:07:46.818Z",
       "fetches": [
         {
           "url": "https://phoenix.standuplive.com/events",
@@ -186,44 +161,20 @@
       "sourceName": "Rick Bronson's House of Comedy",
       "sourceType": "html",
       "url": "https://houseofcomedy.net/scottsdale",
-      "status": "fetch-error",
+      "status": "http-error",
       "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:22:50.244Z",
+      "fetchedAt": "2026-09-23T22:07:46.818Z",
       "fetches": [
         {
           "url": "https://houseofcomedy.net/scottsdale",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "phoenix",
-      "sourceId": "nile-theater-mesa",
-      "sourceName": "The Nile Theater",
-      "sourceType": "html",
-      "url": "https://www.theniletheater.com/events",
-      "status": "ok-last-known-good",
-      "issueType": "zero-in-window",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-09-05T04:22:50.244Z",
-      "fetches": [
-        {
-          "url": "https://www.theniletheater.com/events",
-          "status": "ok",
-          "httpStatus": 200,
+          "status": "http-error",
+          "httpStatus": 404,
           "contentType": "text/html; charset=UTF-8"
         }
       ]

@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "austin",
-  "generatedAt": "2026-09-05T04:30:51.256Z",
+  "generatedAt": "2026-09-23T22:09:58.944Z",
   "registryPath": "data/event-sources-austin.json",
   "outputPath": "public/data/austin/events.json",
-  "eventCount": 123,
-  "adultsEventCount": 21,
+  "eventCount": 122,
+  "adultsEventCount": 16,
   "sourceCount": 26,
-  "liveEventCount": 143,
-  "lastKnownGoodEventCount": 1,
+  "liveEventCount": 137,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 16,
+  "operatorAlertCount": 18,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:30:51.256Z",
+      "fetchedAt": "2026-09-23T22:09:58.944Z",
       "fetches": [
         {
           "url": "https://library.austintexas.gov/events/calendar",
@@ -40,21 +40,21 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "austin",
       "sourceId": "thinkery",
       "sourceName": "Thinkery (Children's Museum)",
       "sourceType": "html",
       "url": "https://thinkeryaustin.org/visit-us/",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-09-05T04:30:51.256Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:09:58.944Z",
       "fetches": [
         {
           "url": "https://thinkeryaustin.org/visit-us/",
@@ -79,7 +79,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:30:51.256Z",
+      "fetchedAt": "2026-09-23T22:09:58.944Z",
       "fetches": [
         {
           "url": "https://www.thestoryoftexas.com/visit/calendar",
@@ -104,7 +104,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:30:51.256Z",
+      "fetchedAt": "2026-09-23T22:09:58.944Z",
       "fetches": [
         {
           "url": "https://www.lbjlibrary.org/events",
@@ -129,7 +129,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:30:51.256Z",
+      "fetchedAt": "2026-09-23T22:09:58.944Z",
       "fetches": [
         {
           "url": "https://blantonmuseum.org/events/",
@@ -154,7 +154,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:30:51.256Z",
+      "fetchedAt": "2026-09-23T22:09:58.944Z",
       "fetches": [
         {
           "url": "https://www.umlaufsculpture.org/events",
@@ -179,10 +179,35 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:30:51.256Z",
+      "fetchedAt": "2026-09-23T22:09:58.944Z",
       "fetches": [
         {
           "url": "https://zilker.org/sitr2026/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "austin",
+      "sourceId": "austin-bat-fest-2026-09-05-src",
+      "sourceName": "Bat Fest",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.austintexas.gov/ace/events/bat-fest",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:09:58.944Z",
+      "fetches": [
+        {
+          "url": "https://www.austintexas.gov/ace/events/bat-fest",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -204,7 +229,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:30:51.256Z",
+      "fetchedAt": "2026-09-23T22:09:58.944Z",
       "fetches": [
         {
           "url": "https://thelongcenter.org/events/",
@@ -229,7 +254,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:30:51.256Z",
+      "fetchedAt": "2026-09-23T22:09:58.944Z",
       "fetches": [
         {
           "url": "https://ghisallo.org/events/austin/",
@@ -254,7 +279,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:30:51.256Z",
+      "fetchedAt": "2026-09-23T22:09:58.944Z",
       "fetches": [
         {
           "url": "https://stubbsaustin.com/concert-calendar/",
@@ -279,7 +304,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:30:51.256Z",
+      "fetchedAt": "2026-09-23T22:09:58.944Z",
       "fetches": [
         {
           "url": "https://mohawkaustin.com/calendar",
@@ -304,7 +329,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:30:51.256Z",
+      "fetchedAt": "2026-09-23T22:09:58.944Z",
       "fetches": [
         {
           "url": "https://continentalclub.com/austin-tx/",
@@ -329,7 +354,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:30:51.256Z",
+      "fetchedAt": "2026-09-23T22:09:58.944Z",
       "fetches": [
         {
           "url": "https://antonesnightclub.com/calendar/",
@@ -354,7 +379,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:30:51.256Z",
+      "fetchedAt": "2026-09-23T22:09:58.944Z",
       "fetches": [
         {
           "url": "https://acl-live.com/calendar/",
@@ -379,7 +404,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:30:51.256Z",
+      "fetchedAt": "2026-09-23T22:09:58.944Z",
       "fetches": [
         {
           "url": "https://drafthouse.com/austin/calendar",
@@ -404,13 +429,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:30:51.256Z",
+      "fetchedAt": "2026-09-23T22:09:58.944Z",
       "fetches": [
         {
           "url": "https://www.capcitycomedy.com/calendar",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "austin",
+      "sourceId": "pecan-street-festival-fall-2026",
+      "sourceName": "Pecan Street Festival (Fall 2026)",
+      "sourceType": "officialTextEvents",
+      "url": "https://pecanstreetfestival.org/event-info/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:09:58.944Z",
+      "fetches": [
+        {
+          "url": "https://pecanstreetfestival.org/event-info/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     }
@@ -466,10 +516,10 @@
       "city": "Austin",
       "metroId": "austin",
       "category": "Museum",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://thinkeryaustin.org/visit-us/",
@@ -482,9 +532,8 @@
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "recoveryMode": "last-known-good",
-      "reason": "source produced no live events; using last-known-good future events"
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "bullock-museum",
@@ -576,21 +625,21 @@
       "metroId": "austin",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 16,
+      "liveEvents": 4,
       "fallbackEvents": 0,
-      "eventCount": 16,
+      "eventCount": 4,
       "fetches": [
         {
           "url": "https://zilkergarden.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=20; pages=1"
+          "contentType": "application/json; source=tribe-events; events=5; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=20; pages=1",
-      "rejectedLiveEvents": 4,
-      "extractedEvents": 20,
+      "contentType": "application/json; source=tribe-events; events=5; pages=1",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 4,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -630,9 +679,9 @@
       "metroId": "austin",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 5,
+      "liveEvents": 6,
       "fallbackEvents": 0,
-      "eventCount": 5,
+      "eventCount": 6,
       "fetches": [
         {
           "url": "https://cedarparkpl.librarycalendar.com/events/month",
@@ -643,7 +692,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 0,
       "extractedEvents": 6,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -657,9 +706,9 @@
       "metroId": "austin",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 8,
+      "liveEvents": 9,
       "fallbackEvents": 0,
-      "eventCount": 8,
+      "eventCount": 9,
       "fetches": [
         {
           "url": "https://pflugerville.librarycalendar.com/events/month",
@@ -671,7 +720,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 8,
+      "extractedEvents": 9,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -711,9 +760,9 @@
       "metroId": "austin",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 89,
+      "liveEvents": 100,
       "fallbackEvents": 0,
-      "eventCount": 89,
+      "eventCount": 100,
       "fetches": [
         {
           "url": "https://roundrocktexas.libcal.com/calendar/libraryevents?cid=19825&cal=19825",
@@ -724,8 +773,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 81,
-      "extractedEvents": 170,
+      "rejectedLiveEvents": 54,
+      "extractedEvents": 154,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -765,9 +814,9 @@
       "metroId": "austin",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.austintexas.gov/ace/events/bat-fest",
@@ -778,7 +827,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -1033,21 +1082,21 @@
       "metroId": "austin",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 15,
+      "liveEvents": 13,
       "fallbackEvents": 0,
-      "eventCount": 15,
+      "eventCount": 13,
       "fetches": [
         {
           "url": "https://www.thecontemporaryaustin.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=31; pages=1"
+          "contentType": "application/json; source=tribe-events; events=26; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=31; pages=1",
-      "rejectedLiveEvents": 16,
-      "extractedEvents": 31,
+      "contentType": "application/json; source=tribe-events; events=26; pages=1",
+      "rejectedLiveEvents": 13,
+      "extractedEvents": 26,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1060,21 +1109,21 @@
       "metroId": "austin",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 5,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 5,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://www.mexic-artemuseum.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=7; pages=1"
+          "contentType": "application/json; source=tribe-events; events=4; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=7; pages=1",
+      "contentType": "application/json; source=tribe-events; events=4; pages=1",
       "rejectedLiveEvents": 2,
-      "extractedEvents": 7,
+      "extractedEvents": 4,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1087,9 +1136,9 @@
       "metroId": "austin",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://pecanstreetfestival.org/event-info/",
@@ -1100,7 +1149,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null

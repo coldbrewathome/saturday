@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "atlanta",
-  "generatedAt": "2026-09-05T04:31:07.040Z",
-  "alertCount": 12,
+  "generatedAt": "2026-09-23T22:06:18.045Z",
+  "alertCount": 15,
   "alerts": [
     {
       "severity": "warning",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:31:07.040Z",
+      "fetchedAt": "2026-09-23T22:06:18.045Z",
       "fetches": [
         {
           "url": "https://www.atlantaga.gov/government/departments/parks-recreation/events",
@@ -36,20 +36,21 @@
       "sourceName": "Children's Museum of Atlanta Program Calendar",
       "sourceType": "cmaProgramEvents",
       "url": "https://childrensmuseumatlanta.org/program-calendar/",
-      "status": "fetch-error",
+      "status": "http-error",
       "issueType": "fetch-failed",
-      "reason": "browser unavailable: launched is not defined",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 74,
+      "recoveredEvents": 11,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 74,
-      "fetchedAt": "2026-09-05T04:31:07.040Z",
+      "lastKnownGoodEvents": 11,
+      "fetchedAt": "2026-09-23T22:06:18.045Z",
       "fetches": [
         {
           "url": "https://childrensmuseumatlanta.org/program-calendar/",
-          "status": "fetch-error",
-          "reason": "browser unavailable: launched is not defined"
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "application/json; charset=UTF-8"
         }
       ]
     },
@@ -68,13 +69,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:31:07.040Z",
+      "fetchedAt": "2026-09-23T22:06:18.045Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=3; pages=1"
+          "contentType": "application/json; source=ticketmaster; events=13; pages=1"
         }
       ]
     },
@@ -93,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:31:07.040Z",
+      "fetchedAt": "2026-09-23T22:06:18.045Z",
       "fetches": [
         {
           "url": "https://www.northgeorgiastatefair.com/",
@@ -118,10 +119,35 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:31:07.040Z",
+      "fetchedAt": "2026-09-23T22:06:18.045Z",
       "fetches": [
         {
           "url": "https://www.gwinnettcountyfair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "atlanta",
+      "sourceId": "atlanta-beltline-lantern-parade-2026",
+      "sourceName": "Atlanta BeltLine Lantern Parade 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://beltline.org/art/lantern-parade/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:06:18.045Z",
+      "fetches": [
+        {
+          "url": "https://beltline.org/art/lantern-parade/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
@@ -143,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:31:07.040Z",
+      "fetchedAt": "2026-09-23T22:06:18.045Z",
       "fetches": [
         {
           "url": "https://www.artsxchange.org/upcomingevents",
@@ -168,13 +194,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:31:07.040Z",
+      "fetchedAt": "2026-09-23T22:06:18.045Z",
       "fetches": [
         {
           "url": "https://gadangmega.org/events/40-ghanafest-2026",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "atlanta",
+      "sourceId": "dragon-con-parade-2026-09-05-src",
+      "sourceName": "Annual Dragon Con Parade",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.dragoncon.org/things-to-do/parade/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:06:18.045Z",
+      "fetches": [
+        {
+          "url": "https://www.dragoncon.org/things-to-do/parade/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -193,7 +244,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:31:07.040Z",
+      "fetchedAt": "2026-09-23T22:06:18.045Z",
       "fetches": [
         {
           "url": "https://www.terminalwestatl.com/events",
@@ -218,7 +269,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:31:07.040Z",
+      "fetchedAt": "2026-09-23T22:06:18.045Z",
       "fetches": [
         {
           "url": "https://www.varietyplayhouse.com/events",
@@ -243,7 +294,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:31:07.040Z",
+      "fetchedAt": "2026-09-23T22:06:18.045Z",
       "fetches": [
         {
           "url": "https://www.badearl.com/calendar",
@@ -256,10 +307,10 @@
     {
       "severity": "warning",
       "metroId": "atlanta",
-      "sourceId": "dad-garage-atl",
-      "sourceName": "Dad's Garage Theatre",
-      "sourceType": "html",
-      "url": "https://www.dadsgarage.com/shows",
+      "sourceId": "shaky-knees-2026",
+      "sourceName": "Shaky Knees Festival 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.shakykneesfestival.com/",
       "status": "ok",
       "issueType": "zero-in-window",
       "reason": "Source returned events, but none were in the planning window.",
@@ -268,13 +319,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:31:07.040Z",
+      "fetchedAt": "2026-09-23T22:06:18.045Z",
       "fetches": [
         {
-          "url": "https://www.dadsgarage.com/shows",
+          "url": "https://www.shakykneesfestival.com/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -293,13 +344,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:31:07.040Z",
+      "fetchedAt": "2026-09-23T22:06:18.045Z",
       "fetches": [
         {
           "url": "https://atlfoodandwinefestival.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "atlanta",
+      "sourceId": "dragon-con-2026",
+      "sourceName": "Dragon Con 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.dragoncon.org/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:06:18.045Z",
+      "fetches": [
+        {
+          "url": "https://www.dragoncon.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     }

@@ -1,33 +1,9 @@
 {
   "schemaVersion": 1,
   "metroId": "miami",
-  "generatedAt": "2026-09-05T04:21:59.876Z",
-  "alertCount": 13,
+  "generatedAt": "2026-09-23T22:07:20.220Z",
+  "alertCount": 11,
   "alerts": [
-    {
-      "severity": "warning",
-      "metroId": "miami",
-      "sourceId": "miami-library-family",
-      "sourceName": "Miami-Dade Public Library Events",
-      "sourceType": "communicoEvents",
-      "url": "https://mdpls.libnet.info/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
-      "recoveredBy": "recurring-template",
-      "recoveredEvents": 8,
-      "liveEvents": 0,
-      "fallbackEvents": 8,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:21:59.876Z",
-      "fetches": [
-        {
-          "url": "https://mdpls.libnet.info/events",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
-        }
-      ]
-    },
     {
       "severity": "warning",
       "metroId": "miami",
@@ -43,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:21:59.876Z",
+      "fetchedAt": "2026-09-23T22:07:20.220Z",
       "fetches": [
         {
           "url": "https://www.fairexpo.com/",
@@ -68,37 +44,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:21:59.876Z",
+      "fetchedAt": "2026-09-23T22:07:20.220Z",
       "fetches": [
         {
           "url": "https://www.southfloridafair.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "miami",
-      "sourceId": "miami-broward-library-communico",
-      "sourceName": "Broward County Library Events",
-      "sourceType": "communicoEvents",
-      "url": "https://broward.libnet.info/events",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1107,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1107,
-      "fetchedAt": "2026-09-05T04:21:59.876Z",
-      "fetches": [
-        {
-          "url": "https://broward.libnet.info/events",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
         }
       ]
     },
@@ -117,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:21:59.876Z",
+      "fetchedAt": "2026-09-23T22:07:20.220Z",
       "fetches": [
         {
           "url": "https://www.citynmb.com/calendar.aspx?view=list&CID=14",
@@ -148,7 +100,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:21:59.876Z",
+      "fetchedAt": "2026-09-23T22:07:20.220Z",
       "fetches": [
         {
           "url": "https://www.thechildrenstrust.org/events/family-expo-miami-2026/",
@@ -159,21 +111,21 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "miami",
       "sourceId": "e11even-miami",
       "sourceName": "E11EVEN Miami",
       "sourceType": "html",
       "url": "https://11miami.com/events",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 6,
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 6,
-      "fetchedAt": "2026-09-05T04:21:59.876Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:07:20.220Z",
       "fetches": [
         {
           "url": "https://11miami.com/events",
@@ -190,21 +142,21 @@
       "sourceName": "Club Space",
       "sourceType": "html",
       "url": "https://clubspace.com/events",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:21:59.876Z",
+      "fetchedAt": "2026-09-23T22:07:20.220Z",
       "fetches": [
         {
           "url": "https://clubspace.com/events",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html;charset=utf-8"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html"
         }
       ]
     },
@@ -223,7 +175,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:21:59.876Z",
+      "fetchedAt": "2026-09-23T22:07:20.220Z",
       "fetches": [
         {
           "url": "https://thegroundmiami.com/events",
@@ -248,7 +200,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:21:59.876Z",
+      "fetchedAt": "2026-09-23T22:07:20.220Z",
       "fetches": [
         {
           "url": "https://www.grframps.com/calendar",
@@ -272,7 +224,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:21:59.876Z",
+      "fetchedAt": "2026-09-23T22:07:20.220Z",
       "fetches": [
         {
           "url": "https://www.oasiswynwood.com/events",
@@ -297,7 +249,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:21:59.876Z",
+      "fetchedAt": "2026-09-23T22:07:20.220Z",
       "fetches": [
         {
           "url": "https://www.lasrosasbar.com/events",
@@ -322,7 +274,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:21:59.876Z",
+      "fetchedAt": "2026-09-23T22:07:20.220Z",
       "fetches": [
         {
           "url": "https://www.miamiimprov.com/calendar",

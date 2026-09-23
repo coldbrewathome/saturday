@@ -1,9 +1,59 @@
 {
   "schemaVersion": 1,
   "metroId": "boston",
-  "generatedAt": "2026-09-05T04:23:14.748Z",
-  "alertCount": 10,
+  "generatedAt": "2026-09-23T22:08:05.342Z",
+  "alertCount": 14,
   "alerts": [
+    {
+      "severity": "warning",
+      "metroId": "boston",
+      "sourceId": "boston-zoo-family",
+      "sourceName": "Zoo New England Program Calendar",
+      "sourceType": "eventList",
+      "url": "https://www.zoonewengland.org/discover/program-calendar/",
+      "status": "ok-template-fallback",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": "recurring-template",
+      "recoveredEvents": 4,
+      "liveEvents": 0,
+      "fallbackEvents": 4,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetches": [
+        {
+          "url": "https://www.zoonewengland.org/discover/program-calendar/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "boston",
+      "sourceId": "ticketmaster-boston-family",
+      "sourceName": "Ticketmaster Boston Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=0; pages=1"
+        }
+      ]
+    },
     {
       "severity": "critical",
       "metroId": "boston",
@@ -19,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:14.748Z",
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
       "fetches": [
         {
           "url": "https://www.easternstatesexposition.com/",
@@ -44,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:14.748Z",
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
       "fetches": [
         {
           "url": "https://www.salemma.gov/CivicAlerts.aspx?AID=235",
@@ -55,21 +105,21 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "boston",
       "sourceId": "cambridge-carnival-2026",
       "sourceName": "Cambridge Carnival 2026",
       "sourceType": "officialTextEvents",
       "url": "https://www.cambridgecarnival.org/",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-09-05T04:23:14.748Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
       "fetches": [
         {
           "url": "https://www.cambridgecarnival.org/",
@@ -94,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:14.748Z",
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
       "fetches": [
         {
           "url": "https://www.rosekennedygreenway.org/events/boston-race-amity-arts-music-festival/",
@@ -119,13 +169,37 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:14.748Z",
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
       "fetches": [
         {
           "url": "https://www.landmarksorchestra.org/press-media/summer-2026-season/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "boston",
+      "sourceId": "sowa-open-market",
+      "sourceName": "SoWa Open Market",
+      "sourceType": "tribeEvents",
+      "url": "https://www.sowaboston.com/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 3,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 3,
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetches": [
+        {
+          "url": "https://www.sowaboston.com/events/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -144,7 +218,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:14.748Z",
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
       "fetches": [
         {
           "url": "https://commshakes.org/production/dream26/",
@@ -169,7 +243,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:14.748Z",
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
       "fetches": [
         {
           "url": "https://saintagrippinaboston.com/",
@@ -194,13 +268,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:14.748Z",
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
       "fetches": [
         {
           "url": "https://www.bostonjazzfoundation.org/crjf",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "boston",
+      "sourceId": "boston-arts-festival-2026-09-12-src",
+      "sourceName": "2026 Boston Arts Festival",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.bostonartsfestival.org/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetches": [
+        {
+          "url": "https://www.bostonartsfestival.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
         }
       ]
     },
@@ -219,7 +318,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:14.748Z",
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
       "fetches": [
         {
           "url": "https://www.crossroadspresents.com/paradise-rock-club",
@@ -244,7 +343,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:14.748Z",
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
       "fetches": [
         {
           "url": "https://www.nickscomedystop.com/calendar",

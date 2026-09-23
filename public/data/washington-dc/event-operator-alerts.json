@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "washington-dc",
-  "generatedAt": "2026-09-05T04:19:14.016Z",
-  "alertCount": 11,
+  "generatedAt": "2026-09-23T22:05:20.761Z",
+  "alertCount": 14,
   "alerts": [
     {
       "severity": "warning",
@@ -19,13 +19,13 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:19:14.016Z",
+      "fetchedAt": "2026-09-23T22:05:20.761Z",
       "fetches": [
         {
           "url": "https://dpr.dc.gov/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -44,13 +44,37 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:19:14.016Z",
+      "fetchedAt": "2026-09-23T22:05:20.761Z",
       "fetches": [
         {
           "url": "https://naturalhistory.si.edu/events/family-programs",
           "status": "http-error",
           "httpStatus": 403,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "washington-dc",
+      "sourceId": "washington-dc-zoo-family",
+      "sourceName": "National Zoo Events",
+      "sourceType": "nationalZooJsonApi",
+      "url": "https://nationalzoo.si.edu/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 3,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 3,
+      "fetchedAt": "2026-09-23T22:05:20.761Z",
+      "fetches": [
+        {
+          "url": "https://nationalzoo.si.edu/events",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ]
     },
@@ -69,13 +93,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:19:14.016Z",
+      "fetchedAt": "2026-09-23T22:05:20.761Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "application/json; source=ticketmaster; events=2; pages=1"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "washington-dc",
+      "sourceId": "maryland-state-fair",
+      "sourceName": "Maryland State Fair",
+      "sourceType": "officialTextEvents",
+      "url": "https://marylandstatefair.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:05:20.761Z",
+      "fetches": [
+        {
+          "url": "https://marylandstatefair.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -94,7 +143,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:19:14.016Z",
+      "fetchedAt": "2026-09-23T22:05:20.761Z",
       "fetches": [
         {
           "url": "https://www.loc.gov/events/2026-national-book-festival/",
@@ -119,7 +168,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:19:14.016Z",
+      "fetchedAt": "2026-09-23T22:05:20.761Z",
       "fetches": [
         {
           "url": "https://www.fairfaxcounty.gov/parks/frying-pan-park/4-h-fair",
@@ -144,7 +193,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:19:14.016Z",
+      "fetchedAt": "2026-09-23T22:05:20.761Z",
       "fetches": [
         {
           "url": "https://deggeller.com/events/13",
@@ -157,10 +206,10 @@
     {
       "severity": "warning",
       "metroId": "washington-dc",
-      "sourceId": "hilloween-dc-2026",
-      "sourceName": "Hilloween on Capitol Hill",
+      "sourceId": "h-street-festival-2026-09-19-src",
+      "sourceName": "2026 H Street Festival",
       "sourceType": "officialTextEvents",
-      "url": "https://hsema.dc.gov/event/hilloween-3",
+      "url": "https://hstreet.org/event/2026-h-street-festival/",
       "status": "ok",
       "issueType": "zero-in-window",
       "reason": "Source returned events, but none were in the planning window.",
@@ -169,13 +218,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:19:14.016Z",
+      "fetchedAt": "2026-09-23T22:05:20.761Z",
+      "fetches": [
+        {
+          "url": "https://hstreet.org/event/2026-h-street-festival/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "washington-dc",
+      "sourceId": "hilloween-dc-2026",
+      "sourceName": "Hilloween on Capitol Hill",
+      "sourceType": "officialTextEvents",
+      "url": "https://hsema.dc.gov/event/hilloween-3",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:05:20.761Z",
       "fetches": [
         {
           "url": "https://hsema.dc.gov/event/hilloween-3",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -194,7 +268,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:19:14.016Z",
+      "fetchedAt": "2026-09-23T22:05:20.761Z",
       "fetches": [
         {
           "url": "https://www.930.com/events",
@@ -219,7 +293,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:19:14.016Z",
+      "fetchedAt": "2026-09-23T22:05:20.761Z",
       "fetches": [
         {
           "url": "https://www.unionstage.com/events",
@@ -243,7 +317,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:19:14.016Z",
+      "fetchedAt": "2026-09-23T22:05:20.761Z",
       "fetches": [
         {
           "url": "https://www.songbyrddc.com/events",
@@ -254,21 +328,21 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "washington-dc",
       "sourceId": "dc-jazzfest-wharf-2026",
       "sourceName": "DC JazzFest at The Wharf 2026",
       "sourceType": "officialTextEvents",
       "url": "https://www.dcjazzfest.org/event-details/dcjazzfest2026",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-09-05T04:19:14.016Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:05:20.761Z",
       "fetches": [
         {
           "url": "https://www.dcjazzfest.org/event-details/dcjazzfest2026",

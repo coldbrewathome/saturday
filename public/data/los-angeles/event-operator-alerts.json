@@ -1,9 +1,34 @@
 {
   "schemaVersion": 1,
   "metroId": "los-angeles",
-  "generatedAt": "2026-09-05T04:29:21.456Z",
-  "alertCount": 30,
+  "generatedAt": "2026-09-23T22:01:24.193Z",
+  "alertCount": 33,
   "alerts": [
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "la-brea-tar-pits",
+      "sourceName": "La Brea Tar Pits & Museum",
+      "sourceType": "html",
+      "url": "https://tarpits.org/calendar?_wrapper_format=html&page=0",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetches": [
+        {
+          "url": "https://tarpits.org/calendar?_wrapper_format=html&page=0",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
     {
       "severity": "critical",
       "metroId": "los-angeles",
@@ -19,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://www.petersen.org/events",
@@ -27,6 +52,31 @@
           "reason": "challenge page returned instead of event content",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "griffith-observatory",
+      "sourceName": "Griffith Observatory",
+      "sourceType": "html",
+      "url": "https://griffithobservatory.lacity.gov/events/",
+      "status": "ok-last-known-good",
+      "issueType": "zero-in-window",
+      "reason": "source produced no live events; using last-known-good future events",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 2,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 2,
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetches": [
+        {
+          "url": "https://griffithobservatory.lacity.gov/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -45,7 +95,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://www.nortonsimon.org/calendar",
@@ -70,7 +120,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://www.huntington.org/calendar",
@@ -95,38 +145,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://grandparkla.org/events/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "los-angeles",
-      "sourceId": "ticketmaster-los-angeles-family",
-      "sourceName": "Ticketmaster Los Angeles Family Events",
-      "sourceType": "ticketmaster",
-      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
-      "fetches": [
-        {
-          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=2; pages=1"
         }
       ]
     },
@@ -145,7 +170,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://ocfair.com/oc-fair/",
@@ -170,7 +195,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://venturacountyfair.org/",
@@ -195,7 +220,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
@@ -220,7 +245,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://www.soundsoflacounty.com/schedule/helen-keller-park-sat-08/01/26-selectors-choice-dj-dance-party-experience-workshops",
@@ -245,7 +270,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://www.soundsoflacounty.com/schedule/william-steinmetz-park-sat-08/01/26-nance-arte-presents-resonance-remedies-an-evening-of-la-soundscapes",
@@ -270,7 +295,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://niseiweek.org/events/grand-parade/",
@@ -295,7 +320,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://niseiweek.org/events/plaza-festival/",
@@ -306,51 +331,26 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "los-angeles",
       "sourceId": "sawdust-art-festival-2026-08-01-src",
       "sourceName": "Sawdust Art Festival (60th Summer Festival)",
       "sourceType": "officialTextEvents",
       "url": "https://sawdustartfestival.org/",
       "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://sawdustartfestival.org/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "los-angeles",
-      "sourceId": "watts-towers-day-of-the-drum-2026-09-26-src",
-      "sourceName": "44th Annual Watts Towers Day of the Drum Festival",
-      "sourceType": "officialTextEvents",
-      "url": "https://culture.lacity.gov/event/44th-annual-watts-towers-day-of-the-drum-festival",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
-      "fetches": [
-        {
-          "url": "https://culture.lacity.gov/event/44th-annual-watts-towers-day-of-the-drum-festival",
-          "status": "http-error",
-          "httpStatus": 403,
           "contentType": "text/html; charset=UTF-8"
         }
       ]
@@ -370,7 +370,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://www.janm.org/index.php/press/release/janm-presents-free-2026-natsumatsuri-family-festival-saturday-august-15",
@@ -395,7 +395,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://www.soundsoflacounty.com/schedule",
@@ -420,7 +420,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://www.soundsoflacounty.com/schedule",
@@ -431,21 +431,21 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "los-angeles",
       "sourceId": "sounds-of-la-county-stephen-sorenson-park-2026-08-15-src",
       "sourceName": "Sounds of LA County: Las Cafeteras at Stephen Sorenson Park",
       "sourceType": "officialTextEvents",
       "url": "https://www.soundsoflacounty.com/schedule",
       "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://www.soundsoflacounty.com/schedule",
@@ -470,7 +470,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://www.wayfinderfamily.org/back-to-school-bash",
@@ -495,7 +495,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://www.getty.edu/news/garden-concerts-for-kids-returns-for-summer-at-the-getty-center/",
@@ -516,11 +516,11 @@
       "issueType": "zero-extracted",
       "reason": "source produced no live events; using last-known-good future events",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 12,
+      "recoveredEvents": 6,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 12,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "lastKnownGoodEvents": 6,
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://losriosrancho.com/apple-season",
@@ -531,12 +531,62 @@
       ]
     },
     {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "malibu-chili-cookoff-2026",
+      "sourceName": "Malibu Chili Cook-Off",
+      "sourceType": "officialTextEvents",
+      "url": "https://malibuchilicookoff.org/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetches": [
+        {
+          "url": "https://malibuchilicookoff.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "fiesta-hermosa-2026",
+      "sourceName": "Fiesta Hermosa",
+      "sourceType": "officialTextEvents",
+      "url": "https://fiestahermosa.net/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetches": [
+        {
+          "url": "https://fiestahermosa.net/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
       "severity": "critical",
       "metroId": "los-angeles",
-      "sourceId": "la-zoo-boo-2026",
-      "sourceName": "Boo at the L.A. Zoo",
+      "sourceId": "water-lantern-fest-inland-empire-2026",
+      "sourceName": "Water Lantern Festival – Inland Empire",
       "sourceType": "officialTextEvents",
-      "url": "https://lazoo.org/plan-your-visit/special-experiences/boo/",
+      "url": "https://www.waterlanternfestival.com/events/inland-empire",
       "status": "ok",
       "issueType": "zero-extracted",
       "reason": "Source returned a payload but no events were extracted.",
@@ -545,10 +595,35 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
-          "url": "https://lazoo.org/plan-your-visit/special-experiences/boo/",
+          "url": "https://www.waterlanternfestival.com/events/inland-empire",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "orange-intl-street-fair-2026",
+      "sourceName": "Orange International Street Fair",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.optevents.org/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetches": [
+        {
+          "url": "https://www.optevents.org/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -562,20 +637,20 @@
       "sourceName": "The Troubadour",
       "sourceType": "html",
       "url": "https://www.troubadour.com/events",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://www.troubadour.com/events",
-          "status": "http-error",
-          "httpStatus": 404,
+          "status": "ok",
+          "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ]
@@ -595,7 +670,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://www.theelrey.com/events",
@@ -620,7 +695,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://www.theroxy.com/events",
@@ -645,7 +720,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://thecomedystore.com/calendar/",
@@ -670,7 +745,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://www.laughfactory.com/shows",
@@ -695,7 +770,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://improv.com/hollywood/calendar/",
@@ -720,7 +795,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://www.ticketmaster.com/the-wiltern-tickets-los-angeles/venue/73790",
@@ -746,7 +821,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:29:21.456Z",
+      "fetchedAt": "2026-09-23T22:01:24.193Z",
       "fetches": [
         {
           "url": "https://www.theregenttheater.com/events",

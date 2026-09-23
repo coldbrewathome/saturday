@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "metroId": "san-diego",
-  "generatedAt": "2026-09-05T04:23:53.531Z",
+  "generatedAt": "2026-09-23T22:08:47.709Z",
   "registryPath": "data/event-sources-san-diego.json",
   "outputPath": "public/data/san-diego/events.json",
-  "eventCount": 347,
-  "adultsEventCount": 74,
+  "eventCount": 398,
+  "adultsEventCount": 89,
   "sourceCount": 20,
-  "liveEventCount": 417,
+  "liveEventCount": 485,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
   "operatorAlertCount": 11,
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:53.531Z",
+      "fetchedAt": "2026-09-23T22:08:47.709Z",
       "fetches": [
         {
           "url": "https://www.sdfair.com/",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:53.531Z",
+      "fetchedAt": "2026-09-23T22:08:47.709Z",
       "fetches": [
         {
           "url": "https://aquarium.ucsd.edu/events/shark-summer",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:53.531Z",
+      "fetchedAt": "2026-09-23T22:08:47.709Z",
       "fetches": [
         {
           "url": "https://ramonachamber.com/ramona-country-fair/",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:53.531Z",
+      "fetchedAt": "2026-09-23T22:08:47.709Z",
       "fetches": [
         {
           "url": "https://www.eventbrite.com/e/35th-annual-morava-serbian-summer-folkfest-2026-tickets-1992743649900",
@@ -128,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:53.531Z",
+      "fetchedAt": "2026-09-23T22:08:47.709Z",
       "fetches": [
         {
           "url": "https://www.fabuloushillcrest.com/cityfest-street-fair-music-festival",
@@ -153,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:53.531Z",
+      "fetchedAt": "2026-09-23T22:08:47.709Z",
       "fetches": [
         {
           "url": "https://www.casbahmusic.com/events",
@@ -178,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:53.531Z",
+      "fetchedAt": "2026-09-23T22:08:47.709Z",
       "fetches": [
         {
           "url": "https://www.bellyup.com/events",
@@ -189,21 +189,21 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "san-diego",
       "sourceId": "music-box-sd",
       "sourceName": "Music Box",
       "sourceType": "html",
       "url": "https://musicboxsd.com/shows/",
       "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:53.531Z",
+      "fetchedAt": "2026-09-23T22:08:47.709Z",
       "fetches": [
         {
           "url": "https://musicboxsd.com/shows/",
@@ -228,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:53.531Z",
+      "fetchedAt": "2026-09-23T22:08:47.709Z",
       "fetches": [
         {
           "url": "https://www.observatorysd.com/events",
@@ -253,7 +253,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:53.531Z",
+      "fetchedAt": "2026-09-23T22:08:47.709Z",
       "fetches": [
         {
           "url": "https://www.americancomedyco.com/calendar",
@@ -278,7 +278,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:53.531Z",
+      "fetchedAt": "2026-09-23T22:08:47.709Z",
       "fetches": [
         {
           "url": "https://thecomedystore.com/la-jolla/",
@@ -313,9 +313,9 @@
       "metroId": "san-diego",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 6,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 6,
       "fetches": [
         {
           "url": "https://sdcl.bibliocommons.com/v2/events",
@@ -327,7 +327,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 2,
+      "extractedEvents": 6,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -340,9 +340,9 @@
       "metroId": "san-diego",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 9,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 9,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://www.sandiego.gov/park-and-recreation/event-calendar",
@@ -353,7 +353,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; source=san-diego-drupal-page-only",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 7,
       "extractedEvents": 9,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -367,9 +367,9 @@
       "metroId": "san-diego",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 99,
+      "liveEvents": 130,
       "fallbackEvents": 0,
-      "eventCount": 99,
+      "eventCount": 130,
       "fetches": [
         {
           "url": "https://thinkplaycreate.org/events/",
@@ -380,7 +380,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 101,
+      "rejectedLiveEvents": 70,
       "extractedEvents": 200,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -394,9 +394,9 @@
       "metroId": "san-diego",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 132,
+      "liveEvents": 135,
       "fallbackEvents": 0,
-      "eventCount": 132,
+      "eventCount": 135,
       "fetches": [
         {
           "url": "https://zoo.sandiegozoo.org/activities/wildlife-presentations",
@@ -407,7 +407,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 6,
+      "rejectedLiveEvents": 3,
       "extractedEvents": 138,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -421,21 +421,21 @@
       "metroId": "san-diego",
       "category": "Ticketed",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=8; pages=3"
+          "contentType": "application/json; source=ticketmaster; events=15; pages=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=ticketmaster; events=8; pages=3",
+      "contentType": "application/json; source=ticketmaster; events=15; pages=3",
       "rejectedLiveEvents": 5,
-      "extractedEvents": 6,
+      "extractedEvents": 7,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -475,21 +475,21 @@
       "metroId": "san-diego",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 98,
+      "liveEvents": 118,
       "fallbackEvents": 0,
-      "eventCount": 98,
+      "eventCount": 118,
       "fetches": [
         {
           "url": "https://www.balboapark.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=174; pages=4"
+          "contentType": "application/json; source=tribe-events; events=186; pages=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=174; pages=4",
-      "rejectedLiveEvents": 74,
-      "extractedEvents": 172,
+      "contentType": "application/json; source=tribe-events; events=186; pages=4",
+      "rejectedLiveEvents": 64,
+      "extractedEvents": 182,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -502,9 +502,9 @@
       "metroId": "san-diego",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 7,
+      "liveEvents": 5,
       "fallbackEvents": 0,
-      "eventCount": 7,
+      "eventCount": 5,
       "fetches": [
         {
           "url": "https://oceansidepl.librarycalendar.com/events/month",
@@ -516,7 +516,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 7,
+      "extractedEvents": 5,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -702,8 +702,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -796,21 +796,21 @@
       "metroId": "san-diego",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 69,
+      "liveEvents": 87,
       "fallbackEvents": 0,
-      "eventCount": 69,
+      "eventCount": 87,
       "fetches": [
         {
           "url": "https://www.balboapark.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=174; pages=4"
+          "contentType": "application/json; source=tribe-events; events=186; pages=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=174; pages=4",
-      "rejectedLiveEvents": 103,
-      "extractedEvents": 172,
+      "contentType": "application/json; source=tribe-events; events=186; pages=4",
+      "rejectedLiveEvents": 95,
+      "extractedEvents": 182,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     }

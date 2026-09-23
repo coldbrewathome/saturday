@@ -1,43 +1,18 @@
 {
   "schemaVersion": 1,
   "metroId": "phoenix",
-  "generatedAt": "2026-09-05T04:22:50.244Z",
+  "generatedAt": "2026-09-23T22:07:46.818Z",
   "registryPath": "data/event-sources-phoenix.json",
   "outputPath": "public/data/phoenix/events.json",
-  "eventCount": 542,
-  "adultsEventCount": 57,
+  "eventCount": 652,
+  "adultsEventCount": 72,
   "sourceCount": 17,
-  "liveEventCount": 566,
-  "lastKnownGoodEventCount": 4,
+  "liveEventCount": 680,
+  "lastKnownGoodEventCount": 3,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 9,
+  "operatorAlertCount": 7,
   "errors": [],
   "operatorAlerts": [
-    {
-      "severity": "warning",
-      "metroId": "phoenix",
-      "sourceId": "ticketmaster-phoenix-family",
-      "sourceName": "Ticketmaster Phoenix Family Events",
-      "sourceType": "ticketmaster",
-      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:22:50.244Z",
-      "fetches": [
-        {
-          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=1; pages=1"
-        }
-      ]
-    },
     {
       "severity": "warning",
       "metroId": "phoenix",
@@ -45,20 +20,20 @@
       "sourceName": "Arizona State Fair",
       "sourceType": "html",
       "url": "https://azstatefair.com/",
-      "status": "ok-last-known-good",
-      "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": "last-known-good",
       "recoveredEvents": 3,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 3,
-      "fetchedAt": "2026-09-05T04:22:50.244Z",
+      "fetchedAt": "2026-09-23T22:07:46.818Z",
       "fetches": [
         {
           "url": "https://azstatefair.com/",
-          "status": "ok",
-          "httpStatus": 200,
+          "status": "http-error",
+          "httpStatus": 403,
           "contentType": "text/html; charset=UTF-8"
         }
       ]
@@ -78,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:22:50.244Z",
+      "fetchedAt": "2026-09-23T22:07:46.818Z",
       "fetches": [
         {
           "url": "https://hotwheelsmonstertruckslive.com/event/glendale-az-2026/",
@@ -103,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:22:50.244Z",
+      "fetchedAt": "2026-09-23T22:07:46.818Z",
       "fetches": [
         {
           "url": "https://xfinitychampionships.com/info/",
@@ -128,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:22:50.244Z",
+      "fetchedAt": "2026-09-23T22:07:46.818Z",
       "fetches": [
         {
           "url": "https://www.crescentphx.com/events",
@@ -153,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:22:50.244Z",
+      "fetchedAt": "2026-09-23T22:07:46.818Z",
       "fetches": [
         {
           "url": "https://www.marqueetheatreaz.com/calendar/",
@@ -178,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:22:50.244Z",
+      "fetchedAt": "2026-09-23T22:07:46.818Z",
       "fetches": [
         {
           "url": "https://phoenix.standuplive.com/events",
@@ -195,44 +170,20 @@
       "sourceName": "Rick Bronson's House of Comedy",
       "sourceType": "html",
       "url": "https://houseofcomedy.net/scottsdale",
-      "status": "fetch-error",
+      "status": "http-error",
       "issueType": "fetch-failed",
-      "reason": "fetch failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:22:50.244Z",
+      "fetchedAt": "2026-09-23T22:07:46.818Z",
       "fetches": [
         {
           "url": "https://houseofcomedy.net/scottsdale",
-          "status": "fetch-error",
-          "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "phoenix",
-      "sourceId": "nile-theater-mesa",
-      "sourceName": "The Nile Theater",
-      "sourceType": "html",
-      "url": "https://www.theniletheater.com/events",
-      "status": "ok-last-known-good",
-      "issueType": "zero-in-window",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-09-05T04:22:50.244Z",
-      "fetches": [
-        {
-          "url": "https://www.theniletheater.com/events",
-          "status": "ok",
-          "httpStatus": 200,
+          "status": "http-error",
+          "httpStatus": 404,
           "contentType": "text/html; charset=UTF-8"
         }
       ]
@@ -262,9 +213,9 @@
       "metroId": "phoenix",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 214,
+      "liveEvents": 255,
       "fallbackEvents": 0,
-      "eventCount": 214,
+      "eventCount": 255,
       "fetches": [
         {
           "url": "https://calendar.phoenixpubliclibrary.org/calendar/",
@@ -276,7 +227,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 214,
+      "extractedEvents": 255,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -316,21 +267,21 @@
       "metroId": "phoenix",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 159,
+      "liveEvents": 178,
       "fallbackEvents": 0,
-      "eventCount": 159,
+      "eventCount": 178,
       "fetches": [
         {
           "url": "https://childrensmuseumofphoenix.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=175; pages=4"
+          "contentType": "application/json; source=tribe-events; events=250; pages=5"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=175; pages=4",
-      "rejectedLiveEvents": 9,
-      "extractedEvents": 168,
+      "contentType": "application/json; source=tribe-events; events=250; pages=5",
+      "rejectedLiveEvents": 68,
+      "extractedEvents": 246,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -343,9 +294,9 @@
       "metroId": "phoenix",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 7,
+      "liveEvents": 9,
       "fallbackEvents": 0,
-      "eventCount": 7,
+      "eventCount": 9,
       "fetches": [
         {
           "url": "https://www.phoenixzoo.org/events/",
@@ -356,7 +307,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 3,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 10,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -370,9 +321,9 @@
       "metroId": "phoenix",
       "category": "Ticketed",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -383,7 +334,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=ticketmaster; events=1; pages=1",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 0,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -396,25 +347,23 @@
       "city": "Phoenix",
       "metroId": "phoenix",
       "category": "Festival",
-      "status": "ok-last-known-good",
+      "status": "http-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 3,
       "fetches": [
         {
           "url": "https://azstatefair.com/",
-          "status": "ok",
-          "httpStatus": 200,
+          "status": "http-error",
+          "httpStatus": 403,
           "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "httpStatus": 200,
+      "httpStatus": 403,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
       "extractedEvents": 0,
       "lastKnownGoodEvents": 3,
-      "recoveryMode": "last-known-good",
-      "reason": "source produced no live events; using last-known-good future events"
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "desert-botanical-garden",
@@ -425,9 +374,9 @@
       "metroId": "phoenix",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 141,
+      "liveEvents": 188,
       "fallbackEvents": 0,
-      "eventCount": 141,
+      "eventCount": 188,
       "fetches": [
         {
           "url": "https://dbg.org/events/",
@@ -438,8 +387,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 49,
-      "extractedEvents": 190,
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 188,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -533,9 +482,9 @@
       "metroId": "phoenix",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 23,
+      "liveEvents": 28,
       "fallbackEvents": 0,
-      "eventCount": 23,
+      "eventCount": 28,
       "fetches": [
         {
           "url": "https://www.thevanburenphx.com/shows",
@@ -546,7 +495,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 13,
+      "rejectedLiveEvents": 8,
       "extractedEvents": 36,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -560,9 +509,9 @@
       "metroId": "phoenix",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://www.therebellounge.com/events",
@@ -574,7 +523,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 3,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -640,18 +589,20 @@
       "city": "Scottsdale",
       "metroId": "phoenix",
       "category": "Comedy",
-      "status": "fetch-error",
+      "status": "http-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://houseofcomedy.net/scottsdale",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "reason": "fetch failed",
+      "httpStatus": 404,
+      "contentType": "text/html; charset=UTF-8",
       "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -664,8 +615,8 @@
       "city": "Mesa",
       "metroId": "phoenix",
       "category": "Music",
-      "status": "ok-last-known-good",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 1,
       "fallbackEvents": 0,
       "eventCount": 1,
       "fetches": [
@@ -678,11 +629,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 0,
       "extractedEvents": 1,
-      "lastKnownGoodEvents": 1,
-      "recoveryMode": "last-known-good",
-      "reason": "source produced no live events; using last-known-good future events"
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     }
   ]
 }

@@ -1,18 +1,68 @@
 {
   "schemaVersion": 1,
   "metroId": "boston",
-  "generatedAt": "2026-09-05T04:23:14.748Z",
+  "generatedAt": "2026-09-23T22:08:05.342Z",
   "registryPath": "data/event-sources-boston.json",
   "outputPath": "public/data/boston/events.json",
-  "eventCount": 428,
-  "adultsEventCount": 83,
+  "eventCount": 419,
+  "adultsEventCount": 84,
   "sourceCount": 27,
-  "liveEventCount": 493,
-  "lastKnownGoodEventCount": 1,
-  "fallbackEventCount": 0,
-  "operatorAlertCount": 10,
+  "liveEventCount": 481,
+  "lastKnownGoodEventCount": 3,
+  "fallbackEventCount": 4,
+  "operatorAlertCount": 14,
   "errors": [],
   "operatorAlerts": [
+    {
+      "severity": "warning",
+      "metroId": "boston",
+      "sourceId": "boston-zoo-family",
+      "sourceName": "Zoo New England Program Calendar",
+      "sourceType": "eventList",
+      "url": "https://www.zoonewengland.org/discover/program-calendar/",
+      "status": "ok-template-fallback",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": "recurring-template",
+      "recoveredEvents": 4,
+      "liveEvents": 0,
+      "fallbackEvents": 4,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetches": [
+        {
+          "url": "https://www.zoonewengland.org/discover/program-calendar/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "boston",
+      "sourceId": "ticketmaster-boston-family",
+      "sourceName": "Ticketmaster Boston Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=ticketmaster; events=0; pages=1"
+        }
+      ]
+    },
     {
       "severity": "critical",
       "metroId": "boston",
@@ -28,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:14.748Z",
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
       "fetches": [
         {
           "url": "https://www.easternstatesexposition.com/",
@@ -53,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:14.748Z",
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
       "fetches": [
         {
           "url": "https://www.salemma.gov/CivicAlerts.aspx?AID=235",
@@ -64,21 +114,21 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "boston",
       "sourceId": "cambridge-carnival-2026",
       "sourceName": "Cambridge Carnival 2026",
       "sourceType": "officialTextEvents",
       "url": "https://www.cambridgecarnival.org/",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-09-05T04:23:14.748Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
       "fetches": [
         {
           "url": "https://www.cambridgecarnival.org/",
@@ -103,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:14.748Z",
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
       "fetches": [
         {
           "url": "https://www.rosekennedygreenway.org/events/boston-race-amity-arts-music-festival/",
@@ -128,13 +178,37 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:14.748Z",
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
       "fetches": [
         {
           "url": "https://www.landmarksorchestra.org/press-media/summer-2026-season/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "boston",
+      "sourceId": "sowa-open-market",
+      "sourceName": "SoWa Open Market",
+      "sourceType": "tribeEvents",
+      "url": "https://www.sowaboston.com/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 3,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 3,
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetches": [
+        {
+          "url": "https://www.sowaboston.com/events/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -153,7 +227,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:14.748Z",
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
       "fetches": [
         {
           "url": "https://commshakes.org/production/dream26/",
@@ -178,7 +252,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:14.748Z",
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
       "fetches": [
         {
           "url": "https://saintagrippinaboston.com/",
@@ -203,13 +277,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:14.748Z",
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
       "fetches": [
         {
           "url": "https://www.bostonjazzfoundation.org/crjf",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "boston",
+      "sourceId": "boston-arts-festival-2026-09-12-src",
+      "sourceName": "2026 Boston Arts Festival",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.bostonartsfestival.org/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetches": [
+        {
+          "url": "https://www.bostonartsfestival.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
         }
       ]
     },
@@ -228,7 +327,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:14.748Z",
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
       "fetches": [
         {
           "url": "https://www.crossroadspresents.com/paradise-rock-club",
@@ -253,7 +352,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-05T04:23:14.748Z",
+      "fetchedAt": "2026-09-23T22:08:05.342Z",
       "fetches": [
         {
           "url": "https://www.nickscomedystop.com/calendar",
@@ -288,9 +387,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 12,
+      "liveEvents": 14,
       "fallbackEvents": 0,
-      "eventCount": 12,
+      "eventCount": 14,
       "fetches": [
         {
           "url": "https://bpl.bibliocommons.com/v2/events?audiences=57f66113863736755f79b0ca",
@@ -302,7 +401,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 12,
+      "extractedEvents": 14,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -342,21 +441,21 @@
       "metroId": "boston",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 57,
+      "liveEvents": 28,
       "fallbackEvents": 0,
-      "eventCount": 57,
+      "eventCount": 28,
       "fetches": [
         {
           "url": "https://bostonchildrensmuseum.org/Calendar/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=eventon-events; events=72"
+          "contentType": "application/json; source=eventon-events; events=75"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=eventon-events; events=72",
-      "rejectedLiveEvents": 14,
-      "extractedEvents": 71,
+      "contentType": "application/json; source=eventon-events; events=75",
+      "rejectedLiveEvents": 46,
+      "extractedEvents": 74,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -368,10 +467,10 @@
       "city": "Boston",
       "metroId": "boston",
       "category": "Zoo",
-      "status": "ok",
-      "liveEvents": 1,
-      "fallbackEvents": 0,
-      "eventCount": 1,
+      "status": "ok-template-fallback",
+      "liveEvents": 0,
+      "fallbackEvents": 4,
+      "eventCount": 4,
       "fetches": [
         {
           "url": "https://www.zoonewengland.org/discover/program-calendar/",
@@ -382,10 +481,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 2,
       "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "recoveryMode": "recurring-template"
     },
     {
       "id": "ticketmaster-boston-family",
@@ -396,21 +495,21 @@
       "metroId": "boston",
       "category": "Ticketed",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=1; pages=1"
+          "contentType": "application/json; source=ticketmaster; events=0; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=ticketmaster; events=1; pages=1",
+      "contentType": "application/json; source=ticketmaster; events=0; pages=1",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -450,9 +549,9 @@
       "metroId": "boston",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 5,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 5,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://marshfieldfair.org/events/",
@@ -463,7 +562,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 5,
       "extractedEvents": 6,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -477,9 +576,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 114,
+      "liveEvents": 113,
       "fallbackEvents": 0,
-      "eventCount": 114,
+      "eventCount": 113,
       "fetches": [
         {
           "url": "https://cambridgepl.libcal.com/calendar/publicevents?cid=7052&cal=7052",
@@ -491,7 +590,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 114,
+      "extractedEvents": 113,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -504,9 +603,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 82,
+      "liveEvents": 105,
       "fallbackEvents": 0,
-      "eventCount": 82,
+      "eventCount": 105,
       "fetches": [
         {
           "url": "https://newtonfreelibrary.libcal.com/calendar?cid=3836&cal=3836",
@@ -517,8 +616,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 5,
-      "extractedEvents": 87,
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 105,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -531,9 +630,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 117,
+      "liveEvents": 141,
       "fallbackEvents": 0,
-      "eventCount": 117,
+      "eventCount": 141,
       "fetches": [
         {
           "url": "https://brooklinelibrary.libcal.com/calendar/events?cid=20102&cal=20102",
@@ -544,8 +643,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 50,
-      "extractedEvents": 167,
+      "rejectedLiveEvents": 18,
+      "extractedEvents": 159,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -558,9 +657,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 32,
+      "liveEvents": 9,
       "fallbackEvents": 0,
-      "eventCount": 32,
+      "eventCount": 9,
       "fetches": [
         {
           "url": "https://somervillepubliclibrary.assabetinteractive.com/calendar/",
@@ -571,8 +670,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 8,
-      "extractedEvents": 40,
+      "rejectedLiveEvents": 38,
+      "extractedEvents": 47,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -611,10 +710,10 @@
       "city": "Cambridge",
       "metroId": "boston",
       "category": "Festival",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.cambridgecarnival.org/",
@@ -627,9 +726,8 @@
       "contentType": "text/html;charset=utf-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "recoveryMode": "last-known-good",
-      "reason": "source produced no live events; using last-known-good future events"
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "boston-race-amity-festival-2026-08-01-src",
@@ -693,24 +791,21 @@
       "city": "Boston",
       "metroId": "boston",
       "category": "Market",
-      "status": "ok",
-      "liveEvents": 3,
+      "status": "fetch-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 3,
       "fetches": [
         {
           "url": "https://www.sowaboston.com/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=5; pages=1"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=5; pages=1",
-      "rejectedLiveEvents": 2,
-      "extractedEvents": 5,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "reason": "fetch failed",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 3,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "free-shakespeare-on-the-common-midsummer-2026-07-31-src",
@@ -802,9 +897,9 @@
       "metroId": "boston",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.bostonartsfestival.org/",
@@ -815,7 +910,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html;charset=utf-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 2,
       "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -855,9 +950,9 @@
       "metroId": "boston",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 26,
+      "liveEvents": 27,
       "fallbackEvents": 0,
-      "eventCount": 26,
+      "eventCount": 27,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&sort=date,asc&venueId=KovZpapwne&apikey=oo1qd0wzLe7WJpm61ALQuUCTMXGK7U5z&source=ticketmaster",
@@ -868,8 +963,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=utf-8",
-      "rejectedLiveEvents": 53,
-      "extractedEvents": 79,
+      "rejectedLiveEvents": 47,
+      "extractedEvents": 74,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -882,9 +977,9 @@
       "metroId": "boston",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 9,
+      "liveEvents": 8,
       "fallbackEvents": 0,
-      "eventCount": 9,
+      "eventCount": 8,
       "fetches": [
         {
           "url": "https://www.sinclaircambridge.com/events/rss",
@@ -895,8 +990,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/rss+xml",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 10,
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 8,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -935,9 +1030,9 @@
       "metroId": "boston",
       "category": "Comedy",
       "status": "ok",
-      "liveEvents": 14,
+      "liveEvents": 17,
       "fallbackEvents": 0,
-      "eventCount": 14,
+      "eventCount": 17,
       "fetches": [
         {
           "url": "https://laughboston.com/",
@@ -948,7 +1043,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 6,
+      "rejectedLiveEvents": 3,
       "extractedEvents": 20,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -970,13 +1065,13 @@
           "url": "https://www.harpoonbrewery.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=106; pages=3"
+          "contentType": "application/json; source=tribe-events; events=107; pages=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=106; pages=3",
-      "rejectedLiveEvents": 87,
-      "extractedEvents": 104,
+      "contentType": "application/json; source=tribe-events; events=107; pages=3",
+      "rejectedLiveEvents": 88,
+      "extractedEvents": 105,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     }
