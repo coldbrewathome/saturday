@@ -11,6 +11,7 @@ import {
 } from "../src/ops/loadAnalytics";
 import {
   CARD_SPECS,
+  computeAttributionRows,
   buildSparklinePath,
   buildSparklineSeries,
   computeBrandSplit,
@@ -107,6 +108,26 @@ describe("normalizeMetricsResponse", () => {
     });
     expect(Object.keys(data.byBrand)).toEqual(["app_open"]);
     expect(data.byBrand.app_open).toEqual({ famhop: 12, mosey: 3 });
+  });
+
+  it("normalizes bounded source/page-type attribution and drops unknown pairs", () => {
+    const data = normalizeMetricsResponse({
+      bySource: {
+        search: { seo_landing: 4, organizer_click: 2 },
+        unknown: { seo_landing: 99 },
+      },
+      byPageType: { event: { seo_landing: 4 } },
+      byAttribution: {
+        seo_landing: { "search:event": 4, "raw.example:event": 8 },
+      },
+    });
+    expect(data.bySource).toEqual({
+      search: { seo_landing: 4, organizer_click: 2 },
+    });
+    expect(data.byPageType).toEqual({ event: { seo_landing: 4 } });
+    expect(data.byAttribution).toEqual({
+      seo_landing: { "search:event": 4 },
+    });
   });
 
   it("zero-fills a missing brand inside a byBrand bucket", () => {
@@ -490,6 +511,28 @@ describe("computeBrandSplit", () => {
     });
     expect(computeBrandSplit(data, "vote_cast")).toEqual({ famhop: 0, mosey: 0 });
     expect(computeBrandSplit(data, "app_open")).toEqual({ famhop: 9, mosey: 0 });
+  });
+});
+
+describe("computeAttributionRows", () => {
+  it("groups static landing and action metrics by source/page pair", () => {
+    const data = normalizeMetricsResponse({
+      byAttribution: {
+        seo_landing: { "search:event": 10 },
+        organizer_click: { "search:event": 3 },
+        event_saved: { "referral:event": 2 },
+      },
+    });
+    expect(computeAttributionRows(data)).toEqual([
+      {
+        pair: "referral:event",
+        counts: { event_saved: 2 },
+      },
+      {
+        pair: "search:event",
+        counts: { seo_landing: 10, organizer_click: 3 },
+      },
+    ]);
   });
 });
 

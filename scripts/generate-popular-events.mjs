@@ -112,7 +112,7 @@ function eventSlug(event) {
 }
 
 function sortedCandidates(events, satKey, sunKey, tz, clicks) {
-  return events
+  const ranked = events
     .filter((e) => {
       if (!e.startDateTime) return false;
       const k = zonedKey(e.startDateTime, tz);
@@ -123,8 +123,21 @@ function sortedCandidates(events, satKey, sunKey, tz, clicks) {
       (a, b) =>
         b._c - a._c ||
         (a.startDateTime < b.startDateTime ? -1 : 1),
-    )
-    .slice(0, MAX_CANDIDATES_PER_METRO);
+    );
+  // Split the budget across both days. One global slice lets a busy Saturday
+  // eat the whole cap, so the editor never sees a Sunday candidate and
+  // "Popular this weekend" ships all-Saturday.
+  const perDay = Math.ceil(MAX_CANDIDATES_PER_METRO / 2);
+  const taken = new Map();
+  const picked = [];
+  for (const event of ranked) {
+    const k = zonedKey(event.startDateTime, tz);
+    const n = taken.get(k) ?? 0;
+    if (n >= perDay) continue;
+    taken.set(k, n + 1);
+    picked.push(event);
+  }
+  return picked;
 }
 
 function digestFor(metro, audience, eventsDoc) {

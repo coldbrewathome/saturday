@@ -82,8 +82,8 @@ for (const metro of metros) {
     brokenSources,
     operatorAlertCount: r.operatorAlertCount ?? 0,
     generatedAt: r.generatedAt ?? null,
-    // Concentration risk: producing real volume but on ≤2 healthy sources.
-    concentrated: healthySources <= 2 && (r.eventCount ?? 0) >= minEvents,
+    // Flag dominant sources even when several smaller sources are healthy.
+    concentrated: (healthySources <= 2 || (totalLive > 0 && (topSource?.liveEvents || 0) / totalLive >= 0.8)) && (r.eventCount ?? 0) >= minEvents,
     status: classify(r.eventCount ?? 0, minEvents),
     kidsEvents,
     adultsEvents,

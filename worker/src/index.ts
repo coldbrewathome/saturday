@@ -4,6 +4,12 @@ import {
   unsubscribeToken,
   type NewsletterRecipient,
 } from "./newsletter";
+import {
+  isMetricName,
+  isMetricPageType,
+  isMetricSource,
+} from "../../shared/analyticsContract";
+import type { MetricPageType, MetricSource } from "../../shared/analyticsContract";
 
 type Vote = "up" | "down" | "meh";
 
@@ -1818,23 +1824,6 @@ async function sendMondayRecapHandler(
 // Aggregate, no-PII counters keyed by metric:{name}:{metro}:{date}. Used to
 // answer "is the share loop / SEO actually working" without third-party
 // trackers or cookies (the site is family-facing, so we avoid GA4/PII).
-const METRIC_NAMES = new Set([
-  "app_open",
-  "app_open_return",
-  "hero_plan_created",
-  "hop_now_opened",
-  "plan_created",
-  "plan_shared",
-  "item_shared",
-  "poll_viewed",
-  "vote_cast",
-  "weekend_guide_click",
-  "signin_prompt_shown",
-  "signin_prompt_clicked",
-  "signin_success",
-  "newsletter_subscribed",
-  "digest_prompt_shown",
-]);
 const METRIC_BRANDS = new Set(["famhop", "mosey"]);
 const METRIC_TTL_SECONDS = 60 * 60 * 24 * 120; // ~120 days
 
@@ -1848,32 +1837,40 @@ async function recordMetric(
   if (!cap.ok) return new Response(null, { status: 204, headers: cors });
   const url = new URL(request.url);
   const name = cleanText(url.searchParams.get("name"), 40);
-  if (!METRIC_NAMES.has(name)) {
+  if (!isMetricName(name)) {
     return new Response(null, { status: 204, headers: cors });
   }
   const metroRaw = cleanText(url.searchParams.get("metro") || "all", 40) || "all";
   const metro = safeKvSegment(metroRaw);
-  // Optional JSON body field `brand` ("famhop" | "mosey") adds a per-brand
-  // counter under metricb:{name}:{brand}:{day}. Anything else is ignored.
+  // Optional JSON body fields are all closed vocabularies. Do not persist raw
+  // referrers, URLs, identifiers, or other request data in analytics keys.
   let brand = "";
+  let source: MetricSource | "" = "";
+  let pageType: MetricPageType | "" = "";
   try {
-    const body = (await request.json()) as { brand?: unknown };
-    if (
-      body &&
-      typeof body.brand === "string" &&
-      METRIC_BRANDS.has(body.brand)
-    ) {
-      brand = body.brand;
+    const body = await request.json();
+    if (body && typeof body === "object") {
+      const fields = body as Record<string, unknown>;
+      if (typeof fields.brand === "string" && METRIC_BRANDS.has(fields.brand)) {
+        brand = fields.brand;
+      }
+      if (isMetricSource(fields.source)) source = fields.source;
+      if (isMetricPageType(fields.pageType)) pageType = fields.pageType;
     }
   } catch {
-    // no body / invalid json — brand stays unset
+    // no body / invalid json — optional dimensions stay unset
   }
   const day = new Date().toISOString().slice(0, 10);
-  for (const key of [
+  // Keep the denormalized all bucket exactly once when metro is omitted/all.
+  const keys = new Set([
     `metric:${name}:all:${day}`,
-    `metric:${name}:${metro}:${day}`,
+    ...(metro !== "all" ? [`metric:${name}:${metro}:${day}`] : []),
     ...(brand ? [`metricb:${name}:${brand}:${day}`] : []),
-  ]) {
+    ...(source && pageType
+      ? [`metricd:${name}:${source}:${pageType}:${day}`]
+      : []),
+  ]);
+  for (const key of keys) {
     const raw = await env.POLLS.get(key);
     const count = raw ? Number(raw) : 0;
     await env.POLLS.put(key, String(count + 1), {
@@ -1903,6 +1900,9 @@ async function readMetrics(
   // response per ADR 03 so the analytics dashboard can render the per-metro
   // table without a second request.
   const byMetro: Record<string, Record<string, number>> = {};
+  const bySource: Record<string, Record<string, number>> = {};
+  const byPageType: Record<string, Record<string, number>> = {};
+  const byAttribution: Record<string, Record<string, number>> = {};
   let cursor: string | undefined;
   do {
     const list = await env.POLLS.list({ prefix: "metric:", cursor });
@@ -1910,7 +1910,7 @@ async function readMetrics(
       const parts = k.name.split(":");
       if (parts.length !== 4) continue;
       const [, name, metro, date] = parts;
-      if (date < cutoff) continue;
+      if (date < cutoff || !isMetricName(name)) continue;
       const raw = await env.POLLS.get(k.name);
       const count = raw ? Number(raw) : 0;
       if (metro === "all") {
@@ -1924,6 +1924,30 @@ async function readMetrics(
     }
     cursor = list.list_complete ? undefined : list.cursor;
   } while (cursor);
+  // Attribution is stored as source x pageType in one bounded key. Expose
+  // additive source/page-type rollups without introducing user identifiers.
+  let attributionCursor: string | undefined;
+  do {
+    const list = await env.POLLS.list({ prefix: "metricd:", cursor: attributionCursor });
+    for (const k of list.keys) {
+      const parts = k.name.split(":");
+      if (parts.length !== 5) continue;
+      const [, name, source, pageType, date] = parts;
+      if (date < cutoff || !isMetricName(name)) continue;
+      if (!isMetricSource(source) || !isMetricPageType(pageType)) continue;
+      const raw = await env.POLLS.get(k.name);
+      const count = raw ? Number(raw) : 0;
+      if (!Number.isFinite(count) || count <= 0) continue;
+      bySource[source] = bySource[source] || {};
+      bySource[source][name] = (bySource[source][name] || 0) + count;
+      byPageType[pageType] = byPageType[pageType] || {};
+      byPageType[pageType][name] = (byPageType[pageType][name] || 0) + count;
+      byAttribution[name] = byAttribution[name] || {};
+      const pair = `${source}:${pageType}`;
+      byAttribution[name][pair] = (byAttribution[name][pair] || 0) + count;
+    }
+    attributionCursor = list.list_complete ? undefined : list.cursor;
+  } while (attributionCursor);
   // Per-brand rollup from the metricb: prefix (additive — existing response
   // fields are unchanged). name -> { famhop, mosey } over the same window.
   const byBrand: Record<string, { famhop: number; mosey: number }> = {};
@@ -1934,7 +1958,7 @@ async function readMetrics(
       const parts = k.name.split(":");
       if (parts.length !== 4) continue;
       const [, name, brand, date] = parts;
-      if (date < cutoff) continue;
+      if (date < cutoff || !isMetricName(name)) continue;
       if (brand !== "famhop" && brand !== "mosey") continue;
       const raw = await env.POLLS.get(k.name);
       const count = raw ? Number(raw) : 0;
@@ -1943,7 +1967,11 @@ async function readMetrics(
     }
     brandCursor = list.list_complete ? undefined : list.cursor;
   } while (brandCursor);
-  return json({ days, totals, byDay, byMetro, byBrand }, { status: 200 }, cors);
+  return json(
+    { days, totals, byDay, byMetro, byBrand, bySource, byPageType, byAttribution },
+    { status: 200 },
+    cors,
+  );
 }
 
 export default {

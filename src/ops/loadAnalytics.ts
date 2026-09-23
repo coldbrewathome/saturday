@@ -15,45 +15,25 @@
 // `normalizeMetricsResponse` is the pure core (easy to unit-test).
 // `loadAnalytics` is the browser-side wrapper.
 //
-// The known metric names list is duplicated from `worker/src/index.ts`
-// (`METRIC_NAMES`) intentionally — the worker owns the allowlist for
-// writes, and the dashboard owns the allowlist for renders. Keeping them
-// in sync is a one-line manual step; cross-importing would couple the
-// worker bundle to the frontend.
+// The known metric names list is imported from the shared contract used by
+// the browser and Worker. This makes a missing dashboard event a type/test
+// failure instead of a silent one-line drift between copies.
 
 import { API_BASE } from "../api";
 import { readSession } from "../auth";
+import {
+  METRIC_NAMES,
+  METRIC_PAGE_TYPES,
+  METRIC_SOURCES,
+} from "../../shared/analyticsContract";
+import type {
+  MetricName,
+  MetricPageType,
+  MetricSource,
+} from "../../shared/analyticsContract";
 
-export type MetricName =
-  | "app_open"
-  | "app_open_return"
-  | "hop_now_opened"
-  | "plan_created"
-  | "plan_shared"
-  | "item_shared"
-  | "poll_viewed"
-  | "vote_cast"
-  | "weekend_guide_click"
-  | "signin_prompt_shown"
-  | "signin_prompt_clicked"
-  | "signin_success"
-  | "newsletter_subscribed";
-
-export const METRIC_NAMES: readonly MetricName[] = [
-  "app_open",
-  "app_open_return",
-  "hop_now_opened",
-  "plan_created",
-  "plan_shared",
-  "item_shared",
-  "poll_viewed",
-  "vote_cast",
-  "weekend_guide_click",
-  "signin_prompt_shown",
-  "signin_prompt_clicked",
-  "signin_success",
-  "newsletter_subscribed",
-];
+export { METRIC_NAMES } from "../../shared/analyticsContract";
+export type { MetricName } from "../../shared/analyticsContract";
 
 export type MetricTotals = Partial<Record<MetricName, number>>;
 
@@ -64,6 +44,9 @@ export type MetricsResponse = {
   byDay?: Record<string, Record<string, number>>;
   byMetro?: Record<string, Record<string, number>>;
   byBrand?: Record<string, { famhop?: number; mosey?: number }>;
+  bySource?: Record<string, Record<string, number>>;
+  byPageType?: Record<string, Record<string, number>>;
+  byAttribution?: Record<string, Record<string, number>>;
 };
 
 /** FamHop vs Mosey counts for one metric over the loaded window. */
@@ -84,6 +67,12 @@ export type AnalyticsData = {
    * workers that don't emit the section.
    */
   byBrand: Partial<Record<MetricName, BrandCounts>>;
+  /** Additive source totals from validated source x pageType pairs. */
+  bySource: Partial<Record<MetricSource, MetricTotals>>;
+  /** Additive page-type totals from validated source x pageType pairs. */
+  byPageType: Partial<Record<MetricPageType, MetricTotals>>;
+  /** Per-metric source x page-type totals, keyed as `source:pageType`. */
+  byAttribution: Partial<Record<MetricName, Record<string, number>>>;
 };
 
 export type LoadAnalyticsResult =
@@ -167,7 +156,42 @@ export function normalizeMetricsResponse(
     }
   }
 
-  return { days, totals, byDay, byMetro, byBrand };
+  const bySource: Partial<Record<MetricSource, MetricTotals>> = {};
+  for (const source of METRIC_SOURCES) {
+    const filtered = pickMetricCounts(response?.bySource?.[source]);
+    if (Object.keys(filtered).length > 0) bySource[source] = filtered;
+  }
+
+  const byPageType: Partial<Record<MetricPageType, MetricTotals>> = {};
+  for (const pageType of METRIC_PAGE_TYPES) {
+    const filtered = pickMetricCounts(response?.byPageType?.[pageType]);
+    if (Object.keys(filtered).length > 0) byPageType[pageType] = filtered;
+  }
+
+  const byAttribution: Partial<Record<MetricName, Record<string, number>>> = {};
+  if (response?.byAttribution && typeof response.byAttribution === "object") {
+    for (const name of METRIC_NAMES) {
+      const pairs = response.byAttribution[name];
+      if (!pairs || typeof pairs !== "object") continue;
+      const filtered: Record<string, number> = {};
+      for (const [pair, value] of Object.entries(pairs)) {
+        const [source, pageType, ...rest] = pair.split(":");
+        if (
+          rest.length === 0 &&
+          METRIC_SOURCES.includes(source as MetricSource) &&
+          METRIC_PAGE_TYPES.includes(pageType as MetricPageType) &&
+          typeof value === "number" &&
+          Number.isFinite(value) &&
+          value > 0
+        ) {
+          filtered[`${source}:${pageType}`] = value;
+        }
+      }
+      if (Object.keys(filtered).length > 0) byAttribution[name] = filtered;
+    }
+  }
+
+  return { days, totals, byDay, byMetro, byBrand, bySource, byPageType, byAttribution };
 }
 
 export type LoadAnalyticsOptions = {
@@ -186,7 +210,7 @@ export type LoadAnalyticsOptions = {
  * lets us invalidate cleanly if the cached shape changes; `days` is part of
  * the key so different window sizes don't collide.
  */
-export const CACHE_KEY_PREFIX = "famhop.opsAnalytics.cache:v2";
+export const CACHE_KEY_PREFIX = "famhop.opsAnalytics.cache:v3";
 /** Cache TTL in ms. 5 min keeps reloads instant without serving badly stale data. */
 export const CACHE_TTL_MS = 5 * 60 * 1000;
 

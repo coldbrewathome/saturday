@@ -4,14 +4,14 @@
 // the headline metric (`app_open`) and a 30-day daily-bucket sparkline for
 // the same headline metric.
 //
-// v1 scope: plain numeric cards (big number + label + 7-day delta) covering
-// the headline counters from the top 3 ADR questions —
+// Scope: plain numeric cards (big number + label + 7-day delta) covering
+// the headline counters from the top ADR questions —
 //   Q1 (traffic):    app_open
 //   Q2 (share loop): plan_shared, poll_viewed, vote_cast
 //   Q3 (hop-now):    hop_now_opened
-// Plus the per-metro breakdown table for `app_open` (ADR Q5) and a single
-// inline-SVG sparkline for the same headline metric (no chart-library
-// dep). Ratios (poll_viewed/plan_shared, etc.) are deliberately left for
+// Plus the per-metro breakdown table for `app_open`, a bounded source/page
+// landing-to-action table, and a single inline-SVG sparkline for the same
+// headline metric (no chart-library dep). Ratios are deliberately left for
 // the next pass.
 //
 // Reuses `ops-alerts-*` CSS classes for the layout shell to match the
@@ -55,13 +55,30 @@ export type CardSpec = {
 export const CARD_SPECS: readonly CardSpec[] = [
   { metric: "app_open", label: "App opens" },
   { metric: "app_open_return", label: "Returning opens" },
+  { metric: "seo_landing", label: "SEO landings" },
   { metric: "item_shared", label: "Events shared" },
   { metric: "plan_created", label: "Plans created" },
+  { metric: "hero_plan_created", label: "Hero plans created" },
   { metric: "plan_shared", label: "Plans shared" },
+  { metric: "profile_completed", label: "Profiles completed" },
+  { metric: "checkin_answered", label: "Check-ins answered" },
+  { metric: "plan_card_created", label: "Plan cards created" },
+  { metric: "plan_card_shared", label: "Plan cards shared" },
   { metric: "poll_viewed", label: "Plans viewed" },
   { metric: "vote_cast", label: "Votes cast" },
+  { metric: "digest_prompt_shown", label: "Digest prompts" },
+  { metric: "weekend_guide_click", label: "Weekend guide clicks" },
+  { metric: "newsletter_subscribed", label: "Newsletter signups" },
   { metric: "signin_success", label: "Sign-ins" },
   { metric: "hop_now_opened", label: "Hop-me-now opens" },
+];
+
+/** Static landing-to-action metrics grouped by the bounded attribution pair. */
+export const ATTRIBUTION_METRICS: readonly MetricName[] = [
+  "seo_landing",
+  "organizer_click",
+  "calendar_save",
+  "event_saved",
 ];
 
 /**
@@ -211,6 +228,31 @@ export function computeBrandSplit(
   const byBrand = data.byBrand ?? {};
   if (Object.keys(byBrand).length === 0) return null;
   return byBrand[metric] ?? { famhop: 0, mosey: 0 };
+}
+
+export type AttributionRow = {
+  pair: string;
+  counts: Partial<Record<MetricName, number>>;
+};
+
+/**
+ * Flatten the worker's metric-first attribution response for one compact
+ * landing-to-action table. The pair is already limited to source:pageType by
+ * the shared contract and Worker parser; no URL, referrer, or user id enters
+ * this view.
+ */
+export function computeAttributionRows(data: AnalyticsData): AttributionRow[] {
+  const pairs = new Map<string, Partial<Record<MetricName, number>>>();
+  for (const metric of ATTRIBUTION_METRICS) {
+    for (const [pair, count] of Object.entries(data.byAttribution[metric] ?? {})) {
+      const current = pairs.get(pair) ?? {};
+      current[metric] = count;
+      pairs.set(pair, current);
+    }
+  }
+  return [...pairs.entries()]
+    .map(([pair, counts]) => ({ pair, counts }))
+    .sort((a, b) => a.pair.localeCompare(b.pair));
 }
 
 export type SparklinePoint = {
@@ -387,7 +429,7 @@ function CoverageHealth({ coverage }: { coverage: CoverageSummary | null }) {
                 {m.concentrated && (
                   <span
                     className="ops-coverage-flag"
-                    title="Volume concentrated in ≤2 sources — one outage could gut this metro"
+                    title="Volume relies on ≤2 healthy sources or one source supplies ≥80% of live events"
                   >
                     {" "}
                     ⚠ concentrated
@@ -473,6 +515,7 @@ export default function OpsAnalyticsView() {
 
   const cards = data ? computeCardData(data) : [];
   const metroRows = data ? computeMetroRows(data) : [];
+  const attributionRows = data ? computeAttributionRows(data) : [];
   const sparklineSeries = data
     ? buildSparklineSeries(data.byDay, SPARKLINE_METRIC, SPARKLINE_DAYS)
     : [];
@@ -574,6 +617,43 @@ export default function OpsAnalyticsView() {
                       )}
                     </td>
                     <td>{row.total.toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+
+          <h2 className="ops-analytics-section-h">
+            SEO landing to action ({data.days}d)
+          </h2>
+          <p className="ops-alerts-state">
+            Aggregate activity across both brands, grouped by the current page's
+            source and type. These are event counts, not unique visitors or a
+            linked conversion funnel.
+          </p>
+          {attributionRows.length === 0 ? (
+            <p className="ops-alerts-state">
+              No attributed landing or action events recorded in the last {data.days} days.
+            </p>
+          ) : (
+            <table className="ops-alerts-table">
+              <thead>
+                <tr>
+                  <th scope="col">Source · page</th>
+                  <th scope="col">Landings</th>
+                  <th scope="col">Organizer clicks</th>
+                  <th scope="col">Calendar saves</th>
+                  <th scope="col">Saved events</th>
+                </tr>
+              </thead>
+              <tbody>
+                {attributionRows.map((row) => (
+                  <tr key={row.pair}>
+                    <td>{row.pair.replace(":", " · ")}</td>
+                    <td>{(row.counts.seo_landing ?? 0).toLocaleString()}</td>
+                    <td>{(row.counts.organizer_click ?? 0).toLocaleString()}</td>
+                    <td>{(row.counts.calendar_save ?? 0).toLocaleString()}</td>
+                    <td>{(row.counts.event_saved ?? 0).toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>

@@ -9,7 +9,7 @@
 // crawlers; this effect is the cosmetic + JS-aware-share-bot fallback.
 
 import { useEffect, useState } from "react";
-import { Check, ChevronLeft, Plus, Share2 } from "lucide-react";
+import { Bookmark, CalendarDays, Check, ChevronLeft, Plus, Share2 } from "lucide-react";
 import type { FamilyEvent } from "./App";
 import type { MetroConfig } from "./metros";
 import { APP_BRAND } from "./appConfig";
@@ -22,6 +22,8 @@ import {
 } from "./eventImages";
 import { fetchEventTrust, type EventTrust } from "./checkinApi";
 import { ageBandLabels } from "./planner";
+import { trackMetric } from "./api";
+import { eventCalendarUrl, eventTrustDisplay } from "./eventTrust";
 
 type Props = {
   events: FamilyEvent[];
@@ -43,6 +45,9 @@ type Props = {
   /** Venue → curated photo index; events without their own photo use the
    * venue's real image instead of a blank hero. */
   venueImages?: VenueImageMap;
+  /** Event save state is optional for backwards-compatible embedded views. */
+  saved?: boolean;
+  onToggleSaved?: (eventId: string) => void;
 };
 
 // Local copy of App.tsx's sourceHostname — importing the runtime helper from
@@ -157,13 +162,13 @@ function buildEventJsonLd(
   }
   if (event.url) {
     const costStr = String(event.cost || "");
-    const isFree = /free|gratis/i.test(costStr) || costStr === "$0";
+    const isFree = /^(?:free|free admission|no admission fee|no cost|\$0(?:\.00)?)$/i.test(costStr.trim());
     let price: string | null = null;
     if (isFree) {
       price = "0";
       node.isAccessibleForFree = true;
     } else {
-      const m = costStr.match(/([0-9]+(?:\.[0-9]{2})?)/);
+      const m = costStr.match(/\$\s*([0-9]+(?:\.[0-9]{1,2})?)/);
       if (m) price = m[1];
     }
     if (price !== null) {
@@ -172,7 +177,6 @@ function buildEventJsonLd(
         url: event.url,
         price,
         priceCurrency: "USD",
-        availability: "https://schema.org/InStock",
       };
     }
   }
@@ -227,6 +231,8 @@ export default function EventDetailView({
   shareCopiedUrl,
   shareUrlFor,
   venueImages,
+  saved = false,
+  onToggleSaved,
 }: Props) {
   const foundEvent = slug ? events.find((e) => e.slug === slug) : null;
   // A slug that still resolves but whose event has since ended must render
@@ -249,6 +255,8 @@ export default function EventDetailView({
     : null;
   const timeStart = event ? formatStart(event.startDateTime) : null;
   const duration = event ? formatDuration(event.startDateTime, event.endDateTime) : null;
+  const trustDisplay = event ? eventTrustDisplay(event) : null;
+  const calendarUrl = event ? eventCalendarUrl(event) : null;
 
   useEffect(() => {
     if (!slug) return;
@@ -362,27 +370,30 @@ export default function EventDetailView({
             </p>
             {/* Quiet trust line (same framing as plan stops), plus the
                 methodology page — verification is a differentiator, show it. */}
-            {event.verified &&
-              event.url &&
-              (() => {
-                const host = sourceHostname(event.url);
-                if (!host) return null;
-                return (
-                  <p className="event-detail-trust">
-                    <a
-                      className="verified-source"
-                      href={event.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Verified · {host}
-                    </a>
+            {trustDisplay && event.url && (() => {
+              const host = sourceHostname(event.url);
+              if (!host) return null;
+              return (
+                <p className="event-detail-trust">
+                  <a
+                    className="verified-source"
+                    href={event.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackMetric("organizer_click", metro.id, { pageType: "event" })}
+                  >
+                    {trustDisplay.kind === "current"
+                      ? `Verified · ${host}`
+                      : `${trustDisplay.label} · Check organizer`}
+                  </a>
+                  {trustDisplay.kind === "current" && (
                     <a className="verified-source" href="/how-we-verify/">
                       How we verify
                     </a>
-                  </p>
-                );
-              })()}
+                  )}
+                </p>
+              );
+            })()}
             {event.ageBands.length > 0 && (
               <p className="event-detail-age">
                 Best for: {event.ageBands.map((b) => ageBandLabels[b]).join(" · ")}
@@ -429,6 +440,18 @@ export default function EventDetailView({
           )}
 
           <div className="event-detail-actions">
+            {onToggleSaved && (
+              <button
+                type="button"
+                className={`event-detail-share-cta${saved ? " is-added" : ""}`}
+                onClick={() => {
+                  onToggleSaved(event.id);
+                }}
+                aria-pressed={saved}
+              >
+                <Bookmark aria-hidden="true" /> {saved ? "Saved" : "Save event"}
+              </button>
+            )}
             <button
               type="button"
               className={`event-detail-plan-cta${inPlan ? " is-added" : ""}`}
@@ -456,6 +479,17 @@ export default function EventDetailView({
                 <Share2 aria-hidden="true" /> {shareCopied ? "Copied!" : "Share"}
               </button>
             )}
+            {calendarUrl && (
+              <a
+                className="event-detail-share-cta"
+                href={calendarUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackMetric("calendar_save", metro.id, { pageType: "event" })}
+              >
+                <CalendarDays aria-hidden="true" /> Save to calendar
+              </a>
+            )}
             <a className="text-button" href="#/browse">
               See it on the map
             </a>
@@ -463,7 +497,12 @@ export default function EventDetailView({
 
           {event.url && (
             <p className="event-detail-source">
-              <a href={event.url} target="_blank" rel="noopener noreferrer">
+              <a
+                href={event.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackMetric("organizer_click", metro.id, { pageType: "event" })}
+              >
                 View original listing
               </a>
             </p>

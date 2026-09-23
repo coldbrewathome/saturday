@@ -1,4 +1,5 @@
 import { APP_AUDIENCE } from "./appConfig";
+import type { MetricAttribution, MetricName } from "../shared/analyticsContract";
 import type { FamilyProfile } from "./familyProfile";
 
 export type Vote = "up" | "down" | "meh";
@@ -197,7 +198,11 @@ function localDay(date = new Date()): string {
   return `${date.getFullYear()}-${month}-${day}`;
 }
 
-function sendMetric(name: string, metroId?: string): void {
+function sendMetric(
+  name: MetricName,
+  metroId?: string,
+  attribution?: MetricAttribution,
+): void {
   const qs = `name=${encodeURIComponent(name)}${
     metroId ? `&metro=${encodeURIComponent(metroId)}` : ""
   }`;
@@ -205,20 +210,39 @@ function sendMetric(name: string, metroId?: string): void {
   // The worker reads `brand` from the JSON request body (not the query
   // string). A plain string body keeps the content type CORS-safelisted
   // (text/plain), so neither path triggers a preflight.
-  const body = JSON.stringify({ brand: METRIC_BRAND });
-  if (navigator.sendBeacon) {
-    navigator.sendBeacon(url, body);
-  } else {
-    void fetch(url, { method: "POST", keepalive: true, mode: "no-cors", body });
+  const body = JSON.stringify({
+    brand: METRIC_BRAND,
+    ...(attribution?.source ? { source: attribution.source } : {}),
+    ...(attribution?.pageType ? { pageType: attribution.pageType } : {}),
+  });
+  try {
+    if (navigator.sendBeacon?.(url, body)) return;
+  } catch {
+    // A blocked/full beacon queue should not silently lose the fallback.
   }
+  void fetch(url, { method: "POST", keepalive: true, mode: "no-cors", body })
+    .catch(() => { /* Offline analytics must never interrupt the outing. */ });
 }
 
 // Fire-and-forget aggregate funnel metric (no PII). Used to measure the
 // share loop + feature engagement. Safe to call anywhere; no-ops without API.
-export function trackMetric(name: string, metroId?: string): void {
+export function trackMetric(
+  name: MetricName,
+  metroId?: string,
+  attribution?: MetricAttribution,
+): void {
   if (!API_BASE || typeof navigator === "undefined") return;
   try {
-    sendMetric(name, metroId);
+    let source: MetricAttribution["source"] = "direct";
+    if (document.referrer) {
+      source = "referral";
+      try {
+        const ref = new URL(document.referrer);
+        if (ref.origin === window.location.origin) source = "internal";
+        else if (/(^|\.)(google\.[a-z.]+|bing\.com|yahoo\.com|duckduckgo\.com)$/i.test(ref.hostname)) source = "search";
+      } catch { /* Keep malformed referrers in the referral bucket. */ }
+    }
+    sendMetric(name, metroId, { source, pageType: "app", ...attribution });
     // Returning-visitor signal: remember the first calendar day we saw this
     // browser; any app_open on a later day also counts as app_open_return so
     // the dashboard can split new vs returning traffic.
@@ -228,7 +252,7 @@ export function trackMetric(name: string, metroId?: string): void {
       if (!firstSeen) {
         window.localStorage.setItem(FIRST_SEEN_KEY, today);
       } else if (firstSeen < today) {
-        sendMetric("app_open_return", metroId);
+        sendMetric("app_open_return", metroId, attribution);
       }
     }
   } catch {

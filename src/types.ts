@@ -103,6 +103,12 @@ export type FamilyEvent = {
   // re-ingests. Drives the "New since your last visit" weekend section
   // (src/newEvents.ts).
   fetchedAt?: string;
+  // Explicit lifecycle timestamps. `fetchedAt` remains the first-seen
+  // timestamp for backwards compatibility; it is never a proxy for source
+  // confirmation.
+  firstSeenAt?: string;
+  lastSuccessfulExtractionAt?: string;
+  lastConfirmedAt?: string;
 };
 
 export type SavedEventDateGroup = {

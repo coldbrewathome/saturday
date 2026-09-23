@@ -170,9 +170,6 @@ const GOOGLE_CLIENT_ID = envValue("VITE_GOOGLE_CLIENT_ID");
 const GSC_VERIFICATION = envValue(
   IS_ADULTS ? "GSC_VERIFICATION_MOSEY" : "GSC_VERIFICATION_FAMHOP",
 );
-// Build timestamp surfaced as `verifiedAt` in Event JSON-LD so crawlers and
-// assistants can tell how fresh each listing is.
-const BUILD_VERIFIED_AT = new Date().toISOString();
 // Spot pages are the bulk of the deployment (Cloudflare Pages caps a deploy
 // at 20k files). 300/metro × 16 metros plus capped event pages keeps the kids
 // build comfortably under ~19k even as event datasets grow; the quality gate
@@ -415,7 +412,7 @@ const lastmodStoreNext = {};
 // every lastmod at once (4,192 of 4,297 live URLs shared one date), teaching
 // Google to distrust the signal entirely. Falls back to the full string for
 // pages with neither region.
-function lastmodContentSignature(html) {
+export function lastmodContentSignature(html) {
   const text = String(html);
   // Volatile blocks must not drive <lastmod>: the event pages' related-events
   // section and the ended-stub's upcoming/featured lists embed live feed
@@ -425,7 +422,12 @@ function lastmodContentSignature(html) {
   const stripped = text
     .replace(/<section class="event-related">[\s\S]*?<\/section>/g, "")
     .replace(/<h2>Upcoming Events in [\s\S]*?<\/ul>/g, "")
-    .replace(/<h2>Featured Spots in [\s\S]*?<\/ul>/g, "");
+    .replace(/<h2>Featured Spots in [\s\S]*?<\/ul>/g, "")
+    // The annual guides' "Updated <today>" label embeds the build date, so it
+    // re-stamped all 162 of them every build whether or not anything changed.
+    // The label still renders — it just no longer votes on the hash, leaving
+    // real content edits as the only thing that moves their <lastmod>.
+    .replace(/<p class="page-updated">[\s\S]*?<\/p>/g, "");
   const main = /<main[\s\S]*?<\/main>/i.exec(stripped);
   if (main) return main[0];
   const shell = /<!--seo-shell:start-->[\s\S]*?<!--seo-shell:end-->/.exec(stripped);
@@ -1970,10 +1972,21 @@ function metroText(text) {
 // Marker comments let the per-metro pass swap out the root pass's block
 // (metro shells are cloned from the already-processed dist/index.html).
 const SHELL_BLOCK_RE = /<!--seo-shell:start-->[\s\S]*?<!--seo-shell:end-->/;
-function replaceShellBlock(html, inner) {
+const ROOT_NOSCRIPT_RE = /(<div\s+id=["']root["']\s*>\s*)<noscript>[\s\S]*?<\/noscript>/i;
+
+export function replaceShellBlock(html, inner) {
   const block = `<!--seo-shell:start-->${inner}<!--seo-shell:end-->`;
-  const re = SHELL_BLOCK_RE.test(html) ? SHELL_BLOCK_RE : /<noscript>[\s\S]*?<\/noscript>/;
-  return html.replace(re, () => block);
+  if (SHELL_BLOCK_RE.test(html)) return html.replace(SHELL_BLOCK_RE, () => block);
+
+  // index.html has a font-loading <noscript> in <head> before the app mount.
+  // The crawlable shell belongs in #root, so never replace the first noscript
+  // tag in the document.
+  if (!ROOT_NOSCRIPT_RE.test(html)) {
+    throw new Error("[seo] Could not find the #root noscript fallback to replace");
+  }
+  // Use a replacement callback: generated copy may contain literal `$&` or
+  // `$1` (for example prices), which String.replace would otherwise expand.
+  return html.replace(ROOT_NOSCRIPT_RE, (_match, prefix) => `${prefix}${block}`);
 }
 
 // Minimal self-contained styling; removed along with the block when React
@@ -3092,7 +3105,7 @@ function generateAnnualEventPages(distinctEvents, eventSlugLookup, eventSlugs) {
       </section>
       ${liveHtml}
       ${entry.officialUrl ? `<p class="see-also"><a rel="noopener" href="${esc(entry.officialUrl)}">Official site &rarr;</a></p>` : ""}
-      <p class="page-updated">Updated ${esc(new Date(BUILD_VERIFIED_AT).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }))} — this guide refreshes whenever the organizer announces dates.</p>
+      <p class="page-updated">Updated ${esc(new Date(`${today()}T12:00:00Z`).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }))} — this guide refreshes whenever the organizer announces dates.</p>
       ${IS_ADULTS ? "" : renderShareBar(canonical, `${yearedName} — ${entry.city} family guide`, null)}
       <nav class="see-also" aria-label="More annual traditions">
         <a href="${metroPath("annual/")}">All annual events in ${esc(metroLabel())}</a>${siblingLinks ? `\n        ${siblingLinks}` : ""}
@@ -3311,6 +3324,7 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
     // after the meta-grid instead of being discarded for the meta string.
     const factsLede = buildEventFacts(event, dateStr);
     const bodyDesc = eventBodyDescription(event, dateStr);
+    const trustLabel = eventTrustLabel(event);
     const bodyDescHtml =
       bodyDesc && bodyDesc !== factsLede ? `<p class="event-desc">${esc(bodyDesc)}</p>` : "";
 
@@ -3325,6 +3339,7 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
     const body = `
       ${heroImage}
       <p class="lede">${esc(factsLede)}</p>
+      ${trustLabel ? `<p class="event-trust-note">${esc(trustLabel)}</p>` : ""}
       ${detailRows.length ? `<dl class="meta-grid">${detailRows.map((r) => `<div><dt>${esc(r.label)}</dt><dd>${r.html}</dd></div>`).join("")}</dl>` : ""}
       ${bodyDescHtml}
       ${
@@ -3339,10 +3354,10 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
         ${(() => {
           const gcal = googleCalendarUrl(event, canonical);
           return gcal
-            ? `<a class="cta-secondary" rel="noopener" href="${esc(gcal)}">Add to calendar</a>`
+            ? `<a class="cta-secondary" data-seo-calendar-save rel="noopener" href="${esc(gcal)}">Add to calendar</a>`
             : "";
         })()}
-        ${event.url ? `<a class="cta-secondary" rel="noopener nofollow" href="${esc(event.url)}">Event details</a>` : ""}
+        ${event.url ? `<a class="cta-secondary" data-seo-organizer rel="noopener nofollow" href="${esc(event.url)}">Event details</a>` : ""}
       </p>
       ${annualEntry ? `<p class="see-also">This is an annual ${esc(metroLabel())} tradition — see the <a href="${metroPath(`annual/${annualEntry.slug}/`)}">${esc(annualEntry.title)} annual guide</a>.</p>` : ""}
       ${renderRelatedEvents(event, upcomingSorted, eventSlugLookup)}
@@ -3742,6 +3757,17 @@ function buildEventFacts(event, dateStr) {
   return `${displayEventTitle(event)}${when} at ${where}${cat}.${cost}${ages}`.trim();
 }
 
+// Keep static event pages as precise about source confidence as the app. A
+// recurring template is not a date-specific confirmation, and a retained
+// last-known-good record is not a fresh organizer check.
+export function eventTrustLabel(event) {
+  const mode = String(event?.sourceMode || event?.extractionMethod || "").toLowerCase();
+  if (mode === "last-known-good") return "Previously listed — check the organizer for current details.";
+  if (mode === "recurring-template") return "Recurring program — check the organizer for this session's details.";
+  if (event?.verified && (event?.sourceUrl || event?.url)) return "Confirmed from the organizer's calendar.";
+  return "";
+}
+
 // junk-7: per-source boilerplate detection — a description shared verbatim by
 // >= 4 distinct titles within one source is source chrome, not event copy.
 // Returns the Set of "sourceId|normalized-desc" keys to suppress.
@@ -3838,7 +3864,11 @@ export function googleCalendarUrl(event, canonical) {
 export function buildEventJsonLd(event, canonical) {
   if (!event.startDateTime) return null;
 
-  const free = eventLikelyFree(event);
+  // Only a cost value explicitly supplied by the feed can support a free or
+  // paid schema claim. Category-based "likely free" ranking is intentionally
+  // not promoted into structured data.
+  const explicitCost = typeof event.cost === "string" ? event.cost.trim() : "";
+  const free = /^(?:free|free admission|no admission fee|no cost|\$0(?:\.00)?)$/i.test(explicitCost);
   // evt-5: title-only online-event flag (descriptions say "zoom" in kids
   // program copy too often — do not widen the match).
   const isOnline = /\bzoom\b/i.test(String(event.title || ""));
@@ -3854,20 +3884,11 @@ export function buildEventJsonLd(event, canonical) {
       : "https://schema.org/OfflineEventAttendanceMode",
     eventStatus: "https://schema.org/EventScheduled",
     startDate: event.startDateTime,
-    // Google's Events rich-result checker flags "Missing field validFrom"
-    // (2026-08-05 inspection); the feed has no ticket-sale date, so the
-    // listing is valid from the event's own start.
-    validFrom: event.startDateTime,
-    // AEO/trust: when this listing was last verified against its source
-    // (build time) and the official source URL. Non-schema.org keys are
-    // ignored by validators but readable by assistants and LLM crawlers.
-    verifiedAt: BUILD_VERIFIED_AT,
   };
-  const officialUrl = event.sourceUrl || event.url;
-  if (officialUrl) node.sourceUrl = officialUrl;
   if (free) node.isAccessibleForFree = true;
-  // A deduped multi-occurrence event runs until its LAST occurrence ends —
-  // using the representative's own endDateTime would expire the page on day one.
+  // Dedupe currently keeps one page for a multi-occurrence run and records
+  // its final end. A future schedule-model pass should emit separate Event
+  // nodes where a run contains independently ticketed performances.
   const endDate = event.occurrenceEnd || event.endDateTime;
   if (endDate) node.endDate = endDate;
   // evt-5: `image` only when the event has a real image. The old fallback
@@ -3908,14 +3929,6 @@ export function buildEventJsonLd(event, canonical) {
       name: event.sourceName,
       url: event.sourceUrl || event.url || canonical,
     };
-    // Same "Missing field performer" warning: the organizer presents the
-    // program (library storytimes, museum series), so it doubles as the
-    // performer. Never invented — only emitted when a real source exists.
-    node.performer = {
-      "@type": "Organization",
-      name: event.sourceName,
-      url: event.sourceUrl || event.url || canonical,
-    };
   }
   if (event.url) {
     let price = null;
@@ -3923,7 +3936,9 @@ export function buildEventJsonLd(event, canonical) {
       price = "0";
     } else if (event.cost) {
       const costStr = String(event.cost);
-      const priceMatch = costStr.match(/([0-9]+(?:\.[0-9]{2})?)/);
+      // Require a currency marker; ages, dates, and capacity notes are not
+      // ticket prices. Ranges use the displayed lower bound as the offer.
+      const priceMatch = costStr.match(/\$\s*([0-9]+(?:\.[0-9]{1,2})?)/);
       if (priceMatch) {
         price = priceMatch[1];
       }
@@ -3935,7 +3950,6 @@ export function buildEventJsonLd(event, canonical) {
         url: event.url,
         price: price,
         priceCurrency: "USD",
-        availability: "https://schema.org/InStock",
       };
     }
   }
@@ -5082,10 +5096,7 @@ async function generateThisWeekendPage(eventItems, eventSlugLookup = null, venue
     .filter((n) => n.length >= 8 && n.length <= 42 && n.includes(" "))
     .slice(0, 4);
   const headlineNames = namePool.slice(0, 2);
-  // Atlanta SERP trick (Mommy Poppins): title and H1 deliberately name
-  // DIFFERENT marquee events, doubling the event-name surface one URL
-  // ranks for. H1 falls back to the title names when only 2 qualify.
-  const h1Names = namePool.length >= 4 ? namePool.slice(2, 4) : headlineNames;
+  // Keep the visible heading concise; featured names belong in the title and cards.
   const countLede = `${upcoming.length} things to do with kids this weekend in ${metroLabel()}`;
   const title = IS_ADULTS
     ? `${guideH1} | ${BRAND}`
@@ -5274,15 +5285,16 @@ async function generateThisWeekendPage(eventItems, eventSlugLookup = null, venue
 
   const body = `
     <p class="wg-updated eyebrow">Updated ${esc(generatedLabel)}</p>
+    <p class="wg-date">${esc(rangeLabel)}</p>
+    ${marqueeHtml}
     ${introHtml}
     <p class="wg-lede">${ledeHtml}</p>
     <div class="wg-stats" aria-label="Weekend snapshot">
       <span class="wg-stat"><b>${upcoming.length}</b> ${A.eventsAdj}events</span>
-      <span class="wg-stat wg-stat--free"><b>${freeCount}</b> free</span>
+      <span class="wg-stat wg-stat--free"><b>${freeCount}</b> likely free</span>
       <span class="wg-stat"><b>${cityCounts.size}</b> cities</span>
     </div>
     ${navHtml}
-    ${marqueeHtml}
     ${renderWeekendInterestChips(editorialBuckets, freeCount)}
     ${planPresets.length ? renderWeekendPlanPresets(planPresets) : ""}
     <section id="timeline" aria-label="Weekend event timeline">
@@ -5372,11 +5384,7 @@ async function generateThisWeekendPage(eventItems, eventSlugLookup = null, venue
       { name: BRAND, url: metroUrl("") },
       { name: "Weekend guide", url: canonical },
     ],
-    h1: h1Names.length >= 1
-      ? `${h1Names.join(", ")} & more: ${guideH1} (${rangeLabel})`
-      : upcoming.length >= 20 && !IS_ADULTS
-        ? `${countLede} (${rangeLabel})`
-        : `${guideH1} (${rangeLabel})`,
+    h1: guideH1,
     eyebrow: metroTag(),
     body,
     hreflangLinks,
@@ -6149,7 +6157,7 @@ function renderNewsletterScript() {
     try {
       navigator.sendBeacon(
         apiBase + "/metric?name=" + name + "&metro=" + encodeURIComponent(metroId),
-        new Blob(['{"brand":"famhop"}'], { type: "application/json" }),
+        new Blob(['{"brand":"famhop"}'], { type: "text/plain;charset=UTF-8" }),
       );
     } catch {}
   };
@@ -6514,7 +6522,7 @@ function renderTimelineEvent(event, eventSlugLookup, locale = "en") {
     ${description ? `<p class="timeline-desc">${esc(description)}</p>` : ""}
     <span class="timeline-side">
       ${free ? `<span class="timeline-free">${freeLabel[locale] || freeLabel.en}</span>` : ""}
-      ${event.url ? `<a class="timeline-official" rel="noopener nofollow" href="${esc(event.url)}">${officialLabel[locale] || officialLabel.en}</a>` : ""}
+      ${event.url ? `<a class="timeline-official" data-seo-organizer rel="noopener nofollow" href="${esc(event.url)}">${officialLabel[locale] || officialLabel.en}</a>` : ""}
     </span>
   </li>`;
 }
@@ -7388,6 +7396,56 @@ ${entries
 // Page shell
 // ---------------------------------------------------------------------------
 
+export function seoPageTypeForCanonical(canonical) {
+  let pathname = String(canonical || "");
+  try {
+    pathname = new URL(pathname, SITE).pathname;
+  } catch {
+    // Keep the conservative fallback below for malformed test fixtures.
+  }
+  if (/(?:^|\/)event\//i.test(pathname)) return "event";
+  if (/(?:^|\/)this-weekend(?:\/|$)/i.test(pathname)) return "weekend";
+  if (metroConfig.metros.some((metro) => pathname === `/${metro.id}/`)) return "metro";
+  return "other";
+}
+
+// Static pages use the same first-party /metric endpoint as the app. The
+// source classification is a closed vocabulary derived from the referrer;
+// no URL, referrer, cookie, or identifier is sent or persisted.
+export function renderStaticSeoMetrics({ canonical = "", metroId = "", pageType = seoPageTypeForCanonical(canonical) } = {}) {
+  if (IS_ADULTS) return "";
+  return `<script>
+(() => {
+  const apiBase = ${JSON.stringify(POLLS_API)};
+  const metroId = ${JSON.stringify(metroId || activeMetro.id || "")};
+  const pageType = ${JSON.stringify(pageType)};
+  if (!apiBase) return;
+  const source = (() => {
+    const referrer = document.referrer || "";
+    if (!referrer) return "direct";
+    try {
+      const ref = new URL(referrer, window.location.href);
+      if (ref.origin === window.location.origin) return "internal";
+      if (/((^|\\.)google\\.)|((^|\\.)bing\\.)|((^|\\.)yahoo\\.)|((^|\\.)duckduckgo\\.)/i.test(ref.hostname)) return "search";
+    } catch {}
+    return "referral";
+  })();
+  const fireMetric = (name) => {
+    const url = apiBase + "/metric?name=" + encodeURIComponent(name) + "&metro=" + encodeURIComponent(metroId);
+    const body = JSON.stringify({ brand: "famhop", source, pageType });
+    try {
+      const payload = new Blob([body], { type: "text/plain;charset=UTF-8" });
+      if (navigator.sendBeacon && navigator.sendBeacon(url, payload)) return;
+    } catch {}
+    void fetch(url, { method: "POST", headers: { "content-type": "text/plain;charset=UTF-8" }, body, keepalive: true, mode: "no-cors" }).catch(() => {});
+  };
+  fireMetric("seo_landing");
+  document.querySelectorAll("[data-seo-organizer]").forEach((el) => el.addEventListener("click", () => fireMetric("organizer_click"), { once: true }));
+  document.querySelectorAll("[data-seo-calendar-save]").forEach((el) => el.addEventListener("click", () => fireMetric("calendar_save"), { once: true }));
+})();
+</script>`;
+}
+
 function renderShell({
   title,
   description,
@@ -7407,6 +7465,7 @@ function renderShell({
   headExtra = "",
   bodyEnd = "",
   mainClass = "famhop-page",
+  pageType = "",
 }) {
   const breadcrumbLd = breadcrumb && breadcrumb.length
     ? {
@@ -7485,6 +7544,7 @@ ${langSwitcherHtml}
   <p>Planning an adults night out in the Bay Area? Try <a href="https://trymosey.com/bay-area/">Mosey</a>.</p>`}
 </footer>
 ${renderStaticAuthScript()}
+${renderStaticSeoMetrics({ canonical, pageType: pageType || seoPageTypeForCanonical(canonical) })}
 ${bodyEnd}
 </body>
 </html>`;

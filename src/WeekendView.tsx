@@ -55,6 +55,8 @@ import {
 import { scoreEventForFamily, type FamilyProfile } from "./familyProfile";
 import { trustBoost, type EventTrust } from "./checkinApi";
 import { sourceHostname } from "./appUtils";
+import { trackMetric } from "./api";
+import { eventCalendarUrl, eventTrustDisplay } from "./eventTrust";
 import {
   buildBestOf,
   pickHeadliner,
@@ -373,8 +375,8 @@ export default function WeekendView({
   function renderCard(event: FamilyEvent, showNewChip = false) {
     const saved = savedEventIds.includes(event.id);
     const inPlan = planEventIds.includes(event.id);
-    const host =
-      event.verified && event.url ? sourceHostname(event.url) : null;
+    const host = event.url ? sourceHostname(event.url) : null;
+    const trustDisplay = eventTrustDisplay(event);
     const free = event.cost === "Free";
     const showCost = !free && event.cost && event.cost !== "Unknown";
     // Trust badge: only when enough families have checked in for the score to
@@ -385,6 +387,7 @@ export default function WeekendView({
         ? `${eventTrust.trustScore}% of parents said worth it`
         : null;
     const editorPicked = editorPickedEventIds.has(event.id);
+    const calendarUrl = eventCalendarUrl(event);
     // The event's own photo, else the venue's real photo (honest — it's the
     // place), else a neutral placeholder.
     const thumb =
@@ -441,14 +444,17 @@ export default function WeekendView({
                   {eventTrust!.trustScore}%
                 </em>
               )}
-              {host && (
+              {trustDisplay && host && (
                 <a
                   className="verified-source"
                   href={event.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackMetric("organizer_click", metro.id, { pageType: "weekend" })}
                 >
-                  Verified · {host}
+                  {trustDisplay.kind === "current"
+                    ? `Verified · ${host}`
+                    : `${trustDisplay.label} · Check organizer`}
                 </a>
               )}
             </span>
@@ -490,6 +496,19 @@ export default function WeekendView({
             >
               <Share2 aria-hidden="true" />
             </button>
+          )}
+          {calendarUrl && (
+            <a
+              className="icon-button"
+              href={calendarUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Save to calendar"
+              aria-label={`Save ${event.title} to calendar`}
+              onClick={() => trackMetric("calendar_save", metro.id, { pageType: "weekend" })}
+            >
+              <CalendarDays aria-hidden="true" />
+            </a>
           )}
         </div>
       </li>
@@ -740,8 +759,8 @@ export default function WeekendView({
             <>
               {total} {APP_AUDIENCE === "adults" ? "" : "kid-friendly "}
               {total === 1 ? "thing" : "things"} to do
-              {freeCount > 0 ? ` · ${freeCount} free` : ""} — every one
-              checked against the organizer&rsquo;s own calendar.
+              {freeCount > 0 ? ` · ${freeCount} likely free` : ""} — check
+              the organizer&rsquo;s listing for current details.
             </>
           ) : (
             <>Here&rsquo;s how this weekend is shaping up.</>

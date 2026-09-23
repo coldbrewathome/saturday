@@ -818,11 +818,9 @@ function App({ metro }: AppProps) {
   }
   // Family profile (kids): first-run wizard collects ages/ZIP/interests/budget/
   // setting once; the weekend feed and browse ranking re-rank for it. Shows on
-  // first visit only, until a profile exists; re-openable via "Edit profile".
+  // requested via "Edit profile" so first-time visitors can browse immediately.
   const [profile, setProfile] = useState<FamilyProfile | null>(readStoredProfile);
-  const [showProfileWizard, setShowProfileWizard] = useState(
-    () => SHOW_AGE_BAND_UI && !readStoredProfile(),
-  );
+  const [showProfileWizard, setShowProfileWizard] = useState(false);
   function completeProfile(next: FamilyProfile) {
     setProfile(next);
     writeStoredProfile(next);
@@ -3279,6 +3277,7 @@ function App({ metro }: AppProps) {
   }
 
   function toggleSavedEvent(id: string) {
+    if (!savedEventIds.includes(id)) trackMetric("event_saved", metro.id);
     setSavedEventIds((current) =>
       current.includes(id)
         ? current.filter((savedId) => savedId !== id)
@@ -4717,6 +4716,8 @@ function App({ metro }: AppProps) {
       ) : view === "event" ? (
       <EventDetailView
         events={events}
+        saved={savedEventIds.includes(events.find((event) => event.slug === activeEventSlug)?.id ?? "")}
+        onToggleSaved={toggleSavedEvent}
         slug={activeEventSlug}
         metro={metro}
         onBack={() => {
@@ -5565,7 +5566,7 @@ function App({ metro }: AppProps) {
         <span>Hop me now</span>
         {!hopNowSeen && <span className="hop-now-fab-badge">NEW</span>}
       </button>
-      {!hopNowSeen && (
+      {!hopNowSeen && !showProfileWizard && view !== "weekend" && view !== "event" && (
         <div className="hop-now-coachmark" role="status" aria-live="polite">
           <div className="hop-now-coachmark-body">
             <span>Stuck on what to do? Tap for instant ideas near you.</span>

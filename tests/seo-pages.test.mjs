@@ -1,14 +1,69 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { runInNewContext } from "node:vm";
 import {
   auditAdultsSitemapUrls,
   formatWeekendRange,
+  lastmodContentSignature,
   nearbySpotsFor,
   sitemapUrlViolatesD3,
   spotPassesQualityGate,
+  replaceShellBlock,
   venueHoursFor,
   weekendGuideTitle,
+  renderStaticSeoMetrics,
+  seoPageTypeForCanonical,
 } from "../scripts/generate-seo-pages.mjs";
+
+test("static metrics send bounded attribution and recover from a rejected beacon", async () => {
+  const calls = [];
+  const script = renderStaticSeoMetrics({ canonical: "https://famhop.com/bay-area/event/test/", metroId: "bay-area" }).replace(/^<script>\s*|\s*<\/script>$/g, "");
+  runInNewContext(script, {
+    URL, Blob,
+    document: { referrer: "https://www.google.com/search?q=private", querySelectorAll: () => [] },
+    window: { location: { href: "https://famhop.com/bay-area/event/test/", origin: "https://famhop.com" } },
+    navigator: { sendBeacon: () => { throw new Error("blocked"); } },
+    fetch: (url, options) => { calls.push({ url, options }); return Promise.resolve(); },
+  });
+  assert.equal(calls.length, 1);
+  assert.deepEqual(JSON.parse(calls[0].options.body), { brand: "famhop", source: "search", pageType: "event" });
+  assert.equal(seoPageTypeForCanonical("https://famhop.com/about/"), "other");
+  assert.equal(seoPageTypeForCanonical("https://famhop.com/bay-area/"), "metro");
+});
+
+test("the annual guides' Updated label does not drive <lastmod>", () => {
+  // The label embeds the build date, so hashing it re-stamped all 162 annual
+  // guides on every build whether or not anything changed.
+  const page = (date, body = "Pumpkin patches, hayrides and a petting zoo.") =>
+    `<!doctype html><html><body><div id="root"><main><h1>Sparktacular</h1>` +
+    `<p class="page-updated">Updated ${date} — this guide refreshes whenever the organizer&#39;s dates land.</p>` +
+    `<p>${body}</p></main></div></body></html>`;
+
+  const todaySignature = lastmodContentSignature(page("September 23, 2026"));
+  assert.match(todaySignature, /Sparktacular/, "page content is still hashed");
+  assert.doesNotMatch(todaySignature, /page-updated/, "the build date is not hashed");
+
+  assert.equal(
+    todaySignature,
+    lastmodContentSignature(page("September 24, 2026")),
+    "a new build date must not move <lastmod>",
+  );
+
+  assert.notEqual(
+    todaySignature,
+    lastmodContentSignature(page("September 23, 2026", "Now with a corn maze.")),
+    "a real content change must still move <lastmod>",
+  );
+});
+
+test("SEO shell replaces only the #root noscript fallback", () => {
+  const input = `<!doctype html><html><head><noscript><link rel="stylesheet" href="/fonts.css"></noscript></head><body><div id="root"><noscript><h1>Fallback</h1></noscript></div></body></html>`;
+  const output = replaceShellBlock(input, "<main><h1>Prerendered page</h1></main>");
+
+  assert.match(output, /<head><noscript><link rel="stylesheet" href="\/fonts\.css"><\/noscript><\/head>/);
+  assert.match(output, /<div id="root"><!--seo-shell:start--><main><h1>Prerendered page<\/h1><\/main><!--seo-shell:end--><\/div>/);
+  assert.equal((output.match(/<h1/g) || []).length, 1);
+});
 
 // --- spotPassesQualityGate -------------------------------------------------
 
@@ -284,6 +339,23 @@ test("displayVenue strips calendar suffixes only when a real venue remains", asy
 });
 
 // --- evt-5 / junk-6 / junk-7: Event JSON-LD accuracy --------------------------
+
+test("event schema does not infer prices, availability, performers, or verification dates", async () => {
+  const { buildEventJsonLd } = await import("../scripts/generate-seo-pages.mjs");
+  const event = { title: "Closed captioned family movie", venue: "Library", sourceName: "Library", verified: true, startDateTime: "2099-05-02T10:00:00-04:00", url: "https://example.org/movie" };
+  for (const cost of [undefined, "Ages 3 and up", "Free for members"]) {
+    const node = buildEventJsonLd({ ...event, cost }, event.url);
+    assert.equal(node.offers, undefined);
+    assert.equal(node.isAccessibleForFree, undefined);
+    assert.equal(node.performer, undefined);
+    assert.equal(node.verifiedAt, undefined);
+    assert.equal(node.validFrom, undefined);
+    assert.equal(node.eventStatus, "https://schema.org/EventScheduled");
+  }
+  const free = buildEventJsonLd({ ...event, cost: "Free" }, event.url);
+  assert.equal(free.offers.price, "0");
+  assert.equal(free.offers.availability, undefined);
+});
 
 test("buildEventJsonLd emits no logo fallback image, cleans location.name, keeps URL", async () => {
   const { buildEventJsonLd } = await import("../scripts/generate-seo-pages.mjs");

@@ -1263,7 +1263,7 @@ async function fetchUrlWithBrowserContext(source, url, init = {}) {
   // via last-known-good/templates — never crash the whole metro ingest.
   let page = null;
   try {
-    launched = await browser();
+    const launched = await browser();
     page = await launched.newPage({
       userAgent: BROWSER_HEADERS["user-agent"],
       extraHTTPHeaders: {

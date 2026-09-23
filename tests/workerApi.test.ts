@@ -94,6 +94,45 @@ describe("POST /metric brand counters", () => {
     expect(kv.store.get(`metricb:app_open_return:famhop:${today}`)).toBe("1");
   });
 
+  it("records validated attribution once and does not duplicate the all bucket", async () => {
+    const kv = makeKv();
+    const env = makeEnv(kv);
+    const res = await call(env, "https://api.test/metric?name=seo_landing", {
+      method: "POST",
+      body: JSON.stringify({
+        brand: "famhop",
+        source: "search",
+        pageType: "event",
+        referrer: "https://private.example/should-not-be-stored",
+      }),
+    });
+    expect(res.status).toBe(204);
+    expect(kv.store.get(`metric:seo_landing:all:${today}`)).toBe("1");
+    expect(kv.store.get(`metricb:seo_landing:famhop:${today}`)).toBe("1");
+    expect(kv.store.get(`metricd:seo_landing:search:event:${today}`)).toBe("1");
+    expect(
+      [...kv.store.keys()].filter((key) => key === `metric:seo_landing:all:${today}`),
+    ).toHaveLength(1);
+  });
+
+  it("does not persist unallowlisted source or page type values", async () => {
+    const kv = makeKv();
+    await call(makeEnv(kv), "https://api.test/metric?name=organizer_click", {
+      method: "POST",
+      body: JSON.stringify({ source: "https://raw.example", pageType: "event-detail" }),
+    });
+    expect([...kv.store.keys()].filter((key) => key.startsWith("metricd:"))).toEqual([]);
+  });
+
+  it("does not persist an event outside the shared metric contract", async () => {
+    const kv = makeKv();
+    const res = await call(makeEnv(kv), "https://api.test/metric?name=not_a_metric", {
+      method: "POST",
+    });
+    expect(res.status).toBe(204);
+    expect([...kv.store.keys()].filter((key) => key.startsWith("metric"))).toEqual([]);
+  });
+
   it("ignores unknown brands and missing bodies", async () => {
     const kv = makeKv();
     const env = makeEnv(kv);
@@ -136,6 +175,35 @@ describe("GET /metrics byBrand", () => {
     expect(body.byBrand).toEqual({
       app_open: { famhop: 3, mosey: 2 },
       plan_shared: { famhop: 0, mosey: 1 },
+    });
+  });
+
+  it("aggregates source and page type dimensions from metricd keys", async () => {
+    const kv = makeKv();
+    const env = makeEnv(kv);
+    kv.store.set(
+      "session:admintok",
+      JSON.stringify({ sub: "1", email: "admin@example.com", name: "Admin" }),
+    );
+    kv.store.set(`metricd:seo_landing:search:event:${today}`, "4");
+    kv.store.set(`metricd:organizer_click:search:event:${today}`, "2");
+    kv.store.set(`metricd:event_saved:referral:event:${today}`, "3");
+
+    const res = await call(env, "https://api.test/metrics?days=30", {
+      headers: { authorization: "Bearer admintok" },
+    });
+    const body = (await res.json()) as Record<string, unknown>;
+    expect(body.bySource).toEqual({
+      search: { seo_landing: 4, organizer_click: 2 },
+      referral: { event_saved: 3 },
+    });
+    expect(body.byPageType).toEqual({
+      event: { seo_landing: 4, organizer_click: 2, event_saved: 3 },
+    });
+    expect(body.byAttribution).toEqual({
+      seo_landing: { "search:event": 4 },
+      organizer_click: { "search:event": 2 },
+      event_saved: { "referral:event": 3 },
     });
   });
 });

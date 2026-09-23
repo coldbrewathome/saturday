@@ -37,6 +37,20 @@ afterEach(() => {
 });
 
 describe("trackMetric", () => {
+  it("falls back to fetch when the browser declines a beacon", async () => {
+    const api = await importApi();
+    const beacon = mockBeacon();
+    beacon.mockReturnValue(false);
+    const fetchSpy = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
+    vi.stubGlobal("fetch", fetchSpy);
+    api.trackMetric("organizer_click", "bay-area", { source: "search", pageType: "event" });
+    expect(fetchSpy).toHaveBeenCalledOnce();
+    expect(fetchSpy.mock.calls[0][1]).toMatchObject({ method: "POST", keepalive: true });
+    expect(JSON.parse(fetchSpy.mock.calls[0][1].body)).toEqual({
+      brand: "famhop", source: "search", pageType: "event",
+    });
+  });
+
   it("injects brand=famhop in the beacon body for the default (kids) build", async () => {
     const api = await importApi();
     const beacon = mockBeacon();
@@ -49,7 +63,22 @@ describe("trackMetric", () => {
     expect(url.searchParams.get("name")).toBe("plan_created");
     expect(url.searchParams.get("metro")).toBe("bay-area");
     // The worker reads `brand` from the JSON request body.
-    expect(JSON.parse(body)).toEqual({ brand: "famhop" });
+    expect(JSON.parse(body)).toEqual({ brand: "famhop", source: "direct", pageType: "app" });
+  });
+
+  it("sends only the bounded attribution dimensions in the beacon body", async () => {
+    const api = await importApi();
+    const beacon = mockBeacon();
+    api.trackMetric("seo_landing", "bay-area", {
+      source: "search",
+      pageType: "event",
+    });
+    const [, body] = beacon.mock.calls[0]! as unknown as [string, string];
+    expect(JSON.parse(body)).toEqual({
+      brand: "famhop",
+      source: "search",
+      pageType: "event",
+    });
   });
 
   it("injects brand=mosey when the build audience is adults", async () => {
@@ -61,7 +90,7 @@ describe("trackMetric", () => {
     api.trackMetric("app_open");
     expect(beacon).toHaveBeenCalledTimes(1);
     const [, body] = beacon.mock.calls[0]! as unknown as [string, string];
-    expect(JSON.parse(body)).toEqual({ brand: "mosey" });
+    expect(JSON.parse(body)).toEqual({ brand: "mosey", source: "direct", pageType: "app" });
   });
 
   it("records firstSeen on the first app_open without firing app_open_return", async () => {
