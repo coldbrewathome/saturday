@@ -4,8 +4,10 @@ import { runInNewContext } from "node:vm";
 import {
   auditAdultsSitemapUrls,
   formatWeekendRange,
+  lastmodBudgetRemaining,
   lastmodContentSignature,
   nearbySpotsFor,
+  planLastmodAdvances,
   sitemapUrlViolatesD3,
   spotPassesQualityGate,
   replaceShellBlock,
@@ -54,6 +56,51 @@ test("the annual guides' Updated label does not drive <lastmod>", () => {
     lastmodContentSignature(page("September 23, 2026", "Now with a corn maze.")),
     "a real content change must still move <lastmod>",
   );
+});
+
+test("lastmod advances drain a large change gradually, most outdated first", () => {
+  const pending = [
+    { url: "https://famhop.com/a/", hash: "h1", prev: { h: "p1", d: "2026-09-01" } },
+    { url: "https://famhop.com/b/", hash: "h2", prev: { h: "p2", d: "2026-08-01" } },
+    { url: "https://famhop.com/c/", hash: "h3", prev: { h: "p3", d: "2026-09-05" } },
+  ];
+  const { advances, deferred } = planLastmodAdvances(pending, 2, "2026-09-23");
+  // Oldest lastmod first: b (08-01) then a (09-01); c (09-05) waits.
+  assert.deepEqual(advances, [
+    { url: "https://famhop.com/b/", h: "h2", d: "2026-09-23" },
+    { url: "https://famhop.com/a/", h: "h1", d: "2026-09-23" },
+  ]);
+  // A deferred page keeps its PREVIOUS hash: if it stored the new one, the next
+  // build would find prev.h === hash and never advance it.
+  assert.deepEqual(deferred, [{ url: "https://famhop.com/c/", h: "p3", d: "2026-09-05" }]);
+
+  // Infinity is the uncapped signal. A numeric 0 is a spent budget and must
+  // advance nothing — conflating the two would let a second build the same day
+  // drain the whole backlog.
+  const uncapped = planLastmodAdvances(pending, Infinity, "2026-09-23");
+  assert.equal(uncapped.advances.length, 3);
+  assert.equal(uncapped.deferred.length, 0);
+  assert.equal(planLastmodAdvances(pending, 0, "2026-09-23").advances.length, 0);
+
+  // Ties break on URL, so a page cannot shuffle in and out of the budget
+  // between builds and never advance.
+  const tied = planLastmodAdvances(
+    [
+      { url: "https://famhop.com/z/", hash: "hz", prev: { h: "pz", d: "2026-09-01" } },
+      { url: "https://famhop.com/a/", hash: "ha", prev: { h: "pa", d: "2026-09-01" } },
+    ],
+    1,
+    "2026-09-23",
+  );
+  assert.deepEqual(tied.advances.map((x) => x.url), ["https://famhop.com/a/"]);
+});
+
+test("the lastmod budget is spent per calendar day, not per build", () => {
+  assert.equal(lastmodBudgetRemaining(undefined, "2026-09-23", 500), 500);
+  assert.equal(lastmodBudgetRemaining({ d: "2026-09-22", n: 500 }, "2026-09-23", 500), 500, "yesterday's spend resets");
+  assert.equal(lastmodBudgetRemaining({ d: "2026-09-23", n: 120 }, "2026-09-23", 500), 380);
+  assert.equal(lastmodBudgetRemaining({ d: "2026-09-23", n: 500 }, "2026-09-23", 500), 0, "a spent day advances nothing more");
+  assert.equal(lastmodBudgetRemaining({ d: "2026-09-23", n: 900 }, "2026-09-23", 500), 0, "never goes negative");
 });
 
 test("SEO shell replaces only the #root noscript fallback", () => {

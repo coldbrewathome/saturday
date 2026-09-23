@@ -434,12 +434,84 @@ export function lastmodContentSignature(html) {
   if (shell) return shell[0];
   return stripped;
 }
+// A build that changes thousands of pages hands Google one date on thousands of
+// URLs at once — the same "shared date" pattern the volatile-strip above exists
+// to prevent, just driven by one large content change instead of per-build
+// churn. Cap how many *changed* pages may re-stamp per build and carry the rest
+// over: 500/build drains a 5,000-page change across ten days.
+const LASTMOD_ADVANCE_PER_DAY = Number(process.env.SEO_LASTMOD_ADVANCE_PER_DAY ?? 500);
+// Reserved store key holding how much of today's budget is already spent. It
+// rides along in data/seo-lastmod.json because saveLastmodStore() preserves any
+// key that is not one of this host's URLs.
+const LASTMOD_BUDGET_KEY = "__lastmodAdvance";
+const lastmodPending = [];
+
+// The day's remaining budget. Per calendar day, not per build: rebuilding three
+// times in one afternoon must not advance 1,500 pages and blow the backlog out
+// in an hour, which is exactly what the cap exists to prevent.
+export function lastmodBudgetRemaining(entry, todayStr, perDay) {
+  const spent = entry && entry.d === todayStr ? Number(entry.n) || 0 : 0;
+  return Math.max(0, perDay - spent);
+}
 function trackedLastmod(url, content) {
   const hash = crypto.createHash("sha1").update(lastmodContentSignature(content)).digest("hex").slice(0, 16);
   const prev = lastmodStore[url];
-  const date = prev && prev.h === hash && prev.d ? prev.d : today();
-  lastmodStoreNext[url] = { h: hash, d: date };
-  return date;
+  if (!prev || !prev.h || !prev.d) {
+    // A URL the store has never seen has no earlier date to carry over: its
+    // <lastmod> is its birth date. New pages are the highest-value change there
+    // is — they are not indexed at all yet — so they always ship, and are not
+    // charged against the advance budget.
+    const born = today();
+    lastmodStoreNext[url] = { h: hash, d: born };
+    return born;
+  }
+  if (prev.h === hash) {
+    lastmodStoreNext[url] = { h: hash, d: prev.d };
+    return prev.d;
+  }
+  // Changed: queue it and provisionally hold the previous date.
+  // resolveLastmodAdvances() promotes the head of the queue once every page has
+  // been seen and the budget can be spent on the most outdated ones.
+  lastmodPending.push({ url, hash, prev });
+  lastmodStoreNext[url] = { h: prev.h, d: prev.d };
+  return prev.d;
+}
+
+// Ranked most-outdated first, so a large change drains gradually instead of
+// stamping every changed URL with one date. Ties break on URL to keep the order
+// reproducible across builds — otherwise a page could shuffle in and out of the
+// budget and never advance. Kept pure so the ordering is directly testable.
+// `budget` is a count of pages; Infinity means uncapped. It is deliberately not
+// a 0-means-uncapped sentinel — a day whose budget is already spent passes 0 and
+// must advance nothing.
+export function planLastmodAdvances(pending, budget, todayStr) {
+  const ranked = pending
+    .slice()
+    .sort((a, b) => (a.prev.d < b.prev.d ? -1 : a.prev.d > b.prev.d ? 1 : a.url < b.url ? -1 : 1));
+  const limit = budget === Infinity ? ranked.length : Math.max(0, budget);
+  return {
+    advances: ranked.slice(0, limit).map(({ url, hash }) => ({ url, h: hash, d: todayStr })),
+    // A deferred page keeps its PREVIOUS hash: the next build still sees
+    // prev.h !== hash, queues it again, and it advances then. Storing the new
+    // hash alongside the old date would pin that date forever, because the
+    // following build would find them equal and never advance it.
+    deferred: ranked.slice(limit).map(({ url, prev }) => ({ url, h: prev.h, d: prev.d })),
+  };
+}
+
+function resolveLastmodAdvances() {
+  if (lastmodPending.length === 0) return { advanced: 0, deferred: 0 };
+  const todayStr = today();
+  const capped = LASTMOD_ADVANCE_PER_DAY > 0;
+  const remaining = capped ? lastmodBudgetRemaining(lastmodStore[LASTMOD_BUDGET_KEY], todayStr, LASTMOD_ADVANCE_PER_DAY) : Infinity;
+  const { advances, deferred } = planLastmodAdvances(lastmodPending, remaining, todayStr);
+  for (const { url, h, d } of advances) lastmodStoreNext[url] = { h, d };
+  for (const { url, h, d } of deferred) lastmodStoreNext[url] = { h, d };
+  if (capped) {
+    const spentToday = LASTMOD_ADVANCE_PER_DAY - remaining + advances.length;
+    lastmodStoreNext[LASTMOD_BUDGET_KEY] = { d: todayStr, n: spentToday };
+  }
+  return { advanced: advances.length, deferred: deferred.length };
 }
 function saveLastmodStore() {
   // Keep the other audience's entries (kids vs Mosey share the file, keyed by
@@ -1416,10 +1488,24 @@ async function main() {
     process.exit(1);
   }
 
+  const lastmodPlan = resolveLastmodAdvances();
+  // trackedLastmod handed back provisional dates while the budget was still
+  // unknown, so the entries have to be re-pointed at the resolved ones.
+  for (const entry of sitemapEntries) {
+    const resolved = lastmodStoreNext[entry.loc];
+    if (resolved && entry.lastmod !== resolved.d) entry.lastmod = resolved.d;
+  }
+
   writeSitemap(sitemapEntries);
   saveLastmodStore();
   saveCityWeekendHistory();
   writeRobotsAndLlms();
+
+  if (lastmodPlan.deferred > 0) {
+    console.log(
+      `[seo] lastmod: advanced ${lastmodPlan.advanced} changed page(s) to ${today()}, deferred ${lastmodPlan.deferred} to later builds (budget ${LASTMOD_ADVANCE_PER_DAY}/day).`,
+    );
+  }
 
   console.log(
     `[seo] wrote ${totalSpotPages} spot pages, ${totalEventPages} event pages, ${totalEndedEventStubs} ended-event stubs, ${totalAnnualPages} annual pages, ${totalEvergreenPages} evergreen-rescue pages, ${totalCityPages} city pages, ${totalCategoryPages} category pages, ${totalWeekendPages} this-weekend pages, ${totalWeekendSubPages} city/free weekend pages, ${totalLocalizedPages} localized i18n pages, sitemap with ${sitemapEntries.length} URLs.`,
