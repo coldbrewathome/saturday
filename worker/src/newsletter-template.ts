@@ -68,6 +68,19 @@ export type DigestInput = {
   // for the family (age bands, interests, budget) instead of generic
   // interestingness.
   profile?: SubscriberProfile;
+  // Metro weekend forecast (worker/src/weather.ts). When Saturday or Sunday
+  // looks wet, the digest says so and leads the list with indoor picks.
+  weather?: DigestWeather;
+};
+
+export type DigestWeatherDay = {
+  label?: string;
+  precipChance?: number;
+};
+
+export type DigestWeather = {
+  saturday?: DigestWeatherDay | null;
+  sunday?: DigestWeatherDay | null;
 };
 
 export type DigestOutput = {
@@ -93,14 +106,29 @@ export function renderWeekendDigest(input: DigestInput): DigestOutput {
     ? pickProfileEvents(input.events, weekend, MAX_EVENTS, now, input.profile)
     : pickTopEvents(input.events, weekend, MAX_EVENTS, now);
 
+  // Rain check: a wet weekend says so and leads with indoor picks. The
+  // qualification bar is unchanged — a rainy Saturday promotes an indoor
+  // headliner only when one clears HEADLINER_MIN_SCORE on its own merits;
+  // otherwise the best event keeps the spotlight, rain or not.
+  const wetDay = wetDayName(input.weather);
+
   // The most interesting in-window event headlines the digest — but only
   // when it actually scores as marquee material; a weekend of storytimes
   // gets the plain list, not a fake "headliner".
-  const headliner =
+  let headliner =
     events.length && scoreEvent(events[0]) >= HEADLINER_MIN_SCORE
       ? events[0]
       : undefined;
-  const restEvents = headliner ? events.slice(1) : events;
+  if (wetDay && headliner && !eventLooksIndoor(headliner)) {
+    const indoor = events.find(
+      (event) => eventLooksIndoor(event) && scoreEvent(event) >= HEADLINER_MIN_SCORE,
+    );
+    if (indoor) headliner = indoor;
+  }
+  const restEvents = headliner
+    ? events.filter((event) => event.id !== headliner?.id)
+    : events;
+  const listedEvents = wetDay ? preferIndoor(restEvents) : restEvents;
 
   const subject = headliner
     ? `🎈 ${truncateForSubject(stripDaySuffix(headliner.title), 44)} + more this weekend in ${input.metroLabel}`
@@ -111,7 +139,8 @@ export function renderWeekendDigest(input: DigestInput): DigestOutput {
     weekend,
     plans,
     headliner,
-    events: restEvents,
+    events: listedEvents,
+    wetDay,
     siteBase,
     unsubscribeUrl: input.unsubscribeUrl,
   });
@@ -121,7 +150,8 @@ export function renderWeekendDigest(input: DigestInput): DigestOutput {
     weekend,
     plans,
     headliner,
-    events: restEvents,
+    events: listedEvents,
+    wetDay,
     siteBase,
     unsubscribeUrl: input.unsubscribeUrl,
   });
@@ -287,6 +317,45 @@ function scoreEvent(event: DigestEvent): number {
   return score;
 }
 
+// ── Weather ────────────────────────────────────────────────────────────
+// Same wet threshold as the app (src/weekendBrief.ts DRY_THRESHOLD): at or
+// above 40% precip the day reads as wet.
+
+const WET_PRECIP_THRESHOLD = 40;
+
+const INDOOR_CATEGORY_RE = /\b(library|museum|cultur|theater|theatre|arts?)\b/i;
+const OUTDOOR_CATEGORY_RE = /\b(park|zoo|farm|festival|outdoor|garden|beach|trail)\b/i;
+const INDOOR_TEXT_RE =
+  /\b(museum|library|indoor|planetarium|aquarium|science cent|art (?:cent|gallery|studio)|play ?space|trampoline|bowling|climb|theater|theatre|story ?time|storytime)\b/i;
+
+// Mirrors eventLooksIndoor in src/familyProfile.ts (the worker can't import
+// app code): category is the strong signal, then the title/venue text.
+export function eventLooksIndoor(event: DigestEvent): boolean {
+  const category = String(event.category || "");
+  if (INDOOR_CATEGORY_RE.test(category)) return true;
+  if (OUTDOOR_CATEGORY_RE.test(category)) return false;
+  return INDOOR_TEXT_RE.test(`${event.title || ""} ${event.venue || ""}`);
+}
+
+// The wet day's name, or null when neither day crosses the threshold.
+export function wetDayName(weather?: DigestWeather): string | null {
+  if (!weather) return null;
+  const satWet = (weather.saturday?.precipChance ?? 0) >= WET_PRECIP_THRESHOLD;
+  const sunWet = (weather.sunday?.precipChance ?? 0) >= WET_PRECIP_THRESHOLD;
+  if (satWet && sunWet) return "all weekend";
+  if (satWet) return "Saturday";
+  if (sunWet) return "Sunday";
+  return null;
+}
+
+// Stable partition: indoor picks keep their ranking but move ahead of the
+// rest. A wet weekend is the one time the digest's order bends to the sky.
+function preferIndoor(events: DigestEvent[]): DigestEvent[] {
+  const indoor = events.filter(eventLooksIndoor);
+  if (indoor.length === 0 || indoor.length === events.length) return events;
+  return [...indoor, ...events.filter((event) => !eventLooksIndoor(event))];
+}
+
 // "Strawberry Festival (Saturday)" → "Strawberry Festival": the weekday
 // marker is feed plumbing; the meta line already carries the day + time.
 function stripDaySuffix(title: string): string {
@@ -435,6 +504,9 @@ type RenderContext = {
   plans: DigestPlan[];
   headliner?: DigestEvent;
   events: DigestEvent[];
+  // Name of the wet weekend day ("Saturday", "Sunday", "all weekend"), or
+  // null/absent when the forecast is dry or unknown.
+  wetDay?: string | null;
   siteBase: string;
   unsubscribeUrl?: string;
 };
@@ -504,6 +576,14 @@ ${meta ? `<p style="color:#555;font-size:14px;margin:6px 0 0;">${esc(meta)}</p>`
     ? `${ctx.headliner.title} — plus ready-made family plans for ${ctx.weekend.label}.`
     : `Your ${ctx.metroLabel} family game plan for ${ctx.weekend.label}.`;
 
+  // The rain line is plain text on purpose — the emoji budget (subject
+  // balloon + section markers) is fixed for deliverability.
+  const rainLine = ctx.wetDay
+    ? `<p style="color:#555;margin:0 0 20px;"><strong>Rain's likely ${
+        ctx.wetDay === "all weekend" ? "all weekend" : ctx.wetDay
+      }</strong> — so the picks below lean indoor.</p>`
+    : "";
+
   return `<!doctype html>
 <html lang="en">
 <head><meta charset="utf-8"/><title>${esc(ctx.metroLabel)} weekend</title></head>
@@ -514,7 +594,7 @@ ${meta ? `<p style="color:#555;font-size:14px;margin:6px 0 0;">${esc(meta)}</p>`
 <p style="font-size:13px;color:#888;text-transform:uppercase;letter-spacing:0.06em;margin:0 0 4px;">FamHop weekly digest</p>
 <h1 style="font-size:24px;margin:0 0 4px;">Your ${esc(ctx.metroLabel)} weekend, sorted 🎉</h1>
 <p style="color:#666;margin:0 0 20px;">${esc(ctx.weekend.label)} — the good stuff, picked for you. Grab the snacks, we did the planning.</p>
-
+${rainLine}
 ${headlinerBlock}
 
 <h2 style="font-size:18px;margin:0 0 12px;">🎪 Don't miss these</h2>
@@ -544,6 +624,9 @@ function renderText(ctx: RenderContext): string {
   const lines: string[] = [];
   lines.push(`Your ${ctx.metroLabel} weekend, sorted (${ctx.weekend.label})`);
   lines.push("The good stuff, picked for you. Grab the snacks, we did the planning.");
+  if (ctx.wetDay) {
+    lines.push(`Rain's likely ${ctx.wetDay} — so the picks below lean indoor.`);
+  }
   lines.push("");
   if (ctx.headliner) {
     const meta = eventMetaLine(ctx.headliner, ctx.weekend.timezone);

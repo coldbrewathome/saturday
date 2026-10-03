@@ -22,6 +22,15 @@ ADMIN_EMAILS = "kaining.usc@gmail.com"
 # a send to a fixed set of addresses (anything else is filtered out and
 # returned as an error). Leave unset for production list sends.
 
+# Thursday 15:00 UTC (8am PT / 11am ET) weekly digest, sent to every KV
+# newsletter:* subscriber grouped by metro. It is a no-op until
+# NEWSLETTER_ENABLED=true, so the cron can be deployed ahead of the
+# Resend setup. Set NEWSLETTER_WORKER_ORIGIN if a custom domain ever
+# fronts this worker — scheduled sends have no request origin and
+# otherwise build unsubscribe links from the workers.dev default.
+[triggers]
+crons = ["0 15 * * 4"]
+
 # Secrets (set via `wrangler secret put <NAME>`, never commit values):
 #   NEWSLETTER_ADMIN_TOKEN — bearer token required by POST /newsletter/send
 #   RESEND_API_KEY — Resend API key used by sendWeekendDigest (worker/src/newsletter.ts)

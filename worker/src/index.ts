@@ -1,9 +1,11 @@
 import {
+  runScheduledDigest,
   sendMondayRecap,
   sendWeekendDigest,
   unsubscribeToken,
   type NewsletterRecipient,
 } from "./newsletter";
+import { fetchWeekendWeather } from "./weather";
 import {
   isMetricName,
   isMetricPageType,
@@ -857,19 +859,6 @@ async function aiBrief(
   );
 }
 
-function weatherCodeLabel(code: number): string {
-  if (code === 0) return "Clear";
-  if (code === 1 || code === 2) return "Mostly sunny";
-  if (code === 3) return "Cloudy";
-  if (code === 45 || code === 48) return "Foggy";
-  if (code >= 51 && code <= 57) return "Drizzly";
-  if (code >= 61 && code <= 67) return "Rainy";
-  if (code >= 71 && code <= 86) return "Snowy";
-  if (code >= 80 && code <= 82) return "Showers";
-  if (code >= 95) return "Stormy";
-  return "Mixed";
-}
-
 async function getWeather(
   request: Request,
   env: Env,
@@ -881,82 +870,15 @@ async function getWeather(
   if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
     return json({ error: "lat,lon required" }, { status: 400 }, cors);
   }
-  const round = (n: number) => Math.round(n * 100) / 100;
-  const cacheKey = `weather:${round(lat)},${round(lon)}`;
-  const cached = await env.POLLS.get(cacheKey);
-  if (cached) {
-    return new Response(cached, {
-      status: 200,
-      headers: {
-        "content-type": "application/json",
-        "x-cache": "HIT",
-        ...cors,
-      },
-    });
-  }
-
-  const apiUrl =
-    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
-    `&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max` +
-    `&timezone=auto&forecast_days=10&temperature_unit=fahrenheit`;
-  const response = await fetch(apiUrl, {
-    headers: { "User-Agent": "famhop/0.1" },
-  });
-  if (!response.ok) {
+  const result = await fetchWeekendWeather(env.POLLS, lat, lon);
+  if (!result) {
     return json({ error: "weather lookup failed" }, { status: 502 }, cors);
   }
-  const data = (await response.json()) as {
-    daily?: {
-      time?: string[];
-      weathercode?: number[];
-      temperature_2m_max?: number[];
-      temperature_2m_min?: number[];
-      precipitation_probability_max?: number[];
-    };
-  };
-  const daily = data.daily;
-  if (!daily || !Array.isArray(daily.time)) {
-    return json({ error: "weather format unexpected" }, { status: 502 }, cors);
-  }
-
-  type Day = {
-    date: string;
-    weatherCode: number;
-    label: string;
-    tempMaxF: number;
-    tempMinF: number;
-    precipChance: number;
-  };
-  let saturday: Day | null = null;
-  let sunday: Day | null = null;
-  for (let i = 0; i < daily.time.length; i += 1) {
-    const date = new Date(`${daily.time[i]}T12:00:00`);
-    const dow = date.getDay();
-    const code = daily.weathercode?.[i] ?? -1;
-    const entry: Day = {
-      date: daily.time[i],
-      weatherCode: code,
-      label: weatherCodeLabel(code),
-      tempMaxF: Math.round(daily.temperature_2m_max?.[i] ?? 0),
-      tempMinF: Math.round(daily.temperature_2m_min?.[i] ?? 0),
-      precipChance: daily.precipitation_probability_max?.[i] ?? 0,
-    };
-    if (dow === 6 && !saturday) saturday = entry;
-    if (dow === 0 && !sunday) sunday = entry;
-    if (saturday && sunday) break;
-  }
-
-  const body = JSON.stringify({
-    saturday,
-    sunday,
-    fetchedAt: new Date().toISOString(),
-  });
-  await env.POLLS.put(cacheKey, body, { expirationTtl: 60 * 60 });
-  return new Response(body, {
+  return new Response(JSON.stringify(result.weather), {
     status: 200,
     headers: {
       "content-type": "application/json",
-      "x-cache": "MISS",
+      "x-cache": result.cached ? "HIT" : "MISS",
       ...cors,
     },
   });
@@ -2130,5 +2052,19 @@ export default {
     }
 
     return json({ error: "not found" }, { status: 404 }, cors);
+  },
+
+  // Thursday-morning digest run (cron in wrangler.toml). No-op until
+  // NEWSLETTER_ENABLED=true, so deploying this changes nothing on its own.
+  async scheduled(
+    _event: ScheduledController,
+    env: Env,
+    ctx: ExecutionContext,
+  ): Promise<void> {
+    ctx.waitUntil(
+      runScheduledDigest(env).then((result) => {
+        console.log("[newsletter] scheduled digest", JSON.stringify(result));
+      }),
+    );
   },
 } satisfies ExportedHandler<Env>;

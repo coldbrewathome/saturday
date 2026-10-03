@@ -292,3 +292,90 @@ describe("renderWeekendDigest", () => {
     expect(out.subject).toBe("🎈 Atlanta this weekend: your family game plan (May 23–24)");
   });
 });
+
+describe("weather-aware digest lead", () => {
+  // A wet Saturday (≥40% precip) must say so and lead with indoor picks.
+  const wetSaturday = { saturday: { label: "Rainy", precipChance: 70 }, sunday: { label: "Clear", precipChance: 5 } };
+
+  const weatherEvents: DigestEvent[] = [
+    {
+      id: "evt-park-festival",
+      title: "Riverside Park Festival",
+      venue: "Riverside Park",
+      city: "Atlanta",
+      category: "Festival",
+      startDateTime: "2026-05-23T18:00:00.000Z",
+    },
+    {
+      id: "evt-museum",
+      title: "Dinosaur Museum Day",
+      venue: "Science Museum",
+      city: "Atlanta",
+      category: "Museum",
+      cost: "Free",
+      startDateTime: "2026-05-23T19:00:00.000Z",
+    },
+  ];
+
+  it("names the wet day and spotlights the indoor pick when it rains", () => {
+    const out = renderWeekendDigest({
+      metroId: "atlanta",
+      metroLabel: "Atlanta",
+      timezone: "America/New_York",
+      plans: [],
+      events: weatherEvents,
+      now: NOW,
+      weather: wetSaturday,
+    });
+    expect(out.html).toContain("Rain's likely Saturday");
+    expect(out.text).toContain("Rain's likely Saturday — so the picks below lean indoor.");
+    // Both clear the headliner bar; the wet day promotes the museum over the
+    // higher-scoring outdoor festival.
+    expect(out.subject).toContain("Dinosaur Museum Day");
+    expect(out.text).toContain("Dinosaur Museum Day");
+    expect(out.text.indexOf("Dinosaur Museum Day")).toBeLessThan(
+      out.text.indexOf("Riverside Park Festival"),
+    );
+  });
+
+  it("keeps the outdoor headliner when no indoor pick qualifies", () => {
+    const out = renderWeekendDigest({
+      metroId: "atlanta",
+      metroLabel: "Atlanta",
+      timezone: "America/New_York",
+      plans: [],
+      events: weatherEvents.filter((event) => event.id !== "evt-museum"),
+      now: NOW,
+      weather: wetSaturday,
+    });
+    expect(out.text).toContain("Rain's likely Saturday");
+    expect(out.subject).toContain("Riverside Park Festival");
+  });
+
+  it("says nothing about rain on a dry weekend", () => {
+    const out = renderWeekendDigest({
+      metroId: "atlanta",
+      metroLabel: "Atlanta",
+      timezone: "America/New_York",
+      plans: [],
+      events: weatherEvents,
+      now: NOW,
+      weather: { saturday: { label: "Clear", precipChance: 10 }, sunday: { label: "Clear", precipChance: 0 } },
+    });
+    expect(out.html).not.toContain("Rain's likely");
+    expect(out.text).not.toContain("Rain's likely");
+  });
+
+  it("renders normally when the forecast is missing", () => {
+    const out = renderWeekendDigest({
+      metroId: "atlanta",
+      metroLabel: "Atlanta",
+      timezone: "America/New_York",
+      plans: [],
+      events: weatherEvents,
+      now: NOW,
+    });
+    expect(out.html).not.toContain("Rain's likely");
+    expect(out.eventCount).toBe(2);
+  });
+});

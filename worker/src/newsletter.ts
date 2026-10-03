@@ -10,8 +10,10 @@ import {
   renderWeekendDigest,
   type DigestEvent,
   type DigestPlan,
+  type DigestWeather,
   type SubscriberProfile,
 } from "./newsletter-template";
+import { fetchWeekendWeather, type WeatherKv } from "./weather";
 
 export type NewsletterRecipient = {
   email: string;
@@ -51,6 +53,13 @@ interface NewsletterEnv {
   // gate for the first real operator test — set this to the operator's
   // address so a fat-fingered subscriber payload can't blast the list.
   NEWSLETTER_TEST_ALLOWLIST?: string;
+  // Public origin of this worker, used for unsubscribe links on scheduled
+  // sends (which have no request to read an origin from). Defaults to
+  // DEFAULT_WORKER_ORIGIN below.
+  NEWSLETTER_WORKER_ORIGIN?: string;
+  // KV binding (subscriber list + the weather cache). Optional so tests
+  // can omit it — without it the digest renders without a forecast.
+  POLLS?: SubscriberKv;
 }
 
 const RESEND_ENDPOINT = "https://api.resend.com/emails";
@@ -60,27 +69,38 @@ const DEFAULT_DATA_ORIGIN = "https://famhop-data.pages.dev";
 const DEFAULT_SITE_ORIGIN = "https://famhop.com";
 
 // Metros we support sending to. Mirrors data/metros.json (id, label,
-// timezone) — kept inline because the worker has no build step and
+// timezone, center) — kept inline because the worker has no build step and
 // can't read the JSON at deploy time. Add new metros here when they
-// graduate to the public list.
-export const METROS: Record<string, { label: string; timezone: string }> = {
-  "bay-area": { label: "Bay Area", timezone: "America/Los_Angeles" },
-  "los-angeles": { label: "Los Angeles", timezone: "America/Los_Angeles" },
-  "new-york-city": { label: "New York City", timezone: "America/New_York" },
-  "seattle": { label: "Seattle", timezone: "America/Los_Angeles" },
-  "chicago": { label: "Chicago", timezone: "America/Chicago" },
-  "dallas-fort-worth": { label: "Dallas-Fort Worth", timezone: "America/Chicago" },
-  "houston": { label: "Houston", timezone: "America/Chicago" },
-  "washington-dc": { label: "Washington DC", timezone: "America/New_York" },
-  "atlanta": { label: "Atlanta", timezone: "America/New_York" },
-  "philadelphia": { label: "Philadelphia", timezone: "America/New_York" },
-  "miami": { label: "Miami", timezone: "America/New_York" },
-  "phoenix": { label: "Phoenix", timezone: "America/Phoenix" },
-  "boston": { label: "Boston", timezone: "America/New_York" },
-  "san-diego": { label: "San Diego", timezone: "America/Los_Angeles" },
-  "honolulu": { label: "Honolulu", timezone: "Pacific/Honolulu" },
-  "austin": { label: "Austin", timezone: "America/Chicago" },
+// graduate to the public list. lat/lon feed the weekend forecast the
+// digest reads (worker/src/weather.ts).
+export const METROS: Record<
+  string,
+  { label: string; timezone: string; lat: number; lon: number }
+> = {
+  "bay-area": { label: "Bay Area", timezone: "America/Los_Angeles", lat: 37.7749, lon: -122.4194 },
+  "los-angeles": { label: "Los Angeles", timezone: "America/Los_Angeles", lat: 34.0522, lon: -118.2437 },
+  "new-york-city": { label: "New York City", timezone: "America/New_York", lat: 40.7128, lon: -74.006 },
+  "seattle": { label: "Seattle", timezone: "America/Los_Angeles", lat: 47.6062, lon: -122.3321 },
+  "chicago": { label: "Chicago", timezone: "America/Chicago", lat: 41.8781, lon: -87.6298 },
+  "dallas-fort-worth": { label: "Dallas-Fort Worth", timezone: "America/Chicago", lat: 32.7767, lon: -96.797 },
+  "houston": { label: "Houston", timezone: "America/Chicago", lat: 29.7604, lon: -95.3698 },
+  "washington-dc": { label: "Washington DC", timezone: "America/New_York", lat: 38.9072, lon: -77.0369 },
+  "atlanta": { label: "Atlanta", timezone: "America/New_York", lat: 33.749, lon: -84.388 },
+  "philadelphia": { label: "Philadelphia", timezone: "America/New_York", lat: 39.9526, lon: -75.1652 },
+  "miami": { label: "Miami", timezone: "America/New_York", lat: 25.7617, lon: -80.1918 },
+  "phoenix": { label: "Phoenix", timezone: "America/Phoenix", lat: 33.4484, lon: -112.074 },
+  "boston": { label: "Boston", timezone: "America/New_York", lat: 42.3601, lon: -71.0589 },
+  "san-diego": { label: "San Diego", timezone: "America/Los_Angeles", lat: 32.7157, lon: -117.1611 },
+  "honolulu": { label: "Honolulu", timezone: "Pacific/Honolulu", lat: 21.3069, lon: -157.8583 },
+  "austin": { label: "Austin", timezone: "America/Chicago", lat: 30.2672, lon: -97.7431 },
 };
+
+// Where this worker answers. Used to build per-recipient unsubscribe links
+// when a send has no request origin of its own (the Thursday cron). Same
+// default as scripts/newsletter-send.mjs; override with the
+// NEWSLETTER_WORKER_ORIGIN var once a custom domain fronts the worker.
+export const DEFAULT_WORKER_ORIGIN =
+  "https://saturday-polls.santaclararental2016.workers.dev";
 
 // Hook for tests to swap the fetch implementation. Production always
 // passes through to the platform fetch.
@@ -188,6 +208,10 @@ export async function sendWeekendDigest(
       continue;
     }
 
+    // One forecast per metro per run. A failed lookup is not fatal — the
+    // digest simply renders without the rain lead.
+    const weather = await metroWeather(env, meta, fetchImpl);
+
     for (const recipient of metroRecipients) {
       // Per-recipient render: the unsubscribe link carries an HMAC of the
       // recipient's email, so the footer differs for every recipient.
@@ -208,6 +232,7 @@ export async function sendWeekendDigest(
         siteBaseUrl: siteOrigin,
         unsubscribeUrl,
         profile: recipient.profile,
+        weather,
       });
       const res = await fetchImpl(RESEND_ENDPOINT, {
         method: "POST",
@@ -638,4 +663,104 @@ async function fetchJsonArray<T>(
   const doc = (await res.json()) as Record<string, unknown>;
   const arr = doc?.[key];
   return Array.isArray(arr) ? (arr as T[]) : [];
+}
+
+// Weekend forecast for a metro, or undefined when KV is unavailable or the
+// lookup failed. The digest treats weather as a bonus, never a blocker.
+async function metroWeather(
+  env: NewsletterEnv,
+  meta: { lat: number; lon: number },
+  fetchImpl: FetchLike,
+): Promise<DigestWeather | undefined> {
+  if (!env.POLLS) return undefined;
+  try {
+    const result = await fetchWeekendWeather(env.POLLS, meta.lat, meta.lon, fetchImpl);
+    return result?.weather ?? undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+// ── Scheduled (Thursday) sends ─────────────────────────────────────────
+// The cron in worker/wrangler.toml calls runScheduledDigest every Thursday
+// morning; it stays a no-op until NEWSLETTER_ENABLED=true.
+
+export type SubscriberKv = WeatherKv & {
+  list(options: {
+    prefix: string;
+    cursor?: string;
+  }): Promise<{ keys: Array<{ name: string }>; list_complete: boolean; cursor?: string }>;
+};
+
+export type StoredSubscriber = {
+  email: string;
+  metroId: string;
+  profile: SubscriberProfile;
+  savedEventIds: string[];
+};
+
+// Subscriber records live at newsletter:{metro}:{email} (see the subscribe
+// handler in worker/src/index.ts). Malformed values are skipped, never sent.
+export async function listSubscribers(kv: SubscriberKv): Promise<StoredSubscriber[]> {
+  const subscribers: StoredSubscriber[] = [];
+  let cursor: string | undefined;
+  do {
+    const page = await kv.list({ prefix: "newsletter:", cursor });
+    const values = await Promise.all(page.keys.map((key) => kv.get(key.name)));
+    for (const raw of values) {
+      if (!raw) continue;
+      let record: Record<string, unknown>;
+      try {
+        record = JSON.parse(raw) as Record<string, unknown>;
+      } catch {
+        continue;
+      }
+      const email = typeof record.email === "string" ? record.email.trim() : "";
+      const metroId = typeof record.metroId === "string" ? record.metroId : "";
+      if (!email || !email.includes("@") || !metroId) continue;
+      const stringArr = (value: unknown): string[] =>
+        Array.isArray(value) ? value.filter((v): v is string => typeof v === "string") : [];
+      const text = (value: unknown): string | undefined =>
+        typeof value === "string" && value.trim() ? value : undefined;
+      subscribers.push({
+        email,
+        metroId,
+        profile: {
+          ageBands: stringArr(record.ageBands),
+          zipCode: text(record.zipCode),
+          interests: stringArr(record.interests),
+          budget: text(record.budget),
+          setting: text(record.setting),
+        },
+        savedEventIds: stringArr(record.savedEventIds),
+      });
+    }
+    cursor = page.list_complete ? undefined : page.cursor;
+  } while (cursor);
+  return subscribers;
+}
+
+// The Thursday run: read the list, let sendWeekendDigest group by metro and
+// render. Unsubscribe links point at this worker's own origin.
+export async function runScheduledDigest(
+  env: NewsletterEnv,
+  fetchImpl: FetchLike = fetch,
+): Promise<SendWeekendDigestResult> {
+  if (env.NEWSLETTER_ENABLED !== "true") {
+    console.log("[newsletter] scheduled run skipped (NEWSLETTER_ENABLED!=true)");
+    return { ok: true, count: 0, skipped: "disabled" };
+  }
+  if (!env.POLLS) {
+    return { ok: true, count: 0, skipped: "no-kv" };
+  }
+  const recipients: NewsletterRecipient[] = (await listSubscribers(env.POLLS)).map(
+    (subscriber) => ({
+      email: subscriber.email,
+      metroId: subscriber.metroId,
+      profile: subscriber.profile,
+      savedEventIds: subscriber.savedEventIds,
+    }),
+  );
+  const baseUrl = (env.NEWSLETTER_WORKER_ORIGIN || DEFAULT_WORKER_ORIGIN).replace(/\/$/, "");
+  return sendWeekendDigest(env, recipients, fetchImpl, baseUrl);
 }
