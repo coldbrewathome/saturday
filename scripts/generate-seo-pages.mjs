@@ -7147,12 +7147,13 @@ function generateTrustPages() {
   const audienceNoun = IS_ADULTS ? "adults" : "families";
   const thingsNoun = IS_ADULTS ? "local events and nightlife spots" : "family events and kid-friendly spots";
   const metroCount = metroConfig.metros.length;
+  const metroCountLabel = `${metroCount} U.S. metro area${metroCount === 1 ? "" : "s"}`;
 
   const aboutCanonical = `${SITE}/about/`;
   const verifyCanonical = `${SITE}/how-we-verify/`;
 
   const aboutBody = `
-<p>${esc(BRAND)} helps ${audienceNoun} find ${thingsNoun} across ${metroCount} U.S. metro areas.
+<p>${esc(BRAND)} helps ${audienceNoun} find ${thingsNoun} across ${metroCountLabel}.
 Every listing links back to the organizer's own page, and every event shows its real dates and times —
 when an event ends, its listing is retired.</p>
 <h2>Where the listings come from</h2>
@@ -7369,7 +7370,90 @@ account data or digest subscription.</li>
     priority: 0.3,
   });
 
-  return 3;
+  // Partners page — the page you can actually send a librarian, parks
+  // coordinator or venue: how to get a public calendar listed, plus a
+  // copy-paste badge/embed snippet (the backlink ask, in one URL).
+  const partnersCanonical = `${SITE}/partners/`;
+  const partnersContact = `hello@${new URL(SITE).hostname}`;
+  const exampleMetro = metroConfig.defaultMetro;
+  const exampleWeekend = `${SITE}/${exampleMetro.id}/this-weekend/`;
+  const badgeTitle = IS_ADULTS
+    ? `Things to do this weekend — ${BRAND}`
+    : `Weekend plans for ${audienceNoun} — ${BRAND}`;
+  const badgeSnippet = `<a href="${SITE}/">${badgeTitle}</a>`;
+  const weekendSnippet = `<a href="${exampleWeekend}">What's on this weekend in ${exampleMetro.label} — ${BRAND}</a>`;
+  const snippetStyle =
+    "background:#f4f1ec;border:1px solid #ddd6cc;border-radius:8px;padding:10px 12px;overflow-x:auto;font-size:13px;";
+
+  const partnersBody = `
+<p>${esc(BRAND)} is a free guide to ${thingsNoun} across ${metroCountLabel}.
+Every listing links straight to the organizer's own page, and we list only what organizers publish
+themselves — the same rule described on <a href="/how-we-verify/">How we verify listings</a>.</p>
+<h2>Get your events listed</h2>
+<p>If your ${
+    IS_ADULTS
+      ? "venue, bar, gallery, theater or organization"
+      : "library, parks department, museum, school or venue"
+  } publishes a public calendar, we can
+ingest it. Free, no account, no fee, no revenue share — listings are never paid placement.</p>
+<ol>
+<li>Email the calendar URL to <a href="mailto:${partnersContact}?subject=Add%20our%20calendar">${partnersContact}</a>
+with the subject &ldquo;Add our calendar&rdquo;.</li>
+<li>We read the official calendar only, exactly as published — no scraped aggregator copies.</li>
+<li>New events appear as you publish them, and each one links back to your page. Ended events are
+retired automatically, so your listings never go stale.</li>
+</ol>
+<p>Have a single event instead of a calendar? Send its page URL and we will add it once the date,
+time and venue are confirmed on your own site.</p>
+<h2>Link to ${esc(BRAND)} from your site</h2>
+<p>Paste either snippet into a page, newsletter or resource list. Both are plain links — no script,
+no tracking pixel, nothing to maintain.</p>
+<h3>General</h3>
+<pre style="${snippetStyle}"><code>${esc(badgeSnippet)}</code></pre>
+<h3>This weekend in ${esc(exampleMetro.label)}</h3>
+<pre style="${snippetStyle}"><code>${esc(weekendSnippet)}</code></pre>
+<p>Every metro has the same shape of URL: <code>${esc(SITE)}/&lt;metro&gt;/this-weekend/</code> —
+for example <a href="${esc(exampleWeekend)}">${esc(exampleWeekend.replace("https://", ""))}</a>.</p>
+<h2>What we do not do</h2>
+<ul>
+<li>No paid placement and no sponsored listings — organizers cannot buy position.</li>
+<li>No ticket sales and no ticket markup; we send visitors to your page to book.</li>
+<li>No republishing of another aggregator's data, and no invented dates, times or prices.</li>
+</ul>
+<h2>Questions</h2>
+<p>Email <a href="mailto:${partnersContact}">${partnersContact}</a> — a person reads it.</p>`;
+
+  const partnersHtml = renderShell({
+    title: `Partner with ${BRAND} — list your events & embed the guide`,
+    description: `Add your public calendar to ${BRAND} for free, and copy a ready-made link or badge for your site or newsletter.`,
+    canonical: partnersCanonical,
+    ogImage: OG_IMAGE,
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "@id": `${partnersCanonical}#webpage`,
+      url: partnersCanonical,
+      name: `Partner with ${BRAND}`,
+      isPartOf: { "@id": `${SITE}/#website` },
+      publisher: { "@id": `${SITE}/#org` },
+    },
+    breadcrumb: [
+      { name: BRAND, url: `${SITE}/` },
+      { name: "Partners", url: partnersCanonical },
+    ],
+    h1: `Partner with ${BRAND}`,
+    eyebrow: IS_ADULTS ? "For organizers & venues" : "For libraries, parks & organizers",
+    body: partnersBody,
+  });
+  writePage("partners/index.html", partnersHtml);
+  sitemapEntries.push({
+    loc: partnersCanonical,
+    lastmod: trackedLastmod(partnersCanonical, partnersHtml),
+    changefreq: "monthly",
+    priority: 0.3,
+  });
+
+  return 4;
 }
 
 // Localized (i18n) weekend guide pages
@@ -7776,7 +7860,7 @@ ${langSwitcherHtml}
 <footer class="famhop-footer">
   <p>© ${BRAND} · ${metroTag()}.</p>
   <p>Spot data © OpenStreetMap contributors (ODbL). Event listings from configured public sources.</p>
-  <p><a href="/about/">About ${esc(BRAND)}</a> · <a href="/how-we-verify/">How we verify listings</a> · <a href="/privacy/">Privacy</a></p>${IS_ADULTS ? "" : `
+  <p><a href="/about/">About ${esc(BRAND)}</a> · <a href="/how-we-verify/">How we verify listings</a> · <a href="/partners/">Partners &amp; embeds</a> · <a href="/privacy/">Privacy</a></p>${IS_ADULTS ? "" : `
   <p>Planning an adults night out in the Bay Area? Try <a href="https://trymosey.com/bay-area/">Mosey</a>.</p>`}
 </footer>
 ${renderStaticAuthScript()}
