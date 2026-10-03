@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "new-york-city",
-  "generatedAt": "2026-09-23T22:02:24.241Z",
-  "alertCount": 27,
+  "generatedAt": "2026-10-03T05:57:49.497Z",
+  "alertCount": 28,
   "alerts": [
     {
       "severity": "warning",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://queens.libnet.info/events",
@@ -44,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://www.nypl.org/events/calendar",
@@ -52,31 +52,6 @@
           "reason": "challenge page returned instead of event content",
           "httpStatus": 200,
           "contentType": "text/html"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "new-york-city",
-      "sourceId": "nyc-parks-kids",
-      "sourceName": "NYC Parks Events",
-      "sourceType": "nycParksEvents",
-      "url": "https://www.nycgovparks.org/events",
-      "status": "ok-last-known-good",
-      "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 838,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 838,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
-      "fetches": [
-        {
-          "url": "https://www.nycgovparks.org/events/kids",
-          "status": "ok",
-          "httpStatus": 202,
-          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -95,13 +70,38 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://www.amnh.org/calendar",
           "status": "http-error",
           "httpStatus": 403,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "new-york-city",
+      "sourceId": "bronx-zoo-events",
+      "sourceName": "Bronx Zoo Events",
+      "sourceType": "html",
+      "url": "https://bronxzoo.com/things-to-do/events",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
+      "fetches": [
+        {
+          "url": "https://bronxzoo.com/things-to-do/events",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -120,7 +120,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://njfair.com/",
@@ -145,7 +145,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://www.hkdbf-ny.org/",
@@ -176,7 +176,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://natddp.org/",
@@ -201,7 +201,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/2026/10/10/boo-bash-in-the-bronx",
@@ -226,7 +226,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/2026/10/17/the-great-pumpkin-spooktacular",
@@ -251,7 +251,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/2026/10/22/zumbaween",
@@ -276,7 +276,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/2026/10/24/halloween-boo-bash",
@@ -301,7 +301,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/2026/10/24/spooktacular-fiesta",
@@ -326,7 +326,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/2026/10/25/halloween-wags-to-witches",
@@ -351,7 +351,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/2026/10/31/pumpkin-palooza",
@@ -376,13 +376,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/2026/10/31/2026-spooky-snug-harbor-tour",
           "status": "http-error",
           "httpStatus": 403,
           "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "new-york-city",
+      "sourceId": "great-jack-o-lantern-blaze-2026",
+      "sourceName": "The Great Jack O'Lantern Blaze",
+      "sourceType": "officialTextEvents",
+      "url": "https://hudsonvalley.org/events/Blaze/",
+      "status": "ok-last-known-good",
+      "issueType": "zero-extracted",
+      "reason": "source produced no live events; using last-known-good future events",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 36,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 36,
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
+      "fetches": [
+        {
+          "url": "https://hudsonvalley.org/events/Blaze/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -401,7 +426,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://www.brooklynsteel.com/calendar",
@@ -426,7 +451,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://www.boweryballroom.com/calendar",
@@ -451,7 +476,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://www.musichallofwilliamsburg.com/calendar",
@@ -476,7 +501,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://lpr.com/calendar",
@@ -501,7 +526,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://www.terminal5nyc.com/calendar",
@@ -526,7 +551,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://www.websterhall.com/events",
@@ -551,7 +576,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://www.comedycellar.com/line-up/",
@@ -576,7 +601,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://gothamcomedyclub.com/calendar",
@@ -601,7 +626,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://www.elsewherebrooklyn.com/events",
@@ -626,7 +651,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://www.roughtradenyc.com/events",
@@ -651,7 +676,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://www.bluenotejazz.com/new-york/schedule",
@@ -676,7 +701,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:02:24.241Z",
+      "fetchedAt": "2026-10-03T05:57:49.497Z",
       "fetches": [
         {
           "url": "https://villagevanguard.com/events",

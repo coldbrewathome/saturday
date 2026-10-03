@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "philadelphia",
-  "generatedAt": "2026-09-23T22:06:54.978Z",
-  "alertCount": 11,
+  "generatedAt": "2026-10-03T06:03:37.069Z",
+  "alertCount": 13,
   "alerts": [
     {
       "severity": "warning",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:06:54.978Z",
+      "fetchedAt": "2026-10-03T06:03:37.069Z",
       "fetches": [
         {
           "url": "https://freelibraryfoundation.org/events/",
@@ -30,27 +30,27 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "philadelphia",
-      "sourceId": "philadelphia-parks-family",
-      "sourceName": "Philadelphia Parks and Recreation Events",
-      "sourceType": "eventList",
-      "url": "https://www.phila.gov/departments/philadelphia-parks-recreation/#calendar",
-      "status": "ok-template-fallback",
+      "sourceId": "ticketmaster-philadelphia-family",
+      "sourceName": "Ticketmaster Philadelphia Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "ok",
       "issueType": "zero-extracted",
       "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": "recurring-template",
-      "recoveredEvents": 8,
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
-      "fallbackEvents": 8,
+      "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:06:54.978Z",
+      "fetchedAt": "2026-10-03T06:03:37.069Z",
       "fetches": [
         {
-          "url": "https://www.phila.gov/departments/philadelphia-parks-recreation/#calendar",
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "application/json; source=ticketmaster; events=0; pages=1"
         }
       ]
     },
@@ -69,13 +69,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:06:54.978Z",
+      "fetchedAt": "2026-10-03T06:03:37.069Z",
       "fetches": [
         {
           "url": "https://middletowngrangefair.org/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "academy-natural-sciences-events",
+      "sourceName": "Academy of Natural Sciences of Drexel University Events",
+      "sourceType": "html",
+      "url": "https://ansp.org/programs-and-events/events/",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-10-03T06:03:37.069Z",
+      "fetches": [
+        {
+          "url": "https://ansp.org/programs-and-events/events/",
+          "status": "http-error",
+          "httpStatus": 301,
+          "contentType": ""
         }
       ]
     },
@@ -94,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:06:54.978Z",
+      "fetchedAt": "2026-10-03T06:03:37.069Z",
       "fetches": [
         {
           "url": "https://peddlersvillage.com/event/peach-festival/",
@@ -119,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:06:54.978Z",
+      "fetchedAt": "2026-10-03T06:03:37.069Z",
       "fetches": [
         {
           "url": "https://www.explorenorthernliberties.org/event/16th-annual-2nd-street-festival/",
@@ -144,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:06:54.978Z",
+      "fetchedAt": "2026-10-03T06:03:37.069Z",
       "fetches": [
         {
           "url": "https://folkfest.org/",
@@ -169,7 +194,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:06:54.978Z",
+      "fetchedAt": "2026-10-03T06:03:37.069Z",
       "fetches": [
         {
           "url": "https://www.utphilly.com/events",
@@ -194,7 +219,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:06:54.978Z",
+      "fetchedAt": "2026-10-03T06:03:37.069Z",
       "fetches": [
         {
           "url": "https://www.johnnybrendas.com/events",
@@ -219,7 +244,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:06:54.978Z",
+      "fetchedAt": "2026-10-03T06:03:37.069Z",
       "fetches": [
         {
           "url": "https://philadelphia.heliumcomedy.com/events",
@@ -244,10 +269,35 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:06:54.978Z",
+      "fetchedAt": "2026-10-03T06:03:37.069Z",
       "fetches": [
         {
           "url": "https://xpn.org/xpnfest/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "philadelphia-fringe-festival-2026",
+      "sourceName": "Philadelphia Fringe Festival 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://phillyfringe.org/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-03T06:03:37.069Z",
+      "fetches": [
+        {
+          "url": "https://phillyfringe.org/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -269,7 +319,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:06:54.978Z",
+      "fetchedAt": "2026-10-03T06:03:37.069Z",
       "fetches": [
         {
           "url": "https://folkfest.org/",

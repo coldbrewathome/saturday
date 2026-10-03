@@ -1,25 +1,25 @@
 {
   "schemaVersion": 1,
   "metroId": "los-angeles",
-  "generatedAt": "2026-09-23T22:01:24.193Z",
-  "alertCount": 33,
+  "generatedAt": "2026-10-03T05:56:20.448Z",
+  "alertCount": 39,
   "alerts": [
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "los-angeles",
       "sourceId": "la-brea-tar-pits",
       "sourceName": "La Brea Tar Pits & Museum",
       "sourceType": "html",
       "url": "https://tarpits.org/calendar?_wrapper_format=html&page=0",
       "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://tarpits.org/calendar?_wrapper_format=html&page=0",
@@ -44,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://www.petersen.org/events",
@@ -52,31 +52,6 @@
           "reason": "challenge page returned instead of event content",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "los-angeles",
-      "sourceId": "griffith-observatory",
-      "sourceName": "Griffith Observatory",
-      "sourceType": "html",
-      "url": "https://griffithobservatory.lacity.gov/events/",
-      "status": "ok-last-known-good",
-      "issueType": "zero-in-window",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 2,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 2,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
-      "fetches": [
-        {
-          "url": "https://griffithobservatory.lacity.gov/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -95,7 +70,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://www.nortonsimon.org/calendar",
@@ -120,7 +95,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://www.huntington.org/calendar",
@@ -145,7 +120,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://grandparkla.org/events/",
@@ -170,7 +145,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://ocfair.com/oc-fair/",
@@ -181,21 +156,21 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "los-angeles",
       "sourceId": "ventura-county-fair",
       "sourceName": "Ventura County Fair",
       "sourceType": "html",
       "url": "https://venturacountyfair.org/",
-      "status": "ok-last-known-good",
+      "status": "ok",
       "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://venturacountyfair.org/",
@@ -220,7 +195,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://ocfair.com/event/2026-oc-fair-your-adventure-awaits/",
@@ -245,7 +220,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://www.soundsoflacounty.com/schedule/helen-keller-park-sat-08/01/26-selectors-choice-dj-dance-party-experience-workshops",
@@ -270,7 +245,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://www.soundsoflacounty.com/schedule/william-steinmetz-park-sat-08/01/26-nance-arte-presents-resonance-remedies-an-evening-of-la-soundscapes",
@@ -295,7 +270,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://niseiweek.org/events/grand-parade/",
@@ -320,7 +295,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://niseiweek.org/events/plaza-festival/",
@@ -345,13 +320,63 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://sawdustartfestival.org/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "watts-towers-day-of-the-drum-2026-09-26-src",
+      "sourceName": "44th Annual Watts Towers Day of the Drum Festival",
+      "sourceType": "officialTextEvents",
+      "url": "https://culture.lacity.gov/event/44th-annual-watts-towers-day-of-the-drum-festival",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
+      "fetches": [
+        {
+          "url": "https://culture.lacity.gov/event/44th-annual-watts-towers-day-of-the-drum-festival",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "abbot-kinney-festival-2026-09-27-src",
+      "sourceName": "Abbot Kinney Festival",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.abbotkinneyfest.com/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
+      "fetches": [
+        {
+          "url": "https://www.abbotkinneyfest.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
         }
       ]
     },
@@ -370,7 +395,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://www.janm.org/index.php/press/release/janm-presents-free-2026-natsumatsuri-family-festival-saturday-august-15",
@@ -395,7 +420,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://www.soundsoflacounty.com/schedule",
@@ -420,7 +445,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://www.soundsoflacounty.com/schedule",
@@ -445,7 +470,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://www.soundsoflacounty.com/schedule",
@@ -470,7 +495,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://www.wayfinderfamily.org/back-to-school-bash",
@@ -495,7 +520,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://www.getty.edu/news/garden-concerts-for-kids-returns-for-summer-at-the-getty-center/",
@@ -516,11 +541,11 @@
       "issueType": "zero-extracted",
       "reason": "source produced no live events; using last-known-good future events",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 6,
+      "recoveredEvents": 4,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 6,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "lastKnownGoodEvents": 4,
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://losriosrancho.com/apple-season",
@@ -545,7 +570,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://malibuchilicookoff.org/",
@@ -570,7 +595,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://fiestahermosa.net/",
@@ -595,7 +620,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://www.waterlanternfestival.com/events/inland-empire",
@@ -620,10 +645,135 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://www.optevents.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "pasadena-chalk-festival-2026",
+      "sourceName": "Pasadena Chalk Festival",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.pasadenachalkfestival.org/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
+      "fetches": [
+        {
+          "url": "https://www.pasadenachalkfestival.org/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "la-libros-festival-2026-09-26-src",
+      "sourceName": "Los Angeles Libros Festival",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.lapl.org/bn/node/50271",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
+      "fetches": [
+        {
+          "url": "https://www.lapl.org/bn/node/50271",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "molaa-lucha-libre-2026-09-26-src",
+      "sourceName": "2026 Lucha Libre Live at MOLAA",
+      "sourceType": "officialTextEvents",
+      "url": "https://molaa.org/2026-lucha-libre",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
+      "fetches": [
+        {
+          "url": "https://molaa.org/2026-lucha-libre",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "molaa-lucha-libre-family-expo-2026-09-27-src",
+      "sourceName": "Lucha Libre Film Screening and Family Expo at MOLAA",
+      "sourceType": "officialTextEvents",
+      "url": "https://molaa.org/2026-lucha-libre",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
+      "fetches": [
+        {
+          "url": "https://molaa.org/2026-lucha-libre",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "watts-towers-jazz-festival-2026-09-27-src",
+      "sourceName": "49th Annual Simon Rodia Watts Towers Jazz Festival",
+      "sourceType": "officialTextEvents",
+      "url": "https://culture.lacity.gov/event/49th-annual-simon-rodia-watts-towers-jazz-festival",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
+      "fetches": [
+        {
+          "url": "https://culture.lacity.gov/event/49th-annual-simon-rodia-watts-towers-jazz-festival",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -645,7 +795,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://www.troubadour.com/events",
@@ -670,7 +820,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://www.theelrey.com/events",
@@ -695,7 +845,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://www.theroxy.com/events",
@@ -720,7 +870,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://thecomedystore.com/calendar/",
@@ -745,7 +895,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://www.laughfactory.com/shows",
@@ -770,7 +920,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://improv.com/hollywood/calendar/",
@@ -795,7 +945,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://www.ticketmaster.com/the-wiltern-tickets-los-angeles/venue/73790",
@@ -821,7 +971,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:01:24.193Z",
+      "fetchedAt": "2026-10-03T05:56:20.448Z",
       "fetches": [
         {
           "url": "https://www.theregenttheater.com/events",

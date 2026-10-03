@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "metroId": "chicago",
-  "generatedAt": "2026-09-23T22:03:24.523Z",
+  "generatedAt": "2026-10-03T05:59:11.362Z",
   "registryPath": "data/event-sources-chicago.json",
   "outputPath": "public/data/chicago/events.json",
-  "eventCount": 2026,
-  "adultsEventCount": 113,
+  "eventCount": 1974,
+  "adultsEventCount": 109,
   "sourceCount": 33,
-  "liveEventCount": 1892,
-  "lastKnownGoodEventCount": 185,
+  "liveEventCount": 1881,
+  "lastKnownGoodEventCount": 146,
   "fallbackEventCount": 0,
   "operatorAlertCount": 17,
   "errors": [],
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:03:24.523Z",
+      "fetchedAt": "2026-10-03T05:59:11.362Z",
       "fetches": [
         {
           "url": "https://www.lcfairgrounds.com/events",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:03:24.523Z",
+      "fetchedAt": "2026-10-03T05:59:11.362Z",
       "fetches": [
         {
           "url": "https://oakpark.librarycalendar.com/events/month",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:03:24.523Z",
+      "fetchedAt": "2026-10-03T05:59:11.362Z",
       "fetches": [
         {
           "url": "https://napervillepl.librarycalendar.com/events/month",
@@ -95,20 +95,21 @@
       "sourceName": "Forest Preserves of Cook County Events",
       "sourceType": "tribeEvents",
       "url": "https://fpdcc.com/events/",
-      "status": "fetch-error",
+      "status": "http-error",
       "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 185,
+      "recoveredEvents": 146,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 185,
-      "fetchedAt": "2026-09-23T22:03:24.523Z",
+      "lastKnownGoodEvents": 146,
+      "fetchedAt": "2026-10-03T05:59:11.362Z",
       "fetches": [
         {
           "url": "https://fpdcc.com/events/",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -127,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:03:24.523Z",
+      "fetchedAt": "2026-10-03T05:59:11.362Z",
       "fetches": [
         {
           "url": "https://chiul.org/event/back-to-school-festival/",
@@ -152,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:03:24.523Z",
+      "fetchedAt": "2026-10-03T05:59:11.362Z",
       "fetches": [
         {
           "url": "https://mortonarb.org/explore/activities/events/destination-asia-festival/",
@@ -169,20 +170,21 @@
       "sourceName": "Big Trucks at Ron Beese Park",
       "sourceType": "officialTextEvents",
       "url": "https://www.barringtonparkdistrict.org/events-trips/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:03:24.523Z",
+      "fetchedAt": "2026-10-03T05:59:11.362Z",
       "fetches": [
         {
           "url": "https://www.barringtonparkdistrict.org/events-trips/",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -201,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:03:24.523Z",
+      "fetchedAt": "2026-10-03T05:59:11.362Z",
       "fetches": [
         {
           "url": "https://www.thehinsdalean.com/story/2026/07/23/pulse/fill-up-on-fun-at-fullersburg-woods/11153.html",
@@ -226,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:03:24.523Z",
+      "fetchedAt": "2026-10-03T05:59:11.362Z",
       "fetches": [
         {
           "url": "https://www.thehinsdalean.com/story/2026/07/23/pulse/fill-up-on-fun-at-fullersburg-woods/11153.html",
@@ -251,7 +253,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:03:24.523Z",
+      "fetchedAt": "2026-10-03T05:59:11.362Z",
       "fetches": [
         {
           "url": "https://www.givesignup.org/TicketEvent/bbpbacktoschoolfestival2026",
@@ -276,7 +278,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:03:24.523Z",
+      "fetchedAt": "2026-10-03T05:59:11.362Z",
       "fetches": [
         {
           "url": "https://metrochicago.com/shows/",
@@ -301,7 +303,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:03:24.523Z",
+      "fetchedAt": "2026-10-03T05:59:11.362Z",
       "fetches": [
         {
           "url": "https://www.emptybottle.com/events/",
@@ -326,7 +328,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:03:24.523Z",
+      "fetchedAt": "2026-10-03T05:59:11.362Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
@@ -351,7 +353,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:03:24.523Z",
+      "fetchedAt": "2026-10-03T05:59:11.362Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
@@ -376,7 +378,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:03:24.523Z",
+      "fetchedAt": "2026-10-03T05:59:11.362Z",
       "fetches": [
         {
           "url": "https://chicago.zanies.com/events",
@@ -401,7 +403,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:03:24.523Z",
+      "fetchedAt": "2026-10-03T05:59:11.362Z",
       "fetches": [
         {
           "url": "https://www.hideoutchicago.com/events",
@@ -426,7 +428,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:03:24.523Z",
+      "fetchedAt": "2026-10-03T05:59:11.362Z",
       "fetches": [
         {
           "url": "https://www.chicagojazz.com/post/city-of-chicago-announces-2026-chicago-jazz-festival-lineup-sept-3-6-featuring-dee-dee-bridgewater",
@@ -461,9 +463,9 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 20,
+      "liveEvents": 18,
       "fallbackEvents": 0,
-      "eventCount": 20,
+      "eventCount": 18,
       "fetches": [
         {
           "url": "https://chipublib.bibliocommons.com/v2/events?audiences=53f250153860d10000000010",
@@ -475,7 +477,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 20,
+      "extractedEvents": 18,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -537,8 +539,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 8,
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 7,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -551,9 +553,9 @@
       "metroId": "chicago",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 39,
+      "liveEvents": 38,
       "fallbackEvents": 0,
-      "eventCount": 39,
+      "eventCount": 38,
       "fetches": [
         {
           "url": "https://www.fieldmuseum.org/our-events",
@@ -564,8 +566,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; charset=utf-8",
-      "rejectedLiveEvents": 43,
-      "extractedEvents": 82,
+      "rejectedLiveEvents": 53,
+      "extractedEvents": 91,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -578,21 +580,21 @@
       "metroId": "chicago",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 19,
+      "liveEvents": 20,
       "fallbackEvents": 0,
-      "eventCount": 19,
+      "eventCount": 20,
       "fetches": [
         {
           "url": "https://www.lpzoo.org/calendar-events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=179; pages=4"
+          "contentType": "application/json; source=tribe-events; events=175; pages=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=179; pages=4",
-      "rejectedLiveEvents": 157,
-      "extractedEvents": 176,
+      "contentType": "application/json; source=tribe-events; events=175; pages=4",
+      "rejectedLiveEvents": 152,
+      "extractedEvents": 172,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -605,9 +607,9 @@
       "metroId": "chicago",
       "category": "Ticketed",
       "status": "ok",
-      "liveEvents": 1098,
+      "liveEvents": 1097,
       "fallbackEvents": 0,
-      "eventCount": 1098,
+      "eventCount": 1097,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -618,7 +620,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=ticketmaster; events=1100; pages=11",
-      "rejectedLiveEvents": 2,
+      "rejectedLiveEvents": 3,
       "extractedEvents": 1100,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -645,8 +647,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -686,9 +688,9 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 9,
+      "liveEvents": 4,
       "fallbackEvents": 0,
-      "eventCount": 9,
+      "eventCount": 4,
       "fetches": [
         {
           "url": "https://evanstonlibrary.bibliocommons.com/v2/events",
@@ -700,7 +702,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 9,
+      "extractedEvents": 4,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -713,21 +715,21 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 249,
+      "liveEvents": 245,
       "fallbackEvents": 0,
-      "eventCount": 249,
+      "eventCount": 245,
       "fetches": [
         {
           "url": "https://schaumburg.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=451; locations=4"
+          "contentType": "application/json; source=communico-events; events=471; locations=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=451; locations=4",
-      "rejectedLiveEvents": 2,
-      "extractedEvents": 251,
+      "contentType": "application/json; source=communico-events; events=471; locations=4",
+      "rejectedLiveEvents": 7,
+      "extractedEvents": 252,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -740,21 +742,21 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 138,
+      "liveEvents": 141,
       "fallbackEvents": 0,
-      "eventCount": 138,
+      "eventCount": 141,
       "fetches": [
         {
           "url": "https://downersgrove.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=204; locations=1"
+          "contentType": "application/json; source=communico-events; events=212; locations=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=204; locations=1",
-      "rejectedLiveEvents": 2,
-      "extractedEvents": 140,
+      "contentType": "application/json; source=communico-events; events=212; locations=1",
+      "rejectedLiveEvents": 3,
+      "extractedEvents": 144,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -767,21 +769,21 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 239,
+      "liveEvents": 235,
       "fallbackEvents": 0,
-      "eventCount": 239,
+      "eventCount": 235,
       "fetches": [
         {
           "url": "https://egvpl.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=303; locations=3"
+          "contentType": "application/json; source=communico-events; events=310; locations=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=303; locations=3",
+      "contentType": "application/json; source=communico-events; events=310; locations=3",
       "rejectedLiveEvents": 7,
-      "extractedEvents": 246,
+      "extractedEvents": 242,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -847,20 +849,22 @@
       "city": "Chicago",
       "metroId": "chicago",
       "category": "Outdoors",
-      "status": "fetch-error",
+      "status": "http-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 185,
+      "eventCount": 146,
       "fetches": [
         {
           "url": "https://fpdcc.com/events/",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "reason": "This operation was aborted",
+      "httpStatus": 403,
+      "contentType": "text/html; charset=UTF-8",
       "extractedEvents": 0,
-      "lastKnownGoodEvents": 185,
+      "lastKnownGoodEvents": 146,
       "recoveryMode": "last-known-good"
     },
     {
@@ -925,18 +929,21 @@
       "city": "Barrington",
       "metroId": "chicago",
       "category": "Community",
-      "status": "fetch-error",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.barringtonparkdistrict.org/events-trips/",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ],
-      "reason": "This operation was aborted",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
       "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -1189,9 +1196,9 @@
       "metroId": "chicago",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 22,
+      "liveEvents": 23,
       "fallbackEvents": 0,
-      "eventCount": 22,
+      "eventCount": 23,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
@@ -1202,8 +1209,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=utf-8",
-      "rejectedLiveEvents": 48,
-      "extractedEvents": 70,
+      "rejectedLiveEvents": 46,
+      "extractedEvents": 69,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1297,9 +1304,9 @@
       "metroId": "chicago",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 26,
+      "liveEvents": 27,
       "fallbackEvents": 0,
-      "eventCount": 26,
+      "eventCount": 27,
       "fetches": [
         {
           "url": "https://www.chicagoculturalalliance.org/events/",
@@ -1310,7 +1317,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 172,
+      "rejectedLiveEvents": 171,
       "extractedEvents": 198,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null

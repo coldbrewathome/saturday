@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "boston",
-  "generatedAt": "2026-09-23T22:08:05.342Z",
+  "generatedAt": "2026-10-03T06:05:14.403Z",
   "registryPath": "data/event-sources-boston.json",
   "outputPath": "public/data/boston/events.json",
-  "eventCount": 419,
+  "eventCount": 516,
   "adultsEventCount": 84,
   "sourceCount": 27,
-  "liveEventCount": 481,
-  "lastKnownGoodEventCount": 3,
+  "liveEventCount": 582,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 4,
-  "operatorAlertCount": 14,
+  "operatorAlertCount": 13,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetchedAt": "2026-10-03T06:05:14.403Z",
       "fetches": [
         {
           "url": "https://www.zoonewengland.org/discover/program-calendar/",
@@ -39,27 +39,27 @@
       ]
     },
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "boston",
       "sourceId": "ticketmaster-boston-family",
       "sourceName": "Ticketmaster Boston Family Events",
       "sourceType": "ticketmaster",
       "url": "https://app.ticketmaster.com/discovery/v2/events.json",
       "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetchedAt": "2026-10-03T06:05:14.403Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=0; pages=1"
+          "contentType": "application/json; source=ticketmaster; events=3; pages=1"
         }
       ]
     },
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetchedAt": "2026-10-03T06:05:14.403Z",
       "fetches": [
         {
           "url": "https://www.easternstatesexposition.com/",
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetchedAt": "2026-10-03T06:05:14.403Z",
       "fetches": [
         {
           "url": "https://www.salemma.gov/CivicAlerts.aspx?AID=235",
@@ -128,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetchedAt": "2026-10-03T06:05:14.403Z",
       "fetches": [
         {
           "url": "https://www.cambridgecarnival.org/",
@@ -153,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetchedAt": "2026-10-03T06:05:14.403Z",
       "fetches": [
         {
           "url": "https://www.rosekennedygreenway.org/events/boston-race-amity-arts-music-festival/",
@@ -178,37 +178,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetchedAt": "2026-10-03T06:05:14.403Z",
       "fetches": [
         {
           "url": "https://www.landmarksorchestra.org/press-media/summer-2026-season/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "boston",
-      "sourceId": "sowa-open-market",
-      "sourceName": "SoWa Open Market",
-      "sourceType": "tribeEvents",
-      "url": "https://www.sowaboston.com/events/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "fetch failed",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 3,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 3,
-      "fetchedAt": "2026-09-23T22:08:05.342Z",
-      "fetches": [
-        {
-          "url": "https://www.sowaboston.com/events/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
         }
       ]
     },
@@ -227,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetchedAt": "2026-10-03T06:05:14.403Z",
       "fetches": [
         {
           "url": "https://commshakes.org/production/dream26/",
@@ -252,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetchedAt": "2026-10-03T06:05:14.403Z",
       "fetches": [
         {
           "url": "https://saintagrippinaboston.com/",
@@ -277,7 +253,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetchedAt": "2026-10-03T06:05:14.403Z",
       "fetches": [
         {
           "url": "https://www.bostonjazzfoundation.org/crjf",
@@ -302,7 +278,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetchedAt": "2026-10-03T06:05:14.403Z",
       "fetches": [
         {
           "url": "https://www.bostonartsfestival.org/",
@@ -327,7 +303,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetchedAt": "2026-10-03T06:05:14.403Z",
       "fetches": [
         {
           "url": "https://www.crossroadspresents.com/paradise-rock-club",
@@ -352,7 +328,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-09-23T22:08:05.342Z",
+      "fetchedAt": "2026-10-03T06:05:14.403Z",
       "fetches": [
         {
           "url": "https://www.nickscomedystop.com/calendar",
@@ -387,9 +363,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 14,
+      "liveEvents": 15,
       "fallbackEvents": 0,
-      "eventCount": 14,
+      "eventCount": 15,
       "fetches": [
         {
           "url": "https://bpl.bibliocommons.com/v2/events?audiences=57f66113863736755f79b0ca",
@@ -401,7 +377,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 14,
+      "extractedEvents": 15,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -414,9 +390,9 @@
       "metroId": "boston",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://www.boston.gov/rss/events",
@@ -427,7 +403,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/rss+xml; charset=utf-8",
-      "rejectedLiveEvents": 24,
+      "rejectedLiveEvents": 23,
       "extractedEvents": 25,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -441,21 +417,21 @@
       "metroId": "boston",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 28,
+      "liveEvents": 113,
       "fallbackEvents": 0,
-      "eventCount": 28,
+      "eventCount": 113,
       "fetches": [
         {
           "url": "https://bostonchildrensmuseum.org/Calendar/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=eventon-events; events=75"
+          "contentType": "application/json; source=eventon-events; events=123"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=eventon-events; events=75",
-      "rejectedLiveEvents": 46,
-      "extractedEvents": 74,
+      "contentType": "application/json; source=eventon-events; events=123",
+      "rejectedLiveEvents": 9,
+      "extractedEvents": 122,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -481,8 +457,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 2,
-      "extractedEvents": 2,
+      "rejectedLiveEvents": 3,
+      "extractedEvents": 3,
       "lastKnownGoodEvents": 0,
       "recoveryMode": "recurring-template"
     },
@@ -503,13 +479,13 @@
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=0; pages=1"
+          "contentType": "application/json; source=ticketmaster; events=3; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=ticketmaster; events=0; pages=1",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "contentType": "application/json; source=ticketmaster; events=3; pages=1",
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -562,8 +538,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 5,
-      "extractedEvents": 6,
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -576,9 +552,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 113,
+      "liveEvents": 104,
       "fallbackEvents": 0,
-      "eventCount": 113,
+      "eventCount": 104,
       "fetches": [
         {
           "url": "https://cambridgepl.libcal.com/calendar/publicevents?cid=7052&cal=7052",
@@ -590,7 +566,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 113,
+      "extractedEvents": 104,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -603,9 +579,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 105,
+      "liveEvents": 98,
       "fallbackEvents": 0,
-      "eventCount": 105,
+      "eventCount": 98,
       "fetches": [
         {
           "url": "https://newtonfreelibrary.libcal.com/calendar?cid=3836&cal=3836",
@@ -617,7 +593,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 105,
+      "extractedEvents": 98,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -630,9 +606,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 141,
+      "liveEvents": 136,
       "fallbackEvents": 0,
-      "eventCount": 141,
+      "eventCount": 136,
       "fetches": [
         {
           "url": "https://brooklinelibrary.libcal.com/calendar/events?cid=20102&cal=20102",
@@ -644,7 +620,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 18,
-      "extractedEvents": 159,
+      "extractedEvents": 154,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -657,9 +633,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 9,
+      "liveEvents": 40,
       "fallbackEvents": 0,
-      "eventCount": 9,
+      "eventCount": 40,
       "fetches": [
         {
           "url": "https://somervillepubliclibrary.assabetinteractive.com/calendar/",
@@ -670,8 +646,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 38,
-      "extractedEvents": 47,
+      "rejectedLiveEvents": 6,
+      "extractedEvents": 46,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -791,21 +767,24 @@
       "city": "Boston",
       "metroId": "boston",
       "category": "Market",
-      "status": "fetch-error",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 3,
       "fallbackEvents": 0,
       "eventCount": 3,
       "fetches": [
         {
           "url": "https://www.sowaboston.com/events/",
-          "status": "fetch-error",
-          "reason": "fetch failed"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=4; pages=1"
         }
       ],
-      "reason": "fetch failed",
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 3,
-      "recoveryMode": "last-known-good"
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=4; pages=1",
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 4,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "free-shakespeare-on-the-common-midsummer-2026-07-31-src",
@@ -963,8 +942,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=utf-8",
-      "rejectedLiveEvents": 47,
-      "extractedEvents": 74,
+      "rejectedLiveEvents": 39,
+      "extractedEvents": 66,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -977,9 +956,9 @@
       "metroId": "boston",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 8,
+      "liveEvents": 9,
       "fallbackEvents": 0,
-      "eventCount": 8,
+      "eventCount": 9,
       "fetches": [
         {
           "url": "https://www.sinclaircambridge.com/events/rss",
@@ -990,8 +969,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/rss+xml",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 8,
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 10,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1065,13 +1044,13 @@
           "url": "https://www.harpoonbrewery.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=107; pages=3"
+          "contentType": "application/json; source=tribe-events; events=105; pages=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=107; pages=3",
-      "rejectedLiveEvents": 88,
-      "extractedEvents": 105,
+      "contentType": "application/json; source=tribe-events; events=105; pages=3",
+      "rejectedLiveEvents": 87,
+      "extractedEvents": 104,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     }
