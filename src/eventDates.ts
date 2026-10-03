@@ -72,6 +72,15 @@ export function eventTimeLabel(event: FamilyEvent): string | null {
     hour: "numeric",
     minute: "2-digit",
   });
+  const spanMs = end ? end.getTime() - start.getTime() : 0;
+  // Day-long rows carry a stamped hour that is not a real start time (date-only
+  // feed values stamped by ingest — some libraries landed as "3:00 AM"). A
+  // ~24h span is the reliable signal, same rule as the SEO pages'
+  // eventIsAllDay; all-day rows are the only rows that span about a day.
+  // Genuine multi-day runs (31h+) keep their real start time.
+  if (spanMs >= 22 * 60 * 60 * 1000 && spanMs <= 26 * 60 * 60 * 1000) {
+    return "All day";
+  }
   if (
     end &&
     sameLocalDate(start, end) &&

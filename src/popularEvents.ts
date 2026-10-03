@@ -60,6 +60,12 @@ export type ResolvePopularEventsOptions<T extends PopularCandidate = PopularCand
   now?: Date;
 };
 
+// Feed ids end in a 10-char content hash that includes the start time, so a
+// date or venue edit rotates the id (scripts/eventPipeline.mjs). A pick can go
+// stale while the file itself is still the right weekend; the slug stem — the
+// id minus that hash — is the stable identity.
+const idStem = (id: string): string => String(id ?? "").replace(/-[0-9a-f]{10}$/, "");
+
 export function resolvePopularEvents<T extends PopularCandidate>({
   dataset,
   events,
@@ -75,6 +81,29 @@ export function resolvePopularEvents<T extends PopularCandidate>({
   if (dataset.weekendStart !== dateKey(sat)) return [];
 
   const byId = new Map(events.map((event) => [event.id, event]));
+  const byStem = new Map<string, T[]>();
+  for (const event of events) {
+    const stem = idStem(event.id);
+    if (!stem) continue;
+    const list = byStem.get(stem);
+    if (list) list.push(event);
+    else byStem.set(stem, [event]);
+  }
+  // Candidate order: the picked session, then its rotated-id twins earliest
+  // first. The first candidate that is still upcoming and inside the window
+  // wins — filtering after choosing would let a past sibling eat the pick.
+  const candidatesFor = (eventId: string): T[] => {
+    const exact = byId.get(eventId);
+    const siblings = byStem.get(idStem(eventId)) || [];
+    return [
+      ...(exact ? [exact] : []),
+      ...siblings
+        .filter((event) => event !== exact)
+        .sort((a, b) =>
+          String(a.startDateTime ?? "").localeCompare(String(b.startDateTime ?? "")),
+        ),
+    ];
+  };
   const seen = new Set<string>();
   const out: T[] = [];
 
@@ -85,11 +114,13 @@ export function resolvePopularEvents<T extends PopularCandidate>({
   });
 
   for (const pick of ranked) {
-    const event = byId.get(pick.eventId);
+    const event = candidatesFor(pick.eventId).find(
+      (candidate) =>
+        !seen.has(candidate.id) &&
+        isUpcomingEvent(candidate, now, timeZone ? { timeZone } : undefined) &&
+        isWeekendWindowEvent(candidate, sat, sun),
+    );
     if (!event) continue; // id not in the live feed this week
-    if (seen.has(event.id)) continue;
-    if (!isUpcomingEvent(event, now, timeZone ? { timeZone } : undefined)) continue;
-    if (!isWeekendWindowEvent(event, sat, sun)) continue;
     seen.add(event.id);
     out.push(event);
   }

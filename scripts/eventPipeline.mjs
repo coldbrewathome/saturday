@@ -3877,10 +3877,15 @@ function communicoList(item, arrayKey, stringKey) {
     .filter(Boolean);
 }
 
-function communicoDateTime(value) {
+// Communico timestamps are metro-local wall-clock values ("2026-10-03 10:00").
+// The offset must come from the source registry (applyRegistryDefaults stamps
+// the metro's DST-aware offset onto every source) — the old hardcoded "-07:00"
+// stamped Eastern libraries as Pacific, which is how 407 Miami date-only rows
+// became "3:00 AM" on the weekend pages.
+function communicoDateTime(value, timezoneOffset = DEFAULT_TIMEZONE_OFFSET) {
   const raw = stripUnsafeText(value, 100);
   const match = raw.match(/^(\d{4}-\d{2}-\d{2})[ T](\d{2}):(\d{2})(?::(\d{2}))?$/);
-  if (match) return `${match[1]}T${match[2]}:${match[3]}:${match[4] || "00"}-07:00`;
+  if (match) return `${match[1]}T${match[2]}:${match[3]}:${match[4] || "00"}${timezoneOffset}`;
   return raw;
 }
 
@@ -4003,8 +4008,8 @@ export function extractCommunicoEvents(json, source = {}) {
       lat: hasGeo ? lat : source.lat,
       lon: hasGeo ? lon : source.lon,
       category: source.category || "Library",
-      startDateTime: communicoDateTime(item.raw_start_time || item.event_start),
-      endDateTime: communicoDateTime(item.raw_end_time || item.event_end),
+      startDateTime: communicoDateTime(item.raw_start_time || item.event_start, source.timezoneOffset),
+      endDateTime: communicoDateTime(item.raw_end_time || item.event_end, source.timezoneOffset),
       ageBands,
       audiences: communicoAudiences(ages, ageBands),
       cost: communicoCost(item, signalText),

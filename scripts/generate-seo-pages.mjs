@@ -2106,7 +2106,7 @@ function buildHubEventList(events, eventLookup) {
     /[a-z]{3,}/i.test(t || "") && !/^\d{1,2}(:\d{2})?\s*(a|p)\.?m\.?/i.test(t || "");
   const inWeekend = events
     .filter((e) => {
-      if (!e.startDateTime || !eventLookup?.get(e)) return false;
+      if (!e.startDateTime || !eventLookup?.get(e) || isFeedJunkEvent(e)) return false;
       const d = new Date(e.startDateTime);
       if (!Number.isFinite(d.getTime())) return false;
       return weekend.keys.has(zonedDateKey(d, activeMetro.timezone));
@@ -3958,6 +3958,14 @@ export function buildEventJsonLd(event, canonical) {
   // evt-5: title-only online-event flag (descriptions say "zoom" in kids
   // program copy too often — do not widen the match).
   const isOnline = /\bzoom\b/i.test(String(event.title || ""));
+  // All-day rows carry a stamped hour that is not a real start time (see
+  // eventIsAllDay); schema gets the metro-local date only, same day for both
+  // ends, instead of advertising "3:00 AM" in rich results.
+  const allDay = eventIsAllDay(event);
+  const localDayKey = (iso) => {
+    const date = new Date(iso);
+    return Number.isFinite(date.getTime()) ? zonedDateKey(date, activeMetro.timezone) : null;
+  };
   const node = {
     "@context": "https://schema.org",
     "@type": "Event",
@@ -3969,14 +3977,14 @@ export function buildEventJsonLd(event, canonical) {
       ? "https://schema.org/OnlineEventAttendanceMode"
       : "https://schema.org/OfflineEventAttendanceMode",
     eventStatus: "https://schema.org/EventScheduled",
-    startDate: event.startDateTime,
+    startDate: allDay ? localDayKey(event.startDateTime) : event.startDateTime,
   };
   if (free) node.isAccessibleForFree = true;
   // Dedupe currently keeps one page for a multi-occurrence run and records
   // its final end. A future schedule-model pass should emit separate Event
   // nodes where a run contains independently ticketed performances.
   const endDate = event.occurrenceEnd || event.endDateTime;
-  if (endDate) node.endDate = endDate;
+  if (endDate) node.endDate = allDay ? node.startDate : endDate;
   // evt-5: `image` only when the event has a real image. The old fallback
   // stamped the identical sitewide og-image.png on every Event node, which
   // Google's event structured-data guidelines say to avoid (og:image/
@@ -4220,9 +4228,12 @@ function eventDayInfo(ev) {
 }
 
 // Start time in the metro's timezone (e.g. "10 AM", "1:30 PM"); null for
-// all-day/midnight rows so we never print a bogus "12 AM".
+// all-day/midnight rows so we never print a bogus "12 AM" — or a bogus
+// "3:00 AM" for a date-only row that ingest stamped with a wrong offset.
+// Delegates to eventIsAllDay so city pages and weekend pages agree on the
+// same datum (they used to disagree: "All day" vs "8:00 PM").
 function eventTimeStr(ev) {
-  if (!ev?.startDateTime || /T00:00/.test(ev.startDateTime)) return null;
+  if (!ev?.startDateTime || /T00:00/.test(ev.startDateTime) || eventIsAllDay(ev)) return null;
   const t = new Date(ev.startDateTime);
   if (!Number.isFinite(t.getTime())) return null;
   const tz = activeMetro.timezone || "America/Los_Angeles";
@@ -5074,6 +5085,10 @@ async function generateThisWeekendPage(eventItems, eventSlugLookup = null, venue
     eventItems
       .filter((e) => {
         if (!e.startDateTime) return false;
+        // Same junk gate the SPA applies — board meetings and tutoring
+        // services are not weekend material (Miami shipped 27 "Homework Help
+        // and Tutoring" cards before this).
+        if (isFeedJunkEvent(e)) return false;
         const d = new Date(e.startDateTime);
         if (!Number.isFinite(d.getTime())) return false;
         return weekend.keys.has(zonedDateKey(d, activeMetro.timezone));
@@ -5170,7 +5185,11 @@ async function generateThisWeekendPage(eventItems, eventSlugLookup = null, venue
   // Kid Fun) all lead the headline with this weekend's NAMED marquee events,
   // refreshed weekly. Surface our top headliners into the title/description;
   // the H1 stays query-shaped.
-  const headliners = pickWeekendHeadliners(upcoming, lookup);
+  // Curated picks lead; tier-ranked headliners fill (see featuredTier —
+  // the pre-2026-10-03 order ranked by data completeness, which is what put
+  // library drop-ins above the Zoo Miami festival).
+  const weekendPicks = resolveWeekendPicks(activeMetro, weekend, upcoming, lookup);
+  const headliners = mergeWeekendCarousel(upcoming, weekendPicks, lookup);
   // Only genuinely marquee events may lend their NAME to the title/intro —
   // a storytime or trivia night in the title reads amateur next to the
   // generic fallback ("Hummingbird Trivia & more..." shipped 2026-07-27).
@@ -5529,7 +5548,7 @@ function weekendEventsFor(eventItems) {
   const weekend = getWeekendDateKeys(new Date(), activeMetro.timezone, { includeFriday: true });
   const upcoming = eventItems
     .filter((e) => {
-      if (!e.startDateTime) return false;
+      if (!e.startDateTime || isFeedJunkEvent(e)) return false;
       const d = new Date(e.startDateTime);
       if (!Number.isFinite(d.getTime())) return false;
       return weekend.keys.has(zonedDateKey(d, activeMetro.timezone));
@@ -5609,7 +5628,7 @@ function generateCityWeekendPages(eventItems, lookup) {
     // next 3 linkable dated events keep it from reading as a soft 404.
     const lookAheadEvents = eventItems
       .filter((e) => {
-        if (!e.startDateTime || e.startDateTime < nowIso) return false;
+        if (!e.startDateTime || e.startDateTime < nowIso || isFeedJunkEvent(e)) return false;
         if (!lookup.get(e)) return false;
         return String(e.city || e.neighborhood || "").trim() === city.name;
       })
@@ -6295,9 +6314,57 @@ function isClosureNotice(event) {
   return /\b(closed|closure|cancel{1,2}ed|cancelation|cancellation)\b/i.test(event?.title || "");
 }
 
+// Feed-junk gate — the SPA's isFeedJunkEvent (src/eventQuality.ts) applied to
+// prerendered listings so the SEO surfaces stop promoting the same listings
+// the app hides. Conservative by design: real family programs (storytime,
+// Lego club, craft, teen movie night) pass untouched.
+export function isFeedJunkEvent(event) {
+  const title = String(event?.title || "").toLowerCase();
+  const text = `${title} ${event?.description || ""} ${event?.venue || ""}`.toLowerCase();
+  return (
+    /\b(advisory|committee)\b/.test(title) ||
+    /teen (advisory|council|committee|leadership)/.test(text) ||
+    /youth (council|advisory|commission)/.test(text) ||
+    /homework (help|club|center)/.test(text) ||
+    /tutoring/.test(text) ||
+    /friends of the (library|museum)/.test(text) ||
+    /board meeting/.test(text) ||
+    /library (association|trustees)/.test(text) ||
+    /volunteer orientation/.test(text) ||
+    /planning meeting/.test(text) ||
+    /staff meeting/.test(text) ||
+    /test prep/.test(text) ||
+    /civics test/.test(text) ||
+    /citizenship (test|class)/.test(text)
+  );
+}
+
+// Routine programming that is a fine timeline row but not a "top pick": a
+// drop-in craft table cannot headline a weekend next to a festival. Mirrors
+// the memo's Miami evidence — 127 of 134 rows were library programs and the
+// one Zoo festival was buried.
+const ROUTINE_PROGRAMMING_RE =
+  /\b(drop[- ]?in|take (?:and|&) make|coloring|colour|craft circle|scavenger hunt|story ?time|homework|tutoring|book club|chess club|knitting|bingo)\b/i;
+
+// Featured-slot tier (0–3): who may win a carousel/poster/title slot. This is
+// a curation ordering, not a quality score — a complete-data library row
+// still loses to a marquee venue event. Tier 0 stays in the timeline.
+export function featuredTier(event) {
+  const title = String(event?.title || "");
+  const category = String(event?.category || "");
+  if (isFeedJunkEvent(event) || isClosureNotice(event)) return 0;
+  if (isMarqueeEvent(event)) return 3;
+  if (/museum|zoo|aquarium|theme park|theat|music|concert|sports|arts/i.test(category)) return 2;
+  if (ROUTINE_PROGRAMMING_RE.test(title)) return 0;
+  if (category === "Library") return 0;
+  return 1;
+}
+
 // The weekend's marquee headliners: crowd-scale events (parades, fireworks,
 // fairs, festivals) scored by scale keywords + quality + free bonus, then
 // picked greedily with city diversity so all five posters aren't one town.
+// Ordered by tier first: data completeness (the old sole order) is how 27
+// "Homework Help and Tutoring" rows became the Miami carousel.
 function headlinerScore(event) {
   const title = event.title || "";
   let score = 0;
@@ -6312,10 +6379,10 @@ function headlinerScore(event) {
 
 function pickWeekendHeadliners(events, eventSlugLookup, limit = 5) {
   const candidates = events
-    .filter((event) => !isClosureNotice(event) && eventSlugLookup.get(event))
-    .map((event) => ({ event, score: headlinerScore(event) }))
-    .filter((c) => c.score >= 5)
-    .sort((a, b) => b.score - a.score);
+    .filter((event) => !isClosureNotice(event) && !isFeedJunkEvent(event) && eventSlugLookup.get(event))
+    .map((event) => ({ event, score: headlinerScore(event), tier: featuredTier(event) }))
+    .filter((c) => c.tier > 0 && c.score >= 5)
+    .sort((a, b) => b.tier - a.tier || b.score - a.score);
   const picked = [];
   const seenCities = new Set();
   const seenTitleKeys = new Set();
@@ -6330,6 +6397,82 @@ function pickWeekendHeadliners(events, eventSlugLookup, limit = 5) {
     if (picked.length >= limit) break;
   }
   return picked;
+}
+
+// Editorial picks (scripts/generate-popular-events.mjs → public/data/{metro}/
+// popular-events.json; the SPA reads the same file behind the same stale gate
+// in src/popularEvents.ts). The generator ignored them until 2026-10-03,
+// which is how a library sticker contest headlined above the Zoo Miami
+// festival. Missing, stale, or unresolvable picks degrade silently to the
+// tier-ranked headliners.
+const idStem = (id) => String(id || "").replace(/-[0-9a-f]{10}$/, "");
+
+export function resolveWeekendPicks(metro, weekend, events, eventLookup) {
+  // Adults (Mosey) reads only its own picks file — the kids file must never
+  // leak a kids event onto a Mosey page, and metroDataPath would fall back to
+  // it for the 15 metros with no adults picks yet.
+  const filename = IS_ADULTS ? "popular-events-adults.json" : "popular-events.json";
+  const file = path.join(ROOT, "public", "data", metro.dataDir || metro.id, filename);
+  if (!fs.existsSync(file)) return [];
+  const doc = readJson(file);
+  if (!doc || !Array.isArray(doc.picks) || !doc.picks.length) return [];
+  if (doc.weekendStart !== weekend.saturdayKey) return [];
+  const byId = new Map(events.map((event) => [event.id, event]));
+  // Feed ids end in a 10-char content hash that includes the start time
+  // (eventPipeline.mjs), so a date edit rotates the id: build a stem index
+  // (the id minus the hash) as the first fallback.
+  const byStem = new Map();
+  for (const event of events) {
+    const stem = idStem(event.id);
+    if (!stem) continue;
+    const list = byStem.get(stem);
+    if (list) list.push(event);
+    else byStem.set(stem, [event]);
+  }
+  // Pages publish one URL per (title, venue) run (dedupeEventOccurrences), and
+  // the surviving record can be a different session than the one the editor
+  // picked — the Mosey 2026-10-03 picks named the Saturday Danny Elfman and
+  // the Sunday My Morning Jacket show, while the published pages belong to the
+  // Friday and Saturday sessions. Group the slug-holding records so a pick can
+  // land on its run's page.
+  const byGroup = new Map();
+  for (const event of events) {
+    if (!eventLookup.get(event)) continue;
+    const key = eventGroupKey(event);
+    if (!byGroup.has(key)) byGroup.set(key, event);
+  }
+  // Candidate order: the picked session → its rotated-id twins → its run's
+  // published page. The first candidate with a slug and no junk wins.
+  const resolvePick = (eventId) => {
+    const exact = byId.get(eventId);
+    const siblings = byStem.get(idStem(eventId)) || [];
+    const candidates = [exact, ...siblings].filter(Boolean);
+    const anchor = candidates[0];
+    if (anchor) {
+      const rep = byGroup.get(eventGroupKey(anchor));
+      if (rep) candidates.push(rep);
+    }
+    return candidates.find(
+      (event) => eventLookup.get(event) && !isClosureNotice(event) && !isFeedJunkEvent(event),
+    );
+  };
+  const picked = [];
+  const seen = new Set();
+  for (const pick of [...doc.picks].sort((a, b) => (a.rank ?? 99) - (b.rank ?? 99))) {
+    const event = resolvePick(pick.eventId);
+    if (!event || seen.has(event.id)) continue;
+    seen.add(event.id);
+    picked.push(event);
+    if (picked.length >= 6) break;
+  }
+  return picked;
+}
+
+// Picks lead the carousel; tier-ranked headliners fill the remaining slots.
+function mergeWeekendCarousel(events, picks, eventSlugLookup, limit = 5) {
+  const fallback = pickWeekendHeadliners(events, eventSlugLookup, limit);
+  const seen = new Set(picks.map((event) => event.id));
+  return [...picks, ...fallback.filter((event) => !seen.has(event.id))].slice(0, limit);
 }
 
 // ── Top-picks carousel imagery ────────────────────────────────────────────
@@ -6828,15 +6971,22 @@ function renderWeekendFilterScript(locale) {
 </script>`;
 }
 
-function eventIsAllDay(event) {
-  // Midnight-local starts are all-day rows (closures, day-long festivals) —
-  // showing "12:00 AM" for them is wrong. Midnight must be checked in the
-  // metro timezone, not the UTC ISO string.
+// All-day rows arrive in two shapes: a metro-local midnight start, and the
+// Communico-style day-long row (a date-only source value stamped by ingest as
+// 00:00→24:00 or, before the 2026-10-03 offset fix, 07:00Z→06:59Z, span
+// ≈ 23.98h). A ~24h span is a day-long program, never a real start time —
+// printing the stamped hour is how "3:00 AM" reached the weekend pages.
+// Genuine multi-day runs (31h+) keep their real start time.
+export function eventIsAllDay(event) {
   if (!event.startDateTime) return false;
   const date = new Date(event.startDateTime);
   if (!Number.isFinite(date.getTime())) return false;
   const { hour, minute } = zonedTimeParts(date, activeMetro.timezone);
-  return hour === 0 && minute === 0;
+  if (hour === 0 && minute === 0) return true;
+  const end = new Date(event.endDateTime);
+  if (!Number.isFinite(end.getTime())) return false;
+  const span = end.getTime() - date.getTime();
+  return span >= 22 * 60 * 60 * 1000 && span <= 26 * 60 * 60 * 1000;
 }
 
 function formatEventTime(event, locale = "en") {

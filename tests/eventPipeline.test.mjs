@@ -421,6 +421,55 @@ test("extractCommunicoEvents parses Berkeley libnet events and branch locations"
   assert.equal(events[0].extractionMethod, "communico-events");
 });
 
+test("extractCommunicoEvents honors the registry timezone offset instead of Pacific", () => {
+  // Regression: the parser hardcoded "-07:00", so Eastern libraries' 10:30
+  // storytime read 1:30 PM and date-only rows became "3:00 AM" (407 Miami
+  // rows). The offset must come from the source registry like every other
+  // parser (applyRegistryDefaults stamps the metro's DST-aware offset).
+  const source = {
+    id: "broward-library",
+    name: "Broward County Library",
+    url: "https://broward.libnet.info/events",
+    city: "Fort Lauderdale",
+    category: "Library",
+    sourceType: "communicoEvents",
+    timezoneOffset: "-04:00",
+  };
+  const events = extractCommunicoEvents(
+    {
+      locations: [{ id: "77", name: "Main Library", locality: "Fort Lauderdale" }],
+      events: [
+        {
+          id: "9001",
+          title: "Family Storytime",
+          raw_start_time: "2026-10-03 10:30:00",
+          raw_end_time: "2026-10-03 11:00:00",
+          location_id: "77",
+          location: "Main Library",
+          agesArray: ["Early Childhood"],
+        },
+        {
+          id: "9002",
+          title: "Drop-In Craft Day",
+          raw_start_time: "2026-10-03 00:00:00",
+          raw_end_time: "2026-10-04 00:00:00",
+          location_id: "77",
+          location: "Main Library",
+          agesArray: ["Early Childhood"],
+        },
+      ],
+    },
+    source,
+  );
+
+  assert.equal(events.length, 2);
+  const storytime = events.find((e) => e.title === "Family Storytime");
+  const craft = events.find((e) => e.title === "Drop-In Craft Day");
+  assert.equal(storytime.startDateTime, "2026-10-03T14:30:00.000Z");
+  assert.equal(craft.startDateTime, "2026-10-03T04:00:00.000Z");
+  assert.equal(craft.endDateTime, "2026-10-04T04:00:00.000Z");
+});
+
 test("extractLocalistEvents parses public Stanford Localist events and skips internal campus items", () => {
   const events = extractLocalistEvents(
     {

@@ -1,13 +1,20 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { runInNewContext } from "node:vm";
 import {
   auditAdultsSitemapUrls,
+  eventIsAllDay,
+  featuredTier,
   formatWeekendRange,
+  isFeedJunkEvent,
   lastmodBudgetRemaining,
   lastmodContentSignature,
   nearbySpotsFor,
   planLastmodAdvances,
+  resolveWeekendPicks,
   sitemapUrlViolatesD3,
   spotPassesQualityGate,
   replaceShellBlock,
@@ -503,4 +510,120 @@ test("nearbySpotsFor ranks family spots by category then real distance", () => {
   // Venue hours: exact-name match wins.
   assert.equal(venueHoursFor({ venue: "City Museum" }, spots), "10am-5pm");
   assert.equal(venueHoursFor({ venue: "Unknown Venue" }, spots), null);
+});
+
+test("all-day detection covers day-long spans, not just metro-local midnight", () => {
+  // Miami Communico rows arrive as date-only values stamped 07:00Z→06:59Z
+  // (23.98h spans) and rendered a literal "3:00 AM" on the weekend pages.
+  assert.equal(
+    eventIsAllDay({ startDateTime: "2026-10-03T12:00:00.000Z", endDateTime: "2026-10-04T11:59:00.000Z" }),
+    true,
+  );
+  // Real timed programs are untouched.
+  assert.equal(
+    eventIsAllDay({ startDateTime: "2026-10-03T17:30:00.000Z", endDateTime: "2026-10-03T18:30:00.000Z" }),
+    false,
+  );
+  // Genuine multi-day runs keep their real start time.
+  assert.equal(
+    eventIsAllDay({ startDateTime: "2026-10-03T17:30:00.000Z", endDateTime: "2026-10-05T00:00:00.000Z" }),
+    false,
+  );
+});
+
+test("feed-junk gate mirrors the SPA's isFeedJunkEvent", () => {
+  assert.equal(isFeedJunkEvent({ title: "Homework Help and Tutoring" }), true);
+  assert.equal(isFeedJunkEvent({ title: "Teen Advisory Board", description: "" }), true);
+  assert.equal(isFeedJunkEvent({ title: "Family Storytime", description: "Songs and read-alouds." }), false);
+  assert.equal(isFeedJunkEvent({ title: "Lego Club", description: "Drop-in building for kids." }), false);
+});
+
+test("featuredTier ranks marquee above notable venues above routine library rows", () => {
+  assert.equal(featuredTier({ title: "Wild Fork's Meat & Seafood Festival", category: "Other" }), 3);
+  assert.equal(featuredTier({ title: "Free Museum Day", category: "Museum" }), 2);
+  // The Miami evidence: a complete-data library row can never win a slot.
+  assert.equal(featuredTier({ title: "\"I Voted\" Sticker Design Contest", category: "Library" }), 0);
+  assert.equal(featuredTier({ title: "Family Storytime", category: "Library" }), 0);
+  assert.equal(featuredTier({ title: "Community Cleanup", category: "Community" }), 1);
+});
+
+test("resolveWeekendPicks reads editorial picks and survives a rotated id hash", () => {
+  const dataRoot = path.resolve(import.meta.dirname, "..", "public", "data");
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "famhop-picks-"));
+  try {
+    const weekend = { saturdayKey: "2026-10-03" };
+    const events = [
+      { id: "zoo-miami-wild-fork-festival-8faec97dc1", title: "Wild Fork's Meat & Seafood Festival", category: "Festival", startDateTime: "2026-10-03T10:00:00-04:00" },
+      { id: "public-library-homework-help-aaaaaaaaaa", title: "Homework Help and Tutoring", category: "Library", startDateTime: "2026-10-03T11:00:00-04:00" },
+      { id: "miami-book-fair-bbbbbbbbbb", title: "Miami Book Fair", category: "Festival", startDateTime: "2026-10-04T10:00:00-04:00" },
+    ];
+    const lookup = new Map(events.map((event) => [event, true]));
+    // metroDataPath would fall back to the kids file, so the adults build reads
+    // its own filename; resolveWeekendPicks only needs dataDir to locate it.
+    const metro = { id: "miami", dataDir: path.relative(dataRoot, dir) };
+
+    // Missing file, stale weekend, and rows without a slug all degrade to [].
+    assert.deepEqual(resolveWeekendPicks(metro, weekend, events, lookup), []);
+    const write = (doc) => fs.writeFileSync(path.join(dir, "popular-events.json"), JSON.stringify(doc));
+    write({ weekendStart: "2026-09-26", picks: [{ eventId: events[0].id, rank: 1 }] });
+    assert.deepEqual(resolveWeekendPicks(metro, weekend, events, lookup), []);
+    write({ weekendStart: "2026-10-03", picks: [{ eventId: events[0].id, rank: 1 }] });
+    assert.deepEqual(resolveWeekendPicks(metro, weekend, events, new Map()), []);
+
+    // Rank order wins over file order; ghost ids and junk rows never make it.
+    write({
+      weekendStart: "2026-10-03",
+      picks: [
+        { eventId: events[0].id, rank: 3 },
+        { eventId: "ghost-cccccccccc", rank: 4 },
+        { eventId: events[1].id, rank: 1 },
+        { eventId: events[2].id, rank: 2 },
+      ],
+    });
+    assert.deepEqual(
+      resolveWeekendPicks(metro, weekend, events, lookup).map((event) => event.id),
+      [events[2].id, events[0].id],
+    );
+
+    // The Mosey 2026-10-03 evidence: the pick id's hash was minted from an old
+    // startDateTime, so the id missed while the event was live and in-window.
+    write({ weekendStart: "2026-10-03", picks: [{ eventId: "zoo-miami-wild-fork-festival-10ec77b65e", rank: 1 }] });
+    assert.deepEqual(
+      resolveWeekendPicks(metro, weekend, events, lookup).map((event) => event.id),
+      [events[0].id],
+    );
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("resolveWeekendPicks falls back to the run's published page when the picked session has none", () => {
+  // Pages publish one URL per (title, venue) run, so the surviving record can
+  // be a different session than the editor picked — the 2026-10-03 Mosey picks
+  // named the Saturday Danny Elfman show while the page was the Friday one.
+  const dataRoot = path.resolve(import.meta.dirname, "..", "public", "data");
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "famhop-picks-"));
+  try {
+    const weekend = { saturdayKey: "2026-10-03" };
+    const friday = { id: "sf-masonic-danny-elfman-8faec97dc1", title: "Danny Elfman", venue: "The Masonic", startDateTime: "2026-10-03T03:30:00.000Z" };
+    const saturday = { id: "sf-masonic-danny-elfman-10ec77b65e", title: "Danny Elfman", venue: "The Masonic", startDateTime: "2026-10-04T03:30:00.000Z" };
+    const metro = { id: "bay-area", dataDir: path.relative(dataRoot, dir) };
+    fs.writeFileSync(
+      path.join(dir, "popular-events.json"),
+      JSON.stringify({ weekendStart: "2026-10-03", picks: [{ eventId: saturday.id, rank: 1 }] }),
+    );
+
+    // Only the Friday session holds a slug: the pick resolves to its run page.
+    assert.deepEqual(
+      resolveWeekendPicks(metro, weekend, [friday, saturday], new Map([[friday, "/bay-area/event/danny-elfman-the-masonic/"]])).map((event) => event.id),
+      [friday.id],
+    );
+    // When the picked session itself is published it stays the pick.
+    assert.deepEqual(
+      resolveWeekendPicks(metro, weekend, [friday, saturday], new Map([[friday, "/a/"], [saturday, "/b/"]])).map((event) => event.id),
+      [saturday.id],
+    );
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
 });
