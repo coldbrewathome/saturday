@@ -640,9 +640,20 @@ export function hopNowPicks(
       picks.push(list[i]);
     }
   };
+  // Tiers are strict, so the score-level wet boost alone would never move an
+  // indoor pick ahead of a park — a rainy day has to swap the tier order too.
+  const wet = options.weather === "wet";
+  const spotTiers: Array<[HopNowSpotPick[], number]> = wet
+    ? [
+        [museumPicks, TIER_BUDGET_MUSEUMS],
+        [parkPicks, TIER_BUDGET_PARKS],
+      ]
+    : [
+        [parkPicks, TIER_BUDGET_PARKS],
+        [museumPicks, TIER_BUDGET_MUSEUMS],
+      ];
   take(eventPicks, TIER_BUDGET_EVENTS);
-  take(parkPicks, TIER_BUDGET_PARKS);
-  take(museumPicks, TIER_BUDGET_MUSEUMS);
+  for (const [list, budget] of spotTiers) take(list, budget);
   // Top up any remaining slot from the catch-all tier first, then overflow
   // from the higher-priority tiers (in priority order) if there's still room.
   for (const p of otherPicks) {
@@ -653,13 +664,11 @@ export function hopNowPicks(
     if (picks.length >= limit) break;
     picks.push(p);
   }
-  for (const p of parkPicks.slice(TIER_BUDGET_PARKS)) {
-    if (picks.length >= limit) break;
-    picks.push(p);
-  }
-  for (const p of museumPicks.slice(TIER_BUDGET_MUSEUMS)) {
-    if (picks.length >= limit) break;
-    picks.push(p);
+  for (const [list, budget] of spotTiers) {
+    for (const p of list.slice(budget)) {
+      if (picks.length >= limit) break;
+      picks.push(p);
+    }
   }
 
   const sparse = picks.length < 3;

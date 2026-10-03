@@ -258,4 +258,28 @@ describe("weatherBrief", () => {
     expect(brief?.saturday?.precipChance).toBe(80);
     expect(brief?.sunday?.tempF).toBe(88);
   });
+
+  it("flags a wet Saturday at the 40% threshold, and not below it", () => {
+    const wet = weatherBrief({
+      saturday: day(61, 40),
+      sunday: day(0, 5),
+      fetchedAt: "2026-08-20T00:00:00Z",
+    });
+    const dry = weatherBrief({
+      saturday: day(2, 39),
+      sunday: day(0, 5),
+      fetchedAt: "2026-08-20T00:00:00Z",
+    });
+    expect(wet?.satWet).toBe(true);
+    expect(dry?.satWet).toBe(false);
+  });
+
+  it("does not flag a wet Saturday without Saturday data", () => {
+    const brief = weatherBrief({
+      saturday: null,
+      sunday: day(61, 80),
+      fetchedAt: "2026-08-20T00:00:00Z",
+    });
+    expect(brief?.satWet).toBe(false);
+  });
 });

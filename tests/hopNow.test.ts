@@ -637,3 +637,35 @@ describe("kids appropriateness gates", () => {
     );
   });
 });
+
+// Wet weather used to be dead weight in the scorer: the tiers are strict
+// (events → parks → museums → other), so a rainy day still led with the park.
+describe("hopNowPicks wet-weather tier order", () => {
+  const park = spot({ id: "park", name: "Sunny Park", friendScore: 95 });
+  const museum = spot({
+    id: "museum",
+    name: "Indoor Museum",
+    category: "Culture",
+    friendScore: 80,
+  });
+
+  it("leads with the museum when the weather is wet", () => {
+    const result = hopNowPicks([park, museum], [], {
+      now: NOW,
+      audience: "kids",
+      userLocation: USER,
+      weather: "wet",
+    });
+    expect(result.picks[0].id).toBe("museum");
+  });
+
+  it("still leads with the higher-scoring park on a dry day", () => {
+    const result = hopNowPicks([park, museum], [], {
+      now: NOW,
+      audience: "kids",
+      userLocation: USER,
+      weather: "dry",
+    });
+    expect(result.picks[0].id).toBe("park");
+  });
+});

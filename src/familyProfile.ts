@@ -73,7 +73,7 @@ export function writeStoredProfile(profile: FamilyProfile): void {
 const HARD_OUTDOOR = new Set(["Park", "Zoo", "Farm", "Festival"]);
 const HARD_INDOOR = new Set(["Library", "Museum", "Culture"]);
 
-function eventLooksIndoor(event: FamilyEvent): boolean {
+export function eventLooksIndoor(event: FamilyEvent): boolean {
   if (HARD_INDOOR.has(event.category)) return true;
   if (HARD_OUTDOOR.has(event.category)) return false;
   const text = `${event.title} ${event.description} ${event.category}`.toLowerCase();

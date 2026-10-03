@@ -160,6 +160,8 @@ export type WeatherBrief = {
   sunday: BriefDay | null;
   /** One-line planning hint, or null when there's nothing useful to say. */
   hint: string | null;
+  /** Saturday looks wet — surfaces should lead with indoor picks. */
+  satWet: boolean;
 };
 
 const DRY_THRESHOLD = 40; // precip chance % below which a day counts dry
@@ -198,5 +200,6 @@ export function weatherBrief(
         "Rain both days — the indoor picks (libraries, museums) are below.";
     }
   }
-  return { saturday, sunday, hint };
+  const satWet = (saturday?.precipChance ?? 0) >= DRY_THRESHOLD;
+  return { saturday, sunday, hint, satWet };
 }

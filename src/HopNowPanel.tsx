@@ -9,6 +9,7 @@ import {
   type HopNowPick,
   type HopNowResult,
   type HopNowSpot,
+  type HopNowWeather,
 } from "./hopNow";
 import { isUpcomingEvent } from "./eventFreshness";
 import type { FamilyEvent, PlanItemRef, Spot } from "./types";
@@ -84,6 +85,7 @@ export function HopNowPanel({
   onAddToPlan,
   onClose,
   metroTimeZone,
+  weather,
 }: {
   spots: Spot[];
   events: FamilyEvent[];
@@ -93,6 +95,8 @@ export function HopNowPanel({
   onAddToPlan: (item: PlanItemRef) => void;
   onClose: () => void;
   metroTimeZone?: string;
+  /** Today's forecast tone, so wet days favor indoor picks. */
+  weather?: HopNowWeather;
 }) {
   const [seed, setSeed] = useState(0);
   const [excludeIds, setExcludeIds] = useState<ReadonlySet<string>>(
@@ -132,8 +136,9 @@ export function HopNowPanel({
       userLocation,
       shuffleSeed: seed,
       excludeIds,
+      weather,
     });
-  }, [audience, events, seed, spots, userLocation, excludeIds, metroTimeZone, clockTick]);
+  }, [audience, events, seed, spots, userLocation, excludeIds, metroTimeZone, clockTick, weather]);
 
   function tryNewBatch() {
     // Park the IDs we just showed so the next batch surfaces fresh items.

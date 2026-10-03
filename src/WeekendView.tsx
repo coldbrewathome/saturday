@@ -52,7 +52,11 @@ import {
   venueImageFor,
   type VenueImageMap,
 } from "./eventImages";
-import { scoreEventForFamily, type FamilyProfile } from "./familyProfile";
+import {
+  eventLooksIndoor,
+  scoreEventForFamily,
+  type FamilyProfile,
+} from "./familyProfile";
 import { trustBoost, type EventTrust } from "./checkinApi";
 import { sourceHostname } from "./appUtils";
 import { trackMetric } from "./api";
@@ -371,6 +375,22 @@ export default function WeekendView({
   const headliner = pickHeadliner(ranked);
   const bestOf = buildBestOf(ranked.slice(1), BEST_OF_CAP);
   const brief = weatherBrief(weather);
+  // A wet Saturday leads with indoor picks — the ranking already favors them
+  // (planner wet-weather boost), so this rail just surfaces them up top and
+  // makes the brief's "the indoor picks are below" hint true.
+  const indoorPicks = useMemo(
+    () =>
+      brief?.satWet
+        ? ranked
+            .filter(
+              (entry) =>
+                entry.event.id !== headliner?.event.id &&
+                eventLooksIndoor(entry.event),
+            )
+            .slice(0, 3)
+        : [],
+    [brief?.satWet, ranked, headliner],
+  );
 
   function renderCard(event: FamilyEvent, showNewChip = false) {
     const saved = savedEventIds.includes(event.id);
@@ -821,6 +841,23 @@ export default function WeekendView({
         </section>
       ) : (
         <>
+          {indoorPicks.length > 0 && (
+            <section
+              className="weekend-bestof weekend-indoor"
+              aria-label="Indoor picks for a rainy Saturday"
+            >
+              <h3>
+                <CloudRain aria-hidden="true" /> Rain on Saturday — start
+                indoors
+              </h3>
+              <ol className="weekend-cards weekend-ranked-list">
+                {indoorPicks.map(({ event }) =>
+                  renderCard(event, newEventIds.has(event.id)),
+                )}
+              </ol>
+            </section>
+          )}
+
           {headliner && renderHeadliner()}
 
           {total === 0 ? (

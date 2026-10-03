@@ -1921,6 +1921,14 @@ function App({ metro }: AppProps) {
           : null;
     return forecast ? weatherTone(forecast.label) : undefined;
   }, [targetDayOfWeek, weather]);
+  // Hop Now is a right-now surface, so it reads today's forecast — and the
+  // feed only carries Saturday/Sunday, so weekdays have no tone at all.
+  const hopNowWeather = useMemo(() => {
+    const day = new Date().getDay();
+    const forecast =
+      day === 6 ? weather?.saturday : day === 0 ? weather?.sunday : null;
+    return forecast ? weatherTone(forecast.label) : undefined;
+  }, [weather]);
   const scoringOptions = useMemo<PlannerScoringOptions>(
     () => ({
       ageBand: ageBand === "any" ? undefined : ageBand,
@@ -5664,6 +5672,7 @@ function App({ metro }: AppProps) {
           onAddToPlan={addHopNowItemToPlan}
           onClose={() => setIsHopNowOpen(false)}
           metroTimeZone={metro.timezone}
+          weather={hopNowWeather}
         />
       )}
 

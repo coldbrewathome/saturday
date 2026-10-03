@@ -107,3 +107,47 @@ describe("WeekendView weather brief", () => {
     expect(screen.queryByLabelText("Weekend weather")).not.toBeInTheDocument();
   });
 });
+
+// The brief's "the indoor picks are below" hint promised a section that did
+// not exist. On a wet Saturday the ranked list now leads with one.
+describe("WeekendView rainy-Saturday indoor rail", () => {
+  const withCategory = (id: string, category: string): FamilyEvent =>
+    ({ ...makeEvent(id), title: `Event ${id}`, category }) as FamilyEvent;
+
+  const rainySaturday = forecast({
+    saturday: {
+      date: "2026-08-15",
+      weatherCode: 61,
+      label: "Rain",
+      tempMaxF: 68,
+      tempMinF: 58,
+      precipChance: 80,
+    },
+  });
+
+  it("leads with indoor picks when Saturday looks wet", () => {
+    render(
+      <WeekendView
+        {...baseProps}
+        events={[
+          withCategory("lib", "Library"),
+          withCategory("mus", "Museum"),
+          withCategory("park", "Park"),
+        ]}
+        weather={rainySaturday}
+      />,
+    );
+    // The rail sits above the headliner and repeats neither it nor the park —
+    // with two indoor events exactly one card lands here.
+    const rail = screen.getByLabelText("Indoor picks for a rainy Saturday");
+    expect(rail.querySelectorAll("li.weekend-card")).toHaveLength(1);
+    expect(rail.textContent).not.toContain("Event park");
+  });
+
+  it("stays out of the way on a dry Saturday", () => {
+    render(<WeekendView {...baseProps} weather={forecast()} />);
+    expect(
+      screen.queryByLabelText("Indoor picks for a rainy Saturday"),
+    ).not.toBeInTheDocument();
+  });
+});
