@@ -55,6 +55,7 @@ export function metroDataFile(metro, key) {
     featuredPlans: "featured-plans.json",
     curatedSpots: "curated-spots.json",
     popularEvents: "popular-events.json",
+    zipCentroids: "zip-centroids.json",
   };
   const filename = filenames[key];
   if (!filename) throw new Error(`Unknown metro data key: ${key}`);

@@ -156,6 +156,7 @@ import {
   weatherTone,
 } from "./eventDates";
 import { buildPlanIcs, downloadIcs } from "./calendarIcs";
+import { lookupZipLocation } from "./zipCentroids";
 import {
   AGE_BAND_STORAGE_KEY,
   AGE_PROMPT_DISMISSED_KEY,
@@ -641,6 +642,7 @@ function App({ metro }: AppProps) {
     events: dataUrl(metroDataPath(metro, "events")),
     featuredPlans: dataUrl(metroDataPath(metro, "featuredPlans")),
     popularEvents: dataUrl(metroDataPath(metro, "popularEvents")),
+    zipCentroids: dataUrl(metroDataPath(metro, "zipCentroids")),
     curatedSpots: rootDataUrl(
       legacyMetroDataPath(metro, "curatedSpots") ||
         metroDataPath(metro, "curatedSpots"),
@@ -1905,13 +1907,30 @@ function App({ metro }: AppProps) {
 
   const targetDateObj = useMemo(() => parseIsoDate(targetDate), [targetDate]);
   const targetDayOfWeek = targetDateObj.getDay();
+  // The profile's ZIP is the last-resort anchor: device location and the
+  // IP guess both outrank a home ZIP the family may not be standing in.
+  const [zipLocation, setZipLocation] = useState<{ lat: number; lon: number } | null>(null);
+  useEffect(() => {
+    const zip = profile?.zipCode;
+    if (!zip) {
+      setZipLocation(null);
+      return;
+    }
+    let active = true;
+    lookupZipLocation(zip, dataUrls.zipCentroids).then((location) => {
+      if (active) setZipLocation(location);
+    });
+    return () => {
+      active = false;
+    };
+  }, [profile?.zipCode, dataUrls]);
   const plannerAnchor = useMemo(() => {
     if (userLocation) return userLocation;
     if (inferredGeo?.lat && inferredGeo?.lon) {
       return { lat: inferredGeo.lat, lon: inferredGeo.lon };
     }
-    return null;
-  }, [inferredGeo, userLocation]);
+    return zipLocation;
+  }, [inferredGeo, userLocation, zipLocation]);
   const plannerWeather = useMemo(() => {
     const forecast =
       targetDayOfWeek === 6
@@ -4702,7 +4721,7 @@ function App({ metro }: AppProps) {
         onOpenMap={() => setView("browse")}
         guideHref={weekendGuideHref}
         profile={profile}
-        homeLocation={userLocation}
+        homeLocation={userLocation ?? zipLocation}
         onEditProfile={() => setShowProfileWizard(true)}
         trust={eventTrust}
         venueImages={venueImages}

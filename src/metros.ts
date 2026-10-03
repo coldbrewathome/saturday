@@ -25,7 +25,8 @@ export type DataKey =
   | "eventReport"
   | "featuredPlans"
   | "curatedSpots"
-  | "popularEvents";
+  | "popularEvents"
+  | "zipCentroids";
 
 const ALL_METROS: MetroConfig[] = metrosDoc.metros as MetroConfig[];
 
@@ -54,6 +55,8 @@ const DATA_FILES: Record<DataKey, string> = {
   featuredPlans: "featured-plans.json",
   curatedSpots: "curated-spots.json",
   popularEvents: "popular-events.json",
+  // Audience-neutral: the same ZIP table serves kids and adults.
+  zipCentroids: "zip-centroids.json",
 };
 
 const ADULTS_DATA_FILES: Partial<Record<DataKey, string>> = {

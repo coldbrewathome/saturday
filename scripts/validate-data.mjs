@@ -98,6 +98,31 @@ async function validateMetro(metro) {
     }
   }
 
+  // ZIP → location table (scripts/build-zip-centroids.mjs), the fallback
+  // proximity anchor when a family grants no location permission. A table
+  // that drifted from the metro bbox would put families in the wrong city.
+  const zipDoc = await readJsonOrNull(metroDataFile(metro, "zipCentroids"));
+  const bbox = metro.spotCoverage?.bbox;
+  if (!zipDoc?.zips || Object.keys(zipDoc.zips).length === 0) {
+    errors.push(
+      "zip-centroids.json is missing or empty — run `node scripts/build-zip-centroids.mjs`.",
+    );
+  } else if (bbox) {
+    for (const [zip, point] of Object.entries(zipDoc.zips)) {
+      const [lat, lon] = Array.isArray(point) ? point : [];
+      if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+        errors.push(`zip-centroids.json: ${zip} has no usable coordinates.`);
+      } else if (
+        lat < bbox.south ||
+        lat > bbox.north ||
+        lon < bbox.west ||
+        lon > bbox.east
+      ) {
+        errors.push(`zip-centroids.json: ${zip} sits outside the metro bbox.`);
+      }
+    }
+  }
+
   if (errors.length > 0) {
     console.error(`[${metro.id}] ${errors.join(`\n[${metro.id}] `)}`);
     process.exit(1);
