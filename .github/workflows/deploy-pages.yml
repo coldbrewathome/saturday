@@ -3,16 +3,13 @@ name: Deploy Web App
 on:
   push:
     branches: [main]
-  schedule:
-    # Friday 13:00 UTC (~6am Pacific) weekly rebuild. The daily refresh-data
-    # commits are pushed with GITHUB_TOKEN, which never triggers push
-    # workflows, so prerendered SEO pages (editor's picks, this-weekend
-    # guides) go stale between manual deploys. This cron re-prerenders both
-    # apps with fresh data right before the weekend. Kids deploys before
-    # adults in the same job — the builds share dist/ and must stay
-    # sequential, never parallel.
-    - cron: "0 13 * * 5"
   workflow_dispatch:
+
+# Deploys are manual (npm run deploy:kids / deploy:adults / deploy:data). The
+# Friday 13:00 UTC rebuild cron was removed 2026-10-02: it rebuilt from
+# origin/main, which lags unpushed local work, and redeployed stale pages over
+# fresh deploys (Sep 25 and Oct 2). Kids deploys before adults in the same job
+# — the builds share dist/ and must stay sequential, never parallel.
 
 permissions:
   contents: read
