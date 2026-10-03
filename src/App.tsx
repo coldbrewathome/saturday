@@ -155,6 +155,7 @@ import {
   validEventDate,
   weatherTone,
 } from "./eventDates";
+import { buildPlanIcs, downloadIcs } from "./calendarIcs";
 import {
   AGE_BAND_STORAGE_KEY,
   AGE_PROMPT_DISMISSED_KEY,
@@ -5220,6 +5221,33 @@ function App({ metro }: AppProps) {
                   <Image aria-hidden="true" />
                   {planCardBusy && !planCard ? "Making card…" : "Share as card"}
                 </button>
+                {activePlanEvents.some((event) => event.startDateTime) && (
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    title="Download this plan for Apple Calendar or Outlook"
+                    onClick={() => {
+                      const sharedUrl =
+                        shareState.status === "shared" && shareState.url
+                          ? shareState.url
+                          : activePlan.pollId
+                            ? pollShareUrl(activePlan.pollId)
+                            : null;
+                      downloadIcs(
+                        `${APP_BRAND.toLowerCase()}-${slugifyDownloadName(activePlan.name)}.ics`,
+                        buildPlanIcs({
+                          name: activePlan.name || "Untitled plan",
+                          items: activePlanItems,
+                          url: sharedUrl,
+                        }),
+                      );
+                      trackMetric("calendar_save", metro.id);
+                    }}
+                  >
+                    <CalendarDays aria-hidden="true" />
+                    Add to calendar
+                  </button>
+                )}
                 <button
                   className="danger-button"
                   onClick={() => deletePlan(activePlan.id)}

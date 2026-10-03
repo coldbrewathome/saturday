@@ -64,6 +64,31 @@ export function eventDateGroupLabel(event: FamilyEvent): string {
   });
 }
 
+// Day-long rows carry a stamped hour that is not a real start time (date-only
+// feed values stamped by ingest — some libraries landed as "3:00 AM"). A ~24h
+// span is the reliable signal, same rule as the SEO pages' eventIsAllDay;
+// all-day rows are the only rows that span about a day. Genuine multi-day
+// runs (31h+) keep their real start time.
+export function isAllDayEvent(event: {
+  startDateTime?: string | null;
+  endDateTime?: string | null;
+}): boolean {
+  const start = validEventDate(event.startDateTime);
+  if (!start) return false;
+  const end = validEventDate(event.endDateTime);
+  const spanMs = end ? end.getTime() - start.getTime() : 0;
+  if (spanMs >= 22 * 60 * 60 * 1000 && spanMs <= 26 * 60 * 60 * 1000) {
+    return true;
+  }
+  return (
+    !!end &&
+    sameLocalDate(start, end) &&
+    start.getHours() === 0 &&
+    start.getMinutes() === 0 &&
+    spanMs >= 23 * 60 * 60 * 1000
+  );
+}
+
 export function eventTimeLabel(event: FamilyEvent): string | null {
   const start = validEventDate(event.startDateTime);
   if (!start) return null;
@@ -72,24 +97,7 @@ export function eventTimeLabel(event: FamilyEvent): string | null {
     hour: "numeric",
     minute: "2-digit",
   });
-  const spanMs = end ? end.getTime() - start.getTime() : 0;
-  // Day-long rows carry a stamped hour that is not a real start time (date-only
-  // feed values stamped by ingest — some libraries landed as "3:00 AM"). A
-  // ~24h span is the reliable signal, same rule as the SEO pages'
-  // eventIsAllDay; all-day rows are the only rows that span about a day.
-  // Genuine multi-day runs (31h+) keep their real start time.
-  if (spanMs >= 22 * 60 * 60 * 1000 && spanMs <= 26 * 60 * 60 * 1000) {
-    return "All day";
-  }
-  if (
-    end &&
-    sameLocalDate(start, end) &&
-    start.getHours() === 0 &&
-    start.getMinutes() === 0 &&
-    end.getTime() - start.getTime() >= 23 * 60 * 60 * 1000
-  ) {
-    return "All day";
-  }
+  if (isAllDayEvent(event)) return "All day";
   if (end && sameLocalDate(start, end) && end.getTime() > start.getTime()) {
     return `${formatter.format(start)} - ${formatter.format(end)}`;
   }

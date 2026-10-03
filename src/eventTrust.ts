@@ -1,3 +1,4 @@
+import { isAllDayEvent, isoDate } from "./eventDates";
 import type { FamilyEvent } from "./types";
 
 /**
@@ -51,10 +52,24 @@ function calendarDate(value: string): string | null {
 /** Build a Google Calendar template only when both times are known. */
 export function eventCalendarUrl(event: FamilyEvent): string | null {
   if (!event.startDateTime) return null;
-  const start = calendarDate(event.startDateTime);
-  if (!start) return null;
   const parsedStart = new Date(event.startDateTime);
   const parsedEnd = event.endDateTime ? new Date(event.endDateTime) : null;
+  // All-day rows carry an ingest-stamped hour that is not a real start time;
+  // Google wants date-only values for them (and renders an all-day block).
+  if (isAllDayEvent(event)) {
+    const day = isoDate(parsedStart);
+    const next = new Date(parsedStart.getFullYear(), parsedStart.getMonth(), parsedStart.getDate() + 1);
+    const params = new URLSearchParams({
+      action: "TEMPLATE",
+      text: event.title,
+      dates: `${day.replace(/-/g, "")}/${isoDate(next).replace(/-/g, "")}`,
+      details: event.description || "",
+      location: [event.venue, event.city].filter(Boolean).join(", "),
+    });
+    return `https://calendar.google.com/calendar/render?${params.toString()}`;
+  }
+  const start = calendarDate(event.startDateTime);
+  if (!start) return null;
   const end = parsedEnd && Number.isFinite(parsedEnd.getTime()) && parsedEnd >= parsedStart
     ? calendarDate(event.endDateTime!)
     : null;

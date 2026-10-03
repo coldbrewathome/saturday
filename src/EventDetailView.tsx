@@ -24,6 +24,7 @@ import { fetchEventTrust, type EventTrust } from "./checkinApi";
 import { ageBandLabels } from "./planner";
 import { trackMetric } from "./api";
 import { eventCalendarUrl, eventTrustDisplay } from "./eventTrust";
+import { buildEventIcs, downloadIcs } from "./calendarIcs";
 
 type Props = {
   events: FamilyEvent[];
@@ -257,6 +258,9 @@ export default function EventDetailView({
   const duration = event ? formatDuration(event.startDateTime, event.endDateTime) : null;
   const trustDisplay = event ? eventTrustDisplay(event) : null;
   const calendarUrl = event ? eventCalendarUrl(event) : null;
+  // Apple Calendar / Outlook get a real file; Google Calendar keeps its
+  // template link (above).
+  const calendarIcs = event ? buildEventIcs(event) : null;
 
   useEffect(() => {
     if (!slug) return;
@@ -489,6 +493,21 @@ export default function EventDetailView({
               >
                 <CalendarDays aria-hidden="true" /> Save to calendar
               </a>
+            )}
+            {calendarIcs && (
+              <button
+                type="button"
+                className="event-detail-share-cta"
+                onClick={() => {
+                  downloadIcs(
+                    `${APP_BRAND.toLowerCase()}-${event.slug || event.id}.ics`,
+                    calendarIcs,
+                  );
+                  trackMetric("calendar_save", metro.id, { pageType: "event" });
+                }}
+              >
+                <CalendarDays aria-hidden="true" /> Apple/Outlook (.ics)
+              </button>
             )}
             <a className="text-button" href="#/browse">
               See it on the map
