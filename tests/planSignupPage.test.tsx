@@ -39,8 +39,8 @@ function makeEvent(
     category: "Festival",
     daysOfWeek: [6],
     timeWindow: "Afternoon",
-    startDateTime: `${satKey}T17:00:00-07:00`,
-    endDateTime: `${satKey}T21:00:00-07:00`,
+    startDateTime: `${key(START)}T${hhmm(START)}:00-07:00`,
+    endDateTime: `${key(END)}T${hhmm(END)}:00-07:00`,
     ageBands: [],
     cost: "Free",
     url: "https://example.com/e",
@@ -62,6 +62,22 @@ const key = (d: Date) =>
   ).padStart(2, "0")}`;
 const satKey = key(SAT);
 const nextSatKey = key(new Date(SAT.getFullYear(), SAT.getMonth(), SAT.getDate() + 7));
+const hhmm = (d: Date) =>
+  `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+
+// ...and inside it at any run *time*: the page drops events that have already
+// started, so a Saturday-evening run must not mint a fixture at a fixed 17:00
+// that is now in the past. Anchor the start an hour out when needed; rolling
+// past midnight just lands the event on Sunday, which the window accepts.
+function anchorStart(now: Date): Date {
+  const sat = new Date(now);
+  const dow = now.getDay();
+  sat.setHours(0, 0, 0, 0);
+  sat.setDate(sat.getDate() + (dow === 6 ? 0 : (6 - dow + 7) % 7));
+  return new Date(Math.max(sat.getTime() + 17 * 3_600_000, now.getTime() + 3_600_000));
+}
+const START = anchorStart(new Date());
+const END = new Date(START.getTime() + 4 * 3_600_000);
 
 const WEEKEND_EVENTS = {
   events: [
@@ -87,6 +103,22 @@ function mockDataFetch() {
     }),
   );
 }
+
+// Regression pin: a Saturday-evening run (CI hit this at 22:00 PT, 2026-10-03)
+// must not build a fixture the page's "already started" filter drops.
+describe("teaser fixture slot", () => {
+  it("stays upcoming and inside the weekend window at any run time", () => {
+    const satEvening = new Date(2026, 9, 3, 22, 0, 0);
+    const satStart = anchorStart(satEvening);
+    expect(satStart.getTime()).toBeGreaterThan(satEvening.getTime());
+    expect([key(satEvening), key(new Date(2026, 9, 4))]).toContain(key(satStart));
+
+    const wednesday = new Date(2026, 9, 7, 9, 0, 0);
+    const wedStart = anchorStart(wednesday);
+    expect(key(wedStart)).toBe("2026-10-10"); // the coming Saturday, at 17:00
+    expect(hhmm(wedStart)).toBe("17:00");
+  });
+});
 
 describe("PlanSignupPage", () => {
   it("renders the capture headline, form, and metro-framed teasers", async () => {
