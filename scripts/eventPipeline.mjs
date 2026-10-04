@@ -2426,6 +2426,27 @@ export function normalizeDateTime(value, timezoneOffset = DEFAULT_TIMEZONE_OFFSE
   return parseLooseDate(raw, new Date(), timezoneOffset);
 }
 
+// An end that precedes the start comes from an overnight window ("9 PM–1 AM",
+// whose end clock belongs to the next day) or from a series still carrying the
+// previous occurrence's end. Nudge the end forward a day at a time until it
+// lands on or after the start; if it still cannot be trusted, fall back to the
+// default hour the way a missing end does. Downstream "has this event ended?"
+// checks (featured-plan generation, the plan validator) read the end, so a
+// record that ends before it begins fails those gates. A zero-length end
+// (start === end, as the Forest Preserves fallback cache ships) is left alone.
+export function resolveEndDateTime(startDateTime, endDateTime, defaultMinutes = 60) {
+  if (!startDateTime) return endDateTime || null;
+  const startMs = Date.parse(startDateTime);
+  let endMs = endDateTime ? Date.parse(endDateTime) : NaN;
+  if (Number.isFinite(endMs)) {
+    for (let day = 0; day < 7 && endMs < startMs; day += 1) {
+      endMs += 24 * 60 * 60 * 1000;
+    }
+    if (endMs >= startMs) return new Date(endMs).toISOString();
+  }
+  return addMinutesToLocalIso(startDateTime, defaultMinutes);
+}
+
 export function normalizeRawEvent(raw, source = {}) {
   const timezoneOffset = raw.timezoneOffset || source.timezoneOffset || DEFAULT_TIMEZONE_OFFSET;
   const title = cleanEventTitle(raw.title);
@@ -2447,7 +2468,7 @@ export function normalizeRawEvent(raw, source = {}) {
   }
 
   const startDateTime = normalizeDateTime(raw.startDateTime, timezoneOffset);
-  const endDateTime = normalizeDateTime(raw.endDateTime, timezoneOffset) || (startDateTime ? addMinutesToLocalIso(startDateTime, 60) : null);
+  const endDateTime = resolveEndDateTime(startDateTime, normalizeDateTime(raw.endDateTime, timezoneOffset));
   const days = startDateTime ? [dayOfWeek(startDateTime)].filter((d) => d !== null) : [];
   const category = stripUnsafeText(raw.category || inferCategory(combined, source.category || "Museum"), 40);
   const ageBands = Array.isArray(raw.ageBands) && raw.ageBands.length > 0

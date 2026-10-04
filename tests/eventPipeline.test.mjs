@@ -41,6 +41,7 @@ import {
   parseDateTimeRange,
   parseLooseDate,
   pruneSlugHistory,
+  resolveEndDateTime,
   updateSlugHistory,
   validateEventsDataset,
 } from "../scripts/eventPipeline.mjs";
@@ -2049,4 +2050,38 @@ test("extractEventbriteOrgEvents reads the embedded upcomingEvents state and ski
   assert.equal(events[0].city, "Loma Mar");
   assert.equal(events[0].startDateTime, "2026-09-05T17:30:00.000Z"); // 10:30 LA
   assert.equal(events[0].extractionMethod, "eventbrite-org");
+});
+
+// An end before the start reached the shipped feeds three ways — an overnight
+// window whose end clock belongs to the next day (Phoenix "Movie in the Park"
+// 23:00–04:00), a museum sleepover (Chicago "Dozin' with the Dinos" 19:00–10:00)
+// and a series carrying the previous occurrence's end (Dallas Zoo Member
+// Mornings). The plan validator then rejected the plan built around the record.
+test("resolveEndDateTime rolls an overnight or stale end past the start", () => {
+  // Same-day end: untouched.
+  assert.equal(
+    resolveEndDateTime("2026-10-03T13:00:00.000Z", "2026-10-03T14:00:00.000Z"),
+    "2026-10-03T14:00:00.000Z",
+  );
+  // Overnight window rolls one day: 23:00 MST -> 04:00 the next morning.
+  assert.equal(
+    resolveEndDateTime("2026-10-18T06:00:00.000Z", "2026-10-17T11:00:00.000Z"),
+    "2026-10-18T11:00:00.000Z",
+  );
+  // The next occurrence kept yesterday's end (Dallas Zoo, 1h long).
+  assert.equal(
+    resolveEndDateTime("2026-10-04T13:00:00.000Z", "2026-10-03T14:00:00.000Z"),
+    "2026-10-04T14:00:00.000Z",
+  );
+  // A missing or unusable end falls back to the default hour.
+  assert.equal(
+    resolveEndDateTime("2026-10-04T13:00:00.000Z", null),
+    "2026-10-04T14:00:00.000Z",
+  );
+  // A zero-length end (the Forest Preserves last-known-good cache) is a
+  // different, pre-existing shape — not this rule's business.
+  assert.equal(
+    resolveEndDateTime("2026-10-03T15:00:00.000Z", "2026-10-03T15:00:00.000Z"),
+    "2026-10-03T15:00:00.000Z",
+  );
 });
