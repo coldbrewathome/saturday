@@ -5836,7 +5836,10 @@ function App({ metro }: AppProps) {
             <a href="/how-we-verify/">How we verify listings</a>
             <span aria-hidden="true">·</span>
             <a href="/privacy/">Privacy</a>
-            {APP_AUDIENCE === "kids" && (
+            {/* Mosey is Bay-Area-only, so this link is meaningless — and lands
+                the reader on a city they aren't in — on the other 15 metros.
+                The static pages gate it the same way. */}
+            {APP_AUDIENCE === "kids" && metro.id === "bay-area" && (
               <>
                 <span aria-hidden="true">·</span>
                 <a href="https://trymosey.com/bay-area/">
