@@ -6031,7 +6031,7 @@ function highSignalEvents(events) {
   return strong.length >= 3 ? strong : pool.length ? pool : events;
 }
 
-function buildWeekendPlanPresets(events, eventSlugLookup) {
+export function buildWeekendPlanPresets(events, eventSlugLookup) {
   const source = highSignalEvents(events);
   const presets = [];
   const addPreset = (id, title, blurb, candidates) => {
@@ -6092,7 +6092,7 @@ function buildWeekendPlanPresets(events, eventSlugLookup) {
     addPreset(
       "low-drive",
       `Low-drive plan in ${topCity}`,
-      "A tighter cluster in one city so the day does not become a cross-Bay drive.",
+      "A tighter cluster in one city so the day does not turn into a long drive.",
       source.filter((event) => (event.city || event.neighborhood || "") === topCity),
     );
   }
@@ -6462,6 +6462,13 @@ export function resolveWeekendPicks(metro, weekend, events, eventLookup) {
     const event = resolvePick(pick.eventId);
     if (!event || seen.has(event.id)) continue;
     seen.add(event.id);
+    // `reason` is the editor's own sentence for this pick (the editorial step
+    // in skills/weekend-event-prep writes one per pick, all 16 metros). It was
+    // dropped here — the hub rendered the organizer's scraped blurb instead,
+    // which is the "pure scrape" the differentiation fix targets.
+    if (typeof pick.reason === "string" && pick.reason.trim()) {
+      event.pickReason = pick.reason.trim();
+    }
     picked.push(event);
     if (picked.length >= 6) break;
   }
@@ -6593,9 +6600,14 @@ function renderWeekendMarquee(headliners, eventSlugLookup, venueImageIndex = nul
     const time = formatEventTime(event) || "";
     const city = event.city || event.neighborhood || "";
     const catLine = [dow, time, city].filter(Boolean).join(" · ");
-    const blurbFull = cleanEventBlurb(event);
+    // Editorial picks carry the editor's sentence (longest is 147 chars, so the
+    // cap is headroom rather than truncation); tier-ranked slots with no editor
+    // fall back to the organizer's scraped line, capped tighter as before.
+    const note = typeof event.pickReason === "string" ? event.pickReason : "";
+    const blurbFull = note || cleanEventBlurb(event);
+    const cap = note ? 150 : 96;
     const sub = blurbFull
-      ? (blurbFull.length > 96 ? blurbFull.slice(0, 96).replace(/\s+\S*$/, "") + "…" : blurbFull)
+      ? (blurbFull.length > cap ? blurbFull.slice(0, cap).replace(/\s+\S*$/, "") + "…" : blurbFull)
       : (event.venue || "");
     // Poster display title: drop " - Venue Plaza"-style marketing suffixes on
     // long titles (the full title stays on the linked event page).
@@ -7860,8 +7872,8 @@ ${langSwitcherHtml}
 <footer class="famhop-footer">
   <p>© ${BRAND} · ${metroTag()}.</p>
   <p>Spot data © OpenStreetMap contributors (ODbL). Event listings from configured public sources.</p>
-  <p><a href="/about/">About ${esc(BRAND)}</a> · <a href="/how-we-verify/">How we verify listings</a> · <a href="/partners/">Partners &amp; embeds</a> · <a href="/privacy/">Privacy</a></p>${IS_ADULTS ? "" : `
-  <p>Planning an adults night out in the Bay Area? Try <a href="https://trymosey.com/bay-area/">Mosey</a>.</p>`}
+  <p><a href="/about/">About ${esc(BRAND)}</a> · <a href="/how-we-verify/">How we verify listings</a> · <a href="/partners/">Partners &amp; embeds</a> · <a href="/privacy/">Privacy</a></p>${!IS_ADULTS && activeMetro.id === "bay-area" ? `
+  <p>Planning an adults night out in the Bay Area? Try <a href="https://trymosey.com/bay-area/">Mosey</a>.</p>` : ""}
 </footer>
 ${renderStaticAuthScript()}
 ${renderStaticSeoMetrics({ canonical, pageType: pageType || seoPageTypeForCanonical(canonical) })}

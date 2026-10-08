@@ -6,6 +6,7 @@ import path from "node:path";
 import { runInNewContext } from "node:vm";
 import {
   auditAdultsSitemapUrls,
+  buildWeekendPlanPresets,
   eventIsAllDay,
   featuredTier,
   formatWeekendRange,
@@ -574,8 +575,8 @@ test("resolveWeekendPicks reads editorial picks and survives a rotated id hash",
     write({
       weekendStart: "2026-10-03",
       picks: [
-        { eventId: events[0].id, rank: 3 },
-        { eventId: "ghost-cccccccccc", rank: 4 },
+        { eventId: events[0].id, rank: 3, reason: "  Free festival food, arrive before noon.  " },
+        { eventId: "ghost-cccccccccc", rank: 4, reason: "Never resolves, so this must not surface." },
         { eventId: events[1].id, rank: 1 },
         { eventId: events[2].id, rank: 2 },
       ],
@@ -584,6 +585,10 @@ test("resolveWeekendPicks reads editorial picks and survives a rotated id hash",
       resolveWeekendPicks(metro, weekend, events, lookup).map((event) => event.id),
       [events[2].id, events[0].id],
     );
+    // The editor's sentence rides along on the resolved event: the hub renders
+    // it in place of the organizer's scraped blurb (the differentiation fix).
+    assert.equal(events[0].pickReason, "Free festival food, arrive before noon.");
+    assert.equal(events[2].pickReason, undefined, "a pick with no reason must not invent one");
 
     // The Mosey 2026-10-03 evidence: the pick id's hash was minted from an old
     // startDateTime, so the id missed while the event was live and in-window.
@@ -625,5 +630,42 @@ test("resolveWeekendPicks falls back to the run's published page when the picked
     );
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+// The preset blurbs/titles below render on all 16 metros' /{metro}/this-weekend/
+// pages. "cross-Bay" shipped on the Miami page for months because this copy was
+// written from a Bay Area desk — any metro-specific wording must be
+// parameterized (like the low-drive title) or left out. Blocklist seeded from
+// the plan's list; add per-metro landmarks here as they're found.
+test("weekend plan preset copy carries no metro-specific regionalism", () => {
+  const BLOCKLIST = [/\bbay\b/i, /cross-bay/i, /\bbart\b/i, /golden gate/i, /silicon valley/i, /\bcalifornia\b/i, /\bsocal\b/i];
+  const mk = (id, title, city, extra = {}) => ({
+    id,
+    title,
+    city,
+    venue: `${city} Library`,
+    category: "Library",
+    description: "Storytime and crafts for families.",
+    startDateTime: "2026-10-10T18:00:00.000Z",
+    cost: "Free",
+    ageBands: ["preschool"],
+    ...extra,
+  });
+  const events = [
+    mk("a1", "Toddler Storytime", "Sunnyvale"),
+    mk("a2", "Preschool Music and Movement", "Sunnyvale"),
+    mk("b1", "Family Craft Day", "Oakland"),
+    mk("b2", "Indoor Museum Day", "Oakland"),
+    mk("c1", "Library Lego Club", "Oakland", { ageBands: ["school-age"] }),
+  ];
+  const presets = buildWeekendPlanPresets(events, new Map(events.map((e) => [e, e.id])));
+  assert.ok(presets.length > 0, "fixture must produce presets, or the test proves nothing");
+  for (const preset of presets) {
+    for (const text of [preset.title, preset.blurb]) {
+      for (const pattern of BLOCKLIST) {
+        assert.doesNotMatch(text, pattern, `preset "${preset.id}" leaks regionalism: ${text}`);
+      }
+    }
   }
 });
