@@ -1,18 +1,67 @@
 {
   "schemaVersion": 1,
   "metroId": "san-diego",
-  "generatedAt": "2026-10-03T06:05:48.870Z",
+  "generatedAt": "2026-10-08T04:36:43.259Z",
   "registryPath": "data/event-sources-san-diego.json",
   "outputPath": "public/data/san-diego/events.json",
-  "eventCount": 416,
-  "adultsEventCount": 100,
-  "sourceCount": 20,
-  "liveEventCount": 507,
-  "lastKnownGoodEventCount": 0,
+  "eventCount": 397,
+  "adultsEventCount": 108,
+  "sourceCount": 16,
+  "liveEventCount": 394,
+  "lastKnownGoodEventCount": 101,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 11,
+  "operatorAlertCount": 9,
   "errors": [],
   "operatorAlerts": [
+    {
+      "severity": "warning",
+      "metroId": "san-diego",
+      "sourceId": "san-diego-museum-family",
+      "sourceName": "The New Children's Museum",
+      "sourceType": "tribeEvents",
+      "url": "https://thinkplaycreate.org/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 95,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 95,
+      "fetchedAt": "2026-10-08T04:36:43.259Z",
+      "fetches": [
+        {
+          "url": "https://thinkplaycreate.org/events/",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "san-diego",
+      "sourceId": "ticketmaster-san-diego-family",
+      "sourceName": "Ticketmaster San Diego Family Events",
+      "sourceType": "ticketmaster",
+      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 6,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 6,
+      "fetchedAt": "2026-10-08T04:36:43.259Z",
+      "fetches": [
+        {
+          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+          "status": "http-error",
+          "httpStatus": 429,
+          "contentType": "application/json"
+        }
+      ]
+    },
     {
       "severity": "critical",
       "metroId": "san-diego",
@@ -28,113 +77,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:48.870Z",
+      "fetchedAt": "2026-10-08T04:36:43.259Z",
       "fetches": [
         {
           "url": "https://www.sdfair.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "san-diego",
-      "sourceId": "birch-shark-summer-stations-2026-07-19-src",
-      "sourceName": "Shark Summer Exploration Stations",
-      "sourceType": "officialTextEvents",
-      "url": "https://aquarium.ucsd.edu/events/shark-summer",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:48.870Z",
-      "fetches": [
-        {
-          "url": "https://aquarium.ucsd.edu/events/shark-summer",
-          "status": "http-error",
-          "httpStatus": 403,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "san-diego",
-      "sourceId": "ramona-country-fair-2026-08-01-src",
-      "sourceName": "Ramona Country Fair (Saturday)",
-      "sourceType": "officialTextEvents",
-      "url": "https://ramonachamber.com/ramona-country-fair/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:48.870Z",
-      "fetches": [
-        {
-          "url": "https://ramonachamber.com/ramona-country-fair/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "san-diego",
-      "sourceId": "morava-serbian-summer-folkfest-2026-08-01-src",
-      "sourceName": "35th Annual MORAVA Serbian Summer Folkfest",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.eventbrite.com/e/35th-annual-morava-serbian-summer-folkfest-2026-tickets-1992743649900",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:48.870Z",
-      "fetches": [
-        {
-          "url": "https://www.eventbrite.com/e/35th-annual-morava-serbian-summer-folkfest-2026-tickets-1992743649900",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "san-diego",
-      "sourceId": "hillcrest-cityfest-2026-08-09-src",
-      "sourceName": "Hillcrest CityFest Art & Music Festival",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.fabuloushillcrest.com/cityfest-street-fair-music-festival",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:48.870Z",
-      "fetches": [
-        {
-          "url": "https://www.fabuloushillcrest.com/cityfest-street-fair-music-festival",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
         }
       ]
     },
@@ -153,13 +102,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:48.870Z",
+      "fetchedAt": "2026-10-08T04:36:43.259Z",
       "fetches": [
         {
           "url": "https://www.casbahmusic.com/events",
           "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=UTF-8"
+          "httpStatus": 403,
+          "contentType": "text/html"
         }
       ]
     },
@@ -178,7 +127,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:48.870Z",
+      "fetchedAt": "2026-10-08T04:36:43.259Z",
       "fetches": [
         {
           "url": "https://www.bellyup.com/events",
@@ -203,7 +152,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:48.870Z",
+      "fetchedAt": "2026-10-08T04:36:43.259Z",
       "fetches": [
         {
           "url": "https://musicboxsd.com/shows/",
@@ -228,7 +177,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:48.870Z",
+      "fetchedAt": "2026-10-08T04:36:43.259Z",
       "fetches": [
         {
           "url": "https://www.observatorysd.com/events",
@@ -253,7 +202,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:48.870Z",
+      "fetchedAt": "2026-10-08T04:36:43.259Z",
       "fetches": [
         {
           "url": "https://www.americancomedyco.com/calendar",
@@ -278,7 +227,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:48.870Z",
+      "fetchedAt": "2026-10-08T04:36:43.259Z",
       "fetches": [
         {
           "url": "https://thecomedystore.com/la-jolla/",
@@ -340,9 +289,9 @@
       "metroId": "san-diego",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 35,
+      "liveEvents": 32,
       "fallbackEvents": 0,
-      "eventCount": 35,
+      "eventCount": 32,
       "fetches": [
         {
           "url": "https://www.sandiego.gov/park-and-recreation/event-calendar",
@@ -353,7 +302,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; source=san-diego-drupal-page-only",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 3,
       "extractedEvents": 35,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -366,24 +315,21 @@
       "city": "San Diego",
       "metroId": "san-diego",
       "category": "Museum",
-      "status": "ok",
-      "liveEvents": 110,
+      "status": "fetch-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 110,
+      "eventCount": 95,
       "fetches": [
         {
           "url": "https://thinkplaycreate.org/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=200; pages=4"
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 90,
-      "extractedEvents": 200,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "reason": "This operation was aborted",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 95,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "san-diego-zoo-family",
@@ -420,24 +366,23 @@
       "city": "San Diego",
       "metroId": "san-diego",
       "category": "Ticketed",
-      "status": "ok",
-      "liveEvents": 6,
+      "status": "http-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 6,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=12; pages=3"
+          "status": "http-error",
+          "httpStatus": 429,
+          "contentType": "application/json"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "application/json; source=ticketmaster; events=12; pages=3",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 6,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "httpStatus": 429,
+      "contentType": "application/json",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 6,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "san-diego-county-fair",
@@ -483,13 +428,13 @@
           "url": "https://www.balboapark.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=168; pages=4"
+          "contentType": "application/json; source=tribe-events; events=171; pages=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=168; pages=4",
-      "rejectedLiveEvents": 42,
-      "extractedEvents": 165,
+      "contentType": "application/json; source=tribe-events; events=171; pages=4",
+      "rejectedLiveEvents": 45,
+      "extractedEvents": 168,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -502,9 +447,9 @@
       "metroId": "san-diego",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 8,
+      "liveEvents": 7,
       "fallbackEvents": 0,
-      "eventCount": 8,
+      "eventCount": 7,
       "fetches": [
         {
           "url": "https://oceansidepl.librarycalendar.com/events/month",
@@ -516,114 +461,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 8,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "birch-shark-summer-stations-2026-07-19-src",
-      "name": "Shark Summer Exploration Stations",
-      "url": "https://aquarium.ucsd.edu/events/shark-summer",
-      "sourceType": "officialTextEvents",
-      "city": "La Jolla",
-      "metroId": "san-diego",
-      "category": "Festival",
-      "status": "http-error",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://aquarium.ucsd.edu/events/shark-summer",
-          "status": "http-error",
-          "httpStatus": 403,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ],
-      "httpStatus": 403,
-      "contentType": "text/html; charset=utf-8",
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "ramona-country-fair-2026-08-01-src",
-      "name": "Ramona Country Fair (Saturday)",
-      "url": "https://ramonachamber.com/ramona-country-fair/",
-      "sourceType": "officialTextEvents",
-      "city": "Ramona",
-      "metroId": "san-diego",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://ramonachamber.com/ramona-country-fair/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 2,
-      "extractedEvents": 2,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "morava-serbian-summer-folkfest-2026-08-01-src",
-      "name": "35th Annual MORAVA Serbian Summer Folkfest",
-      "url": "https://www.eventbrite.com/e/35th-annual-morava-serbian-summer-folkfest-2026-tickets-1992743649900",
-      "sourceType": "officialTextEvents",
-      "city": "San Diego",
-      "metroId": "san-diego",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.eventbrite.com/e/35th-annual-morava-serbian-summer-folkfest-2026-tickets-1992743649900",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "hillcrest-cityfest-2026-08-09-src",
-      "name": "Hillcrest CityFest Art & Music Festival",
-      "url": "https://www.fabuloushillcrest.com/cityfest-street-fair-music-festival",
-      "sourceType": "officialTextEvents",
-      "city": "San Diego",
-      "metroId": "san-diego",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.fabuloushillcrest.com/cityfest-street-fair-music-festival",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html;charset=utf-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
+      "extractedEvents": 7,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -643,12 +481,12 @@
         {
           "url": "https://www.casbahmusic.com/events",
           "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=UTF-8"
+          "httpStatus": 403,
+          "contentType": "text/html"
         }
       ],
-      "httpStatus": 404,
-      "contentType": "text/html; charset=UTF-8",
+      "httpStatus": 403,
+      "contentType": "text/html",
       "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -796,21 +634,21 @@
       "metroId": "san-diego",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 91,
+      "liveEvents": 98,
       "fallbackEvents": 0,
-      "eventCount": 91,
+      "eventCount": 98,
       "fetches": [
         {
           "url": "https://www.balboapark.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=168; pages=4"
+          "contentType": "application/json; source=tribe-events; events=171; pages=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=168; pages=4",
-      "rejectedLiveEvents": 74,
-      "extractedEvents": 165,
+      "contentType": "application/json; source=tribe-events; events=171; pages=4",
+      "rejectedLiveEvents": 70,
+      "extractedEvents": 168,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     }

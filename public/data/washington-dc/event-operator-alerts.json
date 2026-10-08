@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "washington-dc",
-  "generatedAt": "2026-10-03T06:01:27.293Z",
-  "alertCount": 13,
+  "generatedAt": "2026-10-08T04:33:14.556Z",
+  "alertCount": 6,
   "alerts": [
     {
       "severity": "warning",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:01:27.293Z",
+      "fetchedAt": "2026-10-08T04:33:14.556Z",
       "fetches": [
         {
           "url": "https://dpr.dc.gov/events",
@@ -44,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:01:27.293Z",
+      "fetchedAt": "2026-10-08T04:33:14.556Z",
       "fetches": [
         {
           "url": "https://naturalhistory.si.edu/events/family-programs",
@@ -69,163 +69,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:01:27.293Z",
+      "fetchedAt": "2026-10-08T04:33:14.556Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "application/json; source=ticketmaster; events=2; pages=1"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "washington-dc",
-      "sourceId": "maryland-state-fair",
-      "sourceName": "Maryland State Fair",
-      "sourceType": "officialTextEvents",
-      "url": "https://marylandstatefair.com/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:01:27.293Z",
-      "fetches": [
-        {
-          "url": "https://marylandstatefair.com/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "washington-dc",
-      "sourceId": "loc-national-book-festival-2026",
-      "sourceName": "Library of Congress National Book Festival",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.loc.gov/events/2026-national-book-festival/",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:01:27.293Z",
-      "fetches": [
-        {
-          "url": "https://www.loc.gov/events/2026-national-book-festival/",
-          "status": "http-error",
-          "httpStatus": 403,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "washington-dc",
-      "sourceId": "fairfax-county-summer-carnival-and-fair-2026-07-31-src",
-      "sourceName": "Fairfax County Summer Carnival and Fair (Friday)",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.fairfaxcounty.gov/parks/frying-pan-park/4-h-fair",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:01:27.293Z",
-      "fetches": [
-        {
-          "url": "https://www.fairfaxcounty.gov/parks/frying-pan-park/4-h-fair",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "washington-dc",
-      "sourceId": "prince-william-county-fair-2026-src",
-      "sourceName": "Prince William County Fair 2026 (75th)",
-      "sourceType": "officialTextEvents",
-      "url": "https://deggeller.com/events/13",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:01:27.293Z",
-      "fetches": [
-        {
-          "url": "https://deggeller.com/events/13",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "washington-dc",
-      "sourceId": "h-street-festival-2026-09-19-src",
-      "sourceName": "2026 H Street Festival",
-      "sourceType": "officialTextEvents",
-      "url": "https://hstreet.org/event/2026-h-street-festival/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:01:27.293Z",
-      "fetches": [
-        {
-          "url": "https://hstreet.org/event/2026-h-street-festival/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "washington-dc",
-      "sourceId": "hilloween-dc-2026",
-      "sourceName": "Hilloween on Capitol Hill",
-      "sourceType": "officialTextEvents",
-      "url": "https://hsema.dc.gov/event/hilloween-3",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:01:27.293Z",
-      "fetches": [
-        {
-          "url": "https://hsema.dc.gov/event/hilloween-3",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -244,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:01:27.293Z",
+      "fetchedAt": "2026-10-08T04:33:14.556Z",
       "fetches": [
         {
           "url": "https://www.930.com/events",
@@ -269,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:01:27.293Z",
+      "fetchedAt": "2026-10-08T04:33:14.556Z",
       "fetches": [
         {
           "url": "https://www.unionstage.com/events",
@@ -293,35 +143,10 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:01:27.293Z",
+      "fetchedAt": "2026-10-08T04:33:14.556Z",
       "fetches": [
         {
           "url": "https://www.songbyrddc.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "washington-dc",
-      "sourceId": "dc-jazzfest-wharf-2026",
-      "sourceName": "DC JazzFest at The Wharf 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.dcjazzfest.org/event-details/dcjazzfest2026",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:01:27.293Z",
-      "fetches": [
-        {
-          "url": "https://www.dcjazzfest.org/event-details/dcjazzfest2026",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"

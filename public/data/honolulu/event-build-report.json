@@ -1,42 +1,18 @@
 {
   "schemaVersion": 1,
   "metroId": "honolulu",
-  "generatedAt": "2026-10-03T06:06:36.968Z",
+  "generatedAt": "2026-10-08T05:02:59.518Z",
   "registryPath": "data/event-sources-honolulu.json",
   "outputPath": "public/data/honolulu/events.json",
-  "eventCount": 193,
-  "adultsEventCount": 28,
-  "sourceCount": 21,
-  "liveEventCount": 7,
-  "lastKnownGoodEventCount": 208,
+  "eventCount": 401,
+  "adultsEventCount": 35,
+  "sourceCount": 17,
+  "liveEventCount": 434,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 16,
+  "operatorAlertCount": 7,
   "errors": [],
   "operatorAlerts": [
-    {
-      "severity": "warning",
-      "metroId": "honolulu",
-      "sourceId": "hawaii-state-library",
-      "sourceName": "Hawaii State Public Library System",
-      "sourceType": "tribeEvents",
-      "url": "https://www.librarieshawaii.org/events/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 191,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 191,
-      "fetchedAt": "2026-10-03T06:06:36.968Z",
-      "fetches": [
-        {
-          "url": "https://www.librarieshawaii.org/events/",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
-        }
-      ]
-    },
     {
       "severity": "critical",
       "metroId": "honolulu",
@@ -52,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:06:36.968Z",
+      "fetchedAt": "2026-10-08T05:02:59.518Z",
       "fetches": [
         {
           "url": "https://www.bishopmuseum.org/exhibits-and-programs/events/",
@@ -78,7 +54,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:06:36.968Z",
+      "fetchedAt": "2026-10-08T05:02:59.518Z",
       "fetches": [
         {
           "url": "https://honolulumuseum.org/events/",
@@ -103,7 +79,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:06:36.968Z",
+      "fetchedAt": "2026-10-08T05:02:59.518Z",
       "fetches": [
         {
           "url": "https://www.honoluluzoo.org/experiences-events/",
@@ -114,26 +90,27 @@
       ]
     },
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "honolulu",
       "sourceId": "waikiki-aquarium",
       "sourceName": "Waikiki Aquarium",
       "sourceType": "ics",
       "url": "https://calendar.google.com/calendar/ical/hawaii.edu_ur7iq68mqshu5q73n79rmb4jrk%40group.calendar.google.com/public/basic.ics",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:06:36.968Z",
+      "fetchedAt": "2026-10-08T05:02:59.518Z",
       "fetches": [
         {
           "url": "https://calendar.google.com/calendar/ical/hawaii.edu_ur7iq68mqshu5q73n79rmb4jrk%40group.calendar.google.com/public/basic.ics",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/calendar; charset=utf-8"
         }
       ]
     },
@@ -152,7 +129,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:06:36.968Z",
+      "fetchedAt": "2026-10-08T05:02:59.518Z",
       "fetches": [
         {
           "url": "https://www.kualoa.com/activities/",
@@ -163,201 +140,27 @@
       ]
     },
     {
-      "severity": "warning",
-      "metroId": "honolulu",
-      "sourceId": "kuhio-beach-hula-show-2026-08-01-src",
-      "sourceName": "Kuhio Beach Hula Show",
-      "sourceType": "officialTextEvents",
-      "url": "https://kbhulashow.wixsite.com/official",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:06:36.968Z",
-      "fetches": [
-        {
-          "url": "https://kbhulashow.wixsite.com/official",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "honolulu",
-      "sourceId": "waipahu-soto-zen-taiyoji-bon-dance-2026-07-31-src",
-      "sourceName": "Bon Dance at Waipahu Soto Zen Temple Taiyoji",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:06:36.968Z",
-      "fetches": [
-        {
-          "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "honolulu",
-      "sourceId": "waipahu-soto-zen-taiyoji-bon-dance-2026-08-01-src",
-      "sourceName": "Bon Dance at Waipahu Soto Zen Temple Taiyoji",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:06:36.968Z",
-      "fetches": [
-        {
-          "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
       "severity": "critical",
       "metroId": "honolulu",
-      "sourceId": "kcc-farmers-market-2026-08-01-src",
-      "sourceName": "KCC Farmers' Market",
-      "sourceType": "officialTextEvents",
-      "url": "https://hfbf.org/farmers-markets/kcc/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:06:36.968Z",
-      "fetches": [
-        {
-          "url": "https://hfbf.org/farmers-markets/kcc/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "honolulu",
-      "sourceId": "duke-kahanamoku-oceanfest-opening-ceremony-2026-08-14-src",
-      "sourceName": "Duke Kahanamoku OceanFest: Opening Ceremony",
-      "sourceType": "officialTextEvents",
-      "url": "https://dukekahanamokuoceanfest.com/events/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:06:36.968Z",
-      "fetches": [
-        {
-          "url": "https://dukekahanamokuoceanfest.com/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "honolulu",
-      "sourceId": "aiea-soto-mission-bon-dance-2026-08-07-src",
-      "sourceName": "Bon Dance at Soto Mission of Aiea",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
-      "status": "fetch-error",
+      "sourceId": "the-republik-hi",
+      "sourceName": "The Republik",
+      "sourceType": "html",
+      "url": "https://jointherepublik.com/upcoming-events/",
+      "status": "http-error",
       "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:06:36.968Z",
+      "fetchedAt": "2026-10-08T05:02:59.518Z",
       "fetches": [
         {
-          "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "honolulu",
-      "sourceId": "aiea-soto-mission-bon-dance-2026-08-08-src",
-      "sourceName": "Bon Dance at Soto Mission of Aiea",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:06:36.968Z",
-      "fetches": [
-        {
-          "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "honolulu",
-      "sourceId": "pearl-city-hongwanji-bon-dance-2026-08-08-src",
-      "sourceName": "Bon Dance at Pearl City Hongwanji Mission",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:06:36.968Z",
-      "fetches": [
-        {
-          "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "url": "https://jointherepublik.com/upcoming-events/",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
         }
       ]
     },
@@ -376,36 +179,12 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:06:36.968Z",
+      "fetchedAt": "2026-10-08T05:02:59.518Z",
       "fetches": [
         {
           "url": "https://www.alohacomedyclub.com/calendar",
           "status": "fetch-error",
           "reason": "fetch failed"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "honolulu",
-      "sourceId": "blaisdell-center",
-      "sourceName": "Neal S. Blaisdell Center",
-      "sourceType": "tribeEvents",
-      "url": "https://blaisdellcenter.com/events/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 17,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 17,
-      "fetchedAt": "2026-10-03T06:06:36.968Z",
-      "fetches": [
-        {
-          "url": "https://blaisdellcenter.com/events/",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
         }
       ]
     }
@@ -433,21 +212,24 @@
       "city": "Honolulu",
       "metroId": "honolulu",
       "category": "Library",
-      "status": "fetch-error",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 397,
       "fallbackEvents": 0,
-      "eventCount": 191,
+      "eventCount": 397,
       "fetches": [
         {
           "url": "https://www.librarieshawaii.org/events/",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=400; pages=8"
         }
       ],
-      "reason": "This operation was aborted",
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 191,
-      "recoveryMode": "last-known-good"
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=400; pages=8",
+      "rejectedLiveEvents": 3,
+      "extractedEvents": 400,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "bishop-museum",
@@ -565,19 +347,22 @@
       "city": "Honolulu",
       "metroId": "honolulu",
       "category": "Zoo",
-      "status": "fetch-error",
+      "status": "ok",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://calendar.google.com/calendar/ical/hawaii.edu_ur7iq68mqshu5q73n79rmb4jrk%40group.calendar.google.com/public/basic.ics",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/calendar; charset=utf-8"
         }
       ],
-      "reason": "This operation was aborted",
-      "extractedEvents": 0,
+      "httpStatus": 200,
+      "contentType": "text/calendar; charset=utf-8",
+      "rejectedLiveEvents": 627,
+      "extractedEvents": 627,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -635,101 +420,101 @@
       "recoveryMode": null
     },
     {
-      "id": "kuhio-beach-hula-show-2026-08-01-src",
-      "name": "Kuhio Beach Hula Show",
-      "url": "https://kbhulashow.wixsite.com/official",
+      "id": "hawaii-kai-halloween-spooktacular-2026-10-24-src",
+      "name": "Halloween Spooktacular",
+      "url": "https://hawaiikaitownecenter.com/events/list/",
+      "sourceType": "officialTextEvents",
+      "city": "Honolulu",
+      "metroId": "honolulu",
+      "category": "Holiday",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://hawaiikaitownecenter.com/events/list/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "halloween-keiki-costume-contest-2026-10-25-src",
+      "name": "Halloween Keiki Costume Contest",
+      "url": "https://www.royalhawaiiancenter.com/events/halloween-keiki-costume-contest-waikiki-2026",
+      "sourceType": "officialTextEvents",
+      "city": "Honolulu",
+      "metroId": "honolulu",
+      "category": "Holiday",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://www.royalhawaiiancenter.com/events/halloween-keiki-costume-contest-waikiki-2026",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html;charset=utf-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "outrigger-reef-halloween-pumpkin-contest-2026-10-31-src",
+      "name": "Halloween Pumpkin Contest and Bag Making",
+      "url": "https://event.outrigger.com/outrigger-reef-waikiki-beach-resort/events/honolulu/halloween-pumpkin-contest-and-bag-making",
+      "sourceType": "officialTextEvents",
+      "city": "Honolulu",
+      "metroId": "honolulu",
+      "category": "Holiday",
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
+      "fetches": [
+        {
+          "url": "https://event.outrigger.com/outrigger-reef-waikiki-beach-resort/events/honolulu/halloween-pumpkin-contest-and-bag-making",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ],
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
+    },
+    {
+      "id": "shells-wings-wonder-bishop-museum-2026-10-10-src",
+      "name": "Shells, Wings & Wonder",
+      "url": "https://www.bishopmuseum.org/events/",
       "sourceType": "officialTextEvents",
       "city": "Honolulu",
       "metroId": "honolulu",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
-          "url": "https://kbhulashow.wixsite.com/official",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "waipahu-soto-zen-taiyoji-bon-dance-2026-07-31-src",
-      "name": "Bon Dance at Waipahu Soto Zen Temple Taiyoji",
-      "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
-      "sourceType": "officialTextEvents",
-      "city": "Waipahu",
-      "metroId": "honolulu",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "waipahu-soto-zen-taiyoji-bon-dance-2026-08-01-src",
-      "name": "Bon Dance at Waipahu Soto Zen Temple Taiyoji",
-      "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
-      "sourceType": "officialTextEvents",
-      "city": "Waipahu",
-      "metroId": "honolulu",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "kcc-farmers-market-2026-08-01-src",
-      "name": "KCC Farmers' Market",
-      "url": "https://hfbf.org/farmers-markets/kcc/",
-      "sourceType": "officialTextEvents",
-      "city": "Honolulu",
-      "metroId": "honolulu",
-      "category": "Market",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://hfbf.org/farmers-markets/kcc/",
+          "url": "https://www.bishopmuseum.org/events/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -738,111 +523,6 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "duke-kahanamoku-oceanfest-opening-ceremony-2026-08-14-src",
-      "name": "Duke Kahanamoku OceanFest: Opening Ceremony",
-      "url": "https://dukekahanamokuoceanfest.com/events/",
-      "sourceType": "officialTextEvents",
-      "city": "Honolulu",
-      "metroId": "honolulu",
-      "category": "Outdoors",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://dukekahanamokuoceanfest.com/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "aiea-soto-mission-bon-dance-2026-08-07-src",
-      "name": "Bon Dance at Soto Mission of Aiea",
-      "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
-      "sourceType": "officialTextEvents",
-      "city": "Aiea",
-      "metroId": "honolulu",
-      "category": "Festival",
-      "status": "fetch-error",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
-        }
-      ],
-      "reason": "This operation was aborted",
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "aiea-soto-mission-bon-dance-2026-08-08-src",
-      "name": "Bon Dance at Soto Mission of Aiea",
-      "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
-      "sourceType": "officialTextEvents",
-      "city": "Aiea",
-      "metroId": "honolulu",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "pearl-city-hongwanji-bon-dance-2026-08-08-src",
-      "name": "Bon Dance at Pearl City Hongwanji Mission",
-      "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
-      "sourceType": "officialTextEvents",
-      "city": "Pearl City",
-      "metroId": "honolulu",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.jcchawaii.org/resources/2026-obon-schedule",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -855,22 +535,21 @@
       "city": "Honolulu",
       "metroId": "honolulu",
       "category": "Music",
-      "status": "ok",
-      "liveEvents": 1,
+      "status": "http-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://jointherepublik.com/upcoming-events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
+      "httpStatus": 403,
+      "contentType": "text/html",
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -906,21 +585,24 @@
       "city": "Honolulu",
       "metroId": "honolulu",
       "category": "Theater",
-      "status": "fetch-error",
-      "liveEvents": 0,
+      "status": "ok",
+      "liveEvents": 28,
       "fallbackEvents": 0,
-      "eventCount": 17,
+      "eventCount": 28,
       "fetches": [
         {
           "url": "https://blaisdellcenter.com/events/",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "application/json; source=tribe-events; events=199; pages=4"
         }
       ],
-      "reason": "This operation was aborted",
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 17,
-      "recoveryMode": "last-known-good"
+      "httpStatus": 200,
+      "contentType": "application/json; source=tribe-events; events=199; pages=4",
+      "rejectedLiveEvents": 147,
+      "extractedEvents": 175,
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "improv-hawaii",
@@ -931,21 +613,21 @@
       "metroId": "honolulu",
       "category": "Comedy",
       "status": "ok",
-      "liveEvents": 4,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://improvhi.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=5; pages=1"
+          "contentType": "application/json; source=tribe-events; events=4; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=5; pages=1",
+      "contentType": "application/json; source=tribe-events; events=4; pages=1",
       "rejectedLiveEvents": 1,
-      "extractedEvents": 5,
+      "extractedEvents": 4,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     }

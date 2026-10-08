@@ -1,34 +1,9 @@
 {
   "schemaVersion": 1,
   "metroId": "boston",
-  "generatedAt": "2026-10-03T06:05:14.403Z",
-  "alertCount": 13,
+  "generatedAt": "2026-10-08T04:50:45.168Z",
+  "alertCount": 4,
   "alerts": [
-    {
-      "severity": "warning",
-      "metroId": "boston",
-      "sourceId": "boston-zoo-family",
-      "sourceName": "Zoo New England Program Calendar",
-      "sourceType": "eventList",
-      "url": "https://www.zoonewengland.org/discover/program-calendar/",
-      "status": "ok-template-fallback",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": "recurring-template",
-      "recoveredEvents": 4,
-      "liveEvents": 0,
-      "fallbackEvents": 4,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
-      "fetches": [
-        {
-          "url": "https://www.zoonewengland.org/discover/program-calendar/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
     {
       "severity": "warning",
       "metroId": "boston",
@@ -44,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
+      "fetchedAt": "2026-10-08T04:50:45.168Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -69,213 +44,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
+      "fetchedAt": "2026-10-08T04:50:45.168Z",
       "fetches": [
         {
           "url": "https://www.easternstatesexposition.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "boston",
-      "sourceId": "salem-heritage-days-2026",
-      "sourceName": "Salem 400+ Heritage Days Parade 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.salemma.gov/CivicAlerts.aspx?AID=235",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
-      "fetches": [
-        {
-          "url": "https://www.salemma.gov/CivicAlerts.aspx?AID=235",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "boston",
-      "sourceId": "cambridge-carnival-2026",
-      "sourceName": "Cambridge Carnival 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.cambridgecarnival.org/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
-      "fetches": [
-        {
-          "url": "https://www.cambridgecarnival.org/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "boston",
-      "sourceId": "boston-race-amity-festival-2026-08-01-src",
-      "sourceName": "Boston Race Amity Arts & Music Festival",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.rosekennedygreenway.org/events/boston-race-amity-arts-music-festival/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
-      "fetches": [
-        {
-          "url": "https://www.rosekennedygreenway.org/events/boston-race-amity-arts-music-festival/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "boston",
-      "sourceId": "boston-landmarks-four-seasons-bethel-ame-2026-07-31-src",
-      "sourceName": "Boston Landmarks Orchestra: Four Seasons Recomposed & Mozart's 40th",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.landmarksorchestra.org/press-media/summer-2026-season/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
-      "fetches": [
-        {
-          "url": "https://www.landmarksorchestra.org/press-media/summer-2026-season/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "boston",
-      "sourceId": "free-shakespeare-on-the-common-midsummer-2026-07-31-src",
-      "sourceName": "Free Shakespeare on the Common: A Midsummer Night's Dream",
-      "sourceType": "officialTextEvents",
-      "url": "https://commshakes.org/production/dream26/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
-      "fetches": [
-        {
-          "url": "https://commshakes.org/production/dream26/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "boston",
-      "sourceId": "saint-agrippina-di-mineo-feast-2026-07-31-src",
-      "sourceName": "112th Saint Agrippina di Mineo Feast (Friday)",
-      "sourceType": "officialTextEvents",
-      "url": "https://saintagrippinaboston.com/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
-      "fetches": [
-        {
-          "url": "https://saintagrippinaboston.com/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "boston",
-      "sourceId": "charles-river-jazz-festival-2026-08-08-src",
-      "sourceName": "2026 Charles River Jazz Festival",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.bostonjazzfoundation.org/crjf",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
-      "fetches": [
-        {
-          "url": "https://www.bostonjazzfoundation.org/crjf",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "boston",
-      "sourceId": "boston-arts-festival-2026-09-12-src",
-      "sourceName": "2026 Boston Arts Festival",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.bostonartsfestival.org/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
-      "fetches": [
-        {
-          "url": "https://www.bostonartsfestival.org/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
         }
       ]
     },
@@ -294,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
+      "fetchedAt": "2026-10-08T04:50:45.168Z",
       "fetches": [
         {
           "url": "https://www.crossroadspresents.com/paradise-rock-club",
@@ -319,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
+      "fetchedAt": "2026-10-08T04:50:45.168Z",
       "fetches": [
         {
           "url": "https://www.nickscomedystop.com/calendar",

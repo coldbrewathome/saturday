@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "chicago",
-  "generatedAt": "2026-10-03T05:59:11.362Z",
+  "generatedAt": "2026-10-08T04:31:12.447Z",
   "registryPath": "data/event-sources-chicago.json",
   "outputPath": "public/data/chicago/events.json",
-  "eventCount": 1974,
-  "adultsEventCount": 109,
-  "sourceCount": 33,
-  "liveEventCount": 1881,
-  "lastKnownGoodEventCount": 146,
+  "eventCount": 1943,
+  "adultsEventCount": 101,
+  "sourceCount": 26,
+  "liveEventCount": 1884,
+  "lastKnownGoodEventCount": 111,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 17,
+  "operatorAlertCount": 10,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T05:59:11.362Z",
+      "fetchedAt": "2026-10-08T04:31:12.447Z",
       "fetches": [
         {
           "url": "https://www.lcfairgrounds.com/events",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T05:59:11.362Z",
+      "fetchedAt": "2026-10-08T04:31:12.447Z",
       "fetches": [
         {
           "url": "https://oakpark.librarycalendar.com/events/month",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T05:59:11.362Z",
+      "fetchedAt": "2026-10-08T04:31:12.447Z",
       "fetches": [
         {
           "url": "https://napervillepl.librarycalendar.com/events/month",
@@ -99,167 +99,17 @@
       "issueType": "fetch-failed",
       "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 146,
+      "recoveredEvents": 111,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 146,
-      "fetchedAt": "2026-10-03T05:59:11.362Z",
+      "lastKnownGoodEvents": 111,
+      "fetchedAt": "2026-10-08T04:31:12.447Z",
       "fetches": [
         {
           "url": "https://fpdcc.com/events/",
           "status": "http-error",
           "httpStatus": 403,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "chicago",
-      "sourceId": "chicago-urban-league-back-to-school-festival-2026-08-01-src",
-      "sourceName": "Chicago Urban League Back To School Festival",
-      "sourceType": "officialTextEvents",
-      "url": "https://chiul.org/event/back-to-school-festival/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T05:59:11.362Z",
-      "fetches": [
-        {
-          "url": "https://chiul.org/event/back-to-school-festival/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "chicago",
-      "sourceId": "destination-asia-festival-morton-arboretum-2026-07-31-src",
-      "sourceName": "Destination Asia Festival: Toro Nagashi Lantern Evening",
-      "sourceType": "officialTextEvents",
-      "url": "https://mortonarb.org/explore/activities/events/destination-asia-festival/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T05:59:11.362Z",
-      "fetches": [
-        {
-          "url": "https://mortonarb.org/explore/activities/events/destination-asia-festival/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "chicago",
-      "sourceId": "big-trucks-barrington-park-district-2026-08-01-src",
-      "sourceName": "Big Trucks at Ron Beese Park",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.barringtonparkdistrict.org/events-trips/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T05:59:11.362Z",
-      "fetches": [
-        {
-          "url": "https://www.barringtonparkdistrict.org/events-trips/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "chicago",
-      "sourceId": "fullersburg-days-2026-01-src",
-      "sourceName": "Fullersburg Days 2026 (Saturday)",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.thehinsdalean.com/story/2026/07/23/pulse/fill-up-on-fun-at-fullersburg-woods/11153.html",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T05:59:11.362Z",
-      "fetches": [
-        {
-          "url": "https://www.thehinsdalean.com/story/2026/07/23/pulse/fill-up-on-fun-at-fullersburg-woods/11153.html",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "chicago",
-      "sourceId": "fullersburg-days-2026-02-src",
-      "sourceName": "Fullersburg Days 2026 (Sunday)",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.thehinsdalean.com/story/2026/07/23/pulse/fill-up-on-fun-at-fullersburg-woods/11153.html",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T05:59:11.362Z",
-      "fetches": [
-        {
-          "url": "https://www.thehinsdalean.com/story/2026/07/23/pulse/fill-up-on-fun-at-fullersburg-woods/11153.html",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "chicago",
-      "sourceId": "bud-billiken-parade-2026-08-08-src",
-      "sourceName": "97th Annual Bud Billiken Parade & Back-to-School Festival",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.givesignup.org/TicketEvent/bbpbacktoschoolfestival2026",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T05:59:11.362Z",
-      "fetches": [
-        {
-          "url": "https://www.givesignup.org/TicketEvent/bbpbacktoschoolfestival2026",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -278,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T05:59:11.362Z",
+      "fetchedAt": "2026-10-08T04:31:12.447Z",
       "fetches": [
         {
           "url": "https://metrochicago.com/shows/",
@@ -303,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T05:59:11.362Z",
+      "fetchedAt": "2026-10-08T04:31:12.447Z",
       "fetches": [
         {
           "url": "https://www.emptybottle.com/events/",
@@ -328,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T05:59:11.362Z",
+      "fetchedAt": "2026-10-08T04:31:12.447Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
@@ -353,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T05:59:11.362Z",
+      "fetchedAt": "2026-10-08T04:31:12.447Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
@@ -378,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T05:59:11.362Z",
+      "fetchedAt": "2026-10-08T04:31:12.447Z",
       "fetches": [
         {
           "url": "https://chicago.zanies.com/events",
@@ -389,37 +239,12 @@
       ]
     },
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "chicago",
       "sourceId": "hideout-chicago",
       "sourceName": "The Hideout",
       "sourceType": "html",
       "url": "https://www.hideoutchicago.com/events",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T05:59:11.362Z",
-      "fetches": [
-        {
-          "url": "https://www.hideoutchicago.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "chicago",
-      "sourceId": "chicago-jazz-festival-2026",
-      "sourceName": "Chicago Jazz Festival 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.chicagojazz.com/post/city-of-chicago-announces-2026-chicago-jazz-festival-lineup-sept-3-6-featuring-dee-dee-bridgewater",
       "status": "ok",
       "issueType": "zero-in-window",
       "reason": "Source returned events, but none were in the planning window.",
@@ -428,13 +253,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T05:59:11.362Z",
+      "fetchedAt": "2026-10-08T04:31:12.447Z",
       "fetches": [
         {
-          "url": "https://www.chicagojazz.com/post/city-of-chicago-announces-2026-chicago-jazz-festival-lineup-sept-3-6-featuring-dee-dee-bridgewater",
+          "url": "https://www.hideoutchicago.com/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     }
@@ -463,9 +288,9 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 18,
+      "liveEvents": 20,
       "fallbackEvents": 0,
-      "eventCount": 18,
+      "eventCount": 20,
       "fetches": [
         {
           "url": "https://chipublib.bibliocommons.com/v2/events?audiences=53f250153860d10000000010",
@@ -477,7 +302,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 18,
+      "extractedEvents": 20,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -553,9 +378,9 @@
       "metroId": "chicago",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 38,
+      "liveEvents": 39,
       "fallbackEvents": 0,
-      "eventCount": 38,
+      "eventCount": 39,
       "fetches": [
         {
           "url": "https://www.fieldmuseum.org/our-events",
@@ -567,7 +392,7 @@
       "httpStatus": 200,
       "contentType": "application/json; charset=utf-8",
       "rejectedLiveEvents": 53,
-      "extractedEvents": 91,
+      "extractedEvents": 92,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -588,13 +413,13 @@
           "url": "https://www.lpzoo.org/calendar-events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=175; pages=4"
+          "contentType": "application/json; source=tribe-events; events=173; pages=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=175; pages=4",
-      "rejectedLiveEvents": 152,
-      "extractedEvents": 172,
+      "contentType": "application/json; source=tribe-events; events=173; pages=4",
+      "rejectedLiveEvents": 150,
+      "extractedEvents": 170,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -647,8 +472,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 2,
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -688,9 +513,9 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 4,
+      "liveEvents": 6,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 6,
       "fetches": [
         {
           "url": "https://evanstonlibrary.bibliocommons.com/v2/events",
@@ -702,7 +527,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 4,
+      "extractedEvents": 6,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -715,21 +540,21 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 245,
+      "liveEvents": 244,
       "fallbackEvents": 0,
-      "eventCount": 245,
+      "eventCount": 244,
       "fetches": [
         {
           "url": "https://schaumburg.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=471; locations=4"
+          "contentType": "application/json; source=communico-events; events=456; locations=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=471; locations=4",
-      "rejectedLiveEvents": 7,
-      "extractedEvents": 252,
+      "contentType": "application/json; source=communico-events; events=456; locations=4",
+      "rejectedLiveEvents": 6,
+      "extractedEvents": 250,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -742,21 +567,21 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 141,
+      "liveEvents": 147,
       "fallbackEvents": 0,
-      "eventCount": 141,
+      "eventCount": 147,
       "fetches": [
         {
           "url": "https://downersgrove.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=212; locations=1"
+          "contentType": "application/json; source=communico-events; events=215; locations=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=212; locations=1",
-      "rejectedLiveEvents": 3,
-      "extractedEvents": 144,
+      "contentType": "application/json; source=communico-events; events=215; locations=1",
+      "rejectedLiveEvents": 2,
+      "extractedEvents": 149,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -777,13 +602,13 @@
           "url": "https://egvpl.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=310; locations=3"
+          "contentType": "application/json; source=communico-events; events=314; locations=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=310; locations=3",
-      "rejectedLiveEvents": 7,
-      "extractedEvents": 242,
+      "contentType": "application/json; source=communico-events; events=314; locations=3",
+      "rejectedLiveEvents": 5,
+      "extractedEvents": 240,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -852,7 +677,7 @@
       "status": "http-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 146,
+      "eventCount": 111,
       "fetches": [
         {
           "url": "https://fpdcc.com/events/",
@@ -864,170 +689,8 @@
       "httpStatus": 403,
       "contentType": "text/html; charset=UTF-8",
       "extractedEvents": 0,
-      "lastKnownGoodEvents": 146,
+      "lastKnownGoodEvents": 111,
       "recoveryMode": "last-known-good"
-    },
-    {
-      "id": "chicago-urban-league-back-to-school-festival-2026-08-01-src",
-      "name": "Chicago Urban League Back To School Festival",
-      "url": "https://chiul.org/event/back-to-school-festival/",
-      "sourceType": "officialTextEvents",
-      "city": "Chicago",
-      "metroId": "chicago",
-      "category": "Community",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://chiul.org/event/back-to-school-festival/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "destination-asia-festival-morton-arboretum-2026-07-31-src",
-      "name": "Destination Asia Festival: Toro Nagashi Lantern Evening",
-      "url": "https://mortonarb.org/explore/activities/events/destination-asia-festival/",
-      "sourceType": "officialTextEvents",
-      "city": "Lisle",
-      "metroId": "chicago",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://mortonarb.org/explore/activities/events/destination-asia-festival/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 3,
-      "extractedEvents": 3,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "big-trucks-barrington-park-district-2026-08-01-src",
-      "name": "Big Trucks at Ron Beese Park",
-      "url": "https://www.barringtonparkdistrict.org/events-trips/",
-      "sourceType": "officialTextEvents",
-      "city": "Barrington",
-      "metroId": "chicago",
-      "category": "Community",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.barringtonparkdistrict.org/events-trips/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "fullersburg-days-2026-01-src",
-      "name": "Fullersburg Days 2026 (Saturday)",
-      "url": "https://www.thehinsdalean.com/story/2026/07/23/pulse/fill-up-on-fun-at-fullersburg-woods/11153.html",
-      "sourceType": "officialTextEvents",
-      "city": "Oak Brook",
-      "metroId": "chicago",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.thehinsdalean.com/story/2026/07/23/pulse/fill-up-on-fun-at-fullersburg-woods/11153.html",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "fullersburg-days-2026-02-src",
-      "name": "Fullersburg Days 2026 (Sunday)",
-      "url": "https://www.thehinsdalean.com/story/2026/07/23/pulse/fill-up-on-fun-at-fullersburg-woods/11153.html",
-      "sourceType": "officialTextEvents",
-      "city": "Oak Brook",
-      "metroId": "chicago",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.thehinsdalean.com/story/2026/07/23/pulse/fill-up-on-fun-at-fullersburg-woods/11153.html",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "bud-billiken-parade-2026-08-08-src",
-      "name": "97th Annual Bud Billiken Parade & Back-to-School Festival",
-      "url": "https://www.givesignup.org/TicketEvent/bbpbacktoschoolfestival2026",
-      "sourceType": "officialTextEvents",
-      "city": "Chicago",
-      "metroId": "chicago",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.givesignup.org/TicketEvent/bbpbacktoschoolfestival2026",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
     },
     {
       "id": "lincoln-park-zoo-spooky-zoo-2026",
@@ -1065,9 +728,9 @@
       "metroId": "chicago",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 23,
+      "liveEvents": 18,
       "fallbackEvents": 0,
-      "eventCount": 23,
+      "eventCount": 18,
       "fetches": [
         {
           "url": "https://www.brookfieldzoo.org/events/boo-at-the-zoo",
@@ -1079,7 +742,7 @@
       "httpStatus": 200,
       "contentType": "text/html;charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 23,
+      "extractedEvents": 18,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1196,9 +859,9 @@
       "metroId": "chicago",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 23,
+      "liveEvents": 24,
       "fallbackEvents": 0,
-      "eventCount": 23,
+      "eventCount": 24,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&apikey=Mj9g4ZY7tXTmixNb7zMOAP85WPGAfFL8&venueId=rZ7HnEZ17aJq7&venueId=rZ7HnEZ17aJq0&venueId=KovZpZAktlaA",
@@ -1209,7 +872,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=utf-8",
-      "rejectedLiveEvents": 46,
+      "rejectedLiveEvents": 45,
       "extractedEvents": 69,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -1290,8 +953,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1304,9 +967,9 @@
       "metroId": "chicago",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 27,
+      "liveEvents": 24,
       "fallbackEvents": 0,
-      "eventCount": 27,
+      "eventCount": 24,
       "fetches": [
         {
           "url": "https://www.chicagoculturalalliance.org/events/",
@@ -1317,35 +980,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 171,
+      "rejectedLiveEvents": 174,
       "extractedEvents": 198,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "chicago-jazz-festival-2026",
-      "name": "Chicago Jazz Festival 2026",
-      "url": "https://www.chicagojazz.com/post/city-of-chicago-announces-2026-chicago-jazz-festival-lineup-sept-3-6-featuring-dee-dee-bridgewater",
-      "sourceType": "officialTextEvents",
-      "city": "Chicago",
-      "metroId": "chicago",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.chicagojazz.com/post/city-of-chicago-announces-2026-chicago-jazz-festival-lineup-sept-3-6-featuring-dee-dee-bridgewater",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     }

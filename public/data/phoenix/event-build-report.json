@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "phoenix",
-  "generatedAt": "2026-10-03T06:04:55.955Z",
+  "generatedAt": "2026-10-08T04:36:00.807Z",
   "registryPath": "data/event-sources-phoenix.json",
   "outputPath": "public/data/phoenix/events.json",
-  "eventCount": 589,
-  "adultsEventCount": 77,
-  "sourceCount": 17,
-  "liveEventCount": 618,
+  "eventCount": 591,
+  "adultsEventCount": 84,
+  "sourceCount": 15,
+  "liveEventCount": 617,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 7,
+  "operatorAlertCount": 6,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,62 +28,12 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:04:55.955Z",
+      "fetchedAt": "2026-10-08T04:36:00.807Z",
       "fetches": [
         {
           "url": "https://azstatefair.com/",
           "status": "http-error",
           "httpStatus": 403,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "phoenix",
-      "sourceId": "hot-wheels-monster-trucks-live-glendale-2026-08-08-src",
-      "sourceName": "Hot Wheels Monster Trucks Live Glow-N-Fire",
-      "sourceType": "officialTextEvents",
-      "url": "https://hotwheelsmonstertruckslive.com/event/glendale-az-2026/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:04:55.955Z",
-      "fetches": [
-        {
-          "url": "https://hotwheelsmonstertruckslive.com/event/glendale-az-2026/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "phoenix",
-      "sourceId": "xfinity-us-gymnastics-championships-2026-08-08-src",
-      "sourceName": "Xfinity U.S. Gymnastics Championships",
-      "sourceType": "officialTextEvents",
-      "url": "https://xfinitychampionships.com/info/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:04:55.955Z",
-      "fetches": [
-        {
-          "url": "https://xfinitychampionships.com/info/",
-          "status": "ok",
-          "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ]
@@ -103,13 +53,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:04:55.955Z",
+      "fetchedAt": "2026-10-08T04:36:00.807Z",
       "fetches": [
         {
           "url": "https://www.crescentphx.com/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "phoenix",
+      "sourceId": "rebel-lounge-phx",
+      "sourceName": "The Rebel Lounge",
+      "sourceType": "html",
+      "url": "https://www.therebellounge.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-08T04:36:00.807Z",
+      "fetches": [
+        {
+          "url": "https://www.therebellounge.com/events",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
         }
       ]
     },
@@ -128,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:04:55.955Z",
+      "fetchedAt": "2026-10-08T04:36:00.807Z",
       "fetches": [
         {
           "url": "https://www.marqueetheatreaz.com/calendar/",
@@ -153,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:04:55.955Z",
+      "fetchedAt": "2026-10-08T04:36:00.807Z",
       "fetches": [
         {
           "url": "https://phoenix.standuplive.com/events",
@@ -178,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:04:55.955Z",
+      "fetchedAt": "2026-10-08T04:36:00.807Z",
       "fetches": [
         {
           "url": "https://houseofcomedy.net/scottsdale",
@@ -212,9 +187,9 @@
       "metroId": "phoenix",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 238,
+      "liveEvents": 262,
       "fallbackEvents": 0,
-      "eventCount": 238,
+      "eventCount": 262,
       "fetches": [
         {
           "url": "https://calendar.phoenixpubliclibrary.org/calendar/",
@@ -226,7 +201,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 238,
+      "extractedEvents": 262,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -239,9 +214,9 @@
       "metroId": "phoenix",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 16,
+      "liveEvents": 14,
       "fallbackEvents": 0,
-      "eventCount": 16,
+      "eventCount": 14,
       "fetches": [
         {
           "url": "https://www.phoenix.gov/calendar/parks-events.html",
@@ -252,7 +227,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=phoenix-city-calendar; events=20",
-      "rejectedLiveEvents": 4,
+      "rejectedLiveEvents": 6,
       "extractedEvents": 20,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -266,21 +241,21 @@
       "metroId": "phoenix",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 131,
+      "liveEvents": 117,
       "fallbackEvents": 0,
-      "eventCount": 131,
+      "eventCount": 117,
       "fetches": [
         {
           "url": "https://childrensmuseumofphoenix.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=196; pages=4"
+          "contentType": "application/json; source=tribe-events; events=182; pages=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=196; pages=4",
-      "rejectedLiveEvents": 64,
-      "extractedEvents": 195,
+      "contentType": "application/json; source=tribe-events; events=182; pages=4",
+      "rejectedLiveEvents": 61,
+      "extractedEvents": 178,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -293,9 +268,9 @@
       "metroId": "phoenix",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 10,
+      "liveEvents": 9,
       "fallbackEvents": 0,
-      "eventCount": 10,
+      "eventCount": 9,
       "fetches": [
         {
           "url": "https://www.phoenixzoo.org/events/",
@@ -306,7 +281,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 2,
+      "rejectedLiveEvents": 3,
       "extractedEvents": 12,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -373,9 +348,9 @@
       "metroId": "phoenix",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 195,
+      "liveEvents": 188,
       "fallbackEvents": 0,
-      "eventCount": 195,
+      "eventCount": 188,
       "fetches": [
         {
           "url": "https://dbg.org/events/",
@@ -387,61 +362,7 @@
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 195,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "hot-wheels-monster-trucks-live-glendale-2026-08-08-src",
-      "name": "Hot Wheels Monster Trucks Live Glow-N-Fire",
-      "url": "https://hotwheelsmonstertruckslive.com/event/glendale-az-2026/",
-      "sourceType": "officialTextEvents",
-      "city": "Glendale",
-      "metroId": "phoenix",
-      "category": "Ticketed",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://hotwheelsmonstertruckslive.com/event/glendale-az-2026/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "xfinity-us-gymnastics-championships-2026-08-08-src",
-      "name": "Xfinity U.S. Gymnastics Championships",
-      "url": "https://xfinitychampionships.com/info/",
-      "sourceType": "officialTextEvents",
-      "city": "Phoenix",
-      "metroId": "phoenix",
-      "category": "Ticketed",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://xfinitychampionships.com/info/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 2,
-      "extractedEvents": 2,
+      "extractedEvents": 188,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -507,22 +428,21 @@
       "city": "Phoenix",
       "metroId": "phoenix",
       "category": "Music",
-      "status": "ok",
-      "liveEvents": 1,
+      "status": "http-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.therebellounge.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
+      "httpStatus": 403,
+      "contentType": "text/html",
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

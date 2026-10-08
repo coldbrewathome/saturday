@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "phoenix",
-  "generatedAt": "2026-10-03T06:04:55.955Z",
-  "alertCount": 7,
+  "generatedAt": "2026-10-08T04:36:00.807Z",
+  "alertCount": 6,
   "alerts": [
     {
       "severity": "critical",
@@ -19,62 +19,12 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:04:55.955Z",
+      "fetchedAt": "2026-10-08T04:36:00.807Z",
       "fetches": [
         {
           "url": "https://azstatefair.com/",
           "status": "http-error",
           "httpStatus": 403,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "phoenix",
-      "sourceId": "hot-wheels-monster-trucks-live-glendale-2026-08-08-src",
-      "sourceName": "Hot Wheels Monster Trucks Live Glow-N-Fire",
-      "sourceType": "officialTextEvents",
-      "url": "https://hotwheelsmonstertruckslive.com/event/glendale-az-2026/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:04:55.955Z",
-      "fetches": [
-        {
-          "url": "https://hotwheelsmonstertruckslive.com/event/glendale-az-2026/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "phoenix",
-      "sourceId": "xfinity-us-gymnastics-championships-2026-08-08-src",
-      "sourceName": "Xfinity U.S. Gymnastics Championships",
-      "sourceType": "officialTextEvents",
-      "url": "https://xfinitychampionships.com/info/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:04:55.955Z",
-      "fetches": [
-        {
-          "url": "https://xfinitychampionships.com/info/",
-          "status": "ok",
-          "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ]
@@ -94,13 +44,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:04:55.955Z",
+      "fetchedAt": "2026-10-08T04:36:00.807Z",
       "fetches": [
         {
           "url": "https://www.crescentphx.com/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "phoenix",
+      "sourceId": "rebel-lounge-phx",
+      "sourceName": "The Rebel Lounge",
+      "sourceType": "html",
+      "url": "https://www.therebellounge.com/events",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-08T04:36:00.807Z",
+      "fetches": [
+        {
+          "url": "https://www.therebellounge.com/events",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
         }
       ]
     },
@@ -119,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:04:55.955Z",
+      "fetchedAt": "2026-10-08T04:36:00.807Z",
       "fetches": [
         {
           "url": "https://www.marqueetheatreaz.com/calendar/",
@@ -144,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:04:55.955Z",
+      "fetchedAt": "2026-10-08T04:36:00.807Z",
       "fetches": [
         {
           "url": "https://phoenix.standuplive.com/events",
@@ -169,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:04:55.955Z",
+      "fetchedAt": "2026-10-08T04:36:00.807Z",
       "fetches": [
         {
           "url": "https://houseofcomedy.net/scottsdale",

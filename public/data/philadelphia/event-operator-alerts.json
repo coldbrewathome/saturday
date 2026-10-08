@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "philadelphia",
-  "generatedAt": "2026-10-03T06:03:37.069Z",
-  "alertCount": 13,
+  "generatedAt": "2026-10-08T04:51:20.024Z",
+  "alertCount": 8,
   "alerts": [
     {
       "severity": "warning",
@@ -19,10 +19,35 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:03:37.069Z",
+      "fetchedAt": "2026-10-08T04:51:20.024Z",
       "fetches": [
         {
           "url": "https://freelibraryfoundation.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "philadelphia-parks-family",
+      "sourceName": "Philadelphia Parks and Recreation Events",
+      "sourceType": "eventList",
+      "url": "https://www.phila.gov/departments/philadelphia-parks-recreation/#calendar",
+      "status": "ok-template-fallback",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": "recurring-template",
+      "recoveredEvents": 8,
+      "liveEvents": 0,
+      "fallbackEvents": 8,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-08T04:51:20.024Z",
+      "fetches": [
+        {
+          "url": "https://www.phila.gov/departments/philadelphia-parks-recreation/#calendar",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -44,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:03:37.069Z",
+      "fetchedAt": "2026-10-08T04:51:20.024Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -69,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:03:37.069Z",
+      "fetchedAt": "2026-10-08T04:51:20.024Z",
       "fetches": [
         {
           "url": "https://middletowngrangefair.org/",
@@ -94,88 +119,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-10-03T06:03:37.069Z",
+      "fetchedAt": "2026-10-08T04:51:20.024Z",
       "fetches": [
         {
           "url": "https://ansp.org/programs-and-events/events/",
           "status": "http-error",
           "httpStatus": 301,
           "contentType": ""
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "philadelphia",
-      "sourceId": "peach-festival-peddlers-village-2026-08-01-src",
-      "sourceName": "Peach Festival at Peddler's Village (Saturday)",
-      "sourceType": "officialTextEvents",
-      "url": "https://peddlersvillage.com/event/peach-festival/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:03:37.069Z",
-      "fetches": [
-        {
-          "url": "https://peddlersvillage.com/event/peach-festival/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "philadelphia",
-      "sourceId": "second-street-festival-northern-liberties-2026-08-02-src",
-      "sourceName": "16th Annual 2nd Street Festival",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.explorenorthernliberties.org/event/16th-annual-2nd-street-festival/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:03:37.069Z",
-      "fetches": [
-        {
-          "url": "https://www.explorenorthernliberties.org/event/16th-annual-2nd-street-festival/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "philadelphia",
-      "sourceId": "philadelphia-folk-festival-2026-08-15-src",
-      "sourceName": "Philadelphia Folk Festival",
-      "sourceType": "officialTextEvents",
-      "url": "https://folkfest.org/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:03:37.069Z",
-      "fetches": [
-        {
-          "url": "https://folkfest.org/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -194,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:03:37.069Z",
+      "fetchedAt": "2026-10-08T04:51:20.024Z",
       "fetches": [
         {
           "url": "https://www.utphilly.com/events",
@@ -219,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:03:37.069Z",
+      "fetchedAt": "2026-10-08T04:51:20.024Z",
       "fetches": [
         {
           "url": "https://www.johnnybrendas.com/events",
@@ -244,88 +194,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:03:37.069Z",
+      "fetchedAt": "2026-10-08T04:51:20.024Z",
       "fetches": [
         {
           "url": "https://philadelphia.heliumcomedy.com/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "philadelphia",
-      "sourceId": "xponential-music-festival-2026",
-      "sourceName": "XPoNential Music Festival 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://xpn.org/xpnfest/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:03:37.069Z",
-      "fetches": [
-        {
-          "url": "https://xpn.org/xpnfest/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "philadelphia",
-      "sourceId": "philadelphia-fringe-festival-2026",
-      "sourceName": "Philadelphia Fringe Festival 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://phillyfringe.org/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:03:37.069Z",
-      "fetches": [
-        {
-          "url": "https://phillyfringe.org/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "philadelphia",
-      "sourceId": "philadelphia-folk-festival-2026",
-      "sourceName": "Philadelphia Folk Festival 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://folkfest.org/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:03:37.069Z",
-      "fetches": [
-        {
-          "url": "https://folkfest.org/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
         }
       ]
     }

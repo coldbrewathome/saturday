@@ -1,43 +1,18 @@
 {
   "schemaVersion": 1,
   "metroId": "boston",
-  "generatedAt": "2026-10-03T06:05:14.403Z",
+  "generatedAt": "2026-10-08T04:50:45.168Z",
   "registryPath": "data/event-sources-boston.json",
   "outputPath": "public/data/boston/events.json",
-  "eventCount": 516,
-  "adultsEventCount": 84,
-  "sourceCount": 27,
-  "liveEventCount": 582,
+  "eventCount": 519,
+  "adultsEventCount": 91,
+  "sourceCount": 21,
+  "liveEventCount": 593,
   "lastKnownGoodEventCount": 0,
-  "fallbackEventCount": 4,
-  "operatorAlertCount": 13,
+  "fallbackEventCount": 0,
+  "operatorAlertCount": 4,
   "errors": [],
   "operatorAlerts": [
-    {
-      "severity": "warning",
-      "metroId": "boston",
-      "sourceId": "boston-zoo-family",
-      "sourceName": "Zoo New England Program Calendar",
-      "sourceType": "eventList",
-      "url": "https://www.zoonewengland.org/discover/program-calendar/",
-      "status": "ok-template-fallback",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": "recurring-template",
-      "recoveredEvents": 4,
-      "liveEvents": 0,
-      "fallbackEvents": 4,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
-      "fetches": [
-        {
-          "url": "https://www.zoonewengland.org/discover/program-calendar/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
     {
       "severity": "warning",
       "metroId": "boston",
@@ -53,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
+      "fetchedAt": "2026-10-08T04:50:45.168Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -78,213 +53,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
+      "fetchedAt": "2026-10-08T04:50:45.168Z",
       "fetches": [
         {
           "url": "https://www.easternstatesexposition.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "boston",
-      "sourceId": "salem-heritage-days-2026",
-      "sourceName": "Salem 400+ Heritage Days Parade 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.salemma.gov/CivicAlerts.aspx?AID=235",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
-      "fetches": [
-        {
-          "url": "https://www.salemma.gov/CivicAlerts.aspx?AID=235",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "boston",
-      "sourceId": "cambridge-carnival-2026",
-      "sourceName": "Cambridge Carnival 2026",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.cambridgecarnival.org/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
-      "fetches": [
-        {
-          "url": "https://www.cambridgecarnival.org/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "boston",
-      "sourceId": "boston-race-amity-festival-2026-08-01-src",
-      "sourceName": "Boston Race Amity Arts & Music Festival",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.rosekennedygreenway.org/events/boston-race-amity-arts-music-festival/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
-      "fetches": [
-        {
-          "url": "https://www.rosekennedygreenway.org/events/boston-race-amity-arts-music-festival/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "boston",
-      "sourceId": "boston-landmarks-four-seasons-bethel-ame-2026-07-31-src",
-      "sourceName": "Boston Landmarks Orchestra: Four Seasons Recomposed & Mozart's 40th",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.landmarksorchestra.org/press-media/summer-2026-season/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
-      "fetches": [
-        {
-          "url": "https://www.landmarksorchestra.org/press-media/summer-2026-season/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "boston",
-      "sourceId": "free-shakespeare-on-the-common-midsummer-2026-07-31-src",
-      "sourceName": "Free Shakespeare on the Common: A Midsummer Night's Dream",
-      "sourceType": "officialTextEvents",
-      "url": "https://commshakes.org/production/dream26/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
-      "fetches": [
-        {
-          "url": "https://commshakes.org/production/dream26/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "boston",
-      "sourceId": "saint-agrippina-di-mineo-feast-2026-07-31-src",
-      "sourceName": "112th Saint Agrippina di Mineo Feast (Friday)",
-      "sourceType": "officialTextEvents",
-      "url": "https://saintagrippinaboston.com/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
-      "fetches": [
-        {
-          "url": "https://saintagrippinaboston.com/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "boston",
-      "sourceId": "charles-river-jazz-festival-2026-08-08-src",
-      "sourceName": "2026 Charles River Jazz Festival",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.bostonjazzfoundation.org/crjf",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
-      "fetches": [
-        {
-          "url": "https://www.bostonjazzfoundation.org/crjf",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "boston",
-      "sourceId": "boston-arts-festival-2026-09-12-src",
-      "sourceName": "2026 Boston Arts Festival",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.bostonartsfestival.org/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
-      "fetches": [
-        {
-          "url": "https://www.bostonartsfestival.org/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
         }
       ]
     },
@@ -303,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
+      "fetchedAt": "2026-10-08T04:50:45.168Z",
       "fetches": [
         {
           "url": "https://www.crossroadspresents.com/paradise-rock-club",
@@ -328,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:05:14.403Z",
+      "fetchedAt": "2026-10-08T04:50:45.168Z",
       "fetches": [
         {
           "url": "https://www.nickscomedystop.com/calendar",
@@ -363,9 +138,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 15,
+      "liveEvents": 13,
       "fallbackEvents": 0,
-      "eventCount": 15,
+      "eventCount": 13,
       "fetches": [
         {
           "url": "https://bpl.bibliocommons.com/v2/events?audiences=57f66113863736755f79b0ca",
@@ -377,7 +152,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 15,
+      "extractedEvents": 13,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -390,9 +165,9 @@
       "metroId": "boston",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 15,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 15,
       "fetches": [
         {
           "url": "https://www.boston.gov/rss/events",
@@ -403,7 +178,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/rss+xml; charset=utf-8",
-      "rejectedLiveEvents": 23,
+      "rejectedLiveEvents": 10,
       "extractedEvents": 25,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -417,9 +192,9 @@
       "metroId": "boston",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 113,
+      "liveEvents": 100,
       "fallbackEvents": 0,
-      "eventCount": 113,
+      "eventCount": 100,
       "fetches": [
         {
           "url": "https://bostonchildrensmuseum.org/Calendar/",
@@ -430,7 +205,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=eventon-events; events=123",
-      "rejectedLiveEvents": 9,
+      "rejectedLiveEvents": 22,
       "extractedEvents": 122,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -443,10 +218,10 @@
       "city": "Boston",
       "metroId": "boston",
       "category": "Zoo",
-      "status": "ok-template-fallback",
-      "liveEvents": 0,
-      "fallbackEvents": 4,
-      "eventCount": 4,
+      "status": "ok",
+      "liveEvents": 1,
+      "fallbackEvents": 0,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://www.zoonewengland.org/discover/program-calendar/",
@@ -457,10 +232,10 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 3,
+      "rejectedLiveEvents": 2,
       "extractedEvents": 3,
       "lastKnownGoodEvents": 0,
-      "recoveryMode": "recurring-template"
+      "recoveryMode": null
     },
     {
       "id": "ticketmaster-boston-family",
@@ -525,9 +300,9 @@
       "metroId": "boston",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 3,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 3,
       "fetches": [
         {
           "url": "https://marshfieldfair.org/events/",
@@ -539,7 +314,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 1,
-      "extractedEvents": 2,
+      "extractedEvents": 4,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -552,9 +327,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 104,
+      "liveEvents": 108,
       "fallbackEvents": 0,
-      "eventCount": 104,
+      "eventCount": 108,
       "fetches": [
         {
           "url": "https://cambridgepl.libcal.com/calendar/publicevents?cid=7052&cal=7052",
@@ -566,7 +341,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 104,
+      "extractedEvents": 108,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -579,9 +354,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 98,
+      "liveEvents": 100,
       "fallbackEvents": 0,
-      "eventCount": 98,
+      "eventCount": 100,
       "fetches": [
         {
           "url": "https://newtonfreelibrary.libcal.com/calendar?cid=3836&cal=3836",
@@ -593,7 +368,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 98,
+      "extractedEvents": 100,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -606,9 +381,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 136,
+      "liveEvents": 140,
       "fallbackEvents": 0,
-      "eventCount": 136,
+      "eventCount": 140,
       "fetches": [
         {
           "url": "https://brooklinelibrary.libcal.com/calendar/events?cid=20102&cal=20102",
@@ -619,8 +394,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 18,
-      "extractedEvents": 154,
+      "rejectedLiveEvents": 15,
+      "extractedEvents": 155,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -633,9 +408,9 @@
       "metroId": "boston",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 40,
+      "liveEvents": 34,
       "fallbackEvents": 0,
-      "eventCount": 40,
+      "eventCount": 34,
       "fetches": [
         {
           "url": "https://somervillepubliclibrary.assabetinteractive.com/calendar/",
@@ -646,116 +421,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 6,
-      "extractedEvents": 46,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "salem-heritage-days-2026",
-      "name": "Salem 400+ Heritage Days Parade 2026",
-      "url": "https://www.salemma.gov/CivicAlerts.aspx?AID=235",
-      "sourceType": "officialTextEvents",
-      "city": "Salem",
-      "metroId": "boston",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.salemma.gov/CivicAlerts.aspx?AID=235",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "cambridge-carnival-2026",
-      "name": "Cambridge Carnival 2026",
-      "url": "https://www.cambridgecarnival.org/",
-      "sourceType": "officialTextEvents",
-      "city": "Cambridge",
-      "metroId": "boston",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.cambridgecarnival.org/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html;charset=utf-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "boston-race-amity-festival-2026-08-01-src",
-      "name": "Boston Race Amity Arts & Music Festival",
-      "url": "https://www.rosekennedygreenway.org/events/boston-race-amity-arts-music-festival/",
-      "sourceType": "officialTextEvents",
-      "city": "Boston",
-      "metroId": "boston",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.rosekennedygreenway.org/events/boston-race-amity-arts-music-festival/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "boston-landmarks-four-seasons-bethel-ame-2026-07-31-src",
-      "name": "Boston Landmarks Orchestra: Four Seasons Recomposed & Mozart's 40th",
-      "url": "https://www.landmarksorchestra.org/press-media/summer-2026-season/",
-      "sourceType": "officialTextEvents",
-      "city": "Boston",
-      "metroId": "boston",
-      "category": "Live Music",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.landmarksorchestra.org/press-media/summer-2026-season/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 1,
+      "rejectedLiveEvents": 15,
+      "extractedEvents": 49,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -787,74 +454,20 @@
       "recoveryMode": null
     },
     {
-      "id": "free-shakespeare-on-the-common-midsummer-2026-07-31-src",
-      "name": "Free Shakespeare on the Common: A Midsummer Night's Dream",
-      "url": "https://commshakes.org/production/dream26/",
+      "id": "ride-and-chill-franklin-park-2026-10-11-src",
+      "name": "Ride and Chill at Franklin Park",
+      "url": "https://www.boston.gov/calendar/ride-and-chill-franklin-park",
       "sourceType": "officialTextEvents",
       "city": "Boston",
       "metroId": "boston",
-      "category": "Theater",
+      "category": "Community",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
-          "url": "https://commshakes.org/production/dream26/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 3,
-      "extractedEvents": 3,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "saint-agrippina-di-mineo-feast-2026-07-31-src",
-      "name": "112th Saint Agrippina di Mineo Feast (Friday)",
-      "url": "https://saintagrippinaboston.com/",
-      "sourceType": "officialTextEvents",
-      "city": "Boston",
-      "metroId": "boston",
-      "category": "Festival",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://saintagrippinaboston.com/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html"
-        }
-      ],
-      "httpStatus": 200,
-      "contentType": "text/html",
-      "rejectedLiveEvents": 3,
-      "extractedEvents": 3,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
-    },
-    {
-      "id": "charles-river-jazz-festival-2026-08-08-src",
-      "name": "2026 Charles River Jazz Festival",
-      "url": "https://www.bostonjazzfoundation.org/crjf",
-      "sourceType": "officialTextEvents",
-      "city": "Boston",
-      "metroId": "boston",
-      "category": "Live Music",
-      "status": "ok",
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "eventCount": 0,
-      "fetches": [
-        {
-          "url": "https://www.bostonjazzfoundation.org/crjf",
+          "url": "https://www.boston.gov/calendar/ride-and-chill-franklin-park",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -863,34 +476,34 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
     {
-      "id": "boston-arts-festival-2026-09-12-src",
-      "name": "2026 Boston Arts Festival",
-      "url": "https://www.bostonartsfestival.org/",
+      "id": "fall-o-ween-childrens-festival-2026-10-16-src",
+      "name": "Fall-o-Ween Children's Festival 2026",
+      "url": "https://content.boston.gov/calendar/fall-o-ween-childrens-festival-2026",
       "sourceType": "officialTextEvents",
       "city": "Boston",
       "metroId": "boston",
-      "category": "Festival",
+      "category": "Holiday",
       "status": "ok",
-      "liveEvents": 0,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 0,
+      "eventCount": 1,
       "fetches": [
         {
-          "url": "https://www.bostonartsfestival.org/",
+          "url": "https://content.boston.gov/calendar/fall-o-ween-childrens-festival-2026",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html;charset=utf-8"
+          "contentType": "text/html; charset=UTF-8"
         }
       ],
       "httpStatus": 200,
-      "contentType": "text/html;charset=utf-8",
-      "rejectedLiveEvents": 2,
-      "extractedEvents": 2,
+      "contentType": "text/html; charset=UTF-8",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -929,9 +542,9 @@
       "metroId": "boston",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 27,
+      "liveEvents": 28,
       "fallbackEvents": 0,
-      "eventCount": 27,
+      "eventCount": 28,
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json?size=200&sort=date,asc&venueId=KovZpapwne&apikey=oo1qd0wzLe7WJpm61ALQuUCTMXGK7U5z&source=ticketmaster",
@@ -942,8 +555,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=utf-8",
-      "rejectedLiveEvents": 39,
-      "extractedEvents": 66,
+      "rejectedLiveEvents": 40,
+      "extractedEvents": 68,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -956,9 +569,9 @@
       "metroId": "boston",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 9,
+      "liveEvents": 10,
       "fallbackEvents": 0,
-      "eventCount": 9,
+      "eventCount": 10,
       "fetches": [
         {
           "url": "https://www.sinclaircambridge.com/events/rss",
@@ -969,7 +582,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/rss+xml",
-      "rejectedLiveEvents": 1,
+      "rejectedLiveEvents": 0,
       "extractedEvents": 10,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -1009,9 +622,9 @@
       "metroId": "boston",
       "category": "Comedy",
       "status": "ok",
-      "liveEvents": 17,
+      "liveEvents": 18,
       "fallbackEvents": 0,
-      "eventCount": 17,
+      "eventCount": 18,
       "fetches": [
         {
           "url": "https://laughboston.com/",
@@ -1022,7 +635,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 3,
+      "rejectedLiveEvents": 2,
       "extractedEvents": 20,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -1036,21 +649,21 @@
       "metroId": "boston",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 17,
+      "liveEvents": 18,
       "fallbackEvents": 0,
-      "eventCount": 17,
+      "eventCount": 18,
       "fetches": [
         {
           "url": "https://www.harpoonbrewery.com/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=105; pages=3"
+          "contentType": "application/json; source=tribe-events; events=106; pages=3"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=105; pages=3",
+      "contentType": "application/json; source=tribe-events; events=106; pages=3",
       "rejectedLiveEvents": 87,
-      "extractedEvents": 104,
+      "extractedEvents": 105,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     }

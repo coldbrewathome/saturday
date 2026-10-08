@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "austin",
-  "generatedAt": "2026-10-03T06:49:46.156Z",
-  "alertCount": 21,
+  "generatedAt": "2026-10-08T04:51:05.531Z",
+  "alertCount": 14,
   "alerts": [
     {
       "severity": "critical",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
+      "fetchedAt": "2026-10-08T04:51:05.531Z",
       "fetches": [
         {
           "url": "https://library.austintexas.gov/events/calendar",
@@ -45,7 +45,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
+      "fetchedAt": "2026-10-08T04:51:05.531Z",
       "fetches": [
         {
           "url": "https://thinkeryaustin.org/visit-us/",
@@ -62,20 +62,21 @@
       "sourceName": "Bullock Texas State History Museum",
       "sourceType": "html",
       "url": "https://www.thestoryoftexas.com/visit/calendar",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
+      "fetchedAt": "2026-10-08T04:51:05.531Z",
       "fetches": [
         {
           "url": "https://www.thestoryoftexas.com/visit/calendar",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -94,7 +95,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
+      "fetchedAt": "2026-10-08T04:51:05.531Z",
       "fetches": [
         {
           "url": "https://www.lbjlibrary.org/events",
@@ -119,7 +120,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
+      "fetchedAt": "2026-10-08T04:51:05.531Z",
       "fetches": [
         {
           "url": "https://blantonmuseum.org/events/",
@@ -144,7 +145,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
+      "fetchedAt": "2026-10-08T04:51:05.531Z",
       "fetches": [
         {
           "url": "https://zilkergarden.org/events/",
@@ -169,136 +170,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
+      "fetchedAt": "2026-10-08T04:51:05.531Z",
       "fetches": [
         {
           "url": "https://www.umlaufsculpture.org/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "austin",
-      "sourceId": "pflugerville-library",
-      "sourceName": "Pflugerville Public Library",
-      "sourceType": "librarycalendar",
-      "url": "https://pflugerville.librarycalendar.com/events/month",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
-      "fetches": [
-        {
-          "url": "https://pflugerville.librarycalendar.com/events/month",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "austin",
-      "sourceId": "zilker-summer-musical-singin-in-the-rain-2026-07-31-src",
-      "sourceName": "Zilker Summer Musical: Singin' in the Rain (Friday)",
-      "sourceType": "officialTextEvents",
-      "url": "https://zilker.org/sitr2026/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
-      "fetches": [
-        {
-          "url": "https://zilker.org/sitr2026/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "austin",
-      "sourceId": "austin-bat-fest-2026-09-05-src",
-      "sourceName": "Bat Fest",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.austintexas.gov/ace/events/bat-fest",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
-      "fetches": [
-        {
-          "url": "https://www.austintexas.gov/ace/events/bat-fest",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "austin",
-      "sourceId": "long-center-drop-in-2026-08-06-src",
-      "sourceName": "The Drop-In, A Levitt VIBE Austin Music Series",
-      "sourceType": "officialTextEvents",
-      "url": "https://thelongcenter.org/events/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
-      "fetches": [
-        {
-          "url": "https://thelongcenter.org/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "critical",
-      "metroId": "austin",
-      "sourceId": "trick-or-treat-on-the-trail-austin-2026",
-      "sourceName": "Trick or Treat on the Trail – Austin (2026)",
-      "sourceType": "officialTextEvents",
-      "url": "https://ghisallo.org/events/austin/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
-      "fetches": [
-        {
-          "url": "https://ghisallo.org/events/austin/",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
         }
       ]
     },
@@ -317,7 +195,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
+      "fetchedAt": "2026-10-08T04:51:05.531Z",
       "fetches": [
         {
           "url": "https://stubbsaustin.com/concert-calendar/",
@@ -342,7 +220,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
+      "fetchedAt": "2026-10-08T04:51:05.531Z",
       "fetches": [
         {
           "url": "https://mohawkaustin.com/calendar",
@@ -367,7 +245,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
+      "fetchedAt": "2026-10-08T04:51:05.531Z",
       "fetches": [
         {
           "url": "https://continentalclub.com/austin-tx/",
@@ -384,20 +262,21 @@
       "sourceName": "Antone's Nightclub",
       "sourceType": "html",
       "url": "https://antonesnightclub.com/calendar/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
+      "fetchedAt": "2026-10-08T04:51:05.531Z",
       "fetches": [
         {
           "url": "https://antonesnightclub.com/calendar/",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -416,7 +295,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
+      "fetchedAt": "2026-10-08T04:51:05.531Z",
       "fetches": [
         {
           "url": "https://acl-live.com/calendar/",
@@ -441,7 +320,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
+      "fetchedAt": "2026-10-08T04:51:05.531Z",
       "fetches": [
         {
           "url": "https://drafthouse.com/austin/calendar",
@@ -466,62 +345,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
+      "fetchedAt": "2026-10-08T04:51:05.531Z",
       "fetches": [
         {
           "url": "https://www.capcitycomedy.com/calendar",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "austin",
-      "sourceId": "mexic-arte-museum",
-      "sourceName": "Mexic-Arte Museum",
-      "sourceType": "tribeEvents",
-      "url": "https://www.mexic-artemuseum.org/events/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
-      "fetches": [
-        {
-          "url": "https://www.mexic-artemuseum.org/events/",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "austin",
-      "sourceId": "pecan-street-festival-fall-2026",
-      "sourceName": "Pecan Street Festival (Fall 2026)",
-      "sourceType": "officialTextEvents",
-      "url": "https://pecanstreetfestival.org/event-info/",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-03T06:49:46.156Z",
-      "fetches": [
-        {
-          "url": "https://pecanstreetfestival.org/event-info/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
         }
       ]
     }
