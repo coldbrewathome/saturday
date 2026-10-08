@@ -41,6 +41,8 @@ import {
   parseDateTimeRange,
   parseLooseDate,
   pruneSlugHistory,
+  flagImplausibleEarlyStarts,
+  normalizeDateTime,
   resolveEndDateTime,
   updateSlugHistory,
   validateEventsDataset,
@@ -2084,4 +2086,42 @@ test("resolveEndDateTime rolls an overnight or stale end past the start", () => 
     resolveEndDateTime("2026-10-03T15:00:00.000Z", "2026-10-03T15:00:00.000Z"),
     "2026-10-03T15:00:00.000Z",
   );
+});
+
+test("normalizeDateTime resolves zone-less stamps in the metro's zone, not the host's", () => {
+  // The bug (fixplan Fix 4): `new Date()` reads a zone-less stamp in whatever
+  // zone the build machine happens to run in, so CI (Pacific) and a UTC runner
+  // minted different instants from the same feed.
+  assert.equal(normalizeDateTime("2026-10-10T10:00:00", "-04:00"), "2026-10-10T10:00:00-04:00");
+  assert.equal(normalizeDateTime("October 10, 2026 10:00 AM", "-04:00"), "2026-10-10T10:00:00-04:00");
+  // Date-only is UTC midnight per spec, which renders as the PREVIOUS day
+  // everywhere west of Greenwich; anchor it to the metro instead, and keep
+  // T00:00 so the generators still read it as "no clock time given".
+  assert.equal(normalizeDateTime("2026-10-10", "-10:00"), "2026-10-10T00:00:00-10:00");
+  assert.equal(normalizeDateTime("October 10, 2026", "-10:00"), "2026-10-10T00:00:00-10:00");
+  // A source that names its zone is authoritative and must pass through.
+  assert.equal(normalizeDateTime("2026-10-10T10:00:00Z", "-04:00"), "2026-10-10T10:00:00.000Z");
+  assert.equal(normalizeDateTime("2026-10-10T10:00:00-07:00", "-04:00"), "2026-10-10T17:00:00.000Z");
+  assert.equal(normalizeDateTime(""), null);
+});
+
+test("flagImplausibleEarlyStarts flags a real pre-6 AM clock but not a date-only midnight", () => {
+  const events = [
+    // The RailGiants class: a wall clock that cannot be right for a museum.
+    { id: "railgiants", title: "RailGiants Train Museum", startDateTime: "2026-10-10T10:00:00.000Z" },
+    // A date-only row lands on local midnight and carries no clock at all.
+    { id: "date-only", title: "Fall Festival", startDateTime: "2026-10-10T07:00:00.000Z" },
+    // A real morning event stays unflagged.
+    { id: "market", title: "Farmers Market", startDateTime: "2026-10-10T16:00:00.000Z" },
+    { id: "no-start", title: "TBD" },
+  ];
+  const flagged = flagImplausibleEarlyStarts(events, "America/Los_Angeles");
+  assert.deepEqual(flagged.map((row) => row.id), ["railgiants"]);
+  assert.equal(flagged[0].localTime, "03:00");
+  // The gate reads the metro's clock, not a fixed one: 07:00Z is local midnight
+  // in Los Angeles (no clock given) but 3 AM in New York (a real bad time), and
+  // 10:00Z is 3 AM Pacific but a legitimate 6 AM in New York.
+  assert.deepEqual(flagImplausibleEarlyStarts(events, "America/New_York").map((row) => row.id), ["date-only"]);
+  // An unusable zone is not evidence of a bad time.
+  assert.deepEqual(flagImplausibleEarlyStarts(events, "Not/AZone"), []);
 });

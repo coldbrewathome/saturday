@@ -2421,9 +2421,27 @@ export function extractOpenCitiesEventEvents(html, source = {}) {
 export function normalizeDateTime(value, timezoneOffset = DEFAULT_TIMEZONE_OFFSET) {
   const raw = stripUnsafeText(value, 120);
   if (!raw) return null;
+  // A source that names its zone is authoritative: that IS the instant.
+  if (/(?:Z|[+-]\d{2}:?\d{2})$/.test(raw)) {
+    const zoned = new Date(raw);
+    if (Number.isFinite(zoned.getTime())) return zoned.toISOString();
+  }
+  // Everything else is a wall-clock reading with no zone attached, and
+  // `new Date()` resolves those in the HOST's zone — Pacific on CI, UTC on a
+  // cloud runner — so the same feed minted different instants on different
+  // machines, and a bare date ("2026-10-10" is UTC midnight per spec) rendered
+  // as the PREVIOUS DAY everywhere west of Greenwich. Resolve in the metro's
+  // own offset instead, via the loose parser that already does exactly this.
+  const loose = parseLooseDate(raw, new Date(), timezoneOffset);
+  if (loose) {
+    // parseLooseDate stamps a bare date at 10:00 as a convenience default.
+    // The generators read /T00:00/ as "no clock time given" and suppress the
+    // time rather than print one; keep that signal for date-only input.
+    const hasClock = /\d{1,2}:\d{2}|\d{1,2}\s*(?:am|pm)\b/i.test(raw);
+    return hasClock ? loose : loose.replace(/T\d{2}:\d{2}:\d{2}/, "T00:00:00");
+  }
   const parsed = new Date(raw);
-  if (Number.isFinite(parsed.getTime())) return parsed.toISOString();
-  return parseLooseDate(raw, new Date(), timezoneOffset);
+  return Number.isFinite(parsed.getTime()) ? parsed.toISOString() : null;
 }
 
 // An end that precedes the start comes from an overnight window ("9 PM–1 AM",
@@ -4667,6 +4685,48 @@ export function updateSlugHistory(history, eventDatasets, options = {}) {
     updatedAt: nowIso,
     slugs,
   };
+}
+
+// Fix 4 gate: a start clock time before 06:00 local is nearly always a source
+// that published a wall-clock reading stamped as UTC, or a scraper that read
+// the wrong field — the RailGiants "3:00 AM" class. Midnight is excluded on
+// purpose: a date-only row lands on T00:00 and carries no clock time at all,
+// which the generators already render as "no time given" rather than guessing.
+// Returns the flagged rows so a build can log them. It deliberately does NOT
+// drop them: retiring a published page is a metrics-gated decision (CLAUDE.md),
+// and a real 5 AM race start must not disappear because a gate guessed.
+export function flagImplausibleEarlyStarts(events, timeZone, options = {}) {
+  const beforeHour = options.beforeHour ?? 6;
+  const flagged = [];
+  for (const event of events || []) {
+    if (!event?.startDateTime) continue;
+    const date = new Date(event.startDateTime);
+    if (!Number.isFinite(date.getTime())) continue;
+    let hour;
+    let minute;
+    try {
+      const parts = new Intl.DateTimeFormat("en-GB", {
+        timeZone,
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23",
+      }).formatToParts(date);
+      hour = Number(parts.find((part) => part.type === "hour")?.value);
+      minute = Number(parts.find((part) => part.type === "minute")?.value);
+    } catch {
+      continue; // unknowable zone: not evidence of a bad time
+    }
+    if (!Number.isFinite(hour) || !Number.isFinite(minute)) continue;
+    if (hour === 0 && minute === 0) continue;
+    if (hour >= beforeHour) continue;
+    flagged.push({
+      id: event.id,
+      title: event.title,
+      startDateTime: event.startDateTime,
+      localTime: `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`,
+    });
+  }
+  return flagged;
 }
 
 export function validateEventsDataset(dataset, options = {}) {

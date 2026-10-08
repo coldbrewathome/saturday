@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import fs from "node:fs/promises";
-import { validateEventsDataset } from "./eventPipeline.mjs";
+import { flagImplausibleEarlyStarts, validateEventsDataset } from "./eventPipeline.mjs";
 import { qualifiesForAdultFeed } from "./lib/adultAudience.mjs";
 import { auditPlanGeometry, expiredFeaturedPlanRefs } from "./lib/planQuality.mjs";
 import {
@@ -208,6 +208,20 @@ async function validateMetro(metro) {
   if (errors.length > 0) {
     console.error(`[${metro.id}] ${errors.join(`\n[${metro.id}] `)}`);
     process.exit(1);
+  }
+
+  // Fix 4 gate: report, never block. A pre-6 AM local start is almost always a
+  // source timezone bug, but a real 5 AM race start is not, and dropping a
+  // published page is a metrics-gated call this validator has no business
+  // making. Naming the rows is what makes the review cheap.
+  const earlyStarts = flagImplausibleEarlyStarts(dataset.events, metro.timezone);
+  if (earlyStarts.length > 0) {
+    console.warn(
+      `[${metro.id}] ${earlyStarts.length} event(s) start before 06:00 local — check the source timezone:\n` +
+        earlyStarts
+          .map((row) => `[${metro.id}]   ${row.localTime}  ${row.title} (${row.id})`)
+          .join("\n"),
+    );
   }
 
   console.log(`Validated ${dataset.events.length} ${metro.label} events.`);
