@@ -14,6 +14,7 @@ import {
   lastmodBudgetRemaining,
   lastmodContentSignature,
   nearbySpotsFor,
+  pickProgramRepresentative,
   planLastmodAdvances,
   resolveWeekendPicks,
   sitemapUrlViolatesD3,
@@ -303,6 +304,42 @@ test("pickRelatedEvents handles an event with no city", async () => {
   const target = mk("Target", "", "2026-07-20");
   const sorted = [target, mk("A", "Oakland", "2026-07-21"), mk("B", "Berkeley", "2026-07-22")];
   assert.deepEqual(pickRelatedEvents(target, sorted).map((e) => e.title), ["A", "B"]);
+});
+
+// Fix 7: taking the front of a time-sorted list handed every link to the same
+// few early events, and 2,216 of the 6,929 indexable event pages ended up with
+// no internal inlink at all. Related events follow the target's own place in
+// the calendar instead, so the links spread across the whole run.
+test("pickRelatedEvents picks near the target in time, not the metro's soonest", async () => {
+  const { pickRelatedEvents } = await import("../scripts/generate-seo-pages.mjs");
+  const mk = (title, city, start) => ({ title, city, startDateTime: start });
+  // A late event in a long city list: soonest-first would give it E1..E4,
+  // which is every other page's answer too.
+  const day = (n) => `2026-07-${String(n).padStart(2, "0")}`;
+  const early = [1, 2, 3, 4].map((n) => mk(`E${n}`, "Oakland", day(n)));
+  const target = mk("Target", "Oakland", day(20));
+  const sorted = [...early, target, mk("Late1", "Oakland", day(19)), mk("Late2", "Oakland", day(21)), mk("Late3", "Oakland", day(22)), mk("Late4", "Oakland", day(25))];
+  const picked = pickRelatedEvents(target, sorted);
+  assert.deepEqual(picked.map((e) => e.title), ["Late1", "Late2", "Late3", "Late4"]);
+  // The early end behaves the same way — its neighbours, not a fixed block.
+  assert.deepEqual(pickRelatedEvents(early[0], sorted).map((e) => e.title), ["E2", "E3", "E4", "Late1"]);
+});
+
+// Date-only feeds stamp a whole day at one clock time, so exact-distance ties
+// are the common case rather than an edge case — one metro can have thousands of
+// events at distance 0 from each other. Breaking those ties by title gave every
+// page in the tie the same alphabetically-first four and left the rest of the
+// alphabet with no inlink at all. Rotating through the pool instead.
+test("pickRelatedEvents rotates exact-time ties so no member of the tie is starved", async () => {
+  const { pickRelatedEvents } = await import("../scripts/generate-seo-pages.mjs");
+  const at = "2026-07-10T20:00:00.000Z";
+  const pool = ["Aaa", "Bbb", "Ccc", "Ddd", "Eee", "Fff"].map((title) => ({ title, city: "Miami", startDateTime: at }));
+  assert.deepEqual(pickRelatedEvents(pool[2], pool).map((e) => e.title), ["Ddd", "Eee", "Fff", "Aaa"]);
+  // The invariant that matters: across the cohort every member is picked by
+  // someone, which is what the title tie-break broke.
+  const inbound = new Map(pool.map((e) => [e, 0]));
+  for (const e of pool) for (const p of pickRelatedEvents(e, pool)) inbound.set(p, inbound.get(p) + 1);
+  assert.ok([...inbound.values()].every((n) => n > 0), `starved: ${JSON.stringify([...inbound.values()])}`);
 });
 
 // --- matchAnnualLiveEvent ----------------------------------------------------
@@ -668,4 +705,26 @@ test("weekend plan preset copy carries no metro-specific regionalism", () => {
       }
     }
   }
+});
+
+// Fix 3: consolidation must never move a canonical URL. The representative is
+// the shortest slug, which is the one that existed before any collision suffix
+// was appended — so the page Google already indexed is the page that survives.
+test("pickProgramRepresentative keeps the shortest slug, then the earliest start", () => {
+  const slugOf = (e) => e.slug;
+  const members = [
+    { slug: "toddler-storytime-montrose-library", startDateTime: "2026-10-08T17:00:00.000Z" },
+    { slug: "toddler-storytime", startDateTime: "2026-10-09T17:00:00.000Z" },
+    { slug: "toddler-storytime-la-canada-library", startDateTime: "2026-10-07T17:00:00.000Z" },
+  ];
+  assert.equal(pickProgramRepresentative(members, slugOf).slug, "toddler-storytime");
+
+  // Equal-length slugs fall through to the earliest start, so the pick is
+  // deterministic rather than dependent on feed order.
+  const tied = [
+    { slug: "aaaa-bbbb", startDateTime: "2026-10-09T17:00:00.000Z" },
+    { slug: "cccc-dddd", startDateTime: "2026-10-07T17:00:00.000Z" },
+  ];
+  assert.equal(pickProgramRepresentative(tied, slugOf).slug, "cccc-dddd");
+  assert.equal(pickProgramRepresentative([...tied].reverse(), slugOf).slug, "cccc-dddd");
 });

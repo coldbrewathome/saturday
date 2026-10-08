@@ -380,6 +380,21 @@ let activeMetro = metroConfig.defaultMetro;
 // weekend guides run after the main loop and reuse it to avoid linking to
 // capped-out event pages.
 const generatedEventSlugsByMetro = new Map();
+// Fix 3 follow-up, per metro: branch slug -> the representative's slug. Branch
+// pages are noindex, and link-3 forbids linking a noindex page, so every
+// listing resolves a branch event to the representative instead — the program
+// still appears in the listing, at the one URL Google can keep.
+const branchSlugToRepSlugByMetro = new Map();
+// The lookup the listings (city, category, storytime, weekend, hub, root strip)
+// should link through. Mints nothing: generateEventPages has already written
+// every page by the time this is built, so only hrefs change.
+function remapBranchLinks(lookup, metroId) {
+  const branches = branchSlugToRepSlugByMetro.get(metroId);
+  if (!branches || branches.size === 0) return lookup;
+  const remapped = new Map();
+  for (const [event, slug] of lookup) remapped.set(event, branches.get(slug) || slug);
+  return remapped;
+}
 // Restrict an event→slug lookup to events whose pages were generated. Every
 // consumer (timeline renderer, highlights, JSON-LD ItemList) already falls
 // back to the official event URL when the lookup misses.
@@ -1358,22 +1373,27 @@ async function main() {
         }
       }
     }
-    const { slugs: citySlugs, cities } = generateCityPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs);
-    const categorySlugs = generateCategoryPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs);
-    const cityCategorySlugs = generateCityCategoryPages(spots, events, spotSlugLookup, eventSlugLookup, spotSlugs, eventSlugs, cities);
+    // link-3: everything below this point renders hrefs for readers and
+    // crawlers, so it links the representative of a consolidated program rather
+    // than a noindex branch. generateEventPages has already written every page,
+    // so this changes only which URL a listing points at.
+    const listingLookup = remapBranchLinks(eventSlugLookup, metro.id);
+    const { slugs: citySlugs, cities } = generateCityPages(spots, events, spotSlugLookup, listingLookup, spotSlugs, eventSlugs);
+    const categorySlugs = generateCategoryPages(spots, events, spotSlugLookup, listingLookup, spotSlugs, eventSlugs);
+    const cityCategorySlugs = generateCityCategoryPages(spots, events, spotSlugLookup, listingLookup, spotSlugs, eventSlugs, cities);
     // Niche city hubs for the query class a zero-backlink domain wins
     // ("{branch} storytime {city}" ranks pos 4-14 in GSC) — kids + bay-area
     // only for now. Returned entries feed the hub discovery links.
-    const storytimeEntries = generateCityStorytimePages(events, eventSlugLookup, eventSlugs);
+    const storytimeEntries = generateCityStorytimePages(events, listingLookup, eventSlugs);
     // Weekend guides link events through this lookup; restrict it to events
     // whose pages were actually written so capped-out events fall back to
     // their official link instead of a broken internal one.
-    const weekendEventLookup = lookupOfGenerated(eventSlugLookup, eventSlugs);
+    const weekendEventLookup = lookupOfGenerated(listingLookup, eventSlugs);
     // Venue-name → curated spot photo index for the top-picks carousel
     // (event's own photo first, venue photo as the honest fallback).
     const venueImageIndex = buildVenueImageIndex(spots);
-    totalAnnualPages += generateAnnualEventPages(distinctEvents, eventSlugLookup, eventSlugs);
-    totalEvergreenPages += generateEvergreenEventPages(distinctEvents, eventSlugLookup, eventSlugs, allCurrentEventSlugs);
+    totalAnnualPages += generateAnnualEventPages(distinctEvents, listingLookup, eventSlugs);
+    totalEvergreenPages += generateEvergreenEventPages(distinctEvents, listingLookup, eventSlugs, allCurrentEventSlugs);
     const wroteThisWeekend = await generateThisWeekendPage(events, weekendEventLookup, venueImageIndex);
     const wroteFreeWeekend = generateFreeThisWeekendPage(events, weekendEventLookup);
     totalWeekendSubPages +=
@@ -1471,6 +1491,15 @@ async function main() {
 
   const totalLocalizedPages = IS_ADULTS ? 0 : generateLocalizedWeekendPages();
   generateTrustPages();
+
+  // Second root write, now that every metro has recorded which slugs it
+  // actually generated. The first write had to happen before the loop because
+  // the metro hubs clone dist/index.html; this one fills in the weekend strip,
+  // whose links are guaranteed to resolve because they come from that set.
+  if (!IS_ADULTS) {
+    rootWeekendSectionMarkup = renderRootWeekendSection(buildRootWeekendStrip());
+    generateRootAppShellPage();
+  }
 
   // D3 hard backstop: the proactive filters above should already keep these
   // out, but the build fails outright if a kids-content URL reaches the
@@ -2268,6 +2297,95 @@ function generateMetroAppShellPage(metro, extras = {}) {
   });
 }
 
+// Fix 6: the kids homepage was a bare metro chooser — the most-crawled URL on
+// the domain carried no dated content and linked to no event page. This reads
+// the same feeds the metro loop is about to read and surfaces this weekend's
+// events across every metro, which puts real event pages one hop from the
+// homepage and re-stamps the root as the calendar moves. Kids only: the Mosey
+// homepage is Bay-Area-only and already carries its own deep intro.
+const ROOT_STRIP_PER_METRO = 2;
+const ROOT_STRIP_MAX = 16;
+const metroCountLabel = `${metroConfig.metros.length} U.S. metro area${metroConfig.metros.length === 1 ? "" : "s"}`;
+// Filled after the metro loop (only then is it known which slugs got a page);
+// the root shell is written twice, once before the loop because the metro hubs
+// clone dist/index.html, and once after with this inserted.
+let rootWeekendSectionMarkup = "";
+
+function buildRootWeekendStrip() {
+  const now = new Date();
+  const perMetro = [];
+  for (const metro of metroConfig.metros) {
+    // The generated set, not the raw feed: capEventsForPages and
+    // dedupeEventOccurrences both drop events that still carry a slug, and
+    // linking one of those puts a 404 on the homepage.
+    const generated = generatedEventSlugsByMetro.get(metro.id);
+    if (!generated || generated.size === 0) continue;
+    const doc = readJson(metroDataPath(metro, "events"));
+    const events = (Array.isArray(doc?.events) ? doc.events : []).filter(audienceVisible);
+    if (events.length === 0) continue;
+    const previousMetro = activeMetro;
+    activeMetro = metro;
+    // Metro-local weekend window, the same one the this-weekend pages use, so
+    // the strip and the guide can never disagree about what "this weekend" is.
+    const weekend = getWeekendDateKeys(now, metro.timezone, { includeFriday: true });
+    // link-3 again: a consolidated program's branch pages are noindex, so the
+    // strip links the representative. generatedEventSlugsByMetro still holds
+    // every written slug (branches included), and the representative is in it.
+    const slugLookup = remapBranchLinks(buildEventSlugLookup(events), metro.id);
+    const seen = new Set();
+    const picks = [];
+    for (const event of events) {
+      if (picks.length >= ROOT_STRIP_PER_METRO) break;
+      const date = new Date(event.startDateTime || "");
+      if (!Number.isFinite(date.getTime())) continue;
+      if (!weekend.keys.has(zonedDateKey(date, metro.timezone))) continue;
+      if (isFeedJunkEvent(event)) continue;
+      const slug = slugLookup.get(event);
+      if (!slug || !generated.has(slug) || seen.has(slug)) continue;
+      const venue = displayVenue(event);
+      const place = event.city || event.neighborhood || "";
+      seen.add(slug);
+      picks.push({
+        // venue often IS the city for a park or a neighborhood-wide listing;
+        // "Manhattan, Manhattan" reads as a bug.
+        href: metroPath(`event/${slug}/`),
+        title: displayEventTitle(event),
+        where: venue && place && venue !== place ? `${venue}, ${place}` : venue || place,
+        when: `${formatEventDay(zonedDateKey(date, metro.timezone))}${eventTimeSuffix(event)}`,
+        metro: metro.seoName || metro.label || metro.id,
+      });
+    }
+    activeMetro = previousMetro;
+    if (picks.length > 0) perMetro.push(picks);
+  }
+  // Round-robin rather than soonest-first: a flat sort by start time would fill
+  // the strip from whichever metros happen to run morning events, and the point
+  // of the section is that it spans the whole map.
+  const rows = [];
+  for (let round = 0; round < ROOT_STRIP_PER_METRO && rows.length < ROOT_STRIP_MAX; round += 1) {
+    for (const picks of perMetro) {
+      if (rows.length >= ROOT_STRIP_MAX) break;
+      if (picks[round]) rows.push(picks[round]);
+    }
+  }
+  return rows;
+}
+
+function renderRootWeekendSection(rows) {
+  if (rows.length === 0) return "";
+  return `<section>
+          <h2>This weekend across ${esc(BRAND)}</h2>
+          <p>Dated events from official calendars, refreshed every week. Each listing links to the
+          organizer's own page.</p>
+          <ul>${rows
+            .map(
+              (row) =>
+                `<li><a href="${esc(row.href)}">${esc(row.title)}</a> — ${esc(row.where)} · ${esc(row.when)} · ${esc(row.metro)}</li>`,
+            )
+            .join("")}</ul>
+        </section>`;
+}
+
 function generateRootAppShellPage() {
   const shellPath = path.join(DIST, "index.html");
   if (!fs.existsSync(shellPath)) return;
@@ -2333,9 +2451,42 @@ function generateRootAppShellPage() {
           <p>${esc(description)}</p>
         </header>
         <section>
+          <p>${esc(BRAND)} is a free weekend planner for families in ${metroCountLabel}. It does two things:
+          it finds what is actually happening near you, and it turns those listings into a plan you can
+          walk out the door with.</p>
+          <p>Events come from official sources only — organizer, venue, library, parks-department and
+          government calendars. Listings carry real dates, real start times, and a link back to the
+          organizer's own page, and each one is retired once it ends, so what you see is what is still
+          running. Alongside them are ${esc(A.spotLabel)}s like playgrounds, nature centers, museums and
+          indoor play spaces, with the practical detail that decides a trip: hours, cost, and what ages
+          it suits.</p>
+          <p>From there you can build a day: pick a few stops and ${esc(BRAND)} checks the distance
+          between them, so a plan is a workable route rather than a wish list. Share it and everyone
+          votes on each stop, which is usually the fastest way to settle an argument about where to go.
+          Photos, hours and place data come from &copy; OpenStreetMap contributors. Nothing is sponsored
+          and we sell no tickets.</p>
+        </section>
+        <section>
           <h2>Choose your metro</h2>
           <ul>${metroCards}</ul>
         </section>
+        ${rootWeekendSectionMarkup}
+        <section>
+          <h2>Common questions</h2>
+          <h3>Is ${esc(BRAND)} free?</h3>
+          <p>Yes. Every listing, plan and map is free to use, and there is no paid placement — no
+          organizer can pay to appear in a plan or a weekend guide.</p>
+          <h3>Where do the event listings come from?</h3>
+          <p>Official sources only: organizer, venue, library, parks-department and government event
+          calendars. Each listing links to the organizer's own page so you can confirm details and, where
+          tickets are needed, buy them from the source.</p>
+          <h3>How far ahead are events listed?</h3>
+          <p>As far as the organizers publish. Weekend guides are rebuilt every week from the current
+          calendars, and a listing is retired when its event ends rather than left up as a stale date.</p>
+          <h3>Can I use it without an account?</h3>
+          <p>Yes — browsing, planning, sharing and voting all work without signing in.</p>
+        </section>
+        <p>Read more <a href="/about/">about ${esc(BRAND)}</a>, or see <a href="/how-we-verify/">how we verify listings</a>.</p>
         <noscript><p><strong>Heads-up:</strong> ${esc(BRAND)} is an interactive planner. Please enable JavaScript to plan, share and vote.</p></noscript>
       </div>`;
   const jsonLd = {
@@ -2502,6 +2653,16 @@ function replaceMetroShellCopy(html, title, description, extras = {}) {
   // JSON-LD in generateMetroAppShellPage mirrors exactly what renders here.
   const hubList = hubEvents || buildHubEventList(events, eventLookup || new Map());
   const tzHub = activeMetro.timezone || "America/Los_Angeles";
+  // Fix 7: the metro hubs had no edges between them and none back to /, so the
+  // whole site hung off the root as a star and any two hubs were 2+ hops apart.
+  // Every metro writes a hub page unconditionally (generateMetroAppShellPage),
+  // so unlike the category/city keep-lists there is nothing to gate on here.
+  const siblingLinks = metroConfig.metros
+    .filter((m) => m.id !== activeMetro.id && m.canonicalPath)
+    .map(
+      (m) =>
+        `<a href="${esc(`${String(m.canonicalPath).replace(/\/+$/, "")}/`)}">${esc(m.seoName || m.label || m.id)}</a>`,
+    );
   const eventItems = hubList.items.map(({ event, slug }) => {
     if (hubList.mode === "weekend") {
       const day = new Date(event.startDateTime).toLocaleDateString("en-US", {
@@ -2601,6 +2762,12 @@ function replaceMetroShellCopy(html, title, description, extras = {}) {
         ${evergreenItems.length ? `<section>
           <h2>Recurring &amp; returning programs in ${esc(area)}</h2>
           <ul>${evergreenItems.join("\n          ")}</ul>
+        </section>` : ""}
+        ${siblingLinks.length ? `<section>
+          <h2>Other cities on ${esc(BRAND)}</h2>
+          <p>Planning a trip, or looking for family events somewhere else? ${esc(BRAND)} covers
+          ${esc(metroCountLabel)}. <a href="/">Start from the ${esc(BRAND)} homepage &rarr;</a></p>
+          <nav>${siblingLinks.join("\n          ")}</nav>
         </section>` : ""}
         <noscript><p><strong>Heads-up:</strong> ${esc(BRAND)} is an interactive planner. Please enable JavaScript to plan, share and vote.</p></noscript>
       </div>`;
@@ -2976,16 +3143,81 @@ function eventRunDays(event) {
   return [...new Set(event.occurrenceStarts.map((s) => s.slice(0, 10)))].sort();
 }
 
+// Fix 3: which branch of a multi-location program keeps the indexable page.
+// Shortest slug wins, because slug collisions are the only thing that ever
+// lengthen one — so this picks the URL that was already published and indexed
+// before consolidation, and consolidation never moves a canonical. Earliest
+// start breaks a tie. Deduped from `dedupeEventOccurrences`, which picks the
+// same way for the same reason.
+export function pickProgramRepresentative(members, slugOf) {
+  return [...members].sort(
+    (a, b) =>
+      String(slugOf(a) || "").length - String(slugOf(b) || "").length ||
+      String(a.startDateTime || "").localeCompare(String(b.startDateTime || "")),
+  )[0];
+}
+
+// pickRelatedEvents runs once per event against the same pool array, so the
+// pool is ranked once per metro rather than rebuilt on every call.
+const relatedPoolRank = new WeakMap();
+function poolRank(pool) {
+  let rank = relatedPoolRank.get(pool);
+  if (!rank) {
+    rank = new Map(pool.map((e, i) => [e, i]));
+    relatedPoolRank.set(pool, rank);
+  }
+  return rank;
+}
+
 // Sibling events for the "more coming up" block on an event page: same-city
-// events first, then metro-wide, both in soonest-first order (the caller
-// passes a pre-sorted list). Pure so tests can cover the pick order.
+// events first, then metro-wide, both ordered by closeness in time to this
+// event (the caller passes a time-sorted list). Pure so tests can cover the
+// pick order.
 export function pickRelatedEvents(event, upcomingSorted, limit = 4) {
   const city = String(event.city || event.neighborhood || "").toLowerCase();
   const others = upcomingSorted.filter((e) => e !== event);
-  const picked = city
-    ? others.filter((e) => String(e.city || e.neighborhood || "").toLowerCase() === city).slice(0, limit)
+  // Nearest in time to this event, not soonest overall. Taking the front of a
+  // time-sorted list meant every page spent its links on the same handful of
+  // early events, leaving 2,216 of the metro's 6,929 indexable event pages with
+  // no internal inlink at all (Fix 7's acceptance is zero). It is also the more
+  // useful list: "what else is on around then" beats "the four soonest things
+  // in your city" when you are planning a specific date.
+  const at = Date.parse(event.startDateTime);
+  const distance = (e) => {
+    const t = Date.parse(e.startDateTime);
+    return Number.isFinite(at) && Number.isFinite(t) ? Math.abs(t - at) : Number.POSITIVE_INFINITY;
+  };
+  // Exact-distance ties rotate by the candidate's own place in the pool rather
+  // than falling to title order. Date-only feeds coerce every event to the same
+  // clock time, so a single city can have thousands of events at distance 0 from
+  // the target (Miami's library feed: 1,855 events under one `city`, most on the
+  // same stamped hour). Sorting those by title handed the same four
+  // alphabetically-first events to every page in the tie and left the rest of the
+  // alphabet with no inlink at all — the residual 62 of 7,471 orphans. Taking the
+  // next candidates in pool order instead spreads the links evenly across the tie
+  // and reads no worse: any four of an equidistant set are equally arbitrary, but
+  // these are not all the same four.
+  const rank = poolRank(upcomingSorted);
+  const poolSize = upcomingSorted.length;
+  const atIndex = rank.get(event);
+  const spin = (e) => {
+    const i = rank.get(e);
+    return atIndex === undefined || i === undefined ? 0 : (i - atIndex + poolSize) % poolSize;
+  };
+  const byProximity = (list) =>
+    [...list].sort(
+      (a, b) =>
+        distance(a) - distance(b) ||
+        spin(a) - spin(b) ||
+        String(a.startDateTime || "").localeCompare(String(b.startDateTime || "")),
+    );
+  const sameCity = city
+    ? others.filter((e) => String(e.city || e.neighborhood || "").toLowerCase() === city)
     : [];
-  for (const e of others) {
+  const picked = byProximity(sameCity).slice(0, limit);
+  // Backfill from the rest of the metro, also by proximity — a small city's
+  // page should not inherit the front-loaded list this fix exists to remove.
+  for (const e of byProximity(others)) {
     if (picked.length >= limit) break;
     if (!picked.includes(e)) picked.push(e);
   }
@@ -3320,7 +3552,12 @@ function generateEvergreenEventPages(distinctEvents, eventSlugLookup, eventSlugs
 }
 
 function renderRelatedEvents(event, upcomingSorted, eventSlugLookup) {
-  const related = pickRelatedEvents(event, upcomingSorted);
+  // Six rather than four: in a dense metro an event sitting in a quiet gap is
+  // nobody's nearest four, so it ends up with no inlink at all even though every
+  // page around it was picked. Two more links per page move those gap events
+  // into range, and internal links are the discovery lever a young domain
+  // actually has. (pickRelatedEvents keeps its own default of 4.)
+  const related = pickRelatedEvents(event, upcomingSorted, 6);
   if (!related.length) return "";
   const items = related
     .map((e) => {
@@ -3359,10 +3596,22 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
     const key = String(ev.title || "").trim().toLowerCase();
     if (key) titleFreq.set(key, (titleFreq.get(key) || 0) + 1);
   }
-  for (const event of items) {
-    const candidate = eventSlugLookup.get(event);
-    if (!candidate) continue;
-    const canonical = metroUrl(`event/${candidate}/`);
+  // Fix 3: one library program running at 27 branches minted 27 near-identical
+  // pages — 1,041 of the 8,136 event pages came from titles running at 5+
+  // venues. The duplication was measured before touching it (CLAUDE.md
+  // "metrics first"): across the 85 such pages that earned a single impression
+  // in 90 days the entire family produced ONE click. So this consolidates
+  // rather than deletes — the representative page stays indexable and gains
+  // the branch list, and every other branch keeps a working page for readers
+  // but leaves the index (noindex,follow) and the sitemap.
+  //
+  // This is the plan's noindex fallback rather than its preferred 301: the
+  // pages carry no meaningful link equity to preserve (zero backlinks
+  // site-wide), and noindex is reversible, where 1,041 redirects are not.
+  const emitsPage = (event) => {
+    const slug = eventSlugLookup.get(event);
+    if (!slug) return false;
+    const url = metroUrl(`event/${slug}/`);
     // B3: never mint an "upcoming"-copy page for an event that has already
     // ended, regardless of feed staleness — checked against the actual build
     // time, not the feed's self-reported generatedAt (a stale feed's
@@ -3371,12 +3620,60 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
     // 14-day grace window and shipped a page in the previous build keeps it,
     // so a redeploy doesn't delete the asset the detail guard is serving 200
     // through the grace period — the guard 410s it at end+14d regardless.
-    if (isEventPastForSeo(event) && !(endedWithinSeoGrace(event) && lastmodStore[canonical])) continue;
+    if (isEventPastForSeo(event) && !(endedWithinSeoGrace(event) && lastmodStore[url])) return false;
     // D3 backstop: adults build never mints a kids-content slug or a page
     // that fails the D1 title/override rule.
-    if (violatesAdultsSlugGate(candidate, event.title) || (IS_ADULTS && eventFailsAdultsD1(event))) continue;
+    if (violatesAdultsSlugGate(slug, event.title) || (IS_ADULTS && eventFailsAdultsD1(event))) return false;
     // A3 backstop: kids build never mints a page for a blocklisted-venue event.
-    if (!IS_ADULTS && kidsEventBrandSafetyViolation(event, activeMetro?.id)) continue;
+    if (!IS_ADULTS && kidsEventBrandSafetyViolation(event, activeMetro?.id)) return false;
+    return true;
+  };
+  // Same source + same normalized title is one program running at its
+  // branches. Scoping to sourceId matters: "Family Storytime" at LA County
+  // Library and at LA Public Library are different programs that happen to
+  // share a name, and merging them would invent a relationship. dedupeEvents
+  // upstream already collapsed repeats at one venue, so any group of 2+ here
+  // is genuinely 2+ locations.
+  const programKey = (event) =>
+    `${event.sourceId || ""}|${String(event.title || "").trim().toLowerCase().replace(/\s+/g, " ")}`;
+  const programMembers = new Map();
+  for (const event of items) {
+    if (!emitsPage(event)) continue;
+    const key = programKey(event);
+    if (!programMembers.has(key)) programMembers.set(key, []);
+    programMembers.get(key).push(event);
+  }
+  // Representative rule matches dedupeEventOccurrences: shortest slug wins
+  // (collision suffixes only ever lengthen one, so the URL already published
+  // survives), earliest start breaks the tie.
+  const branchRepOf = new Map(); // branch slug -> the representative event
+  const programBranches = new Map(); // representative slug -> every member
+  for (const members of programMembers.values()) {
+    if (members.length < 2) continue;
+    const rep = pickProgramRepresentative(members, (e) => eventSlugLookup.get(e));
+    const repSlug = eventSlugLookup.get(rep);
+    for (const member of members) {
+      const slug = eventSlugLookup.get(member);
+      if (slug !== repSlug) branchRepOf.set(slug, rep);
+    }
+    programBranches.set(repSlug, members);
+  }
+  // Published for the listing generators, which run after this returns.
+  branchSlugToRepSlugByMetro.set(
+    activeMetro.id,
+    new Map([...branchRepOf].map(([branchSlug, rep]) => [branchSlug, eventSlugLookup.get(rep)])),
+  );
+  // The related-events pool must not offer a noindex branch page either (link-3).
+  const relatedPool = upcomingSorted.filter((ev) => !branchRepOf.has(eventSlugLookup.get(ev)));
+  for (const event of items) {
+    const candidate = eventSlugLookup.get(event);
+    if (!candidate) continue;
+    const canonical = metroUrl(`event/${candidate}/`);
+    // The same three gates the branch-program pre-pass ran (see emitsPage) —
+    // shared rather than repeated so a page can never be counted as the one
+    // surviving branch and then skipped here, which would retire a program
+    // from the index with no replacement.
+    if (!emitsPage(event)) continue;
 
     const cityName = event.city || event.neighborhood || metroLabel();
     const citySlug = cityName ? slugify(cityName) : "";
@@ -3435,6 +3732,36 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
               .join("")}</ul></section>`
           : ""
       }
+      ${(() => {
+        // On the surviving page of a branch program, name every location. The
+        // 27 storytime pages this replaced each said one branch; this says all
+        // of them, so a reader searching any branch still finds their answer.
+        // Each branch links to the ORGANIZER's page for that branch, never to
+        // our own noindexed branch page — that is the per-branch link the
+        // reader actually wants, and it keeps this page from spending crawl
+        // budget pointing at URLs Google can never keep (link-3, below).
+        const members = programBranches.get(candidate);
+        if (!members) return "";
+        return `<section class="event-branches"><h2>Also runs at ${members.length} locations</h2><ul>${members
+          .map((b) => {
+            const place = [displayVenue(b), b.city || b.neighborhood].filter(Boolean).join(", ");
+            const when = [formatEventDate(b), formatEventTime(b)].filter(Boolean).join(", ");
+            const label = esc(place || b.title);
+            const named = b.url
+              ? `<a rel="noopener nofollow" href="${esc(b.url)}">${label}</a>`
+              : label;
+            return `<li>${named}${when ? ` — ${esc(when)}` : ""}</li>`;
+          })
+          .join("")}</ul></section>`;
+      })()}
+      ${(() => {
+        // …and the reverse pointer, so a reader who landed on one branch can
+        // reach the page that lists the rest.
+        const rep = branchRepOf.get(candidate);
+        if (!rep) return "";
+        const place = [displayVenue(rep), rep.city || rep.neighborhood].filter(Boolean).join(", ");
+        return `<p class="see-also">This program runs at multiple locations — see <a href="${metroPath(`event/${eventSlugLookup.get(rep)}/`)}">${esc(rep.title)}${place ? ` at ${esc(place)}` : ""}</a> for every branch and date.</p>`;
+      })()}
       <p class="cta-row">
         <a class="cta" href="${metroPath("")}">Plan a day with ${BRAND}</a>
         ${(() => {
@@ -3446,7 +3773,7 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
         ${event.url ? `<a class="cta-secondary" data-seo-organizer rel="noopener nofollow" href="${esc(event.url)}">Event details</a>` : ""}
       </p>
       ${annualEntry ? `<p class="see-also">This is an annual ${esc(metroLabel())} tradition — see the <a href="${metroPath(`annual/${annualEntry.slug}/`)}">${esc(annualEntry.title)} annual guide</a>.</p>` : ""}
-      ${renderRelatedEvents(event, upcomingSorted, eventSlugLookup)}
+      ${renderRelatedEvents(event, relatedPool, eventSlugLookup)}
       ${renderEventValueBlocks(event, spots, spotSlugLookup, spotSlugs)}
       ${renderNewsletterSignup({
         source: "event-page",
@@ -3457,7 +3784,14 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
     `;
 
     const jsonLd = buildEventJsonLd(event, canonical);
+    // Fix 3: a branch of a multi-location program keeps its page (a reader
+    // following an old link still lands on it, and it points at the page that
+    // lists every branch) but leaves the index and the sitemap. noindex,follow
+    // rather than a 301: nothing links here, so there is no equity to carry
+    // over, and this is one line to reverse where 1,041 redirects are not.
+    const isBranchVariant = branchRepOf.has(candidate);
     const html = renderShell({
+      noindex: isBranchVariant,
       title,
       description,
       canonical,
@@ -3476,6 +3810,10 @@ function generateEventPages(items, generatedAt, eventSlugLookup, generatedCitySl
 
     writeMetroPage(`event/${candidate}/index.html`, html);
     slugs.add(candidate);
+
+    // A noindex page in the sitemap is a contradiction Google resolves by
+    // ignoring the sitemap entry, but only after spending the crawl on it.
+    if (isBranchVariant) continue;
 
     sitemapEntries.push({
       loc: canonical,
@@ -3834,13 +4172,41 @@ export function cleanEventBodyText(event) {
 // when the feed copy is empty, one-word, or per-source boilerplate.
 function buildEventFacts(event, dateStr) {
   const where = displayVenue(event) || event.city || metroLabel();
-  const when = dateStr ? ` on ${dateStr}` : "";
+  const when = dateStr ? ` on ${dateStr}${eventTimeSuffix(event)}` : "";
   const cat = event.category ? ` (${event.category})` : "";
   const cost = event.cost && event.cost !== "Unknown" ? ` Cost: ${event.cost}.` : "";
   const ages = !IS_ADULTS && Array.isArray(event.ageBands) && event.ageBands.length
     ? ` Best for: ${event.ageBands.join(", ")}.`
     : "";
   return `${displayEventTitle(event)}${when} at ${where}${cat}.${cost}${ages}`.trim();
+}
+
+// Fix 8: the visible page stated a date but no clock time, while the JSON-LD
+// carried the full instant — markup richer than the text a reader or an AI
+// Overview can quote, which is backwards. The zone abbreviation is resolved
+// against the EVENT's date rather than today's, so an October page says PDT
+// and a December page says PST.
+function formatEventClock(event) {
+  const time = formatEventTime(event);
+  if (!time) return "";
+  const date = new Date(event.startDateTime);
+  if (!Number.isFinite(date.getTime())) return time;
+  const zone = new Intl.DateTimeFormat("en-US", {
+    timeZone: activeMetro.timezone || "America/Los_Angeles",
+    timeZoneName: "short",
+  })
+    .formatToParts(date)
+    .find((part) => part.type === "timeZoneName")?.value;
+  return zone ? `${time} ${zone}` : time;
+}
+
+// " at 3:30 PM PDT" / " (all day)" / "" — shared so the lede and the When row
+// can never disagree about what time the event is.
+function eventTimeSuffix(event) {
+  if (!event?.startDateTime) return "";
+  if (eventIsAllDay(event)) return " (all day)";
+  const clock = formatEventClock(event);
+  return clock ? ` at ${clock}` : "";
 }
 
 // Keep static event pages as precise about source confidence as the app. A
@@ -3910,7 +4276,7 @@ function buildEventDescription(event, dateStr) {
 
 function buildEventDetailRows(event, dateStr) {
   const rows = [];
-  if (dateStr) rows.push({ label: "When", html: esc(dateStr) });
+  if (dateStr) rows.push({ label: "When", html: esc(`${dateStr}${eventTimeSuffix(event)}`) });
   if (event.venue) rows.push({ label: "Venue", html: esc(displayVenue(event)) });
   if (event.city) rows.push({ label: "City", html: esc(event.city) });
   if (event.category) rows.push({ label: "Category", html: esc(event.category) });
@@ -7491,7 +7857,10 @@ function generateLocalizedWeekendPages() {
       // never link an event page the main loop capped out of this build.
       const generatedSlugs = generatedEventSlugsByMetro.get(metro.id);
       const fullLookup = buildEventSlugLookup(fullEvents);
-      const eventSlugLookup = generatedSlugs ? lookupOfGenerated(fullLookup, generatedSlugs) : fullLookup;
+      const eventSlugLookup = remapBranchLinks(
+        generatedSlugs ? lookupOfGenerated(fullLookup, generatedSlugs) : fullLookup,
+        metro.id,
+      );
       let events = fullEvents;
 
       if (cluster.subMetro) {
