@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "atlanta",
-  "generatedAt": "2026-10-08T04:33:47.290Z",
-  "alertCount": 9,
+  "generatedAt": "2026-10-25T17:06:03.777Z",
+  "alertCount": 10,
   "alerts": [
     {
       "severity": "warning",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:33:47.290Z",
+      "fetchedAt": "2026-10-25T17:06:03.777Z",
       "fetches": [
         {
           "url": "https://www.atlantaga.gov/government/departments/parks-recreation/events",
@@ -44,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:33:47.290Z",
+      "fetchedAt": "2026-10-25T17:06:03.777Z",
       "fetches": [
         {
           "url": "https://childrensmuseumatlanta.org/program-calendar/",
@@ -69,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:33:47.290Z",
+      "fetchedAt": "2026-10-25T17:06:03.777Z",
       "fetches": [
         {
           "url": "https://www.northgeorgiastatefair.com/",
@@ -94,13 +94,63 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:33:47.290Z",
+      "fetchedAt": "2026-10-25T17:06:03.777Z",
       "fetches": [
         {
           "url": "https://www.gwinnettcountyfair.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "atlanta",
+      "sourceId": "awesome-alpharetta-family",
+      "sourceName": "Awesome Alpharetta Family Fun Events",
+      "sourceType": "tribeEvents",
+      "url": "https://www.awesomealpharetta.com/calendar/",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 14,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 14,
+      "fetchedAt": "2026-10-25T17:06:03.777Z",
+      "fetches": [
+        {
+          "url": "https://www.awesomealpharetta.com/calendar/",
+          "status": "http-error",
+          "httpStatus": 403,
+          "contentType": "text/html"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "atlanta",
+      "sourceId": "little-5-points-halloween-festival-parade-2026",
+      "sourceName": "Little 5 Points Halloween Festival & Parade (2026)",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.little5pointsofficial.com/halloween",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:06:03.777Z",
+      "fetches": [
+        {
+          "url": "https://www.little5pointsofficial.com/halloween",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -119,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:33:47.290Z",
+      "fetchedAt": "2026-10-25T17:06:03.777Z",
       "fetches": [
         {
           "url": "https://www.terminalwestatl.com/events",
@@ -144,13 +194,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:33:47.290Z",
+      "fetchedAt": "2026-10-25T17:06:03.777Z",
       "fetches": [
         {
           "url": "https://www.varietyplayhouse.com/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "text/html"
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -169,7 +219,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:33:47.290Z",
+      "fetchedAt": "2026-10-25T17:06:03.777Z",
       "fetches": [
         {
           "url": "https://www.badearl.com/calendar",
@@ -182,48 +232,25 @@
     {
       "severity": "warning",
       "metroId": "atlanta",
-      "sourceId": "laughing-skull-atl",
-      "sourceName": "Laughing Skull Lounge",
+      "sourceId": "dad-garage-atl",
+      "sourceName": "Dad's Garage Theatre",
       "sourceType": "html",
-      "url": "https://laughingskulllounge.com/events/?ical=1",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 9,
+      "url": "https://www.dadsgarage.com/shows",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 9,
-      "fetchedAt": "2026-10-08T04:33:47.290Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:06:03.777Z",
       "fetches": [
         {
-          "url": "https://laughingskulllounge.com/events/?ical=1",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "atlanta",
-      "sourceId": "ponce-city-market-atl",
-      "sourceName": "Ponce City Market Events",
-      "sourceType": "tribeEvents",
-      "url": "https://www.poncecitymarket.com/events/",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 46,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 46,
-      "fetchedAt": "2026-10-08T04:33:47.290Z",
-      "fetches": [
-        {
-          "url": "https://www.poncecitymarket.com/events/",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "url": "https://www.dadsgarage.com/shows",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
         }
       ]
     }

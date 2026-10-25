@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "chicago",
-  "generatedAt": "2026-10-08T04:31:12.447Z",
-  "alertCount": 10,
+  "generatedAt": "2026-10-25T17:13:21.161Z",
+  "alertCount": 11,
   "alerts": [
     {
       "severity": "warning",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:31:12.447Z",
+      "fetchedAt": "2026-10-25T17:13:21.161Z",
       "fetches": [
         {
           "url": "https://www.lcfairgrounds.com/events",
@@ -44,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:31:12.447Z",
+      "fetchedAt": "2026-10-25T17:13:21.161Z",
       "fetches": [
         {
           "url": "https://oakpark.librarycalendar.com/events/month",
@@ -69,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:31:12.447Z",
+      "fetchedAt": "2026-10-25T17:13:21.161Z",
       "fetches": [
         {
           "url": "https://napervillepl.librarycalendar.com/events/month",
@@ -90,16 +90,41 @@
       "issueType": "fetch-failed",
       "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 111,
+      "recoveredEvents": 24,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 111,
-      "fetchedAt": "2026-10-08T04:31:12.447Z",
+      "lastKnownGoodEvents": 24,
+      "fetchedAt": "2026-10-25T17:13:21.161Z",
       "fetches": [
         {
           "url": "https://fpdcc.com/events/",
           "status": "http-error",
           "httpStatus": 403,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "chicago",
+      "sourceId": "lincoln-park-zoo-spooky-zoo-2026",
+      "sourceName": "Spooky Zoo at Lincoln Park Zoo",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.lpzoo.org/event/spooky-zoo/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:13:21.161Z",
+      "fetches": [
+        {
+          "url": "https://www.lpzoo.org/event/spooky-zoo/",
+          "status": "ok",
+          "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
         }
       ]
@@ -119,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:31:12.447Z",
+      "fetchedAt": "2026-10-25T17:13:21.161Z",
       "fetches": [
         {
           "url": "https://metrochicago.com/shows/",
@@ -144,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:31:12.447Z",
+      "fetchedAt": "2026-10-25T17:13:21.161Z",
       "fetches": [
         {
           "url": "https://www.emptybottle.com/events/",
@@ -161,21 +186,20 @@
       "sourceName": "Lincoln Hall",
       "sourceType": "html",
       "url": "https://www.lh-st.com/events",
-      "status": "http-error",
+      "status": "fetch-error",
       "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:31:12.447Z",
+      "fetchedAt": "2026-10-25T17:13:21.161Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -186,21 +210,20 @@
       "sourceName": "Schubas Tavern",
       "sourceType": "html",
       "url": "https://www.lh-st.com/events",
-      "status": "http-error",
+      "status": "fetch-error",
       "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:31:12.447Z",
+      "fetchedAt": "2026-10-25T17:13:21.161Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -219,7 +242,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:31:12.447Z",
+      "fetchedAt": "2026-10-25T17:13:21.161Z",
       "fetches": [
         {
           "url": "https://chicago.zanies.com/events",
@@ -230,21 +253,21 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "chicago",
       "sourceId": "hideout-chicago",
       "sourceName": "The Hideout",
       "sourceType": "html",
       "url": "https://www.hideoutchicago.com/events",
       "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:31:12.447Z",
+      "fetchedAt": "2026-10-25T17:13:21.161Z",
       "fetches": [
         {
           "url": "https://www.hideoutchicago.com/events",

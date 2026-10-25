@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "austin",
-  "generatedAt": "2026-10-08T04:51:05.531Z",
-  "alertCount": 14,
+  "generatedAt": "2026-10-25T17:06:44.571Z",
+  "alertCount": 16,
   "alerts": [
     {
       "severity": "critical",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://library.austintexas.gov/events/calendar",
@@ -45,7 +45,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://thinkeryaustin.org/visit-us/",
@@ -70,7 +70,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://www.thestoryoftexas.com/visit/calendar",
@@ -95,7 +95,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://www.lbjlibrary.org/events",
@@ -120,7 +120,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://blantonmuseum.org/events/",
@@ -137,21 +137,21 @@
       "sourceName": "Zilker Botanical Garden",
       "sourceType": "tribeEvents",
       "url": "https://zilkergarden.org/events/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://zilkergarden.org/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=0; pages=1"
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/plain; charset=utf-8"
         }
       ]
     },
@@ -170,13 +170,63 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://www.umlaufsculpture.org/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "austin",
+      "sourceId": "safe-truck-or-treat-2026-10-24-src",
+      "sourceName": "Truck-or-Treat",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.safeaustin.org/calendar/list/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
+      "fetches": [
+        {
+          "url": "https://www.safeaustin.org/calendar/list/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "austin",
+      "sourceId": "halloween-hijinks-jellystone-austin-north-2026-10-09-src",
+      "sourceName": "Halloween Hijinks: Halloween I",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.campjellystone.com/jellystone-park-austin-north/events/halloween-hijinks-halloween-i",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
+      "fetches": [
+        {
+          "url": "https://www.campjellystone.com/jellystone-park-austin-north/events/halloween-hijinks-halloween-i",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -195,7 +245,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://stubbsaustin.com/concert-calendar/",
@@ -220,7 +270,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://mohawkaustin.com/calendar",
@@ -245,7 +295,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://continentalclub.com/austin-tx/",
@@ -270,7 +320,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://antonesnightclub.com/calendar/",
@@ -295,7 +345,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://acl-live.com/calendar/",
@@ -320,7 +370,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://drafthouse.com/austin/calendar",
@@ -345,7 +395,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://www.capcitycomedy.com/calendar",

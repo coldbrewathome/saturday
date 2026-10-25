@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "boston",
-  "generatedAt": "2026-10-08T04:50:45.168Z",
-  "alertCount": 4,
+  "generatedAt": "2026-10-25T17:06:57.642Z",
+  "alertCount": 6,
   "alerts": [
     {
       "severity": "warning",
@@ -19,13 +19,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:50:45.168Z",
+      "fetchedAt": "2026-10-25T17:06:57.642Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=3; pages=1"
+          "contentType": "application/json; source=ticketmaster; events=4; pages=1"
         }
       ]
     },
@@ -44,13 +44,64 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:50:45.168Z",
+      "fetchedAt": "2026-10-25T17:06:57.642Z",
       "fetches": [
         {
           "url": "https://www.easternstatesexposition.com/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "boston",
+      "sourceId": "ride-and-chill-franklin-park-2026-10-11-src",
+      "sourceName": "Ride and Chill at Franklin Park",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.boston.gov/calendar/ride-and-chill-franklin-park",
+      "status": "blocked",
+      "issueType": "fetch-failed",
+      "reason": "challenge page returned instead of event content",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:06:57.642Z",
+      "fetches": [
+        {
+          "url": "https://www.boston.gov/calendar/ride-and-chill-franklin-park",
+          "status": "blocked",
+          "reason": "challenge page returned instead of event content",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "boston",
+      "sourceId": "fall-o-ween-childrens-festival-2026-10-16-src",
+      "sourceName": "Fall-o-Ween Children's Festival 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://content.boston.gov/calendar/fall-o-ween-childrens-festival-2026",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:06:57.642Z",
+      "fetches": [
+        {
+          "url": "https://content.boston.gov/calendar/fall-o-ween-childrens-festival-2026",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -69,7 +120,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:50:45.168Z",
+      "fetchedAt": "2026-10-25T17:06:57.642Z",
       "fetches": [
         {
           "url": "https://www.crossroadspresents.com/paradise-rock-club",
@@ -94,7 +145,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:50:45.168Z",
+      "fetchedAt": "2026-10-25T17:06:57.642Z",
       "fetches": [
         {
           "url": "https://www.nickscomedystop.com/calendar",

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "bay-area",
-  "generatedAt": "2026-10-08T05:02:24.457Z",
-  "alertCount": 34,
+  "generatedAt": "2026-10-25T17:09:17.998Z",
+  "alertCount": 39,
   "alerts": [
     {
       "severity": "warning",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.alamedafree.org/Events-directory",
@@ -44,38 +44,13 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.redwoodcity.org/departments/library/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "bay-area",
-      "sourceId": "san-rafael-library",
-      "sourceName": "San Rafael Public Library",
-      "sourceType": "html",
-      "url": "https://www.srpubliclibrary.org/events",
-      "status": "ok-template-fallback",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": "recurring-template",
-      "recoveredEvents": 4,
-      "liveEvents": 0,
-      "fallbackEvents": 4,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
-      "fetches": [
-        {
-          "url": "https://www.srpubliclibrary.org/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -94,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.calacademy.org/whats-happening",
@@ -119,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.exploratorium.edu/visit/calendar",
@@ -137,14 +112,14 @@
       "sourceType": "html",
       "url": "https://bayareadiscoverymuseum.org/events/",
       "status": "ok-template-fallback",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": "recurring-template",
       "recoveredEvents": 4,
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://bayareadiscoverymuseum.org/events/",
@@ -161,21 +136,21 @@
       "sourceName": "Habitot Children's Museum",
       "sourceType": "html",
       "url": "https://www.habitot.org/visit",
-      "status": "ok-template-fallback",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": "recurring-template",
       "recoveredEvents": 4,
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.habitot.org/visit",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/html; charset=iso-8859-1"
         }
       ]
     },
@@ -194,7 +169,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://curiodyssey.org/visit",
@@ -219,7 +194,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.cdm.org/calendar/",
@@ -244,7 +219,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.thetech.org/visit",
@@ -269,7 +244,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.lawrencehallofscience.org/visit",
@@ -290,11 +265,11 @@
       "issueType": "fetch-failed",
       "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 17,
+      "recoveredEvents": 4,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 17,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "lastKnownGoodEvents": 4,
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://chabotspace.org/programs/calendar-view/",
@@ -319,7 +294,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.aquariumofthebay.org/visit",
@@ -344,7 +319,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.oaklandzoo.org/events",
@@ -369,7 +344,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.sfzoo.org/visit",
@@ -394,7 +369,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://happyhollow.org/",
@@ -419,7 +394,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.fws.gov/refuge/don-edwards-san-francisco-bay/visit-us",
@@ -444,7 +419,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://hiddenvilla.org/visit",
@@ -469,7 +444,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.famsf.org/events/family-art-making-0",
@@ -500,7 +475,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://sunsetmercantilesf.com/innersunsetflea/",
@@ -513,22 +488,22 @@
     {
       "severity": "warning",
       "metroId": "bay-area",
-      "sourceId": "ardenwood-historic-farm",
-      "sourceName": "Ardenwood Historic Farm",
-      "sourceType": "officialTextEvents",
-      "url": "https://www.ebparks.org/calendar?date=2026-10&park=499",
-      "status": "ok-last-known-good",
-      "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 14,
+      "sourceId": "niles-canyon-railway",
+      "sourceName": "Niles Canyon Railway",
+      "sourceType": "html",
+      "url": "https://www.ncry.org/events/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 14,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
-          "url": "https://www.ebparks.org/calendar?date=2026-10&park=499",
+          "url": "https://www.ncry.org/events/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -546,11 +521,11 @@
       "issueType": "fetch-failed",
       "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 3,
+      "recoveredEvents": 1,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 3,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.srcity.org/calendar.aspx?view=list",
@@ -567,62 +542,33 @@
       ]
     },
     {
-      "severity": "warning",
-      "metroId": "bay-area",
-      "sourceId": "napa-city-rec",
-      "sourceName": "City of Napa Parks & Recreation",
-      "sourceType": "civicpluscal",
-      "url": "https://www.cityofnapa.org/calendar.aspx?view=list",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
-      "fetches": [
-        {
-          "url": "https://www.cityofnapa.org/calendar.aspx?view=list",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        },
-        {
-          "url": "https://www.cityofnapa.org/calendar.aspx?view=list&month=11&year=2026&CID=0",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "bay-area",
       "sourceId": "hayward-rec",
       "sourceName": "Hayward Area Recreation & Park District",
       "sourceType": "civicpluscal",
       "url": "https://www.haywardrec.org/calendar.aspx?view=list",
-      "status": "fetch-error",
-      "issueType": "fetch-failed",
-      "reason": "This operation was aborted",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 3,
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 3,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.haywardrec.org/calendar.aspx?view=list",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         },
         {
           "url": "https://www.haywardrec.org/calendar.aspx?view=list&month=11&year=2026&CID=0",
-          "status": "fetch-error",
-          "reason": "This operation was aborted"
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -641,7 +587,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.losaltosca.gov/calendar.aspx?CID=14&view=list",
@@ -672,7 +618,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.cityofsanmateo.org/calendar.aspx?view=list",
@@ -703,7 +649,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://calperformances.org/performances/family/",
@@ -728,7 +674,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.ssfca.gov/Events/0826-Baby-Storytime",
@@ -749,11 +695,11 @@
       "issueType": "fetch-failed",
       "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 41,
+      "recoveredEvents": 21,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 41,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "lastKnownGoodEvents": 21,
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.sanleandro.org/calendar.aspx?CID=25,46&view=list",
@@ -772,19 +718,94 @@
     {
       "severity": "warning",
       "metroId": "bay-area",
-      "sourceId": "spina-farms-pumpkin-patch-2026",
-      "sourceName": "Spina Farms Pumpkin Patch",
+      "sourceId": "dellosso-pumpkin-maze",
+      "sourceName": "Dell'Osso Family Farm Pumpkin Maze",
       "sourceType": "officialTextEvents",
-      "url": "https://spinafarmspumpkinpatch.com/",
+      "url": "https://www.pumpkinmaze.com/",
       "status": "ok-last-known-good",
       "issueType": "zero-extracted",
       "reason": "source produced no live events; using last-known-good future events",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 11,
+      "recoveredEvents": 7,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 11,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "lastKnownGoodEvents": 7,
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
+      "fetches": [
+        {
+          "url": "https://www.pumpkinmaze.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "bay-area",
+      "sourceId": "half-moon-bay-pumpkin-festival-2026",
+      "sourceName": "Half Moon Bay Art & Pumpkin Festival",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.hmbpumpkinfest.com/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
+      "fetches": [
+        {
+          "url": "https://www.hmbpumpkinfest.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "bay-area",
+      "sourceId": "walnut-creek-trunk-or-treat-2026",
+      "sourceName": "Trunk or Treat Walnut Creek",
+      "sourceType": "officialTextEvents",
+      "url": "https://walnutcreekdowntown.com/do/trunk-or-treat-walnut-creek",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
+      "fetches": [
+        {
+          "url": "https://walnutcreekdowntown.com/do/trunk-or-treat-walnut-creek",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "bay-area",
+      "sourceId": "spina-farms-pumpkin-patch-2026",
+      "sourceName": "Spina Farms Pumpkin Patch",
+      "sourceType": "officialTextEvents",
+      "url": "https://spinafarmspumpkinpatch.com/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://spinafarmspumpkinpatch.com/",
@@ -805,11 +826,11 @@
       "issueType": "zero-extracted",
       "reason": "source produced no live events; using last-known-good future events",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 7,
+      "recoveredEvents": 2,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 7,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "lastKnownGoodEvents": 2,
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.gizdich-ranch.com/",
@@ -820,12 +841,87 @@
       ]
     },
     {
+      "severity": "warning",
+      "metroId": "bay-area",
+      "sourceId": "fleet-week-air-show-2026-10-10-src",
+      "sourceName": "San Francisco Fleet Week Air Show",
+      "sourceType": "officialTextEvents",
+      "url": "https://fleetweeksf.org/events/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
+      "fetches": [
+        {
+          "url": "https://fleetweeksf.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "bay-area",
+      "sourceId": "fleet-week-air-show-2026-10-11-src",
+      "sourceName": "San Francisco Fleet Week Air Show",
+      "sourceType": "officialTextEvents",
+      "url": "https://fleetweeksf.org/events/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
+      "fetches": [
+        {
+          "url": "https://fleetweeksf.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "bay-area",
+      "sourceId": "fleet-week-fleet-fest-2026-10-10-src",
+      "sourceName": "Fleet Fest at Fisherman's Wharf",
+      "sourceType": "officialTextEvents",
+      "url": "https://fleetweeksf.org/events/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
+      "fetches": [
+        {
+          "url": "https://fleetweeksf.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
       "severity": "critical",
       "metroId": "bay-area",
-      "sourceId": "great-american-music-hall",
-      "sourceName": "Great American Music Hall",
-      "sourceType": "html",
-      "url": "https://gamh.com/calendar",
+      "sourceId": "fleet-week-fleet-fest-2026-10-11-src",
+      "sourceName": "Fleet Fest at Fisherman's Wharf",
+      "sourceType": "officialTextEvents",
+      "url": "https://fleetweeksf.org/events/",
       "status": "ok",
       "issueType": "zero-extracted",
       "reason": "Source returned a payload but no events were extracted.",
@@ -834,10 +930,35 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
-          "url": "https://gamh.com/calendar",
+          "url": "https://fleetweeksf.org/events/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "bay-area",
+      "sourceId": "sf-italian-heritage-parade-2026-10-11-src",
+      "sourceName": "San Francisco Italian Heritage Parade",
+      "sourceType": "officialTextEvents",
+      "url": "https://sfitalianheritage.org/parade/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
+      "fetches": [
+        {
+          "url": "https://sfitalianheritage.org/parade/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -859,7 +980,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://theuctheatre.org/events/",
@@ -884,7 +1005,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T05:02:24.457Z",
+      "fetchedAt": "2026-10-25T17:09:17.998Z",
       "fetches": [
         {
           "url": "https://www.ebparks.org/calendar",

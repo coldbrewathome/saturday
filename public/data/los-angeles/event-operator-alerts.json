@@ -1,34 +1,9 @@
 {
   "schemaVersion": 1,
   "metroId": "los-angeles",
-  "generatedAt": "2026-10-08T04:49:29.979Z",
-  "alertCount": 16,
+  "generatedAt": "2026-10-25T17:11:21.489Z",
+  "alertCount": 21,
   "alerts": [
-    {
-      "severity": "critical",
-      "metroId": "los-angeles",
-      "sourceId": "la-brea-tar-pits",
-      "sourceName": "La Brea Tar Pits & Museum",
-      "sourceType": "html",
-      "url": "https://tarpits.org/calendar?_wrapper_format=html&page=0",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:49:29.979Z",
-      "fetches": [
-        {
-          "url": "https://tarpits.org/calendar?_wrapper_format=html&page=0",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
-        }
-      ]
-    },
     {
       "severity": "critical",
       "metroId": "los-angeles",
@@ -44,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:49:29.979Z",
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
       "fetches": [
         {
           "url": "https://www.petersen.org/events",
@@ -52,6 +27,31 @@
           "reason": "challenge page returned instead of event content",
           "httpStatus": 200,
           "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "cabrillo-marine-aquarium",
+      "sourceName": "Cabrillo Marine Aquarium",
+      "sourceType": "html",
+      "url": "https://cma.recreation.parks.lacity.gov/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
+      "fetches": [
+        {
+          "url": "https://cma.recreation.parks.lacity.gov/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -70,7 +70,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:49:29.979Z",
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
       "fetches": [
         {
           "url": "https://www.nortonsimon.org/calendar",
@@ -95,7 +95,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:49:29.979Z",
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
       "fetches": [
         {
           "url": "https://www.huntington.org/calendar",
@@ -120,7 +120,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:49:29.979Z",
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
       "fetches": [
         {
           "url": "https://grandparkla.org/events/",
@@ -145,7 +145,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:49:29.979Z",
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
       "fetches": [
         {
           "url": "https://ocfair.com/oc-fair/",
@@ -158,10 +158,10 @@
     {
       "severity": "critical",
       "metroId": "los-angeles",
-      "sourceId": "ventura-county-fair",
-      "sourceName": "Ventura County Fair",
-      "sourceType": "html",
-      "url": "https://venturacountyfair.org/",
+      "sourceId": "los-rios-ranch-apple-season",
+      "sourceName": "Los Rios Rancho Apple U-Pick",
+      "sourceType": "officialTextEvents",
+      "url": "https://losriosrancho.com/apple-season",
       "status": "ok",
       "issueType": "zero-extracted",
       "reason": "Source returned a payload but no events were extracted.",
@@ -170,10 +170,110 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:49:29.979Z",
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
       "fetches": [
         {
-          "url": "https://venturacountyfair.org/",
+          "url": "https://losriosrancho.com/apple-season",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "culver-city-arts-festival-2026-10-10-src",
+      "sourceName": "8th Annual Culver City Arts Festival",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.culvercity.gov/Events-directory/8th-Annual-Culver-City-Arts-Festival",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
+      "fetches": [
+        {
+          "url": "https://www.culvercity.gov/Events-directory/8th-Annual-Culver-City-Arts-Festival",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "feria-de-los-moles-2026-10-11-src",
+      "sourceName": "Feria de los Moles 2026 (The Mole Fair)",
+      "sourceType": "officialTextEvents",
+      "url": "https://feriadelosmoles.com/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
+      "fetches": [
+        {
+          "url": "https://feriadelosmoles.com/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "fall-fantasy-book-faire-2026-10-10-src",
+      "sourceName": "Fall Fantasy Book Faire 2026",
+      "sourceType": "officialTextEvents",
+      "url": "https://theautry.org/events/calendar",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
+      "fetches": [
+        {
+          "url": "https://theautry.org/events/calendar",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "los-angeles",
+      "sourceId": "irvine-park-railroad-pumpkin-patch-2026-src",
+      "sourceName": "Irvine Park Railroad Pumpkin Patch",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.irvineparkrailroad.com/events/pumpkin-patch/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
+      "fetches": [
+        {
+          "url": "https://www.irvineparkrailroad.com/events/pumpkin-patch/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -183,22 +283,47 @@
     {
       "severity": "warning",
       "metroId": "los-angeles",
-      "sourceId": "los-rios-ranch-apple-season",
-      "sourceName": "Los Rios Rancho Apple U-Pick",
+      "sourceId": "shg-ddlm-calavera-mask-workshop-2026-10-10-src",
+      "sourceName": "Día de los Muertos Community Art Workshop #2: Calavera Masks",
       "sourceType": "officialTextEvents",
-      "url": "https://losriosrancho.com/apple-season",
-      "status": "ok-last-known-good",
-      "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 2,
+      "url": "https://www.selfhelpgraphics.com/upcoming-events/101026-dod-calaveramask",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 2,
-      "fetchedAt": "2026-10-08T04:49:29.979Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
       "fetches": [
         {
-          "url": "https://losriosrancho.com/apple-season",
+          "url": "https://www.selfhelpgraphics.com/upcoming-events/101026-dod-calaveramask",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "los-angeles",
+      "sourceId": "shakespeare-bridge-centennial-2026-10-10-src",
+      "sourceName": "Shakespeare Bridge Centennial Celebration",
+      "sourceType": "officialTextEvents",
+      "url": "https://shakespearebridge.org/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
+      "fetches": [
+        {
+          "url": "https://shakespearebridge.org/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html;charset=utf-8"
@@ -220,7 +345,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:49:29.979Z",
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
       "fetches": [
         {
           "url": "https://www.troubadour.com/events",
@@ -245,7 +370,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:49:29.979Z",
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
       "fetches": [
         {
           "url": "https://www.theelrey.com/events",
@@ -270,7 +395,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:49:29.979Z",
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
       "fetches": [
         {
           "url": "https://www.theroxy.com/events",
@@ -295,7 +420,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:49:29.979Z",
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
       "fetches": [
         {
           "url": "https://thecomedystore.com/calendar/",
@@ -320,7 +445,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:49:29.979Z",
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
       "fetches": [
         {
           "url": "https://www.laughfactory.com/shows",
@@ -345,7 +470,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:49:29.979Z",
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
       "fetches": [
         {
           "url": "https://improv.com/hollywood/calendar/",
@@ -370,7 +495,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:49:29.979Z",
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
       "fetches": [
         {
           "url": "https://www.ticketmaster.com/the-wiltern-tickets-los-angeles/venue/73790",
@@ -396,7 +521,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:49:29.979Z",
+      "fetchedAt": "2026-10-25T17:11:21.489Z",
       "fetches": [
         {
           "url": "https://www.theregenttheater.com/events",

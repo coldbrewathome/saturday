@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "austin",
-  "generatedAt": "2026-10-08T04:51:05.531Z",
+  "generatedAt": "2026-10-25T17:06:44.571Z",
   "registryPath": "data/event-sources-austin.json",
   "outputPath": "public/data/austin/events.json",
-  "eventCount": 133,
-  "adultsEventCount": 10,
+  "eventCount": 115,
+  "adultsEventCount": 12,
   "sourceCount": 25,
-  "liveEventCount": 143,
+  "liveEventCount": 128,
   "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 14,
+  "operatorAlertCount": 16,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://library.austintexas.gov/events/calendar",
@@ -54,7 +54,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://thinkeryaustin.org/visit-us/",
@@ -79,7 +79,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://www.thestoryoftexas.com/visit/calendar",
@@ -104,7 +104,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://www.lbjlibrary.org/events",
@@ -129,7 +129,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://blantonmuseum.org/events/",
@@ -146,21 +146,21 @@
       "sourceName": "Zilker Botanical Garden",
       "sourceType": "tribeEvents",
       "url": "https://zilkergarden.org/events/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://zilkergarden.org/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=0; pages=1"
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/plain; charset=utf-8"
         }
       ]
     },
@@ -179,13 +179,63 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://www.umlaufsculpture.org/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "austin",
+      "sourceId": "safe-truck-or-treat-2026-10-24-src",
+      "sourceName": "Truck-or-Treat",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.safeaustin.org/calendar/list/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
+      "fetches": [
+        {
+          "url": "https://www.safeaustin.org/calendar/list/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "austin",
+      "sourceId": "halloween-hijinks-jellystone-austin-north-2026-10-09-src",
+      "sourceName": "Halloween Hijinks: Halloween I",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.campjellystone.com/jellystone-park-austin-north/events/halloween-hijinks-halloween-i",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
+      "fetches": [
+        {
+          "url": "https://www.campjellystone.com/jellystone-park-austin-north/events/halloween-hijinks-halloween-i",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=utf-8"
         }
       ]
     },
@@ -204,7 +254,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://stubbsaustin.com/concert-calendar/",
@@ -229,7 +279,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://mohawkaustin.com/calendar",
@@ -254,7 +304,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://continentalclub.com/austin-tx/",
@@ -279,7 +329,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://antonesnightclub.com/calendar/",
@@ -304,7 +354,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://acl-live.com/calendar/",
@@ -329,7 +379,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://drafthouse.com/austin/calendar",
@@ -354,7 +404,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:05.531Z",
+      "fetchedAt": "2026-10-25T17:06:44.571Z",
       "fetches": [
         {
           "url": "https://www.capcitycomedy.com/calendar",
@@ -524,21 +574,20 @@
       "city": "Austin",
       "metroId": "austin",
       "category": "Outdoors",
-      "status": "ok",
+      "status": "http-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://zilkergarden.org/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=0; pages=1"
+          "status": "http-error",
+          "httpStatus": 404,
+          "contentType": "text/plain; charset=utf-8"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=0; pages=1",
-      "rejectedLiveEvents": 0,
+      "httpStatus": 404,
+      "contentType": "text/plain; charset=utf-8",
       "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -579,9 +628,9 @@
       "metroId": "austin",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 9,
+      "liveEvents": 8,
       "fallbackEvents": 0,
-      "eventCount": 9,
+      "eventCount": 8,
       "fetches": [
         {
           "url": "https://cedarparkpl.librarycalendar.com/events/month",
@@ -593,7 +642,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 9,
+      "extractedEvents": 8,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -606,9 +655,9 @@
       "metroId": "austin",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 9,
+      "liveEvents": 8,
       "fallbackEvents": 0,
-      "eventCount": 9,
+      "eventCount": 8,
       "fetches": [
         {
           "url": "https://pflugerville.librarycalendar.com/events/month",
@@ -620,7 +669,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 9,
+      "extractedEvents": 8,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -660,9 +709,9 @@
       "metroId": "austin",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 109,
+      "liveEvents": 95,
       "fallbackEvents": 0,
-      "eventCount": 109,
+      "eventCount": 95,
       "fetches": [
         {
           "url": "https://roundrocktexas.libcal.com/calendar/libraryevents?cid=19825&cal=19825",
@@ -673,8 +722,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 49,
-      "extractedEvents": 158,
+      "rejectedLiveEvents": 73,
+      "extractedEvents": 168,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -741,9 +790,9 @@
       "metroId": "austin",
       "category": "Community",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.safeaustin.org/calendar/list/",
@@ -755,7 +804,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -768,9 +817,9 @@
       "metroId": "austin",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.campjellystone.com/jellystone-park-austin-north/events/halloween-hijinks-halloween-i",
@@ -781,7 +830,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -982,21 +1031,21 @@
       "metroId": "austin",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 8,
+      "liveEvents": 12,
       "fallbackEvents": 0,
-      "eventCount": 8,
+      "eventCount": 12,
       "fetches": [
         {
           "url": "https://www.thecontemporaryaustin.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=18; pages=1"
+          "contentType": "application/json; source=tribe-events; events=16; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=18; pages=1",
-      "rejectedLiveEvents": 10,
-      "extractedEvents": 18,
+      "contentType": "application/json; source=tribe-events; events=16; pages=1",
+      "rejectedLiveEvents": 4,
+      "extractedEvents": 16,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1009,21 +1058,21 @@
       "metroId": "austin",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 2,
+      "liveEvents": 1,
       "fallbackEvents": 0,
-      "eventCount": 2,
+      "eventCount": 1,
       "fetches": [
         {
           "url": "https://www.mexic-artemuseum.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=3; pages=1"
+          "contentType": "application/json; source=tribe-events; events=2; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=3; pages=1",
+      "contentType": "application/json; source=tribe-events; events=2; pages=1",
       "rejectedLiveEvents": 1,
-      "extractedEvents": 3,
+      "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     }

@@ -1,9 +1,34 @@
 {
   "schemaVersion": 1,
   "metroId": "dallas-fort-worth",
-  "generatedAt": "2026-10-08T04:32:20.085Z",
-  "alertCount": 4,
+  "generatedAt": "2026-10-25T17:14:06.302Z",
+  "alertCount": 6,
   "alerts": [
+    {
+      "severity": "critical",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "state-fair-of-texas",
+      "sourceName": "State Fair of Texas (2026)",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.fairparkdallas.com/events/detail/2026-state-fair-of-texas",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:14:06.302Z",
+      "fetches": [
+        {
+          "url": "https://www.fairparkdallas.com/events/detail/2026-state-fair-of-texas",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
     {
       "severity": "critical",
       "metroId": "dallas-fort-worth",
@@ -19,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:32:20.085Z",
+      "fetchedAt": "2026-10-25T17:14:06.302Z",
       "fetches": [
         {
           "url": "https://www.treesdallas.com/events",
@@ -44,7 +69,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:32:20.085Z",
+      "fetchedAt": "2026-10-25T17:14:06.302Z",
       "fetches": [
         {
           "url": "https://www.thebombfactory.com/events/rss",
@@ -69,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:32:20.085Z",
+      "fetchedAt": "2026-10-25T17:14:06.302Z",
       "fetches": [
         {
           "url": "https://dadadallas.com/calendar/",
@@ -94,13 +119,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:32:20.085Z",
+      "fetchedAt": "2026-10-25T17:14:06.302Z",
       "fetches": [
         {
           "url": "https://www.tulipsftw.com/events",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "hyenas-dfw",
+      "sourceName": "Hyena's Comedy Club",
+      "sourceType": "html",
+      "url": "https://www.prekindle.com/events/hyenasdallas",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-25T17:14:06.302Z",
+      "fetches": [
+        {
+          "url": "https://www.prekindle.com/events/hyenasdallas",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=UTF-8"
         }
       ]
     }

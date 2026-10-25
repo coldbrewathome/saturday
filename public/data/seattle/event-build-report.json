@@ -1,18 +1,43 @@
 {
   "schemaVersion": 1,
   "metroId": "seattle",
-  "generatedAt": "2026-10-08T04:50:23.386Z",
+  "generatedAt": "2026-10-25T16:59:07.456Z",
   "registryPath": "data/event-sources-seattle.json",
   "outputPath": "public/data/seattle/events.json",
-  "eventCount": 514,
-  "adultsEventCount": 25,
+  "eventCount": 472,
+  "adultsEventCount": 24,
   "sourceCount": 25,
-  "liveEventCount": 545,
-  "lastKnownGoodEventCount": 0,
+  "liveEventCount": 477,
+  "lastKnownGoodEventCount": 18,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 13,
+  "operatorAlertCount": 14,
   "errors": [],
   "operatorAlerts": [
+    {
+      "severity": "warning",
+      "metroId": "seattle",
+      "sourceId": "seattle-childrens-museum-calendar",
+      "sourceName": "Seattle Children's Museum Calendar",
+      "sourceType": "eventList",
+      "url": "https://seattlechildrensmuseum.org/calendar/",
+      "status": "http-error",
+      "issueType": "fetch-failed",
+      "reason": "Source fetch did not return a usable payload.",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 18,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 18,
+      "fetchedAt": "2026-10-25T16:59:07.456Z",
+      "fetches": [
+        {
+          "url": "https://seattlechildrensmuseum.org/calendar/",
+          "status": "http-error",
+          "httpStatus": 429,
+          "contentType": "text/html"
+        }
+      ]
+    },
     {
       "severity": "critical",
       "metroId": "seattle",
@@ -28,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:50:23.386Z",
+      "fetchedAt": "2026-10-25T16:59:07.456Z",
       "fetches": [
         {
           "url": "https://www.zoo.org/events?cgid=1",
@@ -53,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:50:23.386Z",
+      "fetchedAt": "2026-10-25T16:59:07.456Z",
       "fetches": [
         {
           "url": "https://www.burkemuseum.org/events",
@@ -78,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:50:23.386Z",
+      "fetchedAt": "2026-10-25T16:59:07.456Z",
       "fetches": [
         {
           "url": "https://pacificsciencecenter.org/events/",
@@ -103,7 +128,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:50:23.386Z",
+      "fetchedAt": "2026-10-25T16:59:07.456Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
@@ -128,7 +153,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:50:23.386Z",
+      "fetchedAt": "2026-10-25T16:59:07.456Z",
       "fetches": [
         {
           "url": "https://www.evergreenfair.org/calendar.aspx",
@@ -153,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:50:23.386Z",
+      "fetchedAt": "2026-10-25T16:59:07.456Z",
       "fetches": [
         {
           "url": "https://www.seattlecenter.com/events/featured-events/festal/croatiafest",
@@ -178,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:50:23.386Z",
+      "fetchedAt": "2026-10-25T16:59:07.456Z",
       "fetches": [
         {
           "url": "https://www.zoo.org/events",
@@ -202,7 +227,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:50:23.386Z",
+      "fetchedAt": "2026-10-25T16:59:07.456Z",
       "fetches": [
         {
           "url": "https://www.neumos.com/events",
@@ -227,7 +252,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:50:23.386Z",
+      "fetchedAt": "2026-10-25T16:59:07.456Z",
       "fetches": [
         {
           "url": "https://www.thecrocodile.com/events",
@@ -252,7 +277,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:50:23.386Z",
+      "fetchedAt": "2026-10-25T16:59:07.456Z",
       "fetches": [
         {
           "url": "https://www.tractortavern.com/events",
@@ -277,7 +302,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:50:23.386Z",
+      "fetchedAt": "2026-10-25T16:59:07.456Z",
       "fetches": [
         {
           "url": "https://www.sunsettavern.com/events",
@@ -302,7 +327,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:50:23.386Z",
+      "fetchedAt": "2026-10-25T16:59:07.456Z",
       "fetches": [
         {
           "url": "https://www.comedyunderground.com/calendar",
@@ -326,7 +351,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:50:23.386Z",
+      "fetchedAt": "2026-10-25T16:59:07.456Z",
       "fetches": [
         {
           "url": "https://www.nectarlounge.com/",
@@ -361,9 +386,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 19,
+      "liveEvents": 16,
       "fallbackEvents": 0,
-      "eventCount": 19,
+      "eventCount": 16,
       "fetches": [
         {
           "url": "https://kcls.bibliocommons.com/v2/events?programs=6092fc2d8910133a0055a335",
@@ -375,7 +400,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 19,
+      "extractedEvents": 16,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -388,9 +413,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 191,
+      "liveEvents": 182,
       "fallbackEvents": 0,
-      "eventCount": 191,
+      "eventCount": 182,
       "fetches": [
         {
           "url": "https://www.trumba.com/calendars/kalendaro.json?filterview=SeriesStoryTime",
@@ -401,8 +426,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 191,
+      "rejectedLiveEvents": 15,
+      "extractedEvents": 197,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -414,24 +439,23 @@
       "city": "Seattle",
       "metroId": "seattle",
       "category": "Museum",
-      "status": "ok",
-      "liveEvents": 66,
+      "status": "http-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 66,
+      "eventCount": 18,
       "fetches": [
         {
           "url": "https://seattlechildrensmuseum.org/calendar/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "http-error",
+          "httpStatus": 429,
+          "contentType": "text/html"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 19,
-      "extractedEvents": 85,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "httpStatus": 429,
+      "contentType": "text/html",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 18,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "woodland-park-zoo-family",
@@ -535,8 +559,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 3,
-      "extractedEvents": 7,
+      "rejectedLiveEvents": 1,
+      "extractedEvents": 5,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -603,9 +627,9 @@
       "metroId": "seattle",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 12,
+      "liveEvents": 10,
       "fallbackEvents": 0,
-      "eventCount": 12,
+      "eventCount": 10,
       "fetches": [
         {
           "url": "https://kcls.bibliocommons.com/v2/events",
@@ -617,7 +641,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 12,
+      "extractedEvents": 10,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -657,21 +681,21 @@
       "metroId": "seattle",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 14,
+      "liveEvents": 28,
       "fallbackEvents": 0,
-      "eventCount": 14,
+      "eventCount": 28,
       "fetches": [
         {
           "url": "https://bellevuebotanical.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=69; pages=1"
+          "contentType": "application/json; source=tribe-events; events=101; pages=2"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=69; pages=1",
-      "rejectedLiveEvents": 54,
-      "extractedEvents": 68,
+      "contentType": "application/json; source=tribe-events; events=101; pages=2",
+      "rejectedLiveEvents": 73,
+      "extractedEvents": 101,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -684,9 +708,9 @@
       "metroId": "seattle",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 200,
+      "liveEvents": 198,
       "fallbackEvents": 0,
-      "eventCount": 200,
+      "eventCount": 198,
       "fetches": [
         {
           "url": "https://www.trumba.com/calendars/sea_campus.json",
@@ -698,7 +722,7 @@
       "httpStatus": 200,
       "contentType": "application/json;charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 200,
+      "extractedEvents": 198,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
