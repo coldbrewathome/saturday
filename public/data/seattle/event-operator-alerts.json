@@ -1,34 +1,9 @@
 {
   "schemaVersion": 1,
   "metroId": "seattle",
-  "generatedAt": "2026-10-25T16:59:07.456Z",
-  "alertCount": 14,
+  "generatedAt": "2026-10-25T17:24:28.604Z",
+  "alertCount": 12,
   "alerts": [
-    {
-      "severity": "warning",
-      "metroId": "seattle",
-      "sourceId": "seattle-childrens-museum-calendar",
-      "sourceName": "Seattle Children's Museum Calendar",
-      "sourceType": "eventList",
-      "url": "https://seattlechildrensmuseum.org/calendar/",
-      "status": "http-error",
-      "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 18,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 18,
-      "fetchedAt": "2026-10-25T16:59:07.456Z",
-      "fetches": [
-        {
-          "url": "https://seattlechildrensmuseum.org/calendar/",
-          "status": "http-error",
-          "httpStatus": 429,
-          "contentType": "text/html"
-        }
-      ]
-    },
     {
       "severity": "critical",
       "metroId": "seattle",
@@ -44,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T16:59:07.456Z",
+      "fetchedAt": "2026-10-25T17:24:28.604Z",
       "fetches": [
         {
           "url": "https://www.zoo.org/events?cgid=1",
@@ -69,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T16:59:07.456Z",
+      "fetchedAt": "2026-10-25T17:24:28.604Z",
       "fetches": [
         {
           "url": "https://www.burkemuseum.org/events",
@@ -94,38 +69,13 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T16:59:07.456Z",
+      "fetchedAt": "2026-10-25T17:24:28.604Z",
       "fetches": [
         {
           "url": "https://pacificsciencecenter.org/events/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
-        }
-      ]
-    },
-    {
-      "severity": "warning",
-      "metroId": "seattle",
-      "sourceId": "ticketmaster-seattle-family",
-      "sourceName": "Ticketmaster Seattle Family Events",
-      "sourceType": "ticketmaster",
-      "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
-      "recoveredBy": null,
-      "recoveredEvents": 0,
-      "liveEvents": 0,
-      "fallbackEvents": 0,
-      "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T16:59:07.456Z",
-      "fetches": [
-        {
-          "url": "https://app.ticketmaster.com/discovery/v2/events.json",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=6; pages=3"
         }
       ]
     },
@@ -144,7 +94,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T16:59:07.456Z",
+      "fetchedAt": "2026-10-25T17:24:28.604Z",
       "fetches": [
         {
           "url": "https://www.evergreenfair.org/calendar.aspx",
@@ -169,7 +119,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T16:59:07.456Z",
+      "fetchedAt": "2026-10-25T17:24:28.604Z",
       "fetches": [
         {
           "url": "https://www.seattlecenter.com/events/featured-events/festal/croatiafest",
@@ -194,7 +144,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T16:59:07.456Z",
+      "fetchedAt": "2026-10-25T17:24:28.604Z",
       "fetches": [
         {
           "url": "https://www.zoo.org/events",
@@ -218,7 +168,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T16:59:07.456Z",
+      "fetchedAt": "2026-10-25T17:24:28.604Z",
       "fetches": [
         {
           "url": "https://www.neumos.com/events",
@@ -243,7 +193,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T16:59:07.456Z",
+      "fetchedAt": "2026-10-25T17:24:28.604Z",
       "fetches": [
         {
           "url": "https://www.thecrocodile.com/events",
@@ -268,7 +218,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T16:59:07.456Z",
+      "fetchedAt": "2026-10-25T17:24:28.604Z",
       "fetches": [
         {
           "url": "https://www.tractortavern.com/events",
@@ -293,7 +243,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T16:59:07.456Z",
+      "fetchedAt": "2026-10-25T17:24:28.604Z",
       "fetches": [
         {
           "url": "https://www.sunsettavern.com/events",
@@ -318,7 +268,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T16:59:07.456Z",
+      "fetchedAt": "2026-10-25T17:24:28.604Z",
       "fetches": [
         {
           "url": "https://www.comedyunderground.com/calendar",
@@ -342,7 +292,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T16:59:07.456Z",
+      "fetchedAt": "2026-10-25T17:24:28.604Z",
       "fetches": [
         {
           "url": "https://www.nectarlounge.com/",
