@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "new-york-city",
-  "generatedAt": "2026-10-25T17:22:34.943Z",
+  "generatedAt": "2026-10-27T23:29:12.021Z",
   "registryPath": "data/event-sources-new-york-city.json",
   "outputPath": "public/data/new-york-city/events.json",
-  "eventCount": 499,
-  "adultsEventCount": 81,
+  "eventCount": 449,
+  "adultsEventCount": 74,
   "sourceCount": 39,
-  "liveEventCount": 465,
-  "lastKnownGoodEventCount": 14,
+  "liveEventCount": 416,
+  "lastKnownGoodEventCount": 13,
   "fallbackEventCount": 20,
-  "operatorAlertCount": 23,
+  "operatorAlertCount": 25,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://queens.libnet.info/events",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.nypl.org/events/calendar",
@@ -79,7 +79,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.amnh.org/calendar",
@@ -104,7 +104,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://njfair.com/",
@@ -129,7 +129,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/2026/10/10/boo-bash-in-the-bronx",
@@ -154,7 +154,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/2026/10/17/the-great-pumpkin-spooktacular",
@@ -179,7 +179,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/2026/10/22/zumbaween",
@@ -204,7 +204,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/2026/10/24/halloween-boo-bash",
@@ -229,10 +229,60 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/2026/10/24/spooktacular-fiesta",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "new-york-city",
+      "sourceId": "halloween-wags-to-witches-2026",
+      "sourceName": "Halloween: Wags to Witches",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.nycgovparks.org/events/2026/10/25/halloween-wags-to-witches",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/2026/10/25/halloween-wags-to-witches",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "new-york-city",
+      "sourceId": "pumpkin-palooza-st-marys-2026",
+      "sourceName": "Pumpkin Palooza at St. Mary's Park",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.nycgovparks.org/events/2026/10/31/pumpkin-palooza",
+      "status": "ok-last-known-good",
+      "issueType": "zero-extracted",
+      "reason": "source produced no live events; using last-known-good future events",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/2026/10/31/pumpkin-palooza",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -250,11 +300,11 @@
       "issueType": "zero-extracted",
       "reason": "source produced no live events; using last-known-good future events",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 14,
+      "recoveredEvents": 12,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 14,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "lastKnownGoodEvents": 12,
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://hudsonvalley.org/events/Blaze/",
@@ -279,7 +329,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.statenislandzoo.org/",
@@ -304,7 +354,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.brooklynsteel.com/calendar",
@@ -329,7 +379,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.boweryballroom.com/calendar",
@@ -354,7 +404,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.musichallofwilliamsburg.com/calendar",
@@ -379,7 +429,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://lpr.com/calendar",
@@ -404,7 +454,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.terminal5nyc.com/calendar",
@@ -429,7 +479,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.websterhall.com/events",
@@ -454,7 +504,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.comedycellar.com/line-up/",
@@ -479,7 +529,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://gothamcomedyclub.com/calendar",
@@ -504,7 +554,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.elsewherebrooklyn.com/events",
@@ -529,7 +579,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.roughtradenyc.com/events",
@@ -554,7 +604,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.bluenotejazz.com/new-york/schedule",
@@ -579,7 +629,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://villagevanguard.com/events",
@@ -669,9 +719,9 @@
       "metroId": "new-york-city",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 4,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 4,
       "fetches": [
         {
           "url": "https://www.bklynlibrary.org/event-series/events-for-youth-and-family",
@@ -683,7 +733,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 3,
+      "extractedEvents": 4,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -696,9 +746,9 @@
       "metroId": "new-york-city",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 213,
+      "liveEvents": 185,
       "fallbackEvents": 0,
-      "eventCount": 213,
+      "eventCount": 185,
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/kids",
@@ -709,8 +759,8 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 51,
-      "extractedEvents": 264,
+      "rejectedLiveEvents": 26,
+      "extractedEvents": 211,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -750,9 +800,9 @@
       "metroId": "new-york-city",
       "category": "Theater",
       "status": "ok",
-      "liveEvents": 24,
+      "liveEvents": 22,
       "fallbackEvents": 0,
-      "eventCount": 24,
+      "eventCount": 22,
       "fetches": [
         {
           "url": "https://www.newvictory.org/api/event-instances.json",
@@ -764,7 +814,7 @@
       "httpStatus": 200,
       "contentType": "application/json",
       "rejectedLiveEvents": 113,
-      "extractedEvents": 137,
+      "extractedEvents": 135,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -898,21 +948,21 @@
       "metroId": "new-york-city",
       "category": "Outdoors",
       "status": "ok",
-      "liveEvents": 39,
+      "liveEvents": 37,
       "fallbackEvents": 0,
-      "eventCount": 39,
+      "eventCount": 37,
       "fetches": [
         {
           "url": "https://queensbotanical.org/calendar/list/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=63; pages=2"
+          "contentType": "application/json; source=tribe-events; events=61; pages=2"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=63; pages=2",
+      "contentType": "application/json; source=tribe-events; events=61; pages=2",
       "rejectedLiveEvents": 18,
-      "extractedEvents": 57,
+      "extractedEvents": 55,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -925,9 +975,9 @@
       "metroId": "new-york-city",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 149,
+      "liveEvents": 138,
       "fallbackEvents": 0,
-      "eventCount": 149,
+      "eventCount": 138,
       "fetches": [
         {
           "url": "https://www.prospectpark.org/events/",
@@ -938,7 +988,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=200; pages=4",
-      "rejectedLiveEvents": 46,
+      "rejectedLiveEvents": 57,
       "extractedEvents": 195,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -952,21 +1002,21 @@
       "metroId": "new-york-city",
       "category": "Community",
       "status": "ok",
-      "liveEvents": 21,
+      "liveEvents": 17,
       "fallbackEvents": 0,
-      "eventCount": 21,
+      "eventCount": 17,
       "fetches": [
         {
           "url": "https://cityparksfoundation.org/events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=22; pages=1"
+          "contentType": "application/json; source=tribe-events; events=18; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=22; pages=1",
+      "contentType": "application/json; source=tribe-events; events=18; pages=1",
       "rejectedLiveEvents": 1,
-      "extractedEvents": 22,
+      "extractedEvents": 18,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -1141,9 +1191,9 @@
       "metroId": "new-york-city",
       "category": "Community",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/2026/10/25/halloween-wags-to-witches",
@@ -1154,7 +1204,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -1167,8 +1217,8 @@
       "city": "Bronx",
       "metroId": "new-york-city",
       "category": "Community",
-      "status": "ok",
-      "liveEvents": 1,
+      "status": "ok-last-known-good",
+      "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 1,
       "fetches": [
@@ -1182,9 +1232,10 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "recoveryMode": "last-known-good",
+      "reason": "source produced no live events; using last-known-good future events"
     },
     {
       "id": "spooky-snug-harbor-tour-2026",
@@ -1224,7 +1275,7 @@
       "status": "ok-last-known-good",
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 14,
+      "eventCount": 12,
       "fetches": [
         {
           "url": "https://hudsonvalley.org/events/Blaze/",
@@ -1237,7 +1288,7 @@
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
       "extractedEvents": 0,
-      "lastKnownGoodEvents": 14,
+      "lastKnownGoodEvents": 12,
       "recoveryMode": "last-known-good",
       "reason": "source produced no live events; using last-known-good future events"
     },
@@ -1250,9 +1301,9 @@
       "metroId": "new-york-city",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 3,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://bronxzoo.com/boo-at-the-zoo",
@@ -1264,7 +1315,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 1,
-      "extractedEvents": 4,
+      "extractedEvents": 3,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

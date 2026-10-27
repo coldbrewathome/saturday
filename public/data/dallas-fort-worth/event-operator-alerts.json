@@ -1,9 +1,105 @@
 {
   "schemaVersion": 1,
   "metroId": "dallas-fort-worth",
-  "generatedAt": "2026-10-25T17:14:06.302Z",
-  "alertCount": 6,
+  "generatedAt": "2026-10-27T15:09:32.106Z",
+  "alertCount": 23,
   "alerts": [
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dallas-fort-worth-library-family",
+      "sourceName": "Dallas Public Library Family Events",
+      "sourceType": "librarycalendar",
+      "url": "https://dallaslibrary.librarymarket.com/events/month",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 6,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 6,
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
+      "fetches": [
+        {
+          "url": "https://dallaslibrary.librarymarket.com/events/month",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dallas-fort-worth-parks-family",
+      "sourceName": "Dallas Parks Calendar",
+      "sourceType": "rss",
+      "url": "https://www.dallasparks.org/RSSFeed.aspx?ModID=58&CID=Main-Calendar-14",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 5,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 5,
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
+      "fetches": [
+        {
+          "url": "https://www.dallasparks.org/RSSFeed.aspx?ModID=58&CID=Main-Calendar-14",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dallas-fort-worth-museum-family",
+      "sourceName": "Perot Museum Events",
+      "sourceType": "ticketureEvents",
+      "url": "https://www.perotmuseum.org/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
+      "fetches": [
+        {
+          "url": "https://www.perotmuseum.org/events/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dallas-fort-worth-zoo-family",
+      "sourceName": "Dallas Zoo Events",
+      "sourceType": "dallasZooAjax",
+      "url": "https://www.dallaszoo.com/dallas-zoo-events/calendar/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 34,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 34,
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
+      "fetches": [
+        {
+          "url": "https://www.dallaszoo.com/dallas-zoo-events/calendar/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
     {
       "severity": "critical",
       "metroId": "dallas-fort-worth",
@@ -11,21 +107,241 @@
       "sourceName": "State Fair of Texas (2026)",
       "sourceType": "officialTextEvents",
       "url": "https://www.fairparkdallas.com/events/detail/2026-state-fair-of-texas",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:14:06.302Z",
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
       "fetches": [
         {
           "url": "https://www.fairparkdallas.com/events/detail/2026-state-fair-of-texas",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dfw-plano-library-communico",
+      "sourceName": "Plano Public Library Events",
+      "sourceType": "communicoEvents",
+      "url": "https://plano.libnet.info/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 218,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 218,
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
+      "fetches": [
+        {
+          "url": "https://plano.libnet.info/events",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dfw-frisco-library-biblio",
+      "sourceName": "Frisco Public Library Events",
+      "sourceType": "biblioevents",
+      "url": "https://friscolibrary.bibliocommons.com/v2/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 11,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 11,
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
+      "fetches": [
+        {
+          "url": "https://friscolibrary.bibliocommons.com/v2/events",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dfw-denton-library-biblio",
+      "sourceName": "Denton Public Library Events",
+      "sourceType": "biblioevents",
+      "url": "https://denton.bibliocommons.com/v2/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 8,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 8,
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
+      "fetches": [
+        {
+          "url": "https://denton.bibliocommons.com/v2/events",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dfw-fort-worth-library-libcal",
+      "sourceName": "Fort Worth Public Library Events",
+      "sourceType": "libcal",
+      "url": "https://fortworthtexas.libcal.com/calendar",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 167,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 167,
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
+      "fetches": [
+        {
+          "url": "https://fortworthtexas.libcal.com/calendar",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dfw-arlington-library-libcal",
+      "sourceName": "Arlington Public Library Events",
+      "sourceType": "libcal",
+      "url": "https://arlingtontx.libcal.com/calendar",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 177,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 177,
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
+      "fetches": [
+        {
+          "url": "https://arlingtontx.libcal.com/calendar",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dfw-irving-library-libcal",
+      "sourceName": "Irving Public Library Events",
+      "sourceType": "libcal",
+      "url": "https://irvinglibrary.libcal.com/calendar",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 110,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 110,
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
+      "fetches": [
+        {
+          "url": "https://irvinglibrary.libcal.com/calendar",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dfw-mckinney-library-libcal",
+      "sourceName": "McKinney Public Library Events",
+      "sourceType": "libcal",
+      "url": "https://mckinneytexas.libcal.com/calendar",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 60,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 60,
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
+      "fetches": [
+        {
+          "url": "https://mckinneytexas.libcal.com/calendar",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dfw-garland-library-civicplus",
+      "sourceName": "Garland Library Calendar",
+      "sourceType": "civicpluscal",
+      "url": "https://www.garlandtx.gov/calendar.aspx?CID=24&view=list&showPastEvents=false",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 92,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 92,
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
+      "fetches": [
+        {
+          "url": "https://www.garlandtx.gov/calendar.aspx?CID=24&view=list&showPastEvents=false",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        },
+        {
+          "url": "https://www.garlandtx.gov/calendar.aspx?CID=24&view=list&showPastEvents=false&month=11&year=2026",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dfw-texas-discovery-gardens-tribe",
+      "sourceName": "Texas Discovery Gardens Events",
+      "sourceType": "tribeEvents",
+      "url": "https://txdg.org/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 2,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 2,
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
+      "fetches": [
+        {
+          "url": "https://txdg.org/events/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -36,46 +352,44 @@
       "sourceName": "Trees",
       "sourceType": "html",
       "url": "https://www.treesdallas.com/events",
-      "status": "http-error",
+      "status": "fetch-error",
       "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:14:06.302Z",
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
       "fetches": [
         {
           "url": "https://www.treesdallas.com/events",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "dallas-fort-worth",
       "sourceId": "the-bomb-factory",
       "sourceName": "The Factory in Deep Ellum",
       "sourceType": "html",
       "url": "https://www.thebombfactory.com/events/rss",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:14:06.302Z",
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
       "fetches": [
         {
           "url": "https://www.thebombfactory.com/events/rss",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/rss+xml"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -86,21 +400,20 @@
       "sourceName": "Dada",
       "sourceType": "html",
       "url": "https://dadadallas.com/calendar/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:14:06.302Z",
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
       "fetches": [
         {
           "url": "https://dadadallas.com/calendar/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -111,21 +424,44 @@
       "sourceName": "Tulips FTW",
       "sourceType": "html",
       "url": "https://www.tulipsftw.com/events",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:14:06.302Z",
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
       "fetches": [
         {
           "url": "https://www.tulipsftw.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dallas-comedy-club",
+      "sourceName": "Dallas Comedy Club",
+      "sourceType": "html",
+      "url": "https://www.prekindle.com/events/dallas-comedy-club",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 96,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 96,
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
+      "fetches": [
+        {
+          "url": "https://www.prekindle.com/events/dallas-comedy-club",
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -136,21 +472,92 @@
       "sourceName": "Hyena's Comedy Club",
       "sourceType": "html",
       "url": "https://www.prekindle.com/events/hyenasdallas",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:14:06.302Z",
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
       "fetches": [
         {
           "url": "https://www.prekindle.com/events/hyenasdallas",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html;charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dfw-tupps-brewery-tribe",
+      "sourceName": "TUPPS Brewery Events",
+      "sourceType": "tribeEvents",
+      "url": "https://tuppsbrewery.com/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 2,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 2,
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
+      "fetches": [
+        {
+          "url": "https://tuppsbrewery.com/events/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dfw-peticolas-brewing-tribe",
+      "sourceName": "Peticolas Brewing Company Events",
+      "sourceType": "tribeEvents",
+      "url": "https://www.peticolasbrewing.com/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
+      "fetches": [
+        {
+          "url": "https://www.peticolasbrewing.com/events/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "dallas-fort-worth",
+      "sourceId": "dfw-lakewood-brewing-tribe",
+      "sourceName": "Lakewood Brewing Company Events",
+      "sourceType": "tribeEvents",
+      "url": "https://lakewoodbrewing.com/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 3,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 3,
+      "fetchedAt": "2026-10-27T15:09:32.106Z",
+      "fetches": [
+        {
+          "url": "https://lakewoodbrewing.com/events/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     }

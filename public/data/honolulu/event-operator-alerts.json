@@ -1,9 +1,33 @@
 {
   "schemaVersion": 1,
   "metroId": "honolulu",
-  "generatedAt": "2026-10-25T17:14:38.916Z",
-  "alertCount": 9,
+  "generatedAt": "2026-10-27T15:09:36.184Z",
+  "alertCount": 15,
   "alerts": [
+    {
+      "severity": "warning",
+      "metroId": "honolulu",
+      "sourceId": "hawaii-state-library",
+      "sourceName": "Hawaii State Public Library System",
+      "sourceType": "tribeEvents",
+      "url": "https://www.librarieshawaii.org/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 384,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 384,
+      "fetchedAt": "2026-10-27T15:09:36.184Z",
+      "fetches": [
+        {
+          "url": "https://www.librarieshawaii.org/events/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
     {
       "severity": "critical",
       "metroId": "honolulu",
@@ -11,22 +35,20 @@
       "sourceName": "Bishop Museum",
       "sourceType": "html",
       "url": "https://www.bishopmuseum.org/exhibits-and-programs/events/",
-      "status": "blocked",
+      "status": "fetch-error",
       "issueType": "fetch-failed",
-      "reason": "challenge page returned instead of event content",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:14:38.916Z",
+      "fetchedAt": "2026-10-27T15:09:36.184Z",
       "fetches": [
         {
           "url": "https://www.bishopmuseum.org/exhibits-and-programs/events/",
-          "status": "blocked",
-          "reason": "challenge page returned instead of event content",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -37,21 +59,20 @@
       "sourceName": "Honolulu Museum of Art",
       "sourceType": "html",
       "url": "https://honolulumuseum.org/events/",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:14:38.916Z",
+      "fetchedAt": "2026-10-27T15:09:36.184Z",
       "fetches": [
         {
           "url": "https://honolulumuseum.org/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -62,46 +83,92 @@
       "sourceName": "Honolulu Zoo",
       "sourceType": "html",
       "url": "https://www.honoluluzoo.org/experiences-events/",
-      "status": "http-error",
+      "status": "fetch-error",
       "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:14:38.916Z",
+      "fetchedAt": "2026-10-27T15:09:36.184Z",
       "fetches": [
         {
           "url": "https://www.honoluluzoo.org/experiences-events/",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
     {
       "severity": "warning",
       "metroId": "honolulu",
+      "sourceId": "hawaii-childrens-discovery",
+      "sourceName": "Hawaii Children's Discovery Center",
+      "sourceType": "html",
+      "url": "https://www.discoverycenterhawaii.org/event-list",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-10-27T15:09:36.184Z",
+      "fetches": [
+        {
+          "url": "https://www.discoverycenterhawaii.org/event-list",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "honolulu",
       "sourceId": "waikiki-aquarium",
       "sourceName": "Waikiki Aquarium",
       "sourceType": "ics",
       "url": "https://calendar.google.com/calendar/ical/hawaii.edu_ur7iq68mqshu5q73n79rmb4jrk%40group.calendar.google.com/public/basic.ics",
-      "status": "ok",
-      "issueType": "zero-in-window",
-      "reason": "Source returned events, but none were in the planning window.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:14:38.916Z",
+      "fetchedAt": "2026-10-27T15:09:36.184Z",
       "fetches": [
         {
           "url": "https://calendar.google.com/calendar/ical/hawaii.edu_ur7iq68mqshu5q73n79rmb4jrk%40group.calendar.google.com/public/basic.ics",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/calendar; charset=utf-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "honolulu",
+      "sourceId": "iolani-palace",
+      "sourceName": "Iolani Palace",
+      "sourceType": "rss",
+      "url": "https://www.iolanipalace.org/event/feed/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-10-27T15:09:36.184Z",
+      "fetches": [
+        {
+          "url": "https://www.iolanipalace.org/event/feed/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -112,46 +179,68 @@
       "sourceName": "Kualoa Ranch",
       "sourceType": "html",
       "url": "https://www.kualoa.com/activities/",
-      "status": "http-error",
+      "status": "fetch-error",
       "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:14:38.916Z",
+      "fetchedAt": "2026-10-27T15:09:36.184Z",
       "fetches": [
         {
           "url": "https://www.kualoa.com/activities/",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=utf-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "honolulu",
       "sourceId": "hawaii-kai-halloween-spooktacular-2026-10-24-src",
       "sourceName": "Halloween Spooktacular",
       "sourceType": "officialTextEvents",
       "url": "https://hawaiikaitownecenter.com/events/list/",
-      "status": "ok-last-known-good",
-      "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-10-25T17:14:38.916Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-27T15:09:36.184Z",
       "fetches": [
         {
           "url": "https://hawaiikaitownecenter.com/events/list/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "honolulu",
+      "sourceId": "halloween-keiki-costume-contest-2026-10-25-src",
+      "sourceName": "Halloween Keiki Costume Contest",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.royalhawaiiancenter.com/events/halloween-keiki-costume-contest-waikiki-2026",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-27T15:09:36.184Z",
+      "fetches": [
+        {
+          "url": "https://www.royalhawaiiancenter.com/events/halloween-keiki-costume-contest-waikiki-2026",
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -162,21 +251,20 @@
       "sourceName": "Halloween Pumpkin Contest and Bag Making",
       "sourceType": "officialTextEvents",
       "url": "https://event.outrigger.com/outrigger-reef-waikiki-beach-resort/events/honolulu/halloween-pumpkin-contest-and-bag-making",
-      "status": "ok-last-known-good",
-      "issueType": "zero-extracted",
-      "reason": "source produced no live events; using last-known-good future events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "browser fetch failed: page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:302:30), <anonymous>:2:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
       "recoveredBy": "last-known-good",
       "recoveredEvents": 1,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-10-25T17:14:38.916Z",
+      "fetchedAt": "2026-10-27T15:09:36.184Z",
       "fetches": [
         {
           "url": "https://event.outrigger.com/outrigger-reef-waikiki-beach-resort/events/honolulu/halloween-pumpkin-contest-and-bag-making",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=utf-8"
+          "status": "fetch-error",
+          "reason": "browser fetch failed: page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:302:30), <anonymous>:2:30)\n    at UtilityScript.evaluate (<anonymous>:304:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
         }
       ]
     },
@@ -187,21 +275,20 @@
       "sourceName": "The Republik",
       "sourceType": "html",
       "url": "https://jointherepublik.com/upcoming-events/",
-      "status": "http-error",
+      "status": "fetch-error",
       "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:14:38.916Z",
+      "fetchedAt": "2026-10-27T15:09:36.184Z",
       "fetches": [
         {
           "url": "https://jointherepublik.com/upcoming-events/",
-          "status": "http-error",
-          "httpStatus": 403,
-          "contentType": "text/html"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -220,10 +307,58 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:14:38.916Z",
+      "fetchedAt": "2026-10-27T15:09:36.184Z",
       "fetches": [
         {
           "url": "https://www.alohacomedyclub.com/calendar",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "honolulu",
+      "sourceId": "blaisdell-center",
+      "sourceName": "Neal S. Blaisdell Center",
+      "sourceType": "tribeEvents",
+      "url": "https://blaisdellcenter.com/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 25,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 25,
+      "fetchedAt": "2026-10-27T15:09:36.184Z",
+      "fetches": [
+        {
+          "url": "https://blaisdellcenter.com/events/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "honolulu",
+      "sourceId": "improv-hawaii",
+      "sourceName": "Improv Hawaii (The Tiny Stage)",
+      "sourceType": "tribeEvents",
+      "url": "https://improvhi.com/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-10-27T15:09:36.184Z",
+      "fetches": [
+        {
+          "url": "https://improvhi.com/events/",
           "status": "fetch-error",
           "reason": "fetch failed"
         }

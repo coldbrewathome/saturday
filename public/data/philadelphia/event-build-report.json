@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "philadelphia",
-  "generatedAt": "2026-10-08T04:51:20.024Z",
+  "generatedAt": "2026-10-27T23:23:45.176Z",
   "registryPath": "data/event-sources-philadelphia.json",
   "outputPath": "public/data/philadelphia/events.json",
-  "eventCount": 912,
-  "adultsEventCount": 140,
+  "eventCount": 710,
+  "adultsEventCount": 125,
   "sourceCount": 22,
-  "liveEventCount": 1003,
-  "lastKnownGoodEventCount": 1,
+  "liveEventCount": 798,
+  "lastKnownGoodEventCount": 0,
   "fallbackEventCount": 16,
-  "operatorAlertCount": 8,
+  "operatorAlertCount": 11,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:20.024Z",
+      "fetchedAt": "2026-10-27T23:23:45.176Z",
       "fetches": [
         {
           "url": "https://freelibraryfoundation.org/events/",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:20.024Z",
+      "fetchedAt": "2026-10-27T23:23:45.176Z",
       "fetches": [
         {
           "url": "https://www.phila.gov/departments/philadelphia-parks-recreation/#calendar",
@@ -64,27 +64,27 @@
       ]
     },
     {
-      "severity": "critical",
+      "severity": "warning",
       "metroId": "philadelphia",
       "sourceId": "ticketmaster-philadelphia-family",
       "sourceName": "Ticketmaster Philadelphia Family Events",
       "sourceType": "ticketmaster",
       "url": "https://app.ticketmaster.com/discovery/v2/events.json",
       "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:20.024Z",
+      "fetchedAt": "2026-10-27T23:23:45.176Z",
       "fetches": [
         {
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=0; pages=1"
+          "contentType": "application/json; source=ticketmaster; events=2; pages=1"
         }
       ]
     },
@@ -103,7 +103,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:20.024Z",
+      "fetchedAt": "2026-10-27T23:23:45.176Z",
       "fetches": [
         {
           "url": "https://middletowngrangefair.org/",
@@ -114,7 +114,7 @@
       ]
     },
     {
-      "severity": "warning",
+      "severity": "critical",
       "metroId": "philadelphia",
       "sourceId": "academy-natural-sciences-events",
       "sourceName": "Academy of Natural Sciences of Drexel University Events",
@@ -123,18 +123,93 @@
       "status": "http-error",
       "issueType": "fetch-failed",
       "reason": "Source fetch did not return a usable payload.",
-      "recoveredBy": "last-known-good",
-      "recoveredEvents": 1,
+      "recoveredBy": null,
+      "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "fetchedAt": "2026-10-08T04:51:20.024Z",
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-27T23:23:45.176Z",
       "fetches": [
         {
           "url": "https://ansp.org/programs-and-events/events/",
           "status": "http-error",
           "httpStatus": 301,
           "contentType": ""
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "philadelphia",
+      "sourceId": "boo-at-the-zoo-2026-10-10-src",
+      "sourceName": "Boo at the Zoo",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.philadelphiazoo.org/events/boo-at-the-zoo/",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-27T23:23:45.176Z",
+      "fetches": [
+        {
+          "url": "https://www.philadelphiazoo.org/events/boo-at-the-zoo/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "spooktacular-science-day-2026-10-24-src",
+      "sourceName": "Spooktacular Science Day",
+      "sourceType": "officialTextEvents",
+      "url": "https://fi.edu/en/events-calendar/20261024/spooktacular-science-day",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-27T23:23:45.176Z",
+      "fetches": [
+        {
+          "url": "https://fi.edu/en/events-calendar/20261024/spooktacular-science-day",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "philadelphia",
+      "sourceId": "stories-of-science-craft-tober-2026-10-10-src",
+      "sourceName": "Stories of Science: Craft-tober",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.sciencehistory.org/visit/events/stories-of-science-craft-tober-20261010/",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-27T23:23:45.176Z",
+      "fetches": [
+        {
+          "url": "https://www.sciencehistory.org/visit/events/stories-of-science-craft-tober-20261010/",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
         }
       ]
     },
@@ -153,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:20.024Z",
+      "fetchedAt": "2026-10-27T23:23:45.176Z",
       "fetches": [
         {
           "url": "https://www.utphilly.com/events",
@@ -178,7 +253,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:20.024Z",
+      "fetchedAt": "2026-10-27T23:23:45.176Z",
       "fetches": [
         {
           "url": "https://www.johnnybrendas.com/events",
@@ -203,7 +278,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-08T04:51:20.024Z",
+      "fetchedAt": "2026-10-27T23:23:45.176Z",
       "fetches": [
         {
           "url": "https://philadelphia.heliumcomedy.com/events",
@@ -292,9 +367,9 @@
       "metroId": "philadelphia",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 458,
+      "liveEvents": 265,
       "fallbackEvents": 0,
-      "eventCount": 458,
+      "eventCount": 265,
       "fetches": [
         {
           "url": "https://www.pleasetouchmuseum.org/calendar/month/",
@@ -305,7 +380,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=tribe-events; events=600; pages=12",
-      "rejectedLiveEvents": 142,
+      "rejectedLiveEvents": 335,
       "extractedEvents": 600,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -319,9 +394,9 @@
       "metroId": "philadelphia",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 15,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 15,
       "fetches": [
         {
           "url": "https://www.philadelphiazoo.org/events/",
@@ -332,7 +407,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; source=wp-rest-events; events=94",
-      "rejectedLiveEvents": 229,
+      "rejectedLiveEvents": 215,
       "extractedEvents": 230,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -354,13 +429,13 @@
           "url": "https://app.ticketmaster.com/discovery/v2/events.json",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=ticketmaster; events=0; pages=1"
+          "contentType": "application/json; source=ticketmaster; events=2; pages=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=ticketmaster; events=0; pages=1",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 0,
+      "contentType": "application/json; source=ticketmaster; events=2; pages=1",
+      "rejectedLiveEvents": 2,
+      "extractedEvents": 2,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -400,9 +475,9 @@
       "metroId": "philadelphia",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 7,
+      "liveEvents": 5,
       "fallbackEvents": 0,
-      "eventCount": 7,
+      "eventCount": 5,
       "fetches": [
         {
           "url": "https://bclsnj.bibliocommons.com/v2/events",
@@ -414,7 +489,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 7,
+      "extractedEvents": 5,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -427,9 +502,9 @@
       "metroId": "philadelphia",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 37,
+      "liveEvents": 64,
       "fallbackEvents": 0,
-      "eventCount": 37,
+      "eventCount": 64,
       "fetches": [
         {
           "url": "https://mnl.libcal.com/calendar?cid=19360&cal=19360",
@@ -440,8 +515,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 30,
-      "extractedEvents": 67,
+      "rejectedLiveEvents": 34,
+      "extractedEvents": 98,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -454,9 +529,9 @@
       "metroId": "philadelphia",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 224,
+      "liveEvents": 158,
       "fallbackEvents": 0,
-      "eventCount": 224,
+      "eventCount": 158,
       "fetches": [
         {
           "url": "https://delcolibraries.libcal.com/calendar?cid=10206&cal=10206",
@@ -467,8 +542,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 225,
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 158,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -481,9 +556,9 @@
       "metroId": "philadelphia",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 165,
+      "liveEvents": 187,
       "fallbackEvents": 0,
-      "eventCount": 165,
+      "eventCount": 187,
       "fetches": [
         {
           "url": "https://calendar.buckslib.org/calendar?cid=3891&cal=3891",
@@ -494,8 +569,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json",
-      "rejectedLiveEvents": 1,
-      "extractedEvents": 166,
+      "rejectedLiveEvents": 2,
+      "extractedEvents": 189,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -510,7 +585,7 @@
       "status": "http-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://ansp.org/programs-and-events/events/",
@@ -521,8 +596,8 @@
       ],
       "httpStatus": 301,
       "extractedEvents": 0,
-      "lastKnownGoodEvents": 1,
-      "recoveryMode": "last-known-good"
+      "lastKnownGoodEvents": 0,
+      "recoveryMode": null
     },
     {
       "id": "boo-at-the-zoo-2026-10-10-src",
@@ -533,9 +608,9 @@
       "metroId": "philadelphia",
       "category": "Holiday",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.philadelphiazoo.org/events/boo-at-the-zoo/",
@@ -547,7 +622,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -560,9 +635,9 @@
       "metroId": "philadelphia",
       "category": "Holiday",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://fi.edu/en/events-calendar/20261024/spooktacular-science-day",
@@ -573,7 +648,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -587,9 +662,9 @@
       "metroId": "philadelphia",
       "category": "Culture",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.sciencehistory.org/visit/events/stories-of-science-craft-tober-20261010/",
@@ -600,7 +675,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "rejectedLiveEvents": 1,
       "extractedEvents": 1,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -640,9 +715,9 @@
       "metroId": "philadelphia",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 34,
+      "liveEvents": 33,
       "fallbackEvents": 0,
-      "eventCount": 34,
+      "eventCount": 33,
       "fetches": [
         {
           "url": "https://www.thefillmorephilly.com/shows",
@@ -653,7 +728,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 2,
+      "rejectedLiveEvents": 3,
       "extractedEvents": 36,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -694,9 +769,9 @@
       "metroId": "philadelphia",
       "category": "Music",
       "status": "ok",
-      "liveEvents": 34,
+      "liveEvents": 33,
       "fallbackEvents": 0,
-      "eventCount": 34,
+      "eventCount": 33,
       "fetches": [
         {
           "url": "https://www.thefillmorephilly.com/shows",
@@ -707,7 +782,7 @@
       ],
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
-      "rejectedLiveEvents": 2,
+      "rejectedLiveEvents": 3,
       "extractedEvents": 36,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -775,9 +850,9 @@
       "metroId": "philadelphia",
       "category": "Live Music",
       "status": "ok",
-      "liveEvents": 4,
+      "liveEvents": 2,
       "fallbackEvents": 0,
-      "eventCount": 4,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://ardmoremusichall.com/all-events/",
@@ -789,7 +864,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 2,
-      "extractedEvents": 6,
+      "extractedEvents": 4,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     }

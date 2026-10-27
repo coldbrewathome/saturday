@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "metroId": "washington-dc",
-  "generatedAt": "2026-10-25T17:23:09.384Z",
+  "generatedAt": "2026-10-27T15:00:11.489Z",
   "source": {
     "name": "Washington DC event source registry",
     "registryPath": "data/event-sources-washington-dc.json",
@@ -35,49 +35,8 @@
       "H Street"
     ]
   },
-  "count": 32,
+  "count": 30,
   "events": [
-    {
-      "id": "montgomery-county-ag-fair-pokefair-11f3054092",
-      "stableKey": "fe55fbac26",
-      "baseId": null,
-      "title": "PokeFair",
-      "description": "Spooky Season PokeFair returns for a grand 2-day Pokémon celebration: The Shadow Ball. A Pokémon Themed Halloween Celebration! Saturday 10/24/2026: 10 AM - 6 PM Sunday 10/25/2026: 11 AM - 5 PM Step into a world of mystery, moonlight, and ghostly adventure at Spooky Season PokeFair: The Shadow Ball, a Halloween celebration where Trainers gather in a setting…",
-      "venue": "Montgomery County Fairgrounds - Building 6, Hall 2",
-      "city": "Gaithersburg",
-      "neighborhood": "Gaithersburg",
-      "lat": 39.1318,
-      "lon": -77.2165,
-      "category": "Festival",
-      "daysOfWeek": [
-        5
-      ],
-      "timeWindow": "Evening",
-      "startDateTime": "2026-10-24T00:00:00-04:00",
-      "endDateTime": "2026-10-25T04:00:00.000Z",
-      "ageBands": [
-        "preschool",
-        "school-age"
-      ],
-      "audiences": [
-        "all"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.pokefair.com/",
-      "sourceUrl": "https://mcagfair.com/",
-      "imageUrl": "https://mcagfair.com/wp-content/uploads/2026/10/PokeFair-Ad-From-Promoter.png",
-      "sourceId": "montgomery-county-ag-fair",
-      "sourceName": "Montgomery County Agricultural Fair",
-      "sourceMode": "json-ld",
-      "extractionMethod": "json-ld",
-      "verified": true,
-      "fetchedAt": "2026-10-25T17:05:17.146Z",
-      "metroId": "washington-dc",
-      "themes": [
-        "festivals-community"
-      ],
-      "slug": "pokefair-montgomery-county-fairgrounds-building-6-hall-2"
-    },
     {
       "id": "prince-georges-county-md-library-family-17079304",
       "stableKey": "101f17f83f",
@@ -109,7 +68,7 @@
       "imageUrl": "https://pgcmls.libnet.info/images/events/pgcmls/2025_Communico_Icon_Sip_And_Paint_780x780.png",
       "sourceId": "prince-georges-county-md-library-family",
       "sourceName": "Prince George's County Memorial Library Events",
-      "sourceMode": "communico-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "communico-events",
       "verified": true,
       "fetchedAt": "2026-10-08T04:33:14.556Z",
@@ -117,7 +76,10 @@
       "themes": [
         "arts-crafts"
       ],
-      "slug": "sip-and-paint-monster-paintings-new-carrollton-large-meeting-room-2"
+      "slug": "sip-and-paint-monster-paintings-new-carrollton-large-meeting-room-2",
+      "originalSourceMode": "communico-events",
+      "originalFetchedAt": "2026-10-08T04:33:14.556Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "prince-georges-county-md-library-family-17269455",
@@ -149,13 +111,16 @@
       "imageUrl": "https://pgcmls.libnet.info/images/events/pgcmls/Communico_Icon_Teentober2024.png",
       "sourceId": "prince-georges-county-md-library-family",
       "sourceName": "Prince George's County Memorial Library Events",
-      "sourceMode": "communico-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "communico-events",
       "verified": true,
       "fetchedAt": "2026-10-08T04:33:14.556Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "trivia-everything-halloween-accokeek-large-meeting-room"
+      "slug": "trivia-everything-halloween-accokeek-large-meeting-room",
+      "originalSourceMode": "communico-events",
+      "originalFetchedAt": "2026-10-08T04:33:14.556Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "prince-georges-county-md-library-family-17267396",
@@ -187,13 +152,16 @@
       "imageUrl": "https://pgcmls.libnet.info/images/events/pgcmls/Communico_Icon_Teentober2024.png",
       "sourceId": "prince-georges-county-md-library-family",
       "sourceName": "Prince George's County Memorial Library Events",
-      "sourceMode": "communico-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "communico-events",
       "verified": true,
       "fetchedAt": "2026-10-08T04:33:14.556Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "trivia-horror-hyattsville-art-room"
+      "slug": "trivia-horror-hyattsville-art-room",
+      "originalSourceMode": "communico-events",
+      "originalFetchedAt": "2026-10-08T04:33:14.556Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "dc-improv-read-the-room-october-29-7aebae0057",
@@ -225,13 +193,16 @@
       "sourceUrl": "https://www.dcimprov.com/shows?format=feed&type=rss",
       "sourceId": "dc-improv",
       "sourceName": "DC Improv",
-      "sourceMode": "rss",
+      "sourceMode": "last-known-good",
       "extractionMethod": "rss",
       "verified": false,
       "fetchedAt": "2026-10-03T06:01:27.293Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "read-the-room-october-29-dc-improv"
+      "slug": "read-the-room-october-29-dc-improv",
+      "originalSourceMode": "rss",
+      "originalFetchedAt": "2026-10-03T06:01:27.293Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "dc-improv-stand-up-showcase-october-30-november-1-e42ea71bb5",
@@ -263,13 +234,16 @@
       "sourceUrl": "https://www.dcimprov.com/shows?format=feed&type=rss",
       "sourceId": "dc-improv",
       "sourceName": "DC Improv",
-      "sourceMode": "rss",
+      "sourceMode": "last-known-good",
       "extractionMethod": "rss",
       "verified": false,
       "fetchedAt": "2026-10-08T04:33:14.556Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "stand-up-showcase-october-30-november-1-dc-improv"
+      "slug": "stand-up-showcase-october-30-november-1-dc-improv",
+      "originalSourceMode": "rss",
+      "originalFetchedAt": "2026-10-08T04:33:14.556Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "montgomery-county-ag-fair-49th-annual-antique-railroad-show-38a6bab00a",
@@ -301,7 +275,7 @@
       "sourceUrl": "https://mcagfair.com/",
       "sourceId": "montgomery-county-ag-fair",
       "sourceName": "Montgomery County Agricultural Fair",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-10-03T06:01:27.293Z",
@@ -309,7 +283,10 @@
       "themes": [
         "festivals-community"
       ],
-      "slug": "49th-annual-antique-railroad-show-montgomery-county-fairgrounds"
+      "slug": "49th-annual-antique-railroad-show-montgomery-county-fairgrounds",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-10-03T06:01:27.293Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "dc-improv-stand-up-class-graduation-november-4-80788d3e1d",
@@ -341,13 +318,16 @@
       "sourceUrl": "https://www.dcimprov.com/shows?format=feed&type=rss",
       "sourceId": "dc-improv",
       "sourceName": "DC Improv",
-      "sourceMode": "rss",
+      "sourceMode": "last-known-good",
       "extractionMethod": "rss",
       "verified": false,
       "fetchedAt": "2026-10-08T04:33:14.556Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "stand-up-class-graduation-november-4-dc-improv"
+      "slug": "stand-up-class-graduation-november-4-dc-improv",
+      "originalSourceMode": "rss",
+      "originalFetchedAt": "2026-10-08T04:33:14.556Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "alexandria-va-library-family-15871050",
@@ -379,7 +359,7 @@
       "imageUrl": "https://alexandria.libnet.info/images/events/alexandria/ourtown.jpg",
       "sourceId": "alexandria-va-library-family",
       "sourceName": "Alexandria Library Events",
-      "sourceMode": "communico-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "communico-events",
       "verified": true,
       "fetchedAt": "2026-10-08T04:33:14.556Z",
@@ -387,7 +367,10 @@
       "themes": [
         "festivals-community"
       ],
-      "slug": "250th-film-festival-ellen-coolidge-burke-branch-library-meeting-room"
+      "slug": "250th-film-festival-ellen-coolidge-burke-branch-library-meeting-room",
+      "originalSourceMode": "communico-events",
+      "originalFetchedAt": "2026-10-08T04:33:14.556Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "prince-georges-county-md-library-family-17573367",
@@ -420,7 +403,7 @@
       "imageUrl": "https://pgcmls.libnet.info/images/events/pgcmls/2025_Communico_Icon_Special_Event_v2_780x780.png",
       "sourceId": "prince-georges-county-md-library-family",
       "sourceName": "Prince George's County Memorial Library Events",
-      "sourceMode": "communico-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "communico-events",
       "verified": true,
       "fetchedAt": "2026-10-08T04:33:14.556Z",
@@ -430,7 +413,10 @@
         "arts-crafts",
         "festivals-community"
       ],
-      "slug": "festival-of-lights-a-community-diwali-celebration-hyattsville-art-room"
+      "slug": "festival-of-lights-a-community-diwali-celebration-hyattsville-art-room",
+      "originalSourceMode": "communico-events",
+      "originalFetchedAt": "2026-10-08T04:33:14.556Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "alexandria-va-library-family-17506822",
@@ -462,7 +448,7 @@
       "imageUrl": "https://alexandria.libnet.info/images/events/alexandria/Native_American_Heritage_Month.png",
       "sourceId": "alexandria-va-library-family",
       "sourceName": "Alexandria Library Events",
-      "sourceMode": "communico-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "communico-events",
       "verified": true,
       "fetchedAt": "2026-10-08T04:33:14.556Z",
@@ -473,7 +459,10 @@
         "food-markets",
         "festivals-community"
       ],
-      "slug": "native-american-heritage-month-sci-fi-fantasy-book-tasting-kate-waller-barrett-branch-library-second-floor"
+      "slug": "native-american-heritage-month-sci-fi-fantasy-book-tasting-kate-waller-barrett-branch-library-second-floor",
+      "originalSourceMode": "communico-events",
+      "originalFetchedAt": "2026-10-08T04:33:14.556Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "dc-improv-stand-up-showcase-november-13-15-5c9930afef",
@@ -505,13 +494,16 @@
       "sourceUrl": "https://www.dcimprov.com/shows?format=feed&type=rss",
       "sourceId": "dc-improv",
       "sourceName": "DC Improv",
-      "sourceMode": "rss",
+      "sourceMode": "last-known-good",
       "extractionMethod": "rss",
       "verified": false,
       "fetchedAt": "2026-10-25T17:05:17.146Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "stand-up-showcase-november-13-15-dc-improv"
+      "slug": "stand-up-showcase-november-13-15-dc-improv",
+      "originalSourceMode": "rss",
+      "originalFetchedAt": "2026-10-25T17:05:17.146Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "montgomery-county-md-library-family-17582654",
@@ -544,7 +536,7 @@
       "imageUrl": "https://mcpl.libnet.info/images/events/mcpl/0environment.png",
       "sourceId": "montgomery-county-md-library-family",
       "sourceName": "Montgomery County Public Libraries Events",
-      "sourceMode": "communico-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "communico-events",
       "verified": true,
       "fetchedAt": "2026-10-08T04:33:14.556Z",
@@ -552,7 +544,10 @@
       "themes": [
         "festivals-community"
       ],
-      "slug": "kensington-share-fair-in-person-kensington-park-library"
+      "slug": "kensington-share-fair-in-person-kensington-park-library",
+      "originalSourceMode": "communico-events",
+      "originalFetchedAt": "2026-10-08T04:33:14.556Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "montgomery-county-md-library-family-17665873",
@@ -585,7 +580,7 @@
       "imageUrl": "https://mcpl.libnet.info/images/events/mcpl/WAP_Banner_for_Website.jpg",
       "sourceId": "montgomery-county-md-library-family",
       "sourceName": "Montgomery County Public Libraries Events",
-      "sourceMode": "communico-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "communico-events",
       "verified": true,
       "fetchedAt": "2026-10-25T17:05:17.146Z",
@@ -594,7 +589,10 @@
         "arts-crafts",
         "festivals-community"
       ],
-      "slug": "learn-to-crochet-wheaton-library"
+      "slug": "learn-to-crochet-wheaton-library",
+      "originalSourceMode": "communico-events",
+      "originalFetchedAt": "2026-10-25T17:05:17.146Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "dc-improv-ahmed-al-kadri-650fe9b9bd",
@@ -626,13 +624,16 @@
       "sourceUrl": "https://www.dcimprov.com/shows?format=feed&type=rss",
       "sourceId": "dc-improv",
       "sourceName": "DC Improv",
-      "sourceMode": "rss",
+      "sourceMode": "last-known-good",
       "extractionMethod": "rss",
       "verified": false,
       "fetchedAt": "2026-10-25T17:05:17.146Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "ahmed-al-kadri-dc-improv"
+      "slug": "ahmed-al-kadri-dc-improv",
+      "originalSourceMode": "rss",
+      "originalFetchedAt": "2026-10-25T17:05:17.146Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "dc-improv-bonnet-talk-friends-7476000449",
@@ -664,13 +665,16 @@
       "sourceUrl": "https://www.dcimprov.com/shows?format=feed&type=rss",
       "sourceId": "dc-improv",
       "sourceName": "DC Improv",
-      "sourceMode": "rss",
+      "sourceMode": "last-known-good",
       "extractionMethod": "rss",
       "verified": false,
       "fetchedAt": "2026-10-25T17:05:17.146Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "bonnet-talk-friends-dc-improv"
+      "slug": "bonnet-talk-friends-dc-improv",
+      "originalSourceMode": "rss",
+      "originalFetchedAt": "2026-10-25T17:05:17.146Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "dc-improv-browntown-e5c2f7ca0e",
@@ -702,13 +706,16 @@
       "sourceUrl": "https://www.dcimprov.com/shows?format=feed&type=rss",
       "sourceId": "dc-improv",
       "sourceName": "DC Improv",
-      "sourceMode": "rss",
+      "sourceMode": "last-known-good",
       "extractionMethod": "rss",
       "verified": false,
       "fetchedAt": "2026-10-25T17:05:17.146Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "browntown-dc-improv"
+      "slug": "browntown-dc-improv",
+      "originalSourceMode": "rss",
+      "originalFetchedAt": "2026-10-25T17:05:17.146Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "dc-improv-couples-therapy-a-comedy-show-96f3c75859",
@@ -740,13 +747,16 @@
       "sourceUrl": "https://www.dcimprov.com/shows?format=feed&type=rss",
       "sourceId": "dc-improv",
       "sourceName": "DC Improv",
-      "sourceMode": "rss",
+      "sourceMode": "last-known-good",
       "extractionMethod": "rss",
       "verified": false,
       "fetchedAt": "2026-10-25T17:05:17.146Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "couples-therapy-a-comedy-show-dc-improv"
+      "slug": "couples-therapy-a-comedy-show-dc-improv",
+      "originalSourceMode": "rss",
+      "originalFetchedAt": "2026-10-25T17:05:17.146Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "dc-improv-geoffrey-asmus-25f25c60db",
@@ -778,13 +788,16 @@
       "sourceUrl": "https://www.dcimprov.com/shows?format=feed&type=rss",
       "sourceId": "dc-improv",
       "sourceName": "DC Improv",
-      "sourceMode": "rss",
+      "sourceMode": "last-known-good",
       "extractionMethod": "rss",
       "verified": false,
       "fetchedAt": "2026-10-25T17:05:17.146Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "geoffrey-asmus-dc-improv"
+      "slug": "geoffrey-asmus-dc-improv",
+      "originalSourceMode": "rss",
+      "originalFetchedAt": "2026-10-25T17:05:17.146Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "dc-improv-jerrod-carmichael-f4fff46fc0",
@@ -816,13 +829,16 @@
       "sourceUrl": "https://www.dcimprov.com/shows?format=feed&type=rss",
       "sourceId": "dc-improv",
       "sourceName": "DC Improv",
-      "sourceMode": "rss",
+      "sourceMode": "last-known-good",
       "extractionMethod": "rss",
       "verified": false,
       "fetchedAt": "2026-10-25T17:05:17.146Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "jerrod-carmichael-dc-improv"
+      "slug": "jerrod-carmichael-dc-improv",
+      "originalSourceMode": "rss",
+      "originalFetchedAt": "2026-10-25T17:05:17.146Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "dc-improv-jive-turkey-and-friends-e62846eac6",
@@ -854,13 +870,16 @@
       "sourceUrl": "https://www.dcimprov.com/shows?format=feed&type=rss",
       "sourceId": "dc-improv",
       "sourceName": "DC Improv",
-      "sourceMode": "rss",
+      "sourceMode": "last-known-good",
       "extractionMethod": "rss",
       "verified": false,
       "fetchedAt": "2026-10-25T17:05:17.146Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "jive-turkey-and-friends-dc-improv"
+      "slug": "jive-turkey-and-friends-dc-improv",
+      "originalSourceMode": "rss",
+      "originalFetchedAt": "2026-10-25T17:05:17.146Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "dc-improv-lincoln-s-cottage-november-1ceeacc6d9",
@@ -892,13 +911,16 @@
       "sourceUrl": "https://www.dcimprov.com/shows?format=feed&type=rss",
       "sourceId": "dc-improv",
       "sourceName": "DC Improv",
-      "sourceMode": "rss",
+      "sourceMode": "last-known-good",
       "extractionMethod": "rss",
       "verified": false,
       "fetchedAt": "2026-10-25T17:05:17.146Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "lincoln-s-cottage-november-dc-improv"
+      "slug": "lincoln-s-cottage-november-dc-improv",
+      "originalSourceMode": "rss",
+      "originalFetchedAt": "2026-10-25T17:05:17.146Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "dc-improv-martin-amini-a23a8d6db4",
@@ -930,13 +952,16 @@
       "sourceUrl": "https://www.dcimprov.com/shows?format=feed&type=rss",
       "sourceId": "dc-improv",
       "sourceName": "DC Improv",
-      "sourceMode": "rss",
+      "sourceMode": "last-known-good",
       "extractionMethod": "rss",
       "verified": false,
       "fetchedAt": "2026-10-25T17:05:17.146Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "martin-amini-dc-improv"
+      "slug": "martin-amini-dc-improv",
+      "originalSourceMode": "rss",
+      "originalFetchedAt": "2026-10-25T17:05:17.146Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "dc-improv-melissa-villasenor-397db769c2",
@@ -968,13 +993,16 @@
       "sourceUrl": "https://www.dcimprov.com/shows?format=feed&type=rss",
       "sourceId": "dc-improv",
       "sourceName": "DC Improv",
-      "sourceMode": "rss",
+      "sourceMode": "last-known-good",
       "extractionMethod": "rss",
       "verified": false,
       "fetchedAt": "2026-10-25T17:05:17.146Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "melissa-villasenor-dc-improv"
+      "slug": "melissa-villasenor-dc-improv",
+      "originalSourceMode": "rss",
+      "originalFetchedAt": "2026-10-25T17:05:17.146Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "dc-improv-rachel-scanlon-c4dba635ee",
@@ -1006,13 +1034,16 @@
       "sourceUrl": "https://www.dcimprov.com/shows?format=feed&type=rss",
       "sourceId": "dc-improv",
       "sourceName": "DC Improv",
-      "sourceMode": "rss",
+      "sourceMode": "last-known-good",
       "extractionMethod": "rss",
       "verified": false,
       "fetchedAt": "2026-10-25T17:05:17.146Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "rachel-scanlon-dc-improv"
+      "slug": "rachel-scanlon-dc-improv",
+      "originalSourceMode": "rss",
+      "originalFetchedAt": "2026-10-25T17:05:17.146Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "dc-improv-sejoe-7f40a83924",
@@ -1044,13 +1075,16 @@
       "sourceUrl": "https://www.dcimprov.com/shows?format=feed&type=rss",
       "sourceId": "dc-improv",
       "sourceName": "DC Improv",
-      "sourceMode": "rss",
+      "sourceMode": "last-known-good",
       "extractionMethod": "rss",
       "verified": false,
       "fetchedAt": "2026-10-25T17:05:17.146Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "sejoe-dc-improv"
+      "slug": "sejoe-dc-improv",
+      "originalSourceMode": "rss",
+      "originalFetchedAt": "2026-10-25T17:05:17.146Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "dc-improv-tony-rock-0f374a2b3a",
@@ -1082,13 +1116,16 @@
       "sourceUrl": "https://www.dcimprov.com/shows?format=feed&type=rss",
       "sourceId": "dc-improv",
       "sourceName": "DC Improv",
-      "sourceMode": "rss",
+      "sourceMode": "last-known-good",
       "extractionMethod": "rss",
       "verified": false,
       "fetchedAt": "2026-10-25T17:05:17.146Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "tony-rock-dc-improv"
+      "slug": "tony-rock-dc-improv",
+      "originalSourceMode": "rss",
+      "originalFetchedAt": "2026-10-25T17:05:17.146Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "dc-improv-tony-woods-friends-48dc8d55a5",
@@ -1120,13 +1157,16 @@
       "sourceUrl": "https://www.dcimprov.com/shows?format=feed&type=rss",
       "sourceId": "dc-improv",
       "sourceName": "DC Improv",
-      "sourceMode": "rss",
+      "sourceMode": "last-known-good",
       "extractionMethod": "rss",
       "verified": false,
       "fetchedAt": "2026-10-25T17:05:17.146Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "tony-woods-friends-dc-improv"
+      "slug": "tony-woods-friends-dc-improv",
+      "originalSourceMode": "rss",
+      "originalFetchedAt": "2026-10-25T17:05:17.146Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "dc-improv-zar-the-star-f19067d7d0",
@@ -1158,13 +1198,16 @@
       "sourceUrl": "https://www.dcimprov.com/shows?format=feed&type=rss",
       "sourceId": "dc-improv",
       "sourceName": "DC Improv",
-      "sourceMode": "rss",
+      "sourceMode": "last-known-good",
       "extractionMethod": "rss",
       "verified": false,
       "fetchedAt": "2026-10-25T17:05:17.146Z",
       "metroId": "washington-dc",
       "themes": [],
-      "slug": "zar-the-star-dc-improv"
+      "slug": "zar-the-star-dc-improv",
+      "originalSourceMode": "rss",
+      "originalFetchedAt": "2026-10-25T17:05:17.146Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "montgomery-county-ag-fair-bellman-doll-show-dee9a7f42d",
@@ -1197,7 +1240,7 @@
       "imageUrl": "https://mcagfair.com/wp-content/uploads/2026/09/Bellman-Doll-Show-2026.jpg",
       "sourceId": "montgomery-county-ag-fair",
       "sourceName": "Montgomery County Agricultural Fair",
-      "sourceMode": "json-ld",
+      "sourceMode": "last-known-good",
       "extractionMethod": "json-ld",
       "verified": true,
       "fetchedAt": "2026-10-25T17:05:17.146Z",
@@ -1206,7 +1249,10 @@
         "arts-crafts",
         "festivals-community"
       ],
-      "slug": "bellman-doll-show-montgomery-county-fairgrounds"
+      "slug": "bellman-doll-show-montgomery-county-fairgrounds",
+      "originalSourceMode": "json-ld",
+      "originalFetchedAt": "2026-10-25T17:05:17.146Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     },
     {
       "id": "prince-georges-county-md-library-family-17673728",
@@ -1239,7 +1285,7 @@
       "imageUrl": "https://pgcmls.libnet.info/images/events/pgcmls/2025_Communico_Icon_Sip_And_Paint_780x780.png",
       "sourceId": "prince-georges-county-md-library-family",
       "sourceName": "Prince George's County Memorial Library Events",
-      "sourceMode": "communico-events",
+      "sourceMode": "last-known-good",
       "extractionMethod": "communico-events",
       "verified": true,
       "fetchedAt": "2026-10-25T17:05:17.146Z",
@@ -1247,47 +1293,10 @@
       "themes": [
         "arts-crafts"
       ],
-      "slug": "sip-and-paint-winter-scenes-upper-marlboro-large-meeting-room"
-    },
-    {
-      "id": "dc-improv-festival-of-laughs-eitan-levine-8ac1ac42f7",
-      "stableKey": "29c7b914de",
-      "baseId": null,
-      "title": "Festival of Laughs: Eitan Levine",
-      "description": "",
-      "venue": "DC Improv",
-      "city": "Washington",
-      "neighborhood": "Washington",
-      "lat": 38.9082,
-      "lon": -77.0419,
-      "category": "Comedy",
-      "daysOfWeek": [
-        0
-      ],
-      "timeWindow": "Morning",
-      "startDateTime": "2026-12-20T14:00:00.000Z",
-      "endDateTime": "2026-12-20T15:00:00.000Z",
-      "ageBands": [
-        "preschool",
-        "school-age"
-      ],
-      "audiences": [
-        "adults"
-      ],
-      "cost": "Unknown",
-      "url": "https://www.dcimprov.com/shows/main-showroom/festival-eitan-levine",
-      "sourceUrl": "https://www.dcimprov.com/shows?format=feed&type=rss",
-      "sourceId": "dc-improv",
-      "sourceName": "DC Improv",
-      "sourceMode": "rss",
-      "extractionMethod": "rss",
-      "verified": false,
-      "fetchedAt": "2026-08-30T17:44:29.827Z",
-      "metroId": "washington-dc",
-      "themes": [
-        "festivals-community"
-      ],
-      "slug": "festival-of-laughs-eitan-levine-dc-improv"
+      "slug": "sip-and-paint-winter-scenes-upper-marlboro-large-meeting-room",
+      "originalSourceMode": "communico-events",
+      "originalFetchedAt": "2026-10-25T17:05:17.146Z",
+      "restoredAt": "2026-10-27T15:00:11.489Z"
     }
   ]
 }

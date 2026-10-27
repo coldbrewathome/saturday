@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "metroId": "new-york-city",
-  "generatedAt": "2026-10-25T17:22:34.943Z",
-  "alertCount": 23,
+  "generatedAt": "2026-10-27T23:29:12.021Z",
+  "alertCount": 25,
   "alerts": [
     {
       "severity": "warning",
@@ -19,7 +19,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://queens.libnet.info/events",
@@ -44,7 +44,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.nypl.org/events/calendar",
@@ -70,7 +70,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.amnh.org/calendar",
@@ -95,7 +95,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://njfair.com/",
@@ -120,7 +120,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/2026/10/10/boo-bash-in-the-bronx",
@@ -145,7 +145,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/2026/10/17/the-great-pumpkin-spooktacular",
@@ -170,7 +170,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/2026/10/22/zumbaween",
@@ -195,7 +195,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/2026/10/24/halloween-boo-bash",
@@ -220,10 +220,60 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.nycgovparks.org/events/2026/10/24/spooktacular-fiesta",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "new-york-city",
+      "sourceId": "halloween-wags-to-witches-2026",
+      "sourceName": "Halloween: Wags to Witches",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.nycgovparks.org/events/2026/10/25/halloween-wags-to-witches",
+      "status": "ok",
+      "issueType": "zero-in-window",
+      "reason": "Source returned events, but none were in the planning window.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/2026/10/25/halloween-wags-to-witches",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "new-york-city",
+      "sourceId": "pumpkin-palooza-st-marys-2026",
+      "sourceName": "Pumpkin Palooza at St. Mary's Park",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.nycgovparks.org/events/2026/10/31/pumpkin-palooza",
+      "status": "ok-last-known-good",
+      "issueType": "zero-extracted",
+      "reason": "source produced no live events; using last-known-good future events",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
+      "fetches": [
+        {
+          "url": "https://www.nycgovparks.org/events/2026/10/31/pumpkin-palooza",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
@@ -241,11 +291,11 @@
       "issueType": "zero-extracted",
       "reason": "source produced no live events; using last-known-good future events",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 14,
+      "recoveredEvents": 12,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 14,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "lastKnownGoodEvents": 12,
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://hudsonvalley.org/events/Blaze/",
@@ -270,7 +320,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.statenislandzoo.org/",
@@ -295,7 +345,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.brooklynsteel.com/calendar",
@@ -320,7 +370,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.boweryballroom.com/calendar",
@@ -345,7 +395,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.musichallofwilliamsburg.com/calendar",
@@ -370,7 +420,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://lpr.com/calendar",
@@ -395,7 +445,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.terminal5nyc.com/calendar",
@@ -420,7 +470,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.websterhall.com/events",
@@ -445,7 +495,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.comedycellar.com/line-up/",
@@ -470,7 +520,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://gothamcomedyclub.com/calendar",
@@ -495,7 +545,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.elsewherebrooklyn.com/events",
@@ -520,7 +570,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.roughtradenyc.com/events",
@@ -545,7 +595,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://www.bluenotejazz.com/new-york/schedule",
@@ -570,7 +620,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:22:34.943Z",
+      "fetchedAt": "2026-10-27T23:29:12.021Z",
       "fetches": [
         {
           "url": "https://villagevanguard.com/events",

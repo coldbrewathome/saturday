@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "chicago",
-  "generatedAt": "2026-10-25T17:13:21.161Z",
+  "generatedAt": "2026-10-27T23:20:57.342Z",
   "registryPath": "data/event-sources-chicago.json",
   "outputPath": "public/data/chicago/events.json",
-  "eventCount": 1710,
-  "adultsEventCount": 73,
+  "eventCount": 1697,
+  "adultsEventCount": 70,
   "sourceCount": 26,
   "liveEventCount": 1734,
-  "lastKnownGoodEventCount": 24,
+  "lastKnownGoodEventCount": 11,
   "fallbackEventCount": 0,
-  "operatorAlertCount": 11,
+  "operatorAlertCount": 12,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:13:21.161Z",
+      "fetchedAt": "2026-10-27T23:20:57.342Z",
       "fetches": [
         {
           "url": "https://www.lcfairgrounds.com/events",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:13:21.161Z",
+      "fetchedAt": "2026-10-27T23:20:57.342Z",
       "fetches": [
         {
           "url": "https://oakpark.librarycalendar.com/events/month",
@@ -78,7 +78,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:13:21.161Z",
+      "fetchedAt": "2026-10-27T23:20:57.342Z",
       "fetches": [
         {
           "url": "https://napervillepl.librarycalendar.com/events/month",
@@ -99,11 +99,11 @@
       "issueType": "fetch-failed",
       "reason": "Source fetch did not return a usable payload.",
       "recoveredBy": "last-known-good",
-      "recoveredEvents": 24,
+      "recoveredEvents": 11,
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "lastKnownGoodEvents": 24,
-      "fetchedAt": "2026-10-25T17:13:21.161Z",
+      "lastKnownGoodEvents": 11,
+      "fetchedAt": "2026-10-27T23:20:57.342Z",
       "fetches": [
         {
           "url": "https://fpdcc.com/events/",
@@ -128,13 +128,38 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:13:21.161Z",
+      "fetchedAt": "2026-10-27T23:20:57.342Z",
       "fetches": [
         {
           "url": "https://www.lpzoo.org/event/spooky-zoo/",
           "status": "ok",
           "httpStatus": 200,
           "contentType": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "severity": "critical",
+      "metroId": "chicago",
+      "sourceId": "brookfield-zoo-boo-2026",
+      "sourceName": "BOO! at the Zoo (Brookfield Zoo)",
+      "sourceType": "officialTextEvents",
+      "url": "https://www.brookfieldzoo.org/events/boo-at-the-zoo",
+      "status": "ok",
+      "issueType": "zero-extracted",
+      "reason": "Source returned a payload but no events were extracted.",
+      "recoveredBy": null,
+      "recoveredEvents": 0,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 0,
+      "fetchedAt": "2026-10-27T23:20:57.342Z",
+      "fetches": [
+        {
+          "url": "https://www.brookfieldzoo.org/events/boo-at-the-zoo",
+          "status": "ok",
+          "httpStatus": 200,
+          "contentType": "text/html;charset=utf-8"
         }
       ]
     },
@@ -153,7 +178,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:13:21.161Z",
+      "fetchedAt": "2026-10-27T23:20:57.342Z",
       "fetches": [
         {
           "url": "https://metrochicago.com/shows/",
@@ -178,7 +203,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:13:21.161Z",
+      "fetchedAt": "2026-10-27T23:20:57.342Z",
       "fetches": [
         {
           "url": "https://www.emptybottle.com/events/",
@@ -203,7 +228,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:13:21.161Z",
+      "fetchedAt": "2026-10-27T23:20:57.342Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
@@ -227,7 +252,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:13:21.161Z",
+      "fetchedAt": "2026-10-27T23:20:57.342Z",
       "fetches": [
         {
           "url": "https://www.lh-st.com/events",
@@ -251,7 +276,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:13:21.161Z",
+      "fetchedAt": "2026-10-27T23:20:57.342Z",
       "fetches": [
         {
           "url": "https://chicago.zanies.com/events",
@@ -276,7 +301,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:13:21.161Z",
+      "fetchedAt": "2026-10-27T23:20:57.342Z",
       "fetches": [
         {
           "url": "https://www.hideoutchicago.com/events",
@@ -338,9 +363,9 @@
       "metroId": "chicago",
       "category": "Park",
       "status": "ok",
-      "liveEvents": 5,
+      "liveEvents": 4,
       "fallbackEvents": 0,
-      "eventCount": 5,
+      "eventCount": 4,
       "fetches": [
         {
           "url": "https://www.chicagoparkdistrict.com/events?field_event_category_target_id=766&field_location_target_id=All&field_community_area_target_id=All&field_zip_code_target_id=All&title=&field_date_value=&field_age_range_target_id=All",
@@ -388,7 +413,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 5,
+      "extractedEvents": 4,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -401,9 +426,9 @@
       "metroId": "chicago",
       "category": "Museum",
       "status": "ok",
-      "liveEvents": 34,
+      "liveEvents": 35,
       "fallbackEvents": 0,
-      "eventCount": 34,
+      "eventCount": 35,
       "fetches": [
         {
           "url": "https://www.fieldmuseum.org/our-events",
@@ -414,7 +439,7 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json; charset=utf-8",
-      "rejectedLiveEvents": 47,
+      "rejectedLiveEvents": 46,
       "extractedEvents": 81,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -428,21 +453,21 @@
       "metroId": "chicago",
       "category": "Zoo",
       "status": "ok",
-      "liveEvents": 21,
+      "liveEvents": 20,
       "fallbackEvents": 0,
-      "eventCount": 21,
+      "eventCount": 20,
       "fetches": [
         {
           "url": "https://www.lpzoo.org/calendar-events/",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=tribe-events; events=163; pages=4"
+          "contentType": "application/json; source=tribe-events; events=162; pages=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=tribe-events; events=163; pages=4",
+      "contentType": "application/json; source=tribe-events; events=162; pages=4",
       "rejectedLiveEvents": 141,
-      "extractedEvents": 162,
+      "extractedEvents": 161,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -536,9 +561,9 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 10,
+      "liveEvents": 7,
       "fallbackEvents": 0,
-      "eventCount": 10,
+      "eventCount": 7,
       "fetches": [
         {
           "url": "https://evanstonlibrary.bibliocommons.com/v2/events",
@@ -550,7 +575,7 @@
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 10,
+      "extractedEvents": 7,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -563,21 +588,21 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 164,
+      "liveEvents": 162,
       "fallbackEvents": 0,
-      "eventCount": 164,
+      "eventCount": 162,
       "fetches": [
         {
           "url": "https://schaumburg.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=314; locations=4"
+          "contentType": "application/json; source=communico-events; events=306; locations=4"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=314; locations=4",
+      "contentType": "application/json; source=communico-events; events=306; locations=4",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 164,
+      "extractedEvents": 162,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -590,21 +615,21 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 147,
+      "liveEvents": 157,
       "fallbackEvents": 0,
-      "eventCount": 147,
+      "eventCount": 157,
       "fetches": [
         {
           "url": "https://downersgrove.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=226; locations=1"
+          "contentType": "application/json; source=communico-events; events=232; locations=1"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=226; locations=1",
-      "rejectedLiveEvents": 8,
-      "extractedEvents": 155,
+      "contentType": "application/json; source=communico-events; events=232; locations=1",
+      "rejectedLiveEvents": 0,
+      "extractedEvents": 157,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -617,9 +642,9 @@
       "metroId": "chicago",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 188,
+      "liveEvents": 185,
       "fallbackEvents": 0,
-      "eventCount": 188,
+      "eventCount": 185,
       "fetches": [
         {
           "url": "https://egvpl.libnet.info/events",
@@ -631,7 +656,7 @@
       "httpStatus": 200,
       "contentType": "application/json; source=communico-events; events=264; locations=3",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 188,
+      "extractedEvents": 185,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -700,7 +725,7 @@
       "status": "http-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 24,
+      "eventCount": 11,
       "fetches": [
         {
           "url": "https://fpdcc.com/events/",
@@ -712,7 +737,7 @@
       "httpStatus": 403,
       "contentType": "text/html; charset=UTF-8",
       "extractedEvents": 0,
-      "lastKnownGoodEvents": 24,
+      "lastKnownGoodEvents": 11,
       "recoveryMode": "last-known-good"
     },
     {
@@ -751,9 +776,9 @@
       "metroId": "chicago",
       "category": "Festival",
       "status": "ok",
-      "liveEvents": 1,
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 1,
+      "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.brookfieldzoo.org/events/boo-at-the-zoo",
@@ -765,7 +790,7 @@
       "httpStatus": 200,
       "contentType": "text/html;charset=utf-8",
       "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
+      "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -891,8 +916,8 @@
       ],
       "httpStatus": 200,
       "contentType": "application/json;charset=utf-8",
-      "rejectedLiveEvents": 42,
-      "extractedEvents": 66,
+      "rejectedLiveEvents": 43,
+      "extractedEvents": 67,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },

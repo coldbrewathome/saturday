@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "metroId": "washington-dc",
-  "generatedAt": "2026-10-25T17:23:09.384Z",
+  "generatedAt": "2026-10-27T15:00:11.489Z",
   "registryPath": "data/event-sources-washington-dc.json",
   "outputPath": "public/data/washington-dc/events.json",
-  "eventCount": 2169,
-  "adultsEventCount": 32,
+  "eventCount": 2090,
+  "adultsEventCount": 30,
   "sourceCount": 18,
-  "liveEventCount": 2177,
-  "lastKnownGoodEventCount": 0,
+  "liveEventCount": 320,
+  "lastKnownGoodEventCount": 1777,
   "fallbackEventCount": 12,
-  "operatorAlertCount": 5,
+  "operatorAlertCount": 15,
   "errors": [],
   "operatorAlerts": [
     {
@@ -28,7 +28,7 @@
       "liveEvents": 0,
       "fallbackEvents": 8,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:23:09.384Z",
+      "fetchedAt": "2026-10-27T15:00:11.489Z",
       "fetches": [
         {
           "url": "https://dpr.dc.gov/events",
@@ -53,7 +53,7 @@
       "liveEvents": 0,
       "fallbackEvents": 4,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:23:09.384Z",
+      "fetchedAt": "2026-10-27T15:00:11.489Z",
       "fetches": [
         {
           "url": "https://naturalhistory.si.edu/events/family-programs",
@@ -64,27 +64,266 @@
       ]
     },
     {
+      "severity": "warning",
+      "metroId": "washington-dc",
+      "sourceId": "washington-dc-zoo-family",
+      "sourceName": "National Zoo Events",
+      "sourceType": "nationalZooJsonApi",
+      "url": "https://nationalzoo.si.edu/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "This operation was aborted",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 70,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 70,
+      "fetchedAt": "2026-10-27T15:00:11.489Z",
+      "fetches": [
+        {
+          "url": "https://nationalzoo.si.edu/events",
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "washington-dc",
+      "sourceId": "montgomery-county-ag-fair",
+      "sourceName": "Montgomery County Agricultural Fair",
+      "sourceType": "html",
+      "url": "https://mcagfair.com/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 2,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 2,
+      "fetchedAt": "2026-10-27T15:00:11.489Z",
+      "fetches": [
+        {
+          "url": "https://mcagfair.com/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "washington-dc",
+      "sourceId": "montgomery-county-md-library-family",
+      "sourceName": "Montgomery County Public Libraries Events",
+      "sourceType": "communicoEvents",
+      "url": "https://mcpl.libnet.info/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 715,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 715,
+      "fetchedAt": "2026-10-27T15:00:11.489Z",
+      "fetches": [
+        {
+          "url": "https://mcpl.libnet.info/events",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "washington-dc",
+      "sourceId": "prince-georges-county-md-library-family",
+      "sourceName": "Prince George's County Memorial Library Events",
+      "sourceType": "communicoEvents",
+      "url": "https://pgcmls.libnet.info/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 563,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 563,
+      "fetchedAt": "2026-10-27T15:00:11.489Z",
+      "fetches": [
+        {
+          "url": "https://pgcmls.libnet.info/events",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "washington-dc",
+      "sourceId": "alexandria-va-library-family",
+      "sourceName": "Alexandria Library Events",
+      "sourceType": "communicoEvents",
+      "url": "https://alexandria.libnet.info/events",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 177,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 177,
+      "fetchedAt": "2026-10-27T15:00:11.489Z",
+      "fetches": [
+        {
+          "url": "https://alexandria.libnet.info/events",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "washington-dc",
+      "sourceId": "fairfax-county-va-library-family",
+      "sourceName": "Fairfax County Public Library Events",
+      "sourceType": "libcal",
+      "url": "https://librarycalendar.fairfaxcounty.gov/calendar?cid=6524&cal=6524",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 84,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 84,
+      "fetchedAt": "2026-10-27T15:00:11.489Z",
+      "fetches": [
+        {
+          "url": "https://librarycalendar.fairfaxcounty.gov/calendar?cid=6524&cal=6524",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "washington-dc",
+      "sourceId": "arlington-va-library-family",
+      "sourceName": "Arlington Public Library Events",
+      "sourceType": "libcal",
+      "url": "https://arlingtonva.libcal.com/calendar/apl/?cid=12881&cal=12881",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 130,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 130,
+      "fetchedAt": "2026-10-27T15:00:11.489Z",
+      "fetches": [
+        {
+          "url": "https://arlingtonva.libcal.com/calendar/apl/?cid=12881&cal=12881",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "washington-dc",
+      "sourceId": "national-building-museum-family",
+      "sourceName": "National Building Museum Children & Youth Programs",
+      "sourceType": "ticketureEvents",
+      "url": "https://nbm.org/events/",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 16,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 16,
+      "fetchedAt": "2026-10-27T15:00:11.489Z",
+      "fetches": [
+        {
+          "url": "https://nbm.org/events/",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "washington-dc",
+      "sourceId": "hilloween-dc-2026",
+      "sourceName": "Hilloween on Capitol Hill",
+      "sourceType": "officialTextEvents",
+      "url": "https://hsema.dc.gov/event/hilloween-1",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 1,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "fetchedAt": "2026-10-27T15:00:11.489Z",
+      "fetches": [
+        {
+          "url": "https://hsema.dc.gov/event/hilloween-1",
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
       "severity": "critical",
       "metroId": "washington-dc",
       "sourceId": "930-club",
       "sourceName": "9:30 Club",
       "sourceType": "html",
       "url": "https://www.930.com/events",
-      "status": "http-error",
+      "status": "fetch-error",
       "issueType": "fetch-failed",
-      "reason": "Source fetch did not return a usable payload.",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:23:09.384Z",
+      "fetchedAt": "2026-10-27T15:00:11.489Z",
       "fetches": [
         {
           "url": "https://www.930.com/events",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "metroId": "washington-dc",
+      "sourceId": "dc-improv",
+      "sourceName": "DC Improv",
+      "sourceType": "html",
+      "url": "https://www.dcimprov.com/shows?format=feed&type=rss",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
+      "recoveredBy": "last-known-good",
+      "recoveredEvents": 19,
+      "liveEvents": 0,
+      "fallbackEvents": 0,
+      "lastKnownGoodEvents": 19,
+      "fetchedAt": "2026-10-27T15:00:11.489Z",
+      "fetches": [
+        {
+          "url": "https://www.dcimprov.com/shows?format=feed&type=rss",
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     },
@@ -103,7 +342,7 @@
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:23:09.384Z",
+      "fetchedAt": "2026-10-27T15:00:11.489Z",
       "fetches": [
         {
           "url": "https://www.unionstage.com/events",
@@ -119,21 +358,20 @@
       "sourceName": "Songbyrd Music House",
       "sourceType": "html",
       "url": "https://www.songbyrddc.com/events",
-      "status": "ok",
-      "issueType": "zero-extracted",
-      "reason": "Source returned a payload but no events were extracted.",
+      "status": "fetch-error",
+      "issueType": "fetch-failed",
+      "reason": "fetch failed",
       "recoveredBy": null,
       "recoveredEvents": 0,
       "liveEvents": 0,
       "fallbackEvents": 0,
       "lastKnownGoodEvents": 0,
-      "fetchedAt": "2026-10-25T17:23:09.384Z",
+      "fetchedAt": "2026-10-27T15:00:11.489Z",
       "fetches": [
         {
           "url": "https://www.songbyrddc.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ]
     }
@@ -162,21 +400,21 @@
       "metroId": "washington-dc",
       "category": "Library",
       "status": "ok",
-      "liveEvents": 318,
+      "liveEvents": 320,
       "fallbackEvents": 0,
-      "eventCount": 318,
+      "eventCount": 320,
       "fetches": [
         {
           "url": "https://dclibrary.libnet.info/events",
           "status": "ok",
           "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=1222; locations=27"
+          "contentType": "application/json; source=communico-events; events=1270; locations=27"
         }
       ],
       "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=1222; locations=27",
-      "rejectedLiveEvents": 8,
-      "extractedEvents": 326,
+      "contentType": "application/json; source=communico-events; events=1270; locations=27",
+      "rejectedLiveEvents": 3,
+      "extractedEvents": 323,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
     },
@@ -241,24 +479,21 @@
       "city": "Washington",
       "metroId": "washington-dc",
       "category": "Zoo",
-      "status": "ok",
-      "liveEvents": 72,
+      "status": "fetch-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 72,
+      "eventCount": 70,
       "fetches": [
         {
           "url": "https://nationalzoo.si.edu/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/vnd.api+json; source=national-zoo-jsonapi; events=36"
+          "status": "fetch-error",
+          "reason": "This operation was aborted"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "application/vnd.api+json; source=national-zoo-jsonapi; events=36",
-      "rejectedLiveEvents": 581,
-      "extractedEvents": 653,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "reason": "This operation was aborted",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 70,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "ticketmaster-washington-dc-family",
@@ -282,24 +517,21 @@
       "city": "Gaithersburg",
       "metroId": "washington-dc",
       "category": "Festival",
-      "status": "ok",
-      "liveEvents": 3,
+      "status": "fetch-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 3,
+      "eventCount": 2,
       "fetches": [
         {
           "url": "https://mcagfair.com/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 7,
-      "extractedEvents": 10,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "reason": "fetch failed",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 2,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "montgomery-county-md-library-family",
@@ -309,24 +541,21 @@
       "city": "Rockville",
       "metroId": "washington-dc",
       "category": "Library",
-      "status": "ok",
-      "liveEvents": 745,
+      "status": "fetch-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 745,
+      "eventCount": 715,
       "fetches": [
         {
           "url": "https://mcpl.libnet.info/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=1507; locations=23"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=1507; locations=23",
-      "rejectedLiveEvents": 20,
-      "extractedEvents": 765,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "reason": "fetch failed",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 715,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "prince-georges-county-md-library-family",
@@ -336,24 +565,21 @@
       "city": "Hyattsville",
       "metroId": "washington-dc",
       "category": "Library",
-      "status": "ok",
-      "liveEvents": 580,
+      "status": "fetch-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 580,
+      "eventCount": 563,
       "fetches": [
         {
           "url": "https://pgcmls.libnet.info/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=933; locations=23"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=933; locations=23",
-      "rejectedLiveEvents": 21,
-      "extractedEvents": 601,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "reason": "fetch failed",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 563,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "alexandria-va-library-family",
@@ -363,24 +589,21 @@
       "city": "Alexandria",
       "metroId": "washington-dc",
       "category": "Library",
-      "status": "ok",
-      "liveEvents": 182,
+      "status": "fetch-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 182,
+      "eventCount": 177,
       "fetches": [
         {
           "url": "https://alexandria.libnet.info/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=communico-events; events=314; locations=12"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "application/json; source=communico-events; events=314; locations=12",
-      "rejectedLiveEvents": 4,
-      "extractedEvents": 186,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "reason": "fetch failed",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 177,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "fairfax-county-va-library-family",
@@ -390,24 +613,21 @@
       "city": "Tysons",
       "metroId": "washington-dc",
       "category": "Library",
-      "status": "ok",
-      "liveEvents": 104,
+      "status": "fetch-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 104,
+      "eventCount": 84,
       "fetches": [
         {
           "url": "https://librarycalendar.fairfaxcounty.gov/calendar?cid=6524&cal=6524",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "application/json",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 104,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "reason": "fetch failed",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 84,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "arlington-va-library-family",
@@ -417,24 +637,21 @@
       "city": "Arlington",
       "metroId": "washington-dc",
       "category": "Library",
-      "status": "ok",
-      "liveEvents": 136,
+      "status": "fetch-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 136,
+      "eventCount": 130,
       "fetches": [
         {
           "url": "https://arlingtonva.libcal.com/calendar/apl/?cid=12881&cal=12881",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "application/json",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 136,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "reason": "fetch failed",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 130,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "national-building-museum-family",
@@ -444,24 +661,21 @@
       "city": "Washington",
       "metroId": "washington-dc",
       "category": "Museum",
-      "status": "ok",
-      "liveEvents": 16,
+      "status": "fetch-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 16,
       "fetches": [
         {
           "url": "https://nbm.org/events/",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/json; source=ticketure-events; events=10; calendars=10"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "application/json; source=ticketure-events; events=10; calendars=10",
-      "rejectedLiveEvents": 18,
-      "extractedEvents": 34,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "reason": "fetch failed",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 16,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "hilloween-dc-2026",
@@ -471,24 +685,21 @@
       "city": "Washington",
       "metroId": "washington-dc",
       "category": "Community",
-      "status": "ok",
-      "liveEvents": 1,
+      "status": "fetch-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 1,
       "fetches": [
         {
           "url": "https://hsema.dc.gov/event/hilloween-1",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
-      "extractedEvents": 1,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "reason": "fetch failed",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 1,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "930-club",
@@ -498,20 +709,18 @@
       "city": "Washington",
       "metroId": "washington-dc",
       "category": "Music",
-      "status": "http-error",
+      "status": "fetch-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.930.com/events",
-          "status": "http-error",
-          "httpStatus": 404,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ],
-      "httpStatus": 404,
-      "contentType": "text/html; charset=UTF-8",
+      "reason": "fetch failed",
       "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
@@ -524,24 +733,21 @@
       "city": "Washington",
       "metroId": "washington-dc",
       "category": "Comedy",
-      "status": "ok",
-      "liveEvents": 20,
+      "status": "fetch-error",
+      "liveEvents": 0,
       "fallbackEvents": 0,
-      "eventCount": 20,
+      "eventCount": 19,
       "fetches": [
         {
           "url": "https://www.dcimprov.com/shows?format=feed&type=rss",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "application/rss+xml; charset=utf-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "application/rss+xml; charset=utf-8",
-      "rejectedLiveEvents": 58,
-      "extractedEvents": 78,
-      "lastKnownGoodEvents": 0,
-      "recoveryMode": null
+      "reason": "fetch failed",
+      "extractedEvents": 0,
+      "lastKnownGoodEvents": 19,
+      "recoveryMode": "last-known-good"
     },
     {
       "id": "union-stage-dc",
@@ -575,21 +781,18 @@
       "city": "Washington",
       "metroId": "washington-dc",
       "category": "Music",
-      "status": "ok",
+      "status": "fetch-error",
       "liveEvents": 0,
       "fallbackEvents": 0,
       "eventCount": 0,
       "fetches": [
         {
           "url": "https://www.songbyrddc.com/events",
-          "status": "ok",
-          "httpStatus": 200,
-          "contentType": "text/html; charset=UTF-8"
+          "status": "fetch-error",
+          "reason": "fetch failed"
         }
       ],
-      "httpStatus": 200,
-      "contentType": "text/html; charset=UTF-8",
-      "rejectedLiveEvents": 0,
+      "reason": "fetch failed",
       "extractedEvents": 0,
       "lastKnownGoodEvents": 0,
       "recoveryMode": null
